@@ -1,5 +1,6 @@
 "use client";
 
+import { validatorList } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
 
@@ -20,7 +21,7 @@ const useValidators = (): IUseTokens => {
   const { data } = useSWRImmutable(
     ["defaultValidatorList"],
     async () => {
-      const res = await fetch(process.env.NEXT_PUBLIC_VALIDATOR_LIST as string);
+      const res = await fetch(validatorList);
 
       const validatorInformation = await res.json();
       if (!validatorInformation) return { list: [], dictionary: {} };

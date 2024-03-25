@@ -2,14 +2,13 @@
 
 import React from "react";
 import { usePollAssetWalletBalance } from "@bera/berajs";
+import { honeyAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export function HoneyControls() {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: token } = useSelectedAssetWalletBalance(
-    process.env.NEXT_PUBLIC_HONEY_ADDRESS ?? "",
-  );
+  const { data: token } = useSelectedAssetWalletBalance(honeyAddress ?? "");
   const tokenBalance = Number(token?.formattedBalance ?? "0");
   return (
     <div className="flex flex-row items-center gap-5">

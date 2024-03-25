@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useReducer } from "react";
+import { jsonRpcUrl } from "@bera/config";
 import { Wallet, providers } from "ethers";
 import { usePublicClient } from "wagmi";
 
@@ -29,9 +30,7 @@ const useOctValueSend = ({
       let hash: any | undefined;
       if (!publicClient) return;
       try {
-        const provider = new providers.JsonRpcProvider(
-          process.env.NEXT_PUBLIC_JSON_RPC_URL,
-        );
+        const provider = new providers.JsonRpcProvider(jsonRpcUrl);
 
         const ethersWallet = new Wallet(octPrivKey, provider);
 

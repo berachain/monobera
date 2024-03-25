@@ -1,14 +1,14 @@
 import { useMemo } from "react";
+import { erc20BribeModule, multicallAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, formatUnits, getAddress, erc20Abi } from "viem";
+import { erc20Abi, formatUnits, getAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BRIBE_PRECOMPILE_ABI } from "~/config";
 import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
 import { usePollActiveValidators } from "../staking";
-import { multicallAddress } from "@bera/config";
 
 export interface RawBribe {
   validator: string;
@@ -42,7 +42,7 @@ export const usePollBribes = () => {
       try {
         if (!publicClient) return undefined;
         const result = (await publicClient.readContract({
-          address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
+          address: erc20BribeModule,
           abi: BRIBE_PRECOMPILE_ABI,
           functionName: method,
           args: [account],

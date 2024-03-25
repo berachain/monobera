@@ -1,6 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import { cloudinaryUrl } from "@bera/config";
+import {
+  cloudinaryUrl,
+  dexUrl,
+  lendUrl,
+  perpsName,
+  perpsUrl,
+} from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
 export default function HoneyBanner() {
@@ -26,12 +32,10 @@ export default function HoneyBanner() {
       <div className="col-span-1">
         <div className="rounded-xl bg-yellow-200 p-4 text-center">
           <h3 className="m-auto mb-4 w-[60px] text-sm text-yellow-900">
-            Lend Honey on {process.env.NEXT_PUBLIC_LEND_NAME}{" "}
+            Lend Honey on {perpsUrl}{" "}
           </h3>
           <div
-            onClick={() =>
-              window.open(process.env.NEXT_PUBLIC_LEND_URL, "_blank")
-            }
+            onClick={() => window.open(lendUrl, "_blank")}
             className="inline-flex gap-2 rounded-full bg-yellow-600 px-4 py-2 text-sm text-white"
           >
             <Icons.helpingHand />
@@ -46,9 +50,7 @@ export default function HoneyBanner() {
             Add Liquidity to Earn BGT Rewards{" "}
           </h3>
           <div
-            onClick={() =>
-              window.open(`${process.env.NEXT_PUBLIC_DEX_URL}/pools`, "_blank")
-            }
+            onClick={() => window.open(`${dexUrl}/pools`, "_blank")}
             className="inline-flex gap-2 rounded-full bg-green-600 px-4 py-2 text-sm text-white"
           >
             <Icons.plus />
@@ -59,12 +61,10 @@ export default function HoneyBanner() {
       <div className="col-span-1">
         <div className="rounded-xl bg-red-200 p-4 text-center">
           <h3 className="m-auto mb-4 w-[86px] text-sm text-red-900">
-            Provide Collateral for {process.env.NEXT_PUBLIC_PERPS_NAME}
+            Provide Collateral for {perpsName}
           </h3>
           <div
-            onClick={() =>
-              window.open(process.env.NEXT_PUBLIC_PERPS_URL, "_blank")
-            }
+            onClick={() => window.open(perpsUrl, "_blank")}
             className="inline-flex gap-2 rounded-full bg-red-600 px-4 py-2 text-sm text-white"
           >
             <Icons.plus />

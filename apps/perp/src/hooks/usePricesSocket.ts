@@ -1,11 +1,10 @@
+import { perpsPriceFeed } from "@bera/config";
 import useSWRSubscription from "swr/subscription";
 
 export const usePricesSocket = () => {
   const QUERY_KEY = "pricefeed";
   const { data } = useSWRSubscription(QUERY_KEY, (_, { next }) => {
-    const socket = new WebSocket(
-      process.env.NEXT_PUBLIC_PERPS_PRICEFEED as string,
-    );
+    const socket = new WebSocket(perpsPriceFeed);
     socket.addEventListener("message", (event: any) => next(null, event.data));
     socket.addEventListener("error", (event: any) => next(event.error));
     return () => socket.close();

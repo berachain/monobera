@@ -1,5 +1,5 @@
 import { useBeraJs } from "@bera/berajs";
-import { perpsEndpoints } from "@bera/config";
+import { perpsEndpoint } from "@bera/config";
 import { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -16,7 +16,7 @@ export const useTradingSummaryChart = ({
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
     if (account) {
       const res = await fetch(
-        `${perpsEndpoints}/trading-summary/traders/${account}?count_back=${parseInt(
+        `${perpsEndpoint}/trading-summary/traders/${account}?count_back=${parseInt(
           interval,
           10,
         )}&resolution=1d`,

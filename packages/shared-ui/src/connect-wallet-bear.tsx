@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { cloudinaryUrl } from "@bera/config";
 
 import { ConnectButton } from "./connect-button";
 
@@ -7,7 +8,7 @@ export const ConnectWalletBear = ({ message }: { message: string }) => {
     <div className="container flex flex-col gap-4">
       <Image
         className="mx-auto"
-        src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/bears/exrpxwn6fmll2x0c0jlr`}
+        src={`${cloudinaryUrl}/bears/exrpxwn6fmll2x0c0jlr`}
         alt="wallet-connect-bear"
         width={535}
         height={285}

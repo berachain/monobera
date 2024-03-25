@@ -9,7 +9,11 @@ import {
   useOct,
   usePollBeraBalance,
 } from "@bera/berajs";
-import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
+import {
+  beraTokenAddress,
+  blockExplorerUrl,
+  tradingContractAddress,
+} from "@bera/config";
 import { ActionButton, TokenIcon, useTxn } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import Identicon from "@bera/shared-ui/src/identicon";
@@ -325,7 +329,7 @@ export function ManageOctDialog({
 
   function revokeDelegation() {
     revokeWrite({
-      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      address: tradingContractAddress,
       abi: TRADING_ABI,
       functionName: "removeDelegate",
       params: [],
@@ -334,7 +338,7 @@ export function ManageOctDialog({
 
   function delegateWallet() {
     write({
-      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      address: tradingContractAddress,
       abi: TRADING_ABI,
       functionName: "setDelegate",
       params: [octAddress],

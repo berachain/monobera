@@ -1,19 +1,20 @@
 /* eslint-disable no-restricted-imports */
 import {
+  developmentAnalytics,
+  mixpanelProjectToken,
+  projectName,
+} from "@bera/config";
+import {
   captureEvent as _captureEvent,
   captureException as _captureException,
 } from "@sentry/react";
 import mixpanel from "mixpanel-browser";
 
 const isDevelopmentWithoutAnalytics =
-  process.env.NODE_ENV === "development" &&
-  !process.env.NEXT_PUBLIC_DEVELOPMENT_ANALYTICS;
+  process.env.NODE_ENV === "development" && !developmentAnalytics;
 
-if (
-  process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN &&
-  !isDevelopmentWithoutAnalytics
-) {
-  mixpanel.init(process.env.NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN, {
+if (mixpanelProjectToken && !isDevelopmentWithoutAnalytics) {
+  mixpanel.init(mixpanelProjectToken, {
     debug: true,
     track_pageview: true,
     persistence: "localStorage",
@@ -43,7 +44,7 @@ export const useAnalytics = () => {
     }
     mixpanel.track(eventName, {
       eventData,
-      project: process.env.NEXT_PUBLIC_PROJECT_NAME ?? "unknown",
+      project: projectName ?? "unknown",
       env: process.env.NODE_ENV,
     });
   };

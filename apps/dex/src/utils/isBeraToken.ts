@@ -16,14 +16,14 @@ export const isBeratoken = (token: Token | undefined) => {
 
 export const isBera = (token: Token | undefined) => {
   if (token === undefined) return false;
-  if (token.address === process.env.NEXT_PUBLIC_BERA_ADDRESS) return true;
+  if (token.address === nativeTokenAddress) return true;
 
   return false;
 };
 
 export const isWBera = (token: Token | undefined) => {
   if (token === undefined) return false;
-  if (token.address === process.env.NEXT_PUBLIC_WBERA_ADDRESS) return true;
+  if (token.address === beraTokenAddress) return true;
 
   return false;
 };
