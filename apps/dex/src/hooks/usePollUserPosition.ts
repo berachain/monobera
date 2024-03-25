@@ -65,7 +65,9 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
             },
           })
           .then((res) => {
-            console.log(res);
+            if (process.env.NODE_ENV === "development") {
+              console.log(res);
+            }
             return res.data?.tokenHoneyPrices.reduce(
               (allPrices: any, price: any) => ({
                 ...allPrices,

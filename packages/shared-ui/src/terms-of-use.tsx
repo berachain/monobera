@@ -48,14 +48,17 @@ export const TermsOfUse = () => {
         impact your rights as to how disputes are resolved.
       </div>
       {Terms.content.map((term, index) => (
-        <div key={index} className="flex flex-col gap-8">
+        <div
+          key={`${index}-privacy-termscontent`}
+          className="flex flex-col gap-8"
+        >
           <div className="text-center text-lg font-semibold leading-6 sm:text-2xl sm:leading-8">
             {index + 1}. {term.title}
           </div>
           <>
             {term.content.map((text, index) => (
               <div
-                key={index}
+                key={`${index}-privacy-termscontent-text`}
                 className="text-xs leading-4 sm:text-sm sm:leading-6"
               >
                 {text}
@@ -85,7 +88,7 @@ export const PrivacyPolicy = () => {
         services (collectively the “<b>services”</b>).
       </div>
       {Privacy.content.map((privacy, index) => (
-        <div key={index} className="flex flex-col gap-8">
+        <div key={`${index}-privacy-content`} className="flex flex-col gap-8">
           {privacy.title && (
             <div className="text-center text-lg font-semibold leading-6 sm:text-2xl sm:leading-8">
               {privacy.title}
@@ -97,7 +100,7 @@ export const PrivacyPolicy = () => {
                 <>
                   {typeof subcontent === "string" ? (
                     <div
-                      key={index}
+                      key={`${index}-privacy-subcontent`}
                       className="text-xs leading-4 sm:text-sm sm:leading-6"
                     >
                       {subcontent}
@@ -106,7 +109,7 @@ export const PrivacyPolicy = () => {
                     <div className="flex flex-col gap-2">
                       {subcontent.map((subsubcontent, index) => (
                         <div
-                          key={index}
+                          key={`${index}-privacy-subsubcontent`}
                           className="pl-4 text-xs leading-4 sm:text-sm sm:leading-6"
                         >
                           {subsubcontent}

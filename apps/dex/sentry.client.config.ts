@@ -19,6 +19,29 @@ Sentry.init({
   // in development and sample at a lower rate in production
   replaysSessionSampleRate: 0.1,
 
+  beforeSend: (event) => {
+    // Check if is ignored error
+    const IGNORED_ERROR_MESSAGES: string[] = [
+      "ResizeObserver loop completed with undelivered notifications.",
+    ];
+    const errorMessage =
+      event?.exception?.values?.[0] && (event.exception.values[0] as any).value;
+    let isIgnoredError = false;
+    if (errorMessage) {
+      IGNORED_ERROR_MESSAGES.forEach((message) => {
+        if (errorMessage.includes(message)) {
+          isIgnoredError = true;
+        }
+      });
+    }
+
+    if (isIgnoredError) {
+      return null;
+    }
+
+    return event;
+  },
+
   // You can remove this option if you're not planning to use the Sentry Session Replay feature:
   integrations: [
     Sentry.replayIntegration({
