@@ -8,7 +8,7 @@ import {
   usePollBgtRewardsForAddress,
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, gTokenContractAddress } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
 export default function HoneyVault() {
@@ -27,7 +27,7 @@ export default function HoneyVault() {
   const bHoneySupply = useFormattedBHoneySupply();
 
   const { useBgtRewardsForAddress } = usePollBgtRewardsForAddress({
-    address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS,
+    address: gTokenContractAddress,
   });
 
   const _ = useBgtRewardsForAddress();

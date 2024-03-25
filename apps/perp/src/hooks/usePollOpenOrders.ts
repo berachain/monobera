@@ -1,5 +1,5 @@
 import { useBeraJs } from "@bera/berajs";
-import { perpsEndpoints } from "@bera/config";
+import { perpsEndpoint } from "@bera/config";
 import { type OpenLimitOrder } from "@bera/proto/src";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
@@ -16,7 +16,7 @@ export const usePollOpenOrders = () => {
     QUERY_KEY,
     async () => {
       if (account) {
-        const res = await fetch(`${perpsEndpoints}/openlimitorders/${account}`);
+        const res = await fetch(`${perpsEndpoint}/openlimitorders/${account}`);
         const data = await res.json();
         return data.open_limit_orders;
       }

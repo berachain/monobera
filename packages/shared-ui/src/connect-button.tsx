@@ -17,7 +17,7 @@ const DynamicConnectButton = dynamic(
   {
     ssr: false,
     loading: () => (
-      <Button>
+      <Button className="w-full">
         <Icons.spinner className="relative mr-1 h-6 w-6 animate-spin" />
         Loading
       </Button>

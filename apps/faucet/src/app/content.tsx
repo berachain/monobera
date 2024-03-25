@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { dexUrl } from "@bera/config";
+import { dexUrl, faucetDripAmount, faucetDripTimeGap } from "@bera/config";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -35,7 +35,7 @@ export default function Content() {
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
-      <div className="items-center justify-between text-center sxlm:flex xl:text-left">
+      <div className="sxlm:flex items-center justify-between text-center xl:text-left">
         <div className="flex flex-col gap-4">
           <div className="leading-12 w-full text-5xl font-bold">
             Bootstrap Your
@@ -128,8 +128,8 @@ export default function Content() {
       <hr />
       <div className="leading-12 text-center text-sm opacity-70 sm:text-start">
         To ensure a sufficient balance for all users, the Faucet is set to
-        dispense {process.env.NEXT_PUBLIC_FAUCET_DRIP_AMOUNT} testnet BERA
-        tokens every {process.env.NEXT_PUBLIC_FAUCET_DRIP_TIME_GAP} hours.
+        dispense {faucetDripAmount} testnet BERA tokens every{" "}
+        {faucetDripTimeGap} hours.
       </div>
 
       {/* <div className="leading-12 text-center text-sm text-muted-foreground sm:text-start">

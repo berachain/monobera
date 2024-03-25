@@ -1,5 +1,6 @@
+import { gTokenContractAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BTOKEN_ABI } from "~/config";
@@ -14,7 +15,7 @@ export const usePollMaxDeposit = () => {
     try {
       if (!publicClient) return undefined;
       const result = await publicClient.readContract({
-        address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+        address: gTokenContractAddress,
         abi: BTOKEN_ABI,
         functionName: method,
         args: [account],

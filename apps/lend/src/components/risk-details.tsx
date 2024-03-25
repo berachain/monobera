@@ -63,7 +63,7 @@ export const RiskDetails = () => {
                   `bg-${getLTVColor(healthFactor)}`,
                 )}
               >
-                {healthFactor <= 1000 ? healthFactor.toFixed(2) : "∞"}
+                {healthFactor <= 999 ? healthFactor.toFixed(2) : "∞"}
               </div>
             </div>
             <div className="h-24">
@@ -72,7 +72,7 @@ export const RiskDetails = () => {
               >
                 <div className={"flex w-fit flex-col items-center"}>
                   <span className="text-sm font-medium leading-3">
-                    {healthFactor <= 1000 ? healthFactor.toFixed(2) : "∞"}
+                    {healthFactor <= 999 ? healthFactor.toFixed(2) : "∞"}
                   </span>
                   <Icons.chevronDown className="h-7 w-7" />
                 </div>

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useBeraJs } from "@bera/berajs";
-import { perpsEndpoints } from "@bera/config";
+import { perpsEndpoint } from "@bera/config";
 import { type OpenTrade } from "@bera/proto/src";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
@@ -20,7 +20,7 @@ export const usePollOpenPositions = () => {
   const refreshData = async () => {
     {
       if (account) {
-        const res = await fetch(`${perpsEndpoints}/opentrades/${account}`);
+        const res = await fetch(`${perpsEndpoint}/opentrades/${account}`);
         const data = await res.json();
         return data.open_trades;
       }

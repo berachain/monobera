@@ -9,6 +9,7 @@ import {
   type Proposal,
   type TallyResult,
 } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -162,7 +163,7 @@ export default function GovernanceByStatus({
       {((!isLoading && sortedProposalList.length === 0) || isLoading) && (
         <div className="mx-auto w-fit">
           <Image
-            src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/bears/e6monhixzv21jy0fqes1`}
+            src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
             alt="not found bear"
             width={345.35}
             height={200}

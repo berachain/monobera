@@ -14,6 +14,8 @@ export const blockExplorerName = process.env
 export const lendEndpointUrl = process.env.NEXT_PUBLIC_LEND_ENDPOINT as string;
 export const faucetEndpointUrl = process.env
   .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
+export const validatorEndpointUrl = process.env.NEXT_PUBLIC_VALIDATOR_ENDPOINT;
+export const awsUrl = process.env.NEXT_PUBLIC_AWS_URL as string;
 
 // Subgraphs
 export const crocSubgraphEndpoint = process.env
@@ -72,6 +74,10 @@ export const gasTokenName = process.env
 export const gasTokenDecimals = Number(
   process.env.NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS,
 );
+
+export const dynamicWalletKey = process.env
+  .NEXT_PUBLIC_DYNAMIC_API_KEY as string;
+
 export const stakingToken = process.env.NEXT_PUBLIC_STAKING_TOKEN as string;
 export const bech32Prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
 export const governanceMinDeposit = Number(
@@ -121,6 +127,10 @@ export const lendHoneyDebtTokenAddress = process.env
   .NEXT_PUBLIC_LEND_HONEY_DEBT_TOKEN_ADDRESS as Address;
 export const perpsReferralsAddress = process.env
   .NEXT_PUBLIC_REFERRALS_CONTRACT_ADDRESS as Address;
+export const tradingContractAddress = process.env
+  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
+export const gTokenContractAddress = process.env
+  .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env
@@ -136,10 +146,12 @@ export const wbtcTokenAddress = process.env.NEXT_PUBLIC_WBTC_ADDRESS as Address;
 export const wethTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS as Address;
 
 // PERPS
-export const perpsEndpoints = process.env
+export const perpsEndpoint = process.env
   .NEXT_PUBLIC_PERPS_ENDPOINT_URL as string;
 export const perpsCompetitionId = process.env
   .NEXT_PUBLIC_PERPS_COMPETITION_ID as string;
+export const perpsPriceFeed = process.env.NEXT_PUBLIC_PERPS_PRICEFEED as string;
+export const candleFeed = process.env.NEXT_PUBLIC_CANDLEFEED as string;
 
 // Validator clue
 export const validatorClueEndpoint = process.env
@@ -171,3 +183,19 @@ export const crocIndexerEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_INDEXER_ENDPOINT as Address;
 export const crocRouterEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;
+
+// Faucet
+export const faucetDripAmount = process.env
+  .NEXT_PUBLIC_FAUCET_DRIP_AMOUNT as string;
+export const faucetDripTimeGap = process.env
+  .NEXT_PUBLIC_FAUCET_DRIP_TIME_GAP as string;
+export const recaptchaSiteKey = process.env
+  .NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string;
+export const cloudflareKey = process.env.NEXT_PUBLIC_CLOUDFLARE_KEY as string;
+
+// Sentry
+export const developmentAnalytics = process.env
+  .NEXT_PUBLIC_DEVELOPMENT_ANALYTICS as string;
+export const mixpanelProjectToken = process.env
+  .PUBLIC_MIXPANEL_PROJECT_TOKEN as string;
+export const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME as string;

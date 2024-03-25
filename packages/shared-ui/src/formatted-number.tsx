@@ -145,7 +145,11 @@ export function FormattedNumber({
         <span className="mr-0.5">$</span>
       )}
       {isBiggerThanMax ? (
-        "∞"
+        number > maxValue ? (
+          "∞"
+        ) : (
+          "-∞"
+        )
       ) : !forceCompact ? (
         new Intl.NumberFormat("en-US", {
           maximumFractionDigits: decimals,

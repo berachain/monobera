@@ -9,6 +9,7 @@ import {
   type PoLValidator,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
+import { erc20BribeModule } from "@bera/config";
 import {
   BribeApyTooltip,
   TokenIconList,
@@ -102,7 +103,7 @@ export default function ValidatorCard({
   ];
   const claimBribe = () => {
     write({
-      address: process.env.NEXT_PUBLIC_ERC20BRIBEMODULE_ADDRESS as Address,
+      address: erc20BribeModule as Address,
       abi: BRIBE_PRECOMPILE_ABI,
       functionName: "claimValidatorBribes",
       params: [account, validator.operatorAddr],
