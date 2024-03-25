@@ -26,6 +26,7 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -101,6 +102,7 @@ export function SwapCard({
     wrapType,
     minAmountOut,
     priceImpact,
+    differenceUSD,
   } = useSwap({
     inputCurrency,
     outputCurrency,
@@ -343,6 +345,8 @@ export function SwapCard({
   ]);
   const breakpoint = useBreakpoint();
 
+  const priceImpactColorClass = getPriceImpactColorClass(priceImpact);
+
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
@@ -423,20 +427,20 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
-                    priceImpact={priceImpact}
+                    difference={differenceUSD}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                   />
                 </ul>
-                {priceImpact && priceImpact < -10 && (
+                {!!priceImpact && priceImpact < -10 && (
                   <TooltipCustom
                     anchor={
-                      breakpoint && breakpoint > BREAKPOINTS.md
+                      breakpoint !== undefined && breakpoint! > BREAKPOINTS.md
                         ? "right"
                         : "bottom-center"
                     }
                     position={
-                      breakpoint && breakpoint > BREAKPOINTS.md
+                      breakpoint !== undefined && breakpoint! > BREAKPOINTS.md
                         ? "left"
                         : "bottom-center"
                     }
@@ -454,15 +458,66 @@ export function SwapCard({
                     <Alert variant="destructive">
                       <AlertDescription className="text-xs">
                         <Icons.tooltip className="mr-2 mt-[-4px] inline h-4 w-4" />
-                        {`Price Impact Warning: ${priceImpact}%`}
+                        {`Price Impact Warning: ${priceImpact?.toFixed(2)}%`}
                       </AlertDescription>
                     </Alert>
                   </TooltipCustom>
+                )}
+                {hasInsufficientBalanceError ? (
+                  <Alert
+                    variant="destructive"
+                    className="items-center justify-center"
+                  >
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                      This amount exceeds your total balance
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  false
+                )}
+                {error !== undefined && (
+                  <Alert variant="destructive">
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription className="text-xs">
+                      {error.message}
+                    </AlertDescription>
+                  </Alert>
+                )}
+                {hasRouteNotFoundError ? (
+                  <Alert variant="destructive">
+                    <AlertTitle>
+                      {" "}
+                      <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
+                      Route Not Found
+                    </AlertTitle>
+                    <AlertDescription className="text-xs">
+                      No route found for this swap. Please try a different pair.
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  false
                 )}
 
                 <div className="flex flex-col gap-2">
                   {!isWrap ? (
                     <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
+                      {!!priceImpact && priceImpact < -5 && (
+                        <div className="flex w-full flex-row justify-between">
+                          <p className="text-xs font-medium text-muted-foreground sm:text-sm">
+                            Price Impact
+                          </p>
+                          <p
+                            className={`whitespace-nowrap text-right text-xs font-medium sm:text-sm ${
+                              priceImpactColorClass ?? ""
+                            }`}
+                          >
+                            {priceImpact
+                              ? `~${Math.abs(priceImpact).toFixed(2)}%`
+                              : "-"}
+                          </p>
+                        </div>
+                      )}
                       <div className="flex w-full flex-row justify-between">
                         <p className="text-xs font-medium text-muted-foreground sm:text-sm">
                           Exchange rate
@@ -485,67 +540,6 @@ export function SwapCard({
                         </p>
                       </div>
                     </div>
-                  ) : (
-                    false
-                  )}
-                  {hasInsufficientBalanceError ? (
-                    <Alert
-                      variant="destructive"
-                      className="items-center justify-center"
-                    >
-                      <AlertTitle>Error</AlertTitle>
-                      <AlertDescription>
-                        This amount exceeds your total balance
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )}
-                  {error !== undefined && (
-                    <Alert variant="destructive">
-                      <AlertTitle>Error</AlertTitle>
-                      <AlertDescription className="text-xs">
-                        {error.message}
-                      </AlertDescription>
-                    </Alert>
-                  )}
-                  {/* {isRouteLoading === true && swapAmount !=='0' && selectedTo !==undefined ? (
-                    <Alert variant="info">
-                      <AlertTitle>Searching for best routes</AlertTitle>
-                      <AlertDescription className="text-xs">
-                        route loading
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )} */}
-                  {/* {showPriceImpact ? (
-                    <Alert variant="destructive">
-                      <AlertTitle>
-                        {" "}
-                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
-                        Price Impact Error
-                      </AlertTitle>
-                      <AlertDescription className="text-xs">
-                        This swap will result in a high price impact (-
-                        {priceImpact?.toFixed(2)}%)
-                      </AlertDescription>
-                    </Alert>
-                  ) : (
-                    false
-                  )} */}
-                  {hasRouteNotFoundError ? (
-                    <Alert variant="destructive">
-                      <AlertTitle>
-                        {" "}
-                        <Icons.tooltip className="mt-[-4px] inline h-4 w-4" />{" "}
-                        Route Not Found
-                      </AlertTitle>
-                      <AlertDescription className="text-xs">
-                        No route found for this swap. Please try a different
-                        pair.
-                      </AlertDescription>
-                    </Alert>
                   ) : (
                     false
                   )}
