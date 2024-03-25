@@ -126,7 +126,7 @@ export function FormattedNumber({
   }
 
   return (
-    <div
+    <span
       className={cn(
         "relative flex inline-flex flex-row items-center text-nowrap",
         className,
@@ -167,6 +167,6 @@ export function FormattedNumber({
       {symbol?.toLowerCase() !== "usd" && typeof symbol !== "undefined" && (
         <span className="ml-0.5">{symbol}</span>
       )}
-    </div>
+    </span>
   );
 }
