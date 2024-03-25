@@ -13,7 +13,10 @@ import mixpanel from "mixpanel-browser";
 const isDevelopmentWithoutAnalytics =
   process.env.NODE_ENV === "development" && !developmentAnalytics;
 
-if (mixpanelProjectToken && !isDevelopmentWithoutAnalytics) {
+const isMixpanelEnabled =
+  mixpanelProjectToken && !isDevelopmentWithoutAnalytics;
+
+if (isMixpanelEnabled) {
   mixpanel.init(mixpanelProjectToken, {
     debug: true,
     track_pageview: true,
@@ -30,16 +33,22 @@ export const useAnalytics = () => {
   };
 
   const setAnalyticsUserId = (userId: string) => {
+    if (!isMixpanelEnabled) {
+      return;
+    }
     mixpanel.reset();
     mixpanel.identify(userId);
   };
 
   const unsetAnalyticsUserId = () => {
+    if (!isMixpanelEnabled) {
+      return;
+    }
     mixpanel.reset();
   };
 
   const track = (eventName: string, eventData?: { [key: string]: any }) => {
-    if (isDevelopmentWithoutAnalytics) {
+    if (!isMixpanelEnabled) {
       return;
     }
     mixpanel.track(eventName, {
