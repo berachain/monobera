@@ -1,6 +1,8 @@
 import { useMemo } from "react";
+import { jsonRpcUrl } from "@bera/config";
 import { providers } from "ethers";
 import { type PublicClient } from "viem";
+
 // import { type Chain, type Client, type Transport } from "viem";
 // import { type Provider } from "@ethersproject/providers";
 
@@ -11,10 +13,7 @@ export function clientToProvider(client: PublicClient) {
     name: chain?.name,
   };
 
-  return new providers.JsonRpcProvider(
-    process.env.NEXT_PUBLIC_JSON_RPC_URL,
-    network as any,
-  );
+  return new providers.JsonRpcProvider(jsonRpcUrl, network as any);
 }
 
 /** Action to convert a viem Client to an ethers.js Provider. */

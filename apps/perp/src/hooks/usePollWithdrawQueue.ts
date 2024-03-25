@@ -1,5 +1,5 @@
 import { useBeraJs } from "@bera/berajs";
-import { perpsEndpoints } from "@bera/config";
+import { perpsEndpoint } from "@bera/config";
 import { type HoneyWithdrawalRequest } from "@bera/proto/src";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
@@ -16,7 +16,7 @@ export const usePollWithdrawQueue = () => {
       if (account) {
         try {
           const res = await fetch(
-            `${perpsEndpoints}/honeywithdrawals/${account}`,
+            `${perpsEndpoint}/honeywithdrawals/${account}`,
           );
           const data = await res.json();
           return data;

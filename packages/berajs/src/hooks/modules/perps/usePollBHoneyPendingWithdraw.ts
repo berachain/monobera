@@ -1,7 +1,8 @@
 import { useMemo } from "react";
+import { gTokenContractAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, formatUnits } from "viem";
+import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BTOKEN_ABI } from "~/config";
@@ -22,7 +23,7 @@ export const usePollBHoneyPendingWithdraw = () => {
       if (isConnected) {
         try {
           const result = await publicClient.readContract({
-            address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+            address: gTokenContractAddress,
             abi: BTOKEN_ABI,
             functionName: "totalSharesBeingWithdrawn",
             args: [account as Address],

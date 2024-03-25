@@ -5,6 +5,7 @@ import {
   useBeraJs,
   usePollBHoneyEpochs,
 } from "@bera/berajs";
+import { gTokenContractAddress } from "@bera/config";
 import { type HoneyWithdrawalRequest } from "@bera/proto/src";
 import { DataTableColumnHeader, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -12,9 +13,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { formatUnits, type Address } from "viem";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
-
-const gTokenAddress = process.env
-  .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address;
 
 export const CancelWithdraw = ({
   withdrawRequest,
@@ -49,7 +47,7 @@ export const CancelWithdraw = ({
         disabled={isCancelLoading}
         onClick={() =>
           cancelWrite({
-            address: gTokenAddress,
+            address: gTokenContractAddress,
             abi: BTOKEN_ABI,
             functionName: "cancelWithdrawRequest",
             params: [
@@ -68,7 +66,7 @@ export const CancelWithdraw = ({
         disabled={isRedeemLoading || isEpochLoading || !isReady}
         onClick={() =>
           redeemWrite({
-            address: gTokenAddress,
+            address: gTokenContractAddress,
             abi: BTOKEN_ABI,
             functionName: "redeem",
             params: [BigInt(withdrawRequest.shares), account, account],
@@ -99,18 +97,6 @@ export const withdraw_queue_columns: ColumnDef<HoneyWithdrawalRequest>[] = [
     accessorKey: "shares",
     enableSorting: false,
   },
-  // {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Epoch Created" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     <div className="flex w-[120px] flex-col gap-1">
-
-  //       {Number(row.original.epoch_created)}</div>;
-  //   },
-  //   accessorKey: "epoch_created",
-  //   enableSorting: true,
-  // },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Unlock Epoch" />

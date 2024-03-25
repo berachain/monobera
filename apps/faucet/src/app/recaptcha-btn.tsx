@@ -1,4 +1,5 @@
 import React from "react";
+import { recaptchaSiteKey } from "@bera/config";
 import { Button } from "@bera/ui/button";
 
 const ReCAPTCHAButton = ({
@@ -17,7 +18,7 @@ const ReCAPTCHAButton = ({
       window.grecaptcha.ready(() => {
         //@ts-ignore
         window.grecaptcha
-          .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
+          .execute(recaptchaSiteKey, {
             action: "submit",
           })
           .then((token: any) => {

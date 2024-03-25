@@ -6,10 +6,9 @@ import {
   usePollBgtRewardsForAddress,
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, gTokenContractAddress } from "@bera/config";
 import { ApyTooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import type { Address } from "viem";
 
 import { usePollFeesApr } from "~/hooks/usePollFeesApr";
 
@@ -30,7 +29,7 @@ export default function Claim() {
     useBgtApr,
     useBgtRewardsForAddress,
   } = usePollBgtRewardsForAddress({
-    address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+    address: gTokenContractAddress,
   });
 
   const _ = useBgtRewardsForAddress();

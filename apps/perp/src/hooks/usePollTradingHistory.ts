@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useBeraJs } from "@bera/berajs";
-import { perpsEndpoints } from "@bera/config";
+import { perpsEndpoint } from "@bera/config";
 import { type ClosedTrade } from "@bera/proto/src";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
@@ -16,7 +16,7 @@ export const usePollTradingHistory = () => {
     QUERY_KEY,
     async () => {
       if (account) {
-        const res = await fetch(`${perpsEndpoints}/closedtrades/${account}`);
+        const res = await fetch(`${perpsEndpoint}/closedtrades/${account}`);
         const data = await res.json();
         return data.closed_trades;
       }

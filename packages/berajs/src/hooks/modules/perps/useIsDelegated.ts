@@ -1,5 +1,5 @@
+import { tradingContractAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { TRADING_ABI } from "~/config";
@@ -16,7 +16,7 @@ export const useIsDelegated = () => {
       if (!publicClient) return undefined;
       try {
         const result = await publicClient.readContract({
-          address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+          address: tradingContractAddress,
           abi: TRADING_ABI,
           functionName: method,
           args: [account],

@@ -1,3 +1,5 @@
+import { dexName } from "@bera/config";
+
 export function getMetaTitle(text: string) {
-  return `${text} | ${process.env.NEXT_PUBLIC_DEX_NAME}`;
+  return `${text} | ${dexName}`;
 }
