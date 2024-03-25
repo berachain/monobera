@@ -21,8 +21,8 @@ import {
   useBreakpoint,
   useTxn,
 } from "@bera/shared-ui";
-import { getPriceImpactColorClass } from "@bera/shared-ui/src/token-input";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
