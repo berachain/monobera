@@ -111,6 +111,7 @@ const WithdrawModalContent = ({
       4,
     ),
   });
+
   const maxWithdrawalAllowance = BigNumber(
     formatUnits(
       (userAccountData.totalCollateralBase as bigint) -
@@ -171,18 +172,17 @@ const WithdrawModalContent = ({
             <div className="flex items-center gap-1 font-semibold">
               <FormattedNumber
                 value={currentHealthFactor}
-                maxValue={999_999_999}
+                maxValue={999}
                 className={cn(
                   `text-${getLTVColor(Number(currentHealthFactor))}`,
                 )}
               />
-              <Icons.moveRight className="inline-block h-6 w-6" />
+              <Icons.moveRight className="inline-block h-4 w-6" />
               <FormattedNumber
                 value={newHealthFactor}
-                colored
-                maxValue={999_999_999}
+                className={cn(`text-${getLTVColor(Number(newHealthFactor))}`)}
+                maxValue={999}
               />
-              {newHealthFactor.toString()}
             </div>
           </div>
         )}
