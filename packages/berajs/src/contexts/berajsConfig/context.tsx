@@ -29,7 +29,7 @@ export interface IBeraConfigAPI {
   chains?: any;
 }
 
-export const globalQueryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 
 export const BeraConfigContext = createContext<IBeraConfigAPI | undefined>(
@@ -74,7 +74,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         theme={theme ?? "auto"}
       >
         <WagmiProvider config={config} reconnectOnMount={true}>
-          <QueryClientProvider client={globalQueryClient}>
+          <QueryClientProvider client={queryClient}>
             <DynamicWagmiConnector>
               <BeraJsProvider>
                 <TransactionStoreProvider>
