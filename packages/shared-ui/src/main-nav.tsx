@@ -32,18 +32,18 @@ export function MainNav({
             <NavigationMenu key={item.href}>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger
-                    className="text-muted-foreground"
-                    onClick={() => {
-                      track(`Navbar - "${item.title}" Clicked`);
-                    }}
-                  >
+                  <NavigationMenuTrigger className="text-muted-foreground">
                     {item.title}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="flex w-[404px] flex-col gap-1 p-4">
                       {item.children.map((component: any) => (
                         <NavListItem
+                          onClick={() => {
+                            track(
+                              `Navbar - "${item.title}" > "${component.title}" Clicked`,
+                            );
+                          }}
                           key={component.title}
                           title={component.title}
                           href={component.href}
@@ -81,11 +81,12 @@ export function MainNav({
 
 interface IconProps extends React.ComponentPropsWithoutRef<"a"> {
   icon?: any;
+  onClick?: () => void;
 }
 export const NavListItem = forwardRef<React.ElementRef<"a">, IconProps>(
-  ({ className, icon, title, type, children, ...props }, ref) => {
+  ({ className, icon, title, type, children, onClick, ...props }, ref) => {
     return (
-      <li>
+      <li onClick={onClick}>
         <NavigationMenuLink asChild>
           <a
             target={type === "external" ? "_blank" : "_self"}
