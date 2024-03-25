@@ -51,7 +51,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
   const config = createConfig({
     chains: [defaultBeraConfig.chain],
     multiInjectedProviderDiscovery: true,
-    ssr: true,
+    ssr: false,
     transports: {
       [defaultBeraConfig.chain.id]: http(
         defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
