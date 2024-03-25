@@ -52,7 +52,7 @@ export function TokenRow({
           <Skeleton className="h-8 w-16" />
         ) : (
           <FormattedNumber
-            value={Number(tokenPrice) * Number(asset.formattedBalance)}
+            value={Number(tokenPrice ?? "0") * Number(asset.formattedBalance)}
             symbol="USD"
           />
         )}
@@ -80,7 +80,7 @@ export function TokenList() {
         <div className="flex h-24 justify-center align-middle">
           <div className="flex flex-col items-center justify-center ">
             <Icons.empty className="h-4 w-4" />
-            <div className="">No recent activity</div>
+            <div>No recent activity</div>
           </div>
         </div>
       )}
