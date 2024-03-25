@@ -68,11 +68,11 @@ const BeraConfig: React.FC<IBeraConfig> = ({
           initialAuthenticationMode: "connect-only",
           environmentId: dynamicWalletKey,
           walletConnectors: [EthereumWalletConnectors],
-          overrides: { evmNetworks: [defaultBeraConfig.evmNetwork] },
+          // overrides: { evmNetworks: [defaultBeraConfig.evmNetwork] },
         }}
         theme={theme ?? "auto"}
       >
-        <WagmiProvider config={config}>
+        <WagmiProvider config={config} reconnectOnMount={true}>
           <QueryClientProvider client={queryClient}>
             <DynamicWagmiConnector>
               <BeraJsProvider>
