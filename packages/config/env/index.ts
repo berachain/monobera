@@ -193,9 +193,9 @@ export const recaptchaSiteKey = process.env
   .NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string;
 export const cloudflareKey = process.env.NEXT_PUBLIC_CLOUDFLARE_KEY as string;
 
-// Sentry
+// Sentry && Mixpanel
 export const developmentAnalytics = process.env
   .NEXT_PUBLIC_DEVELOPMENT_ANALYTICS as string;
 export const mixpanelProjectToken = process.env
-  .PUBLIC_MIXPANEL_PROJECT_TOKEN as string;
+  .NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN as string;
 export const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME as string;
