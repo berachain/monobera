@@ -17,7 +17,6 @@ export function WalletBalanceInUs() {
   const { data: pricesArray } = useTokenHoneyPrices(
     featuredTokenList?.map((featuredToken: Token) => featuredToken.address),
   );
-
   const total =
     assets && pricesArray
       ? assets?.reduce((acc: number, curr: Token) => {

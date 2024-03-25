@@ -22,7 +22,7 @@ export default function BGTApy() {
   });
   const bgtApr = useBgtApr(totalBorrowed) ?? 0; // is this apr or apy? i am confused
   const borrowApy = Number(data?.[honeyTokenAddress]?.variableBorrowAPY ?? "0");
-  console.log("borrowApy", borrowApy, "bgtApr", bgtApr);
+
   return (
     <div className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-accent bg-opacity-10 pr-4 text-xl font-semibold sm:text-3xl">
       <Icons.honey className="h-10 w-10" />

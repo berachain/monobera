@@ -26,11 +26,13 @@ export default function ConnectedWalletPopover({
   const [openPopover, setOpenPopover] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
-  const { account, logout } = useBeraJs();
-  const connectorName = useReadLocalStorage<string>("wagmi.wallet");
   const [setting, setSetting] = React.useState(false);
   const [tab, setTab] = React.useState("tokens");
+
+  const { account, logout } = useBeraJs();
+  const connectorName = useReadLocalStorage<string>("wagmi.wallet");
   const { handleLogOut } = useDynamicContext();
+
   const Content = (
     <>
       {!setting ? (

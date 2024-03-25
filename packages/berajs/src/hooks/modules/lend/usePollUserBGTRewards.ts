@@ -12,22 +12,23 @@ export const usePollLendUserBGTRewards = () => {
   const QUERY_KEY = ["getUserBGTRewardsLend", account];
   const swrResponce = useSWR(QUERY_KEY, async () => {
     if (!publicClient) return undefined;
-    if (account) {
-      try {
-        const result = await publicClient.readContract({
-          address: lendRewardsAddress,
-          abi: LEND_REWARD_HELPER_ABI,
-          functionName: "getAllRewards",
-          args: [account],
-        });
-        return result;
-      } catch (e) {
-        console.log(e);
-        return null;
-      }
-    } else {
-      return null;
-    }
+    // if (account) {
+    // try {
+    //   const result = await publicClient.readContract({
+    //     address: lendRewardsAddress,
+    //     abi: LEND_REWARD_HELPER_ABI,
+    //     functionName: "getAllRewards",
+    //     args: [account],
+    //   });
+    //   return result;
+    // } catch (e) {
+    //   console.log(e);
+    //   return null;
+    // }
+    // } else {
+    //   return null;
+    // }
+    return null;
   });
 
   return {
