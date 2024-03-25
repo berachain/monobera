@@ -10,6 +10,8 @@ import {
   NavigationMenuTrigger,
 } from "@bera/ui/navigation-menu";
 
+import { useAnalytics } from "./utils/analytics";
+
 export function MainNav({
   navItems,
   className,
@@ -18,6 +20,7 @@ export function MainNav({
   navItems: any[];
   className?: string;
 }) {
+  const { track } = useAnalytics();
   return (
     <nav
       className={cn("hidden items-center lg:flex xl:gap-2", className)}
@@ -29,7 +32,12 @@ export function MainNav({
             <NavigationMenu key={item.href}>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-muted-foreground">
+                  <NavigationMenuTrigger
+                    className="text-muted-foreground"
+                    onClick={() => {
+                      track(`Navbar - "${item.title}" Clicked`);
+                    }}
+                  >
                     {item.title}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -56,6 +64,9 @@ export function MainNav({
           <Link
             href={item.href}
             key={`${item.href}-${idx}`}
+            onClick={() => {
+              track(`Navbar - "${item.title}" Clicked`);
+            }}
             className={cn(
               "flex-shrink-0 whitespace-nowrap rounded-xs px-4 py-2 text-sm font-medium outline-none transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             )}
