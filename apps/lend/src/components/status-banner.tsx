@@ -142,7 +142,7 @@ export default function StatusBanner() {
         >
           <FormattedNumber
             value={formatUnits(data?.healthFactor || "0", 18)}
-            maxValue={1_000_000_000_000}
+            maxValue={999}
           />
           <RiskDetails />
         </div>
