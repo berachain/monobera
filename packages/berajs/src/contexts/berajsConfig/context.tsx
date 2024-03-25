@@ -72,7 +72,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         }}
         theme={theme ?? "auto"}
       >
-        <WagmiProvider config={config} reconnectOnMount={true}>
+        <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
             <DynamicWagmiConnector>
               <BeraJsProvider>
