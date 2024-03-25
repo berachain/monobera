@@ -50,8 +50,8 @@ const BeraConfig: React.FC<IBeraConfig> = ({
 
   const config = createConfig({
     chains: [defaultBeraConfig.chain],
-    multiInjectedProviderDiscovery: false,
-    ssr: false,
+    multiInjectedProviderDiscovery: true,
+    ssr: true,
     transports: {
       [defaultBeraConfig.chain.id]: http(
         defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
@@ -72,7 +72,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         }}
         theme={theme ?? "auto"}
       >
-        <WagmiProvider config={config}>
+        <WagmiProvider config={config} reconnectOnMount={true}>
           <QueryClientProvider client={queryClient}>
             <DynamicWagmiConnector>
               <BeraJsProvider>
