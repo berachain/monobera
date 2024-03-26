@@ -8,11 +8,7 @@ import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/Theme
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
-import {
-  WagmiProvider,
-  createConfig,
-  http,
-} from "wagmi";
+import { WagmiProvider, createConfig, http } from "wagmi";
 
 import { defaultBeraConfig } from "~/config";
 import { type NetworkConfig } from "~/config/types";
