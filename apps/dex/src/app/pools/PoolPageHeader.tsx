@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl, docsUrl } from "@bera/config";
+import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { Button } from "@bera/ui/button";
 
 import { PoolSearch } from "./PoolsTable";
@@ -15,6 +16,7 @@ export default function PoolPageHeader({
   poolType: "allPools" | "userPools";
 }) {
   const router = useRouter();
+  const { track } = useAnalytics();
 
   return (
     <div className="mx-auto mt-4 flex w-full flex-col items-center justify-center gap-8">
@@ -36,13 +38,22 @@ export default function PoolPageHeader({
           </div>
           <div className="mb-2 flex flex-row justify-center gap-2 self-center md:justify-start ">
             <Button
-              onClick={() => router.push("/pools/create")}
+              onClick={() => {
+                track("Pool Page - Create a Pool Clicked");
+                router.push("/pools/create");
+              }}
               className="text-md self-center"
             >
               Create a Pool
             </Button>
             <Link href={`${docsUrl}/learn/bex/pools`} target="_blank">
-              <Button variant={"outline"} className="text-md self-center">
+              <Button
+                variant={"outline"}
+                onClick={() => {
+                  track("Pool Page - Learn More Clicked");
+                }}
+                className="text-md self-center"
+              >
                 Learn More
               </Button>
             </Link>

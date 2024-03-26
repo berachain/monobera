@@ -10,6 +10,8 @@ import {
   NavigationMenuTrigger,
 } from "@bera/ui/navigation-menu";
 
+import { useAnalytics } from "./utils/analytics";
+
 export function MainNav({
   navItems,
   className,
@@ -18,6 +20,7 @@ export function MainNav({
   navItems: any[];
   className?: string;
 }) {
+  const { track } = useAnalytics();
   return (
     <nav
       className={cn("hidden items-center lg:flex xl:gap-2", className)}
@@ -36,6 +39,11 @@ export function MainNav({
                     <ul className="flex w-[404px] flex-col gap-1 p-4">
                       {item.children.map((component: any) => (
                         <NavListItem
+                          onClick={() => {
+                            track(
+                              `Navbar - "${item.title}" > "${component.title}" Clicked`,
+                            );
+                          }}
                           key={component.title}
                           title={component.title}
                           href={component.href}
@@ -56,6 +64,9 @@ export function MainNav({
           <Link
             href={item.href}
             key={`${item.href}-${idx}`}
+            onClick={() => {
+              track(`Navbar - "${item.title}" Clicked`);
+            }}
             className={cn(
               "flex-shrink-0 whitespace-nowrap rounded-xs px-4 py-2 text-sm font-medium outline-none transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             )}
@@ -70,11 +81,12 @@ export function MainNav({
 
 interface IconProps extends React.ComponentPropsWithoutRef<"a"> {
   icon?: any;
+  onClick?: () => void;
 }
 export const NavListItem = forwardRef<React.ElementRef<"a">, IconProps>(
-  ({ className, icon, title, type, children, ...props }, ref) => {
+  ({ className, icon, title, type, children, onClick, ...props }, ref) => {
     return (
-      <li>
+      <li onClick={onClick}>
         <NavigationMenuLink asChild>
           <a
             target={type === "external" ? "_blank" : "_self"}
