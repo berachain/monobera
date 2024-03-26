@@ -15,6 +15,7 @@ import { type Chain } from "viem";
 
 import { isProduction } from "../api/utils/isProduction";
 import { type NetworkConfig } from "./types";
+import { createConfig, http } from "wagmi";
 
 const BeraChain: Chain = {
   id: chainId,
@@ -66,3 +67,14 @@ export const defaultBeraConfig: NetworkConfig = {
   chain: BeraChain,
   evmNetwork,
 };
+
+export const wagmiConfig = createConfig({
+  chains: [defaultBeraConfig.chain],
+  multiInjectedProviderDiscovery: false,
+  ssr: false,
+  transports: {
+    [defaultBeraConfig.chain.id]: http(
+      defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
+    ),
+  },
+});

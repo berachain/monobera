@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
 import { WagmiProvider, createConfig, http } from "wagmi";
 
-import { defaultBeraConfig } from "~/config";
+import { defaultBeraConfig, wagmiConfig } from "~/config";
 import { type NetworkConfig } from "~/config/types";
 import { BeraJsProvider } from "~/contexts/berajsProvider";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
@@ -48,17 +48,6 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         ? "dark"
         : "light";
 
-  const config = createConfig({
-    chains: [defaultBeraConfig.chain],
-    multiInjectedProviderDiscovery: false,
-    ssr: false,
-    transports: {
-      [defaultBeraConfig.chain.id]: http(
-        defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
-      ),
-    },
-  });
-
   const queryClient = new QueryClient();
 
   return (
@@ -72,7 +61,7 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         }}
         theme={theme ?? "auto"}
       >
-        <WagmiProvider config={config}>
+        <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             <DynamicWagmiConnector>
               <BeraJsProvider>
