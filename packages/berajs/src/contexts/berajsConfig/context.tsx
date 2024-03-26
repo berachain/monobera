@@ -10,9 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
 import {
   WagmiProvider,
-  cookieStorage,
   createConfig,
-  createStorage,
   http,
 } from "wagmi";
 
@@ -51,16 +49,13 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         ? "auto"
         : nextTheme
       : darkTheme
-      ? "dark"
-      : "light";
+        ? "dark"
+        : "light";
 
   const config = createConfig({
     chains: [defaultBeraConfig.chain],
-    multiInjectedProviderDiscovery: true,
-    ssr: true,
-    storage: createStorage({  
-      storage: cookieStorage, 
-    }),  
+    multiInjectedProviderDiscovery: false,
+    ssr: false,
     transports: {
       [defaultBeraConfig.chain.id]: http(
         defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
