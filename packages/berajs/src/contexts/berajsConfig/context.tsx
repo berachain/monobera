@@ -47,8 +47,8 @@ const BeraConfig: React.FC<IBeraConfig> = ({
         ? "auto"
         : nextTheme
       : darkTheme
-      ? "dark"
-      : "light";
+        ? "dark"
+        : "light";
 
   return (
     <BeraConfigContext.Provider value={{ networkConfig: defaultBeraConfig }}>
