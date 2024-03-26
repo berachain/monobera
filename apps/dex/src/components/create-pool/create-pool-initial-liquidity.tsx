@@ -59,7 +59,9 @@ export function CreatePoolInitialLiquidity({
     setIsBaseTokenInput(true);
     const quoteAmount =
       (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
-      setQuoteAmount(quoteAmount === 0n ? "" : formatUnits(quoteAmount, PRESICION));
+    setQuoteAmount(
+      quoteAmount === 0n ? "" : formatUnits(quoteAmount, PRESICION),
+    );
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
