@@ -32,6 +32,12 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
     },
     ref,
   ) => {
+    const keepFirst = (str: string = "", char: string) => {
+      const firstIndex = str.indexOf(char);
+      const formatted = str.replaceAll(char, "").split("");
+      formatted.splice(firstIndex, 0, char);
+      return formatted.join("");
+    };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (type === "number" && !allowScientific) {
         e.target.value = e.target.value?.replaceAll(/[eE]/g, "");
@@ -46,6 +52,18 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         e.target.value = e.target.value?.replaceAll(/[^eE\d.-]+/g, "");
         if (e.target.value?.split(".").length > 2) {
           // abort if more than one decimal in number
+          e.target.value = keepFirst(e.target.value, ".");
+          return;
+        }
+        if (e.target.value?.toLowerCase().split("e").length > 2) {
+          // abort if more than one e in number
+          e.target.value = keepFirst(e.target.value, "e");
+          return;
+        }
+        if (e.target.value?.slice(1)?.includes("-")) {
+          // abort if more than one - and not in first index in number
+          e.target.value =
+            e.target.value[0] + e.target.value.slice(1).replaceAll("-", "");
           return;
         }
       }
