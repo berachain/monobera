@@ -177,7 +177,7 @@ export default function EcosystemProjects() {
               className="mx-auto flex w-full flex-col justify-between rounded-md border border-solid bg-background p-6 hover:bg-muted sm:h-[296px] sm:w-[260px]"
             >
               <div className="flex flex-col items-center gap-4">
-                <Avatar className="h-16 w-16">
+                <Avatar className="h-[96px] w-[96px]">
                   <AvatarImage src={project.icon} className="rounded-full" />
                 </Avatar>
 
