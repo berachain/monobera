@@ -16,6 +16,8 @@ import { BeraJsProvider } from "~/contexts/berajsProvider";
 import { TransactionStoreProvider } from "~/hooks/transactions/TransactionStoreContext";
 import { CrocEnvContextProvider } from "../crocenv";
 
+const queryClient = new QueryClient();
+
 interface IBeraConfig extends PropsWithChildren {
   // autoConnect?: boolean; // its always on for dynamic 4 now
   darkTheme?: boolean;
@@ -47,8 +49,6 @@ const BeraConfig: React.FC<IBeraConfig> = ({
       : darkTheme
         ? "dark"
         : "light";
-
-  const queryClient = new QueryClient();
 
   return (
     <BeraConfigContext.Provider value={{ networkConfig: defaultBeraConfig }}>
