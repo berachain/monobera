@@ -25,6 +25,7 @@ export const TooltipCustom: FC<
     tooltipContent?: string | ReactNode;
     anchor?: TooltipPosition;
     position?: TooltipPosition;
+    hidden?: boolean | undefined;
   }>
 > = ({
   children,
@@ -32,6 +33,7 @@ export const TooltipCustom: FC<
   tooltipContent,
   anchor = "left",
   position = "bottom-left",
+  hidden,
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -194,12 +196,15 @@ export const TooltipCustom: FC<
     <div
       onMouseEnter={() => setShowTooltip(true)}
       onMouseLeave={() => setShowTooltip(false)}
+      onClick={() => setShowTooltip((prev) => !prev)}
       className="relative"
     >
       {/* Tooltip content container */}
       <div
         className={`${
-          showTooltip ? "z-[999] opacity-100" : "z-[-1] opacity-0"
+          (showTooltip || hidden === false) && hidden !== true
+            ? "z-[999] opacity-100"
+            : "z-[-1] opacity-0"
         } absolute flex h-full w-full ${className}`}
         style={{
           transform: tooltipAnchorStyle.transform,
