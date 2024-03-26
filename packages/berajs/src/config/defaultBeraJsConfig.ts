@@ -12,6 +12,7 @@ import {
 } from "@bera/config";
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
+import { createConfig, http } from "wagmi";
 
 import { isProduction } from "../api/utils/isProduction";
 import { type NetworkConfig } from "./types";
@@ -66,3 +67,14 @@ export const defaultBeraConfig: NetworkConfig = {
   chain: BeraChain,
   evmNetwork,
 };
+
+export const wagmiConfig = createConfig({
+  chains: [defaultBeraConfig.chain],
+  multiInjectedProviderDiscovery: false,
+  ssr: false,
+  transports: {
+    [defaultBeraConfig.chain.id]: http(
+      defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
+    ),
+  },
+});
