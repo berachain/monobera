@@ -12,6 +12,7 @@ import CreatePoolExchangeRate from "./create-pool-exchange-rate";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { getBaseCost, getQuoteCost } from "~/app/pools/fetchPools";
 import { type Token } from "@bera/berajs";
+import { formatUnits, parseUnits } from "viem";
 
 type Props = {
   baseToken: Token | undefined;
@@ -50,18 +51,27 @@ export function CreatePoolInitialLiquidity({
   const baseCost = getBaseCost(getSafeNumber(initialPrice));
   const quoteCost = getQuoteCost(getSafeNumber(initialPrice));
 
+  const PRESICION = 18;
   const handleBaseAssetAmountChange = (value: string): void => {
     setBaseAmount(value);
+    const parsedBaseCost = parseUnits(baseCost.toString(), PRESICION);
+    const parsedValue = parseUnits(value, PRESICION);
     setIsBaseTokenInput(true);
-    const quoteAmount = baseCost * getSafeNumber(value);
-    setQuoteAmount(quoteAmount === 0 ? "" : quoteAmount.toString());
+    const quoteAmount =
+      (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
+    setQuoteAmount(
+      quoteAmount === 0n ? "" : formatUnits(quoteAmount, PRESICION),
+    );
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     setQuoteAmount(value);
     setIsBaseTokenInput(false);
-    const baseAmount = quoteCost * getSafeNumber(value);
-    setBaseAmount(baseAmount === 0 ? "" : baseAmount.toString());
+    const parsedQuoteCost = parseUnits(quoteCost.toString(), PRESICION);
+    const parsedValue = parseUnits(value, PRESICION);
+    const baseAmount =
+      (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
+    setBaseAmount(baseAmount === 0n ? "" : formatUnits(baseAmount, PRESICION));
   };
 
   const isInputDisabled =
@@ -85,7 +95,7 @@ export function CreatePoolInitialLiquidity({
       <div className="flex flex-col w-full gap-4">
         <ul className="divide divide-y divide-border rounded-lg border">
           <CreatePoolInitialPriceInput
-            baseToken={baseToken}
+            quoteToken={quoteToken}
             initialPrice={initialPrice}
             onInitialPriceChange={onInitialPriceChange}
           />
