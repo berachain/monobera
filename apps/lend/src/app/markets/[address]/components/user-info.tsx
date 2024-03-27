@@ -61,7 +61,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
     : borrowPower;
 
   return (
-    <div className="w-full flex-shrink-0 lg:w-[378px]">
+    <div className="w-full flex-shrink-0 xl:w-[378px]">
       <div>
         <div className="text-2xl font-semibold leading-loose">Your Info</div>
         <Card className="p-6">
