@@ -230,8 +230,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                ? "No more transactions"
-                : "Load more"}
+                  ? "No more transactions"
+                  : "Load more"}
             </Button>
           )}
         </>
@@ -251,8 +251,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                ? "No more transactions"
-                : "Load more"}
+                  ? "No more transactions"
+                  : "Load more"}
             </Button>
           )}
         </>
@@ -274,8 +274,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                ? "No more transactions"
-                : "Load more"}
+                  ? "No more transactions"
+                  : "Load more"}
             </Button>
           )}
         </>

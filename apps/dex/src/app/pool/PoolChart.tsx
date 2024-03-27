@@ -189,7 +189,6 @@ export const PoolChart = ({
     }
     quarterlyDayStartTimes.push(dayStartTimestamp);
   }
-  console.log(quarterlyDayStartTimes);
 
   let weeklyVolumeTotal = 0;
   let monthlyVolumeTotal = 0;
