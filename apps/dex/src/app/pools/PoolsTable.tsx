@@ -12,8 +12,7 @@ import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { getPoolUrl } from "./fetchPools";
 import { usePoolTable } from "./usePoolTable";
-import { useRouter } from 'next/navigation'
-
+import { useRouter } from "next/navigation";
 
 export const PoolSearch = ({
   poolType,
@@ -68,7 +67,7 @@ export const PoolSearch = ({
     setSearch("");
   };
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <div
