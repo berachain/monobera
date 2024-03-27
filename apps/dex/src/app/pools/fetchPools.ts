@@ -179,7 +179,7 @@ export const formatPoolData = (result: any): PoolV2 => {
     quoteFees: parseFloat(quoteFeesFormattedAmount.toString()),
     baseVolume: parseFloat(baseVolumeFormattedAmount.toString()),
     quoteVolume: parseFloat(quoteVolumeFormattedAmount.toString()),
-    feeRate: result.info.template.feeRate / 10000,
+    feeRate: result.info?.template?.feeRate ? result.info.template.feeRate / 10000 : result.stats.feeRate / 10000,
     tvlUsd: totalTvl,
     volumeUsd: totalVolume,
     feesUsd: totalFees,
