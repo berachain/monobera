@@ -68,9 +68,9 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           </div>
         </div>
 
-        <hr className="w-[250px] border-t border-yellow-500 opacity-30" />
+        <hr className="w-full sm:w-[250px] border-t border-yellow-500 opacity-30" />
 
-        <div className="flex w-[250px] justify-between">
+        <div className="w-full sm:w-[250px] flex justify-between">
           <div>
             <div className="text-xs font-medium leading-5 text-yellow-900 opacity-60 dark:text-yellow-200">
               Earning BGT APY
@@ -92,9 +92,9 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           </div>
         </div>
 
-        <hr className="w-[250px] border-t border-yellow-500 opacity-30" />
+        <hr className="w-full sm:w-[250px] border-t border-yellow-500 opacity-30" />
 
-        <div className="mb-8 flex h-5 w-[250px] items-center justify-between">
+        <div className="mb-8 flex h-5 w-full sm:w-[250px] items-center justify-between">
           <div className="text-xs font-medium text-yellow-900 text-opacity-60 dark:text-yellow-200">
             Your BGT Rewards
           </div>
