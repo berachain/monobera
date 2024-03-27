@@ -103,7 +103,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col gap-1">
         <div className="text-sm leading-5">
-          <FormattedNumber value={row.original?.feesUsd ?? 0} symbol="USD" />
+          <FormattedNumber value={row.original?.fees24h ?? 0} symbol="USD" />
         </div>
       </div>
     ),
@@ -124,7 +124,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     cell: ({ row }) => (
       <div className="flex flex-col gap-1">
         <div className="text-sm leading-5">
-          <FormattedNumber value={row.original?.volumeUsd ?? 0} symbol="USD" />
+          <FormattedNumber value={row.original?.volume24h ?? 0} symbol="USD" />
         </div>
       </div>
     ),
