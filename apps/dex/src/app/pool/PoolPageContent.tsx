@@ -230,8 +230,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -251,8 +251,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -274,8 +274,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -295,10 +295,15 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   const { usePoolHistoryData, isLoading: isPoolHistoryLoading } =
     usePoolHistory({
-      pool,
+      shareAddress: pool.shareAddress,
     });
 
-  const { data: poolHistory } = usePoolHistoryData();
+  const { data: poolHistoryData } = usePoolHistoryData();
+
+  const poolHistory = poolHistoryData?.history;
+  const timeCreated = poolHistoryData?.info?.timeCreate
+    ? new Date(parseInt(poolHistoryData?.info.timeCreate))
+    : null;
 
   return (
     <div className="flex flex-col gap-8">
@@ -315,6 +320,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 : 0
             }
             historicalData={poolHistory}
+            timeCreated={timeCreated}
             isLoading={isPoolHistoryLoading}
           />
           <div className="mb-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
