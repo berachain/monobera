@@ -353,6 +353,8 @@ export const getRecentSwaps = gql`
       quoteFlow
       transactionHash
       time
+      baseAssetHoneyPrice 
+      quoteAssetHoneyPrice
     }
   }
 `;
@@ -371,6 +373,8 @@ export const getRecentProvisions = gql`
       changeType
       transactionHash
       time
+      baseAssetHoneyPrice 
+      quoteAssetHoneyPrice
     }
   }
 `;

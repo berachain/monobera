@@ -170,7 +170,7 @@ export default function InterestRateOvertime({
 
         <div className="relative h-[180px] w-full">
           <div
-            className="absolute -top-[10px] -translate-x-1/2 transform text-[10px] text-muted-foreground"
+            className="absolute -top-[10px] -translate-x-1/2 transform text-[10px] text-muted-foreground flex items-center"
             style={{
               left: `${Number(reserveData?.borrowUsageRatio) * 100}%`,
             }}
@@ -179,7 +179,7 @@ export default function InterestRateOvertime({
           </div>
           <div
             className={cn(
-              "absolute -top-6 left-[90%] -translate-x-1/2 transform text-[10px] text-muted-foreground",
+              "absolute -top-6 left-[90%] -translate-x-1/2 transform text-[10px] text-muted-foreground flex items-center whitespace-nowrap",
             )}
           >
             Optimal {OPTIMAL_USAGE_RATE * 100}%

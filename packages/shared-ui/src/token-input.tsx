@@ -13,7 +13,13 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { getAddress } from "viem";
 
-import { FormattedNumber, SelectToken, TooltipCustom } from ".";
+import {
+  BREAKPOINTS,
+  FormattedNumber,
+  SelectToken,
+  TooltipCustom,
+  useBreakpoint,
+} from ".";
 import { getPriceImpactColorClass } from "./utils/textStyling";
 
 type Props = {
@@ -104,6 +110,8 @@ export function TokenInput({
     [difference],
   );
 
+  const breakpoint = useBreakpoint();
+
   return (
     <li className={"flex flex-col flex-wrap px-3"}>
       <div className="flex flex-row items-center">
@@ -180,6 +188,11 @@ export function TokenInput({
                   <TooltipCustom
                     anchor="left"
                     position="right"
+                    hidden={
+                      breakpoint !== undefined && breakpoint! <= BREAKPOINTS.md
+                        ? true
+                        : undefined
+                    }
                     tooltipContent={
                       <div className="w-[150px]">
                         <p className="text-xs">

@@ -192,7 +192,7 @@ const WithdrawModalContent = ({
         <Alert variant="destructive">
           <AlertTitle>
             {" "}
-            <Icons.info className="mr-1 inline-block h-4 w-4" />
+            <Icons.info className="mr-1 inline-block h-4 w-4 -mt-1" />
             Must Repay Entire Loan to Withdraw Collateral
           </AlertTitle>
           Please be sure to pay your entire honey debt, you will not be able to

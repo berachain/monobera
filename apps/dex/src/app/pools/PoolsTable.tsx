@@ -12,7 +12,7 @@ import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { getPoolUrl } from "./fetchPools";
 import { usePoolTable } from "./usePoolTable";
-import { mutate } from "swr";
+import { useRouter } from "next/navigation";
 
 export const PoolSearch = ({
   poolType,
@@ -66,6 +66,8 @@ export const PoolSearch = ({
     setKeyword("");
     setSearch("");
   };
+
+  const router = useRouter();
 
   return (
     <div
@@ -152,7 +154,7 @@ export const PoolSearch = ({
                 title={`All Pools (${data?.length ?? "0"})`}
                 className="min-w-[1000px]"
                 onRowClick={(row: any) =>
-                  window.open(getPoolUrl(row.original), "_self")
+                  router.replace(getPoolUrl(row.original))
                 }
                 onCustomSortingChange={(a: any) => handleNewSort(a)}
               />

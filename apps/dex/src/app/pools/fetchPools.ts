@@ -23,6 +23,8 @@ export interface PoolV2 {
   quoteVolume: number;
   baseTokens: string;
   quoteTokens: string;
+  volume24h: number;
+  fees24h: number;
   baseTokenHoneyTvl: number;
   quoteTokenHoneyTvl: number;
   totalApy: number;
@@ -92,7 +94,9 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
     quoteVolume: 0,
     tvlUsd: 0,
     volumeUsd: 0,
+    volume24h: 0,
     feesUsd: 0,
+    fees24h: 0,
     baseTokenHoneyTvl: 0,
     quoteTokenHoneyTvl: 0,
     totalApy: 0,
@@ -160,6 +164,11 @@ export const formatPoolData = (result: any): PoolV2 => {
   const totalVolume =
     parseFloat(baseVolumeHoneyAmount) + parseFloat(quoteVolumeHoneyAmount);
 
+  const volume24h = parseFloat(
+    getFormattedAmount(result.stats.volume24HInHoney),
+  );
+  const fees24h = parseFloat(getFormattedAmount(result.stats.fees24HInHoney));
+
   return {
     id: result.info.id,
     base: result.info.base,
@@ -179,10 +188,14 @@ export const formatPoolData = (result: any): PoolV2 => {
     quoteFees: parseFloat(quoteFeesFormattedAmount.toString()),
     baseVolume: parseFloat(baseVolumeFormattedAmount.toString()),
     quoteVolume: parseFloat(quoteVolumeFormattedAmount.toString()),
-    feeRate: result.stats.feeRate / 10000,
+    feeRate: result.info?.template?.feeRate
+      ? result.info.template.feeRate / 10000
+      : result.stats.feeRate / 10000,
     tvlUsd: totalTvl,
     volumeUsd: totalVolume,
     feesUsd: totalFees,
+    volume24h,
+    fees24h,
     baseTokenHoneyTvl: parseFloat(baseTvlHoneyAmount.toString()),
     quoteTokenHoneyTvl: parseFloat(quoteTvlHoneyAmount.toString()),
     totalApy: 0,

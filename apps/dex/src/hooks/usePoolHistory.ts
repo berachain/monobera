@@ -1,29 +1,52 @@
-import { chainId, crocIndexerEndpoint } from "@bera/config";
+import { crocIndexerEndpoint } from "@bera/config";
 import { type PoolDayDataV2 } from "@bera/graphql";
 import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import useSWRImmutable from "swr/immutable";
 
-import { PoolV2 } from "~/app/pools/fetchPools";
+interface PoolHistoryResponse_Info {
+  id?: string;
+  poolIdx?: string;
+  base?: string;
+  quote?: string;
+  timeCreate?: string;
+  baseInfo?: {
+    id?: string;
+    address?: string;
+    symbol?: string;
+    name?: string;
+    decimals?: number;
+  };
+  quoteInfo?: {
+    id?: string;
+    address?: string;
+    symbol?: string;
+    name?: string;
+    decimals?: number;
+  };
+  template?: {
+    feeRate?: number;
+  };
+  shareAddress?: {
+    address?: string;
+  };
+}
+interface PoolHistoryResponse {
+  info: PoolHistoryResponse_Info;
+  history: PoolDayDataV2[];
+}
 
-export const usePoolHistory = ({ pool }: { pool: PoolV2 }) => {
+export const usePoolHistory = ({ shareAddress }: { shareAddress: string }) => {
   const { captureException } = useAnalytics();
 
-  const QUERY_KEY = [
-    pool?.base,
-    pool?.quote,
-    pool?.poolIdx,
-    chainId.toString(16),
-  ];
+  const QUERY_KEY = ["pool_history", shareAddress];
   const { isLoading, isValidating, mutate } = useSWRImmutable<
     PoolDayDataV2[],
     any,
     any
   >(QUERY_KEY, () => {
-    if (!pool) return;
+    if (!shareAddress) return;
     return fetch(
-      `${crocIndexerEndpoint}/v2/pool_history?chainId=0x${chainId.toString(
-        16,
-      )}&base=${pool.base}&quote=${pool.quote}&poolIdx=${pool.poolIdx}&days=90`,
+      `${crocIndexerEndpoint}/v2/pool_history/${shareAddress}?days=90`,
     )
       .then((data) => data.json())
       .then((data) => {
@@ -35,7 +58,7 @@ export const usePoolHistory = ({ pool }: { pool: PoolV2 }) => {
   });
 
   const usePoolHistoryData = () => {
-    return useSWRImmutable<PoolDayDataV2[], any, any>(QUERY_KEY);
+    return useSWRImmutable<PoolHistoryResponse, any, any>(QUERY_KEY);
   };
 
   return {
