@@ -137,7 +137,7 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
         tension: 0.4,
         borderRadius: 100,
         borderSkipped: false,
-        maxBarThickness: 30,
+        maxBarThickness: 50,
         spanGaps: false,
       },
     ],
