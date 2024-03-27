@@ -230,8 +230,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -251,8 +251,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -274,8 +274,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -341,7 +341,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.volumeUsd} symbol="USD" />
+                <FormattedNumber value={pool?.volume24h} symbol="USD" />
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -351,7 +351,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.feesUsd} symbol="USD" />
+                <FormattedNumber value={pool?.fees24h} symbol="USD" />
               </div>{" "}
             </Card>
             <Card className="px-4 py-2">
