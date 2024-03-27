@@ -119,6 +119,9 @@ function getDateListFromDaysAgo(daysAgo: number): string[] {
   return dateList.reverse();
 }
 const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
+  if (chart === Chart.TVL && data.length === 1) {
+    data.unshift(0);
+  }
   const barLineData = {
     labels: getDateListFromDaysAgo(
       Math.min(data?.length, timeFrameToNumber[timeFrame]),
@@ -134,6 +137,7 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
         tension: 0.4,
         borderRadius: 100,
         borderSkipped: false,
+        maxBarThickness: 30,
         spanGaps: false,
       },
     ],
