@@ -120,7 +120,9 @@ function getDateListFromDaysAgo(daysAgo: number): string[] {
 }
 const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
   const barLineData = {
-    labels: getDateListFromDaysAgo(timeFrameToNumber[timeFrame]),
+    labels: getDateListFromDaysAgo(
+      Math.min(data?.length, timeFrameToNumber[timeFrame]),
+    ),
     datasets: [
       {
         data: data,
@@ -171,15 +173,21 @@ export const PoolChart = ({
   currentTvl,
   historicalData,
   isLoading,
+  timeCreated,
 }: {
   pool: PoolV2;
   currentTvl: number;
   historicalData: PoolDayDataV2[] | undefined;
   isLoading: boolean;
+  timeCreated?: Date | null;
 }) => {
   const quarterlyDayStartTimes: number[] = [];
   for (let i = 0; i < 90; i++) {
-    quarterlyDayStartTimes.push(getDayStartTimestampDaysAgo(i));
+    const dayStartTimestamp = getDayStartTimestampDaysAgo(i);
+    if (timeCreated && new Date(dayStartTimestamp) < timeCreated) {
+      break;
+    }
+    quarterlyDayStartTimes.push(dayStartTimestamp);
   }
 
   let weeklyVolumeTotal = 0;
@@ -251,9 +259,8 @@ export const PoolChart = ({
   );
 
   const extractData = (field: string, numOfDays: number) => {
-    // TODO: slice 0, MIN(num of days since pool creation date, numOfDays) - if pool was created before then we cap it at that
     return completeDailyData
-      .slice(0, numOfDays)
+      .slice(0, Math.min(numOfDays, quarterlyDayStartTimes.length))
       .map((dayData: any) => {
         return Number(dayData[field]);
       })
