@@ -4,13 +4,13 @@ import { Input } from "@bera/ui/input";
 import { type Token } from "@bera/berajs";
 
 type Props = {
-  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
   initialPrice: string;
   onInitialPriceChange: (initialPrice: string) => void;
 };
 
 export default function CreatePoolInitialPriceInput({
-  baseToken,
+  quoteToken,
   initialPrice,
   onInitialPriceChange,
 }: Props) {
@@ -18,8 +18,11 @@ export default function CreatePoolInitialPriceInput({
     <li className={"flex w-full flex-col items-center p-2"}>
       <div className="flex w-full flex-row justify-between ">
         <div className="w-fit flex flex-row gap-1 self-center font-semibold">
-          <TokenIcon address={baseToken?.address} symbol={baseToken?.symbol} />
-          {baseToken?.symbol}
+          <TokenIcon
+            address={quoteToken?.address}
+            symbol={quoteToken?.symbol}
+          />
+          {quoteToken?.symbol}
         </div>
         <Input
           type="number"

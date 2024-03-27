@@ -1,7 +1,6 @@
 import { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
-import { useTokenHoneyPrices } from "@bera/berajs";
 import { dexClient, getRecentProvisions } from "@bera/graphql";
 import { formatUnits, getAddress } from "viem";
 
@@ -13,14 +12,12 @@ export interface IProvisions {
   transactionHash: string;
   time: number;
   estimatedHoneyValue?: number;
+  baseAssetHoneyPrice: string;
+  quoteAssetHoneyPrice: string;
 }
 
 export const usePoolRecentProvisions = (pool: PoolV2 | undefined) => {
-  const { data: prices } = useTokenHoneyPrices([pool?.base, pool?.quote]);
-  const basePrice = prices?.[getAddress(pool?.base ?? "")];
-  const quotePrice = prices?.[getAddress(pool?.quote ?? "")];
-
-  const QUERY_KEY = ["recentProvisions", pool, basePrice, quotePrice];
+  const QUERY_KEY = ["recentProvisions", pool];
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
     if (!pool) {
       return undefined;
@@ -54,10 +51,12 @@ export const usePoolRecentProvisions = (pool: PoolV2 | undefined) => {
               pool.baseInfo.decimals,
             );
             const estimatedBaseHoneyValue =
-              parseFloat(formattedBaseFlow) * basePrice;
+              parseFloat(formattedBaseFlow) *
+              parseFloat(provision.baseAssetHoneyPrice);
 
             const estimatedQuoteHoneyValue =
-              parseFloat(formattedQuoteFlow) * quotePrice;
+              parseFloat(formattedQuoteFlow) *
+              parseFloat(provision.quoteAssetHoneyPrice);
             estimatedHoneyValue =
               estimatedBaseHoneyValue + estimatedQuoteHoneyValue;
           } else if (provision.changeType === "burn") {
@@ -70,10 +69,14 @@ export const usePoolRecentProvisions = (pool: PoolV2 | undefined) => {
               pool.baseInfo.decimals,
             );
             const estimatedBaseHoneyValue =
-              parseFloat(formattedBaseFlow) * -1 * basePrice;
+              parseFloat(formattedBaseFlow) *
+              -1 *
+              parseFloat(provision.baseAssetHoneyPrice);
 
             const estimatedQuoteHoneyValue =
-              parseFloat(formattedQuoteFlow) * -1 * quotePrice;
+              parseFloat(formattedQuoteFlow) *
+              -1 *
+              parseFloat(provision.quoteAssetHoneyPrice);
             estimatedHoneyValue =
               estimatedBaseHoneyValue + estimatedQuoteHoneyValue;
           }
