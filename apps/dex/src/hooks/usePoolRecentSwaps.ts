@@ -1,7 +1,7 @@
 import { mutate } from "swr";
 import { type PoolV2 } from "~/app/pools/fetchPools";
 import useSWRImmutable from "swr/immutable";
-import { useTokenHoneyPrices, type Token } from "@bera/berajs";
+import { type Token } from "@bera/berajs";
 import { dexClient, getRecentSwaps } from "@bera/graphql";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { formatUnits, getAddress } from "viem";
@@ -17,14 +17,12 @@ export interface ISwaps {
   transactionHash: string;
   time: number;
   estimatedHoneyValue?: number;
+  baseAssetHoneyPrice: string;
+  quoteAssetHoneyPrice: string;
 }
 
 export const usePoolRecentSwaps = (pool: PoolV2 | undefined) => {
-  const { data: prices } = useTokenHoneyPrices([pool?.base, pool?.quote]);
-  const basePrice = prices?.[getAddress(pool?.base ?? "")];
-  const quotePrice = prices?.[getAddress(pool?.quote ?? "")];
-
-  const QUERY_KEY = ["recentSwaps", pool, basePrice, quotePrice];
+  const QUERY_KEY = ["recentSwaps", pool];
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
     if (!pool) {
       return undefined;
@@ -69,7 +67,12 @@ export const usePoolRecentSwaps = (pool: PoolV2 | undefined) => {
             BigInt(swap.quoteFlow),
             pool.quoteInfo.decimals,
           );
-          estimatedHoneyValue = parseFloat(formattedQuoteFlow) * quotePrice;
+          estimatedHoneyValue =
+            parseFloat(formattedQuoteFlow) *
+              parseFloat(swap.quoteAssetHoneyPrice) +
+            parseFloat(formattedBaseFlow) *
+              -1 *
+              parseFloat(swap.baseAssetHoneyPrice);
 
           swapIn = pool.quoteInfo;
           swapOut = pool.baseInfo;
@@ -85,7 +88,12 @@ export const usePoolRecentSwaps = (pool: PoolV2 | undefined) => {
             BigInt(swap.quoteFlow),
             pool.quoteInfo.decimals,
           );
-          estimatedHoneyValue = parseFloat(formattedBaseFlow) * basePrice;
+          estimatedHoneyValue =
+            parseFloat(formattedBaseFlow) *
+              parseFloat(swap.baseAssetHoneyPrice) +
+            parseFloat(formattedQuoteFlow) *
+              -1 *
+              parseFloat(swap.quoteAssetHoneyPrice);
 
           swapIn = pool.baseInfo;
           swapOut = pool.quoteInfo;
