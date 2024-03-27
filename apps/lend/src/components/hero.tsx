@@ -6,7 +6,7 @@ import { Button } from "@bera/ui/button";
 export default function Hero() {
   return (
     <div className="flex min-h-[70vh] items-center justify-center py-16">
-      <div className="max-w-xl lg:text-center">
+      <div className="max-w-xl text-center">
         <Image
           src="/kingBear.png"
           alt="King Bear"
