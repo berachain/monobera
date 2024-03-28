@@ -230,8 +230,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -251,8 +251,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -274,8 +274,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -403,7 +403,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <div>
               <div className="flex h-8 items-center justify-between">
                 <div
-                  className="flex cursor-pointer gap-1 hover:underline"
+                  className="group flex cursor-pointer gap-1"
                   onClick={() => {
                     if (pool?.base) {
                       window.open(`${blockExplorerUrl}/address/${pool.base}`);
@@ -414,7 +414,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                     address={pool.baseInfo.address}
                     symbol={pool.baseInfo.symbol}
                   />
-                  <div className="ml-1 font-medium uppercase">
+                  <div className="ml-1 font-medium uppercase group-hover:underline">
                     {pool.base === beraTokenAddress
                       ? "wbera"
                       : pool.baseInfo.symbol}
@@ -435,7 +435,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               </div>
               <div className="flex h-8 items-center justify-between">
                 <div
-                  className="flex cursor-pointer gap-1 hover:underline"
+                  className="group flex cursor-pointer gap-1"
                   onClick={() => {
                     if (pool?.quote) {
                       window.open(`${blockExplorerUrl}/address/${pool.quote}`);
@@ -446,7 +446,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                     address={pool.quoteInfo.address}
                     symbol={pool.quoteInfo.symbol}
                   />
-                  <div className="ml-1 font-medium uppercase">
+                  <div className="ml-1 font-medium uppercase group-hover:underline">
                     {pool.quote === beraTokenAddress
                       ? "wbera"
                       : pool.quoteInfo.symbol}
