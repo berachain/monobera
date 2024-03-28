@@ -230,8 +230,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -251,8 +251,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -274,8 +274,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -285,7 +285,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   // const { isSmall, numericValue: formattedBGTRewards } =
   //   formatAmountSmall(bgtRewards);
-  const { isReady, isConnected } = useBeraJs();
+  const { isReady, isConnected, isWrongNetwork } = useBeraJs();
 
   const { usePosition, isLoading: isPositionBreakdownLoading } =
     usePollUserPosition(pool);
@@ -467,7 +467,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               </div>
             </div>
           </Card>
-          {isConnected && (
+          {isConnected && !isWrongNetwork && (
             <Card>
               <CardContent className="flex items-center justify-between gap-4 p-4">
                 <div className="w-full">
