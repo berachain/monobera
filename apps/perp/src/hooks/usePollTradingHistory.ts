@@ -2,12 +2,13 @@ import { useMemo } from "react";
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoint } from "@bera/config";
 import { type ClosedTrade } from "@bera/proto/src";
+import BigNumber from "bignumber.js";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import { POLLING } from "~/utils/constants";
-import { type IClosedTrade } from "~/app/berpetuals/components/order-history";
-import { type IMarket } from "~/app/berpetuals/page";
+import type { IMarket } from "~/types/market";
+import type { IClosedTrade } from "~/types/order-history";
 
 export const usePollTradingHistory = () => {
   const { account } = useBeraJs();
@@ -46,12 +47,13 @@ export const usePollTradingHistory = () => {
   const useRealizedPnl = () => {
     const { data } = useSWRImmutable(QUERY_KEY);
     return useMemo(() => {
-      return (
-        data?.reduce(
-          (acc: any, curr: IClosedTrade) => acc + Number(curr.pnl),
-          0,
-        ) ?? 0
+      const realizedPnl = data?.reduce(
+        (acc: BigNumber, curr: IClosedTrade) => acc.plus(curr.pnl),
+        BigNumber(0),
       );
+      return !realizedPnl || realizedPnl.isNaN()
+        ? "0"
+        : realizedPnl.toString(10);
     }, [data]);
   };
 

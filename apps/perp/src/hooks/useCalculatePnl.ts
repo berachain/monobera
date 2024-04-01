@@ -1,23 +1,24 @@
 import { useMemo, useState } from "react";
-import { formatUnits } from "viem";
+import BigNumber from "bignumber.js";
 
-import { type IMarketOrder } from "~/app/berpetuals/components/order-history";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import type { IMarketOrder } from "~/types/order-history";
 
 export interface ICalculatePnl {
-  currentPrice: bigint | undefined;
+  currentPrice: string | undefined;
   openPosition: IMarketOrder;
 }
 
 interface IPnl {
-  currentPrice: bigint;
   openPosition: IMarketOrder;
+  currentPrice: string | undefined;
 }
 
 export const useCalculatePnl = ({
   openPosition,
   currentPrice,
-}: IPnl): number | undefined => {
-  const [pnl, setPnl] = useState<number | undefined>(undefined);
+}: IPnl): string | undefined => {
+  const [pnl, setPnl] = useState<BigNumber | undefined>(undefined);
 
   useMemo(() => {
     try {
@@ -32,37 +33,33 @@ export const useCalculatePnl = ({
     }
   }, [currentPrice, openPosition]);
 
-  return pnl;
+  return pnl ? pnl.toString(10) : undefined;
 };
 
 export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
   if (currentPrice && openPosition) {
-    const collateral = BigInt(openPosition.position_size);
-    const formattedCollateral = Number(
-      formatUnits(BigInt(openPosition.position_size), 18),
+    const collateral = BigNumber(openPosition.position_size);
+    const formattedCollateral = formatFromBaseUnit(
+      openPosition.position_size,
+      18,
     );
+    const openPrice = BigNumber(openPosition.open_price);
+    const fees = BigNumber(openPosition.borrowing_fee)
+      .plus(BigNumber(openPosition.rollover_fee))
+      .plus(BigNumber(openPosition.funding_rate))
+      .plus(BigNumber(openPosition.closing_fee));
+    const leverage = BigNumber(openPosition.leverage);
 
-    const openPrice = BigInt(openPosition.open_price);
-    const fees =
-      BigInt(openPosition.borrowing_fee) +
-      BigInt(openPosition.rollover_fee) +
-      BigInt(openPosition.funding_rate) +
-      BigInt(openPosition.closing_fee);
-    const leverage = BigInt(openPosition.leverage);
+    const pnl = openPrice
+      .minus(BigNumber(currentPrice))
+      .times(leverage.times(collateral))
+      .times(openPosition.buy ? -1 : 1)
+      .div(openPrice)
+      .minus(fees);
+    const formattedPnl = formatFromBaseUnit(pnl, 18);
 
-    const pnl =
-      ((openPrice - BigInt(currentPrice)) *
-        (leverage * collateral) *
-        (openPosition.buy === true ? -1n : 1n)) /
-        openPrice -
-      fees;
-
-    const formattedPnl = Number(formatUnits(pnl, 18));
-
-    const minPos = formattedCollateral;
-
-    if (formattedPnl <= -minPos) {
-      return -minPos;
+    if (formattedPnl.lte(formattedCollateral.negated())) {
+      return formattedCollateral.negated();
     }
 
     return formattedPnl;
