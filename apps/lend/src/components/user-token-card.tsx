@@ -83,7 +83,9 @@ export default function UserTokenCard({
 
             <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
               <FormattedNumber value={balance} symbol={asset.symbol} />
-              <Tooltip text={<AssetInfo asset={asset} />} />
+              <Tooltip>
+                <AssetInfo asset={asset} />
+              </Tooltip>
             </div>
             <div className="text-xs font-medium leading-tight">
               <FormattedNumber
@@ -129,15 +131,12 @@ export default function UserTokenCard({
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Variable APY{" "}
-              <Tooltip
-                text={
-                  <>
-                    Variable interest rate will fluctuate based on the market{" "}
-                    <br />
-                    conditions. See additional disclaimers in notes below.
-                  </>
-                }
-              />
+              <Tooltip>
+                <div className="max-w-[300px]">
+                  Variable interest rate will fluctuate based on the market
+                  conditions. See additional disclaimers in notes below.
+                </div>
+              </Tooltip>
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               <FormattedNumber
@@ -152,7 +151,12 @@ export default function UserTokenCard({
           <div className="flex flex-shrink-0 flex-col">
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Loan APY{" "}
-              <Tooltip text="Variable interest rate will fluctuate based on the market conditions. See additional disclaimers in notes below." />
+              <Tooltip>
+                <div className="max-w-[300px]">
+                  Variable interest rate will fluctuate based on the market
+                  conditions. See additional disclaimers in notes below.
+                </div>
+              </Tooltip>
             </div>
             <div className="text-lg font-bold text-warning-foreground">
               <FormattedNumber
@@ -216,7 +220,7 @@ export default function UserTokenCard({
         <Alert variant="destructive" className="mt-4">
           <AlertTitle>
             {" "}
-            <Icons.info className="mr-1 inline-block h-4 w-4 -mt-1" />
+            <Icons.info className="-mt-1 mr-1 inline-block h-4 w-4" />
             Must Repay Entire Loan to Withdraw Collateral
           </AlertTitle>
           Please be sure to pay your entire honey debt, you will not be able to
