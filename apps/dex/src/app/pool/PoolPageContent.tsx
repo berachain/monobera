@@ -96,6 +96,58 @@ enum Selection {
   AddsWithdrawals = "addsWithdrawals",
 }
 
+const TokenView = ({
+  tokens,
+}: {
+  tokens: {
+    address: string;
+    symbol: string;
+    value: string | number;
+    valueUSD?: string | number;
+  }[];
+}) => {
+  return (
+    <>
+      <div className="mb-4 text-sm font-medium">Tokens</div>
+      <div>
+        {tokens?.map((token, index) => {
+          return (
+            <div
+              className="flex h-8 items-center justify-between"
+              key={`token-list-${index}-${token.address}-${token.value}`}
+            >
+              <div
+                className="group flex cursor-pointer gap-1"
+                onClick={() => {
+                  if (token.address) {
+                    window.open(`${blockExplorerUrl}/address/${token.address}`);
+                  }
+                }}
+              >
+                <TokenIcon address={token.address} symbol={token.symbol} />
+                <div className="ml-1 font-medium uppercase group-hover:underline">
+                  {token.address === beraTokenAddress ? "wbera" : token.symbol}
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <div className="font-medium">
+                  <FormattedNumber value={token.value} />
+                </div>
+                {token.valueUSD && (
+                  <div className="text-sm text-muted-foreground">
+                    <FormattedNumber value={token.valueUSD} symbol="USD" />
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
 export const EventTable = ({
   pool,
   events,
@@ -232,8 +284,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -253,8 +305,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -276,8 +328,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -294,6 +346,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   const userAmbientPosition = usePosition();
   const userPositionBreakdown = userAmbientPosition?.userPosition;
+  console.log(userPositionBreakdown);
 
   const { usePoolHistoryData, isLoading: isPoolHistoryLoading } =
     usePoolHistory({
@@ -395,121 +448,78 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             // </Card>
           }
           <Card className="p-4">
-            <div className="mb-8 flex h-8 w-full items-center justify-between text-lg font-semibold">
+            <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
               Pool Liquidity
               <div className="text-2xl">
                 <FormattedNumber value={pool?.tvlUsd} symbol="USD" />
               </div>
             </div>
-            <div className="mb-4 text-sm font-medium">Tokens</div>
-            <div>
-              <div className="flex h-8 items-center justify-between">
-                <div
-                  className="group flex cursor-pointer gap-1"
-                  onClick={() => {
-                    if (pool?.base) {
-                      window.open(`${blockExplorerUrl}/address/${pool.base}`);
-                    }
-                  }}
-                >
-                  <TokenIcon
-                    address={pool.baseInfo.address}
-                    symbol={pool.baseInfo.symbol}
-                  />
-                  <div className="ml-1 font-medium uppercase group-hover:underline">
-                    {pool.base === beraTokenAddress
-                      ? "wbera"
-                      : pool.baseInfo.symbol}
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <div className="font-medium">
-                    <FormattedNumber value={pool?.baseTokens} />
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    <FormattedNumber
-                      value={pool?.baseTokenHoneyTvl}
-                      symbol="USD"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex h-8 items-center justify-between">
-                <div
-                  className="group flex cursor-pointer gap-1"
-                  onClick={() => {
-                    if (pool?.quote) {
-                      window.open(`${blockExplorerUrl}/address/${pool.quote}`);
-                    }
-                  }}
-                >
-                  <TokenIcon
-                    address={pool.quoteInfo.address}
-                    symbol={pool.quoteInfo.symbol}
-                  />
-                  <div className="ml-1 font-medium uppercase group-hover:underline">
-                    {pool.quote === beraTokenAddress
-                      ? "wbera"
-                      : pool.quoteInfo.symbol}
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <div className="font-medium">
-                    <FormattedNumber value={pool?.quoteTokens} />
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    <FormattedNumber
-                      value={pool?.quoteTokenHoneyTvl}
-                      symbol="USD"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <TokenView
+              tokens={[
+                {
+                  address: pool.baseInfo.address,
+                  symbol: pool.baseInfo.symbol,
+                  value: pool.baseTokens,
+                  valueUSD: pool.baseTokenHoneyTvl,
+                },
+                {
+                  address: pool.quoteInfo.address,
+                  symbol: pool.quoteInfo.symbol,
+                  value: pool.baseTokens,
+                  valueUSD: pool.baseTokenHoneyTvl,
+                },
+              ]}
+            />
           </Card>
           {isConnected && !isWrongNetwork && (
             <Card>
               <CardContent className="flex items-center justify-between gap-4 p-4">
-                <div className="w-full">
-                  <h3 className="text-xs font-medium text-muted-foreground">
-                    My pool balance
-                  </h3>
-                  <span className="mt-1 text-lg font-semibold text-foreground">
-                    {isReady ? (
-                      isPositionBreakdownLoading ? (
-                        <Skeleton className="h-[32px] w-[150px]" />
+                <div className="w-full ">
+                  <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      My pool balance
+                    </h3>
+                    <div className="text-2xl">
+                      {isReady ? (
+                        isPositionBreakdownLoading ? (
+                          <Skeleton className="h-[32px] w-[150px]" />
+                        ) : (
+                          <FormattedNumber
+                            value={
+                              userPositionBreakdown?.estimatedHoneyValue ?? 0
+                            }
+                            symbol="USD"
+                          />
+                        )
                       ) : (
-                        <FormattedNumber
-                          value={
-                            userPositionBreakdown?.estimatedHoneyValue ?? 0
-                          }
-                          symbol="USD"
-                        />
-                      )
-                    ) : (
-                      <Skeleton className="h-[32px] w-[150px]" />
-                    )}
-                  </span>
-                  <TokenSummary
-                    title=""
-                    baseToken={pool.baseInfo}
-                    quoteToken={pool.quoteInfo}
-                    baseAmount={
-                      truncateFloat(
-                        userPositionBreakdown?.formattedBaseAmount,
-                        6,
-                      )?.toString() ?? "0"
-                    }
-                    quoteAmount={
-                      truncateFloat(
-                        userPositionBreakdown?.formattedQuoteAmount,
-                        6,
-                      )?.toString() ?? "0"
-                    }
-                    isLoading={isPositionBreakdownLoading}
-                  />
+                        <Skeleton className="h-[32px] w-[150px]" />
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-4 lg:mt-8">
+                    <TokenView
+                      tokens={[
+                        {
+                          address: pool.baseInfo.address,
+                          symbol: pool.baseInfo.symbol,
+                          value:
+                            truncateFloat(
+                              userPositionBreakdown?.formattedBaseAmount,
+                              6,
+                            )?.toString() ?? "0",
+                        },
+                        {
+                          address: pool.quoteInfo.address,
+                          symbol: pool.quoteInfo.symbol,
+                          value:
+                            truncateFloat(
+                              userPositionBreakdown?.formattedQuoteAmount,
+                              6,
+                            )?.toString() ?? "0",
+                        },
+                      ]}
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
