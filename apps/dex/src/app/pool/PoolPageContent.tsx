@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { truncateHash, useBeraJs } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import { ApyTooltip, FormattedNumber, TokenIcon } from "@bera/shared-ui";
+import { truncateFloat } from "@bera/shared-ui/src/utils";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
@@ -29,6 +30,7 @@ import {
 } from "~/hooks/usePoolRecentProvisions";
 import { usePoolRecentSwaps, type ISwaps } from "~/hooks/usePoolRecentSwaps";
 import { type PoolV2 } from "../pools/fetchPools";
+import { TokenSummary } from "../withdraw/WithdrawPageContent";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 
@@ -230,8 +232,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -251,8 +253,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -274,8 +276,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -490,6 +492,24 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                       <Skeleton className="h-[32px] w-[150px]" />
                     )}
                   </span>
+                  <TokenSummary
+                    title=""
+                    baseToken={pool.baseInfo}
+                    quoteToken={pool.quoteInfo}
+                    baseAmount={
+                      truncateFloat(
+                        userPositionBreakdown?.formattedBaseAmount,
+                        6,
+                      )?.toString() ?? "0"
+                    }
+                    quoteAmount={
+                      truncateFloat(
+                        userPositionBreakdown?.formattedQuoteAmount,
+                        6,
+                      )?.toString() ?? "0"
+                    }
+                    isLoading={isPositionBreakdownLoading}
+                  />
                 </div>
               </CardContent>
             </Card>
