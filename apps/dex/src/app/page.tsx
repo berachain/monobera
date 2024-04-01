@@ -2,8 +2,7 @@ import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { chainId, crocIndexerEndpoint, dexName } from "@bera/config";
-import { Documentation, Footer } from "@bera/shared-ui";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import { Documentation, Footer, useAnalytics } from "@bera/shared-ui";
 
 import { getMetaTitle } from "~/utils/metadata";
 import Data from "./components/Data";

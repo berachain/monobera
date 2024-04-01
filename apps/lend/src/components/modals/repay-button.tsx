@@ -17,6 +17,7 @@ import {
   FormattedNumber,
   TokenInput,
   useTxn,
+  useAnalytics
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
@@ -27,7 +28,6 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { useAnalytics } from "@bera/shared-ui/src/utils";
 
 export default function RepayBtn({
   token,

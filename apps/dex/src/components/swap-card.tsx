@@ -24,8 +24,8 @@ import {
   TooltipCustom,
   useBreakpoint,
   useTxn,
+  useAnalytics
 } from "@bera/shared-ui";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
 import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";

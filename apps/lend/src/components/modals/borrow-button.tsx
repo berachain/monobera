@@ -10,7 +10,13 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { FormattedNumber, TokenInput, Tooltip, useTxn } from "@bera/shared-ui";
+import {
+  FormattedNumber,
+  TokenInput,
+  Tooltip,
+  useAnalytics,
+  useTxn,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -18,7 +24,6 @@ import { Icons } from "@bera/ui/icons";
 import { formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { useAnalytics } from "@bera/shared-ui/src/utils";
 
 export default function BorrowBtn({
   token,

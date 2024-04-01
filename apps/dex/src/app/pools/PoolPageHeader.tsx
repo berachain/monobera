@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { cloudinaryUrl, docsUrl } from "@bera/config";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import { useAnalytics } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 
 import { PoolSearch } from "./PoolsTable";

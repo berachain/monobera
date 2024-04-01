@@ -14,7 +14,7 @@ import {
   honeyTokenAddress,
   lendPoolImplementationAddress,
 } from "@bera/config";
-import { FormattedNumber, TokenInput, useTxn } from "@bera/shared-ui";
+import { FormattedNumber, TokenInput, useTxn, useAnalytics } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -25,7 +25,6 @@ import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { maxUint256 } from "~/utils/constants";
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { useAnalytics } from "@bera/shared-ui/src/utils";
 
 export default function WithdrawBtn({
   token,

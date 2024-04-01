@@ -55,3 +55,4 @@ export { FormattedNumber } from "./formatted-number";
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
 export * from "./hooks";
+export * from "./utils";

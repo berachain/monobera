@@ -18,8 +18,8 @@ import {
   TokenInput,
   Tooltip,
   useTxn,
+  useAnalytics
 } from "@bera/shared-ui";
-import { useAnalytics } from "@bera/shared-ui/src/utils";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
