@@ -1,12 +1,12 @@
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoint } from "@bera/config";
-import { type OpenLimitOrder } from "@bera/proto/src";
+import type { OpenLimitOrder } from "@bera/proto/src";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import { POLLING } from "~/utils/constants";
-import { type ILimitOrder } from "~/app/berpetuals/components/order-history";
-import { type IMarket } from "~/app/berpetuals/page";
+import type { IMarket } from "~/types/market";
+import type { ILimitOrder } from "~/types/order-history";
 
 export const usePollOpenOrders = () => {
   const { account } = useBeraJs();

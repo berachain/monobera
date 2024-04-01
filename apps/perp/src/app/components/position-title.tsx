@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { cn } from "@bera/ui";
 
-import { type IMarket } from "../berpetuals/page";
+import type { IMarket } from "~/types/market";
 
 export function PositionTitle({
   market,
@@ -37,7 +37,7 @@ export function PositionTitle({
         className="rounded-full"
       />{" "}
       <div>
-        <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
+        <div className="mt-1 text-nowrap text-sm font-semibold leading-tight text-foreground">
           {market?.name}
         </div>
         <div
@@ -71,7 +71,7 @@ export function PositionCardTitle({
   market: IMarket;
   type: "Long" | "Short";
   className?: string;
-  size: number;
+  size: string;
 }) {
   return (
     <div
@@ -103,7 +103,7 @@ export function PositionCardTitle({
         </div>
       </div>
       <div className="text-sm font-semibold leading-tight text-muted-foreground">
-        {size.toFixed(4) ?? 0} {market?.name.split("-")[0]}
+        {size ?? "0"} {market?.name.split("-")[0]}
       </div>
     </div>
   );

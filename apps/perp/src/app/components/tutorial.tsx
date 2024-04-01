@@ -32,17 +32,6 @@ export default function Tutorial() {
           <br className="block md:hidden" />
           traders to transact.
         </div>
-        {/* <div className="mb-6 flex items-center justify-center xl:justify-start">
-          <Link href="/berpetuals">
-            <Button className="mr-4">
-              <Icons.play className="mr-1 h-6 w-6" />
-              Tutorial
-            </Button>
-          </Link>
-          <Link href="/markets">
-            <Button variant="secondary">Trading Guide</Button>
-          </Link>
-        </div> */}
       </div>
     </div>
   );

@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { DataTable, SearchInput } from "@bera/shared-ui";
 
-import { type IMarket } from "../berpetuals/page";
-import { market_table_column } from "./components/market-table-column";
+import type { IMarket } from "~/types/market";
+import { marketTableColumn } from "./market-table-column";
 
 export default function AvailableMarket({ markets }: { markets: IMarket[] }) {
   const [search, searchInput] = useState<string | undefined>(undefined);
@@ -33,9 +33,9 @@ export default function AvailableMarket({ markets }: { markets: IMarket[] }) {
         </div>
       </div>
       <DataTable
-        columns={market_table_column}
+        columns={marketTableColumn}
         data={filteredMarkets ?? []}
-        className="min-w-[1200px]"
+        className="min-w-[600px]"
         onRowClick={(row) => {
           //@ts-ignore
           window.open(`/berpetuals/${row.original.name}`, "_self");

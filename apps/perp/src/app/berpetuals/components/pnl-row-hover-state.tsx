@@ -8,13 +8,17 @@ export function PnLRowHoverState({
   closeFee,
   openFee,
 }: {
-  initialCollateral: number;
-  pnlAfterFees: number;
-  borrowFee: number;
-  closeFee: number;
-  openFee: number;
+  initialCollateral: string;
+  pnlAfterFees: string;
+  borrowFee: string;
+  closeFee: string;
+  openFee: string;
 }) {
-  const pnl = pnlAfterFees + borrowFee + closeFee + openFee;
+  const pnl =
+    Number(pnlAfterFees) +
+    Number(borrowFee) +
+    Number(closeFee) +
+    Number(openFee);
   return (
     <div>
       <div className="flex">
@@ -58,12 +62,12 @@ export function PnLRowHoverState({
           <span
             className={cn(
               "",
-              Number(borrowFee * -1) > 0
+              Number(borrowFee) * -1 > 0
                 ? "text-success-foreground"
                 : "text-destructive-foreground",
             )}
           >
-            {formatUsd(borrowFee * -1)}
+            {formatUsd(Number(borrowFee) * -1)}
           </span>
         </span>
       </div>
@@ -73,12 +77,12 @@ export function PnLRowHoverState({
           <span
             className={cn(
               "",
-              Number(openFee * -1) > 0
+              Number(openFee) * -1 > 0
                 ? "text-success-foreground"
                 : "text-destructive-foreground",
             )}
           >
-            {formatUsd(openFee * -1)}
+            {formatUsd(Number(openFee) * -1)}
           </span>
         </span>
       </div>
@@ -88,12 +92,12 @@ export function PnLRowHoverState({
           <span
             className={cn(
               "",
-              Number(closeFee * -1) > 0
+              Number(closeFee) * -1 > 0
                 ? "text-success-foreground"
                 : "text-destructive-foreground",
             )}
           >
-            {formatUsd(closeFee * -1)}
+            {formatUsd(Number(closeFee) * -1)}
           </span>
         </span>
       </div>

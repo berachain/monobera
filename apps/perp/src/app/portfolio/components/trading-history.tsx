@@ -3,14 +3,11 @@
 import React from "react";
 import { DataTable } from "@bera/shared-ui";
 
+import { historyColumns } from "~/app/components/table-columns/history";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
-import { history_columns } from "../../berpetuals/components/columns";
-import type { IMarket } from "../../berpetuals/page";
+import type { IMarket } from "~/types/market";
 
 export default function TradingHistory({ markets }: { markets: IMarket[] }) {
-  // const [voterTypes, setVoterTypes] = React.useState<
-  //   "30D" | "60D" | "90D" | "6M" | "ALL TIME"
-  // >("30D");
   const { useMarketClosedPositions } = usePollTradingHistory();
   const closedPositions = useMarketClosedPositions(markets);
   return (
@@ -23,27 +20,10 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
             Breakdown of your trading History
           </div>
         </div>
-        {/* <Tabs defaultValue={voterTypes}>
-          <TabsList>
-            {["30D", "60D", "90D", "6M", "ALL TIME"].map((type) => (
-              <TabsTrigger
-                value={type}
-                key={type}
-                onClick={() =>
-                  setVoterTypes(
-                    type as "30D" | "60D" | "90D" | "6M" | "ALL TIME",
-                  )
-                }
-              >
-                {type}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs> */}
       </div>
       <DataTable
         enablePagination
-        columns={history_columns}
+        columns={historyColumns}
         data={closedPositions ?? []}
         className="min-w-[1136px]"
       />

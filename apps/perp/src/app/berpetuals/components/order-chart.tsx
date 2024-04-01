@@ -1,22 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import { formatUnits } from "viem";
-import { ClosePositionModal } from "../../components/close-position-modal";
+import {
+  type PaginationState,
+  type RowSelectionState,
+} from "@tanstack/react-table";
+
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { CloseOrderModal } from "~/app/components/close-order-modal";
 import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { type IMarket } from "~/types/market";
+import { ILimitOrder, IMarketOrder } from "~/types/order-history";
+import { type TableTabTypes } from "~/types/table-tab-types";
 import {
   type ChartingLibraryWidgetOptions,
   type ResolutionString,
 } from "../../../../public/static/charting_library/charting_library";
-import { type IMarket } from "../page";
+import { ClosePositionModal } from "../../components/close-position-modal";
 import type { ChartProps } from "./TVChartContainer";
-import { type BerpTabTypes } from "./order-wrapper";
-import {
-  type RowSelectionState,
-  type PaginationState,
-} from "@tanstack/react-table";
-import { CloseOrderModal } from "~/app/components/close-order-modal";
-import { ILimitOrder, IMarketOrder } from "./order-history";
 import { LoadingContainer } from "./loading-container";
 
 export type OrderLine = {
@@ -46,15 +47,13 @@ export function OrderChart({
   setSelection,
   pagination,
   tabType,
-  showOrderLines,
 }: {
   markets: IMarket[];
   marketName: string;
   selection: RowSelectionState;
   pagination: PaginationState;
   setSelection: (selection: RowSelectionState) => void;
-  tabType: BerpTabTypes;
-  showOrderLines: boolean;
+  tabType: TableTabTypes;
 }) {
   const { useMarketOpenPositions } = usePollOpenPositions();
   const { useMarketOpenOrders } = usePollOpenOrders();
@@ -96,17 +95,17 @@ export function OrderChart({
             index < (pagination.pageIndex + 1) * pagination.pageSize &&
             position?.market?.name === marketName
           ) {
-            const positionSize =
-              Number(formatUnits(BigInt(position.position_size ?? 0), 18)) *
-              Number(position.leverage);
-            const openPrice = Number(
-              formatUnits(BigInt(position.open_price ?? 0), 10),
-            );
-            const size = positionSize / openPrice;
+            const positionSize = formatFromBaseUnit(
+              position.position_size,
+              18,
+            ).times(position.leverage ?? "1");
+            const openPrice = formatFromBaseUnit(position.open_price, 10);
+            const size = positionSize.div(openPrice).dp(4).toString(10);
+
             const pos = {
-              price: Number(formatUnits(BigInt(position.open_price ?? 0), 10)),
+              price: Number(openPrice.toString(10)),
               type: position.buy ? "Long Position" : "Short Position",
-              positionSize: size.toFixed(4),
+              positionSize: size,
               onHighlight: () => setSelection({ [index]: true }),
               onClose: () => {
                 setPosition(position);
@@ -114,8 +113,12 @@ export function OrderChart({
               },
             } as OrderLine;
             if (selection[index]) {
-              pos.tp = Number(formatUnits(BigInt(position.tp ?? 0), 10));
-              pos.sl = Number(formatUnits(BigInt(position.sl ?? 0), 10));
+              pos.tp = Number(
+                formatFromBaseUnit(position.tp ?? "0", 10).toString(10),
+              );
+              pos.sl = Number(
+                formatFromBaseUnit(position.sl ?? "0", 10).toString(10),
+              );
             }
             acc.push(pos);
           }
@@ -134,15 +137,17 @@ export function OrderChart({
             index < (pagination.pageIndex + 1) * pagination.pageSize &&
             order?.market?.name === marketName
           ) {
-            const positionSize =
-              Number(formatUnits(BigInt(order.position_size ?? 0), 18)) *
-              Number(order.leverage);
-            const openPrice = Number(formatUnits(BigInt(order.price ?? 0), 10));
-            const size = positionSize / openPrice;
+            const positionSize = formatFromBaseUnit(
+              order.position_size,
+              18,
+            ).times(order.leverage ?? "1");
+            const openPrice = formatFromBaseUnit(order.price, 10);
+            const size = positionSize.div(openPrice).dp(4).toString(10);
+
             const limit = {
-              price: Number(formatUnits(BigInt(order.price ?? 0), 10)),
+              price: Number(openPrice),
               type: order.buy ? "Long Limit" : "Short Limit",
-              positionSize: size.toFixed(4),
+              positionSize: size,
               onHighlight: () => setSelection({ [index]: true }),
               onClose: () => {
                 setOrder(order);
@@ -150,8 +155,12 @@ export function OrderChart({
               },
             } as OrderLine;
             if (selection[index]) {
-              limit.tp = Number(formatUnits(BigInt(order.tp ?? 0), 10));
-              limit.sl = Number(formatUnits(BigInt(order.sl ?? 0), 10));
+              limit.tp = Number(
+                formatFromBaseUnit(order.tp ?? "0", 10).toString(10),
+              );
+              limit.sl = Number(
+                formatFromBaseUnit(order.sl ?? "0", 10).toString(10),
+              );
             }
             acc.push(limit);
           }
@@ -171,7 +180,7 @@ export function OrderChart({
   }, [tabType, humanizedOrders, humanizedPositions]);
 
   return (
-    <div className="h-full w-full grid">
+    <div className="grid h-full w-full">
       <div className="h-full w-full" style={{ gridArea: "1 / 1" }}>
         {position && (
           <ClosePositionModal
@@ -189,7 +198,6 @@ export function OrderChart({
         )}
         <TVChartContainer
           {...defaultWidgetProps}
-          showOrderLines={showOrderLines}
           orderLines={orderLines}
           chartReady={chartReady}
           setChartReady={setChartReady}
@@ -200,36 +208,4 @@ export function OrderChart({
       )}
     </div>
   );
-
-  // return (
-  //   <div className="h-full w-full">
-  //       {isMounted ? (
-  //         <>
-  //         {position && (
-  //           <ClosePositionModal
-  //             controlledOpen={positionOpenState}
-  //             openPosition={position}
-  //             onOpenChange={setPositionOpenState}
-  //           />
-  //         )}
-  //         {order && (
-  //           <CloseOrderModal
-  //             controlledOpen={orderOpenState}
-  //             openOrder={order}
-  //             onOpenChange={setOrderOpenState}
-  //           />
-  //         )}
-  //         <TVChartContainer
-  //           {...defaultWidgetProps}
-  //           showOrderLines={showOrderLines}
-  //           orderLines={orderLines}
-  //           chartReady={chartReady}
-  //           setChartReady={setChartReady}
-  //         />
-  //       </>
-  //       ) : (
-  //           <LoadingContainer />
-  //         )}
-  //   </div>
-  // );
 }

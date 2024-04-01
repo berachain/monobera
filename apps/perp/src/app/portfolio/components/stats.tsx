@@ -7,14 +7,12 @@ import { BeraChart } from "@bera/ui/bera-chart";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
 
+import { PNL_TOOLTIP_TEXT, VOLUME_TOOLTIP_TEXT } from "~/utils/tooltip-text";
 import { useTradingSummaryChart } from "~/hooks/useTradingSummaryChart";
-import {
-  PNL_TOOLTIP_TEXT,
-  VOLUME_TOOLTIP_TEXT,
-} from "../../utils/tooltip-text";
-import type { IMarket } from "../berpetuals/page";
-import { Options, chartColor } from "./components/chat-options";
-import { UserGeneralInfo } from "./components/user-general-info";
+import type { IMarket } from "~/types/market";
+import { TimeFrame } from "~/types/time";
+import { Options, chartColor } from "./chat-options";
+import { UserGeneralInfo } from "./user-general-info";
 
 const getData = (data: any[], type: string, light: boolean) => {
   return {
@@ -47,13 +45,7 @@ const getData = (data: any[], type: string, light: boolean) => {
   };
 };
 
-export enum TimeFrame {
-  WEEKLY = "7d",
-  MONTHLY = "30d",
-  QUARTERLY = "90d",
-}
-
-export default function Portfolio({ markets }: { markets: IMarket[] }) {
+export default function Stats({ markets }: { markets: IMarket[] }) {
   const [tabType, setTabType] = React.useState<"Volume" | "PnL">("PnL");
   const [timeFrame, setTimeFrame] = React.useState(TimeFrame.QUARTERLY);
 
@@ -71,7 +63,7 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
       <UserGeneralInfo markets={markets} />
       <div className="flex w-full flex-col justify-between rounded-md border border-border bg-muted px-4 py-6">
         <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:gap-0">
-          <div className="text-xl font-semibold leading-7 my-2 sm:my-0">
+          <div className="my-2 text-xl font-semibold leading-7 sm:my-0">
             {tabType === "Volume"
               ? formatUsd(Number(totalVolume))
               : formatUsd(Number(totalPnl))}
@@ -82,7 +74,7 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
               onValueChange={(value) => setTabType(value as "Volume" | "PnL")}
               className="w-full sm:w-fit"
             >
-              <TabsList className="w-full sm:w-fit border">
+              <TabsList className="w-full border sm:w-fit">
                 {["Volume", "PnL"].map((status) => (
                   <TabsTrigger
                     value={status}
@@ -110,7 +102,7 @@ export default function Portfolio({ markets }: { markets: IMarket[] }) {
             />
           </div>
         </div>
-        <div className="w-full h-full lg:w-[calc(100%-5px)]">
+        <div className="h-full w-full lg:w-[calc(100%-5px)]">
           <BeraChart data={data} options={Options as any} type={"bar"} />
           <div />
         </div>
