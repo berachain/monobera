@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
+import { useEffect, useState } from "react";
+import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -7,13 +7,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
+import { type Address } from "viem";
 
-import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
-import { ActivePositionPNL } from "../berpetuals/components/columns";
-import { type IMarketOrder } from "../berpetuals/components/order-history";
+import type { IMarketOrder } from "~/types/order-history";
+import { ActivePositionPNL } from "./table-columns/positions";
 
 export function ClosePositionModal({
   trigger,
@@ -48,13 +48,13 @@ export function ClosePositionModal({
   const price = useMarketIndexPrice(
     Number(openPosition?.market?.pair_index ?? 0),
   );
-  const positionSize =
-    Number(formatUnits(BigInt(openPosition.position_size ?? 0), 18)) *
-    Number(openPosition?.leverage);
-  const openPrice = Number(
-    formatUnits(BigInt(openPosition?.open_price ?? 0), 10),
-  );
-  const size = positionSize / openPrice;
+
+  const positionSize = formatFromBaseUnit(
+    openPosition.position_size ?? "0",
+    18,
+  ).times(openPosition.leverage ?? "1");
+  const openPrice = formatFromBaseUnit(openPosition.open_price ?? "0", 10);
+  const size = positionSize.div(openPrice).dp(4).toString(10);
 
   const ticker = openPosition?.market?.name?.split("-")[0];
 
@@ -68,18 +68,6 @@ export function ClosePositionModal({
       handleOpenChange(false);
     },
   });
-
-  // const formattedPrice = Number(
-  //   formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
-  // );
-
-  // const liqPrice = useCalculateLiqPrice({
-  //   bfLong: openPosition?.market.pair_borrowing_fee?.bf_long,
-  //   bfShort: openPosition?.market.pair_borrowing_fee?.bf_short,
-  //   orderType: openPosition?.buy === true ? "long" : "short",
-  //   price: formattedPrice,
-  //   leverage: openPosition?.leverage,
-  // });
 
   return (
     <div className={className}>
@@ -114,11 +102,13 @@ export function ClosePositionModal({
               </div>
               <div>
                 <div className="text-lg font-semibold leading-7 text-muted-foreground">
-                  {size.toFixed(4) ?? 0} {ticker}
+                  {size ?? 0} {ticker}
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
                   {price !== undefined ? (
-                    `${formatBigIntUsd(price, 10)} / ${ticker}`
+                    `${formatUsd(
+                      formatFromBaseUnit(price, 10).toString(10),
+                    )} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}
@@ -131,8 +121,12 @@ export function ClosePositionModal({
                   Liquidation Price
                 </div>
                 <div className=" text-right  text-sm  font-semibold leading-5 text-foreground">
-                  {Number(openPosition?.liq_price) !== 0 ? (
-                    formatBigIntUsd(openPosition?.liq_price, 10)
+                  {openPosition?.liq_price !== "0" ? (
+                    formatUsd(
+                      formatFromBaseUnit(openPosition?.liq_price, 10).toString(
+                        10,
+                      ),
+                    )
                   ) : (
                     <Skeleton className={"h-[28px] w-[80px]"} />
                   )}
@@ -143,7 +137,7 @@ export function ClosePositionModal({
                   Executed at
                 </div>
                 <div className=" text-right text-sm  font-semibold leading-5 text-foreground">
-                  {formatBigIntUsd(openPosition?.open_price ?? 0, 10)}
+                  {formatUsd(openPrice.toString(10) ?? 0)}
                 </div>
               </div>
             </div>

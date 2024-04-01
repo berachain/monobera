@@ -6,10 +6,11 @@ import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
+import { formatUsd } from "@bera/berajs";
 
-import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
-import { type IMarket } from "../berpetuals/page";
+import type { IMarket } from "~/types/market";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 
 interface PositionProps extends IMarket {
   className?: string;
@@ -65,17 +66,23 @@ function Position({
           </div>
         </div>
         <div className="text-lg font-semibold leading-normal text-popover-foreground">
-          {price && formatBigIntUsd(price, 10)}
+          {price && formatUsd(formatFromBaseUnit(price, 10).toString(10))}
         </div>
 
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
-          {open_interest && formatBigIntUsd(open_interest?.oi_long, 18)}
+          {open_interest &&
+            formatUsd(
+              formatFromBaseUnit(open_interest?.oi_long, 18).toString(10),
+            )}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">
           Open Interest (L) (24H)
         </div>
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
-          {open_interest && formatBigIntUsd(open_interest?.oi_short, 18)}
+          {open_interest &&
+            formatUsd(
+              formatFromBaseUnit(open_interest?.oi_short, 18).toString(10),
+            )}
         </div>
         <div className="text-xs font-normal leading-3 text-muted-foreground">
           Open Interest (S) (24H)
@@ -84,18 +91,6 @@ function Position({
     </figure>
   );
 }
-
-// function splitArray<T>(array: T[], numParts: number): T[][] {
-//   const result: T[][] = [];
-//   for (let i = 0; i < array.length; i++) {
-//     const index = i % numParts;
-//     if (!result[index]) {
-//       result[index] = [];
-//     } // @ts-expect-error - No types
-//     result[index].push(array[i]);
-//   }
-//   return result;
-// }
 
 interface PositionRowProps {
   className?: string;
@@ -153,7 +148,6 @@ function PositionRow({
 function PositionGrid({ markets }: { markets: IMarket[] }) {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
-  // const rows = splitArray(markets, 2);
   const rows = generateArrays(markets, 20) as [any[], any[]];
   return (
     <div
