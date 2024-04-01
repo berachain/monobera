@@ -2,7 +2,6 @@ import { TimeFrame, type TimeFrame as TimeFrameT } from "@bera/berajs";
 import { HistoryRate } from "@bera/graphql";
 import { Dropdown, Spinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
-import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 export interface LineChartProps {
@@ -93,7 +92,7 @@ export default function LineChart({
 
   return (
     <div>
-      <div className="mb-6 flex items-end justify-between md:items-center">
+      <div className="mb-6 flex justify-between items-center">
         <div className="flex h-full flex-col items-center gap-2 md:flex-row md:gap-8">
           <div className="flex items-center gap-2 font-medium" key={title}>
             <div

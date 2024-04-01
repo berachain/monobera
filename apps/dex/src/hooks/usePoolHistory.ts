@@ -1,6 +1,6 @@
 import { crocIndexerEndpoint } from "@bera/config";
 import { type PoolDayDataV2 } from "@bera/graphql";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import { useAnalytics } from "@bera/shared-ui";
 import useSWRImmutable from "swr/immutable";
 
 interface PoolHistoryResponse_Info {

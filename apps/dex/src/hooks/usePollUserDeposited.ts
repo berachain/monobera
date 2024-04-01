@@ -6,17 +6,20 @@ import {
   crocQueryAddress,
   multicallAddress,
 } from "@bera/config";
-import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import {
+  dexClient,
+  getTokenHoneyPrices,
+  searchFilteredPoolList,
+} from "@bera/graphql";
+import { useAnalytics } from "@bera/shared-ui";
 import { BigNumber } from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, getAddress, toHex, type Address } from "viem";
+import { erc20Abi, getAddress, toHex } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
-import { searchFilteredPoolList } from "./../../../../packages/graphql/src/modules/dex/query";
 
 interface AmbientPosition {
   ambientLiq: string;
