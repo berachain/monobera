@@ -10,7 +10,13 @@ import {
   type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
-import { FormattedNumber, TokenInput, Tooltip, useTxn } from "@bera/shared-ui";
+import {
+  FormattedNumber,
+  TokenInput,
+  Tooltip,
+  useAnalytics,
+  useTxn,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -33,14 +39,20 @@ export default function BorrowBtn({
   const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
+  const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Borrowing ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${token.symbol}`,
     onSuccess: () => {
+      track(`borrow_${token.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
+    },
+    onError: (e: Error | undefined) => {
+      track(`borrow_${token.symbol.toLowerCase()}_failed`);
+      captureException(e);
     },
     actionType: TransactionActionType.BORROW,
   });
