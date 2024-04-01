@@ -56,7 +56,7 @@ export const useAnalytics = () => {
       return;
     }
     mixpanel.track(eventName, {
-      ...eventData,
+      eventData,
     });
   };
 
