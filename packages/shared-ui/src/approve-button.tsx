@@ -11,6 +11,7 @@ import { Button } from "@bera/ui/button";
 import { maxInt256, erc20Abi } from "viem";
 
 import { useTxn } from "./hooks/useTxn";
+import { useAnalytics } from "./utils";
 
 type Props = {
   token: Token | undefined;
@@ -31,13 +32,18 @@ export const ApproveButton = ({
     contract: spender,
     token: token,
   });
-
+  const { captureException, track } = useAnalytics();
   const { write, isLoading, isSubmitting } = useTxn({
     message: `Approving ${token?.name}`,
     actionType: TransactionActionType.APPROVAL,
     onSuccess: () => {
+      track(`approve_token_${token?.symbol.toLowerCase()}`);
       void refresh();
       onApproval?.();
+    },
+    onError: (e: Error | undefined) => {
+      track(`approve_token_${token?.symbol.toLowerCase()}_failed`);
+      captureException(e);
     },
   });
   const ref = useRef<HTMLDivElement>(null);

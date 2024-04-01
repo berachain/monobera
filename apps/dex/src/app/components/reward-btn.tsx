@@ -9,8 +9,12 @@ import {
   useTokens,
 } from "@bera/berajs";
 import { bgtTokenAddress, rewardsAddress } from "@bera/config";
-import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import {
+  ActionButton,
+  TokenInput,
+  useAnalytics,
+  useTxn,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { parseEther, type Address } from "viem";
