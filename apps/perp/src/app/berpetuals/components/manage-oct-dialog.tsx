@@ -10,8 +10,8 @@ import {
   usePollBeraBalance,
 } from "@bera/berajs";
 import {
-  beraTokenAddress,
   blockExplorerUrl,
+  nativeTokenAddress,
   tradingContractAddress,
 } from "@bera/config";
 import { ActionButton, TokenIcon, useTxn } from "@bera/shared-ui";
@@ -53,7 +53,7 @@ const TradeWalletSection = () => {
         <Icons.external className="h-4 w-4" />
       </div>
       <div className="mt-2 flex flex-row gap-2">
-        <TokenIcon address={beraTokenAddress} />
+        <TokenIcon address={nativeTokenAddress} />
         <div className="text-sm font-semibold">
           {Number(octBalance ?? 0).toFixed(2)} BERA{" "}
           <span className="text-xs font-medium text-success-foreground">

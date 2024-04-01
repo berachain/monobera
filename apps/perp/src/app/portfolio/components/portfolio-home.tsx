@@ -7,9 +7,9 @@ import { ConnectWalletBear } from "@bera/shared-ui";
 import { usePollAccountTradingSummary } from "~/hooks/usePollAccountTradingSummary";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { useTradingSummaryChart } from "~/hooks/useTradingSummaryChart";
-import type { IMarket } from "../berpetuals/page";
-import LoadingPortfolio from "./components/loading";
-import { PortfolioHome } from "./components/portfolio";
+import type { IMarket } from "~/types/market";
+import LoadingPortfolio from "./loading";
+import { PortfolioHome } from "./portfolio";
 
 export default function Home({ markets }: { markets: IMarket[] }) {
   const { account } = useBeraJs();

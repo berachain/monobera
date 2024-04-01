@@ -10,39 +10,42 @@ import { honeyAddress } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
 import {
   useOctTxn,
-  useSlippage,
   useSetSlippage,
+  useSlippage,
 } from "@bera/shared-ui/src/hooks";
+import { DEFAULT_SLIPPAGE, SLIPPAGE_MODE } from "@bera/shared-ui/src/settings";
 import { cn } from "@bera/ui";
-import { Input } from "@bera/ui/input";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, parseUnits, type Address } from "viem";
-import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { type OrderType } from "../type";
+import BigNumber from "bignumber.js";
+import { parseUnits, type Address } from "viem";
 
-import { DEFAULT_SLIPPAGE, SLIPPAGE_MODE } from "@bera/shared-ui/src/settings";
+import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { type OrderType } from "~/types/order-type";
 
 export function PlaceOrder({
   form,
   price,
+  formattedPrice,
   openingFee,
   error,
   liqPrice,
   pairIndex,
 }: {
   form: OrderType;
-  price: number | undefined;
-  openingFee: number;
+  price: string | undefined;
+  formattedPrice: string | undefined;
+  openingFee: string;
   error: string | undefined;
   bfLong: string;
-  liqPrice: number | undefined;
+  liqPrice: string | undefined;
   bfShort: string;
-  pairIndex: number;
+  pairIndex: string;
 }) {
-  const formattedPrice = Number(formatUnits(BigInt(price ?? 0n), 10));
   const { refetch } = usePollOpenPositions();
 
   const slippage = useSlippage();
@@ -91,17 +94,19 @@ export function PlaceOrder({
   const storageContract = process.env
     .NEXT_PUBLIC_STORAGE_CONTRACT_ADDRESS as Address;
   const posSize = useMemo(() => {
-    const positionSize = Number(safeAmount) * (form.leverage ?? 1);
-    return Number.isNaN(positionSize) || positionSize === undefined
-      ? 0
-      : positionSize;
+    const positionSize = BigNumber(safeAmount).times(
+      BigNumber(form.leverage ?? "1"),
+    );
+    return positionSize.isNaN() || !positionSize.isFinite()
+      ? "0"
+      : positionSize.toString(10);
   }, [form.amount, form.leverage]);
   const parsedPositionSize = parseUnits(safeAmount, 18);
 
   const payload = [
     {
       trader: account,
-      pairIndex: pairIndex,
+      pairIndex: Number(pairIndex),
       index: 0,
       initialPosToken: 0,
       positionSizeHoney: parsedPositionSize, // position size
@@ -110,9 +115,9 @@ export function PlaceOrder({
           ? BigInt(price ?? 0)
           : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
       buy: form.orderType === "long" ? true : false,
-      leverage: form.leverage,
-      tp: form.tp === "" ? 0n : parseUnits(form?.tp, 10),
-      sl: form.sl === "" ? 0n : parseUnits(form?.sl, 10),
+      leverage: Number(form.leverage),
+      tp: form.tp === "" ? 0n : parseUnits(form?.tp ?? "0", 10),
+      sl: form.sl === "" ? 0n : parseUnits(form?.sl ?? "0", 10),
     },
     form.optionType === "market" ? 0 : 1,
     parseUnits(`${slippage ?? 0}`, 10),
@@ -142,7 +147,7 @@ export function PlaceOrder({
             {price === undefined ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatUsd(formattedPrice ?? 0)
+              formatUsd(formattedPrice ?? "0")
             )}
           </div>
         </div>
@@ -153,7 +158,7 @@ export function PlaceOrder({
             {price === undefined ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatUsd(form.limitPrice ?? 0)
+              formatUsd(form.limitPrice ?? "0")
             )}
           </div>
         </div>
@@ -178,8 +183,15 @@ export function PlaceOrder({
           endAdornment={<div className="absolute left-1.5">%</div>}
           type="number"
           outerClassName="w-auto"
-          className="flex pr-6 h-6 rounded-sm bg-background text-xs w-[64px]"
+          className="flex h-6 w-[64px] rounded-sm bg-background pr-6 text-xs"
           required={false}
+          min={1}
+          max={100}
+          onKeyDown={(e) =>
+            (e.key === "-" || e.key === "e" || e.key === "E") &&
+            e.preventDefault()
+          }
+          maxLength={3}
           value={slippage === 0 ? undefined : slippage}
           onChange={handleSlippageChange}
         />
@@ -217,20 +229,28 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>OPENING FEES</div>
         <div className="text-foreground">
-          {openingFee}%{" "}
+          {formatFromBaseUnit(openingFee, 10).toString(10)}%{" "}
           {/* <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" /> */}
         </div>
       </div>
       <div className="flex w-full justify-between">
         <div>POSITION SIZE</div>
-        <div className="align-items flex flex-row items-center gap-1 text-foreground">
-          {formatUsd(posSize - posSize * openingFee)}{" "}
-          <Icons.honey className=" inline h-3 w-3 text-muted-foreground" />
+        <div className="align-items flex flex-row items-center gap-1 truncate text-foreground">
+          {formatUsd(
+            BigNumber(posSize)
+              .minus(
+                BigNumber(posSize).times(formatFromBaseUnit(openingFee, 10)),
+              )
+              .toString(10),
+          )}{" "}
+          <Icons.honey className=" inline h-3 w-3 flex-1 text-muted-foreground" />
         </div>
       </div>
       <ActionButton className="mt-4">
         {allowance?.formattedAllowance === "0" ||
-        allowance?.allowance < parseUnits(safeAmount, 18) ? (
+        BigNumber(allowance?.allowance?.toString()).isLessThan(
+          formatToBaseUnit(safeAmount, 18),
+        ) ? (
           <ApproveButton
             token={honey}
             spender={storageContract}
@@ -249,7 +269,8 @@ export function PlaceOrder({
               error !== undefined ||
               form.amount === "" ||
               safeAmount === "0" ||
-              form.amount === undefined
+              form.amount === undefined ||
+              form.tp === ""
             }
             onClick={() =>
               write({

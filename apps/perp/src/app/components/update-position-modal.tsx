@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
-import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
+import { useCallback, useEffect, useState } from "react";
+import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
+import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
 import { mutate } from "swr";
-import { formatUnits, type Address } from "viem";
+import { type Address } from "viem";
 
-import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
-import { ActivePositionPNL } from "../berpetuals/components/columns";
-import { type IMarketOrder } from "../berpetuals/components/order-history";
+import type { IMarketOrder } from "~/types/order-history";
 import { TPSL } from "../berpetuals/components/tpsl";
+import { ActivePositionPNL } from "./table-columns/positions";
 
 export function UpdatePositionModal({
   trigger,
@@ -32,12 +33,22 @@ export function UpdatePositionModal({
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const [tp, setTp] = useState<string>(
-    formatUnits(BigInt(openPosition?.tp ?? 0) ?? 0n, 10),
+    formatFromBaseUnit(openPosition?.tp, 10).toString(10),
   );
+
   const [sl, setSl] = useState<string>(
-    formatUnits(BigInt(openPosition?.sl ?? 0) ?? 0n, 10),
+    formatFromBaseUnit(openPosition?.sl, 10).toString(10),
   );
   const { QUERY_KEY } = usePollOpenPositions();
+
+  useEffect(() => {
+    setTp(formatFromBaseUnit(openPosition?.tp, 10).toString(10));
+    setSl(
+      openPosition?.sl === "0"
+        ? ""
+        : formatFromBaseUnit(openPosition?.sl, 10).toString(10),
+    );
+  }, [openPosition.tp, openPosition.sl]);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -54,14 +65,14 @@ export function UpdatePositionModal({
   const price = useMarketIndexPrice(
     Number(openPosition?.market?.pair_index ?? 0),
   );
+  const formattedPrice = formatFromBaseUnit(price ?? "0", 10).toString(10);
 
-  const positionSize =
-    Number(formatUnits(BigInt(openPosition?.position_size ?? 0), 18)) *
-    Number(openPosition?.leverage ?? 0);
-  const openPrice = Number(
-    formatUnits(BigInt(openPosition?.open_price ?? 0), 10),
-  );
-  const size = positionSize / openPrice;
+  const positionSize = formatFromBaseUnit(
+    openPosition.position_size ?? "0",
+    18,
+  ).times(openPosition.leverage ?? "1");
+  const openPrice = formatFromBaseUnit(openPosition?.open_price ?? "0", 10);
+  const size = positionSize.div(openPrice).dp(4).toString(10);
 
   const ticker = openPosition?.market?.name?.split("-")[0];
 
@@ -81,29 +92,34 @@ export function UpdatePositionModal({
     },
   });
 
-  // const formattedPrice = Number(
-  //   formatUnits(BigInt(openPosition?.open_price ?? 0n), 10),
-  // );
-
-  // const liqPrice = useCalculateLiqPrice({
-  //   bfLong: openPosition?.market.pair_borrowing_fee?.bf_long,
-  //   bfShort: openPosition?.market.pair_borrowing_fee?.bf_short,
-  //   orderType: openPosition?.buy === true ? "long" : "short",
-  //   price: formattedPrice,
-  //   leverage: openPosition?.leverage,
-  // });
+  const handleTPSLChange = useCallback(
+    (value: string, key: string) =>
+      key === "tp" ? setTp(value) : setSl(value),
+    [setTp, setSl],
+  );
 
   const updateTpParams = [
     openPosition?.market?.pair_index,
     openPosition?.index,
-    parseUnits(tp, 10),
+    parseUnits(
+      tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
+      10,
+    ),
   ];
 
   const updateSlParams = [
     openPosition?.market?.pair_index,
     openPosition?.index,
-    parseUnits(sl, 10),
+    parseUnits(
+      sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
+      10,
+    ),
   ];
+
+  const liqPrice = formatFromBaseUnit(
+    openPosition?.liq_price ?? "0",
+    10,
+  ).toString(10);
 
   return (
     <div className={className}>
@@ -142,11 +158,11 @@ export function UpdatePositionModal({
               </div>
               <div>
                 <div className="text-lg font-semibold leading-7 text-muted-foreground">
-                  {size.toFixed(4) ?? 0} {ticker}
+                  {size ?? "0"} {ticker}
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
                   {price !== undefined ? (
-                    `${formatBigIntUsd(price, 10)} / ${ticker}`
+                    `${formattedPrice} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}
@@ -160,7 +176,7 @@ export function UpdatePositionModal({
                 </div>
                 <div className="text-right text-sm font-semibold leading-5 text-destructive-foreground">
                   {Number(openPosition?.liq_price) !== 0 ? (
-                    formatBigIntUsd(openPosition?.liq_price, 10)
+                    formatUsd(liqPrice)
                   ) : (
                     <Skeleton className={"h-[28px] w-[80px]"} />
                   )}
@@ -171,7 +187,7 @@ export function UpdatePositionModal({
                   Executed at
                 </div>
                 <div className=" text-right  text-sm font-semibold leading-5 text-foreground">
-                  {formatBigIntUsd(openPosition?.open_price ?? 0, 10)}
+                  {formatUsd(openPrice.toString(10))}
                 </div>
               </div>
             </div>
@@ -192,13 +208,13 @@ export function UpdatePositionModal({
             </div>
           </div>
           <TPSL
-            leverage={Number(openPosition?.leverage) ?? 2}
+            leverage={openPosition?.leverage ?? 2}
             tp={tp}
             sl={sl}
-            formattedPrice={openPrice}
-            isUpdate={true}
-            liqPrice={Number(openPosition?.liq_price)}
-            long={openPosition?.buy === true}
+            formattedPrice={openPrice.toString(10)}
+            isUpdate
+            liqPrice={openPosition.liq_price !== "0" ? liqPrice : undefined}
+            long={openPosition?.buy}
             isSlSubmitLoading={isUpdateSLLoading}
             isTpSubmitLoading={isUpdateTPLoading}
             onTpChangeSubmit={() => {
@@ -219,12 +235,8 @@ export function UpdatePositionModal({
                 params: updateSlParams,
               });
             }}
-            tpslOnChange={(value) => {
-              setTp(value.tp);
-              setSl(value.sl);
-            }}
+            tpslOnChange={handleTPSLChange}
           />
-          {/* <Button>Update Order</Button> */}
         </DialogContent>
       </Dialog>
     </div>

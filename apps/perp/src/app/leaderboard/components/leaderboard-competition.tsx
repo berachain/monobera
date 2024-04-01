@@ -1,15 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { cn } from "@bera/ui";
 import Image from "next/image";
-import { isAddress } from "viem";
-import { cloudinaryUrl } from "@bera/config";
 import { useBeraJs } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import { DataTable, Tooltip } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
+import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { Badge } from "@bera/ui/badge";
 import {
   Select,
   SelectContent,
@@ -20,6 +19,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type TableState } from "@tanstack/react-table";
 import moment from "moment";
+import { isAddress } from "viem";
 
 import { useLeaderboard } from "~/hooks/useLeaderboardCompetition";
 import { useQualifiedAddress } from "~/hooks/useQualifiedAddress";
@@ -245,10 +245,10 @@ export default function LeaderBoardCompetition() {
         </div>
       </div>
       {/* Header Card */}
-      <div className="mt-4 flex h-44 w-full items-center justify-between rounded-[18px] border bg-gradient-to-tr from-[rgba(255,193,7,0.30)] to-[rgba(255,235,59,0.05)] p-8  dark:bg-gradient-to-tr dark:from-[rgba(255,235,59,0.05)] dark:to-[rgba(255,100,7,0.30)]">
+      <div className="mt-4 flex h-56 w-full items-center justify-between rounded-[18px] border bg-gradient-to-tr from-[rgba(255,193,7,0.30)] to-[rgba(255,235,59,0.05)] p-8 dark:bg-gradient-to-tr  dark:from-[rgba(255,235,59,0.05)] dark:to-[rgba(255,100,7,0.30)] sm:h-44">
         <div className="flex w-full flex-col">
-          <div className="flex items-center">
-            <div className="foreground font-['IBM Plex Sans'] text-start text-3xl font-semibold leading-9">
+          <div className="flex flex-col items-start sm:flex-row sm:items-center">
+            <div className="foreground font-['IBM Plex Sans'] min-w-[240px] text-start text-3xl font-semibold leading-9">
               👑 Battle Royale
             </div>
             <Badge
@@ -259,7 +259,7 @@ export default function LeaderBoardCompetition() {
                     : "destructive"
                   : "secondary"
               }
-              className="cursor-pointer rounded-m py-1 px-2 font-medium ml-4 mt-1 self-center"
+              className="rounded-m mt-4 min-w-[105px] cursor-pointer justify-center px-2 py-1 font-medium sm:ml-4 sm:mt-1 sm:self-center"
             >
               {compDetails?.qualifications && (
                 <Tooltip
@@ -379,7 +379,7 @@ export default function LeaderBoardCompetition() {
             "flex w-full shrink-0 bg-muted pl-9 text-foreground lg:mt-0 lg:min-w-[400px]",
             !isValidSearch &&
               value &&
-              "text-destructive-foreground border-destructive-foreground focus:border-destructive-foreground",
+              "border-destructive-foreground text-destructive-foreground focus:border-destructive-foreground",
           )}
           type="text"
           id="wallet-search-input"

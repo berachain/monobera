@@ -6,9 +6,9 @@ export function TotalRelativePnLHoverState({
   realizedPnl,
   totalPnl,
 }: {
-  totalUnrealizedPnl: number;
-  realizedPnl: number;
-  totalPnl: number;
+  totalUnrealizedPnl: string;
+  realizedPnl: string;
+  totalPnl: string;
 }) {
   return (
     <div>

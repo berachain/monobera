@@ -3,7 +3,7 @@ import { perpsEndpoint } from "@bera/config";
 import { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 
-import type { TimeFrame } from "~/app/portfolio/portfolio";
+import type { TimeFrame } from "~/types/time";
 
 export const useTradingSummaryChart = ({
   interval,

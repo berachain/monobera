@@ -86,6 +86,7 @@ export function FormattedNumber({
   compactThreshold,
   maxValue,
   className,
+  prefixText = "",
   ...props
 }: {
   value: BigNumberValue;
@@ -98,6 +99,7 @@ export function FormattedNumber({
   compactThreshold?: number; //function serves to determine when a number should be presented in its compact form (with postfixes like K, M, B for thousands, millions, billions, etc.)
   maxValue?: number;
   className?: string;
+  prefixText?: string;
 }) {
   const number = percent ? Number(value) * 100 : Number(value);
 
@@ -139,6 +141,7 @@ export function FormattedNumber({
       )}
       {...props}
     >
+      {prefixText && <span className="mr-0.5">{prefixText}</span>}
       {isSmallerThanMin && (number < 0 ? ">-" : "<")}{" "}
       {symbol?.toLowerCase() === "usd" && !percent && (
         <span className="mr-0.5">$</span>

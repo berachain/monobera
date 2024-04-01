@@ -19,7 +19,7 @@ import { parseUnits } from "ethers";
 import { type Address } from "viem";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
-import { withdraw_queue_columns } from "./withdraw-queue-columns";
+import { withdrawQueueColumns } from "./withdraw-queue-columns";
 
 export const RewardsWithdraw = () => {
   const { isLoading: isGHoneyBalanceLoading, useFormattedBHoneyBalance } =
@@ -117,17 +117,6 @@ export const RewardsWithdraw = () => {
             />
           )}
         </div>
-        {/* <Alert variant="warning" className="rounded-md">
-          <AlertTitle>
-            {" "}
-            <Icons.info className="inline-block h-4 w-4" /> BGT Rewards are
-            currently paused.
-          </AlertTitle>
-          <AlertDescription>
-            They will start again after the Berps Upgrade on Jan 29th, at 02:15
-            UTC.
-          </AlertDescription>
-        </Alert> */}
       </div>
       <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-2">
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
@@ -189,9 +178,9 @@ export const RewardsWithdraw = () => {
         <p className="pl-2 text-lg font-semibold">Withdrawal Queue</p>
       </div>
       <DataTable
-        columns={withdraw_queue_columns}
+        columns={withdrawQueueColumns}
         data={withdrawQueue ?? []}
-        className="h-full min-w-[490px]"
+        className="h-full min-w-[350px]"
       />
     </div>
   );

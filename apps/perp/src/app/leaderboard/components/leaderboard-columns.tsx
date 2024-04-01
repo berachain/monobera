@@ -24,7 +24,7 @@ const positionToEmoji = (rank: string) => {
 };
 
 export const getColumns = (type: string) => {
-  const leaderboard_columns: ColumnDef<{
+  const leaderboardColumns: ColumnDef<{
     rank: string;
     trader: string;
     value: any;
@@ -95,5 +95,5 @@ export const getColumns = (type: string) => {
     },
   ];
 
-  return leaderboard_columns;
+  return leaderboardColumns;
 };

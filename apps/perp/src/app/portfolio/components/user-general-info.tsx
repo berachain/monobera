@@ -2,9 +2,9 @@ import { formatUsd } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 
-import type { IMarket } from "~/app/berpetuals/page";
 import { usePollAccountTradingSummary } from "~/hooks/usePollAccountTradingSummary";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import type { IMarket } from "~/types/market";
 
 export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
   const { useTotalPositionSize, useTotalUnrealizedPnl } =
@@ -17,18 +17,18 @@ export function UserGeneralInfo({ markets }: { markets: IMarket[] }) {
   const unrealizedPnl = useTotalUnrealizedPnl(markets);
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 flex-1 sm:flex-row lg:flex-col">
+    <div className="flex h-full w-full flex-1 flex-col gap-4 sm:flex-row lg:flex-col">
       <div className="flex w-full flex-col gap-1 rounded-md border border-border bg-muted px-4 py-4 lg:w-[270px]">
         <div className="mb-2 border-b border-border px-1 pb-2 font-medium">
           Current Open Positions
         </div>
         <div className="text-3xl font-semibold leading-9 text-foreground">
-          {formatUsd(Number(positionSize))}
+          {formatUsd(positionSize)}
         </div>
         <div
           className={cn(
             "text-sm font-medium leading-normal",
-            unrealizedPnl < 0
+            Number(unrealizedPnl) < 0
               ? "text-destructive-foreground"
               : "text-success-foreground",
           )}

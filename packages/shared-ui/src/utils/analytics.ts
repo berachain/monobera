@@ -22,6 +22,10 @@ if (isMixpanelEnabled) {
     track_pageview: true,
     persistence: "localStorage",
   });
+  mixpanel.register({
+    project: projectName ?? "unknown",
+    env: process.env.NODE_ENV,
+  });
 }
 
 export const useAnalytics = () => {
@@ -53,8 +57,6 @@ export const useAnalytics = () => {
     }
     mixpanel.track(eventName, {
       eventData,
-      project: projectName ?? "unknown",
-      env: process.env.NODE_ENV,
     });
   };
 
