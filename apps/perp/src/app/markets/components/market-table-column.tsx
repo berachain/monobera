@@ -4,22 +4,24 @@ import { formatUsd, formatter } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import { type ColumnDef } from "@tanstack/react-table";
-import { formatUnits } from "viem";
+import type { ColumnDef } from "@tanstack/react-table";
 
-import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
-import { type IMarket } from "~/app/berpetuals/page";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
+import type { IMarket } from "~/types/market";
 
 const MarketPrice = ({ pairIndex }: { pairIndex: number }) => {
   const { useMarketIndexPrice } = usePricesSocket();
   const price = useMarketIndexPrice(pairIndex);
+
   return (
     <div className="w-[88px]">
       {" "}
       {price !== undefined ? (
-        <span>{formatBigIntUsd(price, 10)}</span>
+        <span>
+          {formatUsd(formatFromBaseUnit(price ?? "0", 10).toString(10))}
+        </span>
       ) : (
         <Skeleton className="h-[16px] w-[80px]" />
       )}
@@ -35,30 +37,33 @@ const Change = ({
   dailyHistoricPrice: number;
 }) => {
   const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(pairIndex);
-  const formattedPrice = Number(formatUnits(BigInt(price ?? 0), 10));
-
+  const price = useMarketIndexPrice(pairIndex ?? 0);
+  const priceBN = useMemo(() => formatFromBaseUnit(price ?? 0, 10), [price]); // BigNumber
+  const formattedPrice = useMemo(() => priceBN.toString(10) ?? "0", [priceBN]); // string
   const difference = useMemo(() => {
-    return calculatePercentDifference(dailyHistoricPrice ?? 0, formattedPrice);
+    return calculatePercentDifference(
+      dailyHistoricPrice?.toString() ?? "0",
+      formattedPrice,
+    );
   }, [dailyHistoricPrice, formattedPrice]);
 
   const priceDifference = useMemo(() => {
-    return formattedPrice - (dailyHistoricPrice ?? 0);
-  }, [dailyHistoricPrice, formattedPrice]);
+    return priceBN.minus(dailyHistoricPrice ?? 0).toString(10);
+  }, [dailyHistoricPrice, priceBN]);
 
   return (
     <div className="flex w-[88px] flex-col gap-1">
       <div
         className={cn(
           "text-sm font-semibold leading-tight",
-          difference >= 0
+          difference.gte(0)
             ? "text-success-foreground"
             : "text-destructive-foreground",
         )}
       >
         {price !== undefined ? (
           <span>
-            {!Number.isNaN(difference) ? Number(difference).toFixed(2) : 0}%
+            {!difference.isNaN() ? difference.dp(2).toString(10) : 0}%
           </span>
         ) : (
           <Skeleton className="h-[16px] w-[50px]" />
@@ -66,9 +71,7 @@ const Change = ({
       </div>
       <div className="text-xs font-medium leading-tight text-muted-foreground">
         {price !== undefined ? (
-          <span>
-            {!Number.isNaN(difference) ? formatUsd(priceDifference) : "$0"}
-          </span>
+          <span>{!difference.isNaN() ? formatUsd(priceDifference) : "$0"}</span>
         ) : (
           <Skeleton className="h-[16px] w-[80px]" />
         )}
@@ -77,14 +80,14 @@ const Change = ({
   );
 };
 
-export const market_table_column: ColumnDef<IMarket>[] = [
+export const marketTableColumn: ColumnDef<IMarket>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Market" />
     ),
     cell: ({ row }) => (
-      <div className="w-[150px]">
-        <div className={cn("flex w-[200px] items-center gap-2", "")}>
+      <div className="min-w-[120px]">
+        <div className={cn("flex min-w-[120px] items-center gap-2", "")}>
           <Image
             src={row.original?.imageUri ?? ""}
             alt={"selectedMarket"}
@@ -136,21 +139,25 @@ export const market_table_column: ColumnDef<IMarket>[] = [
       <DataTableColumnHeader column={column} title="Borrow Fee" />
     ),
     cell: ({ row }) => {
-      const formattedBorrowingL = formatUnits(
-        BigInt(row.original?.pair_borrowing_fee?.bf_long ?? "0"),
+      const formattedBorrowingL = formatFromBaseUnit(
+        row.original?.pair_borrowing_fee?.bf_long,
         18,
-      );
-      const formattedBorrowingS = formatUnits(
-        BigInt(row.original?.pair_borrowing_fee?.bf_short ?? "0"),
+      )
+        .dp(4)
+        .toString(10);
+      const formattedBorrowingS = formatFromBaseUnit(
+        row.original?.pair_borrowing_fee?.bf_short,
         18,
-      );
+      )
+        .dp(4)
+        .toString(10);
       return (
-        <div>
+        <div className="min-w-[90px]">
           <div className="text-xs font-medium text-success-foreground">
-            {Number(formattedBorrowingL).toFixed(4)}% (L)
+            {formattedBorrowingL}% (L)
           </div>
           <div className="text-xs font-medium text-destructive-foreground">
-            {Number(formattedBorrowingS).toFixed(4)}% (S)
+            {formattedBorrowingS}% (S)
           </div>
         </div>
       );
@@ -163,16 +170,18 @@ export const market_table_column: ColumnDef<IMarket>[] = [
       <DataTableColumnHeader column={column} title="Open Interest" />
     ),
     cell: ({ row }) => {
-      const formattedOIL = formatUnits(
-        BigInt(row.original.open_interest?.oi_long ?? "0"),
+      const formattedOIL = formatFromBaseUnit(
+        row.original?.open_interest?.oi_long ?? "0",
         18,
-      );
-      const formattedOIS = formatUnits(
-        BigInt(row.original.open_interest?.oi_short ?? "0"),
+      ).toString(10);
+
+      const formattedOIS = formatFromBaseUnit(
+        row.original?.open_interest?.oi_short ?? "0",
         18,
-      );
+      ).toString(10);
+
       return (
-        <div>
+        <div className="min-w-[95px]">
           <div className="text-xs font-medium text-success-foreground">
             {formatter.format(Number(formattedOIL))} (L)
           </div>
@@ -190,7 +199,7 @@ export const market_table_column: ColumnDef<IMarket>[] = [
       <DataTableColumnHeader column={column} title="24h Volume" />
     ),
     cell: ({ row }) => (
-      <div className="w-[100px] text-xs font-medium text-muted-foreground">
+      <div className="min-w-[110px] text-xs font-medium text-muted-foreground">
         {formatUsd(row.original.dailyVolume ?? 0)}
       </div>
     ),
@@ -202,7 +211,7 @@ export const market_table_column: ColumnDef<IMarket>[] = [
       <DataTableColumnHeader column={column} title="24h Trades" />
     ),
     cell: ({ row }) => (
-      <div className="w-[100px] text-xs font-medium text-muted-foreground">
+      <div className="min-w-[105px] text-xs font-medium text-muted-foreground">
         {row.original.dailyNumOfTrades ?? 0}
       </div>
     ),
