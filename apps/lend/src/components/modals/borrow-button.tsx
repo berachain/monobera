@@ -18,6 +18,7 @@ import { Icons } from "@bera/ui/icons";
 import { formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
+import { useAnalytics } from "@bera/shared-ui/src/utils";
 
 export default function BorrowBtn({
   token,
@@ -33,14 +34,20 @@ export default function BorrowBtn({
   const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
+  const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Borrowing ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${token.symbol}`,
     onSuccess: () => {
+      track(`borrow_${token.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
+    },
+    onError: (e: Error | undefined) => {
+      track(`borrow_${token.symbol.toLowerCase()}_failed`);
+      captureException(e);
     },
     actionType: TransactionActionType.BORROW,
   });
