@@ -30,7 +30,6 @@ import {
 } from "~/hooks/usePoolRecentProvisions";
 import { usePoolRecentSwaps, type ISwaps } from "~/hooks/usePoolRecentSwaps";
 import { type PoolV2 } from "../pools/fetchPools";
-import { TokenSummary } from "../withdraw/WithdrawPageContent";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 
