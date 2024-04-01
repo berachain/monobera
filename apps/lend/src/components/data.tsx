@@ -9,7 +9,7 @@ import BGTApy from "./bgt-apy";
 
 function DataCard({ title, value }: { title: string; value: number }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-sm border border-border bg-muted py-2">
+    <div className="flex flex-col items-center gap-2 rounded-sm border border-border bg-muted p-2">
       <div className="flex items-center gap-3 text-sm"> {title}</div>
       {value ? (
         <FormattedNumber
