@@ -44,7 +44,7 @@ export default function TokenInfoCard({
       ) : (
         <Skeleton className="h-8 w-16" />
       ),
-      tooltip: "Gauge of how much of the lending pool is actively borrowed",
+      tooltip: <Tooltip>Gauge of how much of the lending pool is actively borrowed</Tooltip>,
     },
     {
       title: "Oracle Price",
@@ -88,7 +88,7 @@ export default function TokenInfoCard({
           <div key={index} className="flex flex-col">
             <div className="flex items-center gap-1 text-xs font-normal leading-normal text-muted-foreground md:text-sm">
               {item.title}
-              {item.tooltip && <Tooltip text={item.tooltip} />}
+              {item.tooltip}
             </div>
             <div className="flex h-8 items-center gap-2 text-xl font-semibold leading-loose md:text-2xl">
               {item.amount}

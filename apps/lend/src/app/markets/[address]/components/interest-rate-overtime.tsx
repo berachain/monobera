@@ -127,7 +127,7 @@ export default function InterestRateOvertime({
             <div className="text-sm font-normal leading-normal text-muted-foreground">
               Utilization Rate{" "}
               <Tooltip>
-                <div className="sm:w-[350px]">
+                <div className="max-w-[350px]">
                   The utilization rate represents the ratio of total borrowed{" "}
                   funds to total available funds in a lending pool. It&apos;s{" "}
                   crucial as it directly influences interest rates: higher{" "}

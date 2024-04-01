@@ -47,7 +47,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 text-opacity-60 dark:text-yellow-200">
             Your Borrow Capacity Used
             <Tooltip>
-              <div className="bg-background sm:w-[300px]">
+              <div className="bg-background max-w-[300px]">
                 The first value is the amount of HONEY you have borrowed, the{" "}
                 second value is the Amount of HONEY you are potentially eligible
                 to borrow based on deposited collateral.

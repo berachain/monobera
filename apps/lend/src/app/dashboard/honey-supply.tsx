@@ -54,7 +54,7 @@ export default function HoneySupply({ honey }: { honey: any }) {
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Earn APY{" "}
               <Tooltip>
-                <div className="sm:w-[300px]">
+                <div className="max-w-[300px]">
                   Earn APY (Annual Percentage Yield) represents the annualized{" "}
                   return on supplied assets. See additional disclaimers in notes
                   below.

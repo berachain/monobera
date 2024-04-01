@@ -29,7 +29,7 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
       ),
       tooltip: (
         <Tooltip>
-          <div className="sm:w-[350px]">
+          <div className="max-w-[350px]">
             The Maximum LTV ratio represents the maximum borrowing power of a
             specific collateral. For example, if a collateral has an LTV of 75%,
             the user can borrow up to 0.75 worth of ETH in the principal
@@ -151,7 +151,7 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 APY, variable
                 <Tooltip>
-                  <div className="sm:w-[400px]">
+                  <div className="max-w-[400px]">
                     Variable interest rate will fluctuate based on the market
                     conditions. See additional disclaimers in notes below.
                   </div>

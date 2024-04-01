@@ -110,7 +110,7 @@ export default function StatusBanner() {
         <div className="flex items-center">
           Net APY{" "}
           <Tooltip>
-            <div className="sm:w-[350px]">
+            <div className="max-w-[350px]">
               Net APY (Annual Percentage Yield) is the combined effect of all{" "}
               supply and borrow positions on net worth, including rewards and{" "}
               fees. It is possible to have a negative net APY if debt APY is{" "}

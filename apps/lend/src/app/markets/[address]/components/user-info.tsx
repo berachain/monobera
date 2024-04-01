@@ -98,7 +98,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                 <div className="text-xs font-medium leading-tight">
                   Available to Supply{" "}
                   <Tooltip>
-                    <div className="sm:w-[350px]">
+                    <div className="max-w-[350px]">
                       This is the total amount that you are able to supply to in
                       this reserve. You are able to supply your wallet balance
                       up until the supply cap is reached.
@@ -145,7 +145,7 @@ export default function UserInfo({ token }: { token: Token | undefined }) {
                   <div className="text-xs font-medium leading-tight">
                     Available to Borrow{" "}
                     <Tooltip>
-                      <div className="sm:w-[350px]">
+                      <div className="max-w-[350px]">
                         This is the total amount available for you to borrow.{" "}
                         You can borrow based on your collateral and until the{" "}
                         borrow cap is reached.

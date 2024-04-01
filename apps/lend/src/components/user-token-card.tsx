@@ -83,7 +83,9 @@ export default function UserTokenCard({
 
             <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
               <FormattedNumber value={balance} symbol={asset.symbol} />
-              <Tooltip text={<AssetInfo asset={asset} />} />
+              <Tooltip>
+                <AssetInfo asset={asset} />
+              </Tooltip>
             </div>
             <div className="text-xs font-medium leading-tight">
               <FormattedNumber
@@ -130,7 +132,7 @@ export default function UserTokenCard({
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Variable APY{" "}
               <Tooltip>
-                <div>
+                <div className="max-w-[300px]">
                   Variable interest rate will fluctuate based on the market
                   conditions. See additional disclaimers in notes below.
                 </div>
@@ -150,7 +152,7 @@ export default function UserTokenCard({
             <div className="text-xs font-medium leading-5 text-muted-foreground">
               Loan APY{" "}
               <Tooltip>
-                <div>
+                <div className="max-w-[300px]">
                   Variable interest rate will fluctuate based on the market
                   conditions. See additional disclaimers in notes below.
                 </div>

@@ -29,7 +29,7 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
       ),
       tooltip: (
         <Tooltip>
-          <div className="sm:w-[350px]">
+          <div className="max-w-[350px]">
             The Maximum LTV ratio represents the maximum borrowing power of a{" "}
             specific collateral. For example, if a collateral has an LTV of 75%,{" "}
             the user can borrow up to 0.75 worth of ETH in the principal
@@ -51,7 +51,7 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
       ),
       tooltip: (
         <Tooltip>
-          <div className="sm:w-[350px]">
+          <div className="max-w-[350px]">
             This represents the threshold at which a borrow position will be
             considered undercollateralized and subject to liquidation for each
             collateral. For example, if a collateral has a liquidation threshold
@@ -74,7 +74,7 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
       ),
       tooltip: (
         <Tooltip>
-          <div className="sm:w-[350px]">
+          <div className="max-w-[350px]">
             When a liquidation occurs, liquidators repay up to 50% of the
             outstanding borrowed amount on behalf of the borrower. In return,
             they can buy the collateral at a discount and keep the difference as
