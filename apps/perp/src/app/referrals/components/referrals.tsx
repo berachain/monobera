@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useState, useMemo } from "react";
-import cn from "classnames";
+import { useCallback, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import {
@@ -14,6 +13,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
+import cn from "classnames";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 
@@ -106,7 +106,7 @@ const ReferralCard = ({ bgId, title, text }: ReferralCardProps) => {
         <span className="font-['IBM Plex Sans'] mb-2 text-center text-xl font-semibold text-foreground">
           {title}
         </span>
-        <span className="font-['IBM Plex Sans'] mx-4 mb-8 text-center text-xs font-medium leading-tight text-foreground">
+        <span className="font-['IBM Plex Sans'] mx-4 mb-4 flex h-[60px] items-center text-center text-xs font-medium leading-tight text-foreground">
           {text}
         </span>
       </div>
@@ -215,7 +215,7 @@ export default function Referrals() {
       </div>
       {/* Cards */}
       <div className="hidden sm:block">
-        <div className="mt-4 justify-between gap-6 hidden dark:flex">
+        <div className="mt-4 hidden justify-between gap-6 dark:flex">
           <ReferralCard
             bgId={"Frame_Dark_3_obukzi"}
             title="Refer Friends"
@@ -232,7 +232,7 @@ export default function Referrals() {
             text="Honey Rewards accumulate in real-time and disperse to your wallet as soon as the platform collect’s the fee."
           />
         </div>
-        <div className="mt-4 justify-between gap-6 flex dark:hidden ">
+        <div className="mt-4 flex justify-between gap-6 dark:hidden ">
           <ReferralCard
             bgId={"Frame_Light_3_mkjrlm"}
             title="Refer Friends"

@@ -15,7 +15,7 @@ export function LandingCard2() {
         <span className="text-success-foreground">TakeProfit</span>, you can
         update one or both values.
       </div>
-      <TPSL leverage={0} />
+      <TPSL leverage={"2"} tpslOnChange={() => null} tp="69" sl="420" />
       <Button>Update Order</Button>
     </div>
   );

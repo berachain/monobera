@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { perpsName } from "@bera/config";
 
-import Referrals from "./referrals";
+import Referrals from "./components/referrals";
 
 export function generateMetadata(): Metadata {
   return {

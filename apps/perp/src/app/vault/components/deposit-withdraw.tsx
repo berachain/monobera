@@ -21,10 +21,9 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
-import { type Address } from "viem";
 
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 
 export default function DepositWithdraw() {
@@ -85,17 +84,17 @@ export default function DepositWithdraw() {
 
   const isMaxDepositExceeding = useMemo(() => {
     if (maxDeposit && depositAmount) {
-      return maxDeposit < getSafeNumber(depositAmount);
+      return BigNumber(maxDeposit).lt(BigNumber(depositAmount));
     }
     return false;
   }, [maxDeposit, depositAmount]);
-  // console.log(isMaxDepositExceeding);
+
   return (
-    <div className="flex h-fit w-full flex-col justify-between rounded-lg border border-border px-4 py-6 md:flex-row">
+    <div className="flex h-fit min-h-[400px] w-full flex-col justify-between rounded-lg border border-border px-4 py-6 md:flex-row">
       {DepositModalPortal}
       {WithdrawModalPortal}
       <div className="w-full flex-shrink-0">
-        <Tabs defaultValue="deposit">
+        <Tabs defaultValue="deposit" className="flex h-full flex-col">
           <TabsList className="mb-8 w-full">
             <TabsTrigger value="deposit" className="w-full">
               Deposit
@@ -153,7 +152,6 @@ export default function DepositWithdraw() {
                 />
               ) : (
                 <Button
-                  // variant={"success"}
                   className="w-full"
                   disabled={
                     isDepositLoading ||
@@ -188,7 +186,10 @@ export default function DepositWithdraw() {
             )}
           </TabsContent>
 
-          <TabsContent value="withdraw" className="flex flex-col gap-4">
+          <TabsContent
+            value="withdraw"
+            className="flex grow flex-col justify-between gap-4"
+          >
             <div className="flex gap-1 text-xl font-semibold leading-7">
               <Icons.lock className="h-6 w-6 text-accent" />
               Withdraw Honey
@@ -219,17 +220,6 @@ export default function DepositWithdraw() {
                 />
               </TokenList>
             </div>
-            {/* <Alert variant="warning">
-              <AlertTitle>
-                {" "}
-                <Icons.info className="mr-1 inline-block h-4 w-4" />
-                Must withdraw in the EPOCH’s first 18 hours
-              </AlertTitle>
-              <AlertDescription>
-                You must withdraw your assets in the first 18 hours of your
-                withdraw epoch, otherwise a new request is required.
-              </AlertDescription>
-            </Alert> */}
             <ActionButton>
               <Button
                 disabled={
@@ -243,7 +233,6 @@ export default function DepositWithdraw() {
                     params: withdrawPayload,
                   })
                 }
-                // variant={"destructive"}
                 className="w-full"
               >
                 Request Withdraw

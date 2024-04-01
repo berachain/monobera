@@ -2,13 +2,14 @@ import { useMemo } from "react";
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoint } from "@bera/config";
 import { type OpenTrade } from "@bera/proto/src";
+import BigNumber from "bignumber.js";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits } from "viem";
 
 import { POLLING } from "~/utils/constants";
-import { type IMarketOrder } from "~/app/berpetuals/components/order-history";
-import { type IMarket } from "~/app/berpetuals/page";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import type { IMarket } from "~/types/market";
+import type { IMarketOrder } from "~/types/order-history";
 import { getPnl } from "./useCalculatePnl";
 import { usePricesSocket } from "./usePricesSocket";
 
@@ -55,7 +56,7 @@ export const usePollOpenPositions = () => {
 
     return useMemo(() => {
       if (!Array.isArray(openPositions) || openPositions.length === 0) {
-        return 0;
+        return "0";
       }
 
       let parsedPrices: any;
@@ -63,43 +64,53 @@ export const usePollOpenPositions = () => {
         parsedPrices = JSON.parse(prices);
       } catch (error) {
         console.error("Failed to parse prices:", error);
-        return 0; // Return 0 if the prices are not available
+        return "0"; // Return 0 if the prices are not available
       }
 
       if (!parsedPrices) {
-        return 0;
+        return "0";
       }
 
-      return openPositions?.reduce((acc: number, position: IMarketOrder) => {
-        const currentPrice = parsedPrices[position.market.pair_index];
-        if (currentPrice == null) {
-          console.warn(
-            `No price available for pair_index ${position.market.pair_index}`,
-          );
-          return acc; // Skip this position if the current price is not available
-        }
+      const totalUnrealizedPnl = openPositions?.reduce(
+        (acc: BigNumber, position: IMarketOrder) => {
+          const currentPrice = parsedPrices[position.market.pair_index];
+          if (currentPrice == null) {
+            console.warn(
+              `No price available for pair_index ${position.market.pair_index}`,
+            );
+            return acc; // Skip this position if the current price is not available
+          }
 
-        const pnl = getPnl({
-          currentPrice,
-          openPosition: position,
-        });
+          const pnl = getPnl({
+            currentPrice,
+            openPosition: position,
+          });
 
-        return acc + (pnl ?? 0);
-      }, 0);
+          return acc.plus(pnl ?? 0);
+        },
+        BigNumber(0),
+      );
+
+      return totalUnrealizedPnl.isNaN() ? "0" : totalUnrealizedPnl.toString(10);
     }, [openPositions, prices]);
   };
 
   const useTotalPositionSize = () => {
     const { data } = useSWRImmutable(QUERY_KEY);
-    return useMemo(() => {
-      return data?.reduce((acc: number, position: OpenTrade) => {
-        return (
-          acc +
-          Number(formatUnits(BigInt(position.position_size), 18)) *
-            Number(position.leverage)
+    const totalPositionSize = useMemo(() => {
+      return data?.reduce((acc: BigNumber, position: OpenTrade) => {
+        return acc.plus(
+          BigNumber(position.position_size).times(BigNumber(position.leverage)),
         );
-      }, 0);
+      }, BigNumber(0));
     }, [data]);
+    const formattedTotalPositionSize = formatFromBaseUnit(
+      totalPositionSize,
+      18,
+    );
+    return formattedTotalPositionSize.isNaN()
+      ? "0"
+      : formattedTotalPositionSize.toString(10);
   };
 
   return {

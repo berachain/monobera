@@ -162,7 +162,7 @@ export function TokenInput({
             )}
             value={amount}
             onKeyDown={(e: any) => {
-              if (e.key === "-" || e.key === "e") {
+              if (e.key === "-" || e.key === "e" || e.key === "E") {
                 // don't handle non digit key down (ex: a, b, c, shift, cmd, etc.)
                 e.preventDefault();
               }

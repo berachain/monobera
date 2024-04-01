@@ -1,22 +1,25 @@
 import { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { HoverCard } from "@bera/shared-ui";
+import { FormattedNumber, HoverCard, usePrevious } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import BigNumber from "bignumber.js";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
-import type { IMarket } from "../page";
-import { type BerpTabTypes } from "./order-wrapper";
+import type { IMarket } from "~/types/market";
+import type { TableTabTypes } from "~/types/table-tab-types";
 import { TotalRelativePnLHoverState } from "./total-relative-pnl-hover-state";
 
 export function TotalAmount({
   className,
   markets,
   tabType,
+  spacer,
 }: {
   className?: string;
   markets: IMarket[];
-  tabType: BerpTabTypes;
+  tabType: TableTabTypes;
+  spacer?: boolean;
 }) {
   const { useTotalUnrealizedPnl, useTotalPositionSize } =
     usePollOpenPositions();
@@ -26,8 +29,8 @@ export function TotalAmount({
   const realizedPnl = useRealizedPnl();
 
   const totalPositionSize = useTotalPositionSize();
-  const totalPnl = useMemo(() => {
-    return totalUnrealizedPnl + realizedPnl;
+  const totalPnlBN = useMemo(() => {
+    return BigNumber(totalUnrealizedPnl).plus(realizedPnl);
   }, [totalUnrealizedPnl, realizedPnl]);
 
   const totalRelativePnL = () => {
@@ -39,24 +42,28 @@ export function TotalAmount({
         <div className="group relative">
           <HoverCard
             triggerElement={
-              <span className="font-medium text-success-foreground">
-                <span
-                  className={cn(
-                    "cursor-help underline decoration-dashed",
-                    Number(totalPnl) > 0
-                      ? "text-success-foreground"
-                      : "text-destructive-foreground",
-                  )}
-                >
-                  {formatUsd(totalPnl)}
-                </span>
+              <span className="text-sm font-medium text-success-foreground">
+                {
+                  <FormattedNumber
+                    className={cn(
+                      "cursor-help underline decoration-dashed",
+                      totalPnlBN.gt(0)
+                        ? "text-success-foreground"
+                        : "text-destructive-foreground",
+                    )}
+                    value={totalPnlBN.isNaN() ? "0" : totalPnlBN.toString(10)}
+                    compact={false}
+                    compactThreshold={9_999}
+                    symbol="USD"
+                  />
+                }
               </span>
             }
             content={
               <TotalRelativePnLHoverState
-                totalUnrealizedPnl={totalUnrealizedPnl ?? 0}
-                realizedPnl={realizedPnl ?? 0}
-                totalPnl={totalPnl ?? 0}
+                totalUnrealizedPnl={totalUnrealizedPnl ?? "0"}
+                realizedPnl={realizedPnl ?? "0"}
+                totalPnl={totalPnlBN.isNaN() ? "0" : totalPnlBN.toString(10)}
               />
             }
           />
@@ -71,17 +78,21 @@ export function TotalAmount({
         <span className="text-xs font-medium text-muted-foreground">
           Total Open Pnl
         </span>
-        <span className="font-medium text-success-foreground">
-          <span
-            className={cn(
-              "",
-              Number(totalUnrealizedPnl) > 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-            )}
-          >
-            {formatUsd(totalUnrealizedPnl ?? 0)}
-          </span>
+        <span className="text-sm font-medium text-success-foreground">
+          {
+            <FormattedNumber
+              className={cn(
+                "",
+                Number(totalUnrealizedPnl) > 0
+                  ? "text-success-foreground"
+                  : "text-destructive-foreground",
+              )}
+              value={totalUnrealizedPnl ?? 0}
+              compact={false}
+              compactThreshold={9_999}
+              symbol="USD"
+            />
+          }
         </span>
       </div>
     );
@@ -92,13 +103,25 @@ export function TotalAmount({
       {tabType === "positions" || tabType === "orders"
         ? totalOpenPnL()
         : totalRelativePnL()}
-
+      {spacer && (
+        <span className="mx-1 flex items-center text-xs font-medium text-muted-foreground">
+          {"|"}
+        </span>
+      )}
       <div className="flex flex-col items-center sm:flex-row sm:gap-2">
         <span className="text-xs font-medium text-muted-foreground">
           Total Position Size
         </span>
-        <span className="font-medium text-foreground">
-          {formatUsd(totalPositionSize ?? 0)}
+        <span className="text-sm font-medium text-foreground">
+          {
+            <FormattedNumber
+              className="text-sm font-medium text-foreground"
+              value={totalPositionSize ?? "0"}
+              compact={false}
+              compactThreshold={9_999}
+              symbol="USD"
+            />
+          }
         </span>
       </div>
     </div>
