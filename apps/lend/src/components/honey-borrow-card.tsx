@@ -42,20 +42,17 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
 
   return (
     <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-[#1A1608] dark:via-[#201E09] dark:to-[#312A09] ">
-      <div className="flex flex-col gap-4 px-3 py-4">
+      <div className="flex flex-col gap-4 sm:px-3 py-4">
         <div>
           <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 text-opacity-60 dark:text-yellow-200">
             Your Borrow Capacity Used
-            <Tooltip
-              text={
-                <div className="bg-background">
-                  The first value is the amount of HONEY you have borrowed, the{" "}
-                  <br />
-                  second value is the Amount of HONEY you are potentially <br />
-                  eligible to borrow based on deposited collateral.
-                </div>
-              }
-            />
+            <Tooltip>
+              <div className="bg-background sm:w-[300px]">
+                The first value is the amount of HONEY you have borrowed, the{" "}
+                second value is the Amount of HONEY you are potentially eligible
+                to borrow based on deposited collateral.
+              </div>
+            </Tooltip>
           </div>
           <div className="flex items-center gap-1 text-3xl font-semibold text-yellow-900 dark:text-yellow-200">
             <TokenIcon address={honeyTokenAddress} className="h-8 w-8" />
@@ -68,9 +65,9 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           </div>
         </div>
 
-        <hr className="w-full sm:w-[250px] border-t border-yellow-500 opacity-30" />
+        <hr className="w-full border-t border-yellow-500 opacity-30 sm:w-[250px]" />
 
-        <div className="w-full sm:w-[250px] flex justify-between">
+        <div className="flex w-full justify-between sm:w-[250px]">
           <div>
             <div className="text-xs font-medium leading-5 text-yellow-900 opacity-60 dark:text-yellow-200">
               Earning BGT APY
@@ -92,9 +89,9 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
           </div>
         </div>
 
-        <hr className="w-full sm:w-[250px] border-t border-yellow-500 opacity-30" />
+        <hr className="w-full border-t border-yellow-500 opacity-30 sm:w-[250px]" />
 
-        <div className="mb-8 flex h-5 w-full sm:w-[250px] items-center justify-between">
+        <div className="mb-8 flex h-5 w-full items-center justify-between sm:w-[250px]">
           <div className="text-xs font-medium text-yellow-900 text-opacity-60 dark:text-yellow-200">
             Your BGT Rewards
           </div>
