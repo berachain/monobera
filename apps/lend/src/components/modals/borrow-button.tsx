@@ -188,10 +188,12 @@ const BorrowModalContent = ({
         <div className="flex items-center justify-between text-sm leading-tight">
           <div className="text-muted-foreground">
             Variable Borrow APY {""}
-            <Tooltip
-              text="variable interest rate will fluctuate based on the market
-                  conditions. See additional disclaimers in notes below."
-            />
+            <Tooltip>
+              <div className="max-w-[300px]">
+                Variable interest rate will fluctuate based on the market
+                conditions. See additional disclaimers in notes below.
+              </div>
+            </Tooltip>
           </div>
           <div className="font-semibold text-warning-foreground">
             <FormattedNumber value={reserveData.variableBorrowAPY} percent />

@@ -109,21 +109,15 @@ export default function StatusBanner() {
       title: (
         <div className="flex items-center">
           Net APY{" "}
-          <Tooltip
-            text={
-              <>
-                Net APY (Annual Percentage Yield) is the combined effect of all{" "}
-                <br />
-                supply and borrow positions on net worth, including rewards and{" "}
-                <br />
-                fees. It is possible to have a negative net APY if debt APY is{" "}
-                <br />
-                higher than supply APY + Rewards. See additional disclaimers in{" "}
-                <br />
-                notes below.
-              </>
-            }
-          />
+          <Tooltip>
+            <div className="max-w-[350px]">
+              Net APY (Annual Percentage Yield) is the combined effect of all{" "}
+              supply and borrow positions on net worth, including rewards and{" "}
+              fees. It is possible to have a negative net APY if debt APY is{" "}
+              higher than supply APY + Rewards. See additional disclaimers in{" "}
+              notes below.
+            </div>
+          </Tooltip>
         </div>
       ),
       amount: netAPY === 0 ? "~~" : <FormattedNumber value={netAPY} percent />,
