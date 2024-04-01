@@ -36,7 +36,7 @@ export default function CreatePoolExchangeRate({
             initialPrice === "0" ||
             getSafeNumber(initialPrice) === 0
               ? 0
-              : baseCost}{" "}
+              : quoteCost}{" "}
           </div>
           <p className="truncate text-xs text-muted-foreground">
             {baseToken?.symbol} per {quoteToken?.symbol}
@@ -53,7 +53,7 @@ export default function CreatePoolExchangeRate({
             initialPrice === "0" ||
             getSafeNumber(initialPrice) === 0
               ? 0
-              : quoteCost}{" "}
+              : baseCost}{" "}
           </div>
           <p className="truncate text-xs text-muted-foreground">
             {quoteToken?.symbol} per {baseToken?.symbol}
