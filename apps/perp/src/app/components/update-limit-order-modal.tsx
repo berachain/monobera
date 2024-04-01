@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -7,14 +7,15 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
+import BigNumber from "bignumber.js";
 import { parseUnits as ethersParseUnits } from "ethers";
 import { mutate } from "swr";
-import { formatUnits, parseUnits, type Address } from "viem";
+import { parseUnits, type Address } from "viem";
 
-import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { type ILimitOrder } from "../berpetuals/components/order-history";
+import type { ILimitOrder } from "~/types/order-history";
 import { TPSL } from "../berpetuals/components/tpsl";
 
 export function UpdateLimitOrderModal({
@@ -30,28 +31,37 @@ export function UpdateLimitOrderModal({
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const [tp, setTp] = useState<string>(
-    formatUnits(BigInt(openOrder?.tp) ?? 0, 10),
+    formatFromBaseUnit(openOrder?.tp, 10).toString(10),
   );
   const [sl, setSl] = useState<string>(
-    formatUnits(BigInt(openOrder?.sl) ?? 0, 10),
+    formatFromBaseUnit(openOrder?.sl, 10).toString(10),
   );
   const { QUERY_KEY } = usePollOpenPositions();
 
-  const formattedCurrentPrice = Number(
-    formatUnits(BigInt(openOrder.price ?? 0), 10),
-  );
+  const formattedPrice = formatFromBaseUnit(
+    openOrder.price ?? "0",
+    10,
+  ).toString(10);
 
-  const positionSize =
-    Number(formatUnits(BigInt(openOrder?.position_size ?? 0), 18)) *
-    Number(openOrder.leverage);
-  const openPrice = Number(formatUnits(BigInt(openOrder?.price ?? 0), 10));
-  const size = positionSize / openPrice;
+  useEffect(() => {
+    setTp(formatFromBaseUnit(openOrder?.tp, 10).toString(10));
+    setSl(
+      openOrder?.sl === "0"
+        ? ""
+        : formatFromBaseUnit(openOrder?.sl, 10).toString(10),
+    );
+  }, [openOrder.tp, openOrder.sl]);
+
+  const positionSize = formatFromBaseUnit(
+    openOrder.position_size ?? "0",
+    18,
+  ).times(openOrder.leverage ?? "1");
+  const openPrice = formatFromBaseUnit(openOrder?.price ?? "0", 10);
+  const size = positionSize.div(openPrice).dp(4).toString(10);
 
   const ticker = openOrder?.market?.name?.split("-")[0];
 
-  const [executionPrice, setExecutionPrice] = useState<number>(
-    formattedCurrentPrice,
-  );
+  const [executionPrice, setExecutionPrice] = useState<string>(formattedPrice);
   const { isLoading, write } = useOctTxn({
     message: "Updating Open Limit Order",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
@@ -61,21 +71,26 @@ export function UpdateLimitOrderModal({
     },
   });
 
-  const formattedPrice = Number(
-    formatUnits(BigInt(openOrder?.price ?? 0n), 10),
+  const handleTPSLChange = useCallback(
+    (value: string, key: string) =>
+      key === "tp" ? setTp(value) : setSl(value),
+    [setTp, setSl],
   );
 
+  const formattedBfLong = formatFromBaseUnit(
+    openOrder?.market.pair_borrowing_fee?.bf_long ?? "0",
+    18,
+  ).toString(10);
+  const formattedBfShort = formatFromBaseUnit(
+    openOrder?.market.pair_borrowing_fee?.bf_short ?? "0",
+    18,
+  ).toString(10);
+
   const liqPrice = useCalculateLiqPrice({
-    bfLong: formatUnits(
-      BigInt(openOrder?.market.pair_borrowing_fee?.bf_long ?? 0n),
-      18,
-    ),
-    bfShort: formatUnits(
-      BigInt(openOrder?.market.pair_borrowing_fee?.bf_short ?? 0n),
-      18,
-    ),
+    bfLong: formattedBfLong,
+    bfShort: formattedBfShort,
     orderType: openOrder?.buy === true ? "long" : "short",
-    price: formattedPrice,
+    price: openOrder?.price ?? "0",
     leverage: openOrder?.leverage,
   });
 
@@ -83,8 +98,14 @@ export function UpdateLimitOrderModal({
     openOrder?.market.pair_index,
     openOrder?.index,
     parseUnits(`${executionPrice}`, 10),
-    ethersParseUnits(tp, 10),
-    ethersParseUnits(sl, 10),
+    ethersParseUnits(
+      tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
+      10,
+    ),
+    ethersParseUnits(
+      sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
+      10,
+    ),
   ];
 
   return (
@@ -128,11 +149,11 @@ export function UpdateLimitOrderModal({
               </div>
               <div>
                 <div className="text-lg font-semibold leading-7 text-muted-foreground">
-                  {size.toFixed(4) ?? 0} {ticker}
+                  {size ?? "0"} {ticker}
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
-                  {formattedCurrentPrice !== undefined ? (
-                    `${formatUsd(formattedCurrentPrice)} / ${ticker}`
+                  {formattedPrice !== undefined ? (
+                    `${formatUsd(formattedPrice)} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}
@@ -153,7 +174,7 @@ export function UpdateLimitOrderModal({
                   Current Execution Price
                 </div>
                 <div className=" text-right text-sm font-semibold leading-5 text-foreground">
-                  {formatBigIntUsd(openOrder?.price ?? 0, 10)}
+                  {formatUsd(formattedPrice)}
                 </div>
               </div>
             </div>
@@ -164,21 +185,25 @@ export function UpdateLimitOrderModal({
               value={executionPrice}
               type="number"
               className=" mt-2 h-8 w-full rounded-lg bg-background text-xs lg:w-[102px]"
-              onChange={(e) => setExecutionPrice(Number(e.target.value))}
+              min={0}
+              onKeyDown={(e) =>
+                (e.key === "-" || e.key === "e" || e.key === "E") &&
+                e.preventDefault()
+              }
+              onChange={(e: { target: { value: string } }) =>
+                setExecutionPrice(e.target.value)
+              }
             />
           </div>
 
           <TPSL
-            leverage={Number(openOrder?.leverage) ?? 2}
+            leverage={openOrder?.leverage ?? 2}
             tp={tp}
             sl={sl}
             formattedPrice={executionPrice}
             liqPrice={liqPrice}
             long={openOrder?.buy === true}
-            tpslOnChange={(value) => {
-              setTp(value.tp);
-              setSl(value.sl);
-            }}
+            tpslOnChange={handleTPSLChange}
           />
           <Button
             disabled={isLoading}

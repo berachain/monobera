@@ -2,26 +2,26 @@ import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits } from "viem";
+import BigNumber from "bignumber.js";
 
-import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
-import { CloseOrderModal } from "../components/close-order-modal";
-import { ClosePositionModal } from "../components/close-position-modal";
-import { PositionCardTitle } from "../components/position-title";
-import { UpdateLimitOrderModal } from "../components/update-limit-order-modal";
-import { UpdatePositionModal } from "../components/update-position-modal";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { CloseOrderModal } from "~/app/components/close-order-modal";
+import { ClosePositionModal } from "~/app/components/close-position-modal";
+import { PositionCardTitle } from "~/app/components/position-title";
 import {
   ActivePositionPNL,
   PositionLiquidationPrice,
-} from "./components/columns";
+} from "~/app/components/table-columns/positions";
+import { UpdateLimitOrderModal } from "~/app/components/update-limit-order-modal";
+import { UpdatePositionModal } from "~/app/components/update-position-modal";
+import { type IMarket } from "~/types/market";
 import type {
+  ICards,
   IClosedTrade,
   ILimitOrder,
   IMarketOrder,
   IPosition,
-} from "./components/order-history";
-import { type ICards } from "./components/order-history-table";
-import { type IMarket } from "./page";
+} from "~/types/order-history";
 
 export const getAssetCardList = ({
   marketOrderItems,
@@ -54,11 +54,11 @@ const getMarketListItems = (
   markets: IMarket[],
 ): ICards[] => {
   const cards = marketOrderItems.map((item) => {
-    const positionSize =
-      Number(formatUnits(BigInt(item.position_size ?? 0), 18)) *
-      Number(item.leverage);
-    const openPrice = Number(formatUnits(BigInt(item.open_price ?? 0), 10));
-    const size = positionSize / openPrice;
+    const positionSize = formatFromBaseUnit(item.position_size, 18).times(
+      item.leverage ?? "1",
+    );
+    const openPrice = formatFromBaseUnit(item.open_price ?? "0", 10);
+    const size = positionSize.div(openPrice).dp(4).toString(10);
     return {
       title: (
         <PositionCardTitle
@@ -94,7 +94,9 @@ const getMarketListItems = (
           key: "Entry Price",
           value: (
             <p className="text-xs font-medium leading-tight text-muted-foreground">
-              {formatBigIntUsd(item.open_price ?? 0, 10)}
+              {formatUsd(
+                formatFromBaseUnit(item.open_price ?? "0", 10).toString(10),
+              )}
             </p>
           ),
         },
@@ -123,15 +125,18 @@ const getMarketListItems = (
               <span className="text-success-foreground">
                 {item.tp === "0"
                   ? "∞"
-                  : formatUsd(Number(formatUnits(BigInt(item.tp ?? 0), 10))) ??
-                    "-"}{" "}
+                  : formatUsd(
+                      formatFromBaseUnit(item.tp ?? "0", 10).toString(10),
+                    ) ?? "-"}{" "}
               </span>
               /
               <span className="text-destructive-foreground">
                 {" "}
                 {item.sl === "0"
                   ? "∞"
-                  : formatUsd(Number(formatUnits(BigInt(item.sl ?? 0), 10)))}
+                  : formatUsd(
+                      formatFromBaseUnit(item.sl ?? "0", 10).toString(10),
+                    )}
               </span>
             </div>
           ),
@@ -141,7 +146,7 @@ const getMarketListItems = (
           value: (
             <ActivePositionPNL
               position={item}
-              className="max-h-[15px] text-xs font-medium leading-tight text-muted-foreground mb-2"
+              className="mb-2 max-h-[15px] text-xs font-medium leading-tight text-muted-foreground"
             />
           ),
         },
@@ -154,11 +159,11 @@ const getMarketListItems = (
 
 const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
   const cards = limitOrderItems.map((item) => {
-    const positionSize =
-      Number(formatUnits(BigInt(item.position_size ?? 0), 18)) *
-      Number(item.leverage);
-    const openPrice = Number(formatUnits(BigInt(item.price ?? 0), 10));
-    const size = positionSize / openPrice;
+    const positionSize = formatFromBaseUnit(item.position_size, 18).times(
+      item.leverage ?? "1",
+    );
+    const openPrice = formatFromBaseUnit(item.price ?? "0", 10);
+    const size = positionSize.div(openPrice).dp(4).toString(10);
     return {
       title: (
         <PositionCardTitle
@@ -203,7 +208,9 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
           key: "Price",
           value: (
             <p className="text-xs font-medium leading-tight text-muted-foreground">
-              {formatBigIntUsd(item.price ?? 0, 10)}
+              {formatUsd(
+                formatFromBaseUnit(item.price ?? "0", 10).toString(10),
+              )}
             </p>
           ),
         },
@@ -211,7 +218,9 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
           key: "Position Size",
           value: (
             <p className="text-xs font-medium leading-tight text-muted-foreground">
-              {formatBigIntUsd(item.position_size ?? 0, 18)}
+              {formatUsd(
+                formatFromBaseUnit(item.position_size ?? "0", 18).toString(10),
+              )}
             </p>
           ),
         },
@@ -224,10 +233,10 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
 
 const getHistoryListItems = (historyItems: IPosition[]): ICards[] => {
   const cards = historyItems.map((item) => {
-    const volume = Number(item?.volume);
+    const volume = BigNumber(item?.volume);
 
-    const openPrice = Number(formatUnits(BigInt(item.open_price ?? 0), 10));
-    const size = volume / openPrice;
+    const openPrice = formatFromBaseUnit(item.open_price ?? "0", 10);
+    const size = volume.div(openPrice).dp(4).toString(10);
 
     const openTime = new Date(Number(item.open_time) * 1000);
     const closeTime = new Date(Number(item.close_time) * 1000);
@@ -289,7 +298,9 @@ const getHistoryListItems = (historyItems: IPosition[]): ICards[] => {
           key: "Open Price",
           value: (
             <p className="text-xs text-muted-foreground">
-              {formatBigIntUsd(item.open_price, 10)}
+              {formatUsd(
+                formatFromBaseUnit(item.open_price ?? "0", 10).toString(10),
+              )}
             </p>
           ),
         },
@@ -299,7 +310,11 @@ const getHistoryListItems = (historyItems: IPosition[]): ICards[] => {
             <p className="text-xs text-muted-foreground">
               {item.close_price === ""
                 ? "-"
-                : formatBigIntUsd(item.close_price, 10)}
+                : formatUsd(
+                    formatFromBaseUnit(item.close_price ?? "0", 10).toString(
+                      10,
+                    ),
+                  )}
             </p>
           ),
         },
@@ -307,7 +322,7 @@ const getHistoryListItems = (historyItems: IPosition[]): ICards[] => {
           key: "Position Size",
           value: (
             <p className="text-xs text-muted-foreground">
-              {formatUsd(positionSize ?? 0)}
+              {formatUsd(positionSize.toString(10) ?? 0)}
             </p>
           ),
         },
@@ -345,9 +360,10 @@ const getHistoryListItems = (historyItems: IPosition[]): ICards[] => {
 
 const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
   const cards = historyItems.map((item) => {
-    const volume = Number(item?.volume);
-    const openPrice = Number(formatUnits(BigInt(item.open_price ?? 0), 10));
-    const size = volume / openPrice;
+    const volume = BigNumber(item?.volume);
+
+    const openPrice = formatFromBaseUnit(item.open_price ?? "0", 10);
+    const size = volume.div(openPrice).dp(4).toString(10);
 
     const fees =
       Number(item.rollover_fee) +
@@ -386,7 +402,9 @@ const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
           key: "Open Price",
           value: (
             <p className="text-xs text-muted-foreground">
-              {formatBigIntUsd(item.open_price, 10)}
+              {formatUsd(
+                formatFromBaseUnit(item.open_price ?? "0", 10).toString(10),
+              )}
             </p>
           ),
         },
@@ -394,7 +412,9 @@ const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
           key: "Close Price",
           value: (
             <p className="text-xs text-muted-foreground">
-              {formatBigIntUsd(item.close_price, 10)}
+              {formatUsd(
+                formatFromBaseUnit(item.close_price ?? "0", 10).toString(10),
+              )}
             </p>
           ),
         },

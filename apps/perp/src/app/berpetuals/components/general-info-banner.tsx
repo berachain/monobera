@@ -11,11 +11,12 @@ import {
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits } from "viem";
+import BigNumber from "bignumber.js";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
-import { type IMarket } from "../page";
+import { type IMarket } from "~/types/market";
 
 interface IGeneralInfoBanner {
   market: IMarket;
@@ -26,50 +27,58 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
   const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
   const [open, setOpen] = useState(false);
 
-  const formattedPrice = Number(formatUnits(BigInt(price ?? 0), 10));
+  const formattedPriceBN = formatFromBaseUnit(price, 10);
   const historicPrice = priceChange[Number(market.pair_index)];
+  const historicPriceBN = BigNumber(historicPrice ?? 0);
 
   const difference = useMemo(() => {
-    return calculatePercentDifference(historicPrice ?? 0, formattedPrice);
-  }, [historicPrice, formattedPrice]);
+    return calculatePercentDifference(
+      historicPrice?.toString() ?? "0",
+      formattedPriceBN.toString(10),
+    );
+  }, [historicPrice, formattedPriceBN]);
 
   const priceDifference = useMemo(() => {
-    return formattedPrice - (historicPrice ?? 0);
-  }, [historicPrice, formattedPrice]);
+    return formattedPriceBN.minus(historicPrice ?? "0");
+  }, [historicPrice, formattedPriceBN]);
+
   useEffect(() => {
     document.title =
       price === undefined
         ? `${market.name} | ${perpsName}`
-        : `${formatUsd(Number(formatUnits(price, 10)))} | ${
+        : `${formatFromBaseUnit(price, 10).toString(10)} | ${
             market.name
           } | ${perpsName}`;
   }, [price]);
 
-  const formattedLongOi = formatUnits(
-    BigInt(market.open_interest?.oi_long ?? "0"),
+  const formattedLongOi = formatFromBaseUnit(
+    market.open_interest?.oi_long ?? "0",
     18,
-  );
-  const formattedShortOi = formatUnits(
-    BigInt(market.open_interest?.oi_short ?? "0"),
+  ).toString(10);
+  const formattedShortOi = formatFromBaseUnit(
+    market.open_interest?.oi_short ?? "0",
     18,
-  );
-
-  const formattedBorrowingL = formatUnits(
-    BigInt(market.pair_borrowing_fee?.bf_long ?? "0"),
+  ).toString(10);
+  const formattedBorrowingL = formatFromBaseUnit(
+    market.pair_borrowing_fee?.bf_long ?? "0",
     18,
-  );
-  const formattedBorrowingS = formatUnits(
-    BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
+  )
+    .dp(6)
+    .toString(10);
+  const formattedBorrowingS = formatFromBaseUnit(
+    market.pair_borrowing_fee?.bf_short ?? "0",
     18,
-  );
+  )
+    .dp(6)
+    .toString(10);
 
   return (
-    <div className="flex h-[65px] w-[calc(100%-16px)] items-center justify-between border border-border px-4 m-2 rounded-md">
+    <div className="m-2 flex h-[65px] w-[calc(100%-16px)] items-center justify-between rounded-md border border-border px-4">
       <div className="flex items-center text-muted-foreground">
         <div className="mr-2">
           <div className="text-xl font-semibold leading-7 text-muted-foreground">
             {price !== undefined ? (
-              formatUsd(Number(formatUnits(price, 10)))
+              formatUsd(formatFromBaseUnit(price, 10).toString(10))
             ) : (
               <Skeleton className="h-[28px] w-[80px]" />
             )}
@@ -78,12 +87,12 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
             {price !== undefined ? (
               <div
                 className={
-                  priceDifference > 0
+                  priceDifference.gt(0)
                     ? "text-success-foreground"
                     : "text-destructive-foreground"
                 }
               >
-                {formatUsd(priceDifference)}
+                {formatUsd(priceDifference.toString(10))}
               </div>
             ) : (
               <Skeleton className="mt-1 h-[16px] w-[40px]" />
@@ -95,12 +104,12 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
           {price !== undefined ? (
             <div
               className={
-                difference > 0
+                difference.gt(0)
                   ? "text-success-foreground"
                   : "text-destructive-foreground"
               }
             >
-              {Number(difference).toFixed(2)}%
+              {difference.dp(2).toString(10)}%
             </div>
           ) : (
             <Skeleton className="h-[16px] w-[40px]" />
@@ -126,21 +135,19 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
         </div>
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs 2xl:block">
           Borrow Fee (L)
-          <div className="text-success-foreground">
-            {Number(formattedBorrowingL).toFixed(6)}%
-          </div>
+          <div className="text-success-foreground">{formattedBorrowingL}%</div>
         </div>
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs 2xl:block">
           Borrow Fee (S)
           <div className="text-destructive-foreground">
-            {Number(formattedBorrowingS).toFixed(6)}%
+            {formattedBorrowingS}%
           </div>
         </div>
       </div>
       <div className="flex flex-shrink-0 text-[10px] text-muted-foreground">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <div className="flex text-[14px] h-8 cursor-pointer items-center hover:underline">
+            <div className="flex h-8 cursor-pointer items-center text-[12px] hover:underline">
               Market Details
             </div>
           </DialogTrigger>
@@ -157,12 +164,12 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
                   {price !== undefined ? (
                     <div
                       className={
-                        difference > 0
+                        difference.gt(0)
                           ? "text-success-foreground"
                           : "text-destructive-foreground"
                       }
                     >
-                      {Number(difference).toFixed(2)}%
+                      {difference.dp(2).toString()}%
                     </div>
                   ) : (
                     <Skeleton className="h-[16px] w-[40px]" />
@@ -198,7 +205,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
                   Borrowing Fee (L)
                 </div>
                 <div className="text-success-foreground">
-                  {Number(formattedBorrowingL).toFixed(6)}%
+                  {formattedBorrowingL}%
                 </div>
               </div>
               <div className="flex w-full flex-row justify-between text-xs">
@@ -206,7 +213,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
                   Borrowing Fee (S)
                 </div>
                 <div className="text-destructive-foreground">
-                  {Number(formattedBorrowingS).toFixed(6)}%
+                  {formattedBorrowingS}%
                 </div>
               </div>
             </div>

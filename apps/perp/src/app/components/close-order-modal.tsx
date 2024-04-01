@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
@@ -8,12 +8,12 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { mutate } from "swr";
-import { formatUnits, type Address } from "viem";
+import { type Address } from "viem";
 
-import { formatBigIntUsd } from "~/utils/formatBigIntUsd";
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { type ILimitOrder } from "../berpetuals/components/order-history";
+import type { ILimitOrder } from "~/types/order-history";
 
 export function CloseOrderModal({
   trigger,
@@ -44,11 +44,12 @@ export function CloseOrderModal({
     setOpen(state);
   };
 
-  const positionSize =
-    Number(formatUnits(BigInt(openOrder.position_size ?? 0), 18)) *
-    Number(openOrder.leverage);
-  const openPrice = Number(formatUnits(BigInt(openOrder.price ?? 0), 10));
-  const size = positionSize / openPrice;
+  const positionSize = formatFromBaseUnit(
+    openOrder.position_size ?? "0",
+    18,
+  ).times(openOrder.leverage ?? "1");
+  const openPrice = formatFromBaseUnit(openOrder.price ?? "0", 10);
+  const size = positionSize.div(openPrice).dp(4).toString(10);
 
   const ticker = openOrder?.market?.name?.split("-")[0];
 
@@ -63,24 +64,27 @@ export function CloseOrderModal({
     },
   });
 
-  const formattedPrice = Number(
-    formatUnits(BigInt(openOrder?.price ?? 0n), 10),
-  );
-  const formattedCurrentPrice = Number(
-    formatUnits(BigInt(openOrder.price ?? 0), 10),
-  );
+  const formattedTp = formatFromBaseUnit(openOrder.tp ?? "0", 10).toString(10);
+  const formattedSl = formatFromBaseUnit(openOrder.sl ?? "0", 10).toString(10);
+  const formattedPrice = formatFromBaseUnit(
+    openOrder.price ?? "0",
+    10,
+  ).toString(10);
+
+  const formattedBfLong = formatFromBaseUnit(
+    openOrder?.market.pair_borrowing_fee?.bf_long ?? "0",
+    18,
+  ).toString(10);
+  const formattedBfShort = formatFromBaseUnit(
+    openOrder?.market.pair_borrowing_fee?.bf_short ?? "0",
+    18,
+  ).toString(10);
 
   const liqPrice = useCalculateLiqPrice({
-    bfLong: formatUnits(
-      BigInt(openOrder?.market.pair_borrowing_fee?.bf_long ?? 0n),
-      18,
-    ),
-    bfShort: formatUnits(
-      BigInt(openOrder?.market.pair_borrowing_fee?.bf_short ?? 0n),
-      18,
-    ),
+    bfLong: formattedBfLong,
+    bfShort: formattedBfShort,
     orderType: openOrder?.buy === true ? "long" : "short",
-    price: formattedPrice,
+    price: openOrder.price,
     leverage: openOrder?.leverage,
   });
 
@@ -120,11 +124,11 @@ export function CloseOrderModal({
               </div>
               <div>
                 <div className="text-lg font-semibold leading-7 text-muted-foreground">
-                  {size.toFixed(4) ?? 0} {ticker}
+                  {size ?? "0"} {ticker}
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
-                  {formattedCurrentPrice !== undefined ? (
-                    `${formatUsd(formattedCurrentPrice)} / ${ticker}`
+                  {formattedPrice ? (
+                    `${formatUsd(formattedPrice)} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}
@@ -145,7 +149,7 @@ export function CloseOrderModal({
                   Current Execution Price
                 </div>
                 <div className=" text-right text-sm font-semibold leading-5 text-foreground">
-                  {formatBigIntUsd(openOrder?.price ?? 0, 10)}
+                  {formatUsd(formattedPrice ?? 0)}
                 </div>
               </div>
             </div>
@@ -154,17 +158,13 @@ export function CloseOrderModal({
             <div className="flex w-full flex-row justify-between">
               <div className="text-sm text-muted-foreground">Take Profit</div>
               <div className="text-sm text-success-foreground">
-                {Number(openOrder?.tp) === 0
-                  ? "None"
-                  : formatBigIntUsd(openOrder?.tp ?? 0, 10)}
+                {formattedTp === "0" ? "None" : formatUsd(formattedTp)}
               </div>
             </div>
             <div className="flex w-full flex-row justify-between">
               <div className="text-sm text-muted-foreground">Stop Loss</div>
               <div className="text-sm text-destructive-foreground">
-                {Number(openOrder?.sl) === 0
-                  ? "None"
-                  : formatBigIntUsd(openOrder?.sl ?? 0, 10)}
+                {formattedSl === "0" ? "None" : formatUsd(formattedSl)}
               </div>
             </div>
           </div>

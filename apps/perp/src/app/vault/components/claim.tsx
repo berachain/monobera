@@ -18,30 +18,26 @@ export default function Claim() {
   feeApr = feeApr ? Number(feeApr.slice(0, -1)) : 0;
 
   const {
-    // isLoading: isHoneyVaultBalanceLoading,
+    isLoading: isHoneyVaultBalanceLoading,
     useFormattedHoneyVaultBalance,
   } = usePollHoneyVaultBalance();
 
   const honeyLocked = useFormattedHoneyVaultBalance();
 
-  const {
-    isLoading: isBgtRewardsLoading,
-    useBgtApr,
-    useBgtRewardsForAddress,
-  } = usePollBgtRewardsForAddress({
-    address: gTokenContractAddress,
-  });
-
-  const _ = useBgtRewardsForAddress();
+  const { isLoading: isBgtRewardsLoading, useBgtApr } =
+    usePollBgtRewardsForAddress({
+      address: gTokenContractAddress,
+    });
 
   const bgtApr = useBgtApr(honeyLocked);
 
-  const isLoading = false;
   return (
-    <div className="relative w-full overflow-hidden rounded-md border border-border dark:bg-[#231D14] bg-[#FEFCE8] px-10 py-8">
+    <div className="relative w-full overflow-hidden rounded-md border border-border bg-[#FEFCE8] px-10 py-8 dark:bg-[#231D14]">
       <div className=" relative z-10 inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-yellow-600 bg-stone-900 px-3 py-2">
         <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-yellow-600">
-          {isLoading || isBgtRewardsLoading || isFeesAprLoading ? (
+          {isHoneyVaultBalanceLoading ||
+          isBgtRewardsLoading ||
+          isFeesAprLoading ? (
             <Skeleton className="h-[28px] w-[80px]" />
           ) : (
             <p>{formatter.format((bgtApr ?? 0) + feeApr)}%</p>

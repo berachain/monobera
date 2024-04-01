@@ -2,10 +2,10 @@ import React from "react";
 import type { Metadata } from "next";
 import { perpsName } from "@bera/config";
 
-import { BhoneyStats } from "./bhoney-stats";
-import Claim from "./claim";
-import DepositWithdraw from "./deposit-withdraw";
-import { RewardsWithdraw } from "./rewards-withdraw";
+import { BhoneyStats } from "./components/bhoney-stats";
+import Claim from "./components/claim";
+import DepositWithdraw from "./components/deposit-withdraw";
+import { RewardsWithdraw } from "./components/rewards-withdraw";
 
 export function generateMetadata(): Metadata {
   return {
@@ -24,7 +24,6 @@ export default async function Vault() {
           <RewardsWithdraw />
         </div>
       </div>
-      {/* <HoneyVault /> */}
     </div>
   );
 }

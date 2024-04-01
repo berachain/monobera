@@ -10,8 +10,8 @@ import { type HoneyWithdrawalRequest } from "@bera/proto/src";
 import { DataTableColumnHeader, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
-import { formatUnits, type Address } from "viem";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 
 export const CancelWithdraw = ({
@@ -78,14 +78,14 @@ export const CancelWithdraw = ({
     </div>
   );
 };
-export const withdraw_queue_columns: ColumnDef<HoneyWithdrawalRequest>[] = [
+export const withdrawQueueColumns: ColumnDef<HoneyWithdrawalRequest>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Amount" />
     ),
     cell: ({ row }) => (
       <div className="flex flex-row items-center gap-2 text-sm font-semibold leading-7">
-        {Number(formatUnits(BigInt(row.original.shares ?? 0n), 18))}{" "}
+        {formatFromBaseUnit(row.original.shares ?? "0", 18).toString(10)}{" "}
         <Image
           src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png"
           alt="Honey"
@@ -103,8 +103,8 @@ export const withdraw_queue_columns: ColumnDef<HoneyWithdrawalRequest>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-[120px] flex-col gap-1">
-          {Number(row.original.unlock_epoch)}
+        <div className="flex w-[100px] flex-col gap-1">
+          {row.original.unlock_epoch}
         </div>
       );
     },

@@ -8,7 +8,7 @@ export function LongShortTab({
   valueOnChange?: (value: "short" | "long") => void;
 }) {
   return (
-    <div className="flex h-12 cursor-pointer bg-muted text-muted-foreground flex-grow-0 flex-shrink-0">
+    <div className="flex h-12 flex-shrink-0 flex-grow-0 cursor-pointer bg-muted text-muted-foreground">
       <div
         onClick={() => valueOnChange?.("long")}
         className={cn(

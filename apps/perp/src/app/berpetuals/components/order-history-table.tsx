@@ -1,40 +1,28 @@
-import { useMemo, useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { DataTable, usePrevious } from "@bera/shared-ui";
+import type {
+  PaginationState,
+  RowSelectionState,
+  Updater,
+} from "@tanstack/react-table";
 
 import { ClosePositionModal } from "~/app/components/close-position-modal";
+import { historyColumns } from "~/app/components/table-columns/history";
+import { ordersColumns } from "~/app/components/table-columns/orders";
+import { pnlColumns } from "~/app/components/table-columns/pnl";
+import { generatePositionColumns } from "~/app/components/table-columns/positions";
 import { UpdatePositionModal } from "~/app/components/update-position-modal";
-import { AsesetCardMobile } from "~/app/portfolio/userAssets";
-import { getAssetCardList } from "../getAssetCards";
-import type { IMarket } from "../page";
-import {
-  getPositionColumns,
-  history_columns,
-  orders_columns,
-  pnl_columns,
-} from "./columns";
-import { DataTable, usePrevious } from "@bera/shared-ui";
+import { AsesetCardMobile } from "~/app/portfolio/components/userAssets";
+import { type IMarket } from "~/types/market";
 import type {
   IClosedTrade,
   ILimitOrder,
   IMarketOrder,
   IPosition,
-} from "./order-history";
-import {
-  type RowSelectionState,
-  type Updater,
-  type PaginationState,
-} from "@tanstack/react-table";
-import { type BerpTabTypes } from "./order-wrapper";
-
-export interface IRow {
-  key: string;
-  value: React.ReactNode;
-}
-
-export interface ICards {
-  title: React.ReactNode;
-  rows: IRow[];
-  footer: React.ReactNode | undefined;
-}
+} from "~/types/order-history";
+import type { TableTabTypes } from "~/types/table-tab-types";
+import { getAssetCardList } from "./asset-cards/getAssetCards";
+import { TotalAmount } from "./total-amount";
 
 export function OrderHistoryTable({
   tab,
@@ -49,7 +37,7 @@ export function OrderHistoryTable({
   pagination,
   setPagination,
 }: {
-  tab: BerpTabTypes;
+  tab: TableTabTypes;
   openPositions: IMarketOrder[];
   openOrders: ILimitOrder[];
   history: IClosedTrade[];
@@ -108,7 +96,7 @@ export function OrderHistoryTable({
   };
 
   return (
-    <div className="relative w-full overflow-auto h-full">
+    <div className="relative h-full w-full overflow-auto sm:border-t sm:border-border">
       {tab === "positions" && (
         <>
           <UpdatePositionModal
@@ -122,13 +110,26 @@ export function OrderHistoryTable({
             onOpenChange={setDeleteOpen}
           />
           <DataTable
-            columns={getPositionColumns(markets, setUpdateOpen, setDeleteOpen)}
+            columns={generatePositionColumns(
+              markets,
+              setUpdateOpen,
+              setDeleteOpen,
+            )}
             data={openPositions ?? []}
-            className="hidden overflow-auto h-full w-full sm:block"
+            className="hidden h-full w-full overflow-auto sm:block"
             embedded
             enablePagination={!mobile}
             enableSelection
             fetchData={fetchData}
+            stickyHeaders
+            additionalActions={[
+              <TotalAmount
+                className="hidden flex-shrink-0 p-0 sm:flex"
+                markets={markets}
+                tabType={tab}
+                spacer
+              />,
+            ]}
             additionalTableProps={{
               state: {
                 rowSelection: selection,
@@ -148,13 +149,21 @@ export function OrderHistoryTable({
       )}
       {tab === "orders" && (
         <DataTable
-          columns={orders_columns}
+          columns={ordersColumns}
           data={openOrders ?? []}
-          className="hidden overflow-auto h-full w-full sm:block"
+          className="hidden h-full w-full overflow-auto sm:block"
           embedded
           enablePagination={!mobile}
           enableSelection
           stickyHeaders
+          additionalActions={[
+            <TotalAmount
+              className="hidden flex-shrink-0 p-0 sm:flex"
+              markets={markets}
+              tabType={tab}
+              spacer
+            />,
+          ]}
           additionalTableProps={{
             state: {
               rowSelection: selection,
@@ -173,12 +182,20 @@ export function OrderHistoryTable({
       )}
       {tab === "history" && (
         <DataTable
-          columns={history_columns}
+          columns={historyColumns}
           data={allPositions ?? []}
-          className="hidden overflow-auto h-full w-full sm:block"
+          className="hidden h-full w-full overflow-auto sm:block"
           embedded
           stickyHeaders
           enablePagination={!mobile}
+          additionalActions={[
+            <TotalAmount
+              className="hidden flex-shrink-0 p-0 sm:flex"
+              markets={markets}
+              tabType={tab}
+              spacer
+            />,
+          ]}
           additionalTableProps={{
             initialState: {
               sorting: [{ id: "open_time", desc: true }],
@@ -189,11 +206,19 @@ export function OrderHistoryTable({
       )}
       {tab === "pnl" && (
         <DataTable
-          columns={pnl_columns}
+          columns={pnlColumns}
           data={history ?? []}
-          className="hidden overflow-auto h-full w-full sm:block"
+          className="hidden h-full w-full overflow-auto sm:block"
           embedded
           stickyHeaders
+          additionalActions={[
+            <TotalAmount
+              className="hidden flex-shrink-0 p-0 sm:flex"
+              markets={markets}
+              tabType={tab}
+              spacer
+            />,
+          ]}
           enablePagination={!mobile}
           additionalTableProps={{
             autoResetPageIndex: false,
@@ -201,7 +226,7 @@ export function OrderHistoryTable({
         />
       )}
       {mobile && (
-        <div className="w-[calc(100%-16px)] h-[calc(100%+32px)] flex flex-col gap-4 mx-2 my-2">
+        <div className="mx-2 my-2 flex h-[calc(100%+32px)] w-[calc(100%-16px)] flex-col gap-4">
           {tab === "positions" &&
             assetCardItems.marketList.map((item, index) => (
               <AsesetCardMobile card={item} key={index} />

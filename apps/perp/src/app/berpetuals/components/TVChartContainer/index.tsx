@@ -1,20 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { usePrevious } from "@bera/shared-ui";
 import { useTheme } from "next-themes";
 
 import {
   widget,
   type ChartingLibraryWidgetOptions,
-  type LanguageCode,
-  type ResolutionString,
   type IChartingLibraryWidget,
   type IPositionLineAdapter,
+  type LanguageCode,
+  type ResolutionString,
 } from "../../../../../public/static/charting_library";
 import Datafeed from "../../../../utils/tv-datafeed";
-import styles from "./index.module.css";
 import { type OrderLine } from "../order-chart";
-import { LoadingContainer } from "../loading-container";
-import { cn } from "@bera/ui";
-import { usePrevious } from "@bera/shared-ui";
+import styles from "./index.module.css";
 
 export const TV_BACKGROUND_COLOR = {
   dark: "#0E0803",
@@ -22,7 +20,6 @@ export const TV_BACKGROUND_COLOR = {
 };
 
 export type ChartProps = Partial<ChartingLibraryWidgetOptions> & {
-  showOrderLines?: boolean;
   orderLines?: OrderLine[];
   chartReady: boolean;
   setChartReady: (ready: boolean) => void;
@@ -33,11 +30,17 @@ export const TVChartContainer = (props: ChartProps) => {
     useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
   const tvWidgetRef = useRef<IChartingLibraryWidget | null>(null);
   const orderLineRefs = useRef<IPositionLineAdapter[] | undefined>([]);
-  // const [chartReady, setChartReady] = useState(false);
+  const toggleLinesButton = useRef<HTMLElement | null>(null);
+  const toggleListener = useRef<(() => void) | null>(null);
+  const [showOrderLines, setShowOrderLines] = useState(true);
 
   const { theme: appTheme, systemTheme } = useTheme();
   const theme = (appTheme === "system" ? systemTheme : appTheme) || "dark";
   const prevTheme = usePrevious(theme);
+
+  const handleToggleShowOrderLines = useCallback(() => {
+    setShowOrderLines((prev) => !prev);
+  }, [setShowOrderLines]);
 
   useEffect(() => {
     if (prevTheme !== theme && props.chartReady) {
@@ -131,6 +134,21 @@ export const TVChartContainer = (props: ChartProps) => {
   };
 
   useEffect(() => {
+    if (handleToggleShowOrderLines) {
+      toggleListener.current &&
+        toggleLinesButton.current?.removeEventListener(
+          "click",
+          toggleListener.current,
+        );
+      toggleLinesButton.current?.addEventListener(
+        "click",
+        handleToggleShowOrderLines,
+      );
+      toggleListener.current = handleToggleShowOrderLines;
+    }
+  }, [handleToggleShowOrderLines]);
+
+  useEffect(() => {
     const backgroundColor =
       TV_BACKGROUND_COLOR[theme as keyof typeof TV_BACKGROUND_COLOR];
     const widgetOptions: ChartingLibraryWidgetOptions = {
@@ -183,22 +201,21 @@ export const TVChartContainer = (props: ChartProps) => {
       widgetOptions.overrides &&
         tvWidgetRef.current?.applyOverrides(widgetOptions.overrides);
       props.setChartReady(true);
-      void tvWidget.headerReady().then(() => {
-        const button = tvWidget.createButton();
-        button.setAttribute("title", "Click to show a notification popup");
-        button.classList.add("apply-common-tooltip");
-        button.addEventListener("click", () =>
-          tvWidget.showNoticeDialog({
-            title: "Notification",
-            body: "TradingView Charting Library API works correctly",
-            callback: () => {
-              console.log("Noticed!");
-            },
-          }),
-        );
+    });
 
-        button.innerHTML = "Check API";
-      });
+    tvWidgetRef.current?.headerReady().then(() => {
+      if (!tvWidgetRef.current || !handleToggleShowOrderLines) return;
+      toggleLinesButton.current = tvWidgetRef.current.createButton();
+      toggleLinesButton.current.classList.add("custom-button");
+      toggleLinesButton.current.setAttribute("title", "Hide / Show Orders");
+      toggleLinesButton.current.textContent = showOrderLines
+        ? "Hide Orders"
+        : "Show Orders";
+      toggleLinesButton.current.addEventListener(
+        "click",
+        handleToggleShowOrderLines,
+      );
+      toggleListener.current = handleToggleShowOrderLines;
     });
 
     return () => {
@@ -221,7 +238,7 @@ export const TVChartContainer = (props: ChartProps) => {
 
   useEffect(() => {
     if (props.chartReady) {
-      if (props.showOrderLines) {
+      if (showOrderLines) {
         tvWidgetRef.current?.onChartReady(() => {
           tvWidgetRef.current?.chart().dataReady(() => {
             renderOrderLines();
@@ -231,7 +248,15 @@ export const TVChartContainer = (props: ChartProps) => {
         clearOrderLines();
       }
     }
-  }, [props.orderLines, props.showOrderLines, tvWidgetRef, props.chartReady]);
+  }, [props.orderLines, showOrderLines, tvWidgetRef, props.chartReady]);
+
+  useEffect(() => {
+    if (toggleLinesButton.current) {
+      toggleLinesButton.current.textContent = showOrderLines
+        ? "Hide Orders"
+        : "Show Orders";
+    }
+  }, [showOrderLines]);
 
   return <div ref={chartContainerRef} className={styles.TVChartContainer} />;
 };
