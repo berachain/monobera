@@ -14,7 +14,12 @@ import {
   honeyTokenAddress,
   lendPoolImplementationAddress,
 } from "@bera/config";
-import { FormattedNumber, TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  FormattedNumber,
+  TokenInput,
+  useTxn,
+  useAnalytics,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -39,14 +44,20 @@ export default function WithdrawBtn({
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
+  const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Withdrawing ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${token?.symbol}`,
     onSuccess: () => {
+      track(`withdraw_${token.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
+    },
+    onError: (e: Error | undefined) => {
+      track(`withdraw_${token.symbol.toLowerCase()}_failed`);
+      captureException(e);
     },
     actionType: TransactionActionType.WITHDRAW,
   });
