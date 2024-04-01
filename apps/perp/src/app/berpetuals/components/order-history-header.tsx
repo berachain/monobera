@@ -3,14 +3,13 @@ import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Switch } from "@bera/ui/switch";
+import { RowSelectionState } from "@tanstack/react-table";
 import { mutate } from "swr";
-import { type Address, encodeFunctionData } from "viem";
+import { encodeFunctionData, type Address } from "viem";
 
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-
-import { RowSelectionState } from "@tanstack/react-table";
-import { type BerpTabTypes } from "./order-wrapper";
-import { type CloseOrderPayload } from "./order-history";
+import type { CloseOrderPayload } from "~/types/order-history";
+import type { TableTabTypes } from "~/types/table-tab-types";
 
 export function OrderHistoryHeader({
   headers,
@@ -18,8 +17,6 @@ export function OrderHistoryHeader({
   setTabType,
   closePositionsPayload,
   closeOrdersPayload,
-  showOrderLines,
-  setShowOrderLines,
   selection,
 }: {
   headers: {
@@ -27,12 +24,10 @@ export function OrderHistoryHeader({
     counts?: number;
     type: string;
   }[];
-  tabType: BerpTabTypes;
-  setTabType: (type: BerpTabTypes) => void;
+  tabType: TableTabTypes;
+  setTabType: (type: TableTabTypes) => void;
   closePositionsPayload: CloseOrderPayload[];
   closeOrdersPayload: CloseOrderPayload[];
-  showOrderLines: boolean;
-  setShowOrderLines: (showOrderLines: boolean) => void;
   selection: RowSelectionState;
 }) {
   const { QUERY_KEY } = usePollOpenPositions();
@@ -58,11 +53,11 @@ export function OrderHistoryHeader({
 
   return (
     <div>
-      <div className="flex w-full flex-col items-center justify-between bg-muted px-6 py-4 sm:flex-row rounded-t-md">
-        <div className="flex flex-1 gap-10 text-foreground mr-4">
+      <div className="flex min-h-[64px] w-full flex-col items-center justify-between rounded-t-md bg-muted px-6 py-4 sm:flex-row">
+        <div className="mr-4 flex flex-1 gap-10 text-foreground">
           {headers.map((header, index) => (
             <div
-              onClick={() => setTabType(header.type as BerpTabTypes)}
+              onClick={() => setTabType(header.type as TableTabTypes)}
               key={index}
               className={cn(
                 "flex cursor-pointer items-center gap-2",
@@ -94,7 +89,7 @@ export function OrderHistoryHeader({
         )}
         {tabType === "positions" && (
           <div className="flex flex-grow-0">
-            <div className="float-right flex-grow-0 justify-center mr-4 items-center hidden lg:flex">
+            {/* <div className="float-right flex-grow-0 justify-center mr-4 items-center hidden lg:flex">
               <span className="text-xs font-medium flex-grow-0">{`${
                 showOrderLines ? "Hide" : "Show"
               } Order Lines`}</span>
@@ -104,9 +99,9 @@ export function OrderHistoryHeader({
                 checked={showOrderLines}
                 onCheckedChange={(checked) => setShowOrderLines(checked)}
               />
-            </div>
+            </div> */}
             <Button
-              className="h-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 w-fit min-w-0"
+              className="h-full w-fit min-w-0 cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80"
               disabled={
                 isClosePositionsLoading || closePositionsPayload?.length === 0
               }
@@ -123,7 +118,7 @@ export function OrderHistoryHeader({
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                   abi: TRADING_ABI,
                   functionName: "tryAggregate",
-                  params: [false, encodedData],
+                  params: [true, encodedData],
                 });
               }}
             >
@@ -136,19 +131,8 @@ export function OrderHistoryHeader({
 
         {tabType === "orders" && (
           <div className="flex flex-grow-0">
-            <div className="float-right flex-grow-0 justify-center mr-4 items-center hidden lg:flex">
-              <span className="text-xs font-medium flex-grow-0">{`${
-                showOrderLines ? "Hide" : "Show"
-              } Order Lines`}</span>
-              <Switch
-                className="data-[state=checked]:bg-success-foreground ml-2"
-                id="show-orders"
-                checked={showOrderLines}
-                onCheckedChange={(checked) => setShowOrderLines(checked)}
-              />
-            </div>
             <Button
-              className="h-full min-w-44 w-full cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 md:w-fit md:min-w-0"
+              className="h-full w-full min-w-44 cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 md:w-fit md:min-w-0"
               disabled={
                 isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
               }
@@ -165,7 +149,7 @@ export function OrderHistoryHeader({
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                   abi: TRADING_ABI,
                   functionName: "tryAggregate",
-                  params: [false, encodedData],
+                  params: [true, encodedData],
                 });
               }}
             >

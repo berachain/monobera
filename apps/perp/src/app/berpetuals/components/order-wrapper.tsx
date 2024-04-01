@@ -12,12 +12,11 @@ import {
   type RowSelectionState,
 } from "@tanstack/react-table";
 
+import type { IMarket } from "~/types/market";
+import type { TableTabTypes } from "~/types/table-tab-types";
 import { OrderChart } from "../components/order-chart";
 import { OrderHistory } from "../components/order-history";
-import { CreatePosition, type ICreatePosition } from "../create-position";
-import { type IMarket } from "../page";
-
-export type BerpTabTypes = "positions" | "orders" | "history" | "pnl";
+import { CreatePosition } from "./create-position";
 
 type Props = {
   markets: IMarket[];
@@ -29,25 +28,23 @@ export default function OrderWrapper({
   defaultMarket,
   params,
 }: Props) {
-  const [tabType, setTabType] = useState<BerpTabTypes>("positions");
+  const [tabType, setTabType] = useState<TableTabTypes>("positions");
   const [selection, setSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
-  const [showOrderLines, setShowOrderLines] = useState(true);
 
-  const handleTabTypes = (tab: BerpTabTypes) => {
+  const handleTabTypes = (tab: TableTabTypes) => {
     setSelection({});
     setTabType(tab);
   };
 
   return (
     <>
-      <div className="h-[500px] mx-2 block rounded-md border border-border lg:hidden">
+      <div className="mx-2 block h-[500px] rounded-md border border-border lg:hidden">
         <OrderChart
           setSelection={setSelection}
-          showOrderLines={false}
           selection={selection}
           pagination={pagination}
           tabType={tabType}
@@ -59,15 +56,14 @@ export default function OrderWrapper({
         <CreatePosition market={defaultMarket} params={params} />
         <div className="flex h-full w-full flex-col overflow-auto">
           <ResizablePanelGroup
-            className="lg:!h-[calc(100%-8px)] hidden lg:flex"
+            className="hidden lg:flex lg:!h-[calc(100%-8px)]"
             direction="vertical"
           >
             <ResizablePanel>
-              <div className="h-[calc(100%-8px)] mr-2 hidden flex-shrink-0 rounded-md border border-border lg:block">
+              <div className="mr-2 hidden h-[calc(100%-8px)] flex-shrink-0 rounded-md border border-border lg:block">
                 <OrderChart
                   pagination={pagination}
                   setSelection={setSelection}
-                  showOrderLines={showOrderLines}
                   markets={markets}
                   marketName={defaultMarket.name}
                   selection={selection}
@@ -75,11 +71,9 @@ export default function OrderWrapper({
                 />
               </div>
             </ResizablePanel>
-            <ResizableHandle className="!w-[calc(100%-24px)] mx-2 mb-2 hidden lg:flex" />
+            <ResizableHandle className="mx-2 mb-2 hidden !w-[calc(100%-24px)] lg:flex" />
             <ResizablePanel>
               <OrderHistory
-                showOrderLines={showOrderLines}
-                setShowOrderLines={setShowOrderLines}
                 selection={selection}
                 setSelection={setSelection}
                 pagination={pagination}
@@ -92,8 +86,6 @@ export default function OrderWrapper({
           </ResizablePanelGroup>
           <div className="block lg:hidden">
             <OrderHistory
-              showOrderLines={showOrderLines}
-              setShowOrderLines={setShowOrderLines}
               selection={selection}
               setSelection={setSelection}
               pagination={pagination}

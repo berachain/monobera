@@ -117,32 +117,13 @@ export function OneClickBanner({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "flex h-[63px] w-[calc(100%-16px)] lg:w-[160px] flex-shrink-0 rounded-md border border-border m-2 lg:ml-0",
+        "m-2 flex h-[63px] w-[calc(100%-16px)] flex-shrink-0 rounded-md border border-border lg:ml-0 lg:w-[250px]",
         getStatusColor(getStatus()),
         className,
       )}
     >
-      {/* {getStatus() !== BannerEnum.OFF && (
-        <div className="flex items-center gap-1 text-sm font-bold">
-          {getStatus() === BannerEnum.ON ? (
-            <Icons.wallet className="h-4 w-4" />
-          ) : (
-            <Icons.warning className="h-4 w-4" />
-          )}
-          {walletBalance} BERA |
-        </div>
-      )} */}
-      {/* {getStatus() !== BannerEnum.OFF && (
-        <div
-          className="text-sm font-semibold"
-          onClick={() => setFundModalOpen(true)}
-        >
-          <span className="cursor-pointer underline">Fund 1 click Wallet</span>{" "}
-          |
-        </div>
-      )} */}
-      <div className="h-full" onClick={handleBannerClick}>
-        <span className="flex h-full text-[14px] cursor-pointer items-center p-3 hover:underline text-center">
+      <div className="h-full w-full" onClick={handleBannerClick}>
+        <span className="flex h-full w-full cursor-pointer items-center justify-center p-3 text-center text-[14px] hover:underline">
           {BannerText[getStatus()]}
         </span>
       </div>

@@ -1,61 +1,18 @@
-import { useMemo, useState, useEffect } from "react";
-import type { ClosedTrade, OpenLimitOrder, OpenTrade } from "@bera/proto/src";
+import { useEffect, useMemo, useState } from "react";
+import type { PaginationState, RowSelectionState } from "@tanstack/react-table";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { getPnl } from "~/hooks/useCalculatePnl";
 import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
-import { getPnl } from "~/hooks/useCalculatePnl";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
-import { type IMarket } from "../page";
+import type { IMarket } from "~/types/market";
+import type { CloseOrderPayload } from "~/types/order-history";
+import type { TableTabTypes } from "~/types/table-tab-types";
 import { OrderHistoryHeader } from "./order-history-header";
 import { OrderHistoryTable } from "./order-history-table";
-import {
-  type RowSelectionState,
-  type PaginationState,
-} from "@tanstack/react-table";
-import { type BerpTabTypes } from "./order-wrapper";
 import { TotalAmount } from "./total-amount";
-import { formatUnits } from "viem";
-
-export interface IMarketOrder extends OpenTrade {
-  market: IMarket;
-}
-
-export interface ILimitOrder extends OpenLimitOrder {
-  market: IMarket;
-}
-
-export interface IClosedTrade extends ClosedTrade {
-  market: IMarket;
-}
-
-export interface IPosition {
-  market: IMarket;
-  trader: string;
-  pair_index: string;
-  index: string;
-  buy: boolean;
-  leverage: string;
-  open_price: string;
-  tp: string;
-  sl: string;
-  borrowing_fee: string;
-  rollover_fee: string;
-  funding_rate: string;
-  closing_fee: string;
-  open_fee: string;
-  close_time: string;
-  open_time: string;
-  volume: string;
-  pnl: string;
-  close_price: string;
-  close_type: string;
-}
-
-export type CloseOrderPayload = {
-  pairIndex: bigint;
-  index: bigint;
-};
 
 export function OrderHistory({
   markets,
@@ -65,18 +22,14 @@ export function OrderHistory({
   setSelection,
   pagination,
   setPagination,
-  showOrderLines,
-  setShowOrderLines,
 }: {
   markets: IMarket[];
-  tabType: BerpTabTypes;
-  setTabType: (tab: BerpTabTypes) => void;
+  tabType: TableTabTypes;
+  setTabType: (tab: TableTabTypes) => void;
   selection: RowSelectionState;
   setSelection: (selection: RowSelectionState) => void;
   pagination: PaginationState;
   setPagination: (pagination: PaginationState) => void;
-  showOrderLines: boolean;
-  setShowOrderLines: (showOrderLines: boolean) => void;
 }) {
   const [mobile, setMobile] = useState(false);
   useEffect(() => {
@@ -192,15 +145,23 @@ export function OrderHistory({
         close_time: "",
         close_price: "",
         close_type: "",
-        borrowing_fee: formatUnits(BigInt(position.borrowing_fee ?? 0), 18),
-        closing_fee: formatUnits(BigInt(position.closing_fee ?? 0), 18),
-        funding_rate: formatUnits(BigInt(position.funding_rate ?? 0), 18),
-        open_fee: formatUnits(BigInt(position.open_fee ?? 0), 18),
-        volume: (
-          Number(formatUnits(BigInt(position.position_size ?? 0), 18)) *
-          Number(position.leverage)
-        ).toString(),
-        pnl: estPnl ? estPnl.toString() : "0",
+        borrowing_fee: formatFromBaseUnit(
+          position.borrowing_fee ?? "0",
+          18,
+        ).toString(10),
+        closing_fee: formatFromBaseUnit(
+          position.closing_fee ?? "0",
+          18,
+        ).toString(10),
+        funding_rate: formatFromBaseUnit(
+          position.funding_rate ?? "0",
+          18,
+        ).toString(10),
+        open_fee: formatFromBaseUnit(position.open_fee ?? "0", 18).toString(10),
+        volume: formatFromBaseUnit(position.position_size ?? "0", 18)
+          .times(position.leverage ?? "1")
+          .toString(10),
+        pnl: estPnl && !estPnl.isNaN() ? estPnl.toString(10) : "0",
       };
     });
     const orders = [...positions, ...closedPositions];
@@ -212,12 +173,10 @@ export function OrderHistory({
   }, [openPositions, priceFeed, closedPositions, mobile, tabType]);
 
   return (
-    <div className="flex flex-col w-[calc(100%-16px)] overflow-auto h-full border-border border rounded-md mx-2 mb-10 lg:mb-2 lg:ml-0 lg:w-[calc(100%-8px)]">
+    <div className="mx-2 mb-10 flex h-full w-[calc(100%-16px)] flex-col overflow-auto rounded-md border border-border lg:mb-2 lg:ml-0 lg:w-[calc(100%-8px)]">
       <OrderHistoryHeader
         closePositionsPayload={closePositionsPayload}
         closeOrdersPayload={closeOrdersPayload}
-        showOrderLines={showOrderLines}
-        setShowOrderLines={setShowOrderLines}
         selection={selection}
         {...{ headers, tabType, setTabType }}
       />
@@ -238,11 +197,6 @@ export function OrderHistory({
         history={closedPositions}
         markets={markets}
         mobile={mobile}
-      />
-      <TotalAmount
-        className="hidden sm:flex flex-shrink-0"
-        markets={markets}
-        tabType={tabType}
       />
     </div>
   );

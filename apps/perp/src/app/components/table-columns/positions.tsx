@@ -262,10 +262,10 @@ export const generatePositionColumns = (
               {row.original.tp === "0"
                 ? "∞"
                 : row.original.tp
-                ? formatUsd(
-                    formatFromBaseUnit(row.original.tp, 10).toString(10),
-                  )
-                : "-"}
+                  ? formatUsd(
+                      formatFromBaseUnit(row.original.tp, 10).toString(10),
+                    )
+                  : "-"}
             </span>
             <span className="ml-1">/</span>
           </div>
@@ -273,8 +273,10 @@ export const generatePositionColumns = (
             {row.original.sl === "0"
               ? "∞"
               : row.original.sl
-              ? formatUsd(formatFromBaseUnit(row.original.sl, 10).toString(10))
-              : "-"}
+                ? formatUsd(
+                    formatFromBaseUnit(row.original.sl, 10).toString(10),
+                  )
+                : "-"}
           </span>
         </div>
       ),

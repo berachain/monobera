@@ -13,12 +13,12 @@ import {
   getHistoricalSummary,
   getMarkets,
 } from "~/endpoints";
+import { type IMarket } from "~/types/market";
 import { GeneralInfoBanner } from "../components/general-info-banner";
 import { InstrumentDropdown } from "../components/instrument-dropdown";
 import { OneClickBanner } from "../components/one-click-banner";
-import { ReferralModal } from "../../referrals/referral-modal";
 import OrderWrapper from "../components/order-wrapper";
-import { type IMarket } from "../page";
+import { ReferralModal } from "../components/referral-modal";
 
 type Props = {
   params: { market: string };
@@ -68,11 +68,11 @@ export default async function Home({ params, searchParams: { ref } }: Props) {
     }
 
     return (
-      <div className="flex flex-col h-full overflow-auto">
+      <div className="flex h-full flex-col overflow-auto">
         <ReferralModal referralAddress={ref} />
         <div className="flex h-fit w-full flex-col lg:flex-row">
-          <OneClickBanner className="flex lg:hidden mb-0" />
-          <div className="h-fit w-[calc(100%-16px)] flex-shrink-0 flex-grow-0 mx-2 mt-2 lg:mr-0 lg:w-[400px] border border-border rounded-md">
+          <OneClickBanner className="mb-0 flex lg:hidden" />
+          <div className="mx-2 mt-2 h-fit w-[calc(100%-16px)] flex-shrink-0 flex-grow-0 rounded-md border border-border lg:mr-0 lg:w-[400px]">
             <InstrumentDropdown
               markets={markets}
               selectedMarket={defaultMarket}

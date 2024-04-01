@@ -20,7 +20,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts",
-    "../../packages/shared-ui/src/launch-banner.tsx"
+    ".next/types/**/*.ts"
   ]
 }
