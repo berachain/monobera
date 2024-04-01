@@ -44,7 +44,11 @@ export default function TokenInfoCard({
       ) : (
         <Skeleton className="h-8 w-16" />
       ),
-      tooltip: <Tooltip>Gauge of how much of the lending pool is actively borrowed</Tooltip>,
+      tooltip: (
+        <Tooltip>
+          Gauge of how much of the lending pool is actively borrowed
+        </Tooltip>
+      ),
     },
     {
       title: "Oracle Price",
