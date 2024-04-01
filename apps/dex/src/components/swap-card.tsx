@@ -24,7 +24,7 @@ import {
   TooltipCustom,
   useBreakpoint,
   useTxn,
-  useAnalytics
+  useAnalytics,
 } from "@bera/shared-ui";
 import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
 import { cn } from "@bera/ui";

@@ -17,7 +17,7 @@ import {
   FormattedNumber,
   TokenInput,
   useTxn,
-  useAnalytics
+  useAnalytics,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";

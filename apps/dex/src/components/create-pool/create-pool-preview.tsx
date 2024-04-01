@@ -27,7 +27,7 @@ import {
   TokenList,
   useSlippage,
   useTxn,
-  useAnalytics
+  useAnalytics,
 } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
