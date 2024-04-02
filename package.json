@@ -32,7 +32,10 @@
     "format": "biome format --write .",
     "check": "biome check .",
     "prepare": "husky install",
-    "upsertenv": "node ./scripts/upsertVercelEnv.js"
+    "upsertenv": "node ./scripts/upsertVercelEnv.js",
+    "knip": "knip",
+    "knip:fix": "knip --fix",
+    "checkduplicate": "jscpd --pattern \"apps/*/src/*.ts*\" --pattern \"packages/*/src/*.ts*\""
   },
   "dependencies": {
     "@bera/eslint-config": "0.1.0",
@@ -48,6 +51,8 @@
   },
   "devDependencies": {
     "@types/mixpanel-browser": "^2.49.0",
+    "jscpd": "^3.5.10",
+    "knip": "^5.7.0",
     "yargs": "^17.7.2"
   }
 }
