@@ -18,7 +18,7 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
   const isMyPool = params.get("back") && params.get("back") === "my-pools";
 
   return (
-    <div className="flex w-full flex-col items-center justify-between md:items-end md:justify-center lg:flex-row">
+    <div className="flex w-full flex-col items-center justify-between md:items-start md:justify-center lg:flex-row lg:items-end">
       <div className="flex w-full flex-col items-center gap-4 md:items-start">
         <Link
           href={isMyPool ? "/pools?pool=userPools" : "/pools"}
@@ -97,7 +97,7 @@ export default function PoolHeader({ pool }: { pool: PoolV2 }) {
           </span>
         </div>
       }
-      <div className="mt-4 flex gap-2 md:mt-0">
+      <div className="mt-4 flex gap-2 md:mt-4 lg:mt-0">
         <Link href={getPoolAddLiquidityUrl(pool)} target="_self">
           <Button variant={"outline"}>
             <Icons.add />
