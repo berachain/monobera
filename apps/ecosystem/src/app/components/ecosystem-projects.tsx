@@ -75,7 +75,8 @@ interface EcosystemProject {
   subtitle: string;
   description: string;
   goto: string;
-  ecosystemType: string;
+  ecosystemType1: string;
+  ecosystemType2: string;
 }
 
 const CSV_URL = `https://docs.google.com/spreadsheets/d/e/${process.env.NEXT_PUBLIC_ECOSYSTEM_GOOGLE_SHEET_ID}/pub?output=csv`;
@@ -124,9 +125,12 @@ export default function EcosystemProjects() {
       !keywords ||
       project.name.toLowerCase().includes(keywords.toLowerCase()) ||
       project.description.toLowerCase().includes(keywords.toLowerCase()) ||
-      project.ecosystemType.toLowerCase().includes(keywords.toLowerCase());
+      project.ecosystemType1.toLowerCase().includes(keywords.toLowerCase()) ||
+      project.ecosystemType2.toLowerCase().includes(keywords.toLowerCase());
     const matchesEcosystemType =
-      ecosystemType === "All" || project.ecosystemType === ecosystemType;
+      ecosystemType === "All" ||
+      project.ecosystemType1 === ecosystemType ||
+      project.ecosystemType2 === ecosystemType;
     return matchesKeywords && matchesEcosystemType;
   });
 
@@ -185,9 +189,13 @@ export default function EcosystemProjects() {
                   <div className="pt-4">
                     <div className="text-lg font-semibold">{project.name}</div>
 
-                    <div className="pt-4 text-center text-foreground">
+                    {/* Show 2 types */}
+                    <div className="items -center flex flex-wrap justify-center gap-2 pt-4 text-foreground">
                       <Button variant="secondary" className="text-xs">
-                        {project.ecosystemType}
+                        {project.ecosystemType1}
+                      </Button>
+                      <Button variant="secondary" className="text-xs">
+                        {project.ecosystemType2}
                       </Button>
                     </div>
                   </div>
