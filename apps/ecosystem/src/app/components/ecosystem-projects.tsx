@@ -168,35 +168,48 @@ export default function EcosystemProjects() {
         </div>
       )}
 
-      <div className="grid w-fit grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((project: EcosystemProject, index: number) => (
             <div
               key={index}
-              className="mx-auto flex w-full flex-col justify-between rounded-md border border-solid bg-background p-6 hover:bg-muted sm:h-[296px] sm:w-[260px]"
+              className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between rounded-md border border-solid bg-background p-6 hover:bg-muted sm:h-[296px] sm:w-[260px]"
             >
-              <div className="flex flex-col items-center gap-4">
-                <Avatar className="h-[96px] w-[96px]">
-                  <AvatarImage src={project.icon} className="rounded-full" />
-                </Avatar>
+              <div className="flip-card-inner transform-style relative w-full transition-transform duration-700 ease-in-out">
+                <div className="flip-card-front flex flex-col items-center justify-center">
+                  <Avatar className="h-[96px] w-[96px]">
+                    <AvatarImage src={project.icon} className="rounded-full" />
+                  </Avatar>
 
-                <div>
+                  <div className="pt-4">
+                    <div className="text-lg font-semibold">{project.name}</div>
+
+                    <div className="pt-4 text-center text-foreground">
+                      <Button variant="secondary" className="text-xs">
+                        {project.ecosystemType}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flip-card-back flex flex-col items-center justify-center">
                   <div className="text-lg font-semibold">{project.name}</div>
 
-                  <div className="flex-grow text-center text-sm leading-5 text-foreground">
+                  <div className="flex text-center text-sm leading-5 text-foreground">
                     {project.description}
+                  </div>
+
+                  <div className="flex items-center justify-center gap-2 pt-4">
+                    <Link href={project.goto}>
+                      <Icons.externalLink />
+                    </Link>
+                    <Link href={project.goto}>
+                      <Icons.twitter />
+                    </Link>
                   </div>
                 </div>
               </div>
-              <Link href={project.goto}>
-                <Button
-                  variant="ghost"
-                  className="gap-2 text-sm font-medium text-muted-foreground hover:bg-muted-foreground hover:text-foreground"
-                >
-                  Visit Project <Icons.arrowRight />
-                </Button>
-              </Link>
             </div>
           ))}
       </div>

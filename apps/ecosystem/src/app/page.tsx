@@ -15,7 +15,7 @@ export default function Home() {
       <div className="relative mx-auto flex w-full flex-col items-center justify-between bg-contain bg-no-repeat px-4">
         <Hero />
         {/* <TopProjects /> */}
-        <ProjectHighlights />
+        {/* <ProjectHighlights /> */}
         <EcosystemProjects />
 
         {/* <EcosystemAnnouncements /> */}
