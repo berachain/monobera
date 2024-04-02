@@ -74,7 +74,7 @@ export function TokenInput({
       selected ? getAddress(selected?.address ?? "") ?? "" : "",
     );
 
-  let tokenBalance = token?.formattedBalance;
+  let tokenBalance = token?.formattedBalance || "0";
 
   if (balance !== undefined) {
     tokenBalance = balance;
