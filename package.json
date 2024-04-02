@@ -34,6 +34,7 @@
     "prepare": "husky install",
     "upsertenv": "node ./scripts/upsertVercelEnv.js",
     "knip": "knip",
+    "knip:fix": "knip --fix",
     "knip:fix:types": "knip --fix-type types",
     "knip:fix:dependencies": "knip --fix-type dependecies",
     "knip:fix:exports": "knip --fix-type exports",
