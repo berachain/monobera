@@ -174,9 +174,9 @@ export default function EcosystemProjects() {
           .map((project: EcosystemProject, index: number) => (
             <div
               key={index}
-              className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between rounded-md border border-solid bg-background p-6 hover:bg-muted sm:h-[296px] sm:w-[260px]"
+              className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between sm:h-[296px] sm:w-[260px]"
             >
-              <div className="flip-card-inner transform-style relative w-full transition-transform duration-700 ease-in-out">
+              <div className="flip-card-inner transform-style relative w-full rounded-md border border-solid bg-background transition-transform duration-700 ease-in-out hover:bg-muted">
                 <div className="flip-card-front flex flex-col items-center justify-center">
                   <Avatar className="h-[96px] w-[96px]">
                     <AvatarImage src={project.icon} className="rounded-full" />
@@ -196,7 +196,7 @@ export default function EcosystemProjects() {
                 <div className="flip-card-back flex flex-col items-center justify-center">
                   <div className="text-lg font-semibold">{project.name}</div>
 
-                  <div className="flex text-center text-sm leading-5 text-foreground">
+                  <div className="flex p-6 text-center text-sm leading-5 text-foreground">
                     {project.description}
                   </div>
 
