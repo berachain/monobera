@@ -29,12 +29,12 @@ export default function LineChart({
     switch (time) {
       case TimeFrame.HOURLY: {
         const strH = date.toLocaleTimeString().replace(" ", ":").split(":");
-        return `${strH[0]}·${strH[3]}`;
+        return `${strH[0]}${strH[3]?.toLowerCase()}`;
       }
       case TimeFrame.WEEKLY: {
         const strW1 = date.toLocaleTimeString().replace(" ", ":").split(":");
         const strW2 = date.toLocaleDateString().split("/");
-        return `${strW1[0]}${strW1[3]} ${strW2[0]}/${strW2[1]}`;
+        return `${strW2[0]}/${strW2[1]} ${strW1[0]}${strW1[3]?.toLowerCase()} `;
       }
       case TimeFrame.MONTHLY:
       case TimeFrame.QUARTERLY: {
@@ -84,9 +84,47 @@ export default function LineChart({
         },
       },
     },
+    elements: {
+      point: {
+        radius: 0,
+      },
+      line: {
+        tension: 0.4, // smooth lines
+      },
+    },
     plugins: {
       legend: {
         display: false,
+      },
+      tooltip: {
+        displayColors: false,
+        position: "nearest",
+        borderRadius: 18,
+        caretSize: 0,
+
+        interaction: {
+          intersect: false,
+        },
+        callbacks: {
+          label: (context: {
+            dataset: { label: string };
+            parsed: { y: number | bigint | null };
+          }) => {
+            let label = context.dataset.label || "";
+
+            if (label) {
+              label += ": ";
+            }
+            if (context.parsed.y !== null) {
+              label += `${
+                Number(context.parsed.y) < 0.01
+                  ? "<0.01"
+                  : Number(context.parsed.y).toFixed(2)
+              }%`;
+            }
+            return label;
+          },
+        },
       },
     },
   };

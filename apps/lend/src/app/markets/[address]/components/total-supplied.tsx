@@ -8,6 +8,7 @@ import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
+import { fillAPYDataByDay, fillAPYDataByHour } from "~/utils/graph-utils";
 import Card from "~/components/card";
 import DonutChart from "~/components/donut-chart";
 import LineChart from "~/components/line-chart";
@@ -99,6 +100,20 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
       variables: { timestamp_gt },
     },
   );
+
+  const gData =
+    timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
+      ? fillAPYDataByHour(
+          graphdata?.historyHourRates ?? [],
+          getTime(timeframe),
+          "supplyRates",
+        )
+      : fillAPYDataByDay(
+          graphdata?.historyDayRates ?? [],
+          getTime(timeframe),
+          "supplyRates",
+        );
+
   return (
     <div>
       <div className="text-2xl font-semibold leading-loose">
@@ -165,13 +180,7 @@ export const TotalSupplied = ({ reserveData }: { reserveData: any }) => {
             attribute="supplyRates"
             time={timeframe}
             setTime={setTimeframe}
-            data={
-              graphdata?.[
-                timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
-                  ? "historyHourRates"
-                  : "historyDayRates"
-              ] || []
-            }
+            data={gData}
             isLoading={loading}
             color={color}
             title={"Supply APR"}
