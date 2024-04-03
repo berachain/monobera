@@ -29,32 +29,36 @@ export default function Hero() {
             <br />
             Ecosystem
           </h1>
-          <h2 className="text-md mt-2 text-center leading-8 tracking-tight text-muted-foreground sm:whitespace-nowrap md:text-left">
+          <h2 className="text-md xs:whitespace-nowrap mt-2 text-center leading-8 tracking-tight text-muted-foreground md:text-left">
             A hub for all the bAPPs and brojects Building on Berachain.
             <br />
             Want to contribute to the bearchain ecosystem?
           </h2>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-4 pt-4 md:flex-row lg:justify-start">
-          <Link href={"/dashboard"}>
-            <Button
-              className="rounded-18 w-full text-lg font-semibold leading-7 sm:w-auto"
-              size={"lg"}
-            >
-              <Icons.hammer />
-              <div className="px-2"> Build on Berachain</div>
-            </Button>
-          </Link>
-          <Link href={"/dashboard"}>
-            <Button
-              className="rounded-18 w-full text-lg font-semibold leading-7 sm:w-auto"
-              size={"lg"}
-              variant="secondary"
-            >
-              Read about $150M Ecosystem Fund
-            </Button>
-          </Link>
+        <div className="flex flex-col items-center justify-center gap-4 py-4 md:flex-row lg:justify-start">
+          <div className="w-full">
+            <Link href={"/dashboard"}>
+              <Button
+                className="rounded-18 w-full text-lg font-semibold leading-7 sm:whitespace-nowrap "
+                size={"lg"}
+              >
+                <Icons.hammer />
+                <div className="px-2"> Build on Berachain</div>
+              </Button>
+            </Link>
+          </div>
+          <div className="w-full">
+            <Link href={"/dashboard"}>
+              <Button
+                className="rounded-18 w-full text-lg font-semibold leading-7 sm:whitespace-nowrap"
+                size={"lg"}
+                variant="secondary"
+              >
+                Read about $150M Ecosystem Fund
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

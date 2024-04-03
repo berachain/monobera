@@ -102,7 +102,6 @@ export default function EcosystemProjects() {
       console.error("Error fetching data", error);
     }
   }
-  console.log("projectList", projectList);
 
   useEffect(() => {
     fetchData().then((data) => {
