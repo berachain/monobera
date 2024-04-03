@@ -85,6 +85,7 @@ export function TokenInput({
     Number(amount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
       : Number(amount) ?? 0;
+
   useEffect(() => {
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
     if (safeNumberAmount <= tokenBalance) {
@@ -238,6 +239,7 @@ export function TokenInput({
                     setAmount &&
                       tokenBalance !== "" &&
                       tokenBalance !== "0" &&
+                      !Number.isNaN(tokenBalance) &&
                       setAmount(tokenBalance?.toString() ?? "");
                   }}
                 >
