@@ -4,9 +4,10 @@ import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { useLocalStorage } from "usehooks-ts";
 import { Switch } from "@bera/ui/switch";
+import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { set } from "husky";
+import { useLocalStorage } from "usehooks-ts";
 
 import {
   DEFAULT_DEADLINE,
@@ -14,7 +15,6 @@ import {
   DEFAULT_SOUND_ENABLED,
   LOCAL_STORAGE_KEYS,
 } from "~/utils/constants";
-import { set } from "husky";
 
 export enum SELECTION {
   AUTO = "auto",
@@ -40,11 +40,6 @@ export default function SwapSettings() {
   const [deadlineValue, setDeadlineValue] = useLocalStorage<number | string>(
     LOCAL_STORAGE_KEYS.DEADLINE_VALUE,
     DEFAULT_DEADLINE,
-  );
-
-  const [soundEnabled, setSoundEnabled] = useLocalStorage<boolean>(
-    LOCAL_STORAGE_KEYS.SOUND_ENABLED,
-    DEFAULT_SOUND_ENABLED,
   );
 
   return (
@@ -75,34 +70,43 @@ export default function SwapSettings() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <Input
-          type="number"
-          step="any"
-          min={0.1}
-          max={100}
-          className="h-[40px] pr-8 text-right"
-          disabled={slippageToleranceType !== SELECTION.CUSTOM}
-          placeholder="1"
-          value={
-            slippageToleranceType === SELECTION.AUTO
-              ? DEFAULT_SLIPPAGE
-              : slippageToleranceValue
-          }
-          onKeyDown={(e) => e.key === "-" && e.preventDefault()}
-          endAdornment={
-            <p
-              className={cn(
-                "mr-2 self-center text-xs text-foreground",
-                slippageToleranceType === SELECTION.AUTO && "opacity-50",
-              )}
-            >
-              %
-            </p>
-          }
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSlippageToleranceValue(Number(e.target.value))
-          }
-        />
+        {slippageToleranceType !== SELECTION.DEGEN && (
+          <Input
+            type="number"
+            step="any"
+            min={0.1}
+            max={100}
+            className="h-[40px] pr-8 text-right"
+            disabled={slippageToleranceType !== SELECTION.CUSTOM}
+            placeholder="1"
+            value={
+              slippageToleranceType === SELECTION.AUTO
+                ? DEFAULT_SLIPPAGE
+                : slippageToleranceValue
+            }
+            onKeyDown={(e) => e.key === "-" && e.preventDefault()}
+            endAdornment={
+              <p
+                className={cn(
+                  "mr-2 self-center text-xs text-foreground",
+                  slippageToleranceType === SELECTION.AUTO && "opacity-50",
+                )}
+              >
+                %
+              </p>
+            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const value = parseFloat(e.target.value);
+              if (value < 0.1 || Number.isNaN(value)) {
+                setSlippageToleranceValue(0.1);
+              } else if (value > 100) {
+                setSlippageToleranceValue(100);
+              } else {
+                setSlippageToleranceValue(Number(e.target.value));
+              }
+            }}
+          />
+        )}
       </div>
       {slippageToleranceType === "degen" && (
         <Alert variant={"destructive"} className="flex gap-2">
@@ -179,18 +183,6 @@ export default function SwapSettings() {
           </div>
         </Alert>
       )}
-
-      <div className="space-y-2">
-        <h4 className="flex items-center gap-1 font-medium leading-none">
-          Sound Enabled
-          <Tooltip text="Enable or disable sounds" />
-        </h4>
-        <Switch
-          id="enable-sound"
-          checked={soundEnabled}
-          onCheckedChange={(e) => setSoundEnabled(e)}
-        />
-      </div>
     </div>
   );
 }
