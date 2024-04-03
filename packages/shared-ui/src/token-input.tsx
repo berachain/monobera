@@ -239,7 +239,7 @@ export function TokenInput({
                     setAmount &&
                       tokenBalance !== "" &&
                       tokenBalance !== "0" &&
-                      !Number.isNaN(tokenBalance) &&
+                      !isNaN(tokenBalance) &&
                       setAmount(tokenBalance?.toString() ?? "");
                   }}
                 >
