@@ -4,33 +4,34 @@ import {
   usePollReservesPrices,
   usePollUserAccountData,
 } from "@bera/berajs";
+import { honeyAddress } from "@bera/config";
 import BigNumber from "bignumber.js";
 import { formatUnits, parseUnits } from "viem";
 
 import HoneyBorrowCard from "~/components/honey-borrow-card";
 
-export default function AvailableBorrows({ assets }: { assets: any[] }) {
+export default function HoneyBorrow({ honey }: { honey: any }) {
   const { useBaseCurrencyData } = usePollReservesDataList();
   const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useReservesPrices } = usePollReservesPrices();
   const { data: reservesPrices } = useReservesPrices();
   const { useUserAccountData } = usePollUserAccountData();
   const { data } = useUserAccountData();
-  assets.forEach((asset) => {
-    if (reservesPrices && data && reservesPrices[asset.address]) {
-      const tokenPrice = reservesPrices[asset.address].formattedPrice;
-      const borrowBase = formatUnits(
-        data.availableBorrowsBase,
-        baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
-      );
-      const formattedBalance = BigNumber(borrowBase)
-        .div(tokenPrice)
-        .times(0.99)
-        .toFixed(asset.decimals);
-      asset.formattedBalance = formattedBalance;
-      asset.balance = parseUnits(formattedBalance, asset.decimals);
-    }
-  });
+
+  if (reservesPrices && data && reservesPrices[honeyAddress]) {
+    const tokenPrice = reservesPrices[honeyAddress].formattedPrice;
+    const borrowBase = formatUnits(
+      data.availableBorrowsBase,
+      baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
+    );
+    const formattedBalance = BigNumber(borrowBase)
+      .div(tokenPrice)
+      .times(0.99)
+      .toFixed(18);
+    honey.formattedBalance = formattedBalance;
+    honey.balance = parseUnits(formattedBalance, 18);
+  }
+
   return (
     <>
       <div className="mt-4">
@@ -39,8 +40,7 @@ export default function AvailableBorrows({ assets }: { assets: any[] }) {
           HONEY that can be borrowed against your deposited collateral
         </div>
       </div>
-
-      <HoneyBorrowCard honeyAsset={assets[0]} />
+      <HoneyBorrowCard honeyAsset={honey} />
     </>
   );
 }
