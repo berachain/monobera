@@ -17,6 +17,9 @@ const ecosystemTypeTabs = [
     value: "All",
   },
   {
+    value: "Native",
+  },
+  {
     value: "DeFi",
   },
   {
@@ -75,6 +78,7 @@ interface EcosystemProject {
   subtitle: string;
   description: string;
   goto: string;
+  twitter: string;
   ecosystemType1: string;
   ecosystemType2: string;
 }
@@ -98,6 +102,7 @@ export default function EcosystemProjects() {
       console.error("Error fetching data", error);
     }
   }
+  console.log("projectList", projectList);
 
   useEffect(() => {
     fetchData().then((data) => {
@@ -212,7 +217,9 @@ export default function EcosystemProjects() {
                     <Link href={project.goto}>
                       <Icons.externalLink />
                     </Link>
-                    <Link href={project.goto}>
+                    <Link
+                      href={project.twitter ? project.twitter : project.goto}
+                    >
                       <Icons.twitter />
                     </Link>
                   </div>
