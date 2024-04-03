@@ -95,15 +95,16 @@ export default function SwapSettings() {
                 %
               </p>
             }
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
               const value = parseFloat(e.target.value);
-              if (value < 0.1 || Number.isNaN(value)) {
-                setSlippageToleranceValue(0.1);
-              } else if (value > 100) {
+              if (value > 100) {
                 setSlippageToleranceValue(100);
-              } else {
-                setSlippageToleranceValue(Number(e.target.value));
+              } else if (value < 0.1) {
+                setSlippageToleranceValue(0.1);
               }
+            }}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSlippageToleranceValue(Number(e.target.value));
             }}
           />
         )}
