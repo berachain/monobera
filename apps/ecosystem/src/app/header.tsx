@@ -10,7 +10,7 @@ import { Icons } from "@bera/ui/icons";
 export function Header({ navItems }: { navItems: any[] }) {
   const ThemeToggleMobile = dynamic(
     () =>
-      import("@bera/shared-ui/src/theme-toggle-mobile").then(
+      import("../../../../packages/shared-ui/src/theme-toggle-mobile").then(
         (mod) => mod.ThemeToggleMobile,
       ),
     {
@@ -36,13 +36,6 @@ export function Header({ navItems }: { navItems: any[] }) {
 
         <div className="flex h-full items-center gap-2 xl:gap-2">
           <ThemeToggleMobile />
-          <Link
-            className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-md sm:flex"
-            href={""}
-            target="_blank"
-          >
-            <Icons.faucetFav className="h-10 w-10 hover:opacity-80" />
-          </Link>
           <MobileDropdown navItems={navItems} />
         </div>
       </div>
