@@ -15,11 +15,9 @@
     "dev": "tsup index.ts --watch"
   },
   "dependencies": {
-    "next-auth": "^4.24.5",
     "typescript": "^5.0.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
     "@types/node": "^18.16.6"
   }
 }

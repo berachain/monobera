@@ -1,11 +1,12 @@
 import React from "react";
 import { type Metadata } from "next";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import Gauge from "./gauge";
+import { bgtName } from "@bera/config";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Gauge"),
+  title: getMetaTitle("Gauge", bgtName),
   description: "Rewards",
 };
 

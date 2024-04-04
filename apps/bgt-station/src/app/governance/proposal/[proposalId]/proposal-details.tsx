@@ -36,6 +36,7 @@ import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
 import { getProposalType } from "../../helper";
 import { useProposalDetails } from "./useProposalDetails";
+import { Address } from "viem";
 
 export default function ProposalDetails({
   proposalId,
@@ -104,7 +105,7 @@ export default function ProposalDetails({
     const updateCollateralAddress = async () => {
       const address = await getAddress(jsonMsg[0].params.psmDenoms[0].denom);
       setCollateralAddress(address as string);
-      void read({ address: address as string });
+      void read({ address: address as Address });
     };
 
     if (proposalType === "enable-collateral-for-honey" && jsonMsg)

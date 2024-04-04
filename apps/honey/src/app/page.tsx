@@ -1,9 +1,9 @@
 import { type Metadata } from "next";
 import Image from "next/image";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, honeyName } from "@bera/config";
 import { cn } from "@bera/ui";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import Data from "~/components/data";
 import { HoneyChart } from "~/components/honey-chart";
 import HoneyPage from "~/components/honey-page";
@@ -11,7 +11,7 @@ import HoneyTransactionsTable from "~/components/honey-transactions-table";
 import ModeSwitch from "~/components/mode-switch";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Honey"),
+  title: getMetaTitle("Honey", honeyName),
   description: "Mint & Redeem Honey",
 };
 

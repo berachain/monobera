@@ -8,7 +8,7 @@
   "scripts": {
     "storybook": "turbo storybook",
     "storybook:build": "turbo storybook:build",
-    "build": "turbo build --parallel",
+    "build": "turbo build",
     "clean": "turbo clean && git clean -xdf node_modules",
     "clean:git": "git clean -xdf node_modules",
     "pullenv": "vercel env pull --environment=production",
@@ -33,13 +33,11 @@
     "check": "biome check .",
     "prepare": "husky install",
     "upsertenv": "node ./scripts/upsertVercelEnv.js",
-    "knip": "knip",
+    "knip": "knip --exclude binaries",
     "checkduplicate": "jscpd --pattern \"apps/*/src/*.ts*\" --pattern \"packages/*/src/*.ts*\""
   },
   "dependencies": {
-    "@bera/eslint-config": "0.1.0",
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
-    "@manypkg/cli": "^0.20.0",
     "@types/prettier": "^2.7.2",
     "eslint": "^8.39.0",
     "husky": "^8.0.0",

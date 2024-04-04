@@ -3,13 +3,13 @@ import { notFound } from "next/navigation";
 import { dexName } from "@bera/config";
 import { isAddress } from "viem";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import { fetchSelectedPool } from "../../pools/fetchPools";
 import AddLiquidityContent from "../AddLiquidityContent";
 
 export function generateMetadata(): Metadata {
   return {
-    title: getMetaTitle("Add Liquidity"),
+    title: getMetaTitle("Add Liquidity", dexName),
     description: `Add liquidity to ${dexName}`,
   };
 }

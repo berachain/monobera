@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getDayStartTimestampDaysAgo } from "@bera/bera-router";
 import { formatUsd } from "@bera/berajs";
 import { type PoolDayDataV2 } from "@bera/graphql";
 import { Dropdown, SSRSpinner } from "@bera/shared-ui";
@@ -170,6 +169,14 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 const formatHoney = (amountInHoney: number) => {
   const bnAmount = new BigNumber(amountInHoney.toString());
   return getSafeNumber(bnAmount.div(10 ** 18).toString());
+};
+
+const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
+  const currentTimestamp: number = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
+  const timestampDaysAgo: number = currentTimestamp - daysAgo * 86400; // Subtract the specified number of days in seconds
+  const dayID: number = Math.floor(timestampDaysAgo / 86400); // Calculate dayID
+  const dayStartTimestamp: number = dayID * 86400; // Calculate dayStartTimestamp
+  return dayStartTimestamp;
 };
 
 export const PoolChart = ({
