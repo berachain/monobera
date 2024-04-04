@@ -6,7 +6,7 @@ const config = {
   crossOrigin: "anonymous",
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
-  transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/bera-router"],
+  transpilePackages: ["@bera/ui", "@bera/berajs"],
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },

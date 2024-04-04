@@ -1,15 +1,16 @@
 import React from "react";
 import { type Metadata } from "next";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import {
   ProposalTypeEnum,
   type ProposalTypeEnum as ProposalTypeEnumT,
 } from "../types";
 import NewProposal from "./new-proposal";
+import { bgtName } from "@bera/config";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Create Proposal"),
+  title: getMetaTitle("Create Proposal", bgtName),
   description: "Create a new proposal on Berachain",
 };
 export default function Create({

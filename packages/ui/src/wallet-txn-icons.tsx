@@ -1,6 +1,4 @@
-import { type LucideIcon, type LucideProps } from "lucide-react";
-
-export type Icon = LucideIcon;
+import { type LucideProps } from "lucide-react";
 
 export const WalletTxnIcons = {
   // BGT txn icons

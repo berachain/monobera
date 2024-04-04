@@ -13,7 +13,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
 
-export function TokenRow({
+function TokenRow({
   asset,
   isLoading,
 }: {
