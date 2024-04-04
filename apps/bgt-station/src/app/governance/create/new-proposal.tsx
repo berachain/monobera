@@ -8,7 +8,6 @@ import {
   GOVERNANCE_PRECOMPILE_ABI,
   TransactionActionType,
   useBeraJs,
-  usePollBgtBalance,
   usePollDenom,
 } from "@bera/berajs";
 import {
@@ -54,8 +53,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
   const { isReady } = useBeraJs();
   const triggerRef = useRef<HTMLDivElement>(null);
   const [_contentWidth, setContentWidth] = useState("w-[450px]");
-  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
   const minDeposit = governanceMinDeposit;
   useEffect(() => {
     if (triggerRef.current) {
@@ -87,7 +84,7 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
       .refine((val) => Number(val) >= minDeposit, {
         message: `Inital deposit must be at least ${minDeposit} BGT.`,
       })
-      .refine((val) => Number(val) <= Number(userBalance), {
+      .refine((val) => Number(val) <= Number(0), {
         message: "Insufficient BGT balance.",
       }),
   });
@@ -327,7 +324,6 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                       <Input
                         type="number"
                         id="initial-deposit"
-                        disabled={isBalanceLoading}
                         placeholder="0.0"
                         endAdornment="BGT"
                         {...field}
@@ -337,11 +333,10 @@ export default function NewProposal({ type }: { type: ProposalTypeEnum }) {
                     {isReady && (
                       <div className="absolute right-1 mt-2 flex h-3 w-fit items-center gap-1 text-[10px] text-muted-foreground">
                         <Icons.wallet className="relative inline-block h-3 w-3 " />
-                        {userBalance}
                         <span
                           className="underline hover:cursor-pointer"
                           onClick={() => {
-                            form.setValue("initialDeposit", userBalance);
+                            form.setValue("initialDeposit", 0);
                           }}
                         >
                           Fill Deposit

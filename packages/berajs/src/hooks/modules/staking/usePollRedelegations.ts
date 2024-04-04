@@ -36,7 +36,7 @@ export const usePollRedelegations = (
   dstValidator: `0x${string}`,
 ) => {
   const publicClient = usePublicClient();
-  const { account, error } = useBeraJs();
+  const { account } = useBeraJs();
 
   const method = "getRedelegations";
   const QUERY_KEY = [account, method];
@@ -44,7 +44,7 @@ export const usePollRedelegations = (
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (account && !error) {
+      if (account) {
         const result = await publicClient.readContract({
           address: stakingAddress,
           abi: STAKING_PRECOMPILE_ABI,

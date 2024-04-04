@@ -1,13 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  usePollBgtBalance,
-  usePollDelegatorUnbonding,
-  usePollTotalDelegated,
-  // usePollUserAllBGTRewards,
-  useTokenHoneyPrice,
-} from "@bera/berajs";
+import { useTokenHoneyPrice } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 // import { beraTokenAddress, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
@@ -20,8 +14,6 @@ import { cn } from "@bera/ui";
 // import { Button } from "@bera/ui/button";
 // import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
-import { Skeleton } from "@bera/ui/skeleton";
-
 // import { formatEther } from "viem";
 
 import { BGTIcon } from "./bgt-icon";
@@ -29,19 +21,8 @@ import { FormattedNumber } from "./formatted-number";
 
 export function BGTStatusBtn() {
   const [openPopover, setOpenPopover] = React.useState(false);
-  const { useBgtBalance } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
-  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
-  const bgtTotalDelegated = useTotalDelegatorDelegated();
-  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
-  const totalUnbonding = useDelegatorTotalUnbonding();
-  // const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
-  const totalBGT =
-    Number(userBalance) +
-    Number(bgtTotalDelegated ?? "0") +
-    Number(totalUnbonding ?? "0");
-
+  const totalBGT = 0;
   // @ts-ignore
   // const totalClaimableBGT: bigint =
   // isLoading || !bgtRewards || bgtRewards.length !== 3
@@ -81,18 +62,7 @@ export function BGTStatusBtn() {
 }
 
 export function TotalBGT({ className }: { className?: string }) {
-  const { useBgtBalance } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
-  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
-  const bgtTotalDelegated = useTotalDelegatorDelegated();
-  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
-  const totalUnbonding = useDelegatorTotalUnbonding();
-
-  const totalBGT =
-    Number(userBalance) +
-    Number(bgtTotalDelegated ?? "0") +
-    Number(totalUnbonding ?? "0");
-
+  const totalBGT = 0;
   return (
     <div className={cn("text-3xl font-semibold leading-9", className)}>
       {totalBGT.toFixed(2)} BGT
@@ -102,12 +72,6 @@ export function TotalBGT({ className }: { className?: string }) {
 
 export function BGTStatusDetails() {
   const { data: price } = useTokenHoneyPrice(beraTokenAddress);
-  const { useBgtBalance } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
-  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
-  const bgtTotalDelegated = useTotalDelegatorDelegated();
-  const { useDelegatorTotalUnbonding } = usePollDelegatorUnbonding();
-  const totalUnbonding = useDelegatorTotalUnbonding();
   // const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
   // const totalClaimableBGT: bigint = //@ts-ignore
@@ -120,19 +84,19 @@ export function BGTStatusDetails() {
       background: "#FBBF24",
       stroke: "#78350F",
       text: "Available",
-      amoumt: userBalance,
+      amoumt: 0,
     },
     {
       background: "#DBDBDB",
       stroke: "#4B4B4B",
       text: "Staked on BGT Station",
-      amoumt: bgtTotalDelegated ?? 0,
+      amoumt: 0,
     },
     {
       background: "#FFD3B2",
       stroke: "#94003F",
       text: "In Unbonding Queue",
-      amoumt: totalUnbonding ?? 0,
+      amoumt: 0,
     },
     // {
     //   background: "#EFF199",
@@ -161,14 +125,14 @@ export function BGTStatusDetails() {
               </div>
             </div>
             <div className="whitespace-nowrap text-sm font-medium">
-              {userBalance && price ? (
+              {/* {userBalance && price ? (
                 <FormattedNumber
                   value={Number(item.amoumt) * Number(price)}
                   symbol={"USD"}
                 />
               ) : (
                 <Skeleton className="h-8 w-16" />
-              )}
+              )} */}
             </div>
           </div>
         ))}

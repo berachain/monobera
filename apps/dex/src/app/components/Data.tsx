@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { useLatestBlock, useTokenHoneyPrice } from "@bera/berajs";
+import { useTokenHoneyPrice } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
@@ -34,12 +34,11 @@ export function DataCard({
 }
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  const { data: block } = useLatestBlock();
   const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);
 
   const isDataReady = useMemo(() => {
-    return beraPrice && block !== 0n;
-  }, [block, beraPrice]);
+    return beraPrice;
+  }, [beraPrice]);
 
   return (
     <section className="my-24 flex w-full flex-col items-center">
@@ -75,7 +74,7 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
           isLoading={!isDataReady}
           value={
             <FormattedNumber
-              value={Number(block) * 0.1}
+              value={Number(100) * 0.1}
               compact={false}
               compactThreshold={999_999_999}
               symbol="BGT"

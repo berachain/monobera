@@ -12,11 +12,11 @@ import { useBeraJs } from "~/contexts";
 export const usePollUserReservesData = () => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, error } = useBeraJs();
+  const { account } = useBeraJs();
   const QUERY_KEY = [account, "getUserReservesData"];
   useSWR(QUERY_KEY, async () => {
     if (!publicClient) return undefined;
-    if (!error && account) {
+    if (account) {
       try {
         const result = (await publicClient.readContract({
           address: lendUIDataProviderAddress,

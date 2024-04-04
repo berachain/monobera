@@ -5,7 +5,6 @@ import { usePublicClient } from "wagmi";
 
 import { STAKING_PRECOMPILE_ABI } from "~/config";
 import { defaultPagination } from "~/utils";
-import { usePollBgtSupply } from "../bank";
 import {
   getEstimatedBlocksPerYear,
   getPercentageGlobalVotingPower,
@@ -132,8 +131,7 @@ export const usePollActiveValidators = () => {
 
   const usePercentOfStakedBGT = (): number => {
     const total = useTotalDelegated();
-    const { useBgtSupply } = usePollBgtSupply();
-    const bgtSupply = useBgtSupply();
+    const bgtSupply = undefined;
     if (total && bgtSupply) {
       return (total / Number(bgtSupply)) * 100;
     }

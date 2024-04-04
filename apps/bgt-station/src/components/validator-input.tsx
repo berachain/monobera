@@ -1,10 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import {
-  useBeraJs,
-  usePollAccountDelegations,
-  usePollBgtBalance,
-} from "@bera/berajs";
+import { useBeraJs, usePollAccountDelegations } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -37,8 +33,6 @@ export default function ValidatorInput({
   // emptyMessage?: string;
 }) {
   const router = useRouter();
-  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
-  const userBalance = useBgtBalance();
   const { isReady } = useBeraJs();
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(validatorAddress);
@@ -69,18 +63,17 @@ export default function ValidatorInput({
           className="max-w-100 border-0 bg-transparent text-right text-lg font-semibold leading-7 outline-none"
           value={amount}
           placeholder="0.0"
-          disabled={disabled || isBalanceLoading}
+          disabled={disabled}
           onChange={(e) => onAmountChange(e.target.value)}
         />
       </div>
       {action === DelegateEnum.DELEGATE && isReady && (
         <div className=" mt-2 flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
-          {Number(userBalance).toFixed(2)}
           <span
             className="underline hover:cursor-pointer"
             onClick={() => {
-              onAmountChange(userBalance);
+              onAmountChange("0");
             }}
           >
             MAX

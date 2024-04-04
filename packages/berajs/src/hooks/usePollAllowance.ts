@@ -27,7 +27,7 @@ interface IUsePollAllowances {
  */
 export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
   const publicClient = usePublicClient();
-  const { account, error } = useBeraJs();
+  const { account } = useBeraJs();
 
   const method = "allowance";
   const QUERY_KEY = [
@@ -41,7 +41,7 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (account && !error && token) {
+      if (account && token) {
         const allowance = await publicClient.readContract({
           address: token.address as `0x${string}`,
           abi: erc20Abi,
