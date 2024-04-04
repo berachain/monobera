@@ -52,9 +52,10 @@ interface DataTableProps<TData, TValue> {
   stickyHeaders?: boolean;
   additionalActions?: React.ReactElement[];
 }
-export interface RowSelectHeaderProps<TData, TValue>
+
+interface RowSelectHeaderProps<TData, TValue>
   extends HeaderContext<TData, TValue> {}
-export interface RowSelectCellProps<TData, TValue>
+interface RowSelectCellProps<TData, TValue>
   extends CellContext<TData, TValue> {}
 
 const defaultStateChangeFetchInclusions: Array<keyof TableState> = [
@@ -64,7 +65,7 @@ const defaultStateChangeFetchInclusions: Array<keyof TableState> = [
   "globalFilter",
 ];
 
-export function RowSelectHeader<TData, TValue>({
+function RowSelectHeader<TData, TValue>({
   table,
 }: RowSelectHeaderProps<TData, TValue>) {
   return (
@@ -98,7 +99,7 @@ export function RowSelectHeader<TData, TValue>({
   );
 }
 
-export function RowSelectCell<TData, TValue>(
+function RowSelectCell<TData, TValue>(
   props: RowSelectCellProps<TData, TValue>,
 ) {
   return (

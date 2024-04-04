@@ -8,12 +8,9 @@
     "postcss.js"
   ],
   "devDependencies": {
-    "@biomejs/biome": "1.5.3",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.23",
     "tailwindcss": "^3.3.2"
   },
   "dependencies": {
-    "next-auth": "^4.24.5"
+    "tailwindcss-animate": "^1.0.5"
   }
 }

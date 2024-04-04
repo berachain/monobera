@@ -10,18 +10,18 @@ interface CompactNumberProps {
 
 const POSTFIXES = ["", "K", "M", "B", "T", "P", "E", "Z", "Y"];
 
-export type BigNumberValue = string | number | BigNumber;
+type BigNumberValue = string | number | BigNumber;
 
-export function valueToBigNumber(amount: BigNumberValue): BigNumber {
+function valueToBigNumber(amount: BigNumberValue): BigNumber {
   if (amount instanceof BigNumber) return amount;
   return new BigNumber(amount);
 }
 
-export function normalizeBN(n: BigNumberValue, decimals: number): BigNumber {
+function normalizeBN(n: BigNumberValue, decimals: number): BigNumber {
   return valueToBigNumber(n).shiftedBy(decimals * -1);
 }
 
-export const compactNumber = ({
+const compactNumber = ({
   value,
   visibleDecimals = 2,
   roundDown,
