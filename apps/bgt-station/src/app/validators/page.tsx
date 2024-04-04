@@ -8,11 +8,12 @@ import {
   type Weight,
 } from "@bera/graphql";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import Validators from "./validators";
+import { bgtName } from "@bera/config";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Validators"),
+  title: getMetaTitle("Validators", bgtName),
   description: "View active validators on Berachain",
 };
 

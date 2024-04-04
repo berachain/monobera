@@ -27,7 +27,7 @@ const IconVariants = cva(
   },
 );
 
-export interface IconProps
+interface IconProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof IconVariants> {
   // token?: Token | undefined;

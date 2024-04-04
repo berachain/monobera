@@ -2,13 +2,14 @@ import React from "react";
 import { type Metadata } from "next";
 import { type Address } from "viem";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import Delegate from "./delegate";
 import DemandBasedQueue from "./demand-based-queue";
 import { DelegateEnum } from "./types";
+import { bgtName } from "@bera/config";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Delegate"),
+  title: getMetaTitle("Delegate", bgtName),
   description: "Delegate, Redelegate, or Undelegate your BGT",
 };
 export default function Page({

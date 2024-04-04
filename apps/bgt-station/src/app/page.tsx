@@ -2,11 +2,11 @@ import { type Metadata } from "next";
 import { bgtName } from "@bera/config";
 import { Footer } from "@bera/shared-ui";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import DashBoard from "./dashboard/dashboard";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Home"),
+  title: getMetaTitle("Home", bgtName),
   description: `Welcome to ${bgtName}!`,
 };
 
