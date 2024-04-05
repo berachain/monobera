@@ -2,10 +2,9 @@ import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { chainId, crocIndexerEndpoint, dexName } from "@bera/config";
-import { Documentation, Footer } from "@bera/shared-ui";
-import { useAnalytics } from "@bera/shared-ui/src/utils/analytics";
+import { Documentation, Footer, useAnalytics } from "@bera/shared-ui";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import Data from "./components/Data";
 import Hero from "./components/Hero";
 
@@ -31,7 +30,7 @@ const getTvlAndVolume = (): Promise<{ tvl?: number; volume?: number }> => {
 };
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Home"),
+  title: getMetaTitle("Home", dexName),
   description: `Welcome to ${dexName}!`,
 };
 

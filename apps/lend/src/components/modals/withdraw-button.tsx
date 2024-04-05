@@ -14,7 +14,12 @@ import {
   honeyTokenAddress,
   lendPoolImplementationAddress,
 } from "@bera/config";
-import { FormattedNumber, TokenInput, useTxn } from "@bera/shared-ui";
+import {
+  FormattedNumber,
+  TokenInput,
+  useAnalytics,
+  useTxn,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -39,14 +44,20 @@ export default function WithdrawBtn({
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
+  const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Withdrawing ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${token?.symbol}`,
     onSuccess: () => {
+      track(`withdraw_${token.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
+    },
+    onError: (e: Error | undefined) => {
+      track(`withdraw_${token.symbol.toLowerCase()}_failed`);
+      captureException(e);
     },
     actionType: TransactionActionType.WITHDRAW,
   });
@@ -112,26 +123,6 @@ const WithdrawModalContent = ({
     ),
   });
 
-  const maxWithdrawalAllowance = BigNumber(
-    formatUnits(
-      (userAccountData.totalCollateralBase as bigint) -
-        (userAccountData.totalDebtBase * 10000n) /
-          (userAccountData.currentLiquidationThreshold === 0n
-            ? 8000n
-            : userAccountData.currentLiquidationThreshold),
-      8,
-    ),
-  )
-    .div(reserveData?.formattedPriceInMarketReferenceCurrency ?? 1n)
-    .toFixed(token.decimals ?? 18);
-
-  const balance =
-    token.address === honeyTokenAddress
-      ? Number(maxWithdrawalAllowance) > Number(userBalance)
-        ? userBalance
-        : maxWithdrawalAllowance
-      : userBalance;
-
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>
@@ -139,7 +130,7 @@ const WithdrawModalContent = ({
         <TokenInput
           selected={token}
           amount={amount}
-          balance={balance}
+          balance={userBalance}
           showExceeding={true}
           selectable={false}
           setAmount={(amount) =>
@@ -192,7 +183,7 @@ const WithdrawModalContent = ({
         <Alert variant="destructive">
           <AlertTitle>
             {" "}
-            <Icons.info className="mr-1 inline-block h-4 w-4 -mt-1" />
+            <Icons.info className="-mt-1 mr-1 inline-block h-4 w-4" />
             Must Repay Entire Loan to Withdraw Collateral
           </AlertTitle>
           Please be sure to pay your entire honey debt, you will not be able to
@@ -204,7 +195,7 @@ const WithdrawModalContent = ({
         disabled={
           !amount ||
           BigNumber(amount).lte(BigNumber(0)) ||
-          BigNumber(amount).gt(BigNumber(balance)) ||
+          BigNumber(amount).gt(BigNumber(userBalance)) ||
           (userAccountData.totalDebtBase > 0n && token.address !== honeyAddress)
         }
         onClick={() => {
@@ -214,7 +205,7 @@ const WithdrawModalContent = ({
             functionName: "withdraw",
             params: [
               token.address,
-              BigNumber(balance ?? "0").eq(BigNumber(amount ?? "0"))
+              BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0"))
                 ? maxUint256
                 : parseUnits((amount ?? "0") as `${number}`, token.decimals),
               account,

@@ -24,23 +24,32 @@ export function CustomizeInput({
     <div className="flex flex-col gap-2 rounded-sm bg-muted p-4">
       <div className="flex h-3 items-center justify-between text-xs text-muted-foreground ">
         <div>{title}</div>{" "}
-        <div className="hover:underline" onClick={() => onSubtitleClick?.()}>
+        <div
+          className="ml-2 truncate hover:underline"
+          onClick={() => onSubtitleClick?.()}
+        >
           {subTitle}
         </div>
       </div>
-      <Input
-        disabled={disabled}
-        type="number"
-        className={cn(
-          "h-7 w-full rounded-none border-none bg-inherit p-0 text-lg font-semibold text-foreground",
-          isExceeding && "text-destructive-foreground",
-        )}
-        placeholder="0.00"
-        min={0}
-        endAdornment={endAdornment}
-        value={value}
-        onChange={(e) => onChange?.(e.target.value)}
-      />
+      <div className="relative flex w-full">
+        <Input
+          disabled={disabled}
+          type="number"
+          className={cn(
+            "h-7 flex-1 rounded-none border-none bg-inherit p-0 text-lg font-semibold text-foreground",
+            isExceeding && "text-destructive-foreground",
+          )}
+          placeholder="0.00"
+          min={0}
+          value={value}
+          onKeyDown={(e) =>
+            (e.key === "-" || e.key === "e" || e.key === "E") &&
+            e.preventDefault()
+          }
+          onChange={(e) => onChange?.(e.target.value)}
+        />
+        {endAdornment}
+      </div>
     </div>
   );
 }

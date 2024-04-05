@@ -8,6 +8,7 @@ import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
+import { fillAPYDataByDay, fillAPYDataByHour } from "~/utils/graph-utils";
 import Card from "~/components/card";
 import DonutChart from "~/components/donut-chart";
 import LineChart from "~/components/line-chart";
@@ -28,15 +29,14 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
         <Skeleton className="h-7 w-20" />
       ),
       tooltip: (
-        <>
-          The Maximum LTV ratio represents the maximum borrowing power of a
-          <br />
-          specific collateral. For example, if a collateral has an LTV of 75%,
-          <br />
-          the user can borrow up to 0.75 worth of ETH in the principal currency
-          <br />
-          for every 1 ETH worth of collateral.
-        </>
+        <Tooltip>
+          <div className="max-w-[350px]">
+            The Maximum LTV ratio represents the maximum borrowing power of a
+            specific collateral. For example, if a collateral has an LTV of 75%,
+            the user can borrow up to 0.75 worth of ETH in the principal
+            currency for every 1 ETH worth of collateral.
+          </div>
+        </Tooltip>
       ),
     },
     {
@@ -64,12 +64,26 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
       variables: { timestamp_gt },
     },
   );
+
+  const gData =
+    timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
+      ? fillAPYDataByHour(
+          graphdata?.historyHourRates ?? [],
+          getTime(timeframe),
+          "borrowRates",
+        )
+      : fillAPYDataByDay(
+          graphdata?.historyDayRates ?? [],
+          getTime(timeframe),
+          "borrowRates",
+        );
+
   return (
     <div className="w-full">
       <div className="text-2xl font-semibold leading-loose">
         Total Borrowed {ticker}
       </div>
-      <Card className="flex flex-col gap-8 p-9">
+      <Card className="flex flex-col gap-8 p-4 sm:p-6">
         <div className="flex flex-col gap-8 md:flex-row">
           <div className="flex gap-8">
             <DonutChart
@@ -151,15 +165,12 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
             <div className="flex flex-col gap-[6px]">
               <div className="text-sm font-normal leading-normal text-muted-foreground">
                 APY, variable
-                <Tooltip
-                  text={
-                    <>
-                      Variable interest rate will fluctuate based on the market{" "}
-                      <br />
-                      conditions. Recommended for short-term positions.
-                    </>
-                  }
-                />
+                <Tooltip>
+                  <div className="max-w-[400px]">
+                    Variable interest rate will fluctuate based on the market
+                    conditions. See additional disclaimers in notes below.
+                  </div>
+                </Tooltip>
               </div>
               {reserveData ? (
                 <div className="font-semibold leading-7 md:text-xl">
@@ -180,13 +191,7 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
             attribute="borrowRates"
             time={timeframe}
             setTime={setTimeframe}
-            data={
-              graphdata?.[
-                timeframe === (TimeFrame.HOURLY || TimeFrame.WEEKLY)
-                  ? "historyHourRates"
-                  : "historyDayRates"
-              ] || []
-            }
+            data={gData}
             isLoading={loading}
             color={color}
             title="Borrow APY, Variable"
@@ -202,8 +207,7 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
                 key={item.title}
               >
                 <div className="flex items-center gap-[6px] text-xs text-muted-foreground md:text-sm">
-                  {item.title}
-                  {item.tooltip && <Tooltip text={item.tooltip} />}
+                  {item.title} {item.tooltip}
                 </div>
                 <div className="text-lg font-semibold leading-7 md:mt-[6px]">
                   {item.value}

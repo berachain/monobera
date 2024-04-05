@@ -96,11 +96,11 @@ export default function LeaderBoard() {
         </Tabs>
         <div className="hidden w-full lg:flex" />
         <Select
-          onValueChange={(value: string) => setTimeFrame(value as TimeFrame)}
+          onValueChange={(value: string) => setLeaderboardType(Number(value))}
         >
           <SelectTrigger
             className={
-              "flex w-[180pxpx] items-center justify-between border border-border rounded-md sm:hidden"
+              "flex w-[180pxpx] items-center justify-between rounded-md border border-border sm:hidden"
             }
           >
             <SelectValue

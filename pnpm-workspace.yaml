@@ -1,4 +1,11 @@
 packages:
+  - packages/config/*
+  - packages/beracrocswap
+  - packages/graphql
+  - packages/berajs
+  - packages/proto
+  - packages/ui
+  - packages/shared-ui
   - apps/dex
   - apps/bgt-station
   - apps/honey
@@ -8,13 +15,3 @@ packages:
   - apps/validator-clue
   - apps/ambassador
   - apps/ecosystem
-  - packages/config/*
-  - packages/config/env
-  - packages/beracrocswap
-  - packages/graphql
-  - packages/proto
-  - packages/berajs
-  - packages/bera-router
-  - packages/ui
-  - packages/shared-ui
-  - packages/api

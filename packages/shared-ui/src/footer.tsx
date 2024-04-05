@@ -23,7 +23,7 @@ import {
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
-export const footerNavigation = {
+const footerNavigation = {
   ecosystem: [
     {
       name: dexName,

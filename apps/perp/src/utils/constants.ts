@@ -3,3 +3,6 @@ export enum POLLING {
   NORMAL = 20000,
   SLOW = 200000,
 }
+
+export const MAX_GAIN = "900";
+export const MAX_STOP_LOSS = "-75";

@@ -74,7 +74,7 @@ export function TokenInput({
       selected ? getAddress(selected?.address ?? "") ?? "" : "",
     );
 
-  let tokenBalance = token?.formattedBalance;
+  let tokenBalance = token?.formattedBalance || "0";
 
   if (balance !== undefined) {
     tokenBalance = balance;
@@ -85,6 +85,7 @@ export function TokenInput({
     Number(amount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
       : Number(amount) ?? 0;
+
   useEffect(() => {
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
     if (safeNumberAmount <= tokenBalance) {
@@ -151,7 +152,7 @@ export function TokenInput({
         </div>
         <div className="ml-2 flex w-full flex-col pl-2 sm:pl-0">
           <Input
-            type="number"
+            type="number-enhanced"
             step="any"
             min="0"
             placeholder="0"
@@ -230,6 +231,7 @@ export function TokenInput({
                     setAmount &&
                       tokenBalance !== "" &&
                       tokenBalance !== "0" &&
+                      !Number.isNaN(Number(tokenBalance)) &&
                       setAmount(tokenBalance?.toString() ?? "");
                   }}
                 >

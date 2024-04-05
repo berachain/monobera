@@ -10,7 +10,6 @@
       "**/tailwind/**",
       ".next",
       "**/next/**",
-      "bera-router/**",
       "beracrocswap/*",
       "./apps/perp/public/static/**",
       "**/public/**",

@@ -10,18 +10,18 @@ interface CompactNumberProps {
 
 const POSTFIXES = ["", "K", "M", "B", "T", "P", "E", "Z", "Y"];
 
-export type BigNumberValue = string | number | BigNumber;
+type BigNumberValue = string | number | BigNumber;
 
-export function valueToBigNumber(amount: BigNumberValue): BigNumber {
+function valueToBigNumber(amount: BigNumberValue): BigNumber {
   if (amount instanceof BigNumber) return amount;
   return new BigNumber(amount);
 }
 
-export function normalizeBN(n: BigNumberValue, decimals: number): BigNumber {
+function normalizeBN(n: BigNumberValue, decimals: number): BigNumber {
   return valueToBigNumber(n).shiftedBy(decimals * -1);
 }
 
-export const compactNumber = ({
+const compactNumber = ({
   value,
   visibleDecimals = 2,
   roundDown,
@@ -86,6 +86,7 @@ export function FormattedNumber({
   compactThreshold,
   maxValue,
   className,
+  prefixText = "",
   ...props
 }: {
   value: BigNumberValue;
@@ -98,6 +99,7 @@ export function FormattedNumber({
   compactThreshold?: number; //function serves to determine when a number should be presented in its compact form (with postfixes like K, M, B for thousands, millions, billions, etc.)
   maxValue?: number;
   className?: string;
+  prefixText?: string;
 }) {
   const number = percent ? Number(value) * 100 : Number(value);
 
@@ -139,6 +141,7 @@ export function FormattedNumber({
       )}
       {...props}
     >
+      {prefixText && <span className="mr-0.5">{prefixText}</span>}
       {isSmallerThanMin && (number < 0 ? ">-" : "<")}{" "}
       {symbol?.toLowerCase() === "usd" && !percent && (
         <span className="mr-0.5">$</span>

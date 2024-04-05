@@ -17,6 +17,7 @@ import {
   FormattedNumber,
   TokenInput,
   useTxn,
+  useAnalytics,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
@@ -41,14 +42,20 @@ export default function RepayBtn({
 }) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
+  const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Repaying ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${token.symbol}`,
     onSuccess: () => {
+      track(`repay_${token.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
+    },
+    onError: (e: Error | undefined) => {
+      track(`repay_${token.symbol.toLowerCase()}_failed`);
+      captureException(e);
     },
     actionType: TransactionActionType.REPAY,
   });

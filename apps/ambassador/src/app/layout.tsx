@@ -8,7 +8,6 @@ import { rpcBannerEnabled } from "@bera/config";
 import { TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
-import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -54,9 +53,6 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-              <div className="z-[100]">
-                <Toaster position="bottom-right" />
-              </div>
               <div className="z-10 flex-1">
                 <Header navItems={navItems} />
                 <main

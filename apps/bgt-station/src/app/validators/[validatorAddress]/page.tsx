@@ -1,7 +1,8 @@
 import { type Metadata } from "next";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import Validator from "./validator";
+import { bgtName } from "@bera/config";
 
 type Props = {
   params: { validatorAddress: string };
@@ -10,7 +11,7 @@ type Props = {
 export function generateMetadata({ params }: Props): Metadata {
   const { validatorAddress } = params;
   return {
-    title: getMetaTitle("Validator Details"),
+    title: getMetaTitle("Validator Details", bgtName),
     description: `Validator details for ${validatorAddress}`,
   };
 }

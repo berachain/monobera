@@ -13,15 +13,18 @@ export function Tooltip({
   text,
   className,
   size = 4,
+  children,
+  ...props
 }: {
-  text: any;
+  text?: any;
   className?: string;
   size?: number;
+  children?: React.ReactNode;
 }) {
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
   return (
     <TooltipProvider>
-      <BeraUiTooltip open={tooltipOpen} defaultOpen={false}>
+      <BeraUiTooltip open={tooltipOpen} defaultOpen={false} {...props}>
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
@@ -36,7 +39,10 @@ export function Tooltip({
             <span className="sr-only">Tooltip</span>
           </Button>
         </TooltipTrigger>
-        <TooltipContent>{text}</TooltipContent>
+        <TooltipContent className="w-fit max-w-[96vw]">
+          {text}
+          {children}
+        </TooltipContent>
       </BeraUiTooltip>
     </TooltipProvider>
   );

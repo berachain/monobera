@@ -12,7 +12,7 @@ import {
   type Token,
 } from "@bera/berajs";
 import { honeyRouterAddress, honeyTokenAddress } from "@bera/config";
-import { useTxn } from "@bera/shared-ui";
+import { useTxn, useAnalytics } from "@bera/shared-ui";
 import BigNumber from "bignumber.js";
 import { getAddress, parseUnits, type Address } from "viem";
 
@@ -84,6 +84,8 @@ export const usePsm = () => {
 
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
 
+  const { captureException, track } = useAnalytics();
+
   const {
     write,
     isLoading: isUseTxnLoading,
@@ -99,6 +101,13 @@ export const usePsm = () => {
     actionType: isMint
       ? TransactionActionType.MINT_HONEY
       : TransactionActionType.REDEEM_HONEY,
+    onSuccess: () => {
+      track(`${isMint ? "mint" : "redeem"}_honey`);
+    },
+    onError: (e: Error | undefined) => {
+      track(`${isMint ? "mint" : "redeem"}_honey_failed`);
+      captureException(e);
+    },
   });
 
   const { useHoneyPreview, isLoading: isHoneyPreviewLoading } =

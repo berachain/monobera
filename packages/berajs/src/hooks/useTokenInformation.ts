@@ -2,13 +2,16 @@
 
 import { useCallback, useReducer, useState } from "react";
 import { useConfig, usePublicClient } from "wagmi";
-import { getToken } from "@wagmi/core";
+import { multicall } from "@wagmi/core";
+import { Address, erc20Abi } from "viem";
 
 import { type Token } from "~/api/currency/tokens";
 import { ActionEnum, initialState, reducer } from "../utils/stateReducer";
+import { wagmiConfig } from "~/config";
+import { multicallAddress } from "@bera/config";
 
 interface IuseTokenInformation {
-  address: string;
+  address: Address;
   isDefault?: boolean;
 }
 
@@ -37,22 +40,40 @@ const useTokenInformation = (): useTokenInformationApi => {
     }: IuseTokenInformation): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       try {
-        const token = await getToken(config, {
-          address: address as `0x${string}`,
+        // const formattedToken: Token = {
+        //   address: address,
+        //   decimals: token.decimals,
+        //   symbol: token.symbol as string,
+        //   name: token.name as string,
+        //   default: isDefault,
+        // };
+
+        const result = await multicall(wagmiConfig as any, {
+          contracts: [
+            {
+              address: address,
+              abi: erc20Abi,
+              functionName: "decimals",
+            },
+            {
+              address: address,
+              abi: erc20Abi,
+              functionName: "name",
+            },
+            {
+              address: address,
+              abi: erc20Abi,
+              functionName: "symbol",
+            },
+          ],
+          multicallAddress: multicallAddress,
         });
 
-        const formattedToken: Token = {
-          address: address,
-          decimals: token.decimals,
-          symbol: token.symbol as string,
-          name: token.name as string,
-          default: isDefault,
-        };
-
+        console.log({ result });
         dispatch({
           type: ActionEnum.SUCCESS,
         });
-        setTokenInformation(formattedToken);
+        setTokenInformation(undefined);
       } catch (e: any) {
         console.log(e);
         setError(e);

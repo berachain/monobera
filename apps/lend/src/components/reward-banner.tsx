@@ -72,7 +72,10 @@ export const Banner = () => {
           ) : (
             "~~"
           )}
-          <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
+          <Tooltip>
+            Please note: If your accrued BGT Rewards are less than 0.01, your
+            balance will be displayed as {"< 0.01"}.
+          </Tooltip>
         </div>
         <Button
           disabled={!isReady || !rewards || rewards === 0n || isClaimingLoading}

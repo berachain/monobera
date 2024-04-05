@@ -1,5 +1,5 @@
 import { bannerEnabled, perpsName } from "@bera/config";
-import { UpTimeStatus, LaunchBanner } from "@bera/shared-ui";
+import { LaunchBanner, UpTimeStatus } from "@bera/shared-ui";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

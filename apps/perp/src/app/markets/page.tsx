@@ -3,20 +3,21 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { type Market } from "@/../../packages/proto/src";
 import { perpsName } from "@bera/config";
-import { formatUnits } from "viem";
+import BigNumber from "bignumber.js";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
+import GeneralInfo from "~/app/components/general-info";
+import Markets from "~/app/components/positions";
 import {
   getDailyPriceChange,
   getHistoricalSummary,
   getMarkets,
   getTradingSummary,
 } from "~/endpoints";
-import { type IMarket } from "../berpetuals/page";
-import GeneralInfo from "../components/general-info";
-import Markets from "../components/positions";
-import AvailableMarket from "./available-markets";
+import type { IMarket } from "~/types/market";
+import AvailableMarket from "./components/available-markets";
 
 export function generateMetadata(): Metadata {
   return {
@@ -60,20 +61,16 @@ export default async function Home() {
     };
   });
 
-  let oi = 0;
-  const oiLong = markets?.reduce((acc: number, market: IMarket) => {
-    return (
-      acc + Number(formatUnits(BigInt(market.open_interest?.oi_long ?? 0n), 18))
+  const oiLong = markets?.reduce((acc: BigNumber, market: IMarket) => {
+    return acc.plus(formatFromBaseUnit(market.open_interest?.oi_long ?? 0, 18));
+  }, BigNumber(0));
+  const oiShort = markets?.reduce((acc: BigNumber, market: IMarket) => {
+    return acc.plus(
+      formatFromBaseUnit(market.open_interest?.oi_short ?? 0, 18),
     );
-  }, 0);
-  const oiShort = markets?.reduce((acc: number, market: IMarket) => {
-    return (
-      acc +
-      Number(formatUnits(BigInt(market.open_interest?.oi_short ?? 0n), 18))
-    );
-  }, 0);
+  }, BigNumber(0));
 
-  oi = oiLong + oiShort;
+  const oi = oiLong.plus(oiShort).toString(10);
 
   const tradingSummary = {
     ...data.tradingSummary,

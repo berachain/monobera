@@ -15,12 +15,12 @@ export default function Hero() {
           className="width-[500px] mx-auto"
         />
         <h1 className="mt-2 text-3xl font-extrabold leading-8 tracking-tight text-foreground sm:text-4xl">
-          Earn Interest And Rewards <br />
+          Earn Interest And Rewards <br className="hidden sm:block" />
           By{" "}
           <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
             Supplying
           </span>{" "}
-          Your Assets <br />
+          Your Assets <br className="hidden sm:block" />
           And{" "}
           <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
             Borrowing

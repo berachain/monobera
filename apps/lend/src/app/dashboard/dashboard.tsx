@@ -5,9 +5,10 @@ import {
   usePollUserReservesData,
 } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
+
 import { getAssetList } from "~/utils/lendTokenHelper";
-import AvailableBorrows from "./available-borrows";
 import AvailableSupply from "./available-supply";
+import HoneyBorrow from "./honey-borrow";
 import HoneySupply from "./honey-supply";
 import PageLoading from "./page-loading";
 import UserSupply from "./user-supply";
@@ -47,10 +48,10 @@ export function Dashboard() {
                   (assert) => assert.address === honeyTokenAddress,
                 )}
               />
-              {/* this is not avaliable borrow anymore, its borrow honey :p */}
-              {/* feel free to rename/refactor, i am lazy zzz */}
-              <AvailableBorrows
-                {...{ assets: assetsDictionary.available_borrow }}
+              <HoneyBorrow
+                honey={assetsDictionary.available_borrow.find(
+                  (assert) => assert.address === honeyTokenAddress,
+                )}
               />
             </div>
           </div>

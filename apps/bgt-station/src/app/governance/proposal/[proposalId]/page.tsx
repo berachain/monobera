@@ -1,13 +1,14 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getMetaTitle } from "~/utils/metadata";
+import { getMetaTitle } from "@bera/shared-ui";
 import ProposalDetails from "./proposal-details";
+import { bgtName } from "@bera/config";
 
 export function generateMetadata({ params }: any): Metadata {
   const { proposalId } = params;
   return {
-    title: getMetaTitle("Proposal Details"),
+    title: getMetaTitle("Proposal Details", bgtName),
     description: `View proposal details for proposal ${proposalId} on Berachain`,
   };
 }
