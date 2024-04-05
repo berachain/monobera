@@ -9,7 +9,7 @@ import { Icons } from "@bera/ui/icons";
 
 const ThemeToggleMobile = dynamic(
   () =>
-    import("../../../../packages/shared-ui/src/theme-toggle-mobile").then(
+    import("@bera/shared-ui/src/theme-toggle-mobile").then(
       (mod) => mod.ThemeToggleMobile,
     ),
   {
