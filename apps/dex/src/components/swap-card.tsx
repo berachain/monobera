@@ -22,9 +22,9 @@ import {
   BREAKPOINTS,
   TokenInput,
   TooltipCustom,
+  useAnalytics,
   useBreakpoint,
   useTxn,
-  useAnalytics,
 } from "@bera/shared-ui";
 import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
 import { cn } from "@bera/ui";
@@ -32,7 +32,6 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
 import { parseUnits, type Address } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
