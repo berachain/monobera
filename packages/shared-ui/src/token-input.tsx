@@ -152,7 +152,7 @@ export function TokenInput({
         </div>
         <div className="ml-2 flex w-full flex-col pl-2 sm:pl-0">
           <Input
-            type="number"
+            type="number-enhanced"
             step="any"
             min="0"
             placeholder="0"
@@ -163,13 +163,6 @@ export function TokenInput({
             )}
             value={amount}
             onKeyDown={(e: any) => {
-              if (e.key === "-" || e.key === "e" || e.key === "E") {
-                // don't handle non digit key down (ex: a, b, c, shift, cmd, etc.)
-                e.preventDefault();
-              }
-              if (!/^[\d\.]{1}$/.test(e.key)) {
-                return;
-              }
               clearTimeout(typingTimer);
               setIsTyping?.(true);
               typingTimer = setTimeout(() => {
@@ -179,12 +172,11 @@ export function TokenInput({
             onChange={(e: any) => {
               const inputValue = e.target.value;
               const filteredValue = formatInputTokenValue(inputValue);
-              // Ensure there's only one period
-              const periodsCount = filteredValue.split(".").length - 1;
               const [_, decimalPart = ""] = filteredValue.split(".");
               if (decimalPart.length > 18) return;
-              if (periodsCount <= 1) setAmount?.(filteredValue);
+              setAmount?.(filteredValue);
             }}
+            allowMinus={false}
           />
         </div>
       </div>
