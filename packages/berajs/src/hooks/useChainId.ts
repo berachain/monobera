@@ -1,6 +1,7 @@
-import { useBeraConfig } from "~/contexts";
+import { useChains } from "wagmi";
 
 export function useChainId(): number | null {
-  const { networkConfig } = useBeraConfig();
-  return networkConfig?.chain.id ?? null;
+  const chains = useChains();
+
+  return chains[0]?.id ?? null;
 }

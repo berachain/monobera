@@ -15,6 +15,7 @@
   "dependencies": {
     "@bera/berajs": "0.1.0",
     "@bera/config": "0.1.0",
+    "@bera/wagmi": "0.1.0",
     "@bera/shared-ui": "0.1.0",
     "@bera/tailwind-config": "0.1.0",
     "@bera/ui": "0.1.0",

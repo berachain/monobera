@@ -7,9 +7,9 @@ import React, {
   useState,
   type PropsWithChildren,
 } from "react";
-import { useAccount } from "wagmi";
-
-import { useBeraConfig } from "../berajsConfig";
+import { useAccount, useChains } from "wagmi";
+import { TransactionStoreProvider } from "~/hooks";
+import { CrocEnvContextProvider } from "../crocenv";
 
 export interface IBeraJsAPI {
   account: `0x${string}` | undefined;
@@ -21,13 +21,16 @@ export interface IBeraJsAPI {
 export const BeraJsContext = createContext<IBeraJsAPI | undefined>(undefined);
 
 const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const { networkConfig } = useBeraConfig();
+  const chains = useChains();
   const { address: account, status } = useAccount();
   const [isMounted, setIsMounted] = useState(false);
   const { chain } = useAccount();
 
   useEffect(() => setIsMounted(true), []);
 
+  const isWrongNetwork = useMemo(() => {
+    return !chains.some((c) => c.id === chain?.id);
+  }, [chains, chain?.id]);
   return (
     <BeraJsContext.Provider
       value={{
@@ -36,14 +39,16 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
           () => (account && isMounted ? true : false),
           [account, isMounted, status],
         ),
-        isWrongNetwork: networkConfig.chain.id === chain?.id ? false : true,
+        isWrongNetwork,
         isReady: useMemo(
-          () => account && isMounted && networkConfig.chain.id === chain?.id,
-          [account, isMounted, chain?.id, status, networkConfig],
+          () => account && isMounted && !isWrongNetwork,
+          [account, isMounted, chain?.id, status, isWrongNetwork],
         ),
       }}
     >
-      {children}
+      <TransactionStoreProvider>
+        <CrocEnvContextProvider>{children}</CrocEnvContextProvider>
+      </TransactionStoreProvider>
     </BeraJsContext.Provider>
   );
 };
