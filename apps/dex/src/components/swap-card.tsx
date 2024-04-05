@@ -22,9 +22,9 @@ import {
   BREAKPOINTS,
   TokenInput,
   TooltipCustom,
+  useAnalytics,
   useBreakpoint,
   useTxn,
-  useAnalytics,
 } from "@bera/shared-ui";
 import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
 import { cn } from "@bera/ui";
