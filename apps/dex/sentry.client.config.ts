@@ -19,7 +19,7 @@ Sentry.init({
   // in development and sample at a lower rate in production
   replaysSessionSampleRate: 0.1,
 
-  beforeSend: (event) => {
+  beforeSend: (event: any) => {
     // Check if is ignored error
     const IGNORED_ERROR_MESSAGES: string[] = [
       "ResizeObserver loop completed with undelivered notifications.",
