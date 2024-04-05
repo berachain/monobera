@@ -1,12 +1,10 @@
-import React from "react";
+import React, { KeyboardEvent } from "react";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { Switch } from "@bera/ui/switch";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { set } from "husky";
 import { useLocalStorage } from "usehooks-ts";
 
 import {
@@ -84,7 +82,9 @@ export default function SwapSettings() {
                 ? DEFAULT_SLIPPAGE
                 : slippageToleranceValue
             }
-            onKeyDown={(e) => e.key === "-" && e.preventDefault()}
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
+              e.key === "-" && e.preventDefault()
+            }
             endAdornment={
               <p
                 className={cn(
@@ -157,7 +157,9 @@ export default function SwapSettings() {
           value={
             deadlineType === SELECTION.AUTO ? DEFAULT_DEADLINE : deadlineValue
           }
-          onKeyDown={(e) => e.key === "-" && e.preventDefault()}
+          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
+            e.key === "-" && e.preventDefault()
+          }
           endAdornment={
             <p
               className={cn(
