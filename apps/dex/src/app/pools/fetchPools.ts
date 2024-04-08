@@ -199,7 +199,7 @@ export const formatPoolData = (result: any): PoolV2 => {
   };
 };
 
-export const fetchPoolByAddress = async (
+const fetchPoolByAddress = async (
   shareAddress?: string,
 ): Promise<PoolV2 | null> => {
   try {
