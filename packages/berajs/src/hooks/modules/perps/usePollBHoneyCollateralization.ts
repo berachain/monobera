@@ -1,30 +1,26 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import BigNumber from "bignumber.js";
+import { formatUnits, type Address } from "viem";
+import { usePublicClient } from "wagmi";
 
 import POLLING from "~/config/constants/polling";
-import { usePollBHoneySupply } from "./usePollBHoneySupply";
-import { usePollHoneyVaultBalance } from "./usePollHoneyVaultBalance";
+import { BTOKEN_ABI } from "~/config";
 
 export const usePollBHoneyCollateralization = () => {
-  const { useFormattedHoneyVaultBalance } = usePollHoneyVaultBalance();
-
-  const { useFormattedBHoneySupply } = usePollBHoneySupply();
-  const honeyLocked = useFormattedHoneyVaultBalance();
-  const bHoneySupply = useFormattedBHoneySupply();
-  const method = "bhoney_collateralization";
-  const QUERY_KEY = [method, honeyLocked, bHoneySupply];
+  const publicClient = usePublicClient();
+  const method = "collateralizationP";
+  const QUERY_KEY = ["bhoney", method];
   const { isLoading } = useSWR(
     QUERY_KEY,
-    () => {
+    async () => {
       try {
-        if (honeyLocked !== 0 && bHoneySupply !== 0) {
-          return BigNumber(honeyLocked)
-            .div(BigNumber(bHoneySupply))
-            .times(100)
-            .dp(2);
-        }
-        return undefined;
+        const result = await publicClient.readContract({
+          address: process.env.NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
+          abi: BTOKEN_ABI,
+          functionName: method,
+          args: [],
+        });
+        return result;
       } catch (e) {
         console.error(e);
         return undefined;
@@ -38,7 +34,7 @@ export const usePollBHoneyCollateralization = () => {
   const useBHoneyCollateralization = () => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     if (!data) return 0;
-    return data;
+    return Number(formatUnits(data, 18));
   };
 
   return {
