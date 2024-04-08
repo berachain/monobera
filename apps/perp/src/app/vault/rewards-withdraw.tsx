@@ -27,12 +27,12 @@ export const RewardsWithdraw = () => {
   const { isLoading: isGHoneyBalanceLoading, useFormattedBHoneyBalance } =
     usePollBHoneyBalance();
 
-  const { isLoading: isBHoneyPriceLoading, useFormattedHoneyPrice } =
+  const { isLoading: isBHoneyPriceLoading, useHoneyPrice } =
     usePollBHoneyPrice();
 
   const { isLoading: isBalanceOfAssetsLoading, useFormattedBalanceOfAssets } =
     usePollBalanceOfAssets();
-  const honeyPrice = useFormattedHoneyPrice();
+  const honeyPrice = useHoneyPrice();
 
   const ghoneyBalance = useFormattedBHoneyBalance();
 
@@ -42,7 +42,7 @@ export const RewardsWithdraw = () => {
   }, [ghoneyBalance, honeyPrice]);
 
   const estimatedEarnings = useMemo(() => {
-    return stakedHoney - balanceOfAssets;
+    return Math.abs(stakedHoney - balanceOfAssets);
   }, [stakedHoney, balanceOfAssets]);
 
   const isLoading =

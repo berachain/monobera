@@ -60,7 +60,7 @@ export const BhoneyStats = () => {
 
   const { isLoading: isBHoneySupplyLoading, useFormattedBHoneySupply } =
     usePollBHoneySupply();
-  const { isLoading: isBHoneyPriceLoading, useFormattedHoneyPrice } =
+  const { isLoading: isBHoneyPriceLoading, useHoneyPrice } =
     usePollBHoneyPrice();
 
   const { isLoading: isBHoneyCollateralization, useBHoneyCollateralization } =
@@ -76,7 +76,7 @@ export const BhoneyStats = () => {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
   const bHoneySupply = useFormattedBHoneySupply();
-  const honeyPrice = useFormattedHoneyPrice();
+  const honeyPrice = useHoneyPrice();
   const collateralization = useBHoneyCollateralization();
   const epoch = useBHoneyEpoch();
   return (
