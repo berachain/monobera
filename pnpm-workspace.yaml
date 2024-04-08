@@ -3,6 +3,7 @@ packages:
   - packages/beracrocswap
   - packages/graphql
   - packages/berajs
+  - packages/wagmi
   - packages/proto
   - packages/ui
   - packages/shared-ui

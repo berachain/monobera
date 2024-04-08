@@ -2,7 +2,6 @@ import React from "react";
 import {
   formatter,
   usePollActiveValidators,
-  usePollBgtSupply,
   usePollGlobalValidatorBribes,
 } from "@bera/berajs";
 import { BribeApyTooltip } from "@bera/shared-ui";
@@ -14,8 +13,7 @@ import { EpochTimeline } from "./epoch-timeline";
 export function Details() {
   const { useTotalValidators } = usePollActiveValidators();
   const total = useTotalValidators();
-  const { useBgtSupply } = usePollBgtSupply();
-  const bgtSupply = useBgtSupply();
+
   const prices = undefined;
   const { useGlobalAvgApy } = usePollGlobalValidatorBribes(prices);
   const avgApy = useGlobalAvgApy();
@@ -40,12 +38,7 @@ export function Details() {
       text: "Average Bribe APY",
     },
     {
-      amount:
-        bgtSupply === undefined ? (
-          <Skeleton className="mb-2 h-8 w-20" />
-        ) : (
-          `${formatter.format(Number(bgtSupply))} BGT`
-        ),
+      amount: "0 BGT",
       text: "Total BGT Supply",
     },
   ];

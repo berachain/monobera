@@ -1,10 +1,10 @@
 "use client";
 
-import { useBeraConfig } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 
 import { Spinner } from "./spinner";
+import { blockExplorerUrl } from "@bera/config";
 
 interface IToast {
   title: string;
@@ -78,19 +78,13 @@ export const SuccessToast = ({
   description,
   onClose,
 }: IToast) => {
-  const { networkConfig } = useBeraConfig();
-
   return (
     <BaseToast
       title={title}
       onClose={onClose}
       description={description}
       startAdornment={<Icons.checkCircle className="h-6 w-6 text-positive" />}
-      href={
-        hash
-          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-          : undefined
-      }
+      href={hash ? `${blockExplorerUrl}/tx/${hash}` : undefined}
     />
   );
 };
@@ -101,8 +95,6 @@ export const ErrorToast = ({
   description,
   hash = undefined,
 }: IToast) => {
-  // HANDLE ERROR MESSAGES
-  const { networkConfig } = useBeraConfig();
   if (title === "User rejected txn") {
     return (
       <BaseToast
@@ -122,11 +114,7 @@ export const ErrorToast = ({
       startAdornment={
         <Icons.XOctagon className="h-6 w-6 text-destructive-foreground" />
       }
-      href={
-        hash
-          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-          : undefined
-      }
+      href={hash ? `${blockExplorerUrl}/tx/${hash}` : undefined}
     />
   );
 };
@@ -137,19 +125,13 @@ export const SubmissionToast = ({
   description,
   onClose,
 }: IToast) => {
-  const { networkConfig } = useBeraConfig();
-
   return (
     <BaseToast
       title={title}
       onClose={onClose}
       description={description}
       startAdornment={<Spinner size={18} color="#f8b613" />}
-      href={
-        hash
-          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-          : undefined
-      }
+      href={hash ? `${blockExplorerUrl}/tx/${hash}` : undefined}
     />
   );
 };
@@ -160,19 +142,13 @@ export const LoadingToast = ({
   onClose,
   hash = undefined,
 }: IToast) => {
-  const { networkConfig } = useBeraConfig();
-
   return (
     <BaseToast
       title={title}
       onClose={onClose}
       description={description}
       startAdornment={<Spinner size={18} color="#f8b613" />}
-      href={
-        hash
-          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-          : undefined
-      }
+      href={hash ? `${blockExplorerUrl}/tx/${hash}` : undefined}
     />
   );
 };

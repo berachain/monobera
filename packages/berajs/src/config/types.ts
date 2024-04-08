@@ -1,9 +1,5 @@
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
-import { type Address, type Chain } from "viem";
-
-interface PrecompileMapping {
-  [key: string]: Address;
-}
+import { type Chain } from "viem";
 
 export interface NetworkConfig {
   isTestnet?: boolean;

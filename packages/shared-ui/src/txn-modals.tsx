@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { useBeraConfig } from "@bera/berajs";
-import { blockExplorerName } from "@bera/config";
+import { blockExplorerName, blockExplorerUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import Balancer from "react-wrap-balancer";
@@ -60,8 +59,6 @@ export const SuccessModal = ({
   message = "",
   open,
 }: IModal) => {
-  const { networkConfig } = useBeraConfig();
-
   return (
     <BaseModal
       title={title}
@@ -77,11 +74,7 @@ export const SuccessModal = ({
         />
       }
       open={open}
-      href={
-        hash
-          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-          : undefined
-      }
+      href={hash ? `${blockExplorerUrl}/tx/${hash}` : undefined}
       message={message}
     />
   );
@@ -93,8 +86,6 @@ export const ErrorModal = ({
   onClose,
   open,
 }: IModal) => {
-  // const { networkConfig } = useBeraConfig();
-
   if (message === "User rejected txn") {
     return (
       <BaseModal
@@ -144,8 +135,6 @@ export const SubmissionModal = ({
   onClose,
   open,
 }: IModal) => {
-  const { networkConfig } = useBeraConfig();
-
   return (
     <BaseModal
       title={title}
@@ -153,11 +142,7 @@ export const SubmissionModal = ({
       open={open}
       icon={<Spinner size={64} color="#f8b613" />}
       message={message}
-      href={
-        hash
-          ? `${networkConfig.chain.blockExplorers?.default.url}/tx/${hash}`
-          : undefined
-      }
+      href={hash ? `${blockExplorerUrl}/tx/${hash}` : undefined}
     />
   );
 };

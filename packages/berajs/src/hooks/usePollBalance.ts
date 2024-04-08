@@ -27,13 +27,13 @@ export const usePollBalance = ({
   address: string | undefined;
 }) => {
   const publicClient = usePublicClient();
-  const { account, error } = useBeraJs();
+  const { account } = useBeraJs();
   const QUERY_KEY = [account, address, "balance"];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (account && !error && address) {
+      if (account && address) {
         if (address !== nativeTokenAddress) {
           const call: Call[] = [
             {

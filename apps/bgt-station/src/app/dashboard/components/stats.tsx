@@ -1,10 +1,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import {
-  usePollActiveValidators,
-  usePollBgtSupply,
-  usePollTotalSupply,
-} from "@bera/berajs";
+import { usePollActiveValidators } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -20,11 +16,7 @@ export function Stats() {
   const { usePercentOfStakedBGT } = usePollActiveValidators();
   const percentOfStakedBGT = usePercentOfStakedBGT();
 
-  const { useBgtSupply } = usePollBgtSupply();
-  const bgtSupply = useBgtSupply();
-  const { useTotalSupply } = usePollTotalSupply("abera");
-  const beraSupply = useTotalSupply();
-  const beraToBgtRatio = (beraSupply / bgtSupply) * 100;
+  const beraToBgtRatio = 0.1;
   return (
     <Card className="px-4 py-8 sm:px-16">
       <div className="flex flex-col items-center justify-around sm:flex-row">

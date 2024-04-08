@@ -10,6 +10,7 @@ const config = {
     "@bera/shared-ui",
     "@bera/berajs",
     "@bera/beracrocswap",
+    "@bera/wagmi",
   ],
   compiler: {
     removeConsole: false,

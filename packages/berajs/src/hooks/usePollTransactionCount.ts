@@ -26,7 +26,7 @@ export const usePollTransactionCount = ({
       return 0;
     },
     {
-      refreshInterval: POLLING.FAST,
+      refreshInterval: POLLING.SLOW,
     },
   );
   const useTransactionCount = () => {

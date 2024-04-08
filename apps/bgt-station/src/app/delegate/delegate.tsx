@@ -8,7 +8,6 @@ import {
   useBeraJs,
   usePollAccountDelegations,
   usePollActiveValidators,
-  usePollBgtBalance,
   usePollDelegatorValidators,
   usePollGlobalValidatorBribes,
 } from "@bera/berajs";
@@ -63,7 +62,7 @@ export default function Delegate({
     (redelegateValidator as string) !== undefined;
   const getExceeding = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
-      return Number(amount) > Number(bgtBalance);
+      return Number(amount) > Number(0);
     }
     if (
       activeAction === DelegateEnum.REDELEGATE ||
@@ -75,7 +74,7 @@ export default function Delegate({
 
   const getDisabled = () => {
     if (activeAction === DelegateEnum.DELEGATE) {
-      return Number(amount) > Number(bgtBalance) || !amount || amount === "";
+      return Number(amount) > 0 || !amount || amount === "";
     }
     if (activeAction === DelegateEnum.REDELEGATE) {
       return (
@@ -130,9 +129,6 @@ export default function Delegate({
   useEffect(() => {
     setRedelegatePending(false);
   }, [redelegateValidator]);
-
-  const { useBgtBalance, isLoading: isBalanceLoading } = usePollBgtBalance();
-  const bgtBalance = useBgtBalance();
 
   return (
     <div className="mx-auto w-full max-w-[600px] sm:container sm:px-0 md:px-8 lg:w-[600px]">
@@ -205,10 +201,10 @@ export default function Delegate({
             />
           </>
         )}
-        {getExceeding() && isConnected && !isBalanceLoading && (
+        {getExceeding() && isConnected && (
           <Alert variant="destructive">
             {activeAction === DelegateEnum.DELEGATE
-              ? `This amount exceeds your total balance of ${bgtBalance} BGT`
+              ? "This amount exceeds your total balance of 0 BGT"
               : "Insufficient BGT delegated"}
           </Alert>
         )}

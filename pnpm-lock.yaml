@@ -145,6 +145,9 @@ importers:
       '@bera/ui':
         specifier: 0.1.0
         version: link:../../packages/ui
+      '@bera/wagmi':
+        specifier: 0.1.0
+        version: link:../../packages/wagmi
       '@hookform/resolvers':
         specifier: ^3.2.0
         version: 3.3.4(react-hook-form@7.51.0)
@@ -251,6 +254,9 @@ importers:
       '@bera/ui':
         specifier: 0.1.0
         version: link:../../packages/ui
+      '@bera/wagmi':
+        specifier: 0.1.0
+        version: link:../../packages/wagmi
       '@sentry/nextjs':
         specifier: ^7.103.0
         version: 7.107.0(next@14.1.3)(react@18.2.0)
@@ -418,9 +424,6 @@ importers:
 
   apps/faucet:
     dependencies:
-      '@bera/berajs':
-        specifier: 0.1.0
-        version: link:../../packages/berajs
       '@bera/config':
         specifier: 0.1.0
         version: link:../../packages/config/env
@@ -433,6 +436,9 @@ importers:
       '@bera/ui':
         specifier: 0.1.0
         version: link:../../packages/ui
+      '@bera/wagmi':
+        specifier: 0.1.0
+        version: link:../../packages/wagmi
       '@rive-app/react-canvas':
         specifier: ^4.8.1
         version: 4.8.3(react@18.2.0)
@@ -527,6 +533,9 @@ importers:
       '@bera/ui':
         specifier: 0.1.0
         version: link:../../packages/ui
+      '@bera/wagmi':
+        specifier: 0.1.0
+        version: link:../../packages/wagmi
       '@rive-app/react-canvas':
         specifier: ^4.8.1
         version: 4.8.3(react@18.2.0)
@@ -627,6 +636,9 @@ importers:
       '@bera/ui':
         specifier: 0.1.0
         version: link:../../packages/ui
+      '@bera/wagmi':
+        specifier: 0.1.0
+        version: link:../../packages/wagmi
       '@sentry/nextjs':
         specifier: ^7.103.0
         version: 7.107.0(next@14.1.3)(react@18.2.0)
@@ -727,6 +739,9 @@ importers:
       '@bera/ui':
         specifier: 0.1.0
         version: link:../../packages/ui
+      '@bera/wagmi':
+        specifier: 0.1.0
+        version: link:../../packages/wagmi
       '@sentry/nextjs':
         specifier: ^7.103.0
         version: 7.107.0(next@14.1.3)(react@18.2.0)
@@ -821,6 +836,9 @@ importers:
       '@bera/ui':
         specifier: 0.1.0
         version: link:../../packages/ui
+      '@bera/wagmi':
+        specifier: 0.1.0
+        version: link:../../packages/wagmi
       '@sentry/nextjs':
         specifier: ^7.103.0
         version: 7.107.0(next@14.1.3)(react@18.2.0)
@@ -949,15 +967,9 @@ importers:
       '@bera/graphql':
         specifier: 0.1.0
         version: link:../graphql
-      '@dynamic-labs/ethereum':
-        specifier: ^2.0.0-alpha.18
-        version: 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/rpc-providers@2.0.0-alpha.18)(react-dom@18.2.0)(react@18.2.0)(viem@2.7.22)
       '@dynamic-labs/sdk-react-core':
         specifier: ^2.0.0-alpha.18
         version: 2.0.0-alpha.18(@types/react@18.2.66)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(viem@2.7.22)
-      '@dynamic-labs/wagmi-connector':
-        specifier: ^2.0.0-alpha.18
-        version: 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/rpc-providers@2.0.0-alpha.18)(@dynamic-labs/sdk-react-core@2.0.0-alpha.18)(@dynamic-labs/types@2.0.0-alpha.18)(@dynamic-labs/wallet-connector-core@2.0.0-alpha.18)(@wagmi/core@2.6.15)(eventemitter3@5.0.1)(react@18.2.0)(viem@2.7.22)(wagmi@2.5.7)
       '@tanstack/react-query':
         specifier: ^5.26.3
         version: 5.28.4(react@18.2.0)
@@ -967,9 +979,6 @@ importers:
       axios:
         specifier: ^1.6.8
         version: 1.6.8
-      bech32:
-        specifier: ^2.0.0
-        version: 2.0.0
       bignumber.js:
         specifier: ^9.1.2
         version: 9.1.2
@@ -982,12 +991,12 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      next-themes:
-        specifier: ^0.2.1
-        version: 0.2.1(next@14.1.3)(react-dom@18.2.0)(react@18.2.0)
       react-day-picker:
         specifier: ^8.7.1
         version: 8.10.0(date-fns@2.30.0)(react@18.2.0)
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
       sha3:
         specifier: ^2.1.4
         version: 2.1.4
@@ -1013,18 +1022,12 @@ importers:
       '@types/react':
         specifier: ^18.2.0
         version: 18.2.66
-      '@types/react-dom':
-        specifier: ^18.2.1
-        version: 18.2.22
       eslint:
         specifier: ^8.39.0
         version: 8.57.0
       react:
         specifier: 18.2.0
         version: 18.2.0
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(postcss@8.4.35)(typescript@5.4.2)
@@ -1361,6 +1364,48 @@ importers:
       typescript:
         specifier: ^5.0.4
         version: 5.4.2
+
+  packages/wagmi:
+    dependencies:
+      '@bera/berajs':
+        specifier: 0.1.0
+        version: link:../berajs
+      '@bera/config':
+        specifier: 0.1.0
+        version: link:../config/env
+      '@dynamic-labs/ethereum':
+        specifier: ^2.0.0-alpha.18
+        version: 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/rpc-providers@2.0.0-alpha.18)(react-dom@18.2.0)(react@18.2.0)(viem@2.7.22)
+      '@dynamic-labs/sdk-react-core':
+        specifier: ^2.0.0-alpha.18
+        version: 2.0.0-alpha.18(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(viem@2.7.22)
+      '@dynamic-labs/wagmi-connector':
+        specifier: ^2.0.0-alpha.18
+        version: 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/rpc-providers@2.0.0-alpha.18)(@dynamic-labs/sdk-react-core@2.0.0-alpha.18)(@dynamic-labs/types@2.0.0-alpha.18)(@dynamic-labs/wallet-connector-core@2.0.0-alpha.18)(@wagmi/core@2.6.15)(eventemitter3@5.0.1)(react@18.2.0)(viem@2.7.22)(wagmi@2.5.7)
+      '@tanstack/react-query':
+        specifier: ^5.26.3
+        version: 5.28.4(react@18.2.0)
+      '@wagmi/core':
+        specifier: ^2.6.15
+        version: 2.6.15(@types/react@18.2.66)(react@18.2.0)(typescript@5.4.2)(viem@2.7.22)(zod@3.22.4)
+      next-themes:
+        specifier: ^0.2.1
+        version: 0.2.1(next@14.1.3)(react-dom@18.2.0)(react@18.2.0)
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-day-picker:
+        specifier: ^8.7.1
+        version: 8.10.0(date-fns@2.30.0)(react@18.2.0)
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      viem:
+        specifier: ~2.7.22
+        version: 2.7.22(typescript@5.4.2)(zod@3.22.4)
+      wagmi:
+        specifier: ^2.5.7
+        version: 2.5.7(@tanstack/react-query@5.28.4)(@types/react@18.2.66)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(typescript@5.4.2)(viem@2.7.22)(zod@3.22.4)
 
 packages:
 
@@ -3198,6 +3243,62 @@ packages:
       - uWebSockets.js
       - utf-8-validate
 
+  /@dynamic-labs/sdk-react-core@2.0.0-alpha.18(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(viem@2.7.22):
+    resolution: {integrity: sha512-NPoUvVgbl9nvQM3J1kMhKLPAq3/S3ZBwYOVCxZ+8wNZmgL0KCJKjVHSo40viMFIrOeHXbOhRwzb/0eXEJWWpUg==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      viem: ^2.7.6
+    dependencies:
+      '@dynamic-labs/ethereum': 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/rpc-providers@2.0.0-alpha.18)(react-dom@18.2.0)(react@18.2.0)(viem@2.7.22)
+      '@dynamic-labs/iconic': 2.0.0-alpha.18(react-dom@18.2.0)(react@18.2.0)
+      '@dynamic-labs/logger': 2.0.0-alpha.18
+      '@dynamic-labs/multi-wallet': 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(eventemitter3@5.0.1)(react-dom@18.2.0)(react@18.2.0)(viem@2.7.22)
+      '@dynamic-labs/rpc-provider-ethereum': 2.0.0-alpha.18(viem@2.7.22)
+      '@dynamic-labs/rpc-provider-solana': 2.0.0-alpha.18(viem@2.7.22)
+      '@dynamic-labs/rpc-providers': 2.0.0-alpha.18(viem@2.7.22)
+      '@dynamic-labs/sdk-api': 0.0.389
+      '@dynamic-labs/types': 2.0.0-alpha.18(viem@2.7.22)
+      '@dynamic-labs/utils': 2.0.0-alpha.18(viem@2.7.22)
+      '@dynamic-labs/viem-utils': 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/types@2.0.0-alpha.18)(@dynamic-labs/utils@2.0.0-alpha.18)(@dynamic-labs/wallet-book@2.0.0-alpha.18)(@dynamic-labs/wallet-connector-core@2.0.0-alpha.18)(viem@2.7.22)
+      '@dynamic-labs/wallet-book': 2.0.0-alpha.18(react-dom@18.2.0)(react@18.2.0)(viem@2.7.22)
+      '@dynamic-labs/wallet-connector-core': 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/rpc-providers@2.0.0-alpha.18)(@dynamic-labs/types@2.0.0-alpha.18)(@dynamic-labs/utils@2.0.0-alpha.18)(@dynamic-labs/wallet-book@2.0.0-alpha.18)(eventemitter3@5.0.1)
+      '@hcaptcha/react-hcaptcha': 1.4.4(react-dom@18.2.0)(react@18.2.0)
+      country-list: 2.3.0
+      eventemitter3: 5.0.1
+      formik: 2.2.9(react@18.2.0)
+      i18next: 23.4.6
+      qrcode: 1.5.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-focus-lock: 2.9.2(@types/react@18.2.66)(react@18.2.0)
+      react-i18next: 13.5.0(i18next@23.4.6)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
+      react-international-phone: 4.2.5(react@18.2.0)
+      viem: 2.7.22(typescript@5.4.2)(zod@3.22.4)
+      yup: 0.32.11
+    transitivePeerDependencies:
+      - '@azure/app-configuration'
+      - '@azure/cosmos'
+      - '@azure/data-tables'
+      - '@azure/identity'
+      - '@azure/keyvault-secrets'
+      - '@azure/storage-blob'
+      - '@capacitor/preferences'
+      - '@netlify/blobs'
+      - '@planetscale/database'
+      - '@react-native-async-storage/async-storage'
+      - '@types/react'
+      - '@upstash/redis'
+      - '@vercel/kv'
+      - bufferutil
+      - encoding
+      - ioredis
+      - react-native
+      - supports-color
+      - uWebSockets.js
+      - utf-8-validate
+    dev: false
+
   /@dynamic-labs/solana-utils@2.0.0-alpha.18(@dynamic-labs/types@2.0.0-alpha.18)(@dynamic-labs/utils@2.0.0-alpha.18)(@solana/web3.js@1.70.1):
     resolution: {integrity: sha512-VWjUeuhd19Q0lE54hLuJzQGXUjou1SJ4he0LDxlNorhDWoE3Qt+SUUeqKA6TUGQNQaMEP8rS409BFBHpYGsN/g==}
     peerDependencies:
@@ -3292,7 +3393,7 @@ packages:
     dependencies:
       '@dynamic-labs/logger': 2.0.0-alpha.18
       '@dynamic-labs/rpc-providers': 2.0.0-alpha.18(viem@2.7.22)
-      '@dynamic-labs/sdk-react-core': 2.0.0-alpha.18(@types/react@18.2.66)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(viem@2.7.22)
+      '@dynamic-labs/sdk-react-core': 2.0.0-alpha.18(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)(viem@2.7.22)
       '@dynamic-labs/types': 2.0.0-alpha.18(viem@2.7.22)
       '@dynamic-labs/wallet-connector-core': 2.0.0-alpha.18(@dynamic-labs/logger@2.0.0-alpha.18)(@dynamic-labs/rpc-providers@2.0.0-alpha.18)(@dynamic-labs/types@2.0.0-alpha.18)(@dynamic-labs/utils@2.0.0-alpha.18)(@dynamic-labs/wallet-book@2.0.0-alpha.18)(eventemitter3@5.0.1)
       '@wagmi/core': 2.6.15(@types/react@18.2.66)(react@18.2.0)(typescript@5.4.2)(viem@2.7.22)(zod@3.22.4)
@@ -8121,7 +8222,7 @@ packages:
     resolution: {integrity: sha512-N1ZhksgwD3OBlwTv3R6KFEcPojl/W4ElJOeCZdi+vuI5QmTFwLq3OFf2zd2ROpKvxFdgZ6hUpb0dx9bVNEwYCA==}
     dependencies:
       '@noble/curves': 1.2.0
-      '@noble/hashes': 1.3.2
+      '@noble/hashes': 1.3.3
       '@scure/base': 1.1.5
 
   /@scure/bip32@1.3.3:
@@ -8134,7 +8235,7 @@ packages:
   /@scure/bip39@1.2.1:
     resolution: {integrity: sha512-Z3/Fsz1yr904dduJD0NpiyRHhRYHdcnyh73FZWiV+/qhWi83wNJ3NWolYqCEN+ZWsUz2TWwajJggcRE9r1zUYg==}
     dependencies:
-      '@noble/hashes': 1.3.2
+      '@noble/hashes': 1.3.3
       '@scure/base': 1.1.5
 
   /@scure/bip39@1.2.2:
@@ -11476,10 +11577,6 @@ packages:
 
   /bech32@1.1.4:
     resolution: {integrity: sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==}
-    dev: false
-
-  /bech32@2.0.0:
-    resolution: {integrity: sha512-LcknSilhIGatDAsY1ak2I8VtGaHNhgMSYVxFrGLXv+xLHytaKZKcaUJJUE7qmBr7h33o5YQwP55pMI0xmkpJwg==}
     dev: false
 
   /better-opn@3.0.2:
