@@ -1,8 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Image from "next/image";
-
-// import Link from "next/link";
+import { cloudinaryUrl } from "@bera/config";
 
 export default function AmbassadorProgram() {
   return (
@@ -14,18 +13,19 @@ export default function AmbassadorProgram() {
           content="Learn more about the ambassador program and how you can contribute to the Berachain ecosystem."
         />
       </Head>
-      <div className="flex max-w-[1440px] flex-wrap items-center justify-center p-4">
+      <div className="flex max-w-[1440px] flex-wrap items-center justify-center sm:p-4">
         <div className="mb-6 text-center">
-          <div className="flex-start flex items-center justify-between px-8">
-            <div className="mt-32">
-              <h1 className="mb-4 text-left text-5xl font-bold text-foreground">
+          <div className="flex-start flex items-center justify-between px-8 sm:items-end">
+            <div className="pb-8">
+              <h1 className="mb-4 text-center text-5xl font-bold text-foreground sm:text-left">
                 Ambassador <br /> Program Overview
               </h1>
-              <p className="mb-6 px-1 text-left text-xl text-muted-foreground">
-                Nurturing Community Growth with the Bera Legion
+              <p className="mb-6 px-1 text-center text-xl text-muted-foreground sm:text-left">
+                Nurturing Community Growth <br />
+                with the Bera Legion
               </p>
             </div>
-            <div>
+            <div className="hidden max-w-[420px] sm:block">
               <Image
                 src="/knowmoarbear.png"
                 alt="Bera Legion"
@@ -35,7 +35,7 @@ export default function AmbassadorProgram() {
               />
             </div>
           </div>
-          <p className="mb-4 rounded-md bg-muted px-6 py-4 text-lg text-foreground">
+          <p className="mb-2 rounded-md bg-muted px-6 py-4 text-left text-lg text-foreground">
             The Bera Legion is more than just a program; it&apos;s a commitment
             to fostering a vibrant and engaged community within the Berachain
             ecosystem. With a tiered system designed to empower individuals who
@@ -44,15 +44,15 @@ export default function AmbassadorProgram() {
             Berachain ecosystem.
           </p>
         </div>
-        <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg shadow-lg">
-          <div className="flex w-full flex-col items-stretch justify-center gap-8 align-middle sm:flex-row">
+        <div className="mb-6 flex flex-wrap items-start justify-center gap-8 rounded-lg bg-background align-middle text-lg">
+          <div className="flex w-full flex-col items-stretch justify-center gap-6 align-middle md:flex-row">
             <section
-              className="mb-6 flex-grow rounded-lg bg-muted p-4"
+              className="mb-2 flex-grow rounded-lg bg-muted p-4"
               style={{ flexBasis: "0" }}
             >
-              <div className="flex flex-col rounded-md">
-                <div className="flex-col ">
-                  <div className="flex-start flex-col gap-8 p-6">
+              <div className="flex h-full flex-col rounded-md">
+                <div className="flex h-full flex-col justify-between gap-4 p-4">
+                  <div>
                     <h1 className="mb-2 text-3xl font-semibold text-foreground">
                       1. General Expectations
                     </h1>
@@ -66,8 +66,11 @@ export default function AmbassadorProgram() {
                       contribute to regular calls with other ambassadors and the
                       Berachain team.
                     </p>
+                  </div>
+
+                  <div className="pt-8 align-bottom">
                     <Image
-                      src="/SmokeyBongless.png"
+                      src={`${cloudinaryUrl}/bears/SmokeyBongless_ebu7vl`}
                       alt="Bera Legion"
                       width={120}
                       height={80}
@@ -78,13 +81,13 @@ export default function AmbassadorProgram() {
               </div>
             </section>
             <section
-              className="mb-6 flex-grow rounded-lg bg-muted"
+              className="mb-2 flex-grow rounded-lg bg-muted"
               style={{ flexBasis: "0" }}
             >
               <div className="flex rounded-md">
-                <div className="flex-col gap-8 p-6">
+                <div className="flex-col p-6">
                   <Image
-                    src="/beralegion.png"
+                    src={`${cloudinaryUrl}/ambassador/ajgmhr9iesd8ypu9r74g`}
                     alt="Bera Legion"
                     width={320}
                     height={260}
@@ -122,19 +125,19 @@ export default function AmbassadorProgram() {
               </div>
             </section>
           </div>
-          <div className="mb-6 flex flex-wrap items-stretch justify-center gap-8 rounded-lg bg-background shadow-lg text-lg">
+          <div className="mb-6 flex flex-wrap items-stretch justify-center gap-8 rounded-lg bg-background text-lg">
             <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-1 lg:grid-cols-3">
-              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
+              <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/alien.png"
+                    src={`${cloudinaryUrl}/ambassador/mbmxscjsdetsnztlau9n`}
                     alt="Bera Legion"
                     width={640}
                     height={360}
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
+                    <h2 className="mb-2 mt-8 text-2xl font-semibold text-foreground">
                       3. Benefits of Becoming an Ambassador
                     </h2>
                     <p className="text-muted-foreground">
@@ -146,17 +149,17 @@ export default function AmbassadorProgram() {
                   </div>
                 </div>
               </section>
-              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
+              <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col justify-between rounded-md">
                   <Image
-                    src="/wannabeBond.png"
+                    src={`${cloudinaryUrl}/ambassador/dzidviq6hw4sz9cgzrdb`}
                     alt="Bera Legion"
                     width={640}
                     height={360}
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
+                    <h2 className="mb-2 mt-8 text-2xl font-semibold text-foreground">
                       4. Program Objectives
                     </h2>
                     <p className="text-muted-foreground">
@@ -169,17 +172,17 @@ export default function AmbassadorProgram() {
                   </div>
                 </div>
               </section>
-              <section className="flex flex-col rounded-lg bg-muted p-6 h-full">
+              <section className="flex h-full flex-col rounded-lg bg-muted p-6">
                 <div className="flex flex-col rounded-md">
                   <Image
-                    src="/loltemplars.png"
+                    src={`${cloudinaryUrl}/ambassador/slcfgw2fazn5asmhrek7`}
                     alt="Bera Legion"
                     width={640}
                     height={360}
                     layout="responsive"
                   />
                   <div>
-                    <h2 className="mb-2 text-2xl font-semibold text-foreground mt-8">
+                    <h2 className="mb-2 mt-8 text-2xl font-semibold text-foreground">
                       5. Onboarding Process
                     </h2>
                     <p className="text-muted-foreground">
