@@ -50,7 +50,7 @@ interface ITokenSummary {
   quoteAmount: string;
   isLoading: boolean;
 }
-export const TokenSummary = ({
+const TokenSummary = ({
   title,
   baseToken,
   quoteToken,

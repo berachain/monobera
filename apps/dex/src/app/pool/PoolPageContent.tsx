@@ -147,7 +147,7 @@ const TokenView = ({
   );
 };
 
-export const EventTable = ({
+const EventTable = ({
   pool,
   events,
   isLoading,

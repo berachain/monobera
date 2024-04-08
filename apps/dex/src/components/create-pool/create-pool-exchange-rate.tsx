@@ -14,8 +14,6 @@ type Props = {
   initialPrice: string;
 };
 
-export const MIN_PRICE = 0.00000001;
-
 export default function CreatePoolExchangeRate({
   baseToken,
   quoteToken,

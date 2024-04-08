@@ -2,9 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
-import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
-import { isBeratoken } from "~/utils/isBeraToken";
+
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { isBeratoken } from "~/utils/isBeraToken";
+import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
 
 export interface ITokenWeight {
   weight: number;
@@ -13,7 +14,7 @@ export interface ITokenWeight {
   initialLiquidity: string;
 }
 
-export class InvalidInputError extends Error {
+class InvalidInputError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "InvalidInputError";

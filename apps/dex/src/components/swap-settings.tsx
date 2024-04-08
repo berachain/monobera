@@ -14,7 +14,7 @@ import {
   LOCAL_STORAGE_KEYS,
 } from "~/utils/constants";
 
-export enum SELECTION {
+enum SELECTION {
   AUTO = "auto",
   CUSTOM = "custom",
   DEGEN = "degen",

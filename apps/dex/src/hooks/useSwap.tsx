@@ -32,7 +32,7 @@ import { useGasPrice } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
 
-export enum SwapKind {
+enum SwapKind {
   GIVEN_IN = 0,
   GIVEN_OUT = 1,
 }
