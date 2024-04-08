@@ -30,15 +30,15 @@ interface Call {
 export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, isConnected, error } = useBeraJs();
+  const { account, isConnected } = useBeraJs();
   const { tokenList } = useTokens();
   const QUERY_KEY = [account, isConnected, tokenList, "assetWalletBalances"];
   useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (!account || error || !tokenList) return undefined;
-      if (account && !error && tokenList) {
+      if (!account || !tokenList) return undefined;
+      if (account && tokenList) {
         const fullTokenList = [
           ...tokenList,
           ...(externalTokenList ?? []),

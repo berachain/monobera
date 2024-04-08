@@ -5,7 +5,7 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
 import { ApolloProvider } from "@apollo/client";
-import { BeraConfig } from "@bera/berajs";
+import { BeraWagmi } from "@bera/wagmi";
 import { rpcBannerEnabled } from "@bera/config";
 import { honeyClient } from "@bera/graphql";
 import {
@@ -66,7 +66,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           {" "}
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
           <ApolloProvider client={honeyClient}>
-            <BeraConfig>
+            <BeraWagmi>
               <Header
                 isHoney
                 navItems={navItems}
@@ -84,7 +84,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Footer />
               <TailwindIndicator />
               <Analytics />
-            </BeraConfig>
+            </BeraWagmi>
           </ApolloProvider>
         </body>
       </SWRDevTools>

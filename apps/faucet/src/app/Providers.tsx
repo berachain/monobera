@@ -1,15 +1,16 @@
 "use client";
 
 import React, { type PropsWithChildren } from "react";
-import { BeraConfig } from "@bera/berajs";
+import { BeraWagmi } from "@bera/wagmi";
+
 import { ThemeProvider } from "next-themes";
 
 export default function Providers({ children }: PropsWithChildren<any>) {
   return (
-    <BeraConfig>
-      <ThemeProvider attribute="class" forcedTheme="light">
+    <BeraWagmi>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
         {children}
       </ThemeProvider>
-    </BeraConfig>
+    </BeraWagmi>
   );
 }
