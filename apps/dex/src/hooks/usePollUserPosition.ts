@@ -37,7 +37,7 @@ interface AmbientPosition {
   user: string;
 }
 
-export interface IUserAmbientPositon {
+interface IUserAmbientPositon {
   userPosition: IUserPosition | undefined;
 }
 
