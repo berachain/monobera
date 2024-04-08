@@ -5,20 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { cloudinaryUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
-import { useTheme } from "next-themes";
 
 export default function SignUp() {
-  const { theme, systemTheme } = useTheme();
-  const t = !theme || theme === "system" ? systemTheme || "dark" : theme;
-  const bgGradient =
-    t === "dark"
-      ? "bg-gradient-to-t from-[#371605] to-[#4E2C1A]"
-      : "bg-gradient-to-t from-[#FFB571] to-[#FF7A00]";
-
   return (
     <>
-      <div className="items-center justify-center">
-        <div className="flex items-center justify-between pt-8">
+      <div className="container items-center justify-center">
+        <div className="flex items-center justify-between sm:px-8">
           <div className="hidden sm:block">
             <Image
               className="z-10 max-[600px]:mx-auto"
@@ -36,7 +28,7 @@ export default function SignUp() {
               </span>
             </h1>
             <div className="flex flex-col items-center justify-center">
-              <p className="font-regular w-full pb-8 pr-6 text-center text-xl leading-tight text-white md:leading-normal">
+              <p className="font-regular w-full pb-8 pr-6 text-center text-xl leading-tight text-muted-foreground md:leading-normal">
                 Experience the collaboration of numerous creators. Register now
                 and become a part of a community comprising over 10,000 local
                 and international creators.
