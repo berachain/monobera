@@ -24,7 +24,6 @@ export { PreviewToken, TokenList } from "./preview-token-list";
 export { InfoBoxList, InfoBoxListItem } from "./info-box";
 export { TooltipCustom } from "./tooltip-custom";
 export { Dropdown } from "./dropdown";
-export { HoneyBanner } from "./honey-banner";
 export { LaunchBanner, RPCBanner, CustomizedBanner } from "./launch-banner";
 export { RewardBanner } from "./reward-banner";
 export { RT, type Columns } from "./react-table";
