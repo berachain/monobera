@@ -22,7 +22,7 @@ import {
   type IUserPool,
 } from "~/hooks/usePollUserDeposited";
 
-export const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
+const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   const { useIsPoolDeposited } = usePollUserDeposited();
   const isDeposited = useIsPoolDeposited(pool);
   return (
