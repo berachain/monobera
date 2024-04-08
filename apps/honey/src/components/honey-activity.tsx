@@ -1,10 +1,10 @@
 import React from "react";
 import {
   truncateHash,
-  useBeraConfig,
   useRecentTransactions,
   type NewTransaction,
 } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 
 function formatTimestamp(timestamp: number): string {
   const date = new Date(timestamp);
@@ -23,7 +23,6 @@ function formatTimestamp(timestamp: number): string {
 
 export function History() {
   const transactions = useRecentTransactions();
-  const { networkConfig } = useBeraConfig();
   return (
     <div className="grid gap-4">
       <h3 className="text-xl font-medium">History</h3>
@@ -31,7 +30,7 @@ export function History() {
         <a
           key={txn.hash}
           target="_blank"
-          href={`http://${networkConfig.chain.blockExplorers?.default.url}/tx/${txn.hash}`}
+          href={`http://${blockExplorerUrl}/tx/${txn.hash}`}
           rel="noreferrer"
         >
           <div

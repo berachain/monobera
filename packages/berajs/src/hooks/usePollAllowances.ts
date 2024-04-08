@@ -37,13 +37,13 @@ interface IUsePollAllowances {
 export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, error } = useBeraJs();
+  const { account } = useBeraJs();
   const QUERY_KEY = [account, tokens, contract, "allowances"];
   useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (account && !error) {
+      if (account) {
         const call: Call[] = tokens.map((item: Token) => ({
           address: item.address as `0x${string}`,
           abi: erc20Abi,

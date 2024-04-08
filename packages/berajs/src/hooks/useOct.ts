@@ -6,13 +6,13 @@ import { useLocalStorage } from "usehooks-ts";
 import { createWalletClient, http, type Address } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { useSignMessage } from "wagmi";
+import { useChains } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
 import {
   ActionEnum,
   initialState,
   reducer,
-  useBeraConfig,
   useBeraJs,
   usePollBeraBalance,
   usePollTransactionCount,
@@ -53,7 +53,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
 
   const { account } = useBeraJs();
   const { signMessageAsync } = useSignMessage();
-  const { networkConfig } = useBeraConfig();
+  const chains = useChains();
   const generateKey = useCallback(async () => {
     dispatch({ type: ActionEnum.LOADING });
     onLoading?.();
@@ -91,7 +91,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
       const account = privateKeyToAccount(decodedString);
       const client = createWalletClient({
         account,
-        chain: networkConfig.chain,
+        chain: chains[0],
         transport: http(),
       });
       setOctAccount(client);

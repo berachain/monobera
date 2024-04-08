@@ -11,7 +11,7 @@ import { useBeraJs } from "~/contexts";
 export const usePollUnbondingDelegations = (
   validatorAddress: `0x${string}`,
 ) => {
-  const { account: address, error } = useBeraJs();
+  const { account: address } = useBeraJs();
   const publicClient = usePublicClient();
   const method = "getUnbondingDelegation";
   const QUERY_KEY = [address, validatorAddress, method];
@@ -19,7 +19,7 @@ export const usePollUnbondingDelegations = (
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (address && !error) {
+      if (address) {
         const result: any = await publicClient.readContract({
           address: stakingAddress,
           abi: STAKING_PRECOMPILE_ABI,
