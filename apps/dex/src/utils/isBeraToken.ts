@@ -20,10 +20,3 @@ export const isBera = (token: Token | undefined) => {
 
   return false;
 };
-
-export const isWBera = (token: Token | undefined) => {
-  if (token === undefined) return false;
-  if (token.address === beraTokenAddress) return true;
-
-  return false;
-};

@@ -7,7 +7,7 @@ import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-export function DataCard({
+function DataCard({
   icon,
   title,
   value,

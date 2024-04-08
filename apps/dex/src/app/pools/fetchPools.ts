@@ -32,10 +32,6 @@ export interface PoolV2 {
   shareAddress: string;
 }
 
-export const getPoolId = (base: Address, quote: Address) => {
-  return base.concat("-").concat(quote);
-};
-
 export const getPoolUrl = (pool: PoolV2, isMyPool = false) => {
   return `/pool/${pool?.shareAddress}${isMyPool ? "?back=my-pools" : ""}`;
 };
@@ -203,32 +199,6 @@ export const formatPoolData = (result: any): PoolV2 => {
   };
 };
 
-export const fetchPools = async (
-  page: number,
-  limit: number,
-  sort: string,
-  order: string,
-  keyword = "",
-): Promise<PoolV2[]> => {
-  try {
-    const result = await fetch(
-      `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
-        16,
-      )}&sortBy=${sort}.${order}&page=${page}&size=${limit}&keyword=${keyword}`,
-    );
-
-    const response = await result.json();
-    const formattedPools: PoolV2[] = response.data.pools.map((result: any) => {
-      return formatPoolData(result);
-    });
-
-    return formattedPools;
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-};
-
 export const fetchPoolByAddress = async (
   shareAddress?: string,
 ): Promise<PoolV2 | null> => {
@@ -245,32 +215,6 @@ export const fetchPoolByAddress = async (
   } catch (e) {
     console.log(e);
     return null;
-  }
-};
-
-export const fetchPoolsWithKeyword = async (
-  page: number,
-  limit: number,
-  sort: string,
-  order: string,
-  keyword: string,
-): Promise<PoolV2[]> => {
-  try {
-    const result = await fetch(
-      `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
-        16,
-      )}&sortBy=${sort}.${order}&page=${page}&size=${limit}&keyword=${keyword}`,
-    );
-
-    const response = await result.json();
-    const formattedPools: PoolV2[] = response.data.pools.map((result: any) => {
-      return formatPoolData(result);
-    });
-
-    return formattedPools;
-  } catch (e) {
-    console.log(e);
-    return [];
   }
 };
 
