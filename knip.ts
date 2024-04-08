@@ -7,6 +7,7 @@ const config: KnipConfig = {
     "apps/perp/public/static/**",
     "**/tsup.config.ts",
   ],
+  project: ["apps/dex/**", "!apps/lend/**"],
 };
 
 export default config;
