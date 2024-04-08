@@ -31,6 +31,8 @@ import {
 import { useGasPrice } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
+import { beraJsConfig } from "@bera/wagmi";
+import { POLLING } from "~/utils/constants";
 
 export enum SwapKind {
   GIVEN_IN = 0,
@@ -138,11 +140,17 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     error: getSwapError,
     isLoading: isSwapLoading,
   } = usePollCrocSwap({
-    tokenIn: selectedFrom?.address as Address,
-    tokenOut: selectedTo?.address as Address,
-    tokenInDecimals: selectedFrom?.decimals ?? 18,
-    tokenOutDecimals: selectedTo?.decimals ?? 18,
-    amount: swapAmount,
+    args: {
+      tokenIn: selectedFrom?.address as Address,
+      tokenOut: selectedTo?.address as Address,
+      tokenInDecimals: selectedFrom?.decimals ?? 18,
+      tokenOutDecimals: selectedTo?.decimals ?? 18,
+      amount: swapAmount,
+    },
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+    config: beraJsConfig,
     isTyping: isTyping,
   });
 
