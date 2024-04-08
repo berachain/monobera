@@ -8,7 +8,6 @@ import {
   gasTokenName,
   gasTokenSymbol,
   jsonRpcUrl,
-  multicallAddress,
   publicJsonRpcUrl,
 } from "@bera/config";
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";

@@ -1,7 +1,7 @@
 import { multicallAddress, nativeTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatEther, formatUnits } from "viem";
+import { erc20Abi, formatEther, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { MULTICALL3_ABI } from "~/config";
@@ -72,7 +72,7 @@ export const usePollBalance = ({
               result[0]?.result as bigint,
               (result[3]?.result as number) ?? 18,
             ),
-            address: address,
+            address: getAddress(address),
             decimals: result[3]?.result as number,
             symbol: result[1]?.result as string,
             name: result[2]?.result as string,

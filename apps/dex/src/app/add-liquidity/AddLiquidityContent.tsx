@@ -1,25 +1,15 @@
 "use client";
-
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  encodeWarmPath,
-  transformLimits,
-  type PriceRange,
-} from "@bera/beracrocswap";
 import {
   CROCSWAP_DEX,
   TransactionActionType,
   usePollAssetWalletBalance,
   useTokenHoneyPrice,
+  getAddLiquidityPayload,
   type Token,
 } from "@bera/berajs";
-import {
-  beraTokenAddress,
-  cloudinaryUrl,
-  crocDexAddress,
-  nativeTokenAddress,
-} from "@bera/config";
+import { beraTokenAddress, cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -40,11 +30,8 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, parseUnits } from "viem";
-
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { SettingsPopover } from "~/components/settings-popover";
-import { useCrocPoolNativeBera } from "~/hooks/useCrocPoolNativeBera";
 import {
   getBaseCost,
   getPoolUrl,
@@ -112,6 +99,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   }, [poolPrice]);
 
   const PRESICION = 18;
+
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
     const parsedBaseCost = parseUnits(baseCost.toString(), PRESICION);
@@ -133,23 +121,16 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     updateTokenAmount(0, baseAmount === 0n ? "" : formatUnits(baseAmount, 18));
   };
 
-  const baseTokenAddress = isBeratoken(tokenInputs[0])
+  const bToken = isBeratoken(tokenInputs[0])
     ? isNativeBera
-      ? nativeTokenAddress
-      : beraTokenAddress
-    : tokenInputs[0]?.address;
-  const quoteTokenAddress = isBeratoken(tokenInputs[1])
+      ? beraToken
+      : wBeraToken
+    : tokenInputs[0];
+  const qToken = isBeratoken(tokenInputs[1])
     ? isNativeBera
-      ? nativeTokenAddress
-      : beraTokenAddress
-    : tokenInputs[1]?.address;
-
-  const crocPool = useCrocPoolNativeBera(
-    baseTokenAddress,
-    tokenInputs[0]?.decimals,
-    quoteTokenAddress,
-    tokenInputs[1]?.decimals,
-  );
+      ? beraToken
+      : wBeraToken
+    : tokenInputs[1];
 
   const slippage = useSlippage();
   const baseTokenInitialLiquidity = tokenInputs[0]?.amount;
@@ -193,103 +174,34 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     return minAmountOut;
   }, [quoteTokenInitialLiquidity, slippage]);
 
-  const getPathId = () => {
-    if (baseTokenAddress === nativeTokenAddress) {
-      return 31;
-    }
-    if (quoteTokenAddress === nativeTokenAddress) {
-      return 32;
-    }
-    if (isBaseInput) {
-      return 31;
-    }
-
-    return 32;
-  };
-
-  const getAmount = () => {
-    if (baseTokenAddress === nativeTokenAddress) {
-      return bnBaseAmount;
-    }
-    if (quoteTokenAddress === nativeTokenAddress) {
-      return bnQuoteAmount;
-    }
-    if (isBaseInput) {
-      return bnBaseAmount;
-    }
-    return bnQuoteAmount;
-  };
   const handleAddLiquidity = useCallback(async () => {
     try {
-      if (!crocPool) {
-        return;
-      }
-      const priceLimits = {
-        min: getSafeNumber(poolPrice) * (1 - (slippage ?? 1) / 100),
-        max: getSafeNumber(poolPrice) * (1 + (slippage ?? 1) / 100),
-      };
-      const limits: PriceRange = [priceLimits.min, priceLimits.max];
-
-      const transformedLimits = transformLimits(
-        limits,
-        baseToken.decimals,
-        quoteToken.decimals,
-      );
-
-      let totalValue = 0n;
-
-      if (baseTokenAddress === nativeTokenAddress) {
-        totalValue = bnBaseAmount;
-      }
-
-      if (quoteTokenAddress === nativeTokenAddress) {
-        totalValue = bnQuoteAmount;
-      }
-
-      const pathId = getPathId();
-      const bnAmount = getAmount();
-      console.log(
-        baseTokenAddress as string,
-        quoteTokenAddress as string,
-        pathId,
-        0,
-        0,
-        bnAmount,
-        transformedLimits[0],
-        transformedLimits[1],
-        0,
-        pool.poolIdx,
-      );
-
-      const mintCalldata = await encodeWarmPath(
-        baseTokenAddress as string,
-        quoteTokenAddress as string,
-        pathId,
-        0,
-        0,
-        bnAmount,
-        transformedLimits[0],
-        transformedLimits[1],
-        0,
-        pool.poolIdx,
-      );
-      const payload = [2, mintCalldata];
-
+      const addLiqPayload = await getAddLiquidityPayload({
+        args: {
+          slippage: slippage ?? 0,
+          poolPrice,
+          baseToken: bToken as Token,
+          quoteToken: qToken as Token,
+          isAmountBaseDenominated: isBaseInput,
+          baseAmount: bnBaseAmount,
+          quoteAmount: bnQuoteAmount,
+          poolIdx: pool.poolIdx,
+        },
+      });
       write({
         address: crocDexAddress,
         abi: CROCSWAP_DEX,
         functionName: "userCmd",
-        params: payload,
-        value: totalValue === 0n ? undefined : totalValue,
+        params: addLiqPayload?.payload ?? [],
+        value: addLiqPayload?.value === 0n ? undefined : addLiqPayload?.value,
       });
     } catch (error) {
       console.error("Error creating pool:", error);
     }
   }, [
-    crocPool,
-    baseToken,
+    bToken,
     isBaseInput,
-    quoteToken,
+    qToken,
     poolPrice,
     bnBaseAmount,
     bnQuoteAmount,

@@ -22,3 +22,8 @@ export interface DefaultHookTypes {
   config: BeraConfig;
   opts?: SWRConfiguration;
 }
+
+export interface PayloadReturnType {
+  payload: any[];
+  value?: bigint;
+}

@@ -1,4 +1,4 @@
-import { BeraConfig } from "@bera/berajs/dist/types/global";
+import { BeraConfig } from "@bera/berajs";
 import {
   beraTokenAddress,
   blockExplorerName,
