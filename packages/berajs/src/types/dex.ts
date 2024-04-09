@@ -19,3 +19,13 @@ export interface AddLiquidityRequest {
   quoteAmount: bigint;
   poolIdx: number;
 }
+
+export interface WithdrawLiquidityRequest {
+  slippage: number;
+  poolPrice: number;
+  baseToken: Token;
+  quoteToken: Token;
+  poolIdx: number;
+  percentRemoval: number;
+  seeds: string;
+}

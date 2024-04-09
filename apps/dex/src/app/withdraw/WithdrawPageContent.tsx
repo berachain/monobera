@@ -4,10 +4,10 @@
 
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { type PriceRange } from "@bera/beracrocswap";
 import {
   CROCSWAP_DEX,
   TransactionActionType,
+  getWithdrawLiquidityPayload,
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
@@ -29,14 +29,11 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Slider } from "@bera/ui/slider";
-import { BigNumber } from "ethers";
-
-import { getSafeNumber } from "~/utils/getSafeNumber";
 import { SettingsPopover } from "~/components/settings-popover";
-import { useCrocPool } from "~/hooks/useCrocPool";
 import { usePollUserPosition } from "~/hooks/usePollUserPosition";
 import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
+import { usePublicClient } from "wagmi";
 
 interface IWithdrawLiquidityContent {
   pool: PoolV2;
@@ -147,15 +144,7 @@ export default function WithdrawLiquidityContent({
     baseAmountWithdrawn,
     quoteAmountWithdrawn,
   ]);
-  const liquidityToBurn = useMemo(
-    () =>
-      BigNumber.from(userPositionBreakdown?.seeds.toString() ?? "0")
-        ?.mul(amount)
-        .div(100),
-    [userPositionBreakdown, amount],
-  );
 
-  const crocPool = useCrocPool(pool);
   const { write, ModalPortal } = useTxn({
     message: `Withdraw liquidity from ${pool?.poolName}`,
     onSuccess: () => {
@@ -164,43 +153,42 @@ export default function WithdrawLiquidityContent({
     },
     actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
   });
+
+  const client = usePublicClient();
   const handleWithdrawLiquidity = useCallback(async () => {
     try {
-      if (!liquidityToBurn) {
-        return;
-      }
-      const priceLimits = {
-        min: getSafeNumber(poolPrice) * (1 - (slippage ?? 1) / 100),
-        max: getSafeNumber(poolPrice) * (1 + (slippage ?? 1) / 100),
-      };
-      const limits: PriceRange = [priceLimits.min, priceLimits.max];
-
-      let calldata = "";
-
-      // if (amount === 100) {
-      //   const response = await crocPool?.burnAmbientAll(pool.poolIdx, limits);
-      //   calldata = response?.calldata ?? "";
-      // } else {
-      const response = await crocPool?.burnAmbientLiq(
-        pool.poolIdx,
-        liquidityToBurn,
-        limits,
-      );
-      calldata = response?.calldata ?? "";
-      // }
-
-      const payload = [2, calldata];
+      const withdrawLiquidityRequest = await getWithdrawLiquidityPayload({
+        args: {
+          slippage: slippage ?? 0,
+          poolPrice,
+          baseToken,
+          quoteToken,
+          poolIdx: pool.poolIdx,
+          percentRemoval: amount,
+          seeds: userPositionBreakdown?.seeds.toString() ?? "0",
+        },
+        publicClient: client,
+      });
 
       write({
         address: crocDexAddress,
         abi: CROCSWAP_DEX,
         functionName: "userCmd",
-        params: payload,
+        params: withdrawLiquidityRequest?.payload ?? [],
       });
     } catch (error) {
       console.error("Error creating pool:", error);
     }
-  }, [liquidityToBurn, amount, crocPool, write]);
+  }, [
+    amount,
+    write,
+    client,
+    userPositionBreakdown,
+    slippage,
+    poolPrice,
+    baseToken,
+    quoteToken,
+  ]);
 
   const notDeposited =
     userPositionBreakdown === undefined ||
