@@ -14,7 +14,6 @@ import {
   CROCSWAP_DEX,
   TransactionActionType,
   formatNumber,
-  useCrocEnv,
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
@@ -114,8 +113,6 @@ export function CreatePoolPreview({
     actionType: TransactionActionType.CREATE_POOL,
   });
 
-  const crocenv = useCrocEnv();
-
   const slippage = useSlippage();
 
   const handleCreatePool = useCallback(async () => {
@@ -188,15 +185,7 @@ export function CreatePoolPreview({
     } catch (error) {
       console.error("Error creating pool:", error);
     }
-  }, [
-    crocenv,
-    baseToken,
-    quoteToken,
-    initialPrice,
-    isBaseTokenInput,
-    slippage,
-    write,
-  ]);
+  }, [baseToken, quoteToken, initialPrice, isBaseTokenInput, slippage, write]);
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
