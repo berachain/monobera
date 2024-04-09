@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { useLeaderboard } from "~/hooks/useLeaderboard";
 import { getColumns } from "./leaderboard-columns";
+import { HOURLY, WEEKLY, MONTHLY, QUARTERLY } from "~/utils/constants";
 
 export default function LeaderBoard() {
   enum LeaderboardType {
@@ -27,15 +28,10 @@ export default function LeaderBoard() {
     LeaderboardType.PROFIT,
   );
 
-  enum TimeFrame {
-    HOURLY = "1d",
-    WEEKLY = "7D",
-    MONTHLY = "30D",
-    QUARTERLY = "90D",
-  }
-  const [timeFrame, setTimeFrame] = React.useState<TimeFrame>(
-    TimeFrame.QUARTERLY,
-  );
+  type LeaderboardTimeFrame = "1d" | "7d" | "30d" | "90d";
+
+  const [timeFrame, setTimeFrame] =
+    React.useState<LeaderboardTimeFrame>(QUARTERLY);
 
   const { useLeaderBoardData } = useLeaderboard({
     sort: leaderboardType as any,
@@ -130,39 +126,38 @@ export default function LeaderBoard() {
           </SelectContent>
         </Select>
         <Select
-          onValueChange={(value: string) => setTimeFrame(value as TimeFrame)}
+          onValueChange={(value: string) =>
+            setTimeFrame(value as LeaderboardTimeFrame)
+          }
         >
           <SelectTrigger
             className={
               "w-[80px] justify-start gap-1 rounded-md border border-border"
             }
           >
-            <SelectValue
-              placeholder={TimeFrame.QUARTERLY}
-              defaultValue={TimeFrame.QUARTERLY}
-            />
+            <SelectValue placeholder={QUARTERLY} defaultValue={QUARTERLY} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem
-              value={TimeFrame.HOURLY}
+              value={HOURLY}
               className={"cursor-pointer  hover:bg-muted"}
             >
               1d
             </SelectItem>
             <SelectItem
-              value={TimeFrame.WEEKLY}
+              value={WEEKLY}
               className={"cursor-pointer hover:bg-muted"}
             >
               7d
             </SelectItem>
             <SelectItem
-              value={TimeFrame.MONTHLY}
+              value={MONTHLY}
               className={"cursor-pointer hover:bg-muted"}
             >
               30d
             </SelectItem>
             <SelectItem
-              value={TimeFrame.QUARTERLY}
+              value={QUARTERLY}
               className={"cursor-pointer hover:bg-muted"}
             >
               90d

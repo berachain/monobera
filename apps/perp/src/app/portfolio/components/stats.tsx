@@ -7,10 +7,11 @@ import { BeraChart } from "@bera/ui/bera-chart";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useTheme } from "next-themes";
 
+import { MONTHLY, QUARTERLY, WEEKLY } from "~/utils/constants";
 import { PNL_TOOLTIP_TEXT, VOLUME_TOOLTIP_TEXT } from "~/utils/tooltip-text";
 import { useTradingSummaryChart } from "~/hooks/useTradingSummaryChart";
 import type { IMarket } from "~/types/market";
-import { TimeFrame } from "~/types/time";
+import type { TimeFrame } from "~/types/time";
 import { Options, chartColor } from "./chat-options";
 import { UserGeneralInfo } from "./user-general-info";
 
@@ -47,7 +48,7 @@ const getData = (data: any[], type: string, light: boolean) => {
 
 export default function Stats({ markets }: { markets: IMarket[] }) {
   const [tabType, setTabType] = React.useState<"Volume" | "PnL">("PnL");
-  const [timeFrame, setTimeFrame] = React.useState(TimeFrame.QUARTERLY);
+  const [timeFrame, setTimeFrame] = React.useState<TimeFrame>(QUARTERLY);
 
   const { theme } = useTheme();
   const isLight = theme === "light";
@@ -97,7 +98,7 @@ export default function Stats({ markets }: { markets: IMarket[] }) {
             <Dropdown
               selected={timeFrame}
               onSelect={(value: string) => setTimeFrame(value as TimeFrame)}
-              selectionList={Object.values(TimeFrame)}
+              selectionList={[WEEKLY, MONTHLY, QUARTERLY]}
               sortby={false}
             />
           </div>

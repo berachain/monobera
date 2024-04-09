@@ -23,7 +23,7 @@ import { LongShortTab } from "./long-short-tab";
 import { PlaceOrder } from "./place-order";
 import { TPSL } from "./tpsl";
 
-export interface ICreatePosition {
+interface ICreatePosition {
   market: IMarket;
   params: GlobalParams;
 }

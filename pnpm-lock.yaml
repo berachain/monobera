@@ -742,12 +742,18 @@ importers:
       '@t3-oss/env-nextjs':
         specifier: ^0.2.2
         version: 0.2.2(zod@3.22.4)
+      '@tanstack/react-table':
+        specifier: ^8.15.3
+        version: 8.15.3(react-dom@18.2.0)(react@18.2.0)
       '@vercel/analytics':
         specifier: ^1.0.1
         version: 1.2.2(next@14.1.3)(react@18.2.0)
       bignumber.js:
         specifier: ^9.1.2
         version: 9.1.2
+      date-fns:
+        specifier: ^2.29.3
+        version: 2.30.0
       ethers:
         specifier: ^6.8.0
         version: 6.11.1
@@ -772,6 +778,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hot-toast:
+        specifier: ^2.4.1
+        version: 2.4.1(csstype@3.1.3)(react-dom@18.2.0)(react@18.2.0)
       swr:
         specifier: ^2.2.5
         version: 2.2.5(react@18.2.0)
@@ -784,6 +793,9 @@ importers:
       usehooks-ts:
         specifier: ^2.14.0
         version: 2.16.0(react@18.2.0)
+      viem:
+        specifier: ~2.7.22
+        version: 2.7.22(typescript@5.4.2)(zod@3.22.4)
       zod:
         specifier: ^3.21.4
         version: 3.22.4
@@ -14155,7 +14167,6 @@ packages:
       csstype: ^3.0.10
     dependencies:
       csstype: 3.1.3
-    dev: true
 
   /gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
@@ -18166,7 +18177,6 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     transitivePeerDependencies:
       - csstype
-    dev: true
 
   /react-i18next@13.5.0(i18next@22.5.1)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
     resolution: {integrity: sha512-CFJ5NDGJ2MUyBohEHxljOq/39NQ972rh1ajnadG9BjTk+UXbHLq4z5DKEbEQBDoIhUmmbuS/fIMJKo6VOax1HA==}
