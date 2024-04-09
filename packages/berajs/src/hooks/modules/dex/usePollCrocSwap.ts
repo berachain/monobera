@@ -29,6 +29,10 @@ export interface ICrocSwapStep {
   quote: Address;
   isBuy: boolean;
 }
+
+/**
+ * Polls a pair for the optimal route and amount for a swap
+ */
 export const usePollCrocSwap = ({
   args,
   config,

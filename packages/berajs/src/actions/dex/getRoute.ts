@@ -5,6 +5,9 @@ import { handleNativeBera } from "~/utils";
 import { BeraConfig } from "~/types/global";
 import { SwapRequest } from "~/types";
 
+/**
+ * Queries router for optimal swap path from one token to another
+ */
 export const getRoute = async ({
   args,
   config,

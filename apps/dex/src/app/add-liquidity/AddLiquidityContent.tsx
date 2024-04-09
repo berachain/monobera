@@ -121,12 +121,13 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     updateTokenAmount(0, baseAmount === 0n ? "" : formatUnits(baseAmount, 18));
   };
 
-  const bToken = isBeratoken(tokenInputs[0])
+  const wrappedBaseToken = isBeratoken(tokenInputs[0])
     ? isNativeBera
       ? beraToken
       : wBeraToken
     : tokenInputs[0];
-  const qToken = isBeratoken(tokenInputs[1])
+
+  const wrappedQuoteToken = isBeratoken(tokenInputs[1])
     ? isNativeBera
       ? beraToken
       : wBeraToken
@@ -180,28 +181,32 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         args: {
           slippage: slippage ?? 0,
           poolPrice,
-          baseToken: bToken as Token,
-          quoteToken: qToken as Token,
+          baseToken: wrappedBaseToken as Token,
+          quoteToken: wrappedQuoteToken as Token,
           isAmountBaseDenominated: isBaseInput,
           baseAmount: bnBaseAmount,
           quoteAmount: bnQuoteAmount,
           poolIdx: pool.poolIdx,
         },
       });
+      if (!addLiqPayload || !addLiqPayload.payload) {
+        console.error("Error creating pool: No payload");
+        return;
+      }
       write({
         address: crocDexAddress,
         abi: CROCSWAP_DEX,
         functionName: "userCmd",
-        params: addLiqPayload?.payload ?? [],
+        params: addLiqPayload.payload,
         value: addLiqPayload?.value === 0n ? undefined : addLiqPayload?.value,
       });
     } catch (error) {
       console.error("Error creating pool:", error);
     }
   }, [
-    bToken,
+    wrappedBaseToken,
     isBaseInput,
-    qToken,
+    wrappedQuoteToken,
     poolPrice,
     bnBaseAmount,
     bnQuoteAmount,

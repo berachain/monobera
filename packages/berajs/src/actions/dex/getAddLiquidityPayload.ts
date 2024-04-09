@@ -45,6 +45,10 @@ const getAmount = (
   return quoteAmount;
 };
 
+/**
+ * generates a payload used to add liquidity to bex
+ */
+
 export const getAddLiquidityPayload = async ({
   args,
 }: {

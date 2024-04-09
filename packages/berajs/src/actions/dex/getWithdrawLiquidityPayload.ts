@@ -6,6 +6,9 @@ import { PublicClient } from "viem";
 import { clientToProvider } from "~/hooks/useEthersProvider";
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
 
+/**
+ * generates a payload used to add liquidity to bex
+ */
 export const getWithdrawLiquidityPayload = async ({
   args,
   publicClient,

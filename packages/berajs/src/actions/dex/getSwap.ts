@@ -1,9 +1,13 @@
-import { Address, PublicClient, formatUnits, getAddress } from "viem";
+import { PublicClient, formatUnits, getAddress } from "viem";
 import { getRoute } from "./getRoute";
 import { nativeTokenAddress, beraTokenAddress } from "@bera/config";
 import { MULTISWAP_ABI } from "~/config";
 import { BeraConfig } from "~/types/global";
 import { SwapRequest } from "~/types";
+
+/**
+ * Returns the optimal swap path and return amount for a given swap request
+ */
 
 export const getSwap = async ({
   args,
