@@ -14,7 +14,7 @@ import Datafeed from "../../../../utils/tv-datafeed";
 import { type OrderLine } from "../order-chart";
 import styles from "./index.module.css";
 
-export const TV_BACKGROUND_COLOR = {
+const TV_BACKGROUND_COLOR = {
   dark: "#0E0803",
   light: "#FAFAF9",
 };

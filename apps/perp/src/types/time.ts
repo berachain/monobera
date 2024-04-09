@@ -1,5 +1,1 @@
-export enum TimeFrame {
-  WEEKLY = "7d",
-  MONTHLY = "30d",
-  QUARTERLY = "90d",
-}
+export type TimeFrame = "7d" | "30d" | "90d";

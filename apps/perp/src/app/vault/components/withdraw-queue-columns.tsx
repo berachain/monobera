@@ -14,7 +14,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 
-export const CancelWithdraw = ({
+const CancelWithdraw = ({
   withdrawRequest,
 }: {
   withdrawRequest: HoneyWithdrawalRequest;

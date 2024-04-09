@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
-import clsx from "clsx";
+import { cn } from "@bera/ui";
 import { useInView } from "framer-motion";
 import { formatUsd } from "@bera/berajs";
 
@@ -42,7 +42,7 @@ function Position({
   const price = useMarketIndexPrice(Number(pair_index ?? 0));
   return (
     <figure
-      className={clsx(
+      className={cn(
         "flex h-fit w-[162px] flex-shrink-0 items-center rounded-2xl border border-border bg-background p-4",
         className,
       )}
@@ -127,7 +127,7 @@ function PositionRow({
   return (
     <div
       ref={rowRef}
-      className={clsx("flex animate-marquee-x space-x-4", className)}
+      className={cn("flex animate-marquee-x space-x-4", className)}
       style={{
         // @ts-expect-error - No types
         "--marquee-duration": duration,
@@ -161,7 +161,7 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
             // @ts-ignore
             positions={rows[0]}
             positionClassName={(positionIndex) =>
-              clsx(
+              cn(
                 // @ts-ignore
                 positionIndex >= rows[0].length && "md:hidden",
 

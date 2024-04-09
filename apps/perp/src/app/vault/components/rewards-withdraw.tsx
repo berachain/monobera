@@ -5,7 +5,6 @@ import Image from "next/image";
 import {
   BTOKEN_ABI,
   TransactionActionType,
-  formatAmountSmall,
   formatter,
   useBeraJs,
   usePollBHoneyBalance,
@@ -15,6 +14,7 @@ import {
 } from "@bera/berajs";
 import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
+import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
 import { type Address } from "viem";
 
@@ -66,9 +66,13 @@ export const RewardsWithdraw = () => {
     },
   });
 
-  const { isSmall, numericValue: formattedBgt } = formatAmountSmall(
-    claimableBgtRewards === undefined ? "" : claimableBgtRewards,
-  );
+  const bgtRewardsBN = BigNumber(claimableBgtRewards ?? 0);
+  let formattedBgt = "0.00";
+  if (bgtRewardsBN.isFinite()) {
+    formattedBgt = bgtRewardsBN.lt(0.01)
+      ? "< 0.01"
+      : `${bgtRewardsBN.dp(4).toString()}`;
+  }
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -88,7 +92,7 @@ export const RewardsWithdraw = () => {
                 width={20}
                 height={20}
               />{" "}
-              {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(4)}`}
+              {formattedBgt}
               <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
             </div>
           )}

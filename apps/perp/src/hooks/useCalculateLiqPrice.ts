@@ -3,7 +3,7 @@ import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 
-export interface ICalculateLiqPrice {
+interface ICalculateLiqPrice {
   bfLong: string | undefined;
   bfShort: string | undefined;
   orderType: string | undefined;

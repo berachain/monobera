@@ -9,11 +9,11 @@ import {
   usePollTraderReferral,
 } from "@bera/berajs";
 import { cloudinaryUrl, perpsUrl } from "@bera/config";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
-import cn from "classnames";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 
