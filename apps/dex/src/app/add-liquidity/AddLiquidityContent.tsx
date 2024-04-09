@@ -76,8 +76,20 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
 
-  const baseToken = pool.baseInfo;
-  const quoteToken = pool.quoteInfo;
+  const baseToken = (
+    isBeratoken(tokenInputs[0])
+      ? isNativeBera
+        ? beraToken
+        : wBeraToken
+      : tokenInputs[0]
+  ) as Token;
+  const quoteToken = (
+    isBeratoken(tokenInputs[1])
+      ? isNativeBera
+        ? beraToken
+        : wBeraToken
+      : tokenInputs[1]
+  ) as Token;
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
@@ -120,18 +132,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
     updateTokenAmount(0, baseAmount === 0n ? "" : formatUnits(baseAmount, 18));
   };
-
-  const wrappedBaseToken = isBeratoken(tokenInputs[0])
-    ? isNativeBera
-      ? beraToken
-      : wBeraToken
-    : tokenInputs[0];
-
-  const wrappedQuoteToken = isBeratoken(tokenInputs[1])
-    ? isNativeBera
-      ? beraToken
-      : wBeraToken
-    : tokenInputs[1];
 
   const slippage = useSlippage();
   const baseTokenInitialLiquidity = tokenInputs[0]?.amount;
@@ -181,8 +181,8 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         args: {
           slippage: slippage ?? 0,
           poolPrice,
-          baseToken: wrappedBaseToken as Token,
-          quoteToken: wrappedQuoteToken as Token,
+          baseToken: baseToken as Token,
+          quoteToken: quoteToken as Token,
           isAmountBaseDenominated: isBaseInput,
           baseAmount: bnBaseAmount,
           quoteAmount: bnQuoteAmount,
@@ -190,7 +190,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         },
       });
       if (!addLiqPayload || !addLiqPayload.payload) {
-        console.error("Error creating pool: No payload");
+        console.error("No payload");
         return;
       }
       write({
@@ -204,9 +204,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       console.error("Error creating pool:", error);
     }
   }, [
-    wrappedBaseToken,
+    baseToken,
     isBaseInput,
-    wrappedQuoteToken,
+    quoteToken,
     poolPrice,
     bnBaseAmount,
     bnQuoteAmount,
