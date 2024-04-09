@@ -3,7 +3,7 @@ import { jsonRpcUrl } from "@bera/config";
 import { providers } from "ethers";
 import { type PublicClient } from "viem";
 
-function clientToProvider(client: PublicClient) {
+export function clientToProvider(client: PublicClient) {
   const { chain } = client;
   const network = {
     chainId: chain?.id,

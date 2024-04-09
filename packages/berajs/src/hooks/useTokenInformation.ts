@@ -7,7 +7,6 @@ import { Address, erc20Abi } from "viem";
 
 import { type Token } from "~/api/currency/tokens";
 import { ActionEnum, initialState, reducer } from "../utils/stateReducer";
-import { wagmiConfig } from "~/config";
 import { multicallAddress } from "@bera/config";
 
 interface IuseTokenInformation {
@@ -34,21 +33,10 @@ const useTokenInformation = (): useTokenInformationApi => {
   const publicClient = usePublicClient();
   const config = useConfig();
   const read = useCallback(
-    async ({
-      address,
-      isDefault = false,
-    }: IuseTokenInformation): Promise<void> => {
+    async ({ address }: IuseTokenInformation): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       try {
-        // const formattedToken: Token = {
-        //   address: address,
-        //   decimals: token.decimals,
-        //   symbol: token.symbol as string,
-        //   name: token.name as string,
-        //   default: isDefault,
-        // };
-
-        const result = await multicall(wagmiConfig as any, {
+        const result = await multicall(config as any, {
           contracts: [
             {
               address: address,
