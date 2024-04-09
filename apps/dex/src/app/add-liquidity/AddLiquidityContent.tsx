@@ -190,8 +190,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         },
       });
       if (!addLiqPayload || !addLiqPayload.payload) {
-        console.error("No payload");
-        return;
+        throw new Error("Error generating transaction payload");
       }
       write({
         address: crocDexAddress,
@@ -201,7 +200,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         value: addLiqPayload?.value === 0n ? undefined : addLiqPayload?.value,
       });
     } catch (error) {
-      console.error("Error creating pool:", error);
+      console.error("Error submitting transaction:", error);
     }
   }, [
     baseToken,
