@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { defaultBeraConfig } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useChainId } from "@bera/berajs";
 
 export const SwicthNetworkBtn = ({ className }: { className?: string }) => {
   const { walletConnector } = useDynamicContext();
+  const chainId = useChainId();
   const [switching, setSwitching] = useState(false);
   return (
     <Button
@@ -14,7 +15,7 @@ export const SwicthNetworkBtn = ({ className }: { className?: string }) => {
           setSwitching(true);
           try {
             await walletConnector.switchNetwork({
-              networkChainId: defaultBeraConfig.chain.id,
+              networkChainId: chainId as number,
             });
           } catch (e) {
             console.log("Error switching network", e);
