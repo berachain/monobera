@@ -37,7 +37,7 @@ export default function RewardsCard({ pool }: { pool: IUserPool }) {
       </div>
 
       <div className="flex w-full flex-col justify-between gap-4 sm:flex-row md:justify-between">
-        <div className="flex min-w-[65px] flex-col gap-1">
+        <div className="flex min-w-[65px] flex-col-reverse gap-1 md:flex-col">
           <div className=" text-left text-sm font-semibold leading-tight md:text-lg md:leading-7">
             {/* {isMyPoolsLoading ? (
               <Skeleton className="h-[32px] w-[150px]" />
@@ -54,7 +54,7 @@ export default function RewardsCard({ pool }: { pool: IUserPool }) {
           </div>
         </div>
 
-        <div className="flex min-w-[65px] flex-col gap-1">
+        <div className="flex min-w-[65px] flex-col-reverse gap-1  md:flex-col">
           <div className=" text-left text-sm font-semibold leading-tight md:text-lg md:leading-7">
             {/* {(pool.bgtApy ?? 0) > 100000
               ? formatter.format(pool.bgtApy ?? 0)
@@ -66,12 +66,10 @@ export default function RewardsCard({ pool }: { pool: IUserPool }) {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex min-w-[65px] flex-col gap-1">
-            <div className=" text-left text-sm font-semibold leading-tight text-warning-foreground md:text-lg md:leading-7">
-              <p className="text-lg font-semibold text-foreground">
-                {/* {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}`} */}
-                0
-              </p>
+          <div className="flex min-w-[65px] flex-col flex-col-reverse  gap-1 md:flex-col">
+            <div className=" text-left text-sm font-semibold leading-tight md:text-lg md:leading-7">
+              {/* {isSmall ? `< ${formattedBgt}` : `${formattedBgt.toFixed(2)}`} */}
+              0
             </div>
             <div className="text-left text-xs font-medium leading-tight text-muted-foreground md:text-sm ">
               BGT earned
