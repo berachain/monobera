@@ -12,15 +12,7 @@ import type {
   SubscribeBarsCallback,
 } from "public/static/charting_library/charting_library";
 
-export function parseFullSymbol(fullSymbol: string) {
-  const match = fullSymbol.split("-");
-  if (!match) {
-    return null;
-  }
-  return { fromSymbol: match[0], toSymbol: match[1] };
-}
-
-export const supportedResolutions: ResolutionString[] = [
+const supportedResolutions: ResolutionString[] = [
   "1" as ResolutionString,
   "3" as ResolutionString,
   "5" as ResolutionString,
@@ -31,9 +23,9 @@ export const supportedResolutions: ResolutionString[] = [
   "1D" as ResolutionString,
 ];
 
-export const intradayMultipliers = ["1", "5", "15", "60", "240"];
+const intradayMultipliers = ["1", "5", "15", "60", "240"];
 
-export const symbolInfoMap: Record<string, any> = {
+const symbolInfoMap: Record<string, any> = {
   "BTC-USDC": {
     ticker: "BTC-USDC",
     name: "BTC-USDC",
@@ -96,7 +88,7 @@ export const symbolInfoMap: Record<string, any> = {
   },
 };
 
-export const configurationData: DatafeedConfiguration = {
+const configurationData: DatafeedConfiguration = {
   supports_marks: false,
   supports_timescale_marks: false,
   supports_time: true,

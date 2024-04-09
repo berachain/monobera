@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import type { IMarketOrder } from "~/types/order-history";
 
-export interface ICalculatePnl {
+interface ICalculatePnl {
   currentPrice: string | undefined;
   openPosition: IMarketOrder;
 }
