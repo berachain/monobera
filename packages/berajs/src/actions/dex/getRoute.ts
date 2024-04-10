@@ -8,13 +8,15 @@ import { SwapRequest } from "~/types";
 /**
  * Queries router for optimal swap path from one token to another
  */
+
+export interface GetRoute {
+  args: SwapRequest;
+  config: BeraConfig;
+}
 export const getRoute = async ({
   args,
   config,
-}: {
-  args: SwapRequest;
-  config: BeraConfig;
-}): Promise<SwapInfoV3> => {
+}: GetRoute): Promise<SwapInfoV3> => {
   const { tokenIn, tokenOut, tokenInDecimals, amount } = args;
   const emptyRoute = {
     batchSwapSteps: [],
@@ -29,7 +31,7 @@ export const getRoute = async ({
     formattedPredictedAmountOut: "0",
   };
   try {
-    if (!config.endpoints.dexRouter) {
+    if (!config.endpoints?.dexRouter) {
       console.error("Dex router endpoint not found");
       return emptyRoute;
     }

@@ -32,7 +32,7 @@ import { useGasPrice } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
 import { beraJsConfig } from "@bera/wagmi";
-import { POLLING } from "~/utils/constants";
+import { POLLING } from "@bera/shared-ui";
 
 enum SwapKind {
   GIVEN_IN = 0,
