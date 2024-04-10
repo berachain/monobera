@@ -5,49 +5,63 @@ import {
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
+  usePollUserAccountData,
 } from "@bera/berajs";
 import {
   cloudinaryUrl,
   honeyTokenAddress,
   lendHoneyDebtTokenAddress,
+  vdHoneyTokenAddress,
 } from "@bera/config";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
-import { formatEther } from "viem";
+import { formatEther, formatUnits } from "viem";
 
 import BGTRewardsClaimBtn from "./bgt-rewards-claim-btn";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
 
-export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
+export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
     usePollLendUserBGTRewards();
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
   });
+
   const { useTotalBorrowed } = usePollReservesDataList();
   const totalBorrowed = useTotalBorrowed();
   const bgtApr = useBgtApr(totalBorrowed);
 
+  const { useSelectedReserveData } = usePollReservesDataList();
+  const honeyReserve = useSelectedReserveData(honeyTokenAddress);
+
+  const { useUserAccountData } = usePollUserAccountData();
+  const { data: userData } = useUserAccountData();
+
+  const borrowAllowanceUSD = formatUnits(userData.availableBorrowsBase, 8);
+  const honeyBorrowAllowance = BigNumber(borrowAllowanceUSD)
+    .div(honeyReserve.formattedPriceInMarketReferenceCurrency)
+    .times(0.99)
+    .toFixed(18);
+
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: debtTokenBalance } = useSelectedAssetWalletBalance(
-    lendHoneyDebtTokenAddress,
-  );
-  const userTotalBorrowAllowance = BigNumber(honeyAsset?.formattedBalance)
-    .plus(BigNumber(debtTokenBalance?.formattedBalance ?? 0))
+  const { data: vdHoneyBalance } =
+    useSelectedAssetWalletBalance(vdHoneyTokenAddress);
+  const userTotalBorrowAllowance = BigNumber(honeyBorrowAllowance)
+    .plus(BigNumber(vdHoneyBalance?.formattedBalance ?? 0))
     .toString();
 
   return (
     <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-[#1A1608] dark:via-[#201E09] dark:to-[#312A09] ">
-      <div className="flex flex-col gap-4 sm:px-3 py-4">
+      <div className="flex flex-col gap-4 py-4 sm:px-3">
         <div>
           <div className="flex items-center gap-1 text-xs font-medium leading-5 text-yellow-900 text-opacity-60 dark:text-yellow-200">
             Your Borrow Capacity Used
             <Tooltip>
-              <div className="bg-background max-w-[300px]">
+              <div className="max-w-[300px] bg-background">
                 The first value is the amount of HONEY you have borrowed, the{" "}
                 second value is the Amount of HONEY you are potentially eligible
                 to borrow based on deposited collateral.
@@ -58,7 +72,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
             <TokenIcon address={honeyTokenAddress} className="h-8 w-8" />
             <FormattedNumber
               className="opacity-80"
-              value={debtTokenBalance?.formattedBalance ?? "0"}
+              value={vdHoneyBalance?.formattedBalance ?? "0"}
             />
             /
             <FormattedNumber value={userTotalBorrowAllowance ?? "0"} />
@@ -82,7 +96,7 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
               <FormattedNumber
-                value={-honeyAsset?.reserveData?.variableBorrowAPY}
+                value={-honeyReserve.variableBorrowAPY}
                 percent
               />
             </div>
@@ -111,16 +125,13 @@ export default function HoneyBorrowCard({ honeyAsset }: { honeyAsset: any }) {
 
         <div className="flex w-full gap-3">
           <BorrowBtn
-            token={honeyAsset}
+            honeyBorrowAllowance={honeyBorrowAllowance}
+            reserve={honeyReserve}
             variant="outline"
             className="w-full flex-1 border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-2xl hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
           />
           <RepayBtn
-            token={{
-              ...honeyAsset,
-              formattedBalance: debtTokenBalance?.formattedBalance,
-              balance: debtTokenBalance?.balance,
-            }}
+            reserve={honeyReserve}
             variant="outline"
             className="w-full flex-1 border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-2xl hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
           />

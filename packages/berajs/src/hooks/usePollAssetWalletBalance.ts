@@ -33,7 +33,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const { account, isConnected } = useBeraJs();
   const { tokenList } = useTokens();
   const QUERY_KEY = [account, isConnected, tokenList, "assetWalletBalances"];
-  useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
@@ -111,9 +111,16 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
     return useSWRImmutable([...QUERY_KEY, address]);
   };
 
+  const useSelectedTagAssetWalletBalance = (tag: string) => {
+    const { data = [] } = useSWRImmutable(QUERY_KEY);
+    return data.filter((item: Token) => item.tags?.includes(tag));
+  };
+
   return {
+    ...swrResponse,
     refetch: () => void mutate(QUERY_KEY),
     useCurrentAssetWalletBalances,
     useSelectedAssetWalletBalance,
+    useSelectedTagAssetWalletBalance,
   };
 };

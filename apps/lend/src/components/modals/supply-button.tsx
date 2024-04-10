@@ -17,8 +17,8 @@ import {
   FormattedNumber,
   TokenInput,
   Tooltip,
-  useTxn,
   useAnalytics,
+  useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -30,38 +30,42 @@ import { formatEther, formatUnits, parseUnits } from "viem";
 import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function SupplyBtn({
-  token,
+  reserve,
   disabled = false,
   variant = "primary",
-  supply = false,
   className,
 }: {
-  token: Token;
+  reserve: any;
   disabled?: boolean;
   variant?: "primary" | "outline";
-  supply?: boolean;
   className?: string;
 }) {
+  const supply = reserve.underlyingAsset === honeyTokenAddress;
+
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
   const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `${supply ? "Supplying" : "Depositing"} ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
-    } ${token?.symbol}`,
+    } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`supply_${token.symbol.toLowerCase()}`);
+      track(`supply_${reserve.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`supply_${token.symbol.toLowerCase()}_failed`);
+      track(`supply_${reserve.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.SUPPLY,
   });
-  const { isReady } = useBeraJs();
+
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: token } = useSelectedAssetWalletBalance(
+    reserve.underlyingAsset,
+  );
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -75,14 +79,16 @@ export default function SupplyBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || !isReady || token.balance === 0n}
+        disabled={disabled || isLoading || !token || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : supply ? "Supply" : "Deposit"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
-          <SupplyModalContent {...{ token, amount, setAmount, write }} />
+          <SupplyModalContent
+            {...{ reserve, token, amount, setAmount, write }}
+          />
         </DialogContent>
       </Dialog>
     </>
@@ -90,37 +96,36 @@ export default function SupplyBtn({
 }
 
 const SupplyModalContent = ({
+  reserve,
   token,
   amount,
   setAmount,
   write,
 }: {
+  reserve: any;
   token: Token;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
+  const supply = token.address === honeyTokenAddress;
   const { account } = useBeraJs();
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: balance } = useSelectedAssetWalletBalance(token.address);
+
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
     token,
   });
-
   const allowance = useAllowance();
-  const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(token.address);
+
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
-
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
       Number(formatUnits(userAccountData.totalCollateralBase, 8)) +
       Number(amount ?? "0") *
-        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+        Number(reserve?.formattedPriceInMarketReferenceCurrency),
     borrowBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalDebtBase,
       8,
@@ -133,18 +138,21 @@ const SupplyModalContent = ({
 
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <div className="text-lg font-semibold leading-7">Supply</div>
+      <div className="text-lg font-semibold leading-7">
+        {supply ? "Supply" : "Deposit"}
+      </div>
+
       <div className="rounded-md border border-border bg-input">
         <TokenInput
           selected={token}
           amount={amount}
-          balance={balance?.formattedBalance ?? "0"}
+          balance={token.formattedBalance}
           showExceeding={true}
           selectable={false}
           setAmount={(amount) =>
             setAmount(amount === "" ? undefined : (amount as `${number}`))
           }
-          price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
+          price={Number(reserve?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
 
@@ -154,33 +162,37 @@ const SupplyModalContent = ({
           <FormattedNumber
             value={
               Number(amount ?? "0") *
-              Number(reserveData.formattedPriceInMarketReferenceCurrency)
+              Number(reserve.formattedPriceInMarketReferenceCurrency)
             }
             symbol="USD"
             className="w-[200px] justify-end truncate text-right font-semibold"
           />
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="flex items-center align-middle text-muted-foreground">
-            Supply APY{" "}
-            <Tooltip
-              text={
-                <>
-                  APY (Annual Percentage Yield) is calculated based on the fees
-                  and rewards <br />
-                  generated by the platform over the last 24 hours. The APY
-                  displayed is <br />
-                  algorithmic and subject to change. See additional disclaimers
-                  in notes below.
-                </>
-              }
-            />
+
+        {supply && (
+          <div className="flex justify-between text-sm leading-tight">
+            <div className="flex items-center align-middle text-muted-foreground">
+              Supply APY{" "}
+              <Tooltip
+                text={
+                  <>
+                    APY (Annual Percentage Yield) is calculated based on the
+                    fees and rewards <br />
+                    generated by the platform over the last 24 hours. The APY
+                    displayed is <br />
+                    algorithmic and subject to change. See additional
+                    disclaimers in notes below.
+                  </>
+                }
+              />
+            </div>
+            <div className="font-semibold text-success-foreground">
+              <FormattedNumber value={reserve.supplyAPY} percent />
+            </div>
           </div>
-          <div className="font-semibold text-success-foreground">
-            <FormattedNumber value={reserveData.supplyAPY} percent />
-          </div>
-        </div>
-        {token.address !== honeyTokenAddress && (
+        )}
+
+        {!supply && (
           <div className="flex justify-between text-sm leading-tight">
             <div className="text-muted-foreground ">LTV Health Ratio</div>
             <div className="flex items-center gap-1 font-semibold">
@@ -212,7 +224,7 @@ const SupplyModalContent = ({
           disabled={
             !amount ||
             Number(amount) <= 0 ||
-            Number(amount) > Number(balance.formattedBalance)
+            Number(amount) > Number(token.formattedBalance)
           }
           onClick={() => {
             write({
@@ -228,7 +240,7 @@ const SupplyModalContent = ({
             });
           }}
         >
-          {!amount ? "Enter Amount" : "Supply"}
+          {!amount ? "Enter Amount" : supply ? "Supply" : "Deposit"}
         </Button>
       ) : (
         <ApproveButton

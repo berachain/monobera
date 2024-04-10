@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useBeraJs, usePollAssetWalletBalance } from "@bera/berajs";
+import { useBeraJs } from "@bera/berajs";
 import { ConnectWalletBear } from "@bera/shared-ui";
 
 import StatusBanner from "~/components/status-banner";
@@ -10,7 +10,6 @@ import { Dashboard } from "./dashboard";
 export default function DashboardPageContent() {
   const { isReady } = useBeraJs();
 
-  usePollAssetWalletBalance();
   return (
     <div className="flex flex-col gap-8 md:gap-6">
       <StatusBanner />

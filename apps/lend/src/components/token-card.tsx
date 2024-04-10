@@ -71,7 +71,7 @@ export default function TokenCard({ reserveData }: { reserveData: any }) {
       </div>
 
       <div className="flex w-full items-center gap-2 xl:w-fit">
-        <SupplyBtn token={reserveData.token} />
+        <SupplyBtn reserve={reserveData} />
         <InfoButton address={reserveData.underlyingAsset} />
       </div>
     </Card>
