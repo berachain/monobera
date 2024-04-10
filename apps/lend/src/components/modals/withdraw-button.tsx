@@ -7,7 +7,6 @@ import {
   usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
-  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
@@ -23,9 +22,8 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import BigNumber from "bignumber.js";
-import { formatEther, formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
-import { maxUint256 } from "~/utils/constants";
 import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function WithdrawBtn({
@@ -50,7 +48,6 @@ export default function WithdrawBtn({
       track(`withdraw_${reserve.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
-      userReservesRefetch();
     },
     onError: (e: Error | undefined) => {
       track(`withdraw_${reserve.symbol.toLowerCase()}_failed`);
@@ -72,7 +69,6 @@ export default function WithdrawBtn({
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
-  const { refetch: userReservesRefetch } = usePollUserReservesData();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);

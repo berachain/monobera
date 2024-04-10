@@ -4,7 +4,6 @@ import {
   usePollBgtRewardsForAddress,
   usePollReservesDataList,
   usePollUserAccountData,
-  usePollUserReservesData,
 } from "@bera/berajs";
 import { lendHoneyDebtTokenAddress } from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
@@ -23,16 +22,13 @@ export default function StatusBanner() {
 
   const { isReady } = useBeraJs();
 
-  const { useUserReservesData } = usePollUserReservesData();
-  const { data: userReservesDictionary } = useUserReservesData();
-
   const { useReservesDataList, useBaseCurrencyData } =
     usePollReservesDataList();
-  const { data: reservesDictionary } = useReservesDataList();
+  const { data: reservesDataList = [] } = useReservesDataList();
   const { data: baseCurrency } = useBaseCurrencyData();
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { data: balanceToken } = useCurrentAssetWalletBalances();
+  const { data: balanceToken = [] } = useCurrentAssetWalletBalances();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
@@ -48,25 +44,28 @@ export default function StatusBanner() {
 
   let positiveProportion = 0;
   let negativeProportion = 0;
-  if (reservesDictionary && userReservesDictionary) {
-    Object.keys(reservesDictionary).forEach((address) => {
-      // need to work on
-      if (reservesDictionary[address] && userReservesDictionary[address]) {
-        const useReserve = userReservesDictionary[address];
-        const reserve = reservesDictionary[address];
-        positiveProportion +=
-          Number(
-            formatUnits(useReserve.scaledATokenBalance, reserve.decimals),
-          ) *
-          Number(reserve.supplyAPY) *
-          Number(reserve.formattedPriceInMarketReferenceCurrency);
-        negativeProportion +=
-          Number(formatUnits(useReserve.scaledVariableDebt, reserve.decimals)) *
-          Number(reserve.variableBorrowAPY) *
-          Number(reserve.formattedPriceInMarketReferenceCurrency);
-      }
-    });
-  }
+
+  reservesDataList.forEach((reserve: any) => {
+    const atoken = balanceToken.find(
+      (token: any) => token.address === reserve.aTokenAddress,
+    );
+    if (atoken) {
+      positiveProportion +=
+        Number(atoken.formattedBalance) *
+        Number(reserve.supplyAPY) *
+        Number(reserve.formattedPriceInMarketReferenceCurrency);
+    }
+    const debtToken = balanceToken.find(
+      (token: any) => token.address === reserve.variableDebtTokenAddress,
+    );
+    if (debtToken) {
+      negativeProportion +=
+        Number(debtToken.formattedBalance) *
+        Number(reserve.variableBorrowAPY) *
+        Number(reserve.formattedPriceInMarketReferenceCurrency);
+    }
+  });
+
   negativeProportion -=
     Number(
       formatUnits(
@@ -167,7 +166,7 @@ export default function StatusBanner() {
       amount: (
         <FormattedNumber
           value={getEligibleDepositAmount(
-            reservesDictionary ?? {},
+            reservesDataList ?? [],
             balanceToken ?? [],
           )}
           compact={false}
