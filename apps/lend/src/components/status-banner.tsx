@@ -20,15 +20,20 @@ import { RiskDetails } from "./risk-details";
 export default function StatusBanner() {
   const { useUserAccountData } = usePollUserAccountData();
   const { data, isLoading } = useUserAccountData();
+
   const { isReady } = useBeraJs();
+
   const { useUserReservesData } = usePollUserReservesData();
   const { data: userReservesDictionary } = useUserReservesData();
+
   const { useReservesDataList, useBaseCurrencyData } =
     usePollReservesDataList();
   const { data: reservesDictionary } = useReservesDataList();
   const { data: baseCurrency } = useBaseCurrencyData();
+
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: balanceToken } = useCurrentAssetWalletBalances();
+
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
   });

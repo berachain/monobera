@@ -2,10 +2,9 @@ import Link from "next/link";
 import { addTokenToWallet, type Token } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-
-import Card from "~/components/card";
 
 export default function TokenInfoCard({
   token,
@@ -60,7 +59,7 @@ export default function TokenInfoCard({
     },
   ];
   return (
-    <Card className="flex flex-col gap-6 lg:flex-row lg:justify-between">
+    <Card className="flex flex-col gap-6 rounded-lg border border-border bg-background p-6 lg:flex-row lg:justify-between">
       <div className="flex items-center gap-4 ">
         {token ? (
           <TokenIcon address={token.address} size="2xl" />

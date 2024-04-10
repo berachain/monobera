@@ -19,7 +19,6 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
   const [dstValidator, setDstValidator] = useState<Validator | null>(null);
   const { useActiveValidator } = usePollActiveValidators();
   const srcValidator = useActiveValidator(fromAddress);
-  usePollAssetWalletBalance();
   const { tokenList: tokens } = useTokens();
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(fromAddress);
