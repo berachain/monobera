@@ -1,0 +1,53 @@
+# getRoute
+
+Action for fetching the optimal swap route between two tokens.
+
+## Import 
+
+```ts
+import { getRoute } from '@bera/berajs'
+```
+
+## Usage
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { getRoute, SwapInfoV3 } from '@bera/berajs'
+import { beraConfig } from './config'
+
+const route = await getRoute({
+    args: {
+        tokenIn: '0x1',
+        tokenOut: '0x2',
+        tokenInDecimals: 18,
+        tokenOutDecimals: 18,
+        amount: '1.1',
+    },
+    config: beraConfig
+})
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+    endpoints: {
+        dexRouter: 'https://...'
+    }
+}
+```
+
+:::
+
+
+## Parameters
+```ts
+import { type getRoute } from 'berajs'
+```
+
+## Returns
+```ts
+import { type SwapInfoV3 } from 'berajs'
+```

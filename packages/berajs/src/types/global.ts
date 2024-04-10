@@ -2,15 +2,15 @@ import { SWRConfiguration } from "swr";
 import { Address } from "viem";
 
 export interface BeraConfig {
-  endpoints: {
+  endpoints?: {
     dexRouter?: string;
   };
-  subgraphs: {
+  subgraphs?: {
     honeySubgraph?: string;
     dexSubgraph?: string;
     lendSubgraph?: string;
   };
-  contracts: {
+  contracts?: {
     multicallAddress?: Address;
     crocMultiSwapAddress?: Address;
     wrappedTokenAddress?: Address;

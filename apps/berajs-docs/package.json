@@ -1,0 +1,19 @@
+{
+  "name": "berajs-docs",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vocs dev",
+    "clean": "git clean -xdf .turbo node_modules",
+    "build": "vocs build",
+    "preview": "vocs preview"
+  },
+  "dependencies": {
+    "@types/react": "latest",
+    "@bera/berajs": "0.1.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "typescript": "latest",
+    "vocs": "latest"
+  }
+}
