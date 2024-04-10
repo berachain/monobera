@@ -1,0 +1,60 @@
+# Bera Config
+
+Bera Config is a common object used to pass configuration options to Bera. It can either be used to point towards already hosted services or be used to point towards your own services.
+
+```ts
+import { type BeraConfig } from 'berajs'
+export const beraJsConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+  subgraphs: {
+    honeySubgraph: "https://...",
+    dexSubgraph: "https://...",
+    lendSubgraph: "https://...",
+  },
+  contracts: {
+    multicallAddress: "0x...",
+    crocMultiSwapAddress: "0x...",
+    wrappedTokenAddress: "0x...",
+    dexAddress: "0x...",
+  },
+};
+```
+
+All fields on `BeraConfig` are optional such that if you only want to interact with dex, you can provide a minimal config like so:
+
+```ts
+import { type BeraConfig } from 'berajs'
+export const beraJsConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+  contracts: {
+    multicallAddress: "0x...",
+    dexAddress: "0x...",
+  },
+};
+```
+
+Required `BeraConfig` fields are documented on each hook / action.
+
+## Berachain Services
+
+Berachain has a suite of open source indexers, subgraphs, and contracts required to run our frontends and BeraJs tooling.
+
+### Router
+
+Berachain provides an open source router to calculate optimal swaps between pairs on dex. You can use our hosted one or run your own. 
+https://github.com/berachain/subgraph-dex-router
+
+### Subgraphs
+
+All Berachain subgraphs are open source in a single monorepo. You can use our hosted ones or run your own. https://github.com/berachain/subgraphs-monorepo
+
+### Contracts
+
+All Berachain smart contracts are open source & audited. You can plug into our existing contracts or deploy your own.
