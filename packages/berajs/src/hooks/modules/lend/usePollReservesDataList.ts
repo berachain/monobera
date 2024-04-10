@@ -5,6 +5,7 @@ import {
 } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
+import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { lendUIDataProviderABI } from "../../../config/abi";
@@ -38,24 +39,10 @@ export const usePollReservesDataList = () => {
         marketReferencePriceInUsd:
           baseCurrencyData.marketReferenceCurrencyPriceInUsd,
       });
-      const reservesDictionary = {};
-      await Promise.all(
-        formattedReserves.map(async (formattedReserve) => {
-          await mutate(
-            [...QUERY_KEY, formattedReserve.underlyingAsset],
-            formattedReserve,
-          );
-
-          //@ts-ignore
-          reservesDictionary[formattedReserve.underlyingAsset] =
-            formattedReserve;
-        }),
-      );
-
-      return reservesDictionary;
+      return formattedReserves;
     } catch (e) {
       console.log(e);
-      return {};
+      return [];
     }
   });
 
@@ -63,8 +50,14 @@ export const usePollReservesDataList = () => {
     return useSWRImmutable(QUERY_KEY);
   };
 
-  const useSelectedReserveData = (address: string) => {
-    return useSWRImmutable([...QUERY_KEY, address]);
+  const useSelectedReserveData = (address: Address) => {
+    const { data = [] } = useSWRImmutable(QUERY_KEY);
+    return data.find(
+      (reserve: any) =>
+        reserve.underlyingAsset === address ||
+        reserve.aTokenAddress === address ||
+        reserve.variableDebtTokenAddress === address,
+    );
   };
 
   const useBaseCurrencyData = () => {

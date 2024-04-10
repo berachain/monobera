@@ -144,6 +144,10 @@ export const stgusdcTokenAddress = process.env
 export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;
 export const wbtcTokenAddress = process.env.NEXT_PUBLIC_WBTC_ADDRESS as Address;
 export const wethTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS as Address;
+export const aHoneyTokenAddress = process.env
+  .NEXT_PUBLIC_AHONEY_ADDRESS as Address;
+export const vdHoneyTokenAddress = process.env
+  .NEXT_PUBLIC_VDHONEY_ADDRESS as Address;
 
 // PERPS
 export const perpsEndpoint = process.env
