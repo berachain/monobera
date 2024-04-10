@@ -16,3 +16,4 @@ packages:
   - apps/validator-clue
   - apps/ambassador
   - apps/ecosystem
+  - apps/berajs-docs

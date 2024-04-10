@@ -23,7 +23,7 @@ export const getSwap = async ({
     console.error("Public client not found");
     return undefined;
   }
-  if (!config.contracts.crocMultiSwapAddress) {
+  if (!config.contracts?.crocMultiSwapAddress) {
     console.error("Croc MultiSwap address not found");
     return undefined;
   }
