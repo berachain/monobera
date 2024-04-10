@@ -17,7 +17,7 @@ export default function UserTokenCard({
 }) {
   const { useSelectedReserveData } = usePollReservesDataList();
   const reserve = useSelectedReserveData(token.address as Address);
-  const balance = token.formattedBalance??"0";
+  const balance = token.formattedBalance ?? "0";
   return (
     <Card key={reserve.symbol} className="bg-muted p-4">
       <div className="flex flex-row items-center justify-between gap-6">
