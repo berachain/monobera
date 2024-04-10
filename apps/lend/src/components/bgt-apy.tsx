@@ -13,15 +13,16 @@ import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 export default function BGTApy() {
-  const { useReservesDataList, useTotalBorrowed } = usePollReservesDataList();
-  const { data } = useReservesDataList();
+  const { useSelectedReserveData, useTotalBorrowed } =
+    usePollReservesDataList();
+  const honey = useSelectedReserveData(honeyTokenAddress);
   const totalBorrowed = useTotalBorrowed();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
   });
   const bgtApr = useBgtApr(totalBorrowed) ?? 0; // is this apr or apy? i am confused
-  const borrowApy = Number(data?.[honeyTokenAddress]?.variableBorrowAPY ?? "0");
+  const borrowApy = Number(honey?.variableBorrowAPY ?? "0");
 
   return (
     <div className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-accent bg-opacity-10 pr-4 text-xl font-semibold sm:text-3xl">

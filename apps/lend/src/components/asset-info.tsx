@@ -4,26 +4,24 @@ import { FormattedNumber } from "@bera/shared-ui";
 import DonutChart from "~/components/donut-chart";
 
 export default function AssetInfo({ asset }: { asset: any }) {
-  const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(asset.address);
   const info = [
     {
       title: "Max LTV",
-      value: `${(
-        Number(reserveData?.formattedBaseLTVasCollateral) * 100
-      ).toFixed(2)}%`,
+      value: `${(Number(asset?.formattedBaseLTVasCollateral) * 100).toFixed(
+        2,
+      )}%`,
     },
     {
       title: "Liquidation Threshold",
       value: `${(
-        Number(reserveData?.formattedReserveLiquidationThreshold) * 100
+        Number(asset?.formattedReserveLiquidationThreshold) * 100
       ).toFixed(2)}%`,
     },
     {
       title: "Liquidation Penalty",
-      value: `${(
-        Number(reserveData?.formattedReserveLiquidationBonus) * 100
-      ).toFixed(2)}%`,
+      value: `${(Number(asset?.formattedReserveLiquidationBonus) * 100).toFixed(
+        2,
+      )}%`,
     },
   ];
   const color = "#FBBF24";
@@ -33,10 +31,8 @@ export default function AssetInfo({ asset }: { asset: any }) {
       <div className="flex gap-4">
         <DonutChart
           percentage={
-            Number(reserveData?.supplyCap) !== 0
-              ? (Number(reserveData?.totalLiquidity) /
-                  Number(reserveData?.supplyCap)) *
-                100
+            Number(asset?.supplyCap) !== 0
+              ? (Number(asset?.totalLiquidity) / Number(asset?.supplyCap)) * 100
               : 0
           }
           color={color}
@@ -48,17 +44,13 @@ export default function AssetInfo({ asset }: { asset: any }) {
           </div>
 
           <div className="whitespace-nowrap font-semibold leading-7 md:text-xl">
-            <FormattedNumber value={reserveData?.totalLiquidity} /> of{" "}
-            <FormattedNumber value={reserveData?.supplyCap} />
+            <FormattedNumber value={asset?.totalLiquidity} /> of{" "}
+            <FormattedNumber value={asset?.supplyCap} />
           </div>
 
           <div className="text-xs font-medium leading-tight text-muted-foreground">
-            <FormattedNumber
-              value={reserveData?.totalLiquidityUSD}
-              symbol="USD"
-            />{" "}
-            of{" "}
-            <FormattedNumber value={reserveData?.supplyCapUSD} symbol="USD" />
+            <FormattedNumber value={asset?.totalLiquidityUSD} symbol="USD" /> of{" "}
+            <FormattedNumber value={asset?.supplyCapUSD} symbol="USD" />
           </div>
         </div>
       </div>

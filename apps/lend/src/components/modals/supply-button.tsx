@@ -8,7 +8,6 @@ import {
   usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
-  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
@@ -53,7 +52,6 @@ export default function SupplyBtn({
       track(`supply_${reserve.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
-      userReservesRefetch();
     },
     onError: (e: Error | undefined) => {
       track(`supply_${reserve.symbol.toLowerCase()}_failed`);
@@ -69,7 +67,6 @@ export default function SupplyBtn({
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
-  const { refetch: userReservesRefetch } = usePollUserReservesData();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
