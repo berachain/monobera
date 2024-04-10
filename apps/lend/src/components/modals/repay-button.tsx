@@ -11,13 +11,17 @@ import {
   usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
-import { lendPoolImplementationAddress } from "@bera/config";
+import {
+  honeyTokenAddress,
+  lendPoolImplementationAddress,
+  vdHoneyTokenAddress,
+} from "@bera/config";
 import {
   ApproveButton,
   FormattedNumber,
   TokenInput,
-  useTxn,
   useAnalytics,
+  useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertTitle } from "@bera/ui/alert";
@@ -30,12 +34,12 @@ import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function RepayBtn({
-  token,
+  reserve,
   disabled = false,
   variant = "outline",
   className = "",
 }: {
-  token: Token;
+  reserve: any;
   disabled?: boolean;
   variant?: "primary" | "outline";
   className?: string;
@@ -46,19 +50,23 @@ export default function RepayBtn({
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Repaying ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
-    } ${token.symbol}`,
+    } ${reserve.symbol}`,
     onSuccess: () => {
-      track(`repay_${token.symbol.toLowerCase()}`);
+      track(`repay_${reserve.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`repay_${token.symbol.toLowerCase()}_failed`);
+      track(`repay_${reserve.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.REPAY,
   });
+
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: honey } = useSelectedAssetWalletBalance(honeyTokenAddress);
+  const { data: vdHoney } = useSelectedAssetWalletBalance(vdHoneyTokenAddress);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -72,14 +80,16 @@ export default function RepayBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || token.balance === 0n}
+        disabled={disabled || isLoading || vdHoney.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
-          <RepayModalContent {...{ token, amount, setAmount, write }} />
+          <RepayModalContent
+            {...{ reserve, vdHoney, honey, amount, setAmount, write }}
+          />
         </DialogContent>
       </Dialog>
     </>
@@ -87,30 +97,30 @@ export default function RepayBtn({
 }
 
 const RepayModalContent = ({
-  token,
+  reserve,
+  vdHoney,
+  honey,
   amount,
   setAmount,
   write,
 }: {
-  token: Token;
+  reserve: any;
+  vdHoney: Token;
+  honey: Token;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
-    token,
+    token: honey,
   });
-
   const allowance = useAllowance();
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const debtBalance = token.formattedBalance ?? "0";
-  const { data: tokenB } = useSelectedAssetWalletBalance(token.address);
-  const tokenBalance = tokenB?.formattedBalance;
+
+  const tokenBalance = honey.formattedBalance ?? "0";
+  const debtBalance = vdHoney.formattedBalance ?? "0";
 
   const { account } = useBeraJs();
-  const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(token.address);
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
@@ -119,7 +129,6 @@ const RepayModalContent = ({
     : debtBalance;
 
   const currentHealthFactor = formatEther(userAccountData.healthFactor);
-
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalCollateralBase,
@@ -128,7 +137,7 @@ const RepayModalContent = ({
     borrowBalanceMarketReferenceCurrency:
       Number(formatUnits(userAccountData.totalDebtBase, 8)) -
       Number(amount ?? "0") *
-        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+        Number(reserve?.formattedPriceInMarketReferenceCurrency),
     currentLiquidationThreshold: formatUnits(
       userAccountData.currentLiquidationThreshold,
       4,
@@ -140,7 +149,7 @@ const RepayModalContent = ({
       <div className="text-lg font-semibold leading-7">Repay</div>
       <div className="rounded-md border border-border bg-input">
         <TokenInput
-          selected={token}
+          selected={honey}
           amount={amount}
           balance={balance}
           showExceeding={true}
@@ -148,7 +157,7 @@ const RepayModalContent = ({
           setAmount={(amount) =>
             setAmount(amount === "" ? undefined : (amount as `${number}`))
           }
-          price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
+          price={Number(reserve.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -166,7 +175,7 @@ const RepayModalContent = ({
           <FormattedNumber
             value={
               Number(amount ?? "0") *
-              Number(reserveData.formattedPriceInMarketReferenceCurrency)
+              Number(reserve.formattedPriceInMarketReferenceCurrency)
             }
             symbol="USD"
             className="w-[200px] justify-end truncate text-right font-semibold"
@@ -196,7 +205,7 @@ const RepayModalContent = ({
         <div className="flex justify-between text-sm leading-tight">
           <div className="text-muted-foreground ">Loan APY</div>
           <div className="font-semibold text-warning-foreground">
-            <FormattedNumber value={reserveData.variableBorrowAPY} percent />
+            <FormattedNumber value={reserve.variableBorrowAPY} percent />
           </div>
         </div>
       </div>
@@ -225,10 +234,10 @@ const RepayModalContent = ({
               abi: lendPoolImplementationABI,
               functionName: "repay",
               params: [
-                token.address,
+                honeyTokenAddress,
                 (amount ?? "0") === (debtBalance ?? "0")
                   ? maxUint256
-                  : parseUnits(amount as `${number}`, token.decimals),
+                  : parseUnits(amount as `${number}`, honey.decimals),
                 2,
                 account,
               ],
@@ -239,13 +248,13 @@ const RepayModalContent = ({
         </Button>
       ) : (
         <ApproveButton
-          token={token}
+          token={honey}
           spender={lendPoolImplementationAddress}
           amount={parseUnits(
             BigNumber(amount ?? "0")
               .times(2)
               .toString() as `${number}`,
-            token.decimals,
+            honey.decimals,
           )}
         />
       )}

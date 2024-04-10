@@ -1,10 +1,12 @@
 import React from "react";
-import { honeyTokenAddress } from "@bera/config";
+import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
 import { NotFoundBear } from "@bera/shared-ui";
 
 import UserTokenCard from "~/components/user-token-card";
 
-export default function AvailableSupply({ assets }: { assets: any[] }) {
+export default function AvailableDeposit() {
+  const { useSelectedTagAssetWalletBalance } = usePollAssetWalletBalance();
+  const assets = useSelectedTagAssetWalletBalance("deposit");
   return (
     <>
       <div className="mt-4">
@@ -15,13 +17,11 @@ export default function AvailableSupply({ assets }: { assets: any[] }) {
           You can deposit the following assets to borrow HONEY
         </div>
       </div>
-      {assets && assets.length > 0 ? (
+      {assets.length > 0 ? (
         <>
-          {assets
-            .filter((assets) => assets.address !== honeyTokenAddress)
-            .map((asset, index) => (
-              <UserTokenCard asset={asset} key={index} type="supply" />
-            ))}
+          {assets.map((asset: Token, index: number) => (
+            <UserTokenCard token={asset} key={index} />
+          ))}
         </>
       ) : (
         <div className="flex justify-center rounded-2xl border border-border px-4 py-6">

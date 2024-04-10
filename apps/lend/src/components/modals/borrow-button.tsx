@@ -4,10 +4,10 @@ import {
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
+  usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
   usePollUserReservesData,
-  type Token,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import {
@@ -21,37 +21,39 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import BigNumber from "bignumber.js";
 import { formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function BorrowBtn({
-  token,
+  honeyBorrowAllowance,
+  reserve,
   disabled = false,
   variant = "primary",
   className,
 }: {
-  token: Token;
+  honeyBorrowAllowance: string;
+  reserve: any;
   disabled?: boolean;
   variant?: "primary" | "outline";
   className?: string;
 }) {
-  const { isReady } = useBeraJs();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
   const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Borrowing ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
-    } ${token.symbol}`,
+    } ${reserve.symbol}`,
     onSuccess: () => {
-      track(`borrow_${token.symbol.toLowerCase()}`);
+      track(`borrow_${reserve.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`borrow_${token.symbol.toLowerCase()}_failed`);
+      track(`borrow_${reserve.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.BORROW,
@@ -69,14 +71,18 @@ export default function BorrowBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || !isReady || token.balance === 0n}
+        disabled={
+          disabled || isLoading || BigNumber(honeyBorrowAllowance).lte(0)
+        }
         variant={variant}
       >
         {isLoading ? "Loading" : "Borrow"}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
-          <BorrowModalContent {...{ token, amount, setAmount, write }} />
+          <BorrowModalContent
+            {...{ reserve, honeyBorrowAllowance, amount, setAmount, write }}
+          />
         </DialogContent>
       </Dialog>
     </>
@@ -84,43 +90,41 @@ export default function BorrowBtn({
 }
 
 const BorrowModalContent = ({
-  token,
+  reserve,
+  honeyBorrowAllowance,
   amount,
   setAmount,
   write,
 }: {
-  token: Token;
+  reserve: any;
+  honeyBorrowAllowance: string;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
-  const { useSelectedReserveData, useBaseCurrencyData } =
-    usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(token.address);
+  const { useBaseCurrencyData } = usePollReservesDataList();
   const { data: baseCurrencyData } = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
-  const borrowPower = token.formattedBalance;
-
-  const availableLiquidity = formatUnits(
-    BigInt(reserveData?.availableLiquidity ?? "0") *
-      parseUnits(
-        reserveData?.formattedPriceInMarketReferenceCurrency,
-        token.decimals,
-      ),
-    token.decimals * 2,
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: token } = useSelectedAssetWalletBalance(
+    reserve.underlyingAsset,
   );
 
-  const borrowAmout =
-    Number(borrowPower as `${number}`) >
-    Number(availableLiquidity as `${number}`)
-      ? availableLiquidity
-      : borrowPower;
+  const availableLiquidity = formatUnits(
+    BigInt(reserve.availableLiquidity ?? "0"),
+    reserve.decimals,
+  );
+
+  const borrowAmout = BigNumber(honeyBorrowAllowance as `${number}`).gt(
+    BigNumber(availableLiquidity as `${number}`),
+  )
+    ? availableLiquidity
+    : honeyBorrowAllowance;
 
   const currentHealthFactor = formatUnits(userAccountData.healthFactor, 18);
-
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalCollateralBase,
@@ -134,13 +138,14 @@ const BorrowModalContent = ({
         ),
       ) +
       Number(amount ?? "0") *
-        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+        Number(reserve.formattedPriceInMarketReferenceCurrency),
 
     currentLiquidationThreshold: formatUnits(
       userAccountData.currentLiquidationThreshold,
       4,
     ),
   });
+
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">Borrow</div>
@@ -154,7 +159,7 @@ const BorrowModalContent = ({
           setAmount={(amount) =>
             setAmount(amount === "" ? undefined : (amount as `${number}`))
           }
-          price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
+          price={Number(reserve.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -191,7 +196,7 @@ const BorrowModalContent = ({
           <FormattedNumber
             value={
               Number(amount ?? "0") *
-              Number(reserveData.formattedPriceInMarketReferenceCurrency)
+              Number(reserve.formattedPriceInMarketReferenceCurrency)
             }
             symbol="USD"
             className="w-[200px] justify-end truncate text-right font-semibold"
@@ -208,7 +213,7 @@ const BorrowModalContent = ({
             </Tooltip>
           </div>
           <div className="font-semibold text-warning-foreground">
-            <FormattedNumber value={reserveData.variableBorrowAPY} percent />
+            <FormattedNumber value={reserve.variableBorrowAPY} percent />
           </div>
         </div>
       </div>

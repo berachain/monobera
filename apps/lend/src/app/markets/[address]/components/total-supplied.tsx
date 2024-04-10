@@ -9,7 +9,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { fillAPYDataByDay, fillAPYDataByHour } from "~/utils/graph-utils";
-import Card from "~/components/card";
+import { Card } from "@bera/ui/card";
 import DonutChart from "~/components/donut-chart";
 import LineChart from "~/components/line-chart";
 
