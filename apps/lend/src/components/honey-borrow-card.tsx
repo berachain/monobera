@@ -41,7 +41,10 @@ export default function HoneyBorrowCard() {
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userData } = useUserAccountData();
 
-  const borrowAllowanceUSD = formatUnits(userData.availableBorrowsBase, 8);
+  const borrowAllowanceUSD = formatUnits(
+    userData?.availableBorrowsBase ?? 0n,
+    8,
+  );
   const honeyBorrowAllowance = BigNumber(borrowAllowanceUSD)
     .div(honeyReserve.formattedPriceInMarketReferenceCurrency)
     .times(0.99)

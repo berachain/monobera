@@ -8,7 +8,6 @@ import {
   usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
-  usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
 import {
@@ -55,7 +54,6 @@ export default function RepayBtn({
       track(`repay_${reserve.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
-      userReservesRefetch();
     },
     onError: (e: Error | undefined) => {
       track(`repay_${reserve.symbol.toLowerCase()}_failed`);
@@ -70,7 +68,6 @@ export default function RepayBtn({
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
-  const { refetch: userReservesRefetch } = usePollUserReservesData();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
