@@ -16,7 +16,7 @@ import { getRoute } from '@bera/berajs'
 import { getRoute, SwapInfoV3 } from '@bera/berajs'
 import { beraConfig } from './config'
 
-const route: SwapInfoV3 = await getRoute({
+const route = await getRoute({
     args: {
         tokenIn: '0x1',
         tokenOut: '0x2',
