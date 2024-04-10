@@ -4,7 +4,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 import AssetInfo from "./asset-info";
-import Card from "./card";
+import { Card } from "@bera/ui/card";
 import SupplyBtn from "./modals/supply-button";
 import WithdrawBtn from "./modals/withdraw-button";
 

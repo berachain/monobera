@@ -11,7 +11,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { formatUnits } from "viem";
 
-import Card from "~/components/card";
+import { Card } from "@bera/ui/card";
 import BorrowBtn from "~/components/modals/borrow-button";
 import SupplyBtn from "~/components/modals/supply-button";
 
