@@ -1,16 +1,20 @@
 import React from "react";
-import { usePollAssetWalletBalance } from "@bera/berajs";
-import { honeyTokenAddress } from "@bera/config";
+import {
+  usePollAssetWalletBalance,
+  usePollReservesDataList,
+} from "@bera/berajs";
+import { aHoneyTokenAddress, honeyTokenAddress } from "@bera/config";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 
 import SupplyBtn from "~/components/modals/supply-button";
 import WithdrawBtn from "~/components/modals/withdraw-button";
 
-export default function HoneySupply({ honey }: { honey: any }) {
+export default function HoneySupply() {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: aTokenBalance } = useSelectedAssetWalletBalance(
-    honey?.reserveData.aTokenAddress,
-  );
+  const { data: aHoneyToken } =
+    useSelectedAssetWalletBalance(aHoneyTokenAddress);
+  const { useSelectedReserveData } = usePollReservesDataList();
+  const honeyReserve = useSelectedReserveData(honeyTokenAddress);
   return (
     <>
       <div>
@@ -30,18 +34,16 @@ export default function HoneySupply({ honey }: { honey: any }) {
                 Supplied
               </div>
               <div className="h-8 text-lg font-bold uppercase">
-                <FormattedNumber
-                  value={aTokenBalance?.formattedBalance ?? "0"}
-                />{" "}
-                {honey?.symbol}
+                <FormattedNumber value={aHoneyToken?.formattedBalance ?? "0"} />{" "}
+                {honeyReserve?.symbol}
               </div>
               <div className="text-xs font-medium leading-tight">
                 <FormattedNumber
                   value={
-                    Number(aTokenBalance?.formattedBalance ?? "0") *
+                    Number(aHoneyToken?.formattedBalance ?? "0") *
                     Number(
-                      honey?.reserveData
-                        ?.formattedPriceInMarketReferenceCurrency ?? "0",
+                      honeyReserve.formattedPriceInMarketReferenceCurrency ??
+                        "0",
                     )
                   }
                   symbol="USD"
@@ -62,22 +64,17 @@ export default function HoneySupply({ honey }: { honey: any }) {
               </Tooltip>
             </div>
             <div className="text-lg font-bold text-success-foreground">
-              <FormattedNumber value={honey.reserveData.supplyAPY} percent />
+              <FormattedNumber value={honeyReserve.supplyAPY} percent />
             </div>
           </div>
 
           <div className="grow-1 hidden w-full items-center gap-2 md:flex md:w-fit">
             <SupplyBtn
-              token={honey}
-              supply
+              reserve={honeyReserve}
               className="border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400 text-black"
             />
             <WithdrawBtn
-              token={{
-                ...honey,
-                formattedBalance: aTokenBalance?.formattedBalance,
-                balance: aTokenBalance?.balance,
-              }}
+              reserve={honeyReserve}
               className="w-fit border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
             />
           </div>
@@ -85,16 +82,11 @@ export default function HoneySupply({ honey }: { honey: any }) {
 
         <div className="grow-1 mt-4 flex w-full items-center gap-2 md:hidden">
           <SupplyBtn
-            token={honey}
-            supply
+            reserve={honeyReserve}
             className="w-full border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400 text-black"
           />
           <WithdrawBtn
-            token={{
-              ...honey,
-              formattedBalance: aTokenBalance?.formattedBalance,
-              balance: aTokenBalance?.balance,
-            }}
+            reserve={honeyReserve}
             className="w-full border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-md hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
           />
         </div>

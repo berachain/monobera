@@ -2,13 +2,14 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
+import { cloudinaryUrl } from "@bera/config";
 
 export default function Hero() {
   return (
     <div className="flex min-h-[70vh] items-center justify-center py-16">
       <div className="max-w-xl text-center">
         <Image
-          src="/kingBear.png"
+          src={`${cloudinaryUrl}/bears/t5orajybz3ww40m5arls`}
           alt="King Bear"
           width={500}
           height={311.72}

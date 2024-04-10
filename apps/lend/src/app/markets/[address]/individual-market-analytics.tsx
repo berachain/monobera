@@ -20,10 +20,9 @@ export default function IndividualMarketAnalytics({
 }: {
   address: Address;
 }) {
-  usePollAssetWalletBalance();
   const { tokenDictionary } = useTokens();
   const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(address);
+  const reserve = useSelectedReserveData(address);
 
   return (
     <div className="w-full">
@@ -38,25 +37,23 @@ export default function IndividualMarketAnalytics({
         {...{
           token: tokenDictionary?.[address],
           reserve:
-            Number(reserveData?.totalLiquidity) *
-            Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+            Number(reserve?.totalLiquidity) *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency),
           liquidity:
-            Number(reserveData?.totalLiquidity) *
-            Number(reserveData?.formattedPriceInMarketReferenceCurrency) *
-            Number(1 - reserveData?.borrowUsageRatio),
-          utilization: Number(reserveData?.borrowUsageRatio),
-          oraclePrice: Number(
-            reserveData?.formattedPriceInMarketReferenceCurrency,
-          ),
+            Number(reserve?.totalLiquidity) *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency) *
+            Number(1 - reserve?.borrowUsageRatio),
+          utilization: Number(reserve?.borrowUsageRatio),
+          oraclePrice: Number(reserve?.formattedPriceInMarketReferenceCurrency),
         }}
       />
 
       <div className="mt-9 flex flex-col gap-8 xl:flex-row">
-        <UserInfo token={tokenDictionary?.[address]} />
+        <UserInfo />
         <div className="flex w-full flex-col gap-8 overflow-hidden">
-          <TotalSupplied reserveData={reserveData} />
-          <TotalBorrowed reserveData={reserveData} />
-          <InterestRateOvertime reserveData={reserveData} />
+          <TotalSupplied reserveData={reserve} />
+          <TotalBorrowed reserveData={reserve} />
+          <InterestRateOvertime reserveData={reserve} />
         </div>
       </div>
     </div>

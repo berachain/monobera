@@ -4,16 +4,13 @@ import {
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
+  usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
   usePollUserReservesData,
   type Token,
 } from "@bera/berajs";
-import {
-  honeyAddress,
-  honeyTokenAddress,
-  lendPoolImplementationAddress,
-} from "@bera/config";
+import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,
   TokenInput,
@@ -32,12 +29,12 @@ import { maxUint256 } from "~/utils/constants";
 import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function WithdrawBtn({
-  token,
+  reserve,
   disabled = false,
   variant = "outline",
   className,
 }: {
-  token: Token;
+  reserve: any;
   disabled?: boolean;
   variant?: "primary" | "outline";
   className?: string;
@@ -48,19 +45,31 @@ export default function WithdrawBtn({
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Withdrawing ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
-    } ${token?.symbol}`,
+    } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`withdraw_${token.symbol.toLowerCase()}`);
+      track(`withdraw_${reserve.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
       userReservesRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`withdraw_${token.symbol.toLowerCase()}_failed`);
+      track(`withdraw_${reserve.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.WITHDRAW,
   });
+
+  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { data: atoken } = useSelectedAssetWalletBalance(reserve.aTokenAddress);
+  const { data: otoken } = useSelectedAssetWalletBalance(
+    reserve.underlyingAsset,
+  );
+  const token = {
+    ...otoken,
+    balance: atoken?.balance ?? 0n,
+    formattedBalance: atoken?.formattedBalance ?? "0",
+  };
+
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
   const { refetch: userReservesRefetch } = usePollUserReservesData();
@@ -81,7 +90,9 @@ export default function WithdrawBtn({
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
-          <WithdrawModalContent {...{ token, amount, setAmount, write }} />
+          <WithdrawModalContent
+            {...{ reserve, token, amount, setAmount, write }}
+          />
         </DialogContent>
       </Dialog>
     </>
@@ -89,30 +100,30 @@ export default function WithdrawBtn({
 }
 
 const WithdrawModalContent = ({
+  reserve,
   token,
   amount,
   setAmount,
   write,
 }: {
+  reserve: any;
   token: Token;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
+  const isHoney = reserve.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
-  const { useSelectedReserveData } = usePollReservesDataList();
-  const { data: reserveData } = useSelectedReserveData(token.address);
   const { account } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData();
   const { data: userAccountData } = useUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
-
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
     collateralBalanceMarketReferenceCurrency:
       Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
       Number(amount ?? "0") *
-        Number(reserveData?.formattedPriceInMarketReferenceCurrency),
+        Number(reserve?.formattedPriceInMarketReferenceCurrency),
     borrowBalanceMarketReferenceCurrency: formatUnits(
       userAccountData.totalDebtBase,
       8,
@@ -128,7 +139,7 @@ const WithdrawModalContent = ({
       <div className="text-lg font-semibold leading-7">Withdraw</div>
       <div className="rounded-md border border-border bg-input">
         <TokenInput
-          selected={token}
+          selected={{ ...token, symbol: reserve.symbol }}
           amount={amount}
           balance={userBalance}
           showExceeding={true}
@@ -136,7 +147,7 @@ const WithdrawModalContent = ({
           setAmount={(amount) =>
             setAmount(amount === "" ? undefined : (amount as `${number}`))
           }
-          price={Number(reserveData?.formattedPriceInMarketReferenceCurrency)}
+          price={Number(reserve?.formattedPriceInMarketReferenceCurrency)}
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -145,19 +156,21 @@ const WithdrawModalContent = ({
           <FormattedNumber
             value={
               Number(amount ?? "0") *
-              Number(reserveData?.formattedPriceInMarketReferenceCurrency)
+              Number(reserve?.formattedPriceInMarketReferenceCurrency)
             }
             symbol="USD"
             className="w-[200px] justify-end truncate text-right font-semibold"
           />
         </div>
-        <div className="flex justify-between text-sm leading-tight">
-          <div className="text-muted-foreground ">Supply APY</div>
-          <div className="font-semibold text-success-foreground">
-            <FormattedNumber value={reserveData.supplyAPY} percent />
+        {isHoney && (
+          <div className="flex justify-between text-sm leading-tight">
+            <div className="text-muted-foreground ">Supply APY</div>
+            <div className="font-semibold text-success-foreground">
+              <FormattedNumber value={reserve.supplyAPY} percent />
+            </div>
           </div>
-        </div>
-        {token.address !== honeyTokenAddress && (
+        )}
+        {!isHoney && (
           <div className="flex justify-between text-sm leading-tight">
             <div className="text-muted-foreground ">LTV Health Ratio</div>
             <div className="flex items-center gap-1 font-semibold">
@@ -179,7 +192,7 @@ const WithdrawModalContent = ({
         )}
       </div>
 
-      {token.address !== honeyAddress && userAccountData.totalDebtBase > 0n && (
+      {!isHoney && userAccountData.totalDebtBase > 0n && (
         <Alert variant="destructive">
           <AlertTitle>
             {" "}
@@ -196,7 +209,7 @@ const WithdrawModalContent = ({
           !amount ||
           BigNumber(amount).lte(BigNumber(0)) ||
           BigNumber(amount).gt(BigNumber(userBalance)) ||
-          (userAccountData.totalDebtBase > 0n && token.address !== honeyAddress)
+          (userAccountData.totalDebtBase > 0n && !isHoney)
         }
         onClick={() => {
           write({

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Card } from "@bera/ui/card";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -9,7 +10,6 @@ import {
   getRates,
   type Rate,
 } from "~/utils/utilization-rates";
-import Card from "~/components/card";
 
 export default function InterestRateOvertime({
   reserveData,
