@@ -55,6 +55,14 @@ export default defineConfig({
           text: "usePollAssetWalletBalance",
           link: "/react/usePollAssetWalletBalance/",
         },
+        {
+          text: "useTokenHoneyPrice",
+          link: "/react/useTokenHoneyPrice/",
+        },
+        {
+          text: "useTokenHoneyPrices",
+          link: "/react/useTokenHoneyPrices/",
+        },
       ],
     },
     {
