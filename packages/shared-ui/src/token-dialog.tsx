@@ -22,10 +22,10 @@ import { Icons } from "@bera/ui/icons";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
+import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
 import { TokenChip } from "./token-chip";
 import { TokenIcon } from "./token-icon";
-import { FormattedNumber } from "./formatted-number";
 
 type Props = {
   open: boolean;
@@ -199,7 +199,7 @@ export function TokenDialog({
               )}
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
-            <div className="overflow-y-scoll max-h-[600px] ">
+            <div className="max-h-[min(600px,60vh)] overflow-y-scroll">
               {!error ? (
                 filteredTokens?.length ? (
                   filteredTokens
@@ -342,7 +342,7 @@ const TokenDialogRow = ({
           <div className="absolute ml-auto" />
         )}
         {!pendingAddition && isConnected && (
-          <div className="ml-auto text-muted-foreground truncate">
+          <div className="ml-auto truncate text-muted-foreground">
             {/* <p>{tokenBalance ?? 0}</p> */}
             <FormattedNumber
               value={tokenBalance}
