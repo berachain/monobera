@@ -54,9 +54,9 @@ export const usePollReservesDataList = () => {
     const { data = [] } = useSWRImmutable(QUERY_KEY);
     return data.find(
       (reserve: any) =>
-        reserve.underlyingAsset === address ||
-        reserve.aTokenAddress === address ||
-        reserve.variableDebtTokenAddress === address,
+        reserve?.underlyingAsset === address ||
+        reserve?.aTokenAddress === address ||
+        reserve?.variableDebtTokenAddress === address,
     );
   };
 

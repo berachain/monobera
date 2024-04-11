@@ -1,10 +1,11 @@
 import { usePollReservesDataList, type Token } from "@bera/berajs";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
+
 import AssetInfo from "./asset-info";
-import { Card } from "@bera/ui/card";
 import SupplyBtn from "./modals/supply-button";
 import WithdrawBtn from "./modals/withdraw-button";
 
@@ -19,49 +20,57 @@ export default function UserTokenCard({
   const reserve = useSelectedReserveData(token.address as Address);
   const balance = token.formattedBalance ?? "0";
   return (
-    <Card key={reserve.symbol} className="bg-muted p-4">
-      <div className="flex flex-row items-center justify-between gap-6">
-        <div className="flex flex-shrink-0 items-center gap-4 ">
-          <TokenIcon address={reserve.underlyingAsset} size="2xl" />
-          <div>
-            <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
-              {deposited && "Deposited"}
-              {!deposited && (
-                <>
-                  <Icons.wallet className="relative h-3 w-3 rounded-lg" />
-                  Wallet Balance
-                </>
-              )}
+    <>
+      {reserve ? (
+        <Card key={reserve?.symbol} className="bg-muted p-4">
+          <div className="flex flex-row items-center justify-between gap-6">
+            <div className="flex flex-shrink-0 items-center gap-4 ">
+              <TokenIcon address={reserve?.underlyingAsset} size="2xl" />
+              <div>
+                <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
+                  {deposited && "Deposited"}
+                  {!deposited && (
+                    <>
+                      <Icons.wallet className="relative h-3 w-3 rounded-lg" />
+                      Wallet Balance
+                    </>
+                  )}
+                </div>
+
+                <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
+                  <FormattedNumber value={balance} symbol={reserve?.symbol} />
+                  <Tooltip>
+                    <AssetInfo asset={reserve} />
+                  </Tooltip>
+                </div>
+                <div className="text-xs font-medium leading-tight">
+                  <FormattedNumber
+                    symbol="USD"
+                    value={
+                      Number(balance) *
+                      Number(
+                        reserve.formattedPriceInMarketReferenceCurrency ?? "0",
+                      )
+                    }
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
-              <FormattedNumber value={balance} symbol={reserve.symbol} />
-              <Tooltip>
-                <AssetInfo asset={reserve} />
-              </Tooltip>
-            </div>
-            <div className="text-xs font-medium leading-tight">
-              <FormattedNumber
-                symbol="USD"
-                value={
-                  Number(balance) *
-                  Number(reserve.formattedPriceInMarketReferenceCurrency ?? "0")
-                }
-              />
+            <div className="grow-1 hidden w-full items-center gap-2 md:flex md:w-fit">
+              <SupplyBtn reserve={reserve} />
+              {deposited && <WithdrawBtn reserve={reserve} />}
             </div>
           </div>
-        </div>
-
-        <div className="grow-1 hidden w-full items-center gap-2 md:flex md:w-fit">
-          <SupplyBtn reserve={reserve} />
-          {deposited && <WithdrawBtn reserve={reserve} />}
-        </div>
-      </div>
-      <div className="grow-1 mt-8 flex w-full items-center gap-2 md:hidden md:w-fit">
-        <SupplyBtn reserve={reserve} />
-        {deposited && <WithdrawBtn reserve={reserve} />}
-      </div>
-    </Card>
+          <div className="grow-1 mt-8 flex w-full items-center gap-2 md:hidden md:w-fit">
+            <SupplyBtn reserve={reserve} />
+            {deposited && <WithdrawBtn reserve={reserve} />}
+          </div>
+        </Card>
+      ) : (
+        <UserTokenLoading />
+      )}
+    </>
   );
 }
 
