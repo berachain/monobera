@@ -68,7 +68,7 @@ export default function RepayBtn({
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
-
+  
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
   return (
@@ -77,7 +77,7 @@ export default function RepayBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || vdHoney?.balance === 0n}
+        disabled={disabled || isLoading || vdHoney || vdHoney?.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
