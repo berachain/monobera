@@ -77,7 +77,9 @@ export default function RepayBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || !vdHoney || vdHoney.balance === 0n || !honey}
+        disabled={
+          disabled || isLoading || !vdHoney || vdHoney.balance === 0n || !honey
+        }
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
@@ -85,7 +87,14 @@ export default function RepayBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <RepayModalContent
-            {...{ reserve, vdHoney: vdHoney!, honey:honey!, amount, setAmount, write }}
+            {...{
+              reserve,
+              vdHoney: vdHoney!,
+              honey: honey!,
+              amount,
+              setAmount,
+              write,
+            }}
           />
         </DialogContent>
       </Dialog>

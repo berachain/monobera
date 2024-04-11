@@ -224,7 +224,7 @@ const BorrowModalContent = ({
             functionName: "borrow",
             params: [
               token?.address,
-              parseUnits(`${amount}` as `${number}`, token?.decimals??18),
+              parseUnits(`${amount}` as `${number}`, token?.decimals ?? 18),
               2,
               0,
               account,
