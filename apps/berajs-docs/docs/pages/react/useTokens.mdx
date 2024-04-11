@@ -1,0 +1,68 @@
+# useTokens
+
+React hook for providing an interface to a [token list](https://tokenlists.org/) compatible json file. For berachain, default token lists are maintained [here](https://github.com/berachain/default-token-list). 
+
+`useTokens` allows for management of custom tokens to be added and removed in browser localStorage.
+
+## Import 
+
+```ts
+import { useTokens } from '@bera/berajs'
+```
+
+## Usage
+
+:::code-group
+```ts twoslash [example.ts]
+import { useTokens, Token } from '@bera/berajs'
+import { beraConfig } from './config'
+
+const {
+    isLoading, // boolean indicating if token list is still loading
+    tokenList,
+    customTokenList, // a list of all tokens that user has added
+    tokenDictionary,
+    featuredTokenList, // list of berachain "featured" tokens
+    beraToken, 
+    wBeraToken,
+    addNewToken, // function to add a new token to customTokenList. Accepts Token Object
+    removeToken, // function to remove a token from customTokenList. Accepts Token Object
+} = useTokens(beraConfig)
+
+const token = {
+    address: '0x...',
+    name: '...',
+    symbol: '...',
+    decimals: 18
+}
+
+addNewToken(token)
+removeToken(token)
+
+
+```
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+    endpoints: {
+        tokenList: 'https://..',
+    }
+}
+```
+:::
+
+
+## Parameters
+```ts
+import { type DefaultHookTypes } from '@bera/berajs'
+```
+
+- config.endpoints.tokenList
+    - Type: `string`
+    - Description: url to a [token list](https://tokenlists.org/) compatible json file
+## Returns
+```ts
+import { type IUseTokens } from '@bera/berajs'
+```

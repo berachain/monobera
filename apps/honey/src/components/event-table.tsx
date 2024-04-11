@@ -14,6 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@bera/ui/table";
+import { beraJsConfig } from "@bera/wagmi";
 import { formatDistance } from "date-fns";
 import { formatUnits, getAddress } from "viem";
 
@@ -86,7 +87,9 @@ export const EventTable = ({
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
-  const { tokenDictionary } = useTokens();
+  const { tokenDictionary } = useTokens({
+    config: beraJsConfig,
+  });
   return (
     <Table>
       <TableHeader>

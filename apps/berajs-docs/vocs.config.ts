@@ -52,8 +52,12 @@ export default defineConfig({
           items: [{ text: "Getting Started", link: "/react/getting-started/" }],
         },
         {
-          text: "usePollAssetWalletBalance",
-          link: "/react/usePollAssetWalletBalance/",
+          text: "usePollWalletBalances",
+          link: "/react/usePollWalletBalances/",
+        },
+        {
+          text: "useTokens",
+          link: "/react/useTokens/",
         },
       ],
     },

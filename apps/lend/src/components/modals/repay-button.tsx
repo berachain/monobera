@@ -5,7 +5,7 @@ import {
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
   type Token,
@@ -31,6 +31,7 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function RepayBtn({
   reserve,
@@ -62,9 +63,11 @@ export default function RepayBtn({
     actionType: TransactionActionType.REPAY,
   });
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: honey } = useSelectedAssetWalletBalance(honeyTokenAddress);
-  const { data: vdHoney } = useSelectedAssetWalletBalance(vdHoneyTokenAddress);
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const honey = useSelectedWalletBalance(honeyTokenAddress);
+  const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -77,7 +80,7 @@ export default function RepayBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || vdHoney || vdHoney?.balance === 0n}
+        disabled={disabled || isLoading || !vdHoney || vdHoney?.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
@@ -85,7 +88,7 @@ export default function RepayBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <RepayModalContent
-            {...{ reserve, vdHoney, honey, amount, setAmount, write }}
+            {...({ reserve, vdHoney, honey, amount, setAmount, write } as any)}
           />
         </DialogContent>
       </Dialog>
