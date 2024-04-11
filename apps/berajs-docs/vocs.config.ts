@@ -65,7 +65,19 @@ export default defineConfig({
         {
           text: "Bex",
           collapsed: true,
-          items: [{ text: "getRoute", link: "/actions/getRoute/" }],
+          items: [
+            { text: "getRoute", link: "/actions/getRoute/" },
+            { text: "getSwap", link: "/actions/getSwap/" },
+            { text: "getSwapPayload", link: "/actions/getSwapPayload/" },
+            {
+              text: "getAddLiquidityPayload",
+              link: "/actions/getAddLiquidityPayload/",
+            },
+            {
+              text: "getWithdrawLiquidityPayload",
+              link: "/actions/getWithdrawLiquidityPayload/",
+            },
+          ],
         },
         {
           text: "Honey",
