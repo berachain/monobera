@@ -19,7 +19,7 @@ export default function UserTokenCard({
   const reserve = useSelectedReserveData(token.address as Address);
   const balance = token.formattedBalance ?? "0";
   return (
-    <Card key={reserve.symbol} className="bg-muted p-4">
+    <Card key={reserve?.symbol} className="bg-muted p-4">
       <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-shrink-0 items-center gap-4 ">
           <TokenIcon address={reserve?.underlyingAsset} size="2xl" />
@@ -35,7 +35,7 @@ export default function UserTokenCard({
             </div>
 
             <div className="flex h-8 items-center gap-1 text-lg font-bold uppercase">
-              <FormattedNumber value={balance} symbol={reserve.symbol} />
+              <FormattedNumber value={balance} symbol={reserve?.symbol} />
               <Tooltip>
                 <AssetInfo asset={reserve} />
               </Tooltip>

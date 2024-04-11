@@ -49,14 +49,14 @@ export default function RepayBtn({
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Repaying ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
-    } ${reserve.symbol}`,
+    } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`repay_${reserve.symbol.toLowerCase()}`);
+      track(`repay_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`repay_${reserve.symbol.toLowerCase()}_failed`);
+      track(`repay_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.REPAY,

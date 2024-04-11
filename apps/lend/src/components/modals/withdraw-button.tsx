@@ -45,12 +45,12 @@ export default function WithdrawBtn({
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`withdraw_${reserve.symbol.toLowerCase()}`);
+      track(`withdraw_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`withdraw_${reserve.symbol.toLowerCase()}_failed`);
+      track(`withdraw_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.WITHDRAW,

@@ -49,12 +49,12 @@ export default function SupplyBtn({
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`supply_${reserve.symbol.toLowerCase()}`);
+      track(`supply_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`supply_${reserve.symbol.toLowerCase()}_failed`);
+      track(`supply_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.SUPPLY,

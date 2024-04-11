@@ -44,14 +44,14 @@ export default function BorrowBtn({
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Borrowing ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
-    } ${reserve.symbol}`,
+    } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`borrow_${reserve.symbol.toLowerCase()}`);
+      track(`borrow_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`borrow_${reserve.symbol.toLowerCase()}_failed`);
+      track(`borrow_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.BORROW,
