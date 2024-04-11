@@ -50,14 +50,14 @@ export default function RepayBtn({
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Repaying ${
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
-    } ${reserve.symbol}`,
+    } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`repay_${reserve.symbol.toLowerCase()}`);
+      track(`repay_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`repay_${reserve.symbol.toLowerCase()}_failed`);
+      track(`repay_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.REPAY,
@@ -80,7 +80,7 @@ export default function RepayBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || vdHoney?.balance === 0n}
+        disabled={disabled || isLoading || !vdHoney || vdHoney?.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
@@ -88,7 +88,7 @@ export default function RepayBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <RepayModalContent
-            {...{ reserve, vdHoney, honey, amount, setAmount, write } as any}
+            {...({ reserve, vdHoney, honey, amount, setAmount, write } as any)}
           />
         </DialogContent>
       </Dialog>

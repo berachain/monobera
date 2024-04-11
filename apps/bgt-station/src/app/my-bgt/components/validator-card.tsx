@@ -26,8 +26,8 @@ export default function ValidatorCard({
 }) {
   const router = useRouter();
   const { account } = useBeraJs();
-  const userDelegated = undefined
-  const bribeTotal = undefined
+  const userDelegated = undefined;
+  const bribeTotal = undefined;
   const { write, ModalPortal } = useTxn({
     message: "Claiming bribes",
     actionType: TransactionActionType.CLAIMING_BRIBES,
@@ -136,10 +136,7 @@ export default function ValidatorCard({
           >
             Unbond <Icons.minus className="relative ml-1 h-4 w-4" />
           </Button>
-          <Button
-            size="sm"
-            onClick={claimBribe}
-          >
+          <Button size="sm" onClick={claimBribe}>
             Claim Bribes
           </Button>
         </div>
@@ -203,10 +200,7 @@ export default function ValidatorCard({
           >
             <Icons.minus className="relative h-4 w-4" />
           </Button>
-          <Button
-            size="sm"
-            onClick={claimBribe}
-          >
+          <Button size="sm" onClick={claimBribe}>
             Claim Bribes
           </Button>
         </div>

@@ -34,7 +34,7 @@ const BribeCard = ({
 }) => {
   const [token, setToken] = useState<Token | undefined>(undefined);
   const { tokenDictionary } = useTokens({
-    config: beraJsConfig
+    config: beraJsConfig,
   });
   const { read, tokenInformation } = useTokenInformation();
 

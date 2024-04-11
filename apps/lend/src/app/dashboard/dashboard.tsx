@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  usePollWalletBalances,
-  usePollReservesDataList,
-} from "@bera/berajs";
+import { usePollWalletBalances, usePollReservesDataList } from "@bera/berajs";
 import AvailableDeposit from "./available-deposit";
 import HoneyBorrow from "./honey-borrow";
 import HoneySupply from "./honey-supply";

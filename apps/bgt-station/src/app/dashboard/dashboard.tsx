@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function DashBoard() {
   const prices = undefined;
-  const validators = undefined
+  const validators = undefined;
   const validatorSession = [
     {
       sortingAttr: "tokens",

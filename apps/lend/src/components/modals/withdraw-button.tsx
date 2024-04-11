@@ -46,12 +46,12 @@ export default function WithdrawBtn({
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`withdraw_${reserve.symbol.toLowerCase()}`);
+      track(`withdraw_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`withdraw_${reserve.symbol.toLowerCase()}_failed`);
+      track(`withdraw_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.WITHDRAW,
@@ -61,9 +61,7 @@ export default function WithdrawBtn({
     config: beraJsConfig,
   });
   const atoken = useSelectedWalletBalance(reserve.aTokenAddress);
-  const otoken = useSelectedWalletBalance(
-    reserve.underlyingAsset,
-  );
+  const otoken = useSelectedWalletBalance(reserve.underlyingAsset);
   const token = {
     ...otoken,
     balance: atoken?.balance ?? 0n,
@@ -90,7 +88,7 @@ export default function WithdrawBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <WithdrawModalContent
-            {...{ reserve, token, amount, setAmount, write } as any}
+            {...({ reserve, token, amount, setAmount, write } as any)}
           />
         </DialogContent>
       </Dialog>
@@ -111,7 +109,7 @@ const WithdrawModalContent = ({
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const isHoney = reserve.underlyingAsset === honeyTokenAddress;
+  const isHoney = reserve?.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
   const { account } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData();

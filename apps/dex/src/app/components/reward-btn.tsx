@@ -25,8 +25,7 @@ export function RewardBtn({ poolAddress, ...props }: any) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<`${number}` | undefined>(undefined);
 
-
-  const bgtRewards = '0'
+  const bgtRewards = "0";
 
   const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal } = useTxn({

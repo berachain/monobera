@@ -1,1 +1,1 @@
-export * from './useBgtRewardsForAddress'
+export * from "./useBgtRewardsForAddress";

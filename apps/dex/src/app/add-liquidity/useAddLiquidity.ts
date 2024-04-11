@@ -46,7 +46,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   );
 
   const { tokenDictionary, beraToken, wBeraToken } = useTokens({
-    config: beraJsConfig
+    config: beraJsConfig,
   });
 
   const reset = () => {

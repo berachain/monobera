@@ -18,7 +18,7 @@ export function WalletBalanceInUs() {
   const { useCurrentWalletBalances } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const  assets= useCurrentWalletBalances();
+  const assets = useCurrentWalletBalances();
   const { data: pricesArray } = useTokenHoneyPrices(
     featuredTokenList?.map((featuredToken: Token) => featuredToken.address),
   );

@@ -6,10 +6,10 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { EpochTimeline } from "./epoch-timeline";
 
 export function Details() {
-  const total = undefined
+  const total = undefined;
 
   const prices = undefined;
-  const avgApy = undefined
+  const avgApy = undefined;
 
   const generalInfo = [
     {
@@ -23,11 +23,7 @@ export function Details() {
     },
     {
       amount:
-        avgApy === undefined ? (
-          <Skeleton className="mb-2 h-8 w-20" />
-        ) : (
-          `0%`
-        ),
+        avgApy === undefined ? <Skeleton className="mb-2 h-8 w-20" /> : "0%",
       text: "Average Bribe APY",
     },
     {

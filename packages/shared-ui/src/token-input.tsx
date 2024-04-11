@@ -69,13 +69,13 @@ export function TokenInput({
   difference,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  const { useSelectedWalletBalance,  isLoading: isBalancesLoading } = usePollWalletBalances({
-    config: beraJsConfig,
-  });
-  const token =
-    useSelectedWalletBalance(
-      selected ? getAddress(selected?.address ?? "") ?? "" : "",
-    );
+  const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
+    usePollWalletBalances({
+      config: beraJsConfig,
+    });
+  const token = useSelectedWalletBalance(
+    selected ? getAddress(selected?.address ?? "") ?? "" : "",
+  );
 
   let tokenBalance = token?.formattedBalance || "0";
 

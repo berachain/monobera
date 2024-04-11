@@ -24,7 +24,7 @@ export interface DefaultHookTypes {
   opts?: SWRConfiguration | undefined;
 }
 
-export interface PayloadReturnType {
-  payload: any[];
+export interface PayloadReturnType<T = any[]> {
+  payload: T;
   value?: bigint;
 }

@@ -14,7 +14,7 @@ export const usePollBgtRewardsForAddress = ({
 }: {
   address: string | undefined;
 }) => {
-  const cuttingBoard = undefined
+  const cuttingBoard = undefined;
   const inflationData = undefined;
 
   const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);

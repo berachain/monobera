@@ -20,7 +20,7 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
   const { useActiveValidator } = usePollActiveValidators();
   const srcValidator = useActiveValidator(fromAddress);
   const { tokenList: tokens } = useTokens({
-    config: beraJsConfig
+    config: beraJsConfig,
   });
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(fromAddress);

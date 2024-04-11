@@ -1,10 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  usePollReservesDataList,
-  useTokens,
-} from "@bera/berajs";
+import { usePollReservesDataList, useTokens } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
