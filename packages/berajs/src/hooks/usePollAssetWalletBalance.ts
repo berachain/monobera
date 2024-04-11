@@ -27,6 +27,7 @@ interface Call {
   args: any[];
 }
 
+// TODO optimize data access pattern to avoid double store
 export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
@@ -103,9 +104,8 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
     },
   );
 
-  const useCurrentAssetWalletBalances = (): BalanceToken[] | undefined => {
-    const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
-    return data;
+  const useCurrentAssetWalletBalances = () => {
+    return useSWRImmutable<BalanceToken[]>(QUERY_KEY);
   };
 
   const useSelectedAssetWalletBalance = (address: string) => {
