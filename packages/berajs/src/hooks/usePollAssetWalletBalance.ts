@@ -34,7 +34,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const { account, isConnected } = useBeraJs();
   const { tokenList } = useTokens();
   const QUERY_KEY = [account, isConnected, tokenList, "assetWalletBalances"];
-  const { data, isLoading } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
@@ -118,7 +118,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   };
 
   return {
-    isLoading,
+    ...swrResponse,
     refetch: () => void mutate(QUERY_KEY),
     useCurrentAssetWalletBalances,
     useSelectedAssetWalletBalance,
