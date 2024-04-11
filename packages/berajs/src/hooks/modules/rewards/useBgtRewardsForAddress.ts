@@ -1,5 +1,6 @@
 import { beraTokenAddress } from "@bera/config";
 import { type Weight } from "@bera/graphql";
+import { beraJsConfig } from "@bera/wagmi";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
@@ -25,6 +26,7 @@ export const usePollBgtRewardsForAddress = ({
   const inflationData = useInflationData();
 
   const { data: beraPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
     args: { tokenAddress: beraTokenAddress },
   });
   // const beraPrice = useBeraPrice();
@@ -34,7 +36,6 @@ export const usePollBgtRewardsForAddress = ({
     cuttingBoard,
     beraPrice,
     inflationData,
-    git,
   ];
 
   const swrResponse = useSWR(

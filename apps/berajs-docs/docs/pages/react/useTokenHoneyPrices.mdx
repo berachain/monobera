@@ -15,9 +15,13 @@ import { useTokenHoneyPrices } from "@bera/berajs";
 ```ts twoslash [example.ts]
 import { useTokenHoneyPrices, type Token } from "@bera/berajs";
 
-const tokenAddresses = ["0x1", "0x2"];
-const { data: tokePricesInHoney, isLoading } =
-  useTokenHoneyPrices(tokenAddresses);
+import { beraConfig } from "./config";
+
+const exampleTokenAddresses = ["0x1", "0x2"];
+const { data: tokePricesInHoney, isLoading } = useTokenHoneyPrices({
+  config: beraConfig,
+  args: { tokenAddresses: exampleTokenAddresses },
+});
 ```
 
 ```ts twoslash [config.ts] filename="config.ts"
@@ -25,8 +29,8 @@ import { BeraConfig } from "@bera/berajs";
 
 // required configs for getRoute
 export const beraConfig: BeraConfig = {
-  endpoints: {
-    dexRouter: "https://...",
+  subgraphs: {
+    dexSubgraph: "https://...",
   },
 };
 ```
@@ -36,7 +40,7 @@ export const beraConfig: BeraConfig = {
 ## Parameters
 
 ```ts
-import { type getHoneyPricesReq } from "berajs";
+import { type DefaultHookTypes } from "@bera/berajs";
 ```
 
 ## Returns
