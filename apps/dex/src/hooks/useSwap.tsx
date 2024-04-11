@@ -8,7 +8,7 @@ import {
   useBeraJs,
   useGasData,
   usePollAllowance,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollCrocSwap,
   useTokenHoneyPrice,
   useTokenInformation,
@@ -59,7 +59,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     useTokenInformation();
   const { read: readOutput, tokenInformation: outputToken } =
     useTokenInformation();
-  const { tokenDictionary } = useTokens();
+  const { tokenDictionary } = useTokens({
+    config: beraJsConfig,
+  });
 
   useEffect(() => {
     if (inputCurrency) {
@@ -119,7 +121,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [isTyping, setIsTyping] = useState(false);
 
-  const { isLoading: isBalanceLoading } = usePollAssetWalletBalance();
+  const { isLoading: isBalanceLoading } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
 
   useEffect(() => {
     if (isWrap) {

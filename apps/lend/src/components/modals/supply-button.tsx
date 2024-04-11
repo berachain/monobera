@@ -5,9 +5,9 @@ import {
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
-  usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
   type Token,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
@@ -23,6 +23,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
@@ -60,8 +61,10 @@ export default function SupplyBtn({
     actionType: TransactionActionType.SUPPLY,
   });
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const token = useSelectedAssetWalletBalance(reserve?.underlyingAsset);
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const token = useSelectedWalletBalance(reserve.underlyingAsset);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();

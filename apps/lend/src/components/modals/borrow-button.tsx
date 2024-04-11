@@ -4,7 +4,7 @@ import {
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
 } from "@bera/berajs";
@@ -24,6 +24,7 @@ import BigNumber from "bignumber.js";
 import { formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function BorrowBtn({
   honeyBorrowAllowance,
@@ -105,8 +106,10 @@ const BorrowModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const userAccountData = useUserAccountData();
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const token = useSelectedAssetWalletBalance(reserve?.underlyingAsset);
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const token = useSelectedWalletBalance(reserve?.underlyingAsset);
 
   const availableLiquidity = formatUnits(
     BigInt(reserve.availableLiquidity ?? "0"),

@@ -4,7 +4,7 @@ import {
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
   type BalanceToken,
@@ -25,6 +25,7 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function WithdrawBtn({
   reserve,
@@ -56,9 +57,11 @@ export default function WithdrawBtn({
     actionType: TransactionActionType.WITHDRAW,
   });
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const atoken = useSelectedAssetWalletBalance(reserve?.aTokenAddress);
-  const otoken = useSelectedAssetWalletBalance(reserve?.underlyingAsset);
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const atoken = useSelectedWalletBalance(reserve?.aTokenAddress);
+  const otoken = useSelectedWalletBalance(reserve?.underlyingAsset);
   const token = {
     ...otoken,
     balance: atoken?.balance ?? 0n,
@@ -85,7 +88,7 @@ export default function WithdrawBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <WithdrawModalContent
-            {...{ reserve, token: token, amount, setAmount, write }}
+            {...{ reserve, token: token!, amount, setAmount, write }}
           />
         </DialogContent>
       </Dialog>

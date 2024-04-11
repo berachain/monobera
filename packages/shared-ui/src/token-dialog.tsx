@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import {
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenInformation,
   useTokens,
   type Token,
@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
@@ -57,7 +58,9 @@ export function TokenDialog({
     featuredTokenList,
     addNewToken,
     removeToken,
-  } = useTokens();
+  } = useTokens({
+    config: beraJsConfig,
+  });
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
@@ -310,9 +313,10 @@ const TokenDialogRow = ({
   pendingAddition,
 }: RowProps) => {
   const { isConnected } = useBeraJs();
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const t = useSelectedAssetWalletBalance(token?.address ?? "0x");
-  const tokenBalance = t?.formattedBalance ?? "0";
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const t = useSelectedWalletBalance(token?.address ?? "0x");
   return (
     <div>
       <Button
@@ -344,7 +348,7 @@ const TokenDialogRow = ({
         {!pendingAddition && isConnected && (
           <div className="ml-auto truncate text-muted-foreground">
             <FormattedNumber
-              value={tokenBalance}
+              value={t?.formattedBalance ?? "0"}
               visibleDecimals={4}
               compact={false}
             />

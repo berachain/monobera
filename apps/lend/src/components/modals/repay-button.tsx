@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
-  type BalanceToken,
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
-  usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
+  type BalanceToken,
 } from "@bera/berajs";
 import {
   honeyTokenAddress,
@@ -27,6 +27,7 @@ import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
@@ -62,9 +63,11 @@ export default function RepayBtn({
     actionType: TransactionActionType.REPAY,
   });
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const honey = useSelectedAssetWalletBalance(honeyTokenAddress);
-  const vdHoney = useSelectedAssetWalletBalance(vdHoneyTokenAddress);
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const honey = useSelectedWalletBalance(honeyTokenAddress);
+  const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -78,7 +81,7 @@ export default function RepayBtn({
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
         disabled={
-          disabled || isLoading || !vdHoney || vdHoney.balance === 0n || !honey
+          disabled || isLoading || !vdHoney || vdHoney?.balance === 0n || !honey
         }
         variant={variant}
       >

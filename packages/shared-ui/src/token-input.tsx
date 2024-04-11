@@ -4,13 +4,14 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   formatInputTokenValue,
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   type Token,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { beraJsConfig } from "@bera/wagmi";
 import { getAddress } from "viem";
 
 import {
@@ -68,9 +69,11 @@ export function TokenInput({
   difference,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  const { useSelectedAssetWalletBalance, isLoading: isBalancesLoading } =
-    usePollAssetWalletBalance();
-  const token = useSelectedAssetWalletBalance(
+  const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
+    usePollWalletBalances({
+      config: beraJsConfig,
+    });
+  const token = useSelectedWalletBalance(
     selected ? getAddress(selected?.address ?? "0x") ?? "0x" : "0x",
   );
 

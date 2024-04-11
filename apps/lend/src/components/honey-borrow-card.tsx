@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
@@ -23,6 +23,7 @@ import { formatEther, formatUnits } from "viem";
 import BGTRewardsClaimBtn from "./bgt-rewards-claim-btn";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
@@ -50,8 +51,10 @@ export default function HoneyBorrowCard() {
     .times(0.99)
     .toFixed(18);
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const vdHoneyBalance = useSelectedAssetWalletBalance(vdHoneyTokenAddress);
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const vdHoneyBalance = useSelectedWalletBalance(vdHoneyTokenAddress);
   const userTotalBorrowAllowance = BigNumber(honeyBorrowAllowance)
     .plus(BigNumber(vdHoneyBalance?.formattedBalance ?? 0))
     .toString();

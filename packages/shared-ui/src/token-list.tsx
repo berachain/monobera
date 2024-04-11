@@ -2,7 +2,7 @@
 
 import React from "react";
 import {
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
@@ -12,6 +12,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 
 import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
+import { beraJsConfig } from "@bera/wagmi";
 
 function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   const { data: tokenPrice } = useTokenHoneyPrice(asset.address);
@@ -55,9 +56,10 @@ function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   );
 }
 export function TokenList() {
-  const { useCurrentAssetWalletBalances, isLoading } =
-    usePollAssetWalletBalance();
-  const assets = useCurrentAssetWalletBalances();
+  const { useCurrentWalletBalances, isLoading } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const assets = useCurrentWalletBalances();
 
   return (
     <div className="grid gap-4">

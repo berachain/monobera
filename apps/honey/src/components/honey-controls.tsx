@@ -1,14 +1,17 @@
 "use client";
 
 import React from "react";
-import { usePollAssetWalletBalance } from "@bera/berajs";
+import { usePollWalletBalances } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 
 export function HoneyControls() {
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const token = useSelectedAssetWalletBalance(honeyAddress ?? "0x");
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const token = useSelectedWalletBalance(honeyAddress ?? "0x");
   const tokenBalance = Number(token?.formattedBalance ?? "0");
   return (
     <div className="flex flex-row items-center gap-5">

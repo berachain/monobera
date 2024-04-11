@@ -1,9 +1,4 @@
 import React from "react";
-import {
-  formatter,
-  usePollActiveValidators,
-  usePollGlobalValidatorBribes,
-} from "@bera/berajs";
 import { BribeApyTooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -11,12 +6,10 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { EpochTimeline } from "./epoch-timeline";
 
 export function Details() {
-  const { useTotalValidators } = usePollActiveValidators();
-  const total = useTotalValidators();
+  const total = undefined;
 
   const prices = undefined;
-  const { useGlobalAvgApy } = usePollGlobalValidatorBribes(prices);
-  const avgApy = useGlobalAvgApy();
+  const avgApy = undefined;
 
   const generalInfo = [
     {
@@ -30,11 +23,7 @@ export function Details() {
     },
     {
       amount:
-        avgApy === undefined ? (
-          <Skeleton className="mb-2 h-8 w-20" />
-        ) : (
-          `${avgApy?.toFixed(2)}%`
-        ),
+        avgApy === undefined ? <Skeleton className="mb-2 h-8 w-20" /> : "0%",
       text: "Average Bribe APY",
     },
     {

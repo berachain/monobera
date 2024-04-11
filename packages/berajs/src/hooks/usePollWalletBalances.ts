@@ -8,12 +8,10 @@ import useSWRImmutable from "swr/immutable";
 import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { MULTICALL3_ABI } from "..";
+import { DefaultHookTypes, MULTICALL3_ABI } from "..";
 import { type Token } from "../api/currency/tokens";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
-
-const REFRESH_BLOCK_INTERVAL = 20000;
 
 export interface BalanceToken extends Token {
   balance: bigint;
@@ -27,27 +25,55 @@ interface Call {
   args: any[];
 }
 
+export interface UsePollWalletBalancesRequest extends DefaultHookTypes {
+  args?: {
+    externalTokenList?: Token[];
+  };
+}
+
+export interface UsePollBalancesResponse {
+  isLoading: boolean;
+  isValidating: boolean;
+  refetch: () => void;
+  useCurrentWalletBalances: () => BalanceToken[] | undefined;
+  useSelectedWalletBalance: (address: string) => BalanceToken | undefined;
+  useSelectedTagWalletBalances: (tag: string) => BalanceToken[] | undefined;
+}
+
 // TODO optimize data access pattern to avoid double store
-export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
+export const usePollWalletBalances = ({
+  config,
+  args,
+  opts,
+}: UsePollWalletBalancesRequest): UsePollBalancesResponse => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, isConnected } = useBeraJs();
-  const { tokenList } = useTokens();
-  const QUERY_KEY = [account, isConnected, tokenList, "assetWalletBalances"];
+  const { tokenList } = useTokens({ config });
+  const QUERY_KEY = [
+    account,
+    isConnected,
+    tokenList,
+    "assetWalletBalances",
+    args?.externalTokenList,
+  ];
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
       if (!account || !tokenList) return undefined;
+      if (!config.contracts?.multicallAddress) {
+        throw new Error("Multicall address not found in config");
+      }
       if (account && tokenList) {
         const fullTokenList = [
           ...tokenList,
-          ...(externalTokenList ?? []),
+          ...(args?.externalTokenList ?? []),
         ].filter((token: Token) => token.address !== bgtTokenAddress);
         const call: Call[] = fullTokenList.map((item: Token) => {
           if (item.address === nativeTokenAddress) {
             return {
-              address: multicallAddress,
+              address: config.contracts?.multicallAddress as Address,
               abi: MULTICALL3_ABI,
               functionName: "getEthBalance",
               args: [account],
@@ -100,33 +126,38 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
       }
     },
     {
-      refreshInterval: REFRESH_BLOCK_INTERVAL,
+      ...opts,
     },
   );
 
-  const useCurrentAssetWalletBalances = (): BalanceToken[] => {
-    const { data = [] } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
+  const useCurrentWalletBalances = (): BalanceToken[] | undefined => {
+    const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
     return data;
   };
 
-  const useSelectedAssetWalletBalance = (
-    address: Address,
+  const useSelectedWalletBalance = (
+    address: string,
   ): BalanceToken | undefined => {
-    const { data = undefined } = useSWRImmutable([...QUERY_KEY, address]);
+    const { data = undefined } = useSWRImmutable<BalanceToken>([
+      ...QUERY_KEY,
+      address,
+    ]);
     return data;
   };
 
-  const useSelectedTagAssetWalletBalance = (tag: string): BalanceToken[] => {
-    const { data = [] } = useSWRImmutable(QUERY_KEY);
-    return data.filter((item: Token) => item.tags?.includes(tag));
+  const useSelectedTagWalletBalances = (
+    tag: string,
+  ): BalanceToken[] | undefined => {
+    const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
+    return data?.filter((item: Token) => item.tags?.includes(tag));
   };
 
   return {
     isLoading,
     isValidating,
     refetch: () => void mutate(QUERY_KEY),
-    useCurrentAssetWalletBalances,
-    useSelectedAssetWalletBalance,
-    useSelectedTagAssetWalletBalance,
+    useCurrentWalletBalances,
+    useSelectedWalletBalance,
+    useSelectedTagWalletBalances,
   };
 };

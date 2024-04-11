@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import {
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
@@ -13,6 +13,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
+import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   token: Token;
@@ -27,10 +28,10 @@ export default function CreatePoolInitialLiquidityInput({
   disabled,
   onTokenBalanceChange,
 }: Props) {
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const tokenBalanceData = useSelectedAssetWalletBalance(
-    token?.address ?? "0x",
-  );
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const tokenBalanceData = useSelectedWalletBalance(token?.address ?? "0x");
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const tokenBalance = Number(tokenBalanceData?.formattedBalance || 0);
 
