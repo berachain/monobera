@@ -24,14 +24,69 @@ export default defineConfig({
     {
       text: "React",
       collapsed: true,
-      items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+      items: [
+        { text: "Getting Started", link: "/react/getting-started/" },
+        {
+          text: "Bex",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "Honey",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "Bend",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "Berps",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "BGT",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "usePollAssetWalletBalance",
+          link: "/react/usePollAssetWalletBalance/",
+        },
+      ],
     },
     {
       text: "Actions",
       collapsed: true,
       items: [
-        { text: "Getting Started", link: "/actions/getting-started/" },
-        { text: "getRoute", link: "/actions/getRoute/" },
+        { text: "Getting Started", link: "/react/getting-started/" },
+        {
+          text: "Bex",
+          collapsed: true,
+          items: [{ text: "getRoute", link: "/actions/getRoute/" }],
+        },
+        {
+          text: "Honey",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "Bend",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "Berps",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "BGT",
+          collapsed: true,
+          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
       ],
     },
     {
