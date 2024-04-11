@@ -94,6 +94,7 @@ export function SwapCard({
     isRouteLoading,
     refreshAllowance,
     payload,
+    payloadValue,
     exchangeRate,
     gasPrice,
     tokenInPrice,
@@ -267,7 +268,7 @@ export function SwapCard({
                 abi: MULTISWAP_ABI,
                 functionName: "multiSwap",
                 params: payload ?? [],
-                value: swapInfo.value,
+                value: payloadValue,
               });
             }}
             isLoading={isLoading}

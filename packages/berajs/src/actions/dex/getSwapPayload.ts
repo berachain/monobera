@@ -1,6 +1,7 @@
 import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 
 import { ICrocSwapStep, SwapInfoV3, Token } from "../..";
+import { PayloadReturnType } from "./../../types/global";
 
 /**
  * Returns the appropriate payload / arguments for the swap smart contract function
@@ -11,16 +12,15 @@ import { ICrocSwapStep, SwapInfoV3, Token } from "../..";
  * @returns {[ICrocSwapStep[], bigint, bigint] | undefined} - the payload / arguments for the swap smart contract function, undefined if there was invalid input
  */
 export const getSwapPayload = ({
-  swapInfo,
-  slippage,
-  baseToken,
-  quoteToken,
+  args: { swapInfo, slippage, baseToken, quoteToken },
 }: {
-  swapInfo: SwapInfoV3 | undefined;
-  slippage: number | undefined;
-  baseToken: Token | undefined;
-  quoteToken: Token | undefined;
-}): [ICrocSwapStep[], bigint, bigint] | undefined => {
+  args: {
+    swapInfo: SwapInfoV3 | undefined;
+    slippage: number | undefined;
+    baseToken: Token | undefined;
+    quoteToken: Token | undefined;
+  };
+}): PayloadReturnType<[ICrocSwapStep[], bigint, bigint]> | undefined => {
   if (
     !(swapInfo?.batchSwapSteps?.length && slippage && baseToken && quoteToken)
   ) {
@@ -72,7 +72,7 @@ export const getSwapPayload = ({
       minAmountOut,
     ];
 
-    return payload;
+    return { payload, value: swapInfo.value };
   } catch (e) {
     console.log("getSwapError:", e);
     return undefined;
