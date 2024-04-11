@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
+
 import { getSwap } from "~/actions/dex";
 import { SwapRequest, type DefaultHookTypes } from "~/types";
 
@@ -46,7 +47,7 @@ export const usePollCrocSwap = ({
     QUERY_KEY,
     async () => {
       try {
-        if (!publicClient) return undefined;
+        if (!publicClient || !config) return undefined;
         if (isTyping !== undefined && isTyping === true) {
           return {
             batchSwapSteps: [],

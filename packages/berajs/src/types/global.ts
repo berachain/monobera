@@ -19,7 +19,7 @@ export interface BeraConfig {
 }
 
 export interface DefaultHookTypes {
-  config: BeraConfig;
+  config?: BeraConfig;
   opts?: SWRConfiguration;
 }
 

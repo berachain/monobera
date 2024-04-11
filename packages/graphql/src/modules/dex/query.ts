@@ -151,7 +151,7 @@ export const getGlobalDexData = gql`
   }
 `;
 
-export const getTokenHoneyPrice = gql`
+export const getTokenHoneyPriceReq = gql`
   query GetTokenHoneyPrice($id: String) {
     tokenHoneyPrice(id: $id) {
       id
@@ -160,7 +160,7 @@ export const getTokenHoneyPrice = gql`
   }
 `;
 
-export const getTokenHoneyPrices = gql`
+export const getTokenHoneyPricesReq = gql`
   query GetTokenHoneyPrice($id: [String!]) {
     tokenHoneyPrices(where: { id_in: $id }) {
       id
@@ -353,7 +353,7 @@ export const getRecentSwaps = gql`
       quoteFlow
       transactionHash
       time
-      baseAssetHoneyPrice 
+      baseAssetHoneyPrice
       quoteAssetHoneyPrice
     }
   }
@@ -373,7 +373,7 @@ export const getRecentProvisions = gql`
       changeType
       transactionHash
       time
-      baseAssetHoneyPrice 
+      baseAssetHoneyPrice
       quoteAssetHoneyPrice
     }
   }

@@ -1,5 +1,5 @@
 import { honeyTokenAddress } from "@bera/config";
-import { dexClient, getTokenHoneyPrice } from "@bera/graphql";
+import { dexClient, getTokenHoneyPriceReq } from "@bera/graphql";
 import { Address } from "viem";
 
 import { handleNativeBera } from "~/utils";
@@ -12,7 +12,7 @@ interface FetchHoneyPriceArgs {
  * fetch the current honey price of a given token
  */
 
-export const getTokenHoneyPriceReq = async ({
+export const getTokenHoneyPrice = async ({
   tokenAddress,
 }: FetchHoneyPriceArgs): Promise<string | undefined> => {
   if (!tokenAddress) {
@@ -23,7 +23,7 @@ export const getTokenHoneyPriceReq = async ({
   }
   return await dexClient
     .query({
-      query: getTokenHoneyPrice,
+      query: getTokenHoneyPriceReq,
       variables: {
         id: handleNativeBera(tokenAddress as Address).toLowerCase(),
       },
