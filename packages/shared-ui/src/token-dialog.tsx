@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import {
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenInformation,
   useTokens,
   type Token,
@@ -26,6 +26,7 @@ import { SearchInput } from "./search-input";
 import { TokenChip } from "./token-chip";
 import { TokenIcon } from "./token-icon";
 import { FormattedNumber } from "./formatted-number";
+import {beraJsConfig} from "@bera/wagmi";
 
 type Props = {
   open: boolean;
@@ -57,7 +58,9 @@ export function TokenDialog({
     featuredTokenList,
     addNewToken,
     removeToken,
-  } = useTokens();
+  } = useTokens({
+    config: beraJsConfig,
+  });
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
@@ -310,8 +313,10 @@ const TokenDialogRow = ({
   pendingAddition,
 }: RowProps) => {
   const { isConnected } = useBeraJs();
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: t } = useSelectedAssetWalletBalance(token?.address ?? "");
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const t = useSelectedWalletBalance(token?.address ?? "");
   const tokenBalance = t?.formattedBalance;
   return (
     <div>
@@ -345,7 +350,7 @@ const TokenDialogRow = ({
           <div className="ml-auto text-muted-foreground truncate">
             {/* <p>{tokenBalance ?? 0}</p> */}
             <FormattedNumber
-              value={tokenBalance}
+              value={tokenBalance ?? '0'}
               visibleDecimals={4}
               compact={false}
             />

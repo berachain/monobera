@@ -15,11 +15,14 @@ import { honeyRouterAddress, honeyTokenAddress } from "@bera/config";
 import { useTxn, useAnalytics } from "@bera/shared-ui";
 import BigNumber from "bignumber.js";
 import { getAddress, parseUnits, type Address } from "viem";
+import { beraJsConfig } from "@bera/wagmi";
 
 export const usePsm = () => {
   const [isTyping, setIsTyping] = useState(false);
 
-  const { tokenDictionary, tokenList } = useTokens();
+  const { tokenDictionary, tokenList } = useTokens({
+    config: beraJsConfig,
+  });
   const collateralList = tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
   );

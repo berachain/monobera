@@ -5,7 +5,6 @@ import {
   REWARDS_PRECOMPILE_ABI,
   TransactionActionType,
   useBeraJs,
-  usePollBgtRewards,
   useTokens,
 } from "@bera/berajs";
 import { bgtTokenAddress, rewardsAddress } from "@bera/config";
@@ -18,6 +17,7 @@ import {
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { parseEther, type Address } from "viem";
+import { beraJsConfig } from "@bera/wagmi";
 
 export function RewardBtn({ poolAddress, ...props }: any) {
   const { isReady } = useBeraJs();
@@ -25,8 +25,8 @@ export function RewardBtn({ poolAddress, ...props }: any) {
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<`${number}` | undefined>(undefined);
 
-  const { useBgtReward, refetch } = usePollBgtRewards([poolAddress]);
-  const { data: bgtRewards } = useBgtReward(poolAddress);
+
+  const bgtRewards = '0'
 
   const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal } = useTxn({
@@ -38,7 +38,6 @@ export function RewardBtn({ poolAddress, ...props }: any) {
       track("claim_bgt_reward_success", {
         claim_amount: Number(amount).toFixed(2),
       });
-      refetch();
     },
     onError: (e: Error | undefined) => {
       track("claim_bgt_reward_failed", {
@@ -87,7 +86,9 @@ const RewardModalContent = ({
 }) => {
   const exceeding = amount !== undefined && Number(amount) > Number(bgtRewards);
 
-  const { tokenDictionary } = useTokens();
+  const { tokenDictionary } = useTokens({
+    config: beraJsConfig,
+  });
   return (
     <div className="flex w-full flex-col gap-8 ">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>

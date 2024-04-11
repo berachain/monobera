@@ -6,20 +6,22 @@ import {
   truncateHash,
   usePollAccountDelegations,
   usePollActiveValidators,
-  usePollAssetWalletBalance,
   useTokens,
   type Validator,
 } from "@bera/berajs";
 import { stakingAddress } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
 import { getAddress, parseUnits } from "viem";
+import { beraJsConfig } from "@bera/wagmi";
 
 export const useRedelegate = (fromAddress: `0x{string}`) => {
   const [redelegateAmount, setRedelegateAmount] = useState(0);
   const [dstValidator, setDstValidator] = useState<Validator | null>(null);
   const { useActiveValidator } = usePollActiveValidators();
   const srcValidator = useActiveValidator(fromAddress);
-  const { tokenList: tokens } = useTokens();
+  const { tokenList: tokens } = useTokens({
+    config: beraJsConfig
+  });
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(fromAddress);
   const accountDelegation = useSelectedAccountDelegation();

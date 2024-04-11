@@ -3,10 +3,6 @@ import {
   BRIBE_PRECOMPILE_ABI,
   TransactionActionType,
   useBeraJs,
-  usePollActiveValidators,
-  usePollBribes,
-  usePollTotalDelegated,
-  type PoLValidator,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/src/utils";
 import { erc20BribeModule } from "@bera/config";
@@ -26,31 +22,15 @@ import { formatEther, type Address } from "viem";
 export default function ValidatorCard({
   validator,
 }: {
-  validator: PoLValidator;
+  validator: any;
 }) {
   const router = useRouter();
-  const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
-
-  const { usePercentageDelegated } = usePollActiveValidators();
-  const percentageDelegated = usePercentageDelegated(
-    validator.operatorAddr as Address,
-  );
-
-  const { useValidatorDelegation } = usePollTotalDelegated();
-  const userDelegated = useValidatorDelegation(validator.operatorAddr);
-  const prices = undefined;
-  const { useValidatorBribeTotal, useValidatorUserBribes, QUERY_KEY } =
-    usePollBribes();
-
-  const bribeTotal = useValidatorBribeTotal(validator.operatorAddr, prices);
-  const userBribeTokenList = useValidatorUserBribes(validator.operatorAddr);
+  const userDelegated = undefined
+  const bribeTotal = undefined
   const { write, ModalPortal } = useTxn({
     message: "Claiming bribes",
     actionType: TransactionActionType.CLAIMING_BRIBES,
-    onSuccess: () => {
-      void mutate(QUERY_KEY);
-    },
   });
 
   const valiInfo = [
@@ -70,7 +50,7 @@ export default function ValidatorCard({
           <Tooltip text="Represents the influence in network governance based on amount delegated to this validator" />
         </div>
       ),
-      value: `${percentageDelegated?.toFixed(2) ?? 0}%`,
+      value: "0",
     },
     {
       title: (
@@ -157,7 +137,6 @@ export default function ValidatorCard({
             Unbond <Icons.minus className="relative ml-1 h-4 w-4" />
           </Button>
           <Button
-            disabled={userBribeTokenList.length === 0}
             size="sm"
             onClick={claimBribe}
           >
@@ -225,7 +204,6 @@ export default function ValidatorCard({
             <Icons.minus className="relative h-4 w-4" />
           </Button>
           <Button
-            disabled={userBribeTokenList.length === 0}
             size="sm"
             onClick={claimBribe}
           >

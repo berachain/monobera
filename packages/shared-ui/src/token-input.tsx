@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   formatInputTokenValue,
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   type Token,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
@@ -21,6 +21,7 @@ import {
   useBreakpoint,
 } from ".";
 import { getPriceImpactColorClass } from "./utils/textStyling";
+import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   selected: Token | undefined;
@@ -68,9 +69,11 @@ export function TokenInput({
   difference,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { isLoading: isBalancesLoading, data: token } =
-    useSelectedAssetWalletBalance(
+  const { useSelectedWalletBalance,  isLoading: isBalancesLoading } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const token =
+    useSelectedWalletBalance(
       selected ? getAddress(selected?.address ?? "") ?? "" : "",
     );
 
@@ -88,13 +91,13 @@ export function TokenInput({
 
   useEffect(() => {
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
-    if (safeNumberAmount <= tokenBalance) {
+    if (safeNumberAmount <= Number(tokenBalance)) {
       setExceeding(false);
       return;
     }
     if (
       !isBalancesLoading &&
-      (safeNumberAmount > tokenBalance || Number(tokenBalance) === 0) &&
+      (safeNumberAmount > Number(tokenBalance) || Number(tokenBalance) === 0) &&
       selected !== undefined
     ) {
       setExceeding(true);
@@ -218,7 +221,7 @@ export function TokenInput({
               </div>
             )}
           </div>
-          {isConnected && selected && tokenBalance !== 0 && (
+          {isConnected && selected && tokenBalance !== "0" && (
             <div className="flex flex-row items-center justify-start gap-1 px-1">
               <Icons.wallet className="h-3 w-3 text-muted-foreground" />
               <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">

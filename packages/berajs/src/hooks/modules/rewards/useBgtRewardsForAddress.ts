@@ -5,9 +5,6 @@ import useSWRImmutable from "swr/immutable";
 
 import POLLING from "~/config/constants/polling";
 import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrices";
-import { usePollGlobalCuttingBoard } from "..";
-import { usePollBgtInflation } from "../staking/usePollBgtInflation";
-
 interface IBgtRewardsForAddress {
   bgtPerYear: number;
   UsdBgtPerYear: number;
@@ -17,12 +14,8 @@ export const usePollBgtRewardsForAddress = ({
 }: {
   address: string | undefined;
 }) => {
-  const { useGlobalCuttingBoard } = usePollGlobalCuttingBoard();
-
-  const { useInflationData } = usePollBgtInflation();
-
-  const cuttingBoard = useGlobalCuttingBoard();
-  const inflationData = useInflationData();
+  const cuttingBoard = undefined
+  const inflationData = undefined;
 
   const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);
   // const beraPrice = useBeraPrice();
@@ -37,24 +30,24 @@ export const usePollBgtRewardsForAddress = ({
   const swrResponse = useSWR(
     QUERY_KEY,
     () => {
-      if (cuttingBoard && address && inflationData) {
-        const totalAmount = cuttingBoard.reduce((acc: number, curr: any) => {
-          return acc + Number(curr.amount);
-        }, 0);
-        const cb: Weight = cuttingBoard.find(
-          (b: Weight) => b.receiver.toLowerCase() === address.toLowerCase(),
-        );
-        if (cb) {
-          const weight = cb.amount / totalAmount;
-          const amountPerYear = weight * inflationData.bgtPerYear;
+      // if (cuttingBoard && address && inflationData) {
+      //   const totalAmount = cuttingBoard.reduce((acc: number, curr: any) => {
+      //     return acc + Number(curr.amount);
+      //   }, 0);
+      //   const cb: Weight = cuttingBoard.find(
+      //     (b: Weight) => b.receiver.toLowerCase() === address.toLowerCase(),
+      //   );
+      //   if (cb) {
+      //     const weight = cb.amount / totalAmount;
+      //     const amountPerYear = weight * inflationData.bgtPerYear;
 
-          return {
-            bgtPerYear: amountPerYear,
-            UsdBgtPerYear: amountPerYear * Number(beraPrice),
-          };
-        }
-        return undefined;
-      }
+      //     return {
+      //       bgtPerYear: amountPerYear,
+      //       UsdBgtPerYear: amountPerYear * Number(beraPrice),
+      //     };
+      //   }
+      //   return undefined;
+      // }
       return undefined;
     },
     {

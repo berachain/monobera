@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollReservesDataList,
 } from "@bera/berajs";
 import { aHoneyTokenAddress, honeyTokenAddress } from "@bera/config";
@@ -8,11 +8,14 @@ import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 
 import SupplyBtn from "~/components/modals/supply-button";
 import WithdrawBtn from "~/components/modals/withdraw-button";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function HoneySupply() {
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: aHoneyToken } =
-    useSelectedAssetWalletBalance(aHoneyTokenAddress);
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const aHoneyToken =
+    useSelectedWalletBalance(aHoneyTokenAddress);
   const { useSelectedReserveData } = usePollReservesDataList();
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
   return (

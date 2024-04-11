@@ -10,6 +10,7 @@ import { type PoolV2 } from "../pools/fetchPools";
 import { useCrocPoolPrice } from "~/hooks/useCrocPoolPrice";
 import { crocDexAddress } from "@bera/config";
 import useMultipleTokenApprovalsWithSlippage from "~/hooks/useMultipleTokenApprovalsWithSlippage";
+import { beraJsConfig } from "@bera/wagmi";
 
 export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   const { account: _account } = useBeraJs();
@@ -44,7 +45,9 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     crocDexAddress as Address,
   );
 
-  const { tokenDictionary } = useTokens();
+  const { tokenDictionary, beraToken, wBeraToken } = useTokens({
+    config: beraJsConfig
+  });
 
   const reset = () => {
     setPreviewOpen(false);
@@ -53,8 +56,6 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
       updateTokenAmount(i, "");
     });
   };
-
-  const { beraToken, wBeraToken } = useTokens();
 
   const [isNativeBera, setIsNativeBera] = useState(true);
 

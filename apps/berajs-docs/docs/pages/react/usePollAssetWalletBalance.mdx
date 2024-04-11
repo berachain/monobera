@@ -1,34 +1,34 @@
-# usePollAssetWalletBalance
+# usePollWalletBalances
 
 React hook for polling balance of a token list for a connected user
 
 ## Import 
 
 ```ts
-import { usePollAssetWalletBalance } from '@bera/berajs'
+import { usePollWalletBalances } from '@bera/berajs'
 ```
 
 ## Usage
 
 :::code-group
 ```ts twoslash [example.ts]
-import { usePollAssetWalletBalance } from '@bera/berajs'
+import { usePollWalletBalances } from '@bera/berajs'
 import { beraConfig } from './config'
 
 const {
-    useCurrentAssetWalletBalances,
-    useSelectedAssetWalletBalance,
-    useSelectedTagAssetWalletBalance,
+    useCurrentWalletBalances,
+    useSelectedWalletBalance,
+    useSelectedTagWalletBalances,
     refetch,
     isLoading
-} = usePollAssetWalletBalance()
+} = usePollWalletBalances()
 
 // list of all balances
-const balances = useCurrentAssetWalletBalances()
+const balances = useCurrentWalletBalances()
 // balance of selected asset
-const selectedBalance = useSelectedAssetWalletBalance('0x...')
+const selectedBalance = useSelectedWalletBalance('0x...')
 // balance of selected tag assets
-const selectedTagBalance = useSelectedTagAssetWalletBalance('atoken')
+const selectedTagBalance = useSelectedTagWalletBalances('atoken')
 
 ```
 ```ts twoslash [config.ts] filename="config.ts"
