@@ -1,2 +1,2 @@
-export * from "./getHoneyPriceReq";
-export * from "./getHoneyPricesReq";
+export * from "./getHoneyPrice";
+export * from "./getHoneyPrices";
