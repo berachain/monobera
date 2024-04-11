@@ -14,26 +14,26 @@ export function Tooltip({
   className,
   size = 4,
   children,
-  toolTripTrigger,
+  toolTipTrigger,
   ...props
 }: {
   text?: any;
   className?: string;
   size?: number;
   children?: React.ReactNode;
-  toolTripTrigger?: React.ReactNode;
+  toolTipTrigger?: React.ReactNode;
 }) {
   const [tooltipOpen, setTooltipOpen] = React.useState(false);
   return (
     <TooltipProvider>
       <BeraUiTooltip open={tooltipOpen} defaultOpen={false} {...props}>
         <TooltipTrigger asChild>
-          {toolTripTrigger ? (
+          {toolTipTrigger ? (
             <div
               onMouseEnter={() => setTooltipOpen(true)}
               onMouseLeave={() => setTooltipOpen(false)}
             >
-              {toolTripTrigger}
+              {toolTipTrigger}
             </div>
           ) : (
             <Button

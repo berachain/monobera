@@ -41,7 +41,7 @@ export function TotalAmount({
         </span>
         <div className="group relative">
           <Tooltip
-            toolTripTrigger={
+            toolTipTrigger={
               <span className="text-sm font-medium text-success-foreground">
                 {
                   <FormattedNumber

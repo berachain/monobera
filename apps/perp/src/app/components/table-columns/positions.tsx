@@ -103,7 +103,7 @@ export const ActivePositionPNL = ({
       .minus(positionSizeBN)
       .div(positionSizeBN)
       .times(100);
-    return percentage.dp(2).toString(10);
+    return percentage.isFinite() ? percentage.dp(2).toString(10) : "-";
   }, [pnl, position]);
 
   const initialCollateral = formatFromBaseUnit(position.position_size, 18)
@@ -127,7 +127,7 @@ export const ActivePositionPNL = ({
             )}
           >
             <Tooltip
-              toolTripTrigger={
+              toolTipTrigger={
                 <div className="cursor-help underline decoration-dashed">
                   {formatUsd(pnl)}
                 </div>

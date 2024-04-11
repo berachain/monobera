@@ -40,8 +40,8 @@ export default function Claim() {
         height={186}
         className="absolute bottom-0 right-0 block h-[186px] object-cover"
       />
-      <div className=" relative inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-yellow-600 bg-stone-900 px-3 py-2">
-        <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-yellow-600">
+      <div className=" relative inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-warning-foreground bg-muted px-3 py-2">
+        <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-warning-foreground">
           {isHoneyVaultBalanceLoading ||
           isBgtRewardsLoading ||
           isFeesAprLoading ? (
