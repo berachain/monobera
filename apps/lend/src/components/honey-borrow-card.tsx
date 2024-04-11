@@ -46,7 +46,7 @@ export default function HoneyBorrowCard() {
     8,
   );
   const honeyBorrowAllowance = BigNumber(borrowAllowanceUSD)
-    .div(honeyReserve.formattedPriceInMarketReferenceCurrency)
+    .div(honeyReserve?.formattedPriceInMarketReferenceCurrency??"0")
     .times(0.99)
     .toFixed(18);
 
