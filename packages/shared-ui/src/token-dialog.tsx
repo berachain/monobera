@@ -162,7 +162,7 @@ export function TokenDialog({
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         {!managingTokens && (
-          <DialogContent className="flex max-w-[425px] flex-col gap-4 rounded-2xl px-6">
+          <DialogContent className="flex max-h-[100vh] max-w-[425px] flex-col gap-4 rounded-2xl px-6">
             <DialogHeader>
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
@@ -247,7 +247,7 @@ export function TokenDialog({
           </DialogContent>
         )}
         {managingTokens && (
-          <DialogContent className="flex w-full flex-col">
+          <DialogContent className="flex max-h-[100vh] w-full  flex-col">
             <DialogHeader>
               <DialogTitle className="flex flex-row items-center justify-start gap-2 text-lg">
                 {" "}
@@ -352,7 +352,7 @@ const TokenDialogRow = ({
           </div>
         )}
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
-          <DialogContent className="flex flex-col items-center justify-center gap-3 px-4 md:w-[350px]">
+          <DialogContent className="flex max-h-[100vh] flex-col items-center justify-center gap-3 px-4  md:w-[350px]">
             <Icons.tooltip
               style={{ height: "64px", width: "64px", color: "#DC2626" }}
             />
