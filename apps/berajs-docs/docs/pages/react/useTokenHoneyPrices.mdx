@@ -1,0 +1,46 @@
+# useTokenHoneyPrice
+
+React hook to retrieve the current honey prices of a series of tokens
+
+## Import
+
+```ts
+import { useTokenHoneyPrices } from "@bera/berajs";
+```
+
+## Usage
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { useTokenHoneyPrices, type Token } from "@bera/berajs";
+
+const tokenAddresses = ["0x1", "0x2"];
+const { data: tokePricesInHoney, isLoading } =
+  useTokenHoneyPrices(tokenAddresses);
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+};
+```
+
+:::
+
+## Parameters
+
+```ts
+import { type getHoneyPricesReq } from "berajs";
+```
+
+## Returns
+
+```ts
+string[] // an array of token prices in Honey
+```

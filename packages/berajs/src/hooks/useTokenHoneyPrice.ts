@@ -1,10 +1,7 @@
-import { honeyTokenAddress } from "@bera/config";
-import { dexClient, getTokenHoneyPrice } from "@bera/graphql";
 import useSWR from "swr";
-import { type Address } from "viem";
 
+import { getTokenHoneyPriceReq } from "~/actions/honey";
 import POLLING from "~/config/constants/polling";
-import { handleNativeBera } from "~/utils";
 
 /**
  *
@@ -17,26 +14,7 @@ export const useTokenHoneyPrice = (tokenAddress: string | undefined) => {
   return useSWR(
     QUERY_KEY,
     async () => {
-      if (!tokenAddress) {
-        return "0";
-      }
-      if (tokenAddress.toLowerCase() === honeyTokenAddress.toLowerCase()) {
-        return "1";
-      }
-      return await dexClient
-        .query({
-          query: getTokenHoneyPrice,
-          variables: {
-            id: handleNativeBera(tokenAddress as Address).toLowerCase(),
-          },
-        })
-        .then((res: any) => {
-          return res.data.tokenHoneyPrice?.price;
-        })
-        .catch((e: any) => {
-          console.log(e);
-          return "0";
-        });
+      return getTokenHoneyPriceReq({ tokenAddress });
     },
     {
       refreshInterval: POLLING.REFRESH_BLOCK_INTERVAL,
