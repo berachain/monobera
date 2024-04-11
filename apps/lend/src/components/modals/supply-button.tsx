@@ -39,7 +39,7 @@ export default function SupplyBtn({
   variant?: "primary" | "outline";
   className?: string;
 }) {
-  const supply = reserve.underlyingAsset === honeyTokenAddress;
+  const supply = reserve?.underlyingAsset === honeyTokenAddress;
 
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
@@ -49,12 +49,12 @@ export default function SupplyBtn({
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`supply_${reserve.symbol.toLowerCase()}`);
+      track(`supply_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`supply_${reserve.symbol.toLowerCase()}_failed`);
+      track(`supply_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.SUPPLY,
@@ -62,7 +62,7 @@ export default function SupplyBtn({
 
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: token } = useSelectedAssetWalletBalance(
-    reserve.underlyingAsset,
+    reserve?.underlyingAsset,
   );
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
