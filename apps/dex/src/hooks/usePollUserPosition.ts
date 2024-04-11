@@ -1,6 +1,6 @@
 import { getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
-import { dexClient, getTokenHoneyPrices } from "@bera/graphql";
+import { dexClient, getTokenHoneyPricesReq } from "@bera/graphql";
 import { POLLING } from "@bera/shared-ui/src/utils";
 import BigNumber from "bignumber.js";
 import useSWR, { mutate } from "swr";
@@ -59,7 +59,7 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
       try {
         const tokenHoneyPricesResult = dexClient
           .query({
-            query: getTokenHoneyPrices,
+            query: getTokenHoneyPricesReq,
             variables: {
               id: [pool.base, pool.quote],
             },

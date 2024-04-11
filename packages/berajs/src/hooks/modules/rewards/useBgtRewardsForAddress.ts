@@ -24,7 +24,9 @@ export const usePollBgtRewardsForAddress = ({
   const cuttingBoard = useGlobalCuttingBoard();
   const inflationData = useInflationData();
 
-  const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);
+  const { data: beraPrice } = useTokenHoneyPrice({
+    args: { tokenAddress: beraTokenAddress },
+  });
   // const beraPrice = useBeraPrice();
   const QUERY_KEY = [
     "bgtRewardsForAddress",
@@ -32,6 +34,7 @@ export const usePollBgtRewardsForAddress = ({
     cuttingBoard,
     beraPrice,
     inflationData,
+    git,
   ];
 
   const swrResponse = useSWR(
