@@ -59,7 +59,7 @@ export default function WithdrawBtn({
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: atoken } = useSelectedAssetWalletBalance(reserve.aTokenAddress);
   const { data: otoken } = useSelectedAssetWalletBalance(
-    reserve.underlyingAsset,
+    reserve?.underlyingAsset,
   );
   const token = {
     ...otoken,
@@ -108,7 +108,7 @@ const WithdrawModalContent = ({
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const isHoney = reserve.underlyingAsset === honeyTokenAddress;
+  const isHoney = reserve?.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
   const { account } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData();

@@ -1,5 +1,3 @@
-import { honeyAddress } from "@bera/config";
-import { formatUnits, type Address } from "viem";
 
 export function getEligibleDepositAmount(reserves: any[], balanceToken: any[]) {
   let eligibleDepositAmount = 0;
