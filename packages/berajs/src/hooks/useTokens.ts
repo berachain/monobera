@@ -1,11 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import {
-  beraTokenAddress,
-  nativeTokenAddress,
-  tokenListUrl,
-} from "@bera/config";
+import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -13,6 +9,7 @@ import { type Token } from "~/api";
 import { DefaultHookTypes } from "..";
 
 interface IUseTokens {
+  isLoading: boolean;
   tokenList?: Token[] | undefined;
   customTokenList?: Token[] | undefined;
   tokenDictionary?: { [key: string]: Token } | undefined;
@@ -37,7 +34,7 @@ const useTokens = ({ config, opts }: DefaultHookTypes): IUseTokens => {
   const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
     Token[]
   >(TOKEN_KEY, []);
-  const { data } = useSWRImmutable(
+  const { data, isLoading } = useSWRImmutable(
     ["defaultTokenList", localStorageTokenList, config],
     async () => {
       if (!config.endpoints?.tokenList) {
@@ -137,6 +134,7 @@ const useTokens = ({ config, opts }: DefaultHookTypes): IUseTokens => {
   }, [data?.dictionary]);
 
   return {
+    isLoading: isLoading,
     tokenList: data?.list ?? [],
     customTokenList: data?.customList ?? [],
     tokenDictionary: data?.dictionary ?? {},

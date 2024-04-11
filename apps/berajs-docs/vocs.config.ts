@@ -55,6 +55,10 @@ export default defineConfig({
           text: "usePollWalletBalances",
           link: "/react/usePollWalletBalances/",
         },
+        {
+          text: "useTokens",
+          link: "/react/useTokens/",
+        },
       ],
     },
     {

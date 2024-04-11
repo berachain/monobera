@@ -25,13 +25,13 @@ interface Call {
   args: any[];
 }
 
-interface UsePollWalletBalancesRequest extends DefaultHookTypes {
+export interface UsePollWalletBalancesRequest extends DefaultHookTypes {
   args?: {
     externalTokenList?: Token[];
   };
 }
 
-interface UsePollBalancesResponse {
+export interface UsePollBalancesResponse {
   isLoading: boolean;
   isValidating: boolean;
   refetch: () => void;

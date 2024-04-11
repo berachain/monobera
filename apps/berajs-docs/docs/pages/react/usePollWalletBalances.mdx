@@ -21,7 +21,7 @@ const {
     useSelectedTagWalletBalances,
     refetch,
     isLoading
-} = usePollWalletBalances()
+} = usePollWalletBalances(beraConfig)
 
 // list of all balances
 const balances = useCurrentWalletBalances()
@@ -37,7 +37,7 @@ import { BeraConfig } from "@bera/berajs";
 // required configs for getRoute
 export const beraConfig: BeraConfig = {
     endpoints: {
-        dexRouter: 'https://...'
+        tokenList: 'https://..',
     }
 }
 ```
@@ -46,12 +46,13 @@ export const beraConfig: BeraConfig = {
 
 ## Parameters
 ```ts
-// TODO: create custom type
-import { type getRoute } from 'berajs'
+import { type UsePollWalletBalancesRequest } from '@bera/berajs'
 ```
 
+- config.endpoints.tokenList
+    - Type: `string`
+    - Description: url to a [token list](https://tokenlists.org/) compatible json file
 ## Returns
 ```ts
-// TODO: create custom type
-import { type SwapInfoV3 } from 'berajs'
+import { type UsePollBalancesResponse } from '@bera/berajs'
 ```
