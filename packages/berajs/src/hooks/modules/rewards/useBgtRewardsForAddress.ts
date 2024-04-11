@@ -4,7 +4,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import POLLING from "~/config/constants/polling";
-import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrices";
+import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrice";
 import { usePollGlobalCuttingBoard } from "..";
 import { usePollBgtInflation } from "../staking/usePollBgtInflation";
 
