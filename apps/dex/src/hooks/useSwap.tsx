@@ -253,9 +253,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const allowance = useAllowance();
 
   const slippage = useSlippage();
-  // useEffect(() => {
-
-  // }, [swapInfo, slippage]);
   const payload = getSwapPayload({
     swapInfo,
     slippage,
