@@ -9,9 +9,9 @@ export default function UserDeposits() {
   const { useSelectedTagAssetWalletBalance } = usePollAssetWalletBalance();
   const atokens = useSelectedTagAssetWalletBalance("aToken").filter(
     (atoken: Token) =>
-      atoken.balance &&
-      atoken.balance > 0n &&
-      atoken.address !== aHoneyTokenAddress,
+      atoken?.balance &&
+      atoken?.balance > 0n &&
+      atoken?.address !== aHoneyTokenAddress,
   );
   return (
     <>
