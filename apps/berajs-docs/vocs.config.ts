@@ -55,7 +55,6 @@ export default defineConfig({
           text: "usePollAssetWalletBalance",
           link: "/react/usePollAssetWalletBalance/",
         },
-        
       ],
     },
     {
