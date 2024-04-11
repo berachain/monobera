@@ -22,7 +22,7 @@ export default function UserTokenCard({
     <Card key={reserve.symbol} className="bg-muted p-4">
       <div className="flex flex-row items-center justify-between gap-6">
         <div className="flex flex-shrink-0 items-center gap-4 ">
-          <TokenIcon address={reserve.underlyingAsset} size="2xl" />
+          <TokenIcon address={reserve?.underlyingAsset} size="2xl" />
           <div>
             <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
               {deposited && "Deposited"}

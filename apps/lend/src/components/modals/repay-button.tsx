@@ -68,7 +68,7 @@ export default function RepayBtn({
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
-  
+
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
   return (

@@ -107,7 +107,7 @@ const BorrowModalContent = ({
 
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
   const { data: token } = useSelectedAssetWalletBalance(
-    reserve.underlyingAsset,
+    reserve?.underlyingAsset,
   );
 
   const availableLiquidity = formatUnits(
