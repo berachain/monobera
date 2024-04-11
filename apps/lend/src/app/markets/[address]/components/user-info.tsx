@@ -1,6 +1,6 @@
 import {
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
 } from "@bera/berajs";
@@ -14,13 +14,14 @@ import { formatUnits } from "viem";
 import { Card } from "@bera/ui/card";
 import BorrowBtn from "~/components/modals/borrow-button";
 import SupplyBtn from "~/components/modals/supply-button";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function UserInfo() {
   const { isReady } = useBeraJs();
-  const { useSelectedAssetWalletBalance, isLoading } =
-    usePollAssetWalletBalance();
-  const { data: tokenBalance } =
-    useSelectedAssetWalletBalance(honeyTokenAddress);
+  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const tokenBalance = useSelectedWalletBalance(honeyTokenAddress);
 
   const { useSelectedReserveData, useBaseCurrencyData } =
     usePollReservesDataList();
