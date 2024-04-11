@@ -8,24 +8,29 @@ import { DefaultHookTypes } from "~/types/global";
  *
  * @returns the current honey price of a series of tokens
  */
-interface UseTokenHoneyPricesRequest extends DefaultHookTypes {
+interface IUseTokenHoneyPricesRequest extends DefaultHookTypes {
   args?: {
     tokenAddresses: string[] | undefined;
   };
 }
 
 export const useTokenHoneyPrices = ({
+  config,
   args: { tokenAddresses } = { tokenAddresses: undefined },
   opts: { refreshInterval } = {
     refreshInterval: POLLING.REFRESH_BLOCK_INTERVAL,
   },
-}: UseTokenHoneyPricesRequest) => {
+}: IUseTokenHoneyPricesRequest) => {
+  if (!config.subgraphs?.dexSubgraph) {
+    throw new Error("dex subgraph uri s not found in config");
+  }
   const method = "tokenHoneyPrices";
   const QUERY_KEY = [tokenAddresses, method];
+  const subgraphEndpoint = config.subgraphs?.dexSubgraph;
   return useSWR(
     QUERY_KEY,
     async () => {
-      return getTokenHoneyPrices({ tokenAddresses });
+      return getTokenHoneyPrices({ tokenAddresses, subgraphEndpoint });
     },
     {
       refreshInterval,

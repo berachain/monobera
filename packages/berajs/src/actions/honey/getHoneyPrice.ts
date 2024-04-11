@@ -1,11 +1,13 @@
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { honeyTokenAddress } from "@bera/config";
-import { dexClient, getTokenHoneyPriceReq } from "@bera/graphql";
+import { getTokenHoneyPriceReq } from "@bera/graphql";
 import { Address } from "viem";
 
 import { handleNativeBera } from "~/utils";
 
 interface FetchHoneyPriceArgs {
   tokenAddress?: string | undefined;
+  subgraphEndpoint?: string | undefined;
 }
 
 /**
@@ -14,7 +16,12 @@ interface FetchHoneyPriceArgs {
 
 export const getTokenHoneyPrice = async ({
   tokenAddress,
+  subgraphEndpoint,
 }: FetchHoneyPriceArgs): Promise<string | undefined> => {
+  const dexClient = new ApolloClient({
+    uri: subgraphEndpoint,
+    cache: new InMemoryCache(),
+  });
   if (!tokenAddress) {
     return "0";
   }

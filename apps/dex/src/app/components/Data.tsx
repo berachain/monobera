@@ -6,6 +6,7 @@ import { beraTokenAddress } from "@bera/config";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
 
 function DataCard({
   icon,
@@ -34,7 +35,10 @@ function DataCard({
 }
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);
+  const { data: beraPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: beraTokenAddress },
+  });
 
   const isDataReady = useMemo(() => {
     return beraPrice;
