@@ -110,7 +110,7 @@ export default function UserInfo() {
                     )}
                   </b>{" "}
                   {reserve ? (
-                    reserve.symbol
+                    reserve?.symbol
                   ) : (
                     <Skeleton className="inline-block h-7 w-20" />
                   )}

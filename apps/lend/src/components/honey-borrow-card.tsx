@@ -46,7 +46,7 @@ export default function HoneyBorrowCard() {
     8,
   );
   const honeyBorrowAllowance = BigNumber(borrowAllowanceUSD)
-    .div(honeyReserve.formattedPriceInMarketReferenceCurrency)
+    .div(honeyReserve?.formattedPriceInMarketReferenceCurrency ?? "0")
     .times(0.99)
     .toFixed(18);
 
@@ -78,7 +78,7 @@ export default function HoneyBorrowCard() {
               value={vdHoneyBalance?.formattedBalance ?? "0"}
             />
             /
-            <FormattedNumber value={userTotalBorrowAllowance ?? "0"} />
+            <FormattedNumber value={userTotalBorrowAllowance} />
           </div>
         </div>
 
@@ -99,7 +99,7 @@ export default function HoneyBorrowCard() {
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
               <FormattedNumber
-                value={-honeyReserve.variableBorrowAPY}
+                value={-honeyReserve?.variableBorrowAPY ?? 0}
                 percent
               />
             </div>
