@@ -13,13 +13,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
 
-function TokenRow({
-  asset,
-  isLoading,
-}: {
-  asset: Token;
-  isLoading: boolean;
-}) {
+function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   const { data: tokenPrice } = useTokenHoneyPrice(asset.address);
   return (
     <div
@@ -61,8 +55,9 @@ function TokenRow({
   );
 }
 export function TokenList() {
-  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { data: assets, isLoading } = useCurrentAssetWalletBalances();
+  const { useCurrentAssetWalletBalances, isLoading } =
+    usePollAssetWalletBalance();
+  const assets = useCurrentAssetWalletBalances();
 
   return (
     <div className="grid gap-4">

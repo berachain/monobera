@@ -17,18 +17,18 @@ import { getEligibleDepositAmount } from "~/utils/lendTokenHelper";
 import { RiskDetails } from "./risk-details";
 
 export default function StatusBanner() {
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data, isLoading } = useUserAccountData();
+  const { useUserAccountData, isLoading } = usePollUserAccountData();
+  const data = useUserAccountData();
 
   const { isReady } = useBeraJs();
 
   const { useReservesDataList, useBaseCurrencyData } =
     usePollReservesDataList();
-  const { data: reservesDataList = [] } = useReservesDataList();
-  const { data: baseCurrency } = useBaseCurrencyData();
+  const reservesDataList = useReservesDataList();
+  const baseCurrency = useBaseCurrencyData();
 
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { data: balanceToken = [] } = useCurrentAssetWalletBalances();
+  const balanceToken = useCurrentAssetWalletBalances();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,

@@ -45,9 +45,7 @@ export function HoneyTokenInput({
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: token } = useSelectedAssetWalletBalance(
-    selected?.address ?? "",
-  );
+  const token = useSelectedAssetWalletBalance(selected?.address ?? "0x");
   let tokenBalance: string = token?.formattedBalance ?? "0";
   if (balance !== undefined) tokenBalance = balance.toString();
 

@@ -7,7 +7,7 @@ import {
   usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
-  type Token,
+  type BalanceToken,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
@@ -57,15 +57,13 @@ export default function WithdrawBtn({
   });
 
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: atoken } = useSelectedAssetWalletBalance(reserve.aTokenAddress);
-  const { data: otoken } = useSelectedAssetWalletBalance(
-    reserve?.underlyingAsset,
-  );
+  const atoken = useSelectedAssetWalletBalance(reserve?.aTokenAddress);
+  const otoken = useSelectedAssetWalletBalance(reserve?.underlyingAsset);
   const token = {
     ...otoken,
     balance: atoken?.balance ?? 0n,
     formattedBalance: atoken?.formattedBalance ?? "0",
-  };
+  } as BalanceToken;
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -79,7 +77,7 @@ export default function WithdrawBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || token.balance === 0n}
+        disabled={disabled || isLoading || !token || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Withdraw"}
@@ -87,7 +85,7 @@ export default function WithdrawBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <WithdrawModalContent
-            {...{ reserve, token, amount, setAmount, write }}
+            {...{ reserve, token: token, amount, setAmount, write }}
           />
         </DialogContent>
       </Dialog>
@@ -103,7 +101,7 @@ const WithdrawModalContent = ({
   write,
 }: {
   reserve: any;
-  token: Token;
+  token: BalanceToken;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
@@ -112,7 +110,7 @@ const WithdrawModalContent = ({
   const userBalance = token.formattedBalance ?? "0";
   const { account } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const userAccountData = useUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({

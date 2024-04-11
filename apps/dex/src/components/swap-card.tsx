@@ -195,8 +195,7 @@ export function SwapCard({
     },
   });
 
-  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { isLoading: isBalancesLoading } = useCurrentAssetWalletBalances();
+  const { isLoading: isBalancesLoading } = usePollAssetWalletBalance();
 
   const getSwapButton = () => {
     if (

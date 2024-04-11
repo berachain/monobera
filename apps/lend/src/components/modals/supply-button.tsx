@@ -61,9 +61,7 @@ export default function SupplyBtn({
   });
 
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: token } = useSelectedAssetWalletBalance(
-    reserve?.underlyingAsset,
-  );
+  const token = useSelectedAssetWalletBalance(reserve?.underlyingAsset);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -84,7 +82,7 @@ export default function SupplyBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <SupplyModalContent
-            {...{ reserve, token, amount, setAmount, write }}
+            {...{ reserve, token: token!, amount, setAmount, write }}
           />
         </DialogContent>
       </Dialog>
@@ -115,7 +113,7 @@ const SupplyModalContent = ({
   const allowance = useAllowance();
 
   const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const userAccountData = useUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
   const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({

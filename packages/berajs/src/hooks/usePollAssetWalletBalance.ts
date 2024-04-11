@@ -5,7 +5,7 @@ import {
 } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatUnits, getAddress } from "viem";
+import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { MULTICALL3_ABI } from "..";
@@ -15,7 +15,7 @@ import useTokens from "./useTokens";
 
 const REFRESH_BLOCK_INTERVAL = 20000;
 
-interface BalanceToken extends Token {
+export interface BalanceToken extends Token {
   balance: bigint;
   formattedBalance: string;
 }
@@ -34,7 +34,7 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
   const { account, isConnected } = useBeraJs();
   const { tokenList } = useTokens();
   const QUERY_KEY = [account, isConnected, tokenList, "assetWalletBalances"];
-  const swrResponse = useSWR(
+  const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
@@ -104,21 +104,26 @@ export const usePollAssetWalletBalance = (externalTokenList?: Token[]) => {
     },
   );
 
-  const useCurrentAssetWalletBalances = () => {
-    return useSWRImmutable<BalanceToken[]>(QUERY_KEY);
+  const useCurrentAssetWalletBalances = (): BalanceToken[] => {
+    const { data = [] } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
+    return data;
   };
 
-  const useSelectedAssetWalletBalance = (address: string) => {
-    return useSWRImmutable([...QUERY_KEY, address]);
+  const useSelectedAssetWalletBalance = (
+    address: Address,
+  ): BalanceToken | undefined => {
+    const { data = undefined } = useSWRImmutable([...QUERY_KEY, address]);
+    return data;
   };
 
-  const useSelectedTagAssetWalletBalance = (tag: string) => {
+  const useSelectedTagAssetWalletBalance = (tag: string): BalanceToken[] => {
     const { data = [] } = useSWRImmutable(QUERY_KEY);
     return data.filter((item: Token) => item.tags?.includes(tag));
   };
 
   return {
-    ...swrResponse,
+    isLoading,
+    isValidating,
     refetch: () => void mutate(QUERY_KEY),
     useCurrentAssetWalletBalances,
     useSelectedAssetWalletBalance,

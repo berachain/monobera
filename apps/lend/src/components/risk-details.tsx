@@ -18,7 +18,7 @@ export const RiskDetails = () => {
   const [open, setOpen] = React.useState(false);
 
   const { useUserAccountData } = usePollUserAccountData();
-  const { data } = useUserAccountData();
+  const data = useUserAccountData();
   const healthFactor = Number(formatEther(data?.healthFactor ?? 0n));
   const totalCollateralBase =
     !data?.totalCollateralBase || data?.totalCollateralBase === 0n
@@ -59,7 +59,7 @@ export const RiskDetails = () => {
               </div>
               <div
                 className={cn(
-                  "flex h-[62px] w-[62px] items-center justify-center rounded-full text-md font-semibold leading-7",
+                  "text-md flex h-[62px] w-[62px] items-center justify-center rounded-full font-semibold leading-7",
                   `bg-${getLTVColor(healthFactor)}`,
                 )}
               >
@@ -102,7 +102,7 @@ export const RiskDetails = () => {
               </div>
               <div
                 className={cn(
-                  "flex h-[62px] w-[62px] items-center justify-center rounded-full text-md font-semibold leading-7",
+                  "text-md flex h-[62px] w-[62px] items-center justify-center rounded-full font-semibold leading-7",
                   `bg-${getLTVColor(healthFactor)}`,
                 )}
               >

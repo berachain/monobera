@@ -77,11 +77,11 @@ const useCreateTokenWeights = () => {
     return tokenB?.address === crocPool?.quoteToken.tokenAddr ? tokenB : tokenA;
   }, [JSON.stringify(crocPool)]);
 
-  const { data: baseTokenBalance } = useSelectedAssetWalletBalance(
-    baseToken?.address ?? "",
+  const baseTokenBalance = useSelectedAssetWalletBalance(
+    baseToken?.address ?? "0x",
   );
-  const { data: quoteTokenBalance } = useSelectedAssetWalletBalance(
-    quoteToken?.address ?? "",
+  const quoteTokenBalance = useSelectedAssetWalletBalance(
+    quoteToken?.address ?? "0x",
   );
 
   // track any errors

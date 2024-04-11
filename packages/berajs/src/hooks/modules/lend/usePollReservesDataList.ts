@@ -16,7 +16,7 @@ export const usePollReservesDataList = () => {
   const { mutate } = useSWRConfig();
 
   const QUERY_KEY = ["getReservesDataList"];
-  const swrResponse = useSWR(QUERY_KEY, async () => {
+  const { isLoading, isValidating } = useSWR(QUERY_KEY, async () => {
     if (!publicClient) return undefined;
     try {
       const result = (await publicClient.readContract({
@@ -46,13 +46,14 @@ export const usePollReservesDataList = () => {
     }
   });
 
-  const useReservesDataList = () => {
-    return useSWRImmutable(QUERY_KEY);
+  const useReservesDataList = (): any[] => {
+    const { data = [] } = useSWRImmutable(QUERY_KEY);
+    return data;
   };
 
-  const useSelectedReserveData = (address: Address) => {
-    const { data = [] } = useSWRImmutable(QUERY_KEY);
-    return data.find(
+  const useSelectedReserveData = (address: Address): any => {
+    const { data: reserves = [] } = useSWRImmutable(QUERY_KEY);
+    return reserves.find(
       (reserve: any) =>
         reserve?.underlyingAsset === address ||
         reserve?.aTokenAddress === address ||
@@ -60,30 +61,35 @@ export const usePollReservesDataList = () => {
     );
   };
 
-  const useBaseCurrencyData = () => {
-    return useSWRImmutable([...QUERY_KEY, "baseCurrencyData"]);
+  const useBaseCurrencyData = (): any => {
+    const { data: baseCurrency = undefined } = useSWRImmutable([
+      ...QUERY_KEY,
+      "baseCurrencyData",
+    ]);
+    return baseCurrency;
   };
 
-  const useTotalBorrowed = () => {
-    const { data } = useReservesDataList();
+  const useTotalBorrowed = (): number => {
+    const { data: reserves = [] } = useSWRImmutable(QUERY_KEY);
     let totalBorrowed = 0;
-    Object.keys(data ?? {}).forEach(
-      (key) => (totalBorrowed += Number(data[key].totalDebt)),
+    reserves.forEach(
+      (reserve: any) => (totalBorrowed += Number(reserve.totalDebt)),
     );
     return totalBorrowed;
   };
 
-  const useTotalMarketSize = () => {
-    const { data } = useReservesDataList();
+  const useTotalMarketSize = (): number => {
+    const { data: reserves = [] } = useSWRImmutable(QUERY_KEY);
     let marketSize = 0;
-    Object.keys(data ?? {}).forEach(
-      (key) => (marketSize += Number(data[key].totalLiquidity)),
+    reserves.forEach(
+      (reserve: any) => (marketSize += Number(reserve.totalLiquidity)),
     );
     return marketSize;
   };
 
   return {
-    ...swrResponse,
+    isLoading,
+    isValidating,
     refetch: () => void mutate(QUERY_KEY),
     useReservesDataList,
     useSelectedReserveData,

@@ -12,8 +12,7 @@ import { UserTokenLoading } from "~/components/user-token-card";
 
 export default function HoneySupply() {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: aHoneyToken } =
-    useSelectedAssetWalletBalance(aHoneyTokenAddress);
+  const aHoneyToken = useSelectedAssetWalletBalance(aHoneyTokenAddress);
   const { useSelectedReserveData } = usePollReservesDataList();
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
   return (

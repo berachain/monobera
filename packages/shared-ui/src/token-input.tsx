@@ -68,11 +68,11 @@ export function TokenInput({
   difference,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { isLoading: isBalancesLoading, data: token } =
-    useSelectedAssetWalletBalance(
-      selected ? getAddress(selected?.address ?? "") ?? "" : "",
-    );
+  const { useSelectedAssetWalletBalance, isLoading: isBalancesLoading } =
+    usePollAssetWalletBalance();
+  const token = useSelectedAssetWalletBalance(
+    selected ? getAddress(selected?.address ?? "0x") ?? "0x" : "0x",
+  );
 
   let tokenBalance = token?.formattedBalance || "0";
 
@@ -88,13 +88,13 @@ export function TokenInput({
 
   useEffect(() => {
     if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
-    if (safeNumberAmount <= tokenBalance) {
+    if (safeNumberAmount <= Number(tokenBalance)) {
       setExceeding(false);
       return;
     }
     if (
       !isBalancesLoading &&
-      (safeNumberAmount > tokenBalance || Number(tokenBalance) === 0) &&
+      (safeNumberAmount > Number(tokenBalance) || Number(tokenBalance) === 0) &&
       selected !== undefined
     ) {
       setExceeding(true);
@@ -218,7 +218,7 @@ export function TokenInput({
               </div>
             )}
           </div>
-          {isConnected && selected && tokenBalance !== 0 && (
+          {isConnected && selected && Number(tokenBalance) !== 0 && (
             <div className="flex flex-row items-center justify-start gap-1 px-1">
               <Icons.wallet className="h-3 w-3 text-muted-foreground" />
               <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">

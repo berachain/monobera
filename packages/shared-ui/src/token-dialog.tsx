@@ -311,8 +311,8 @@ const TokenDialogRow = ({
 }: RowProps) => {
   const { isConnected } = useBeraJs();
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: t } = useSelectedAssetWalletBalance(token?.address ?? "");
-  const tokenBalance = t?.formattedBalance;
+  const t = useSelectedAssetWalletBalance(token?.address ?? "0x");
+  const tokenBalance = t?.formattedBalance ?? "0";
   return (
     <div>
       <Button
@@ -343,7 +343,6 @@ const TokenDialogRow = ({
         )}
         {!pendingAddition && isConnected && (
           <div className="ml-auto truncate text-muted-foreground">
-            {/* <p>{tokenBalance ?? 0}</p> */}
             <FormattedNumber
               value={tokenBalance}
               visibleDecimals={4}

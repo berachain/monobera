@@ -119,8 +119,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [isTyping, setIsTyping] = useState(false);
 
-  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
+  const { isLoading: isBalanceLoading } = usePollAssetWalletBalance();
 
   useEffect(() => {
     if (isWrap) {

@@ -101,14 +101,12 @@ const BorrowModalContent = ({
 }) => {
   const { account } = useBeraJs();
   const { useBaseCurrencyData } = usePollReservesDataList();
-  const { data: baseCurrencyData } = useBaseCurrencyData();
+  const baseCurrencyData = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const userAccountData = useUserAccountData();
 
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: token } = useSelectedAssetWalletBalance(
-    reserve?.underlyingAsset,
-  );
+  const token = useSelectedAssetWalletBalance(reserve?.underlyingAsset);
 
   const availableLiquidity = formatUnits(
     BigInt(reserve.availableLiquidity ?? "0"),
@@ -225,8 +223,8 @@ const BorrowModalContent = ({
             abi: lendPoolImplementationABI,
             functionName: "borrow",
             params: [
-              token.address,
-              parseUnits(`${amount}` as `${number}`, token.decimals),
+              token?.address,
+              parseUnits(`${amount}` as `${number}`, token?.decimals??18),
               2,
               0,
               account,

@@ -1,17 +1,18 @@
 import React, { useMemo, useState } from "react";
 import {
-  type Token,
   useBeraJs,
   usePollAssetWalletBalance,
   useTokenHoneyPrice,
+  type Token,
 } from "@bera/berajs";
+import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
 import { TokenIcon } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { cn } from "@bera/ui";
 
 type Props = {
   token: Token;
@@ -27,8 +28,8 @@ export default function CreatePoolInitialLiquidityInput({
   onTokenBalanceChange,
 }: Props) {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: tokenBalanceData } = useSelectedAssetWalletBalance(
-    token?.address ?? "",
+  const tokenBalanceData = useSelectedAssetWalletBalance(
+    token?.address ?? "0x",
   );
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const tokenBalance = Number(tokenBalanceData?.formattedBalance || 0);
@@ -86,7 +87,7 @@ export default function CreatePoolInitialLiquidityInput({
                 {tokenBalance ? tokenBalance : "0"}
               </p>
               <p
-                className="cursor-pointer self-start text-xs text-muted-foreground hover:underline select-none"
+                className="cursor-pointer select-none self-start text-xs text-muted-foreground hover:underline"
                 onClick={() => {
                   !disabled && onTokenBalanceChange(tokenBalance.toString());
                 }}

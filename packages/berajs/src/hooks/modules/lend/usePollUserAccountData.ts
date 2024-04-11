@@ -15,7 +15,7 @@ export const usePollUserAccountData = () => {
   const { account } = useBeraJs();
 
   const QUERY_KEY = [account, "getUserAccountData"];
-  useSWR(
+  const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
@@ -57,11 +57,14 @@ export const usePollUserAccountData = () => {
     },
   );
 
-  const useUserAccountData = () => {
-    return useSWRImmutable(QUERY_KEY);
+  const useUserAccountData = (): any => {
+    const { data } = useSWRImmutable(QUERY_KEY);
+    return data;
   };
 
   return {
+    isLoading,
+    isValidating,
     refetch: () => void mutate(QUERY_KEY),
     useUserAccountData,
   };

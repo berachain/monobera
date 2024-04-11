@@ -8,7 +8,7 @@ import { Icons } from "@bera/ui/icons";
 
 export function HoneyControls() {
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: token } = useSelectedAssetWalletBalance(honeyAddress ?? "");
+  const token = useSelectedAssetWalletBalance(honeyAddress ?? "0x");
   const tokenBalance = Number(token?.formattedBalance ?? "0");
   return (
     <div className="flex flex-row items-center gap-5">

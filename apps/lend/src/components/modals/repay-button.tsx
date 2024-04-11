@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  type BalanceToken,
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
@@ -8,7 +9,6 @@ import {
   usePollAssetWalletBalance,
   usePollReservesDataList,
   usePollUserAccountData,
-  type Token,
 } from "@bera/berajs";
 import {
   honeyTokenAddress,
@@ -63,8 +63,8 @@ export default function RepayBtn({
   });
 
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: honey } = useSelectedAssetWalletBalance(honeyTokenAddress);
-  const { data: vdHoney } = useSelectedAssetWalletBalance(vdHoneyTokenAddress);
+  const honey = useSelectedAssetWalletBalance(honeyTokenAddress);
+  const vdHoney = useSelectedAssetWalletBalance(vdHoneyTokenAddress);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -77,7 +77,7 @@ export default function RepayBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || vdHoney || vdHoney?.balance === 0n}
+        disabled={disabled || isLoading || !vdHoney || vdHoney.balance === 0n || !honey}
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
@@ -85,7 +85,7 @@ export default function RepayBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <RepayModalContent
-            {...{ reserve, vdHoney, honey, amount, setAmount, write }}
+            {...{ reserve, vdHoney: vdHoney!, honey:honey!, amount, setAmount, write }}
           />
         </DialogContent>
       </Dialog>
@@ -102,8 +102,8 @@ const RepayModalContent = ({
   write,
 }: {
   reserve: any;
-  vdHoney: Token;
-  honey: Token;
+  vdHoney: BalanceToken;
+  honey: BalanceToken;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
@@ -119,7 +119,7 @@ const RepayModalContent = ({
 
   const { account } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const userAccountData = useUserAccountData();
 
   const balance = BigNumber(debtBalance).gt(BigNumber(tokenBalance))
     ? tokenBalance

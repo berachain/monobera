@@ -31,15 +31,15 @@ export default function HoneyBorrowCard() {
     address: lendHoneyDebtTokenAddress,
   });
 
-  const { useTotalBorrowed } = usePollReservesDataList();
+  const { useTotalBorrowed, useSelectedReserveData } =
+    usePollReservesDataList();
   const totalBorrowed = useTotalBorrowed();
   const bgtApr = useBgtApr(totalBorrowed);
 
-  const { useSelectedReserveData } = usePollReservesDataList();
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
 
   const { useUserAccountData } = usePollUserAccountData();
-  const { data: userData } = useUserAccountData();
+  const userData = useUserAccountData();
 
   const borrowAllowanceUSD = formatUnits(
     userData?.availableBorrowsBase ?? 0n,
@@ -51,8 +51,7 @@ export default function HoneyBorrowCard() {
     .toFixed(18);
 
   const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: vdHoneyBalance } =
-    useSelectedAssetWalletBalance(vdHoneyTokenAddress);
+  const vdHoneyBalance = useSelectedAssetWalletBalance(vdHoneyTokenAddress);
   const userTotalBorrowAllowance = BigNumber(honeyBorrowAllowance)
     .plus(BigNumber(vdHoneyBalance?.formattedBalance ?? 0))
     .toString();

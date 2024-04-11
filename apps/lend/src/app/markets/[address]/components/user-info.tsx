@@ -6,12 +6,12 @@ import {
 } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { formatUnits } from "viem";
 
-import { Card } from "@bera/ui/card";
 import BorrowBtn from "~/components/modals/borrow-button";
 import SupplyBtn from "~/components/modals/supply-button";
 
@@ -19,16 +19,15 @@ export default function UserInfo() {
   const { isReady } = useBeraJs();
   const { useSelectedAssetWalletBalance, isLoading } =
     usePollAssetWalletBalance();
-  const { data: tokenBalance } =
-    useSelectedAssetWalletBalance(honeyTokenAddress);
+  const tokenBalance = useSelectedAssetWalletBalance(honeyTokenAddress);
 
   const { useSelectedReserveData, useBaseCurrencyData } =
     usePollReservesDataList();
   const reserve = useSelectedReserveData(honeyTokenAddress);
-  const { data: baseCurrencyData } = useBaseCurrencyData();
+  const baseCurrencyData = useBaseCurrencyData();
 
   const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const userAccountData = useUserAccountData();
 
   const tokenPrice = reserve?.formattedPriceInMarketReferenceCurrency;
 
