@@ -266,7 +266,7 @@ export function SwapCard({
                 address: crocMultiSwapAddress,
                 abi: MULTISWAP_ABI,
                 functionName: "multiSwap",
-                params: payload,
+                params: payload ?? [],
                 value: swapInfo.value,
               });
             }}
@@ -292,7 +292,7 @@ export function SwapCard({
               address: crocMultiSwapAddress,
               abi: MULTISWAP_ABI,
               functionName: "multiSwap",
-              params: payload,
+              params: payload ?? [],
               value: (swapInfo as any)?.value,
             });
           }}
