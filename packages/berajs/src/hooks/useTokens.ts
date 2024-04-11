@@ -1,24 +1,21 @@
 "use client";
 
 import { useMemo } from "react";
-import {
-  beraTokenAddress,
-  nativeTokenAddress,
-  tokenListUrl,
-} from "@bera/config";
+import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
 import { type Token } from "~/api";
-import POLLING from "~/config/constants/polling";
+import { DefaultHookTypes } from "..";
 
 interface IUseTokens {
-  tokenList: Token[] | undefined;
-  customTokenList: Token[] | undefined;
-  tokenDictionary: { [key: string]: Token } | undefined;
-  featuredTokenList: Token[] | undefined;
-  beraToken: Token | undefined;
-  wBeraToken: Token | undefined;
+  isLoading: boolean;
+  tokenList?: Token[] | undefined;
+  customTokenList?: Token[] | undefined;
+  tokenDictionary?: { [key: string]: Token } | undefined;
+  featuredTokenList?: Token[] | undefined;
+  beraToken?: Token | undefined;
+  wBeraToken?: Token | undefined;
   addNewToken: (token: Token | undefined) => void;
   removeToken: (token: Token) => void;
 }
@@ -31,18 +28,25 @@ function tokenListToDict(list: Token[]): { [key: string]: Token } {
   }, {});
 }
 
-const useTokens = (): IUseTokens => {
+const useTokens = ({ config, opts }: DefaultHookTypes): IUseTokens => {
   const TOKEN_KEY = "tokens";
 
   const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
     Token[]
   >(TOKEN_KEY, []);
-
-  const { data } = useSWRImmutable(
-    ["defaultTokenList", localStorageTokenList],
+  const { data, isLoading } = useSWRImmutable(
+    ["defaultTokenList", localStorageTokenList, config],
     async () => {
+      if (!config.endpoints?.tokenList) {
+        return {
+          list: [],
+          customList: [...localStorageTokenList],
+          dictionary: tokenListToDict(localStorageTokenList),
+          featured: [],
+        };
+      }
       try {
-        const tokenList = await fetch(tokenListUrl);
+        const tokenList = await fetch(config.endpoints?.tokenList);
         const temp = await tokenList.json();
         if (!temp.tokens)
           return { list: localStorageTokenList, featured: [], dictionary: {} };
@@ -74,11 +78,15 @@ const useTokens = (): IUseTokens => {
         };
       } catch (error) {
         console.error("Error fetching token list", error);
-        return { list: localStorageTokenList, featured: [], dictionary: {} };
+        return {
+          list: localStorageTokenList,
+          featured: [],
+          dictionary: tokenListToDict(localStorageTokenList),
+        };
       }
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      ...opts,
     },
   );
 
@@ -126,6 +134,7 @@ const useTokens = (): IUseTokens => {
   }, [data?.dictionary]);
 
   return {
+    isLoading: isLoading,
     tokenList: data?.list ?? [],
     customTokenList: data?.customList ?? [],
     tokenDictionary: data?.dictionary ?? {},

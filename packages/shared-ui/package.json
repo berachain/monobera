@@ -27,6 +27,7 @@
   "devDependencies": {
     "@bera/berajs": "0.1.0",
     "@bera/config": "0.1.0",
+    "@bera/wagmi": "0.1.0",
     "@bera/ui": "0.1.0",
     "@dynamic-labs/sdk-react-core": "^2.0.0-alpha.18",
     "@metamask/jazzicon": "^2.0.0",

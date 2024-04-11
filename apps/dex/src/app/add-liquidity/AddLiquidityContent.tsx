@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import {
   CROCSWAP_DEX,
   TransactionActionType,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenHoneyPrice,
   getAddLiquidityPayload,
   type Token,
@@ -39,6 +39,7 @@ import {
   type PoolV2,
 } from "../pools/fetchPools";
 import { useAddLiquidity } from "./useAddLiquidity";
+import { beraJsConfig } from "@bera/wagmi";
 
 interface IAddLiquidityContent {
   pool: PoolV2;
@@ -66,7 +67,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     setIsNativeBera,
   } = useAddLiquidity(pool);
 
-  const { refetch } = usePollAssetWalletBalance();
+  const { refetch } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
