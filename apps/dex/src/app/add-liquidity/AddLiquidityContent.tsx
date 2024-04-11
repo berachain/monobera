@@ -1,12 +1,13 @@
 "use client";
+
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   CROCSWAP_DEX,
   TransactionActionType,
+  getAddLiquidityPayload,
   usePollAssetWalletBalance,
   useTokenHoneyPrice,
-  getAddLiquidityPayload,
   type Token,
 } from "@bera/berajs";
 import { beraTokenAddress, cloudinaryUrl, crocDexAddress } from "@bera/config";
@@ -29,7 +30,10 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import { formatUnits, parseUnits } from "viem";
+import { base } from "viem/chains";
+
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { SettingsPopover } from "~/components/settings-popover";
 import {
@@ -91,10 +95,14 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       : tokenInputs[1]
   ) as Token;
 
-  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
-  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
-    quoteToken?.address,
-  );
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: baseToken?.address },
+  });
+  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: quoteToken?.address },
+  });
 
   const baseCost = useMemo(() => {
     if (!poolPrice) {
@@ -449,9 +457,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       ? maxBaseApprovalAmount
                       : maxQuoteApprovalAmount
                     : needsApproval[0]?.address.toLowerCase() ===
-                        baseToken.address.toLowerCase()
-                      ? maxBaseApprovalAmount
-                      : maxQuoteApprovalAmount
+                      baseToken.address.toLowerCase()
+                    ? maxBaseApprovalAmount
+                    : maxQuoteApprovalAmount
                 }
                 token={isNativeBera ? needsApprovalNoBera[0] : needsApproval[0]}
                 spender={crocDexAddress}

@@ -29,11 +29,13 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Slider } from "@bera/ui/slider";
+import { beraJsConfig } from "@bera/wagmi";
+import { usePublicClient } from "wagmi";
+
 import { SettingsPopover } from "~/components/settings-popover";
 import { usePollUserPosition } from "~/hooks/usePollUserPosition";
 import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
-import { usePublicClient } from "wagmi";
 
 interface IWithdrawLiquidityContent {
   pool: PoolV2;
@@ -127,10 +129,14 @@ export default function WithdrawLiquidityContent({
     return bnAmountWithdrawn.div(10 ** quoteToken.decimals).toString();
   }, [userPositionBreakdown?.quoteAmount, amount]);
 
-  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
-  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
-    quoteToken?.address,
-  );
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: baseToken?.address },
+  });
+  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: quoteToken?.address },
+  });
 
   const totalHoneyPrice = useMemo(() => {
     if (!baseTokenHoneyPrice || !quoteTokenHoneyPrice) return 0;

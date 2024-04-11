@@ -20,7 +20,9 @@ import {
   crocMultiSwapAddress,
   nativeTokenAddress,
 } from "@bera/config";
+import { POLLING } from "@bera/shared-ui";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
+import { beraJsConfig } from "@bera/wagmi";
 import {
   formatEther,
   formatGwei,
@@ -31,8 +33,6 @@ import {
 import { useGasPrice } from "wagmi";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import { beraJsConfig } from "@bera/wagmi";
-import { POLLING } from "@bera/shared-ui";
 
 enum SwapKind {
   GIVEN_IN = 0,
@@ -98,8 +98,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     inputToken,
   );
 
-  const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
-  const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
+  const { data: tokenInPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: selectedFrom?.address },
+  });
+  const { data: tokenOutPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: selectedTo?.address },
+  });
 
   const [isWrap, setIsWrap] = useState(false);
 
@@ -379,7 +385,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     };
   }
   const gasData = useGasData({ contractArgs: gasParams });
-  const beraInUsd = useTokenHoneyPrice(nativeTokenAddress);
+  const beraInUsd = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: nativeTokenAddress },
+  });
   const formattedGasPriceInBera = gasData ? parseFloat(formatGwei(gasData)) : 0;
 
   // Calculate general gas for unconnected wallet user (less accurate)

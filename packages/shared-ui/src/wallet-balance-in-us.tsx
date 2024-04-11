@@ -9,14 +9,20 @@ import {
   type Token,
 } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
 
 export function WalletBalanceInUs() {
   const { featuredTokenList } = useTokens();
   const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
   const { data: assets } = useCurrentAssetWalletBalances();
-  const { data: pricesArray } = useTokenHoneyPrices(
-    featuredTokenList?.map((featuredToken: Token) => featuredToken.address),
-  );
+  const { data: pricesArray } = useTokenHoneyPrices({
+    config: beraJsConfig,
+    args: {
+      tokenAddresses: featuredTokenList?.map(
+        (featuredToken: Token) => featuredToken.address,
+      ),
+    },
+  });
   const total =
     assets && pricesArray
       ? assets?.reduce((acc: number, curr: Token) => {
