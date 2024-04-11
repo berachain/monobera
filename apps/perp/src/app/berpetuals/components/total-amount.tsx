@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { FormattedNumber, HoverCard, usePrevious } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip, usePrevious } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import BigNumber from "bignumber.js";
 
@@ -40,8 +40,8 @@ export function TotalAmount({
           Total Relative Pnl
         </span>
         <div className="group relative">
-          <HoverCard
-            triggerElement={
+          <Tooltip
+            toolTripTrigger={
               <span className="text-sm font-medium text-success-foreground">
                 {
                   <FormattedNumber
@@ -59,12 +59,14 @@ export function TotalAmount({
                 }
               </span>
             }
-            content={
-              <TotalRelativePnLHoverState
-                totalUnrealizedPnl={totalUnrealizedPnl ?? "0"}
-                realizedPnl={realizedPnl ?? "0"}
-                totalPnl={totalPnlBN.isNaN() ? "0" : totalPnlBN.toString(10)}
-              />
+            children={
+              <div className="p-2">
+                <TotalRelativePnLHoverState
+                  totalUnrealizedPnl={totalUnrealizedPnl ?? "0"}
+                  realizedPnl={realizedPnl ?? "0"}
+                  totalPnl={totalPnlBN.isNaN() ? "0" : totalPnlBN.toString(10)}
+                />
+              </div>
             }
           />
         </div>
@@ -98,25 +100,22 @@ export function TotalAmount({
     );
   };
 
-  return (
-    <div className={cn("flex justify-between p-3", className)}>
-      {tabType === "positions" || tabType === "orders"
-        ? totalOpenPnL()
-        : totalRelativePnL()}
-      {spacer && (
-        <span className="mx-1 flex items-center text-xs font-medium text-muted-foreground">
-          {"|"}
-        </span>
-      )}
+  const totalHistoricalPnL = () => {
+    return (
       <div className="flex flex-col items-center sm:flex-row sm:gap-2">
         <span className="text-xs font-medium text-muted-foreground">
-          Total Position Size
+          Total Historical Pnl
         </span>
-        <span className="text-sm font-medium text-foreground">
+        <span className="text-sm font-medium text-success-foreground">
           {
             <FormattedNumber
-              className="text-sm font-medium text-foreground"
-              value={totalPositionSize ?? "0"}
+              className={cn(
+                "",
+                Number(realizedPnl) > 0
+                  ? "text-success-foreground"
+                  : "text-destructive-foreground",
+              )}
+              value={realizedPnl ?? 0}
               compact={false}
               compactThreshold={9_999}
               symbol="USD"
@@ -124,6 +123,39 @@ export function TotalAmount({
           }
         </span>
       </div>
+    );
+  };
+
+  return (
+    <div className={cn("flex justify-between p-3", className)}>
+      {tabType === "history"
+        ? totalRelativePnL()
+        : tabType === "pnl"
+          ? totalHistoricalPnL()
+          : totalOpenPnL()}
+      {spacer && tabType !== "pnl" && (
+        <span className="mx-1 flex items-center text-xs font-medium text-muted-foreground">
+          {"|"}
+        </span>
+      )}
+      {tabType !== "pnl" && (
+        <div className="flex flex-col items-center sm:flex-row sm:gap-2">
+          <span className="text-xs font-medium text-muted-foreground">
+            Total Position Size
+          </span>
+          <span className="text-sm font-medium text-foreground">
+            {
+              <FormattedNumber
+                className="text-sm font-medium text-foreground"
+                value={totalPositionSize ?? "0"}
+                compact={false}
+                compactThreshold={9_999}
+                symbol="USD"
+              />
+            }
+          </span>
+        </div>
+      )}
     </div>
   );
 }

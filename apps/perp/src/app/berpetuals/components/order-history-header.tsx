@@ -53,8 +53,8 @@ export function OrderHistoryHeader({
 
   return (
     <div>
-      <div className="flex min-h-[64px] w-full flex-col items-center justify-between rounded-t-md bg-muted px-6 py-4 sm:flex-row">
-        <div className="mr-4 flex flex-1 gap-10 text-foreground">
+      <div className="flex min-h-[64px] w-full flex-col items-center justify-between rounded-t-md bg-muted p-2 py-4 sm:flex-row sm:px-6">
+        <div className="mr-2 flex flex-1 gap-3 text-foreground sm:gap-6">
           {headers.map((header, index) => (
             <div
               onClick={() => setTabType(header.type as TableTabTypes)}
@@ -68,16 +68,16 @@ export function OrderHistoryHeader({
             >
               <div
                 className={cn(
-                  "hover:underline",
+                  "text-xs hover:underline",
                   tabType === header.type
-                    ? "text-sm font-semibold"
-                    : "text-xs font-medium text-muted-foreground",
+                    ? "font-semibold"
+                    : "font-medium text-muted-foreground",
                 )}
               >
                 {header.title}
               </div>
               {header.counts && (
-                <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-background">
+                <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-background sm:w-8">
                   {header.counts}
                 </span>
               )}
@@ -89,17 +89,6 @@ export function OrderHistoryHeader({
         )}
         {tabType === "positions" && (
           <div className="flex flex-grow-0">
-            {/* <div className="float-right flex-grow-0 justify-center mr-4 items-center hidden lg:flex">
-              <span className="text-xs font-medium flex-grow-0">{`${
-                showOrderLines ? "Hide" : "Show"
-              } Order Lines`}</span>
-              <Switch
-                className="data-[state=checked]:bg-success-foreground ml-2"
-                id="show-orders"
-                checked={showOrderLines}
-                onCheckedChange={(checked) => setShowOrderLines(checked)}
-              />
-            </div> */}
             <Button
               className="h-full w-fit min-w-0 cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80"
               disabled={
