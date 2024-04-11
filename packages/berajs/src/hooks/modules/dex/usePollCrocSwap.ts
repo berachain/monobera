@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
+
 import { getSwap } from "~/actions/dex";
 import { SwapRequest, type DefaultHookTypes } from "~/types";
 
@@ -50,7 +51,7 @@ export const usePollCrocSwap = ({
         if (isTyping !== undefined && isTyping === true) {
           return {
             batchSwapSteps: [],
-            formattedSwapAmount: amount.toString(),
+            formattedSwapAmount: amount ? amount.toString() : "0",
             formattedAmountIn: "0",
             formattedReturnAmount: "0",
             amountIn: 0n,
@@ -78,7 +79,7 @@ export const usePollCrocSwap = ({
         console.error(e);
         return {
           batchSwapSteps: [],
-          formattedSwapAmount: amount.toString(),
+          formattedSwapAmount: amount ? amount.toString() : "0",
           formattedAmountIn: "0",
           formattedReturnAmount: "0",
           amountIn: 0n,
