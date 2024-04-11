@@ -1,6 +1,6 @@
 # useTokenHoneyPrice
 
-React hook to retrieve the current honey price of a given token
+React hook to retrieve the current honey price of a given token.
 
 ## Import
 
@@ -13,11 +13,10 @@ import { useTokenHoneyPrice } from "@bera/berajs";
 :::code-group
 
 ```ts twoslash [example.ts]
-import { useTokenHoneyPrice } from "@bera/berajs";
+import { useTokenHoneyPrice, type Token } from "@bera/berajs";
 
-import { beraConfig } from "./config";
-
-const { data, isLoading } = useTokenHoneyPrice();
+const tokenAddress = "0x1";
+const { data: tokePriceInHoney, isLoading } = useTokenHoneyPrice(tokenAddress);
 ```
 
 ```ts twoslash [config.ts] filename="config.ts"
@@ -36,13 +35,11 @@ export const beraConfig: BeraConfig = {
 ## Parameters
 
 ```ts
-// TODO: create custom type
-import { type getRoute } from "berajs";
+import { type getHoneyPriceReq } from "berajs";
 ```
 
 ## Returns
 
 ```ts
-// TODO: create custom type
-import { type SwapInfoV3 } from "berajs";
+string; // token price in Honey
 ```
