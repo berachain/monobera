@@ -4,7 +4,8 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
 import POLLING from "~/config/constants/polling";
-import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrices";
+import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrice";
+
 interface IBgtRewardsForAddress {
   bgtPerYear: number;
   UsdBgtPerYear: number;
@@ -17,13 +18,17 @@ export const usePollBgtRewardsForAddress = ({
   const cuttingBoard = undefined;
   const inflationData = undefined;
 
-  const { data: beraPrice } = useTokenHoneyPrice(beraTokenAddress);
+  // TODO: Fix this
+  // const { data: beraPrice } = useTokenHoneyPrice({
+  //   config: beraJsConfig,
+  //   args: { tokenAddress: beraTokenAddress },
+  // });
   // const beraPrice = useBeraPrice();
   const QUERY_KEY = [
     "bgtRewardsForAddress",
     address,
     cuttingBoard,
-    beraPrice,
+    "1",
     inflationData,
   ];
 
