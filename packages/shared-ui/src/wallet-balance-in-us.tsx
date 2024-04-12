@@ -3,7 +3,7 @@
 import {
   formatUsd,
   handleNativeBera,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenHoneyPrices,
   useTokens,
   type Token,
@@ -12,9 +12,13 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { beraJsConfig } from "@bera/wagmi";
 
 export function WalletBalanceInUs() {
-  const { featuredTokenList } = useTokens();
-  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { data: assets } = useCurrentAssetWalletBalances();
+  const { featuredTokenList } = useTokens({
+    config: beraJsConfig,
+  });
+  const { useCurrentWalletBalances } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const assets = useCurrentWalletBalances();
   const { data: pricesArray } = useTokenHoneyPrices({
     config: beraJsConfig,
     args: {

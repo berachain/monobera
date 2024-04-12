@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import {
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenInformation,
   useTokens,
   type Token,
@@ -22,10 +22,11 @@ import { Icons } from "@bera/ui/icons";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
+import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
 import { TokenChip } from "./token-chip";
 import { TokenIcon } from "./token-icon";
-import { FormattedNumber } from "./formatted-number";
+import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   open: boolean;
@@ -57,7 +58,9 @@ export function TokenDialog({
     featuredTokenList,
     addNewToken,
     removeToken,
-  } = useTokens();
+  } = useTokens({
+    config: beraJsConfig,
+  });
   const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
@@ -162,7 +165,7 @@ export function TokenDialog({
     <>
       <Dialog open={open} onOpenChange={handleOpenChange}>
         {!managingTokens && (
-          <DialogContent className="flex max-w-[425px] flex-col gap-4 rounded-2xl px-6">
+          <DialogContent className="flex max-h-[100vh] max-w-[425px] flex-col gap-4 rounded-2xl px-6">
             <DialogHeader>
               <DialogTitle className="text-lg">Select a token</DialogTitle>
             </DialogHeader>
@@ -199,7 +202,7 @@ export function TokenDialog({
               )}
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
-            <div className="overflow-y-scoll max-h-[600px] ">
+            <div className="max-h-[min(600px,60vh)] overflow-y-scroll">
               {!error ? (
                 filteredTokens?.length ? (
                   filteredTokens
@@ -247,7 +250,7 @@ export function TokenDialog({
           </DialogContent>
         )}
         {managingTokens && (
-          <DialogContent className="flex w-full flex-col">
+          <DialogContent className="flex max-h-[100vh] w-full  flex-col">
             <DialogHeader>
               <DialogTitle className="flex flex-row items-center justify-start gap-2 text-lg">
                 {" "}
@@ -310,8 +313,10 @@ const TokenDialogRow = ({
   pendingAddition,
 }: RowProps) => {
   const { isConnected } = useBeraJs();
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: t } = useSelectedAssetWalletBalance(token?.address ?? "");
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const t = useSelectedWalletBalance(token?.address ?? "");
   const tokenBalance = t?.formattedBalance;
   return (
     <div>
@@ -342,17 +347,17 @@ const TokenDialogRow = ({
           <div className="absolute ml-auto" />
         )}
         {!pendingAddition && isConnected && (
-          <div className="ml-auto text-muted-foreground truncate">
+          <div className="ml-auto truncate text-muted-foreground">
             {/* <p>{tokenBalance ?? 0}</p> */}
             <FormattedNumber
-              value={tokenBalance}
+              value={tokenBalance ?? "0"}
               visibleDecimals={4}
               compact={false}
             />
           </div>
         )}
         <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
-          <DialogContent className="flex flex-col items-center justify-center gap-3 px-4 md:w-[350px]">
+          <DialogContent className="flex max-h-[100vh] flex-col items-center justify-center gap-3 px-4  md:w-[350px]">
             <Icons.tooltip
               style={{ height: "64px", width: "64px", color: "#DC2626" }}
             />

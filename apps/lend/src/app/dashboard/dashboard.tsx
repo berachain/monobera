@@ -1,17 +1,17 @@
 import React from "react";
-import {
-  usePollAssetWalletBalance,
-  usePollReservesDataList,
-} from "@bera/berajs";
+import { usePollWalletBalances, usePollReservesDataList } from "@bera/berajs";
 import AvailableDeposit from "./available-deposit";
 import HoneyBorrow from "./honey-borrow";
 import HoneySupply from "./honey-supply";
 import PageLoading from "./page-loading";
 import UserDeposits from "./user-deposits";
+import { beraJsConfig } from "@bera/wagmi";
 
 export function Dashboard() {
   const { isLoading: isReservesDataLoading } = usePollReservesDataList();
-  const { isLoading: isWalletBalanceLoading } = usePollAssetWalletBalance();
+  const { isLoading: isWalletBalanceLoading } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
   const isLoading = isReservesDataLoading || isWalletBalanceLoading;
   return (
     <div className="flex flex-col gap-9 md:gap-6">

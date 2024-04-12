@@ -6,8 +6,6 @@ import useSWRImmutable from "swr/immutable";
 
 import POLLING from "~/config/constants/polling";
 import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrice";
-import { usePollGlobalCuttingBoard } from "..";
-import { usePollBgtInflation } from "../staking/usePollBgtInflation";
 
 interface IBgtRewardsForAddress {
   bgtPerYear: number;
@@ -18,47 +16,44 @@ export const usePollBgtRewardsForAddress = ({
 }: {
   address: string | undefined;
 }) => {
-  const { useGlobalCuttingBoard } = usePollGlobalCuttingBoard();
+  const cuttingBoard = undefined;
+  const inflationData = undefined;
 
-  const { useInflationData } = usePollBgtInflation();
-
-  const cuttingBoard = useGlobalCuttingBoard();
-  const inflationData = useInflationData();
-
-  const { data: beraPrice } = useTokenHoneyPrice({
-    config: beraJsConfig,
-    args: { tokenAddress: beraTokenAddress },
-  });
+  // TODO: Fix this
+  // const { data: beraPrice } = useTokenHoneyPrice({
+  //   config: beraJsConfig,
+  //   args: { tokenAddress: beraTokenAddress },
+  // });
   // const beraPrice = useBeraPrice();
   const QUERY_KEY = [
     "bgtRewardsForAddress",
     address,
     cuttingBoard,
-    beraPrice,
+    "1",
     inflationData,
   ];
 
   const swrResponse = useSWR(
     QUERY_KEY,
     () => {
-      if (cuttingBoard && address && inflationData) {
-        const totalAmount = cuttingBoard.reduce((acc: number, curr: any) => {
-          return acc + Number(curr.amount);
-        }, 0);
-        const cb: Weight = cuttingBoard.find(
-          (b: Weight) => b.receiver.toLowerCase() === address.toLowerCase(),
-        );
-        if (cb) {
-          const weight = cb.amount / totalAmount;
-          const amountPerYear = weight * inflationData.bgtPerYear;
+      // if (cuttingBoard && address && inflationData) {
+      //   const totalAmount = cuttingBoard.reduce((acc: number, curr: any) => {
+      //     return acc + Number(curr.amount);
+      //   }, 0);
+      //   const cb: Weight = cuttingBoard.find(
+      //     (b: Weight) => b.receiver.toLowerCase() === address.toLowerCase(),
+      //   );
+      //   if (cb) {
+      //     const weight = cb.amount / totalAmount;
+      //     const amountPerYear = weight * inflationData.bgtPerYear;
 
-          return {
-            bgtPerYear: amountPerYear,
-            UsdBgtPerYear: amountPerYear * Number(beraPrice),
-          };
-        }
-        return undefined;
-      }
+      //     return {
+      //       bgtPerYear: amountPerYear,
+      //       UsdBgtPerYear: amountPerYear * Number(beraPrice),
+      //     };
+      //   }
+      //   return undefined;
+      // }
       return undefined;
     },
     {

@@ -4,7 +4,7 @@ import {
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
   type Token,
@@ -25,6 +25,7 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function WithdrawBtn({
   reserve,
@@ -45,22 +46,22 @@ export default function WithdrawBtn({
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`withdraw_${reserve.symbol.toLowerCase()}`);
+      track(`withdraw_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`withdraw_${reserve.symbol.toLowerCase()}_failed`);
+      track(`withdraw_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.WITHDRAW,
   });
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: atoken } = useSelectedAssetWalletBalance(reserve.aTokenAddress);
-  const { data: otoken } = useSelectedAssetWalletBalance(
-    reserve.underlyingAsset,
-  );
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const atoken = useSelectedWalletBalance(reserve.aTokenAddress);
+  const otoken = useSelectedWalletBalance(reserve.underlyingAsset);
   const token = {
     ...otoken,
     balance: atoken?.balance ?? 0n,
@@ -87,7 +88,7 @@ export default function WithdrawBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <WithdrawModalContent
-            {...{ reserve, token, amount, setAmount, write }}
+            {...({ reserve, token, amount, setAmount, write } as any)}
           />
         </DialogContent>
       </Dialog>
@@ -108,7 +109,7 @@ const WithdrawModalContent = ({
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const isHoney = reserve.underlyingAsset === honeyTokenAddress;
+  const isHoney = reserve?.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
   const { account } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData();
