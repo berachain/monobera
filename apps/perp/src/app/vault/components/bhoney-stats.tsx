@@ -9,6 +9,7 @@ import {
   usePollBHoneySupply,
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { Epochs } from "./epochs";
@@ -17,11 +18,13 @@ const StatCard = ({
   title,
   value,
   isHoney,
+  isBHoney,
   isLoading,
 }: {
   title: string;
-  value: string;
+  value: string | JSX.Element;
   isHoney?: boolean;
+  isBHoney?: boolean;
   isLoading?: boolean;
 }) => {
   return (
@@ -32,14 +35,15 @@ const StatCard = ({
       ) : (
         <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
           {value}{" "}
-          {isHoney ? (
+          {isHoney && (
             <Image
               src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/honey.png"
               alt="Honey"
               width={20}
               height={20}
             />
-          ) : (
+          )}
+          {isBHoney && (
             <Image
               src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png"
               alt="Honey"
@@ -60,7 +64,7 @@ export const BhoneyStats = () => {
 
   const { isLoading: isBHoneySupplyLoading, useFormattedBHoneySupply } =
     usePollBHoneySupply();
-  const { isLoading: isBHoneyPriceLoading, useFormattedHoneyPrice } =
+  const { isLoading: isBHoneyPriceLoading, useHoneyPrice } =
     usePollBHoneyPrice();
 
   const { isLoading: isBHoneyCollateralization, useBHoneyCollateralization } =
@@ -76,7 +80,7 @@ export const BhoneyStats = () => {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
   const bHoneySupply = useFormattedBHoneySupply();
-  const honeyPrice = useFormattedHoneyPrice();
+  const honeyPrice = useHoneyPrice();
   const collateralization = useBHoneyCollateralization();
   const epoch = useBHoneyEpoch();
   return (
@@ -84,25 +88,43 @@ export const BhoneyStats = () => {
       <div className="col-span-2 mb-4 grid w-full grid-cols-1 grid-rows-2 gap-4 md:grid-cols-2 lg:mb-0">
         <StatCard
           title={"TVL"}
-          value={formatUsd(honeyLocked)}
+          value={
+            <FormattedNumber
+              value={honeyLocked}
+              compact={false}
+              compactThreshold={999_999_999_999}
+            />
+          }
           isLoading={isLoading}
           isHoney={true}
         />
         <StatCard
           title={"bHONEY Price"}
-          value={formatUsd(honeyPrice)}
+          value={
+            <FormattedNumber
+              value={honeyPrice}
+              compact={false}
+              compactThreshold={999_999_999_999}
+            />
+          }
           isLoading={isLoading}
-          isHoney={false}
+          isBHoney
         />
         <StatCard
           title={"Collateralization Ratio"}
           value={`${collateralization.toFixed(2)}%`}
           isLoading={isLoading}
-          isHoney={true}
         />
         <StatCard
           title={"bHONEY Supply"}
-          value={bHoneySupply.toFixed(2)}
+          value={
+            <FormattedNumber
+              value={bHoneySupply}
+              compact={false}
+              compactThreshold={999_999_999_999}
+            />
+          }
+          isBHoney
           isLoading={isLoading}
         />
       </div>

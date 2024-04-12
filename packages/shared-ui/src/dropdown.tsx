@@ -14,6 +14,8 @@ export const Dropdown = ({
   onSelect,
   sortby = true,
   className,
+  triggerClassName,
+  contentClassname,
   ...props
 }: {
   selected: string;
@@ -21,19 +23,26 @@ export const Dropdown = ({
   onSelect: (selected: string) => void;
   sortby?: boolean;
   className?: string;
+  triggerClassName?: string;
+  contentClassname?: string;
 }) => {
   return (
     <div {...props} className={cn("w-fit flex-shrink-0", className)}>
       <div className="flex items-center text-muted-foreground md:gap-1">
-        {sortby && <div className="text-sm font-medium mr-2">Sort by</div>}
+        {sortby && <div className="mr-2 text-sm font-medium">Sort by</div>}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="flex w-fit items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm">
+            <div
+              className={cn(
+                "flex w-fit items-center gap-1 rounded-md border border-border bg-background px-3 py-2 text-sm",
+                triggerClassName,
+              )}
+            >
               {selected.replaceAll("-", " ")}
               <Icons.chevronDown className=" h-4 w-4" />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
+          <DropdownMenuContent className={cn(contentClassname)} align="start">
             {selectionList.map((selection) => (
               <DropdownMenuCheckboxItem
                 key={selection}

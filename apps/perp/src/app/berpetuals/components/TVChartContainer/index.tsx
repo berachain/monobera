@@ -52,8 +52,50 @@ export const TVChartContainer = (props: ChartProps) => {
     tvWidgetRef.current?.onChartReady(() => {
       tvWidgetRef.current?.chart().dataReady(() => {
         clearOrderLines();
-        orderLineRefs.current = props.orderLines?.reduce(
-          (acc, order, index) => {
+        orderLineRefs.current = props.orderLines?.reduce((acc, order) => {
+          if (order.price) {
+            if (order.tp) {
+              const tpLine = tvWidgetRef.current
+                ?.chart()
+                .createPositionLine()
+                .setText("TP")
+                .setTooltip(`TP at ${order.positionSize}`)
+                .setPrice(order.tp)
+                .setQuantity(order.positionSize.toString())
+                .setLineStyle(2)
+                .setLineColor("#059669")
+                .setBodyTextColor("#FFFFFF")
+                .setQuantityTextColor("#FFFFFF")
+                .setBodyBackgroundColor("#059669")
+                .setQuantityBackgroundColor("#059669")
+                .setBodyBorderColor("#059669")
+                .setQuantityBorderColor("#059669");
+              if (tpLine) acc.unshift(tpLine);
+            }
+            if (order.sl) {
+              const slLine = tvWidgetRef.current
+                ?.chart()
+                .createPositionLine()
+                .setText("SL")
+                .setTooltip(`SL at ${order.positionSize}`)
+                .setPrice(order.sl)
+                .setQuantity(order.positionSize.toString())
+                .setLineStyle(2)
+                .setLineColor("#DC2626")
+                .setBodyTextColor("#FFFFFF")
+                .setQuantityTextColor("#FFFFFF")
+                .setBodyBackgroundColor("#DC2626")
+                .setQuantityBackgroundColor("#DC2626")
+                .setBodyBorderColor("#DC2626")
+                .setQuantityBorderColor("#DC2626");
+              if (slLine) acc.unshift(slLine);
+            }
+          }
+          return acc;
+        }, [] as IPositionLineAdapter[]);
+        orderLineRefs.current = [
+          ...(orderLineRefs.current ?? []),
+          ...(props.orderLines?.reduce((acc, order) => {
             if (order.price) {
               const orderLine = tvWidgetRef.current
                 ?.chart()
@@ -81,47 +123,10 @@ export const TVChartContainer = (props: ChartProps) => {
                 .setCloseButtonBorderColor("#57534E")
                 .setCloseTooltip("Close position");
               if (orderLine) acc.push(orderLine);
-              if (order.tp) {
-                const tpLine = tvWidgetRef.current
-                  ?.chart()
-                  .createPositionLine()
-                  .setText("TP")
-                  .setTooltip(`TP at ${order.positionSize}`)
-                  .setPrice(order.tp)
-                  .setQuantity(order.positionSize.toString())
-                  .setLineStyle(2)
-                  .setLineColor("#059669")
-                  .setBodyTextColor("#FFFFFF")
-                  .setQuantityTextColor("#FFFFFF")
-                  .setBodyBackgroundColor("#059669")
-                  .setQuantityBackgroundColor("#059669")
-                  .setBodyBorderColor("#059669")
-                  .setQuantityBorderColor("#059669");
-                if (tpLine) acc.push(tpLine);
-              }
-              if (order.sl) {
-                const slLine = tvWidgetRef.current
-                  ?.chart()
-                  .createPositionLine()
-                  .setText("SL")
-                  .setTooltip(`SL at ${order.positionSize}`)
-                  .setPrice(order.sl)
-                  .setQuantity(order.positionSize.toString())
-                  .setLineStyle(2)
-                  .setLineColor("#DC2626")
-                  .setBodyTextColor("#FFFFFF")
-                  .setQuantityTextColor("#FFFFFF")
-                  .setBodyBackgroundColor("#DC2626")
-                  .setQuantityBackgroundColor("#DC2626")
-                  .setBodyBorderColor("#DC2626")
-                  .setQuantityBorderColor("#DC2626");
-                if (slLine) acc.push(slLine);
-              }
             }
             return acc;
-          },
-          [] as IPositionLineAdapter[],
-        );
+          }, [] as IPositionLineAdapter[]) ?? []),
+        ];
       });
     });
   };

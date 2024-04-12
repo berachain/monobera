@@ -95,6 +95,11 @@ export function OrderHistoryTable({
     setSelection({});
   };
 
+  const positionsColumns = useMemo(
+    () => generatePositionColumns(markets, setUpdateOpen, setDeleteOpen),
+    [markets, setUpdateOpen, setDeleteOpen],
+  );
+
   return (
     <div className="relative h-full w-full overflow-auto sm:border-t sm:border-border">
       {tab === "positions" && (
@@ -110,11 +115,7 @@ export function OrderHistoryTable({
             onOpenChange={setDeleteOpen}
           />
           <DataTable
-            columns={generatePositionColumns(
-              markets,
-              setUpdateOpen,
-              setDeleteOpen,
-            )}
+            columns={positionsColumns}
             data={openPositions ?? []}
             className="hidden h-full w-full overflow-auto sm:block"
             embedded
@@ -226,23 +227,39 @@ export function OrderHistoryTable({
         />
       )}
       {mobile && (
-        <div className="mx-2 my-2 flex h-[calc(100%+32px)] w-[calc(100%-16px)] flex-col gap-4">
-          {tab === "positions" &&
-            assetCardItems.marketList.map((item, index) => (
-              <AsesetCardMobile card={item} key={index} />
-            ))}
-          {tab === "orders" &&
-            assetCardItems.limitList.map((item, index) => (
-              <AsesetCardMobile card={item} key={index} />
-            ))}
-          {tab === "history" &&
-            assetCardItems.historyList.map((item, index) => (
-              <AsesetCardMobile card={item} key={index} />
-            ))}
-          {tab === "pnl" &&
-            assetCardItems.pnlList.map((item, index) => (
-              <AsesetCardMobile card={item} key={index} />
-            ))}
+        <div className="mx-2 flex h-[calc(100%+32px)] w-[calc(100%-16px)] flex-col gap-4">
+          {tab === "positions" && assetCardItems.marketList.length > 0 && (
+            <>
+              {assetCardItems.marketList.map((item, index) => (
+                <AsesetCardMobile card={item} key={index} />
+              ))}
+              <div />
+            </>
+          )}
+          {tab === "orders" && assetCardItems.limitList.length > 0 && (
+            <>
+              {assetCardItems.limitList.map((item, index) => (
+                <AsesetCardMobile card={item} key={index} />
+              ))}
+              <div />
+            </>
+          )}
+          {tab === "history" && assetCardItems.historyList.length > 0 && (
+            <>
+              {assetCardItems.historyList.map((item, index) => (
+                <AsesetCardMobile card={item} key={index} />
+              ))}
+              <div />
+            </>
+          )}
+          {tab === "pnl" && assetCardItems.pnlList.length > 0 && (
+            <>
+              {assetCardItems.pnlList.map((item, index) => (
+                <AsesetCardMobile card={item} key={index} />
+              ))}
+              <div />
+            </>
+          )}
         </div>
       )}
     </div>

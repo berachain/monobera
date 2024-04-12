@@ -46,7 +46,7 @@ const InputSelect = ({
   return (
     <div className="flex w-full gap-1">
       <Input
-        className="h-8 w-full min-w-[98px] rounded-sm bg-background text-xs"
+        className="h-8 w-full min-w-[60px] rounded-sm bg-background text-xs sm:min-w-[98px]"
         placeholder="Amount"
         type={"number"}
         min={0}

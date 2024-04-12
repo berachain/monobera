@@ -8,7 +8,7 @@ import {
 } from "@bera/config";
 import {
   dexClient,
-  getTokenHoneyPrices,
+  getTokenHoneyPricesReq,
   searchFilteredPoolList,
 } from "@bera/graphql";
 import { useAnalytics } from "@bera/shared-ui";
@@ -99,7 +99,7 @@ export const usePollUserDeposited = (
 
         const tokenHoneyPricesResult = dexClient
           .query({
-            query: getTokenHoneyPrices,
+            query: getTokenHoneyPricesReq,
             variables: {
               id: uniqueTokenAddresses,
             },

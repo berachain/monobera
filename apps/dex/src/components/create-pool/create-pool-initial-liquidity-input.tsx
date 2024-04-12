@@ -11,9 +11,9 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { beraJsConfig } from "@bera/wagmi";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   token: Token;
@@ -37,7 +37,10 @@ export default function CreatePoolInitialLiquidityInput({
 
   const { isConnected } = useBeraJs();
 
-  const { data: tokenHoneyPrice } = useTokenHoneyPrice(token?.address);
+  const { data: tokenHoneyPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: token?.address },
+  });
 
   useMemo(() => {
     if (tokenBalanceData) {

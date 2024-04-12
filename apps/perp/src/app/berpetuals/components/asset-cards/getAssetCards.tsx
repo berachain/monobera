@@ -146,6 +146,7 @@ const getMarketListItems = (
           value: (
             <ActivePositionPNL
               position={item}
+              wrapped
               className="mb-2 max-h-[15px] text-xs font-medium leading-tight text-muted-foreground"
             />
           ),
@@ -164,6 +165,7 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
     );
     const openPrice = formatFromBaseUnit(item.price ?? "0", 10);
     const size = positionSize.div(openPrice).dp(4).toString(10);
+    const date = new Date(Number(item.timestamp_placed) * 1000);
     return {
       title: (
         <PositionCardTitle
@@ -197,15 +199,20 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
       ),
       rows: [
         {
-          key: "Order Type",
+          key: "Time",
           value: (
-            <p className="text-xs font-medium leading-tight text-muted-foreground">
-              LIMIT ORDER
-            </p>
+            <div className="flex gap-1">
+              <div className="text-xs font-semibold leading-tight text-foreground ">
+                {date.toLocaleDateString()}
+              </div>
+              <div className="text-xs font-medium leading-tight text-muted-foreground">
+                {`(${date.toLocaleTimeString()})`}
+              </div>
+            </div>
           ),
         },
         {
-          key: "Price",
+          key: "Execution Price",
           value: (
             <p className="text-xs font-medium leading-tight text-muted-foreground">
               {formatUsd(
@@ -218,9 +225,7 @@ const getLimitListItems = (limitOrderItems: ILimitOrder[]): ICards[] => {
           key: "Position Size",
           value: (
             <p className="text-xs font-medium leading-tight text-muted-foreground">
-              {formatUsd(
-                formatFromBaseUnit(item.position_size ?? "0", 18).toString(10),
-              )}
+              {formatUsd(positionSize.toString(10))}
             </p>
           ),
         },
@@ -396,6 +401,14 @@ const getPnlListItems = (historyItems: IClosedTrade[]): ICards[] => {
                 {formatUsd(item.pnl ?? 0)}
               </span>
             </div>
+          ),
+        },
+        {
+          key: "Order Type",
+          value: (
+            <p className="text-xs text-muted-foreground">
+              {item.close_type || "-"}
+            </p>
           ),
         },
         {
