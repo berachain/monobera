@@ -1,0 +1,88 @@
+# getSwapPayload
+
+Action that returns the appropriate payload / arguments for the swap smart contract function.
+
+## Import
+
+```ts
+import { getSwapPayload } from "@bera/berajs";
+```
+
+## Usage
+
+:::code-group
+
+```ts twoslash [example.ts]
+import {
+  MULTISWAP_ABI,
+  getSwap,
+  getSwapPayload,
+  useBeraContractWrite,
+} from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+// get swapInfo using the getSwap function
+const swapInfo = await getSwap({
+  args: {
+    tokenIn: "0x...", // address of token to swap in
+    tokenOut: "0x...", // address of token to receive from swap
+    tokenInDecimals: 18, // usually 18
+    tokenOutDecimals: 18, // usually 18
+    amount: "1000", // amount of token to swap in
+  },
+  config: beraJsConfig,
+});
+
+// get the contract payload/args using the getSwapPayload function and the swapInfo object from getSwap above
+const swapPayload = getSwapPayload({
+  args: {
+    swapInfo,
+    slippage, // value between 0.1 and 100 represented slippage tolerance for this swap transaction
+    baseToken: "0x...", // address of token to swap in
+    quoteToken: "0x...", // address of token to receive from swap
+  },
+});
+
+// use the swap payload to perform the swap
+const { write } = useBeraContractWrite();
+write({
+  address: beraConfig.contracts.crocMultiSwapAddress,
+  abi: MULTISWAP_ABI,
+  functionName: "multiSwap",
+  params: swapPayload?.payload ?? [],
+  value: swapPayload?.value,
+});
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getSwapPayload
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...", // required for getSwap
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...", // required for getSwap and getSwapPayload
+  },
+};
+```
+
+:::
+
+## Parameters
+
+```ts
+import { type getSwapPayload } from "@bera/berajs";
+```
+
+## Returns
+
+```ts
+import { type PayloadReturnType } from "@bera/berajs";
+
+type getSwapPayloadResult =
+  | PayloadReturnType<[ICrocSwapStep[], bigint, bigint]>
+  | undefined;
+```

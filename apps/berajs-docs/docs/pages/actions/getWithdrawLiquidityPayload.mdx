@@ -1,0 +1,45 @@
+# getWithdrawLiquidityPayload
+
+Action for creating the payload for performing a withdraw liquidity operation on a pool.
+
+## Import
+
+```ts
+import { getWithdrawLiquidityPayload } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getWithdrawLiquidityPayload, type Token } from "@bera/berajs";
+import { usePublicClient } from "wagmi";
+
+const client = usePublicClient();
+
+const withdrawLiqPayload = await getWithdrawLiquidityPayload({
+  args: {
+    slippage: 0.1, // value between 0.1 and 100
+    poolPrice: 1,
+    baseToken: { address: "0x..." } as Token,
+    quoteToken: { address: "0x..." } as Token,
+    percentRemoval: 50, // value between 0 and 100
+    poolIdx: 1, // pool.poolIdx
+    seeds: "...",
+  },
+  publicClient: client,
+});
+```
+
+## Parameters
+
+```ts
+import { type getWithdrawLiquidityPayload } from "berajs";
+```
+
+## Returns
+
+```ts
+import { type PayloadReturnType } from "berajs";
+
+type result = Promise<PayloadReturnType | undefined>;
+```

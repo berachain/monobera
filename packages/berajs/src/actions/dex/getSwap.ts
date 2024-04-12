@@ -1,9 +1,11 @@
+import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { PublicClient, formatUnits, getAddress } from "viem";
-import { getRoute } from "./getRoute";
-import { nativeTokenAddress, beraTokenAddress } from "@bera/config";
+
 import { MULTISWAP_ABI } from "~/config";
-import { BeraConfig } from "~/types/global";
+import { SwapInfoV3 } from "~/hooks";
 import { SwapRequest } from "~/types";
+import { BeraConfig } from "~/types/global";
+import { getRoute } from "./getRoute";
 
 /**
  * Returns the optimal swap path and return amount for a given swap request
@@ -17,7 +19,7 @@ export const getSwap = async ({
   args: SwapRequest;
   config: BeraConfig;
   publicClient: PublicClient;
-}) => {
+}): Promise<SwapInfoV3 | undefined> => {
   const { tokenIn, tokenOutDecimals } = args;
   if (!publicClient) {
     console.error("Public client not found");
