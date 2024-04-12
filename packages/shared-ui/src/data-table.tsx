@@ -309,7 +309,7 @@ export function DataTable<TData, TValue>({
                   type="button"
                   onClick={() => table.setPageIndex(0)}
                   disabled={!table.getCanPreviousPage()}
-                  className="font-['IBM Plex Sans'] w-8 text-xs leading-tight text-foreground disabled:opacity-50"
+                  className="font-['IBM Plex Sans'] w-8 select-none text-xs leading-tight text-foreground disabled:opacity-50"
                 >
                   First
                 </button>
@@ -319,7 +319,7 @@ export function DataTable<TData, TValue>({
                   type="button"
                   onClick={() => table.previousPage()}
                   disabled={!table.getCanPreviousPage()}
-                  className="relative text-foreground disabled:opacity-50"
+                  className="relative select-none text-foreground disabled:opacity-50"
                 >
                   &lt;
                 </button>
@@ -336,7 +336,7 @@ export function DataTable<TData, TValue>({
                   type="button"
                   onClick={() => table.nextPage()}
                   disabled={!table.getCanNextPage()}
-                  className="relative text-foreground disabled:opacity-50"
+                  className="relative select-none text-foreground disabled:opacity-50	"
                 >
                   &gt;
                 </button>
@@ -346,7 +346,7 @@ export function DataTable<TData, TValue>({
                   type="button"
                   disabled={!table.getCanNextPage()}
                   onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                  className="font-['IBM Plex Sans'] w-8 text-xs leading-tight text-foreground disabled:opacity-50"
+                  className="font-['IBM Plex Sans'] w-8 select-none text-xs leading-tight text-foreground disabled:opacity-50"
                 >
                   Last
                 </button>

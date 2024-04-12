@@ -40,22 +40,6 @@ export const ordersColumns: ColumnDef<ILimitOrder>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Type"
-        className="min-w-[32px]"
-      />
-    ),
-    cell: () => (
-      <div className=" text-xs font-medium uppercase text-muted-foreground">
-        LIMIT
-      </div>
-    ),
-    accessorKey: "type",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
         title="Market / Action"
         className="min-w-[102px]"
       />
@@ -140,14 +124,14 @@ export const ordersColumns: ColumnDef<ILimitOrder>[] = [
     ),
     cell: ({ row }) => (
       <div className="">
-        <span className="text-nowrap text-success-foreground">
+        <span className="text-nowrap">
           {row.original.tp === "0"
             ? "∞"
             : formatUsd(formatFromBaseUnit(row.original.tp, 10).toString(10)) ??
               "-"}{" "}
         </span>
         /
-        <span className="text-destructive-foreground">
+        <span>
           {" "}
           {row.original.sl === "0"
             ? "∞"

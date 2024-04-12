@@ -204,12 +204,10 @@ export default function DepositWithdraw() {
                   selectable={false}
                   balance={eligibleForWithdraw}
                   selected={{
-                    symbol: "BHONEY",
+                    symbol: "bHONEY",
                     address: gTokenContractAddress,
                     decimals: 18,
-                    name: "BHONEY",
-                    logoURI:
-                      "https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png",
+                    name: "bHONEY",
                   }}
                   amount={withdrawAmount}
                   setAmount={setWithdrawAmount}
