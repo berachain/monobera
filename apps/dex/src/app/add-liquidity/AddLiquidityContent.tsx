@@ -6,7 +6,7 @@ import {
   CROCSWAP_DEX,
   TransactionActionType,
   getAddLiquidityPayload,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
@@ -32,7 +32,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { beraJsConfig } from "@bera/wagmi";
 import { formatUnits, parseUnits } from "viem";
-import { base } from "viem/chains";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { SettingsPopover } from "~/components/settings-popover";
@@ -70,7 +69,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     setIsNativeBera,
   } = useAddLiquidity(pool);
 
-  const { refetch } = usePollAssetWalletBalance();
+  const { refetch } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
@@ -457,9 +458,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       ? maxBaseApprovalAmount
                       : maxQuoteApprovalAmount
                     : needsApproval[0]?.address.toLowerCase() ===
-                        baseToken.address.toLowerCase()
-                      ? maxBaseApprovalAmount
-                      : maxQuoteApprovalAmount
+                      baseToken.address.toLowerCase()
+                    ? maxBaseApprovalAmount
+                    : maxQuoteApprovalAmount
                 }
                 token={isNativeBera ? needsApprovalNoBera[0] : needsApproval[0]}
                 spender={crocDexAddress}
