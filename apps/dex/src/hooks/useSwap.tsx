@@ -100,8 +100,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     inputToken,
   );
 
-  const { data: tokenInPrice } = useTokenHoneyPrice(selectedFrom?.address);
-  const { data: tokenOutPrice } = useTokenHoneyPrice(selectedTo?.address);
+  const { data: tokenInPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: selectedFrom?.address },
+  });
+  const { data: tokenOutPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: selectedTo?.address },
+  });
 
   const [isWrap, setIsWrap] = useState(false);
 
@@ -321,7 +327,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     };
   }
   const gasData = useGasData({ contractArgs: gasParams });
-  const beraInUsd = useTokenHoneyPrice(nativeTokenAddress);
+  const beraInUsd = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: nativeTokenAddress },
+  });
   const formattedGasPriceInBera = gasData ? parseFloat(formatGwei(gasData)) : 0;
 
   // Calculate general gas for unconnected wallet user (less accurate)

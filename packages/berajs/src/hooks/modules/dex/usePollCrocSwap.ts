@@ -47,7 +47,7 @@ export const usePollCrocSwap = ({
     QUERY_KEY,
     async () => {
       try {
-        if (!publicClient) return undefined;
+        if (!publicClient || !config) return undefined;
         if (isTyping !== undefined && isTyping === true) {
           return {
             batchSwapSteps: [],

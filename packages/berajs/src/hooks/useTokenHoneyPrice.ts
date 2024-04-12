@@ -1,48 +1,48 @@
 import useSWR from "swr";
 
-import { getTokenHoneyPrices } from "~/actions/honey";
+import { getTokenHoneyPrice } from "~/actions/honey";
 import POLLING from "~/config/constants/polling";
 import { DefaultHookTypes } from "~/types/global";
 
 /**
  *
- * @returns the current honey price of a series of tokens
+ * @returns the current honey price of a given token
  */
-export interface UseTokenHoneyPricesRequest extends DefaultHookTypes {
+
+export interface UseTokenHoneyPriceRequest extends DefaultHookTypes {
   args?: {
-    tokenAddresses: string[] | undefined;
+    tokenAddress: `0x${string}` | undefined;
   };
 }
 
-export interface UseTokenHoneyPricesResponse {
+export interface UseTokenHoneyPriceResponse {
   isLoading: boolean;
   isValidating: boolean;
-  data: string[] | undefined;
+  data: string | undefined;
 }
 
-export const useTokenHoneyPrices = ({
+export const useTokenHoneyPrice = ({
   config,
-  args: { tokenAddresses } = { tokenAddresses: undefined },
+  args: { tokenAddress } = { tokenAddress: undefined },
   opts: { refreshInterval } = {
     refreshInterval: POLLING.REFRESH_BLOCK_INTERVAL,
   },
-}: UseTokenHoneyPricesRequest): UseTokenHoneyPricesResponse => {
+}: UseTokenHoneyPriceRequest) => {
   if (!config.subgraphs?.dexSubgraph) {
     throw new Error("dex subgraph uri s not found in config");
   }
-  const method = "tokenHoneyPrices";
-  const QUERY_KEY = [tokenAddresses, method];
+  const method = "tokenHoneyPrice";
+  const QUERY_KEY = [tokenAddress, method];
   const subgraphEndpoint = config.subgraphs?.dexSubgraph;
   const { data, isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      return getTokenHoneyPrices({ tokenAddresses, subgraphEndpoint });
+      return getTokenHoneyPrice({ tokenAddress, subgraphEndpoint });
     },
     {
       refreshInterval,
     },
   );
-
   return {
     isLoading,
     isValidating,

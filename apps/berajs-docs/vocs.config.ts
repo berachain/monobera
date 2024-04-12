@@ -59,6 +59,14 @@ export default defineConfig({
           text: "useTokens",
           link: "/react/useTokens/",
         },
+        {
+          text: "useTokenHoneyPrice",
+          link: "/react/useTokenHoneyPrice/",
+        },
+        {
+          text: "useTokenHoneyPrices",
+          link: "/react/useTokenHoneyPrices/",
+        },
       ],
     },
     {
