@@ -9,6 +9,15 @@ import { useBeraJs } from "~/contexts";
 
 const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
 
+export interface UserAccountData {
+  totalCollateralBase: bigint;
+  totalDebtBase: bigint;
+  availableBorrowsBase: bigint;
+  currentLiquidationThreshold: bigint;
+  ltv: bigint;
+  healthFactor: bigint;
+}
+
 export const usePollUserAccountData = () => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
@@ -36,7 +45,7 @@ export const usePollUserAccountData = () => {
             currentLiquidationThreshold,
             ltv,
             healthFactor,
-          ] = result as [any, any, any, any, any, any];
+          ] = result as [bigint, bigint, bigint, bigint, bigint, bigint];
 
           return {
             totalCollateralBase,
@@ -57,8 +66,8 @@ export const usePollUserAccountData = () => {
     },
   );
 
-  const useUserAccountData = (): any => {
-    const { data } = useSWRImmutable(QUERY_KEY);
+  const useUserAccountData = (): UserAccountData | undefined => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
 

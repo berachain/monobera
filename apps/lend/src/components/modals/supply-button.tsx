@@ -118,21 +118,23 @@ const SupplyModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const userAccountData = useUserAccountData();
 
-  const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency:
-      Number(formatUnits(userAccountData.totalCollateralBase, 8)) +
-      Number(amount ?? "0") *
-        Number(reserve?.formattedPriceInMarketReferenceCurrency),
-    borrowBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalDebtBase,
-      8,
-    ),
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
-  });
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency:
+          Number(formatUnits(userAccountData.totalCollateralBase, 8)) +
+          Number(amount ?? "0") *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency),
+        borrowBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalDebtBase,
+          8,
+        ),
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : BigNumber(0);
 
   return (
     <div className="flex flex-col gap-6 pb-4">

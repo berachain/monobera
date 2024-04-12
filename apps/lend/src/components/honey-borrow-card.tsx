@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  usePollWalletBalances,
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import {
   cloudinaryUrl,
@@ -17,13 +17,13 @@ import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits } from "viem";
 
 import BGTRewardsClaimBtn from "./bgt-rewards-claim-btn";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
@@ -101,7 +101,7 @@ export default function HoneyBorrowCard() {
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
               <FormattedNumber
-                value={-honeyReserve?.variableBorrowAPY ?? 0}
+                value={-(honeyReserve?.variableBorrowAPY ?? 0)}
                 percent
               />
             </div>

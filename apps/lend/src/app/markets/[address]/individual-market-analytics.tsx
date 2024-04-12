@@ -41,7 +41,7 @@ export default function IndividualMarketAnalytics({
           liquidity:
             Number(reserve?.totalLiquidity) *
             Number(reserve?.formattedPriceInMarketReferenceCurrency) *
-            Number(1 - reserve?.borrowUsageRatio),
+            Number(1 - Number(reserve?.borrowUsageRatio)),
           utilization: Number(reserve?.borrowUsageRatio),
           oraclePrice: Number(reserve?.formattedPriceInMarketReferenceCurrency),
         }}

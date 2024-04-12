@@ -1,4 +1,4 @@
-import { formatReserves } from "@aave/math-utils";
+import { FormatReserveUSDResponse, formatReserves } from "@aave/math-utils";
 import {
   lendPoolAddressProviderAddress,
   lendUIDataProviderAddress,
@@ -9,7 +9,12 @@ import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { lendUIDataProviderABI } from "../../../config/abi";
-import { getReservesHumanized } from "../../../utils";
+import { BaseCurrencyData, getReservesHumanized } from "../../../utils";
+
+export interface ReserveData extends FormatReserveUSDResponse {
+  aTokenAddress: Address;
+  variableDebtTokenAddress: Address;
+}
 
 export const usePollReservesDataList = () => {
   const publicClient = usePublicClient();
@@ -46,43 +51,43 @@ export const usePollReservesDataList = () => {
     }
   });
 
-  const useReservesDataList = (): any[] => {
+  const useReservesDataList = (): ReserveData[] => {
     const { data = [] } = useSWRImmutable(QUERY_KEY);
     return data;
   };
 
-  const useSelectedReserveData = (address: Address): any => {
-    const { data: reserves = [] } = useSWRImmutable(QUERY_KEY);
+  const useSelectedReserveData = (
+    address: Address,
+  ): ReserveData | undefined => {
+    const { data: reserves = [] } = useSWRImmutable<ReserveData[]>(QUERY_KEY);
     return reserves.find(
-      (reserve: any) =>
-        reserve?.underlyingAsset === address ||
-        reserve?.aTokenAddress === address ||
-        reserve?.variableDebtTokenAddress === address,
+      (reserve: ReserveData) =>
+        reserve.underlyingAsset === address ||
+        reserve.aTokenAddress === address ||
+        reserve.variableDebtTokenAddress === address,
     );
   };
 
-  const useBaseCurrencyData = (): any => {
-    const { data: baseCurrency = undefined } = useSWRImmutable([
-      ...QUERY_KEY,
-      "baseCurrencyData",
-    ]);
+  const useBaseCurrencyData = (): BaseCurrencyData | undefined => {
+    const { data: baseCurrency = undefined } =
+      useSWRImmutable<BaseCurrencyData>([...QUERY_KEY, "baseCurrencyData"]);
     return baseCurrency;
   };
 
   const useTotalBorrowed = (): number => {
-    const { data: reserves = [] } = useSWRImmutable(QUERY_KEY);
+    const { data: reserves = [] } = useSWRImmutable<ReserveData[]>(QUERY_KEY);
     let totalBorrowed = 0;
     reserves.forEach(
-      (reserve: any) => (totalBorrowed += Number(reserve.totalDebt)),
+      (reserve: ReserveData) => (totalBorrowed += Number(reserve.totalDebt)),
     );
     return totalBorrowed;
   };
 
   const useTotalMarketSize = (): number => {
-    const { data: reserves = [] } = useSWRImmutable(QUERY_KEY);
+    const { data: reserves = [] } = useSWRImmutable<ReserveData[]>(QUERY_KEY);
     let marketSize = 0;
     reserves.forEach(
-      (reserve: any) => (marketSize += Number(reserve.totalLiquidity)),
+      (reserve: ReserveData) => (marketSize += Number(reserve.totalLiquidity)),
     );
     return marketSize;
   };

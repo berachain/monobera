@@ -137,21 +137,23 @@ const RepayModalContent = ({
     ? tokenBalance
     : debtBalance;
 
-  const currentHealthFactor = formatEther(userAccountData.healthFactor);
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalCollateralBase,
-      8,
-    ),
-    borrowBalanceMarketReferenceCurrency:
-      Number(formatUnits(userAccountData.totalDebtBase, 8)) -
-      Number(amount ?? "0") *
-        Number(reserve?.formattedPriceInMarketReferenceCurrency),
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
-  });
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalCollateralBase,
+          8,
+        ),
+        borrowBalanceMarketReferenceCurrency:
+          Number(formatUnits(userAccountData.totalDebtBase, 8)) -
+          Number(amount ?? "0") *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency),
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : BigNumber(0);
 
   return (
     <div className="flex flex-col gap-6 pb-4">

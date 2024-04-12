@@ -1,21 +1,21 @@
 import {
   useBeraJs,
-  usePollWalletBalances,
   usePollBgtRewardsForAddress,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import { lendHoneyDebtTokenAddress } from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
 import { formatUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 import { getEligibleDepositAmount } from "~/utils/lendTokenHelper";
 import { RiskDetails } from "./risk-details";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function StatusBanner() {
   const { useUserAccountData, isLoading } = usePollUserAccountData();
@@ -79,13 +79,13 @@ export default function StatusBanner() {
 
   const totalLiquidityUSD = Number(
     formatUnits(
-      data?.totalCollateralBase || "1",
+      data?.totalCollateralBase ?? 0n,
       baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
     ),
   );
   const totalBorrowsUSD = Number(
     formatUnits(
-      data?.totalDebtBase || "1",
+      data?.totalDebtBase ?? 0n,
       baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
     ),
   );
@@ -103,7 +103,7 @@ export default function StatusBanner() {
       amount: (
         <FormattedNumber
           value={formatUnits(
-            data?.totalCollateralBase || "0",
+            data?.totalCollateralBase ?? 0n,
             baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
           )}
           symbol="USD"
@@ -137,12 +137,12 @@ export default function StatusBanner() {
           className={cn(
             "flex items-center gap-2",
             `text-${getLTVColor(
-              Number(formatUnits(data?.healthFactor || "0", 18)),
+              Number(formatUnits(data?.healthFactor ?? 0n, 18)),
             )}`,
           )}
         >
           <FormattedNumber
-            value={formatUnits(data?.healthFactor || "0", 18)}
+            value={formatUnits(data?.healthFactor ?? 0n, 18)}
             maxValue={999}
           />
           <RiskDetails />
@@ -156,7 +156,7 @@ export default function StatusBanner() {
       amount: (
         <FormattedNumber
           value={formatUnits(
-            data?.availableBorrowsBase || "0",
+            data?.availableBorrowsBase ?? 0n,
             baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
           )}
           compact={false}

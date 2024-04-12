@@ -4,9 +4,9 @@ import {
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
-  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import {
@@ -20,11 +20,11 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function BorrowBtn({
   honeyBorrowAllowance,
@@ -122,27 +122,32 @@ const BorrowModalContent = ({
     ? availableLiquidity
     : honeyBorrowAllowance;
 
-  const currentHealthFactor = formatUnits(userAccountData.healthFactor, 18);
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalCollateralBase,
-      baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
-    ),
-    borrowBalanceMarketReferenceCurrency:
-      Number(
-        formatUnits(
-          userAccountData.totalDebtBase,
+  const currentHealthFactor = formatUnits(
+    userAccountData?.healthFactor ?? 0n,
+    18,
+  );
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalCollateralBase,
           baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
         ),
-      ) +
-      Number(amount ?? "0") *
-        Number(reserve.formattedPriceInMarketReferenceCurrency),
+        borrowBalanceMarketReferenceCurrency:
+          Number(
+            formatUnits(
+              userAccountData.totalDebtBase,
+              baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+            ),
+          ) +
+          Number(amount ?? "0") *
+            Number(reserve.formattedPriceInMarketReferenceCurrency),
 
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
-  });
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : BigNumber(0);
 
   return (
     <div className="flex flex-col gap-6 pb-4">

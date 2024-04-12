@@ -4,9 +4,9 @@ import {
   TransactionActionType,
   lendPoolImplementationABI,
   useBeraJs,
-  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
   type BalanceToken,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
@@ -21,11 +21,11 @@ import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function WithdrawBtn({
   reserve,
@@ -115,21 +115,23 @@ const WithdrawModalContent = ({
   const { useUserAccountData } = usePollUserAccountData();
   const userAccountData = useUserAccountData();
 
-  const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency:
-      Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
-      Number(amount ?? "0") *
-        Number(reserve?.formattedPriceInMarketReferenceCurrency),
-    borrowBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalDebtBase,
-      8,
-    ),
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
-  });
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency:
+          Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
+          Number(amount ?? "0") *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency),
+        borrowBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalDebtBase,
+          8,
+        ),
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -189,7 +191,7 @@ const WithdrawModalContent = ({
         )}
       </div>
 
-      {!isHoney && userAccountData.totalDebtBase > 0n && (
+      {!isHoney && userAccountData && userAccountData.totalDebtBase > 0n && (
         <Alert variant="destructive">
           <AlertTitle>
             {" "}
@@ -206,6 +208,7 @@ const WithdrawModalContent = ({
           !amount ||
           BigNumber(amount).lte(BigNumber(0)) ||
           BigNumber(amount).gt(BigNumber(userBalance)) ||
+          !userAccountData ||
           (userAccountData.totalDebtBase > 0n && !isHoney)
         }
         onClick={() => {
