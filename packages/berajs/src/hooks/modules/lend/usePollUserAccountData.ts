@@ -1,4 +1,3 @@
-import { lendPoolImplementationAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
@@ -16,10 +15,7 @@ export interface UserAccountData {
   healthFactor: bigint;
 }
 
-export const usePollUserAccountData = ({
-  config,
-  opts,
-}: DefaultHookTypes) => {
+export const usePollUserAccountData = ({ config, opts }: DefaultHookTypes) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
@@ -29,10 +25,11 @@ export const usePollUserAccountData = ({
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
+      if (!config.contracts?.lendPoolProxyAddress) return undefined;
       if (account) {
         try {
           const result = await publicClient.readContract({
-            address: lendPoolImplementationAddress,
+            address: config.contracts.lendPoolProxyAddress,
             abi: lendPoolImplementationABI,
             functionName: "getUserAccountData",
             args: [account],
