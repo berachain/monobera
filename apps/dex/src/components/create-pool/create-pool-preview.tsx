@@ -24,14 +24,15 @@ import {
   ApproveButton,
   PreviewToken,
   TokenList,
+  useAnalytics,
   useSlippage,
   useTxn,
-  useAnalytics,
 } from "@bera/shared-ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import { encodeAbiParameters, parseAbiParameters, parseUnits } from "viem";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
@@ -187,10 +188,14 @@ export function CreatePoolPreview({
     }
   }, [baseToken, quoteToken, initialPrice, isBaseTokenInput, slippage, write]);
 
-  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice(baseToken?.address);
-  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice(
-    quoteToken?.address,
-  );
+  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: baseToken?.address },
+  });
+  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: quoteToken?.address },
+  });
 
   const total = useMemo(() => {
     return (

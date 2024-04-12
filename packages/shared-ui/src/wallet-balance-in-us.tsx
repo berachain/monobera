@@ -19,9 +19,14 @@ export function WalletBalanceInUs() {
     config: beraJsConfig,
   });
   const assets = useCurrentWalletBalances();
-  const { data: pricesArray } = useTokenHoneyPrices(
-    featuredTokenList?.map((featuredToken: Token) => featuredToken.address),
-  );
+  const { data: pricesArray } = useTokenHoneyPrices({
+    config: beraJsConfig,
+    args: {
+      tokenAddresses: featuredTokenList?.map(
+        (featuredToken: Token) => featuredToken.address,
+      ),
+    },
+  });
   const total =
     assets && pricesArray
       ? assets?.reduce((acc: number, curr: Token) => {

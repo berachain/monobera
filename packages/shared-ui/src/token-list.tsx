@@ -9,19 +9,17 @@ import {
 import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
 
 import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
-import { beraJsConfig } from "@bera/wagmi";
 
-function TokenRow({
-  asset,
-  isLoading,
-}: {
-  asset: Token;
-  isLoading: boolean;
-}) {
-  const { data: tokenPrice } = useTokenHoneyPrice(asset.address);
+function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
+  const { data: tokenPrice } = useTokenHoneyPrice({
+    config: beraJsConfig,
+    args: { tokenAddress: asset.address },
+  });
+
   return (
     <div
       className="flex items-center justify-between gap-5"
