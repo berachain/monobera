@@ -3,14 +3,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@bera/ui/button";
-import { cn } from "@bera/ui";
-import { useInView } from "framer-motion";
 import { formatUsd } from "@bera/berajs";
+import { cn } from "@bera/ui";
+import { Button } from "@bera/ui/button";
+import { Skeleton } from "@bera/ui/skeleton";
+import { useInView } from "framer-motion";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePricesSocket } from "~/hooks/usePricesSocket";
 import type { IMarket } from "~/types/market";
-import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 
 interface PositionProps extends IMarket {
   className?: string;
@@ -66,7 +67,7 @@ function Position({
           </div>
         </div>
         <div className="text-lg font-semibold leading-normal text-popover-foreground">
-          {price && formatUsd(formatFromBaseUnit(price, 10).toString(10))}
+          {price ? formatUsd(formatFromBaseUnit(price, 10).toString(10)) : "-"}
         </div>
 
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
@@ -154,7 +155,7 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
       ref={containerRef}
       className="relative flex flex-col gap-4 overflow-hidden "
     >
-      {isInView && (
+      {isInView ? (
         <>
           <PositionRow
             row={0}
@@ -183,6 +184,11 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
             msPerPixel={15}
           />
         </>
+      ) : (
+        <div className="relative flex flex-col gap-4 overflow-hidden">
+          <Skeleton className="h-[181px] w-full" />
+          <Skeleton className="h-[181px] w-full" />
+        </div>
       )}
       <div className="pointer-events-none absolute inset-y-0 right-0 h-full w-[120px] bg-gradient-to-l from-background" />
       <div className="pointer-events-none absolute inset-y-0 left-0 h-full w-[120px] bg-gradient-to-r from-background" />

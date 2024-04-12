@@ -7,7 +7,7 @@ import {
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
 import { cloudinaryUrl, gTokenContractAddress } from "@bera/config";
-import { ApyTooltip } from "@bera/shared-ui";
+import { ApyTooltip, Tooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { usePollFeesApr } from "~/hooks/usePollFeesApr";
@@ -33,8 +33,15 @@ export default function Claim() {
 
   return (
     <div className="relative w-full overflow-hidden rounded-md border border-border bg-[#FEFCE8] px-10 py-8 dark:bg-[#231D14]">
-      <div className=" relative z-10 inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-yellow-600 bg-stone-900 px-3 py-2">
-        <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-yellow-600">
+      <Image
+        src={`${cloudinaryUrl}/BERPS/HoneyVaultBanner2_vhuynl`}
+        alt="honey-jar"
+        width={1080}
+        height={186}
+        className="absolute bottom-0 right-0 block h-[186px] object-cover"
+      />
+      <div className=" relative inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-warning-foreground bg-muted px-3 py-2">
+        <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-warning-foreground">
           {isHoneyVaultBalanceLoading ||
           isBgtRewardsLoading ||
           isFeesAprLoading ? (
@@ -44,16 +51,10 @@ export default function Claim() {
           )}
         </div>
       </div>
-      <div className=" relative z-10 mt-4 w-full text-xs text-muted-foreground">
-        APY <ApyTooltip />
+      <div className=" relative mt-4 w-full text-xs text-muted-foreground">
+        APY{" "}
+        <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
       </div>
-      <Image
-        src={`${cloudinaryUrl}/BERPS/HoneyVaultBanner2_vhuynl`}
-        alt="honey-jar"
-        width={1080}
-        height={186}
-        className="absolute bottom-0 right-0 z-0 block h-[186px] object-cover"
-      />
     </div>
   );
 }
