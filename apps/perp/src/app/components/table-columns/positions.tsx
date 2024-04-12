@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader, HoverCard } from "@bera/shared-ui";
+import { DataTableColumnHeader, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -81,9 +81,11 @@ export const PositionLiquidationPrice = ({
 export const ActivePositionPNL = ({
   position,
   className,
+  wrapped,
 }: {
   position: IMarketOrder;
   className?: string;
+  wrapped?: boolean;
 }) => {
   const { useMarketIndexPrice } = usePricesSocket();
 
@@ -101,7 +103,7 @@ export const ActivePositionPNL = ({
       .minus(positionSizeBN)
       .div(positionSizeBN)
       .times(100);
-    return percentage.dp(2).toString(10);
+    return percentage.isFinite() ? percentage.dp(2).toString(10) : "-";
   }, [pnl, position]);
 
   const initialCollateral = formatFromBaseUnit(position.position_size, 18)
@@ -117,19 +119,20 @@ export const ActivePositionPNL = ({
         <div>
           <div
             className={cn(
-              " flex flex-col items-start ",
+              " flex flex-col items-start",
               Number(pnl) > 0
                 ? "text-success-foreground"
                 : "text-destructive-foreground",
+              wrapped && "flex-row gap-1",
             )}
           >
-            <HoverCard
-              triggerElement={
+            <Tooltip
+              toolTipTrigger={
                 <div className="cursor-help underline decoration-dashed">
                   {formatUsd(pnl)}
                 </div>
               }
-              content={
+              children={
                 <PnLRowHoverState
                   initialCollateral={initialCollateral}
                   pnlAfterFees={pnl}
@@ -139,6 +142,7 @@ export const ActivePositionPNL = ({
                 />
               }
             />
+            {wrapped && <div className="text-xs"> | </div>}
             <div className="text-xs">({percentage}%)</div>
           </div>
         </div>
@@ -258,7 +262,7 @@ export const generatePositionColumns = (
       cell: ({ row }) => (
         <div className="flex flex-col">
           <div className="flex flex-nowrap">
-            <span className="text-success-foreground">
+            <span>
               {row.original.tp === "0"
                 ? "∞"
                 : row.original.tp
@@ -269,7 +273,7 @@ export const generatePositionColumns = (
             </span>
             <span className="ml-1">/</span>
           </div>
-          <span className="text-destructive-foreground">
+          <span>
             {row.original.sl === "0"
               ? "∞"
               : row.original.sl

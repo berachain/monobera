@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { type IBHoneyEpoch } from "@bera/berajs";
+import { Icons } from "@bera/ui/icons";
 import { Progress } from "@bera/ui/progress";
 import { Skeleton } from "@bera/ui/skeleton";
 import { format, formatDistanceToNow, isPast } from "date-fns";
@@ -71,13 +72,22 @@ export const Epochs = ({
   return (
     <div className="flex h-48 w-full flex-col justify-between rounded-md border border-border px-8 py-6 ">
       {isLoading ? (
-        <Skeleton className="h-[48px] w-[120px]" />
+        <div className="flex w-full flex-row items-center justify-between">
+          <Skeleton className="h-[48px] w-[120px]" />
+          <Skeleton className="h-[12px] w-[80px] self-center" />
+        </div>
       ) : (
-        <p className="text-2xl font-semibold leading-loose">
-          Epoch {epoch?.currentEpoch}
-        </p>
+        <div className="flex w-full flex-row items-center justify-between">
+          <p className="text-2xl font-semibold leading-loose">
+            Epoch {epoch?.currentEpoch}
+          </p>
+          <div className="flex text-xs font-normal leading-tight text-muted-foreground">
+            <Icons.timerReset className="mr-1 h-4 w-4" />
+            {duration}
+          </div>
+        </div>
       )}
-      <div className="inline-flex flex-col items-start justify-start gap-2">
+      <div className="inline-flex flex-col gap-2">
         {isLoading ? (
           <Skeleton className="h-[12px] w-[80px]" />
         ) : (
@@ -96,21 +106,12 @@ export const Epochs = ({
           />
         )}
         {isLoading ? (
-          <div className="flex w-full flex-row justify-between">
-            <Skeleton className="h-[12px] w-[80px]" />
-            <Skeleton className="h-[12px] w-[80px]" />
-          </div>
+          <Skeleton className="h-[12px] w-[80px] self-end" />
         ) : (
-          <div className="flex w-full flex-row justify-between">
-            <p className="text-xs font-normal leading-tight text-muted-foreground">
-              Time Remaining: <br />
-              {duration}
-            </p>
-            <p className="text-xs font-normal leading-tight">
-              <span className="text-muted-foreground">End:</span>{" "}
-              {formattedEndDate}
-            </p>
-          </div>
+          <p className="self-end text-xs font-normal leading-tight">
+            <span className="text-muted-foreground">End:</span>{" "}
+            {formattedEndDate}
+          </p>
         )}
       </div>
     </div>
