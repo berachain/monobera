@@ -13,7 +13,6 @@ import { beraJsConfig } from "@bera/wagmi";
 
 import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
-import { beraJsConfig } from "@bera/wagmi";
 
 function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   const { data: tokenPrice } = useTokenHoneyPrice({
