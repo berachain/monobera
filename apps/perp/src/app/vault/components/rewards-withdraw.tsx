@@ -12,7 +12,13 @@ import {
   usePollBalanceOfAssets,
   usePollPerpsBgtRewards,
 } from "@bera/berajs";
-import { DataTable, DynamicRewardBtn, Tooltip, useTxn } from "@bera/shared-ui";
+import {
+  DataTable,
+  DynamicRewardBtn,
+  FormattedNumber,
+  Tooltip,
+  useTxn,
+} from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
@@ -40,7 +46,7 @@ export const RewardsWithdraw = () => {
   }, [ghoneyBalance, honeyPrice]);
 
   const estimatedEarnings = useMemo(() => {
-    return stakedHoney - balanceOfAssets;
+    return Math.abs(stakedHoney - balanceOfAssets);
   }, [stakedHoney, balanceOfAssets]);
 
   const isLoading =
@@ -131,7 +137,14 @@ export const RewardsWithdraw = () => {
             <Skeleton className="h-[28px] w-1/2" />
           ) : (
             <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
-              {formatter.format(Number(ghoneyBalance))}{" "}
+              {
+                <FormattedNumber
+                  value={ghoneyBalance}
+                  compact={false}
+                  compactThreshold={999}
+                  visibleDecimals={2}
+                />
+              }
               <Image
                 src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png"
                 alt="Honey"
@@ -149,7 +162,14 @@ export const RewardsWithdraw = () => {
             <Skeleton className="h-[28px] w-1/2" />
           ) : (
             <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
-              {formatter.format(stakedHoney)}{" "}
+              {
+                <FormattedNumber
+                  value={stakedHoney}
+                  compact={false}
+                  compactThreshold={999}
+                  visibleDecimals={2}
+                />
+              }
               <Image
                 src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/honey.png"
                 alt="Honey"
@@ -167,7 +187,14 @@ export const RewardsWithdraw = () => {
             <Skeleton className="h-[28px] w-1/2" />
           ) : (
             <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
-              {formatter.format(estimatedEarnings)}{" "}
+              {
+                <FormattedNumber
+                  value={estimatedEarnings}
+                  compact={false}
+                  compactThreshold={999}
+                  visibleDecimals={2}
+                />
+              }
               <Image
                 src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/honey.png"
                 alt="Honey"

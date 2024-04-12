@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
+import { usePrevious } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -30,6 +31,7 @@ export function UpdateLimitOrderModal({
   className?: string;
 }) {
   const [open, setOpen] = useState<boolean>(false);
+  const prevOpen = usePrevious(open);
   const [tp, setTp] = useState<string>(
     formatFromBaseUnit(openOrder?.tp, 10).toString(10),
   );
@@ -70,6 +72,18 @@ export function UpdateLimitOrderModal({
       setOpen(false);
     },
   });
+
+  useEffect(() => {
+    if (!open && prevOpen !== open) {
+      setTp(formatFromBaseUnit(openOrder?.tp, 10).toString(10));
+      setSl(
+        openOrder?.sl === "0"
+          ? ""
+          : formatFromBaseUnit(openOrder?.sl, 10).toString(10),
+      );
+      setExecutionPrice(formattedPrice);
+    }
+  }, [open, prevOpen, openOrder, formattedPrice]);
 
   const handleTPSLChange = useCallback(
     (value: string, key: string) =>
