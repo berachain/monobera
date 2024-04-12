@@ -9,7 +9,7 @@ import { DefaultHookTypes } from "~/types/global";
  * @returns the current honey price of a given token
  */
 
-interface UseTokenHoneyPriceRequest extends DefaultHookTypes {
+export interface UseTokenHoneyPriceRequest extends DefaultHookTypes {
   args?: {
     tokenAddress: `0x${string}` | undefined;
   };
