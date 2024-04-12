@@ -77,7 +77,7 @@ export default function RepayBtn({
     },
   });
   const { refetch: reservesDataRefetch } = usePollReservesDataList({
-    config: beraJsConfig
+    config: beraJsConfig,
   });
 
   useEffect(() => setOpen(false), [isSuccess]);

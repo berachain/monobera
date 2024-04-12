@@ -13,7 +13,11 @@ import { beraJsConfig } from "@bera/wagmi";
 
 export default function BGTRewardsClaimBtn() {
   const { account } = useBeraJs();
-  const { data: rewards, isLoading, refetch } = usePollLendUserBGTRewards({ config: beraJsConfig });
+  const {
+    data: rewards,
+    isLoading,
+    refetch,
+  } = usePollLendUserBGTRewards({ config: beraJsConfig });
   const {
     write,
     isLoading: isClaimingLoading,
