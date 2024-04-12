@@ -27,7 +27,7 @@ import RepayBtn from "./modals/repay-button";
 
 export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
-    usePollLendUserBGTRewards();
+    usePollLendUserBGTRewards({ config: beraJsConfig });
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
   });
