@@ -1,0 +1,59 @@
+# getSwap
+
+Action for fetching the optimal swap route between two tokens and then providing additional processed fields relevant to the swap being performed.
+
+## Import
+
+```ts
+import { getSwap } from "@bera/berajs";
+```
+
+## Usage
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { getSwap } from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+const swap = await getSwap({
+  args: {
+    tokenIn,
+    tokenOut,
+    tokenInDecimals,
+    tokenOutDecimals,
+    amount,
+  },
+  config: beraConfig,
+  publicClient,
+});
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getSwap
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...",
+  },
+};
+```
+
+:::
+
+## Parameters
+
+```ts
+import { type getSwap } from "berajs";
+```
+
+## Returns
+
+```ts
+import { type SwapInfoV3 } from "berajs";
+```
