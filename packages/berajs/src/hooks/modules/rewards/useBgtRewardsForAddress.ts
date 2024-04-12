@@ -1,6 +1,5 @@
 import { beraTokenAddress } from "@bera/config";
 import { type Weight } from "@bera/graphql";
-import { beraJsConfig } from "@bera/wagmi";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
