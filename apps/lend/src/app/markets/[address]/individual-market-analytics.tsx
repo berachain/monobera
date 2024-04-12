@@ -20,7 +20,9 @@ export default function IndividualMarketAnalytics({
   const { tokenDictionary } = useTokens({
     config: beraJsConfig,
   });
-  const { useSelectedReserveData } = usePollReservesDataList();
+  const { useSelectedReserveData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const reserve = useSelectedReserveData(address);
 
   return (

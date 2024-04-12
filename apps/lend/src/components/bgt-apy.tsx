@@ -5,16 +5,18 @@ import {
   usePollReservesDataList,
 } from "@bera/berajs";
 import {
-  bgtTokenAddress,
   honeyTokenAddress,
   lendHoneyDebtTokenAddress,
 } from "@bera/config";
-import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function BGTApy() {
   const { useSelectedReserveData, useTotalBorrowed } =
-    usePollReservesDataList();
+    usePollReservesDataList({
+      config: beraJsConfig,
+    });
   const honey = useSelectedReserveData(honeyTokenAddress);
   const totalBorrowed = useTotalBorrowed();
 

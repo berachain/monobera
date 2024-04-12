@@ -1,13 +1,10 @@
 import { FormatReserveUSDResponse, formatReserves } from "@aave/math-utils";
-import {
-  lendPoolAddressProviderAddress,
-  lendUIDataProviderAddress,
-} from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
+import { DefaultHookTypes } from "~/types";
 import { lendUIDataProviderABI } from "../../../config/abi";
 import { BaseCurrencyData, getReservesHumanized } from "../../../utils";
 
@@ -16,40 +13,49 @@ export interface ReserveData extends FormatReserveUSDResponse {
   variableDebtTokenAddress: Address;
 }
 
-export const usePollReservesDataList = () => {
+export const usePollReservesDataList = ({ config, opts }: DefaultHookTypes) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
 
   const QUERY_KEY = ["getReservesDataList"];
-  const { isLoading, isValidating } = useSWR(QUERY_KEY, async () => {
-    if (!publicClient) return undefined;
-    try {
-      const result = (await publicClient.readContract({
-        address: lendUIDataProviderAddress,
-        abi: lendUIDataProviderABI,
-        functionName: "getReservesData",
-        args: [lendPoolAddressProviderAddress],
-      })) as [any[], any];
-      const currentTimestamp = Math.floor(Date.now() / 1000);
-      const { reservesData, baseCurrencyData } = getReservesHumanized(
-        result[0],
-        result[1],
-      );
-      await mutate([...QUERY_KEY, "baseCurrencyData"], baseCurrencyData);
-      const formattedReserves = formatReserves({
-        reserves: reservesData,
-        currentTimestamp,
-        marketReferenceCurrencyDecimals:
-          baseCurrencyData.marketReferenceCurrencyDecimals,
-        marketReferencePriceInUsd:
-          baseCurrencyData.marketReferenceCurrencyPriceInUsd,
-      });
-      return formattedReserves;
-    } catch (e) {
-      console.log(e);
-      return [];
-    }
-  });
+  const { isLoading, isValidating } = useSWR(
+    QUERY_KEY,
+    async () => {
+      if (!publicClient) return undefined;
+      if (!config.contracts?.lendUIDataProviderAddress) return undefined;
+      if (!config.contracts?.lendAddressProviderAddress) return undefined;
+
+      try {
+        const result = (await publicClient.readContract({
+          address: config.contracts.lendUIDataProviderAddress,
+          abi: lendUIDataProviderABI,
+          functionName: "getReservesData",
+          args: [config.contracts?.lendAddressProviderAddress],
+        })) as [any[], any];
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        const { reservesData, baseCurrencyData } = getReservesHumanized(
+          result[0],
+          result[1],
+        );
+        await mutate([...QUERY_KEY, "baseCurrencyData"], baseCurrencyData);
+        const formattedReserves = formatReserves({
+          reserves: reservesData,
+          currentTimestamp,
+          marketReferenceCurrencyDecimals:
+            baseCurrencyData.marketReferenceCurrencyDecimals,
+          marketReferencePriceInUsd:
+            baseCurrencyData.marketReferenceCurrencyPriceInUsd,
+        });
+        return formattedReserves;
+      } catch (e) {
+        console.log(e);
+        return [];
+      }
+    },
+    {
+      ...opts,
+    },
+  );
 
   const useReservesDataList = (): ReserveData[] => {
     const { data = [] } = useSWRImmutable(QUERY_KEY);

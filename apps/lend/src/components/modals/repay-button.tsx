@@ -70,7 +70,9 @@ export default function RepayBtn({
   const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);

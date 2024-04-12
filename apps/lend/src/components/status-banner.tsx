@@ -23,8 +23,9 @@ export default function StatusBanner() {
 
   const { isReady } = useBeraJs();
 
-  const { useReservesDataList, useBaseCurrencyData } =
-    usePollReservesDataList();
+  const { useReservesDataList, useBaseCurrencyData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const reservesDataList = useReservesDataList();
   const baseCurrency = useBaseCurrencyData();
 

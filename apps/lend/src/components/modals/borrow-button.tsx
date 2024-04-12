@@ -59,7 +59,9 @@ export default function BorrowBtn({
   });
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -101,7 +103,9 @@ const BorrowModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const { account } = useBeraJs();
-  const { useBaseCurrencyData } = usePollReservesDataList();
+  const { useBaseCurrencyData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const baseCurrencyData = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData();
   const userAccountData = useUserAccountData();

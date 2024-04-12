@@ -1,14 +1,17 @@
 import React from "react";
-import { usePollWalletBalances, usePollReservesDataList } from "@bera/berajs";
+import { usePollReservesDataList, usePollWalletBalances } from "@bera/berajs";
+import { beraJsConfig } from "@bera/wagmi";
+
 import AvailableDeposit from "./available-deposit";
 import HoneyBorrow from "./honey-borrow";
 import HoneySupply from "./honey-supply";
 import PageLoading from "./page-loading";
 import UserDeposits from "./user-deposits";
-import { beraJsConfig } from "@bera/wagmi";
 
 export function Dashboard() {
-  const { isLoading: isReservesDataLoading } = usePollReservesDataList();
+  const { isLoading: isReservesDataLoading } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const { isLoading: isWalletBalanceLoading } = usePollWalletBalances({
     config: beraJsConfig,
   });

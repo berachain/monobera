@@ -25,7 +25,9 @@ export default function UserInfo() {
   const tokenBalance = useSelectedWalletBalance(honeyTokenAddress);
 
   const { useSelectedReserveData, useBaseCurrencyData } =
-    usePollReservesDataList();
+    usePollReservesDataList({
+      config: beraJsConfig,
+    });
   const reserve = useSelectedReserveData(honeyTokenAddress);
   const baseCurrencyData = useBaseCurrencyData();
   console.log("reserve", reserve);

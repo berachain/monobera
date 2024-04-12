@@ -33,7 +33,9 @@ export default function HoneyBorrowCard() {
   });
 
   const { useTotalBorrowed, useSelectedReserveData } =
-    usePollReservesDataList();
+    usePollReservesDataList({
+      config: beraJsConfig,
+    });
   const totalBorrowed = useTotalBorrowed();
   const bgtApr = useBgtApr(totalBorrowed);
 

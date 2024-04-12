@@ -13,7 +13,9 @@ export default function HoneySupply() {
     config: beraJsConfig,
   });
   const aHoneyToken = useSelectedWalletBalance(aHoneyTokenAddress);
-  const { useSelectedReserveData } = usePollReservesDataList();
+  const { useSelectedReserveData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
   return (
     <>

@@ -6,9 +6,12 @@ import { FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import BGTApy from "./bgt-apy";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function Data() {
-  const { useTotalBorrowed, useTotalMarketSize } = usePollReservesDataList();
+  const { useTotalBorrowed, useTotalMarketSize } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const totalMarketSize = useTotalMarketSize();
   const totalBorrowed = useTotalBorrowed();
 
