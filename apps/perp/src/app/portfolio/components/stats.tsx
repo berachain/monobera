@@ -73,22 +73,31 @@ export default function Stats({ markets }: { markets: IMarket[] }) {
             <Tabs
               defaultValue={tabType}
               onValueChange={(value) => setTabType(value as "Volume" | "PnL")}
-              className="w-full sm:w-fit"
+              className="h-full w-full sm:w-fit"
             >
-              <TabsList className="w-full border sm:w-fit">
+              <TabsList className="h-full w-full border border-border sm:w-fit">
                 {["Volume", "PnL"].map((status) => (
                   <TabsTrigger
                     value={status}
                     key={status}
-                    className="w-full flex-1 capitalize sm:w-fit"
+                    className="variant w-full flex-1 capitalize data-[state=active]:bg-secondary data-[state=active]:text-foreground sm:w-fit"
                     onClick={() => setTabType(status as "Volume" | "PnL")}
                   >
                     {status}{" "}
                     <Tooltip
-                      text={
-                        status === "Volume"
-                          ? VOLUME_TOOLTIP_TEXT
-                          : PNL_TOOLTIP_TEXT
+                      children={
+                        <span
+                          style={{
+                            display: "block",
+                            maxWidth: "340px",
+                            whiteSpace: "normal",
+                            textAlign: "left",
+                          }}
+                        >
+                          {status === "Volume"
+                            ? VOLUME_TOOLTIP_TEXT
+                            : PNL_TOOLTIP_TEXT}
+                        </span>
                       }
                     />
                   </TabsTrigger>
@@ -100,6 +109,8 @@ export default function Stats({ markets }: { markets: IMarket[] }) {
               onSelect={(value: string) => setTimeFrame(value as TimeFrame)}
               selectionList={[WEEKLY, MONTHLY, QUARTERLY]}
               sortby={false}
+              triggerClassName="bg-muted border border-border"
+              contentClassname="bg-muted border border-border"
             />
           </div>
         </div>

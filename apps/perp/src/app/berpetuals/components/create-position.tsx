@@ -217,17 +217,23 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     const minSL =
       form.optionType === "market" ? formattedPrice : form.limitPrice ?? "0";
 
-    if (
+    if (!form.amount) {
+      setError("An amount/collateral must be set.");
+    } else if (
       form.amount &&
       safeAmountBN.times(leverageBN).gt(formattedMaxCollateralBN)
     ) {
       setError(
-        `Max position size is ${formattedMaxCollateralBN.toString(10)} HONEY.`,
+        `Maximum position size is ${formattedMaxCollateralBN.toString(
+          10,
+        )} HONEY.`,
       );
+    } else if (form.tp === "") {
+      setError("Take Profit must be set.");
     } else if (form.amount && safeAmountBN.lt(0)) {
-      setError("Collateral must be positive.");
+      setError("Amount/Collateral must be positive.");
     } else if (form.amount && safeAmountBN.lt(10)) {
-      setError("Min Collateral is 10 HONEY.");
+      setError("Minimum Amount/Collateral is 10 HONEY.");
     } else if (
       leverageBN.lt(2) ||
       leverageBN.gt(maxLeverage) ||

@@ -20,7 +20,7 @@ export function PnLRowHoverState({
     Number(closeFee) +
     Number(openFee);
   return (
-    <div>
+    <div className="p-2">
       <div className="flex">
         <span className="text-xs font-medium text-muted-foreground">
           Est. PnL: Initial Collateral - Fees + PnL
