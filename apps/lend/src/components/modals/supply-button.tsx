@@ -5,7 +5,7 @@ import {
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
   type Token,
@@ -27,6 +27,7 @@ import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function SupplyBtn({
   reserve,
@@ -39,7 +40,7 @@ export default function SupplyBtn({
   variant?: "primary" | "outline";
   className?: string;
 }) {
-  const supply = reserve.underlyingAsset === honeyTokenAddress;
+  const supply = reserve?.underlyingAsset === honeyTokenAddress;
 
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string | undefined>(undefined);
@@ -49,21 +50,21 @@ export default function SupplyBtn({
       Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
     } ${reserve?.symbol}`,
     onSuccess: () => {
-      track(`supply_${reserve.symbol.toLowerCase()}`);
+      track(`supply_${reserve?.symbol.toLowerCase()}`);
       userAccountRefetch();
       reservesDataRefetch();
     },
     onError: (e: Error | undefined) => {
-      track(`supply_${reserve.symbol.toLowerCase()}_failed`);
+      track(`supply_${reserve?.symbol.toLowerCase()}_failed`);
       captureException(e);
     },
     actionType: TransactionActionType.SUPPLY,
   });
 
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
-  const { data: token } = useSelectedAssetWalletBalance(
-    reserve.underlyingAsset,
-  );
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const token = useSelectedWalletBalance(reserve.underlyingAsset);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
@@ -84,7 +85,7 @@ export default function SupplyBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <SupplyModalContent
-            {...{ reserve, token, amount, setAmount, write }}
+            {...({ reserve, token, amount, setAmount, write } as any)}
           />
         </DialogContent>
       </Dialog>

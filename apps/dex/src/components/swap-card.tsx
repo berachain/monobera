@@ -9,7 +9,7 @@ import {
   TransactionActionType,
   WBERA_ABI,
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -36,6 +36,7 @@ import { parseUnits, type Address } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
+import { beraJsConfig } from "@bera/wagmi";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
   loading: () => (
@@ -94,6 +95,7 @@ export function SwapCard({
     isRouteLoading,
     refreshAllowance,
     payload,
+    payloadValue,
     exchangeRate,
     gasPrice,
     tokenInPrice,
@@ -110,7 +112,9 @@ export function SwapCard({
 
   const { captureException, track } = useAnalytics();
 
-  const { refetch } = usePollAssetWalletBalance();
+  const { refetch, isLoading: isBalancesLoading } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -194,9 +198,6 @@ export function SwapCard({
     },
   });
 
-  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { isLoading: isBalancesLoading } = useCurrentAssetWalletBalances();
-
   const getSwapButton = () => {
     if (
       (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
@@ -266,8 +267,8 @@ export function SwapCard({
                 address: crocMultiSwapAddress,
                 abi: MULTISWAP_ABI,
                 functionName: "multiSwap",
-                params: payload,
-                value: swapInfo.value,
+                params: payload ?? [],
+                value: payloadValue,
               });
             }}
             isLoading={isLoading}
@@ -292,7 +293,7 @@ export function SwapCard({
               address: crocMultiSwapAddress,
               abi: MULTISWAP_ABI,
               functionName: "multiSwap",
-              params: payload,
+              params: payload ?? [],
               value: (swapInfo as any)?.value,
             });
           }}

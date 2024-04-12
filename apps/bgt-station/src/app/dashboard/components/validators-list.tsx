@@ -1,10 +1,9 @@
 import React, { type ReactNode } from "react";
-import { type PoLValidator } from "@bera/berajs";
 
 import ValidatorCard, { SkeletonValidatorCard } from "./validator-card";
 
 interface ValidatorsListProps {
-  validators: PoLValidator[] | undefined;
+  validators: any;
   sortingAttr: string;
   title: ReactNode;
   message: string;
@@ -38,7 +37,7 @@ export function ValidatorsList({
                 0,
                 validators && validators.length <= 4 ? validators.length : 4,
               )
-              .map((validator: PoLValidator) => (
+              .map((validator: any) => (
                 <ValidatorCard
                   validator={validator}
                   key={validator.operatorAddr + sortingAttr}

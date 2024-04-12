@@ -1,7 +1,6 @@
 "use client";
 
 import { type Metadata } from "next";
-import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
 
 import GlobalGaugeWeightInfo from "~/components/global-gauge-weight-info";
 import { Details } from "./components/details";
@@ -14,8 +13,7 @@ export const metadata: Metadata = {
 
 export default function DashBoard() {
   const prices = undefined;
-  const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
-  const validators: PoLValidator[] = usePolValidators();
+  const validators = undefined;
   const validatorSession = [
     {
       sortingAttr: "tokens",
@@ -78,7 +76,7 @@ export default function DashBoard() {
         <ValidatorsList
           key={info.sortingAttr + info.title}
           validators={validators}
-          isLoading={isLoading}
+          isLoading={true}
           {...info}
         />
       ))}

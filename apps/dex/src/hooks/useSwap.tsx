@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  ICrocSwapStep,
   MULTISWAP_ABI,
   WBERA_ABI,
+  getSwapPayload,
   useBeraJs,
   useGasData,
   usePollAllowance,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollCrocSwap,
   useTokenHoneyPrice,
   useTokenInformation,
@@ -59,7 +59,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     useTokenInformation();
   const { read: readOutput, tokenInformation: outputToken } =
     useTokenInformation();
-  const { tokenDictionary } = useTokens();
+  const { tokenDictionary } = useTokens({
+    config: beraJsConfig,
+  });
 
   useEffect(() => {
     if (inputCurrency) {
@@ -123,12 +125,11 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [swapKind, setSwapKind] = useState<SwapKind>(SwapKind.GIVEN_IN);
 
-  const [payload, setPayload] = useState<any[]>([]);
-
   const [isTyping, setIsTyping] = useState(false);
 
-  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { isLoading: isBalanceLoading } = useCurrentAssetWalletBalances();
+  const { isLoading: isBalanceLoading } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
 
   useEffect(() => {
     if (isWrap) {
@@ -260,71 +261,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const allowance = useAllowance();
 
   const slippage = useSlippage();
-  useEffect(() => {
-    if (
-      swapInfo?.batchSwapSteps?.length &&
-      slippage &&
-      selectedFrom &&
-      selectedTo
-    ) {
-      try {
-        // parse minutes to blocks
-        const sI = BigInt(swapInfo.returnAmount);
-        const s = BigInt(slippage * 10 ** 18);
-        const minAmountOut =
-          (sI ?? 0n) - ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
-
-        // @ts-nocheck
-        if (selectedFrom && selectedFrom.address === nativeTokenAddress) {
-          const swapSteps = [...swapInfo.batchSwapSteps];
-          const firstStep = swapSteps[0] as ICrocSwapStep;
-          if (swapSteps.length > 0 && firstStep.base && firstStep.quote) {
-            if (
-              firstStep.base.toLowerCase() === beraTokenAddress.toLowerCase()
-            ) {
-              firstStep.base = nativeTokenAddress;
-            } else if (
-              firstStep.quote.toLowerCase() === beraTokenAddress.toLowerCase()
-            ) {
-              firstStep.quote = nativeTokenAddress;
-            }
-            swapInfo.batchSwapSteps = swapSteps;
-          }
-        }
-
-        if (selectedTo && selectedTo.address === nativeTokenAddress) {
-          const swapSteps = [...swapInfo.batchSwapSteps];
-          if (swapSteps.length > 0) {
-            const lastIndex = swapSteps.length - 1;
-            const lastStep = swapSteps[lastIndex] as ICrocSwapStep;
-            if (lastStep.base && lastStep.quote) {
-              if (
-                lastStep.base.toLowerCase() === beraTokenAddress.toLowerCase()
-              ) {
-                lastStep.base = nativeTokenAddress;
-              } else if (
-                lastStep.quote.toLowerCase() === beraTokenAddress.toLowerCase()
-              ) {
-                lastStep.quote = nativeTokenAddress;
-              }
-              swapInfo.batchSwapSteps = swapSteps;
-            }
-          }
-        }
-
-        const payload = [
-          swapInfo.batchSwapSteps,
-          swapInfo.amountIn,
-          minAmountOut,
-        ];
-
-        setPayload(payload);
-      } catch (e) {
-        console.log(e);
-        setPayload([]);
-      }
-    }
-  }, [swapInfo, slippage]);
+  const swapPayload = getSwapPayload({
+    args: {
+      swapInfo,
+      slippage,
+      baseToken: selectedFrom,
+      quoteToken: selectedTo,
+    },
+  });
 
   const onSwitch = () => {
     const tempFrom = selectedFrom;
@@ -354,11 +298,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [isWrap]);
 
-  const minAmountOut = useMemo(() => {
-    if (!payload[2]) return "0";
-    const amountOut = payload[2];
-    return formatUnits(amountOut ?? 0, selectedTo?.decimals ?? 18);
-  }, [payload]);
+  const minAmountOutFormatted = swapPayload?.payload?.[2]
+    ? formatUnits(swapPayload?.payload[2] ?? 0, selectedTo?.decimals ?? 18)
+    : "";
 
   // Calculate gas for connected wallet user (more accurate)
   const { account } = useBeraJs();
@@ -374,12 +316,12 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       value: wrapType === WRAP_TYPE.WRAP ? parseUnits(`${swapAmount}`, 18) : 0n,
       account,
     };
-  } else if (payload?.length > 1) {
+  } else if (swapPayload?.payload && swapPayload?.payload?.length > 1) {
     gasParams = {
       address: crocMultiSwapAddress,
       abi: MULTISWAP_ABI,
       functionName: "multiSwap",
-      args: payload,
+      args: swapPayload?.payload,
       value: swapInfo?.value,
       account,
     };
@@ -422,7 +364,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setIsTyping,
     refreshAllowance,
     swapAmount,
-    payload,
+    payload: swapPayload?.payload,
+    payloadValue: swapPayload?.value,
     selectedFrom,
     allowance,
     selectedTo,
@@ -439,7 +382,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     isBalanceLoading,
     tokenInPrice,
     tokenOutPrice,
-    minAmountOut,
+    minAmountOut: minAmountOutFormatted,
     priceImpact: priceImpactPercentage,
     differenceUSD,
   };

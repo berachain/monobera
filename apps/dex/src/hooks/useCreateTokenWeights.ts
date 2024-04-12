@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
+import { usePollWalletBalances, type Token } from "@bera/berajs";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBeratoken } from "~/utils/isBeraToken";
 import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
+import { beraJsConfig } from "@bera/wagmi";
 
 export interface ITokenWeight {
   weight: number;
@@ -55,7 +56,9 @@ const useCreateTokenWeights = () => {
   const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 
   const [initialPrice, setInitialPrice] = useState<string>("");
-  const { useSelectedAssetWalletBalance } = usePollAssetWalletBalance();
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
 
   const [isBaseTokenInput, setIsBaseTokenInput] = useState<boolean>(true);
 
@@ -77,12 +80,8 @@ const useCreateTokenWeights = () => {
     return tokenB?.address === crocPool?.quoteToken.tokenAddr ? tokenB : tokenA;
   }, [JSON.stringify(crocPool)]);
 
-  const { data: baseTokenBalance } = useSelectedAssetWalletBalance(
-    baseToken?.address ?? "",
-  );
-  const { data: quoteTokenBalance } = useSelectedAssetWalletBalance(
-    quoteToken?.address ?? "",
-  );
+  const baseTokenBalance = useSelectedWalletBalance(baseToken?.address ?? "");
+  const quoteTokenBalance = useSelectedWalletBalance(quoteToken?.address ?? "");
 
   // track any errors
   useEffect(() => {

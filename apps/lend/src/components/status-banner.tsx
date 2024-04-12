@@ -1,6 +1,6 @@
 import {
   useBeraJs,
-  usePollAssetWalletBalance,
+  usePollWalletBalances,
   usePollBgtRewardsForAddress,
   usePollReservesDataList,
   usePollUserAccountData,
@@ -15,6 +15,7 @@ import { formatUnits } from "viem";
 import { getLTVColor } from "~/utils/get-ltv-color";
 import { getEligibleDepositAmount } from "~/utils/lendTokenHelper";
 import { RiskDetails } from "./risk-details";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function StatusBanner() {
   const { useUserAccountData } = usePollUserAccountData();
@@ -27,8 +28,10 @@ export default function StatusBanner() {
   const { data: reservesDataList = [] } = useReservesDataList();
   const { data: baseCurrency } = useBaseCurrencyData();
 
-  const { useCurrentAssetWalletBalances } = usePollAssetWalletBalance();
-  const { data: balanceToken = [] } = useCurrentAssetWalletBalances();
+  const { useCurrentWalletBalances } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const balanceToken = useCurrentWalletBalances();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
@@ -46,7 +49,7 @@ export default function StatusBanner() {
   let negativeProportion = 0;
 
   reservesDataList.forEach((reserve: any) => {
-    const atoken = balanceToken.find(
+    const atoken = balanceToken?.find(
       (token: any) => token.address === reserve.aTokenAddress,
     );
     if (atoken) {
@@ -55,7 +58,7 @@ export default function StatusBanner() {
         Number(reserve.supplyAPY) *
         Number(reserve.formattedPriceInMarketReferenceCurrency);
     }
-    const debtToken = balanceToken.find(
+    const debtToken = balanceToken?.find(
       (token: any) => token.address === reserve.variableDebtTokenAddress,
     );
     if (debtToken) {

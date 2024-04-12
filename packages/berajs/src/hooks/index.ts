@@ -17,3 +17,4 @@ export * from "./useGasData";
 export * from "./usePollDenom";
 export * from "./useTokenHoneyPrice";
 export * from "./useTokenHoneyPrices";
+export * from "./usePollWalletBalances";

@@ -17,6 +17,7 @@ import {
   lendSubgraphUrl,
   multicallAddress,
   publicJsonRpcUrl,
+  tokenListUrl,
 } from "@bera/config";
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
@@ -87,6 +88,7 @@ export const wagmiConfig = createConfig({
 
 export const beraJsConfig: BeraConfig = {
   endpoints: {
+    tokenList: tokenListUrl,
     dexRouter: crocRouterEndpoint,
   },
   subgraphs: {

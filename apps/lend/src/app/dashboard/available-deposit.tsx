@@ -1,12 +1,15 @@
 import React from "react";
-import { usePollAssetWalletBalance, type Token } from "@bera/berajs";
+import { usePollWalletBalances, type Token } from "@bera/berajs";
 import { NotFoundBear } from "@bera/shared-ui";
 
 import UserTokenCard from "~/components/user-token-card";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function AvailableDeposit() {
-  const { useSelectedTagAssetWalletBalance } = usePollAssetWalletBalance();
-  const assets = useSelectedTagAssetWalletBalance("deposit");
+  const { useSelectedTagWalletBalances } = usePollWalletBalances({
+    config: beraJsConfig,
+  });
+  const assets = useSelectedTagWalletBalances("deposit");
   return (
     <>
       <div className="mt-4">
@@ -17,9 +20,9 @@ export default function AvailableDeposit() {
           You can deposit the following assets to borrow HONEY
         </div>
       </div>
-      {assets.length > 0 ? (
+      {(assets?.length ?? 0) > 0 ? (
         <>
-          {assets.map((asset: Token, index: number) => (
+          {assets?.map((asset: Token, index: number) => (
             <UserTokenCard token={asset} key={index} />
           ))}
         </>
