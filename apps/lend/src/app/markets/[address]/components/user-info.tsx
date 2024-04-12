@@ -1,12 +1,11 @@
 import {
-  ReserveData,
   useBeraJs,
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
 } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
-import { FormattedNumber, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, POLLING, Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -30,8 +29,13 @@ export default function UserInfo() {
     });
   const reserve = useSelectedReserveData(honeyTokenAddress);
   const baseCurrencyData = useBaseCurrencyData();
-  console.log("reserve", reserve);
-  const { useUserAccountData } = usePollUserAccountData();
+
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
   const userAccountData = useUserAccountData();
 
   const tokenPrice = reserve?.formattedPriceInMarketReferenceCurrency ?? "0";

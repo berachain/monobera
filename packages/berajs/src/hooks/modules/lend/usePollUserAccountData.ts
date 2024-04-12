@@ -4,10 +4,8 @@ import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import { lendPoolImplementationABI } from "~/config";
-import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
-
-const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
+import { DefaultHookTypes } from "~/types";
 
 export interface UserAccountData {
   totalCollateralBase: bigint;
@@ -18,7 +16,10 @@ export interface UserAccountData {
   healthFactor: bigint;
 }
 
-export const usePollUserAccountData = () => {
+export const usePollUserAccountData = ({
+  config,
+  opts,
+}: DefaultHookTypes) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
@@ -62,7 +63,7 @@ export const usePollUserAccountData = () => {
       } else return undefined;
     },
     {
-      refreshInterval: REFRESH_BLOCK_INTERVAL,
+      ...opts,
     },
   );
 

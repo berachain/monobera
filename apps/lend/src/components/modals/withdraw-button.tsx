@@ -12,6 +12,7 @@ import {
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,
+  POLLING,
   TokenInput,
   useAnalytics,
   useTxn,
@@ -68,7 +69,12 @@ export default function WithdrawBtn({
     formattedBalance: atoken?.formattedBalance ?? "0",
   } as BalanceToken;
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
+  const { refetch: userAccountRefetch } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
   const { refetch: reservesDataRefetch } = usePollReservesDataList({
     config: beraJsConfig,
   });
@@ -114,7 +120,12 @@ const WithdrawModalContent = ({
   const isHoney = reserve?.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
   const { account } = useBeraJs();
-  const { useUserAccountData } = usePollUserAccountData();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
   const userAccountData = useUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);

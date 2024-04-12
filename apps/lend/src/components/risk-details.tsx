@@ -13,11 +13,18 @@ import { Icons } from "@bera/ui/icons";
 import { formatEther, formatUnits } from "viem";
 
 import { getLTVColor, getLTVSpace } from "~/utils/get-ltv-color";
+import { POLLING } from "@bera/shared-ui";
+import { beraJsConfig } from "@bera/wagmi";
 
 export const RiskDetails = () => {
   const [open, setOpen] = React.useState(false);
 
-  const { useUserAccountData } = usePollUserAccountData();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
   const data = useUserAccountData();
   const healthFactor = Number(formatEther(data?.healthFactor ?? 0n));
   const totalCollateralBase =

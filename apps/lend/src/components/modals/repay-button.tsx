@@ -18,6 +18,7 @@ import {
 import {
   ApproveButton,
   FormattedNumber,
+  POLLING,
   TokenInput,
   useAnalytics,
   useTxn,
@@ -69,9 +70,14 @@ export default function RepayBtn({
   const honey = useSelectedWalletBalance(honeyTokenAddress);
   const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+  const { refetch: userAccountRefetch } = usePollUserAccountData({
     config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+    config: beraJsConfig
   });
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -132,7 +138,12 @@ const RepayModalContent = ({
   const debtBalance = vdHoney.formattedBalance ?? "0";
 
   const { account } = useBeraJs();
-  const { useUserAccountData } = usePollUserAccountData();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
   const userAccountData = useUserAccountData();
 
   const balance = BigNumber(debtBalance).gt(BigNumber(tokenBalance))
