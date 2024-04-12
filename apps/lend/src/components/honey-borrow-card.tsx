@@ -32,10 +32,9 @@ export default function HoneyBorrowCard() {
     address: lendHoneyDebtTokenAddress,
   });
 
-  const { useTotalBorrowed, useSelectedReserveData } =
-    usePollReservesDataList({
-      config: beraJsConfig,
-    });
+  const { useTotalBorrowed, useSelectedReserveData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const totalBorrowed = useTotalBorrowed();
   const bgtApr = useBgtApr(totalBorrowed);
 

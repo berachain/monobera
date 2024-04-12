@@ -130,6 +130,6 @@ export const beraJsConfig: BeraConfig = {
     weth: wethTokenAddress,
     wbtc: wbtcTokenAddress,
     ahoney: aHoneyTokenAddress,
-    vdhoney: vdHoneyTokenAddress
-  }
+    vdhoney: vdHoneyTokenAddress,
+  },
 };
