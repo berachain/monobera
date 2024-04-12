@@ -4,6 +4,7 @@ import { Address } from "viem";
 export interface BeraConfig {
   endpoints?: {
     dexRouter?: string;
+    tokenList?: string;
   };
   subgraphs?: {
     honeySubgraph?: string;
@@ -20,10 +21,10 @@ export interface BeraConfig {
 
 export interface DefaultHookTypes {
   config: BeraConfig;
-  opts?: SWRConfiguration;
+  opts?: SWRConfiguration | undefined;
 }
 
-export interface PayloadReturnType {
-  payload: any[];
+export interface PayloadReturnType<T = any[]> {
+  payload: T;
   value?: bigint;
 }
