@@ -32,6 +32,7 @@ export function ClosePositionModal({
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const { refetch } = usePollOpenPositions();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -58,7 +59,7 @@ export function ClosePositionModal({
 
   const ticker = openPosition?.market?.name?.split("-")[0];
 
-  const { isLoading, write } = useOctTxn({
+  const { isLoading, isSubmitting, write } = useOctTxn({
     message: `Closing ${openPosition?.market?.name} ${
       openPosition?.buy === true ? "Long" : "Short"
     } position`,
@@ -160,7 +161,7 @@ export function ClosePositionModal({
           </div>
           <ActionButton>
             <Button
-              disabled={isLoading}
+              disabled={isLoading || isSubmitting}
               onClick={() => {
                 write({
                   address: process.env

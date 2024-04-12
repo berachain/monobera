@@ -88,6 +88,24 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
+        title="Type"
+        className="min-w-[32px]"
+      />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className=" text-sm font-medium uppercase text-muted-foreground">
+          {row.original.close_type || "-"}
+        </div>
+      );
+    },
+    accessorKey: "type",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
         title="Open Price"
         className="min-w-[72px]"
       />

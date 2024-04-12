@@ -87,6 +87,7 @@ export function FormattedNumber({
   maxValue,
   className,
   prefixText = "",
+  showIsSmallerThanMin,
   ...props
 }: {
   value: BigNumberValue;
@@ -100,9 +101,9 @@ export function FormattedNumber({
   maxValue?: number;
   className?: string;
   prefixText?: string;
+  showIsSmallerThanMin?: boolean;
 }) {
   const number = percent ? Number(value) * 100 : Number(value);
-
   let decimals: number = visibleDecimals ?? 0;
   if (number === 0) {
     decimals = 0;
@@ -117,6 +118,7 @@ export function FormattedNumber({
   const minValue = 10 ** -(decimals as number);
   const isSmallerThanMin =
     number !== 0 && Math.abs(number) < Math.abs(minValue);
+  const isNegative = number < 0;
   const isBiggerThanMax = maxValue && Math.abs(number) > maxValue;
   let formattedNumber = isSmallerThanMin ? minValue : number;
   const forceCompact =
@@ -142,10 +144,9 @@ export function FormattedNumber({
       {...props}
     >
       {prefixText && <span className="mr-0.5">{prefixText}</span>}
-      {isSmallerThanMin && (number < 0 ? ">-" : "<")}{" "}
-      {symbol?.toLowerCase() === "usd" && !percent && (
-        <span className="mr-0.5">$</span>
-      )}
+      {isSmallerThanMin && showIsSmallerThanMin && (number < 0 ? ">-" : "<")}{" "}
+      {isNegative && "-"}
+      {symbol?.toLowerCase() === "usd" && !percent && <span>$</span>}
       {isBiggerThanMax ? (
         number > maxValue ? (
           "∞"
@@ -156,7 +157,7 @@ export function FormattedNumber({
         new Intl.NumberFormat("en-US", {
           maximumFractionDigits: decimals,
           minimumFractionDigits: decimals,
-        }).format(formattedNumber)
+        }).format(Math.abs(formattedNumber))
       ) : (
         <CompactNumber
           value={formattedNumber}

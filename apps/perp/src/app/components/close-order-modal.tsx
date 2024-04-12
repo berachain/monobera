@@ -53,7 +53,7 @@ export function CloseOrderModal({
 
   const ticker = openOrder?.market?.name?.split("-")[0];
 
-  const { isLoading, write } = useOctTxn({
+  const { isLoading, isSubmitting, write } = useOctTxn({
     message: `Closing ${openOrder?.market?.name} ${
       openOrder?.buy === true ? "Long" : "Short"
     } Limit Order`,
@@ -171,7 +171,7 @@ export function CloseOrderModal({
           <ActionButton>
             <Button
               className="w-full"
-              disabled={isLoading}
+              disabled={isLoading || isSubmitting}
               onClick={() => {
                 write({
                   address: process.env
