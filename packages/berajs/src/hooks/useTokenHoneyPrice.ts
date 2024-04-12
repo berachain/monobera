@@ -15,6 +15,12 @@ export interface UseTokenHoneyPriceRequest extends DefaultHookTypes {
   };
 }
 
+export interface UseTokenHoneyPriceResponse {
+  isLoading: boolean;
+  isValidating: boolean;
+  data: string | undefined;
+}
+
 export const useTokenHoneyPrice = ({
   config,
   args: { tokenAddress } = { tokenAddress: undefined },
@@ -28,7 +34,7 @@ export const useTokenHoneyPrice = ({
   const method = "tokenHoneyPrice";
   const QUERY_KEY = [tokenAddress, method];
   const subgraphEndpoint = config.subgraphs?.dexSubgraph;
-  return useSWR(
+  const { data, isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
       return getTokenHoneyPrice({ tokenAddress, subgraphEndpoint });
@@ -37,4 +43,9 @@ export const useTokenHoneyPrice = ({
       refreshInterval,
     },
   );
+  return {
+    isLoading,
+    isValidating,
+    data,
+  };
 };
