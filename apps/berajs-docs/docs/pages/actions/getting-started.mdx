@@ -1,3 +1,61 @@
-# Get started
+# Getting Started With Actions [Get started integrating Berajs to your Typescript project]
 
-Hello world!
+## Installation
+
+:::code-group
+
+```bash [npm]
+npm i berajs@latest viem@latest
+```
+
+```bash [pnpm]
+pnpm i berajs@latest viem@latest
+```
+
+```bash [yarn]
+yarn add berajs@latest viem@latest
+```
+
+```bash [bun]
+bun i berajs@latest viem@latest
+```
+
+:::
+
+## Usage
+In this example, we will setup a public client and use that with berajs to easily interact with Berachain.
+
+```tsx [app.ts]
+import { createPublicClient } from 'viem'
+import { berachain } from 'viem/chains'
+import { getSwap } from '@bera/berajs'
+
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({ 
+  chain: berachain,
+  transport: http()
+})
+
+// intialize a beraconfig
+const beraConfig: {
+    endpoints: {
+        dexRouter: 'https://'
+    }, 
+    contracts: {
+        crocMultiSwapAddress: '0x'
+    }
+}
+
+// pass in public client, a swap request, and beraconfig
+const swapInfo = await getSwap({
+    publicClient,
+    args: {
+        tokenIn: '0x',
+        tokenIn: '0x'
+        tokenInDecimals: 18,
+        tokenOutDecimals: 18,
+        amountIn: '1.1',
+    },
+    config: beraConfig
+})
+```
