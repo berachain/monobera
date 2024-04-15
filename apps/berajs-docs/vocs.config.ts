@@ -19,7 +19,10 @@ export default defineConfig({
   sidebar: [
     {
       text: "Introduction",
-      link: "/introduction/",
+      collapsed: false,
+      items: [
+        { text: "Getting Started", link: "/introduction/getting-started/" },
+      ],
     },
     {
       text: "React",
@@ -81,7 +84,7 @@ export default defineConfig({
       text: "Actions",
       collapsed: true,
       items: [
-        { text: "Getting Started", link: "/react/getting-started/" },
+        { text: "Getting Started", link: "/actions/getting-started/" },
         {
           text: "Bex",
           collapsed: true,
