@@ -1,17 +1,10 @@
-import { FormatReserveUSDResponse, formatReserves } from "@aave/math-utils";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
+import { BaseCurrencyData, ReserveData, getReserveData } from "~/actions/lend";
 import { DefaultHookTypes } from "~/types";
-import { lendUIDataProviderABI } from "../../../config/abi";
-import { BaseCurrencyData, getReservesHumanized } from "../../../utils";
-
-export interface ReserveData extends FormatReserveUSDResponse {
-  aTokenAddress: Address;
-  variableDebtTokenAddress: Address;
-}
 
 export const usePollReservesDataList = ({ config, opts }: DefaultHookTypes) => {
   const publicClient = usePublicClient();
@@ -24,33 +17,20 @@ export const usePollReservesDataList = ({ config, opts }: DefaultHookTypes) => {
       if (!publicClient) return undefined;
       if (!config.contracts?.lendUIDataProviderAddress) return undefined;
       if (!config.contracts?.lendAddressProviderAddress) return undefined;
-
-      try {
-        const result = (await publicClient.readContract({
-          address: config.contracts.lendUIDataProviderAddress,
-          abi: lendUIDataProviderABI,
-          functionName: "getReservesData",
-          args: [config.contracts?.lendAddressProviderAddress],
-        })) as [any[], any];
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        const { reservesData, baseCurrencyData } = getReservesHumanized(
-          result[0],
-          result[1],
+      const result = await getReserveData({
+        client: publicClient,
+        uiDataProviderAddress: config.contracts.lendUIDataProviderAddress,
+        addressProviderAddress: config.contracts.lendAddressProviderAddress,
+      });
+      if (result) {
+        await mutate(
+          [...QUERY_KEY, "baseCurrencyData"],
+          result.baseCurrencyData,
         );
-        await mutate([...QUERY_KEY, "baseCurrencyData"], baseCurrencyData);
-        const formattedReserves = formatReserves({
-          reserves: reservesData,
-          currentTimestamp,
-          marketReferenceCurrencyDecimals:
-            baseCurrencyData.marketReferenceCurrencyDecimals,
-          marketReferencePriceInUsd:
-            baseCurrencyData.marketReferenceCurrencyPriceInUsd,
-        });
-        return formattedReserves;
-      } catch (e) {
-        console.log(e);
-        return [];
+        return result.formattedReserves;
       }
+      await mutate([...QUERY_KEY, "baseCurrencyData"], undefined);
+      return [];
     },
     {
       ...opts,

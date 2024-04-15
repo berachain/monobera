@@ -82,10 +82,3 @@ export function getReservesHumanized(
     baseCurrencyData,
   };
 }
-
-export interface BaseCurrencyData {
-  marketReferenceCurrencyDecimals: number;
-  marketReferenceCurrencyPriceInUsd: string;
-  networkBaseTokenPriceInUsd: string;
-  networkBaseTokenPriceDecimals: number;
-}

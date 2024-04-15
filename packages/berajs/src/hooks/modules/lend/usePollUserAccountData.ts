@@ -2,18 +2,12 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { lendPoolImplementationABI } from "~/config";
+import {
+  UserAccountData,
+  getUserAccountData,
+} from "~/actions/lend/getUserAccountData";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookTypes } from "~/types";
-
-export interface UserAccountData {
-  totalCollateralBase: bigint;
-  totalDebtBase: bigint;
-  availableBorrowsBase: bigint;
-  currentLiquidationThreshold: bigint;
-  ltv: bigint;
-  healthFactor: bigint;
-}
 
 export const usePollUserAccountData = ({ config, opts }: DefaultHookTypes) => {
   const publicClient = usePublicClient();
@@ -26,38 +20,12 @@ export const usePollUserAccountData = ({ config, opts }: DefaultHookTypes) => {
     async () => {
       if (!publicClient) return undefined;
       if (!config.contracts?.lendPoolProxyAddress) return undefined;
-      if (account) {
-        try {
-          const result = await publicClient.readContract({
-            address: config.contracts.lendPoolProxyAddress,
-            abi: lendPoolImplementationABI,
-            functionName: "getUserAccountData",
-            args: [account],
-          });
-
-          // Here we assert that result is of type any[] with at least six elements.
-          const [
-            totalCollateralBase,
-            totalDebtBase,
-            availableBorrowsBase,
-            currentLiquidationThreshold,
-            ltv,
-            healthFactor,
-          ] = result as [bigint, bigint, bigint, bigint, bigint, bigint];
-
-          return {
-            totalCollateralBase,
-            totalDebtBase,
-            availableBorrowsBase,
-            currentLiquidationThreshold,
-            ltv,
-            healthFactor,
-          };
-        } catch (e) {
-          console.log(e);
-          return undefined;
-        }
-      } else return undefined;
+      if (!account) return undefined;
+      return await getUserAccountData({
+        client: publicClient,
+        contractAddress: config.contracts.lendPoolProxyAddress,
+        accountAddress: account,
+      });
     },
     {
       ...opts,
