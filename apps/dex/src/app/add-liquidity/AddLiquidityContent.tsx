@@ -308,7 +308,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
             />
 
             <TokenInput
-              key={quoteToken.address}
+              key={quoteToken?.address}
               selected={
                 isBeratoken(quoteToken)
                   ? isNativeBera
@@ -338,7 +338,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 setIsBaseInput(false);
                 handleQuoteAssetAmountChange(amount);
               }}
-              weight={quoteToken.normalizedWeight}
+              weight={quoteToken?.normalizedWeight}
               price={Number(quoteTokenHoneyPrice)}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(1, exceeding)
@@ -357,7 +357,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       value={poolPrice}
                       symbol={baseToken.symbol}
                     />{" "}
-                    = 1 {quoteToken.symbol}
+                    = 1 {quoteToken?.symbol}
                   </>
                 ) : (
                   "-"
@@ -425,7 +425,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         value={poolPrice}
                         symbol={baseToken.symbol}
                       />{" "}
-                      = 1 {quoteToken.symbol}
+                      = 1 {quoteToken?.symbol}
                     </>
                   ) : (
                     "-"

@@ -1,9 +1,9 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
+import { fetchPoolByAddress } from "@bera/berajs";
 import { isAddress } from "viem";
 
-import { fetchSelectedPool } from "../../pools/fetchPools";
 import PoolPageContent from "../PoolPageContent";
 
 export function generateMetadata(): Metadata {
@@ -23,7 +23,8 @@ export default async function PoolPage({
     if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    const pool = await fetchSelectedPool(params.shareAddress);
+    // const pool = null;
+    const pool = await fetchPoolByAddress(params.shareAddress);
 
     if (!pool) {
       notFound();

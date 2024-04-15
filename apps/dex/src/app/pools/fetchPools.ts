@@ -37,28 +37,3 @@ export const getQuoteCostBN = (initialPrice: string): string => {
   // Perform multiplication (though unnecessary as it's by 1) and convert the result to a string
   return new BigNumber(1).multipliedBy(bnInitialPrice).toFixed();
 };
-
-const fetchPoolByAddress = async (
-  shareAddress?: string,
-): Promise<PoolV2 | null> => {
-  try {
-    const result = await fetch(
-      `${crocIndexerEndpoint}/v2/pool_stats/${shareAddress}?chainId=0x${chainId.toString(
-        16,
-      )}`,
-    );
-
-    const response = await result.json();
-
-    return formatPoolData(response.data);
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-};
-
-export const fetchSelectedPool = async (shareAddress: string) => {
-  if (!shareAddress) return null;
-  const response = await fetchPoolByAddress(shareAddress);
-  return response;
-};
