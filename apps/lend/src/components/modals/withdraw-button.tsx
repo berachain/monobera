@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
+  getWithdrawPayload,
   lendPoolImplementationABI,
   useBeraJs,
   usePollReservesDataList,
@@ -24,7 +25,7 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
-import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
+import { formatEther, formatUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 
@@ -119,7 +120,7 @@ const WithdrawModalContent = ({
 }) => {
   const isHoney = reserve?.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
-  const { account } = useBeraJs();
+  const { account = "0x" } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData({
     config: beraJsConfig,
     opts: {
@@ -145,6 +146,12 @@ const WithdrawModalContent = ({
         ),
       })
     : 0;
+  const paylaod = token && getWithdrawPayload({
+    token,
+    amount: amount ?? "0",
+    withdrawMax: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
+    account,
+  });
 
   return (
     <div className="flex flex-col gap-6">
@@ -229,13 +236,7 @@ const WithdrawModalContent = ({
             address: lendPoolImplementationAddress,
             abi: lendPoolImplementationABI,
             functionName: "withdraw",
-            params: [
-              token.address,
-              BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0"))
-                ? maxUint256
-                : parseUnits((amount ?? "0") as `${number}`, token.decimals),
-              account,
-            ],
+            params: paylaod,
           });
         }}
       >

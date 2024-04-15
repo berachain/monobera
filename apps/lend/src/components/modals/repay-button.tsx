@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
+  getRepayPayload,
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
@@ -30,7 +31,7 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
-import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 
@@ -137,7 +138,7 @@ const RepayModalContent = ({
   const tokenBalance = honey.formattedBalance ?? "0";
   const debtBalance = vdHoney.formattedBalance ?? "0";
 
-  const { account } = useBeraJs();
+  const { account = "0x" } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData({
     config: beraJsConfig,
     opts: {
@@ -167,6 +168,13 @@ const RepayModalContent = ({
         ),
       })
     : BigNumber(0);
+
+  const payload = honey && getRepayPayload({
+    token: honey,
+    amount: amount ?? "0",
+    repayMax: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
+    account,
+  });
 
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -257,14 +265,7 @@ const RepayModalContent = ({
               address: lendPoolImplementationAddress,
               abi: lendPoolImplementationABI,
               functionName: "repay",
-              params: [
-                honeyTokenAddress,
-                (amount ?? "0") === (debtBalance ?? "0")
-                  ? maxUint256
-                  : parseUnits(amount as `${number}`, honey.decimals),
-                2,
-                account,
-              ],
+              params: payload,
             });
           }}
         >

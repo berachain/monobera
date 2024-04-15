@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
+  getSupplyPayload,
   lendPoolImplementationABI,
   useBeraJs,
   usePollAllowance,
@@ -115,7 +116,7 @@ const SupplyModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const supply = token.address === honeyTokenAddress;
-  const { account } = useBeraJs();
+  const { account = "0x" } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
@@ -149,6 +150,7 @@ const SupplyModalContent = ({
       })
     : BigNumber(0);
 
+  const payload = token && getSupplyPayload({ token, amount: amount ?? "0", account });
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">
@@ -244,12 +246,7 @@ const SupplyModalContent = ({
               address: lendPoolImplementationAddress,
               abi: lendPoolImplementationABI,
               functionName: "supply",
-              params: [
-                token.address,
-                parseUnits(`${amount ?? "0"}` as `${number}`, token.decimals),
-                account,
-                parseUnits("0", token.decimals),
-              ],
+              params: payload,
             });
           }}
         >

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
+  getBorrowPayload,
   lendPoolImplementationABI,
   useBeraJs,
   usePollReservesDataList,
@@ -23,7 +24,7 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 
@@ -108,7 +109,7 @@ const BorrowModalContent = ({
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const { account } = useBeraJs();
+  const { account = "0x" } = useBeraJs();
   const { useBaseCurrencyData } = usePollReservesDataList({
     config: beraJsConfig,
   });
@@ -163,6 +164,8 @@ const BorrowModalContent = ({
         ),
       })
     : BigNumber(0);
+
+  const payload = token && getBorrowPayload({ token, amount: amount ?? "0", account });
 
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -245,13 +248,7 @@ const BorrowModalContent = ({
             address: lendPoolImplementationAddress,
             abi: lendPoolImplementationABI,
             functionName: "borrow",
-            params: [
-              token?.address,
-              parseUnits(`${amount}` as `${number}`, token?.decimals ?? 18),
-              2,
-              0,
-              account,
-            ],
+            params: payload,
           });
         }}
       >
