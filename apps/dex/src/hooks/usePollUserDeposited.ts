@@ -1,5 +1,11 @@
 import { decodeCrocPrice } from "@bera/beracrocswap";
-import { CROC_QUERY_ABI, getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
+import {
+  CROC_QUERY_ABI,
+  formatSubgraphPoolData,
+  getCrocErc20LpAddress,
+  useBeraJs,
+  type PoolV2,
+} from "@bera/berajs";
 import {
   chainId,
   crocIndexerEndpoint,
@@ -18,8 +24,6 @@ import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { erc20Abi, getAddress, toHex } from "viem";
 import { usePublicClient } from "wagmi";
-
-import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
 
 interface AmbientPosition {
   ambientLiq: string;

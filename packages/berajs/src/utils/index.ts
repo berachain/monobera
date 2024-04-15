@@ -12,3 +12,4 @@ export * from "./timeFrame";
 export * from "./fixedPointEthers";
 export * from "./formatNumber";
 export * from "./getCrocErc20LpAddress";
+export * from "./formatPoolData";

@@ -8,6 +8,7 @@ import {
   getAddLiquidityPayload,
   usePollWalletBalances,
   useTokenHoneyPrice,
+  type PoolV2,
   type Token,
 } from "@bera/berajs";
 import { beraTokenAddress, cloudinaryUrl, crocDexAddress } from "@bera/config";
@@ -35,12 +36,7 @@ import { formatUnits, parseUnits } from "viem";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { SettingsPopover } from "~/components/settings-popover";
-import {
-  getBaseCost,
-  getPoolUrl,
-  getQuoteCost,
-  type PoolV2,
-} from "../pools/fetchPools";
+import { getBaseCost, getPoolUrl, getQuoteCost } from "../pools/fetchPools";
 import { useAddLiquidity } from "./useAddLiquidity";
 
 interface IAddLiquidityContent {

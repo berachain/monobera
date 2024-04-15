@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { type PoolV2 } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -15,7 +16,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
-  type PoolV2,
 } from "~/app/pools/fetchPools";
 import {
   usePollUserDeposited,

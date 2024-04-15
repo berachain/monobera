@@ -1,4 +1,4 @@
-import { getCrocErc20LpAddress, useBeraJs } from "@bera/berajs";
+import { getCrocErc20LpAddress, useBeraJs, type PoolV2 } from "@bera/berajs";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { dexClient, getTokenHoneyPricesReq } from "@bera/graphql";
 import { POLLING } from "@bera/shared-ui/src/utils";
@@ -8,7 +8,6 @@ import useSWRImmutable from "swr/immutable";
 import { erc20Abi, getAddress, toHex } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { type PoolV2 } from "~/app/pools/fetchPools";
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
 import { type IUserPosition } from "./usePollUserDeposited";
 
