@@ -71,7 +71,7 @@ export function TotalBGT({ className }: { className?: string }) {
 }
 
 export function BGTStatusDetails() {
-  const { data: price } = useTokenHoneyPrice(beraTokenAddress);
+  // const { data: price } = useTokenHoneyPrice(beraTokenAddress);
   // const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
   // const totalClaimableBGT: bigint = //@ts-ignore

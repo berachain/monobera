@@ -354,13 +354,13 @@ export default function WithdrawLiquidityContent({
                 key={baseToken.address}
                 token={baseToken}
                 value={Number(baseAmountWithdrawn)}
-                price={baseTokenHoneyPrice}
+                price={Number(baseTokenHoneyPrice ?? 0)}
               />
               <PreviewToken
                 key={quoteToken.address}
                 token={quoteToken}
                 value={Number(quoteAmountWithdrawn)}
-                price={quoteTokenHoneyPrice}
+                price={Number(quoteTokenHoneyPrice ?? 0)}
               />
             </TokenList>
             <InfoBoxList>
