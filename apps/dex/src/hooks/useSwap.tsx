@@ -184,8 +184,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       return;
     }
 
-    const usdIn = tokenInPrice * Number(swapInfo?.formattedAmountIn);
-    const usdOut = tokenOutPrice * Number(swapInfo?.formattedReturnAmount);
+    const usdIn =
+      Number(tokenInPrice ?? 0) * Number(swapInfo?.formattedAmountIn);
+    const usdOut =
+      Number(tokenOutPrice ?? 0) * Number(swapInfo?.formattedReturnAmount);
     const differenceUSD = (usdOut / usdIn) * 100 - 100;
     setDifferenceUSD(parseFloat(differenceUSD.toFixed(2)));
   }, [swapInfo, tokenInPrice, tokenOutPrice]);

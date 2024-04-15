@@ -226,8 +226,8 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       return 0;
     }
     return (
-      Number(baseTokenHoneyPrice) * Number(tokenInputs[0]?.amount || 0) +
-      Number(quoteTokenHoneyPrice) * Number(tokenInputs[1]?.amount || 0)
+      Number(baseTokenHoneyPrice ?? 0) * Number(tokenInputs[0]?.amount || 0) +
+      Number(quoteTokenHoneyPrice ?? 0) * Number(tokenInputs[1]?.amount || 0)
     );
   }, [
     baseTokenHoneyPrice,
@@ -303,7 +303,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 setIsBaseInput(true);
                 handleBaseAssetAmountChange(amount);
               }}
-              price={baseTokenHoneyPrice}
+              price={Number(baseTokenHoneyPrice)}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(0, exceeding)
               }
@@ -343,7 +343,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 handleQuoteAssetAmountChange(amount);
               }}
               weight={quoteToken.normalizedWeight}
-              price={quoteTokenHoneyPrice}
+              price={Number(quoteTokenHoneyPrice)}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(1, exceeding)
               }
@@ -405,7 +405,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     : tokenInputs[0]
                 }
                 value={tokenInputs[0]?.amount}
-                price={baseTokenHoneyPrice}
+                price={Number(baseTokenHoneyPrice ?? 0)}
               />
               <PreviewToken
                 token={
@@ -416,7 +416,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     : tokenInputs[1]
                 }
                 value={tokenInputs[1]?.amount}
-                price={quoteTokenHoneyPrice}
+                price={Number(quoteTokenHoneyPrice ?? 0)}
               />
             </TokenList>
             <InfoBoxList>

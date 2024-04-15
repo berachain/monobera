@@ -224,12 +224,12 @@ export function CreatePoolPreview({
         <TokenList className="bg-muted ">
           <PreviewToken
             token={baseToken}
-            price={baseTokenHoneyPrice}
+            price={Number(baseTokenHoneyPrice ?? 0)}
             value={baseAmount}
           />
           <PreviewToken
             token={quoteToken}
-            price={quoteTokenHoneyPrice}
+            price={Number(quoteTokenHoneyPrice ?? 0)}
             value={quoteAmount}
           />
         </TokenList>
