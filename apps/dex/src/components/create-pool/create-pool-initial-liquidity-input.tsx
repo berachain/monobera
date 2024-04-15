@@ -104,7 +104,7 @@ export default function CreatePoolInitialLiquidityInput({
                 {tokenAmount !== "0" &&
                   tokenAmount !== "" &&
                   formatUsd(
-                    getSafeNumber(tokenAmount) * (tokenHoneyPrice ?? 0),
+                    getSafeNumber(tokenAmount) * Number(tokenHoneyPrice ?? 0),
                   )}
               </p>
             </div>

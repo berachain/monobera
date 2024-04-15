@@ -1,3 +1,62 @@
-# Get started
+# Getting Started With React [Get started integrating Berajs to your application]
 
-Hello world!
+## Installation
+
+:::code-group
+
+```bash [npm]
+npm i berajs@latest wagmi@latest viem@latest @tanstack/react-query
+```
+
+```bash [pnpm]
+pnpm i berajs@latest wagmi@latest viem@latest @tanstack/react-query
+```
+
+```bash [yarn]
+yarn add berajs@latest wagmi@latest viem@latest @tanstack/react-query
+```
+
+```bash [bun]
+bun i berajs@latest wagmi@latest viem@latest @tanstack/react-query
+```
+
+:::
+
+## Usage
+
+Berajs can be used with any wagmi compatible wallet library. Here is an example of how to use BeraJs with [Dynamic](https://www.dynamic.xyz/).
+
+```tsx [app.tsx]
+import { WagmiProvider } from 'wagmi'
+import { config } from './config' 
+import { BeraJsProvider } from "@bera/berajs";  // [!code focus]
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
+
+function App() {
+  const queryClient = new QueryClient();
+  return (
+    <DynamicContextProvider
+        settings={{
+          environmentId: "...",
+          walletConnectors: [EthereumWalletConnectors],
+          overrides: { evmNetworks: ['...'] },
+        }}
+    >
+        <WagmiProvider config={config}>
+            <QueryClientProvider client={queryClient}>
+                <DynamicWagmiConnector>
+                    <BeraJsProvider>  // [!code focus]
+                        {/** ... */}   // [!code focus]
+                    </BeraJsProvider>  // [!code focus]
+                </DynamicWagmiConnector>
+          </QueryClientProvider>
+        </WagmiProvider> 
+    </DynamicContextProvider>
+
+  )
+}
+```
+
+This is just one of many configurations BeraJs can be used. 
