@@ -22,7 +22,7 @@ export default defineConfig({
       collapsed: false,
       items: [
         { text: "Getting Started", link: "/introduction/getting-started/" },
-      ]
+      ],
     },
     {
       text: "React",
