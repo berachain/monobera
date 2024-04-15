@@ -1,3 +1,5 @@
+import { BeraConfig } from "~/types";
+
 export interface IContractWrite {
   address: `0x${string}`;
   abi: any[];
@@ -34,4 +36,5 @@ export interface IUseContractWrite {
   onError?: (e?: any) => void;
   onLoading?: () => void;
   onSubmission?: (hash: string) => void;
+  config?: BeraConfig;
 }

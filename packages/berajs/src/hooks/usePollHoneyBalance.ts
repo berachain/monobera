@@ -1,7 +1,6 @@
-import { get } from "lodash";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";

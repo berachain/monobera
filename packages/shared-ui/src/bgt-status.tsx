@@ -14,6 +14,7 @@ import { cn } from "@bera/ui";
 // import { Button } from "@bera/ui/button";
 // import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
+
 // import { formatEther } from "viem";
 
 import { BGTIcon } from "./bgt-icon";
@@ -71,7 +72,7 @@ export function TotalBGT({ className }: { className?: string }) {
 }
 
 export function BGTStatusDetails() {
-  const { data: price } = useTokenHoneyPrice(beraTokenAddress);
+  // const { data: price } = useTokenHoneyPrice(beraTokenAddress);
   // const { data: bgtRewards, isLoading } = usePollUserAllBGTRewards();
 
   // const totalClaimableBGT: bigint = //@ts-ignore

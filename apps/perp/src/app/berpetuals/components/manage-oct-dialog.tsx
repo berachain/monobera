@@ -27,7 +27,9 @@ import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
 
 const TradeWalletSection = () => {
-  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
+  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct({
+    config: beraJsConfig,
+  });
   const [copied, setCopied] = useState(false);
   const { account } = useBeraJs();
 
@@ -299,7 +301,9 @@ export function ManageOctDialog({
     isOctBalanceLow,
     octAddress,
     octBalance,
-  } = useOct();
+  } = useOct({
+    config: beraJsConfig,
+  });
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();

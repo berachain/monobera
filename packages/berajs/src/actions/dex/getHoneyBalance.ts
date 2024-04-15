@@ -4,7 +4,7 @@ import { useBeraJs } from "~/contexts";
 import { BeraConfig } from "~/types";
 
 /**
- * fetch the current bera balance of a given address
+ * fetch the current honey balance of a given address
  */
 
 export const getHoneyBalance = async ({

@@ -10,6 +10,7 @@ import { useChains, useSignMessage } from "wagmi";
 import { decrypt, encrypt } from "~/utils/encoder";
 import {
   ActionEnum,
+  BeraConfig,
   initialState,
   reducer,
   useBeraJs,
@@ -27,12 +28,13 @@ interface IUseOct {
   onSuccess?: () => void;
   onError?: () => void;
   onLoading?: () => void;
+  config: BeraConfig;
 }
 
 const hash = new Keccak(256);
 
 const KEY = "deezNuts";
-export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
+export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
   const [octMap, setOctMap] = useLocalStorage<Record<Address, boolean>>(
     LOCAL_STORAGE_KEYS.OCT_ENABLED,
     {},
@@ -139,6 +141,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   };
 
   const { useBalance } = usePollBeraBalance({
+    config,
     args: { address: account as string },
   });
   const { useTransactionCount } = usePollTransactionCount({

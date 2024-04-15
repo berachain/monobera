@@ -28,10 +28,10 @@ const { data } = useBalance();
 ```ts twoslash [config.ts] filename="config.ts"
 import { BeraConfig } from "@bera/berajs";
 
-// required configs for getRoute
+// required configs for getHoneyBalance
 export const beraConfig: BeraConfig = {
-  subgraphs: {
-    dexSubgraph: "https://...",
+  contracts: {
+    honeyAddress: "0x....",
   },
 };
 ```

@@ -67,6 +67,14 @@ export default defineConfig({
           text: "useTokenHoneyPrices",
           link: "/react/useTokenHoneyPrices/",
         },
+        {
+          text: "usePollBeraBalance",
+          link: "/react/usePollBeraBalance/",
+        },
+        {
+          text: "usePollHoneyBalance",
+          link: "/react/usePollHoneyBalance/",
+        },
       ],
     },
     {
