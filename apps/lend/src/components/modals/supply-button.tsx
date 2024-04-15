@@ -150,7 +150,8 @@ const SupplyModalContent = ({
       })
     : BigNumber(0);
 
-  const payload = token && getSupplyPayload({ token, amount: amount ?? "0", account });
+  const payload =
+    token && getSupplyPayload({ token, amount: amount ?? "0", account });
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">

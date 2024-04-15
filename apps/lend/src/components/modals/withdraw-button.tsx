@@ -146,12 +146,14 @@ const WithdrawModalContent = ({
         ),
       })
     : 0;
-  const paylaod = token && getWithdrawPayload({
-    token,
-    amount: amount ?? "0",
-    withdrawMax: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
-    account,
-  });
+  const paylaod =
+    token &&
+    getWithdrawPayload({
+      token,
+      amount: amount ?? "0",
+      withdrawMax: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
+      account,
+    });
 
   return (
     <div className="flex flex-col gap-6">

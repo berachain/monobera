@@ -169,12 +169,14 @@ const RepayModalContent = ({
       })
     : BigNumber(0);
 
-  const payload = honey && getRepayPayload({
-    token: honey,
-    amount: amount ?? "0",
-    repayMax: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
-    account,
-  });
+  const payload =
+    honey &&
+    getRepayPayload({
+      token: honey,
+      amount: amount ?? "0",
+      repayMax: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
+      account,
+    });
 
   return (
     <div className="flex flex-col gap-6 pb-4">
