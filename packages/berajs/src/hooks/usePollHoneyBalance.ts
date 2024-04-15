@@ -1,8 +1,10 @@
+import { get } from "lodash";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { erc20Abi, formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
+import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";
 import POLLING from "~/config/constants/polling";
 import { DefaultHookTypes } from "~/types/global";
 import { useBeraJs } from "../contexts";
@@ -26,21 +28,7 @@ export const usePollHoneyBalance = ({
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (isConnected) {
-        try {
-          const result = await publicClient.readContract({
-            address: config.contracts?.honeyAddress,
-            abi: erc20Abi,
-            functionName: "balanceOf",
-            args: [account as Address],
-          });
-          return result;
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      return undefined;
+      return getHoneyBalance({ publicClient, config });
     },
     {
       refreshInterval,
