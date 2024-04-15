@@ -5,8 +5,7 @@ import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
 import { createWalletClient, http, type Address } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { useSignMessage } from "wagmi";
-import { useChains } from "wagmi";
+import { useChains, useSignMessage } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
 import {
@@ -140,7 +139,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   };
 
   const { useBalance } = usePollBeraBalance({
-    address: octAddress,
+    args: { address: account as string },
   });
   const { useTransactionCount } = usePollTransactionCount({
     address: octAddress,

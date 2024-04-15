@@ -1,0 +1,55 @@
+# usePollBeraBalance
+
+React hook to retrieve the current Bera balance of a given token.
+
+## Import
+
+```ts
+import { usePollBeraBalance } from "@bera/berajs";
+```
+
+## Usage
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { usePollBeraBalance } from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+const exampleTokenAddress = "0x1";
+const { useBalance, isLoading, isValidating } = useTokenHoneyPrice({
+  args: { tokenAddress: exampleTokenAddress },
+});
+
+const { data } = useBalance();
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+};
+```
+
+:::
+
+## Parameters
+
+```ts
+import { type UsePollBeraBalanceRequest } from "@bera/berajs";
+```
+
+- args.address
+  - Type: string
+  - Description: Address
+
+## Returns
+
+```ts
+import { type UsePollBeraBalanceResponse } from "@bera/berajs";
+```

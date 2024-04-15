@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   TRADING_ABI,
   TransactionActionType,
+  beraJsConfig,
   truncateHash,
   useBeraJs,
   useOct,
@@ -302,7 +303,10 @@ export function ManageOctDialog({
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();
-  const { useBalance } = usePollBeraBalance({ address: account as string });
+  const { useBalance } = usePollBeraBalance({
+    config: beraJsConfig,
+    args: { address: account as string },
+  });
   const userBalance = useBalance();
   const { isLoading, write } = useTxn({
     message: "Delegate One Click Trading Wallet",

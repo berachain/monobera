@@ -16,6 +16,7 @@ export interface BeraConfig {
     crocMultiSwapAddress?: Address;
     wrappedTokenAddress?: Address;
     dexAddress?: Address;
+    honeyAddress?: Address;
   };
 }
 
