@@ -5,7 +5,7 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  CROCSWAP_DEX,
+  BEX_ABI,
   TransactionActionType,
   getWithdrawLiquidityPayload,
   useTokenHoneyPrice,
@@ -179,7 +179,7 @@ export default function WithdrawLiquidityContent({
 
       write({
         address: crocDexAddress,
-        abi: CROCSWAP_DEX,
+        abi: BEX_ABI,
         functionName: "userCmd",
         params: withdrawLiquidityRequest?.payload ?? [],
       });

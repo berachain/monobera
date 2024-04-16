@@ -1,5 +1,5 @@
-import { getCrocErc20LpAddress, useBeraJs, type PoolV2 } from "@bera/berajs";
-import { chainId, crocIndexerEndpoint } from "@bera/config";
+import { getBeraLpAddress, useBeraJs } from "@bera/berajs";
+import { chainId } from "@bera/config";
 import { dexClient, getTokenHoneyPricesReq } from "@bera/graphql";
 import { POLLING } from "@bera/shared-ui/src/utils";
 import BigNumber from "bignumber.js";
@@ -77,7 +77,10 @@ export const usePollUserPosition = (pool: PoolV2 | undefined) => {
           });
 
         const lpBalanceCall = publicClient.readContract({
-          address: getCrocErc20LpAddress(pool.base, pool.quote) as any,
+          address: getBeraLpAddress({
+            base: pool.base,
+            quote: pool.quote,
+          }) as any,
           abi: erc20Abi,
           functionName: "balanceOf",
           args: [account],

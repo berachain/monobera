@@ -3,7 +3,7 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  CROCSWAP_DEX,
+  BEX_ABI,
   TransactionActionType,
   getAddLiquidityPayload,
   usePollWalletBalances,
@@ -199,7 +199,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       }
       write({
         address: crocDexAddress,
-        abi: CROCSWAP_DEX,
+        abi: BEX_ABI,
         functionName: "userCmd",
         params: addLiqPayload.payload,
         value: addLiqPayload?.value === 0n ? undefined : addLiqPayload?.value,
@@ -338,7 +338,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 setIsBaseInput(false);
                 handleQuoteAssetAmountChange(amount);
               }}
-              weight={quoteToken?.normalizedWeight}
               price={Number(quoteTokenHoneyPrice)}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(1, exceeding)

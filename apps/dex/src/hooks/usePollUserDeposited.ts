@@ -1,11 +1,5 @@
 import { decodeCrocPrice } from "@bera/beracrocswap";
-import {
-  CROC_QUERY_ABI,
-  formatSubgraphPoolData,
-  getCrocErc20LpAddress,
-  useBeraJs,
-  type PoolV2,
-} from "@bera/berajs";
+import { BEX_QUERY_ABI, getBeraLpAddress, useBeraJs } from "@bera/berajs";
 import {
   chainId,
   crocIndexerEndpoint,
@@ -22,7 +16,7 @@ import { BigNumber } from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, getAddress, toHex } from "viem";
+import { Address, erc20Abi, getAddress, toHex } from "viem";
 import { usePublicClient } from "wagmi";
 
 interface AmbientPosition {
@@ -120,7 +114,7 @@ export const usePollUserDeposited = (
 
         const calls: Call[] = positions.data.map((pool: AmbientPosition) => {
           return {
-            abi: CROC_QUERY_ABI,
+            abi: BEX_QUERY_ABI,
             address: crocQueryAddress,
             functionName: "queryPrice",
             args: [pool.base, pool.quote, pool.poolIdx],
@@ -137,7 +131,10 @@ export const usePollUserDeposited = (
           (pool: AmbientPosition) => {
             return {
               abi: erc20Abi,
-              address: getCrocErc20LpAddress(pool.base, pool.quote),
+              address: getBeraLpAddress({
+                base: pool.base as Address,
+                quote: pool.quote as Address,
+              }),
               functionName: "balanceOf",
               args: [account],
             };

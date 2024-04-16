@@ -1,6 +1,6 @@
 import type { Address, PublicClient } from "viem";
 
-import { type TransactionActionType } from "~/config";
+import { type TransactionActionType } from "~/enum";
 
 const storageKey = "rk-transactions";
 
