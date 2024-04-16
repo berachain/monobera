@@ -13,6 +13,11 @@ export interface UseTokenHoneyPriceRequest extends DefaultHookTypes {
   args?: {
     tokenAddress: `0x${string}` | undefined;
   };
+  config: {
+    subgraphs?: {
+      dexSubgraph?: string;
+    };
+  };
 }
 
 export interface UseTokenHoneyPriceResponse {

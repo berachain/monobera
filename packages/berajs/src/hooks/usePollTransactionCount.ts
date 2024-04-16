@@ -1,34 +1,41 @@
 import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
+
 import POLLING from "~/enum/polling";
+import { getTransactionCount } from "../actions/dex";
+import { DefaultHookTypes } from "../types/global";
+
+interface IUserPollTransactionCountRequest extends DefaultHookTypes {
+  args?: {
+    address: string | undefined;
+  };
+}
+
+interface IUserPollTransactionCountResponse {
+  isLoading: boolean;
+  useTransactionCount: () => string;
+  refresh: () => void;
+}
 
 export const usePollTransactionCount = ({
-  address,
-}: {
-  address: string | undefined;
-}) => {
+  args: { address } = { address: undefined },
+  opts: { refreshInterval } = {
+    refreshInterval: POLLING.SLOW,
+  },
+}: IUserPollTransactionCountRequest): IUserPollTransactionCountResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [address, "txnCount"];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (address) {
-        const transactionCount = await publicClient.getTransactionCount({
-          address: address as Address,
-        });
-        return transactionCount;
-      }
-
-      return 0;
+      return getTransactionCount({ address, publicClient });
     },
     {
-      refreshInterval: POLLING.SLOW,
+      refreshInterval,
     },
   );
-  const useTransactionCount = () => {
+  const useTransactionCount = (): string => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };

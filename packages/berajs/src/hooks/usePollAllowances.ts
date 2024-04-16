@@ -1,12 +1,13 @@
-import { multicallAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatUnits } from "viem";
+import { erc20Abi } from "viem";
 import { usePublicClient } from "wagmi";
 
-import POLLING from "~/enum/polling";
 import { useBeraJs } from "~/contexts";
+import POLLING from "~/enum/polling";
 import { Token } from "~/types";
+import { getAllowances } from "../actions/dex";
+import { DefaultHookTypes } from "../types/global";
 
 const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
 
@@ -22,9 +23,11 @@ interface Call {
   args: any[];
 }
 
-interface IUsePollAllowances {
-  contract: string;
-  tokens: Token[];
+interface IUsePollAllowances extends DefaultHookTypes {
+  args: {
+    contract: string;
+    tokens: Token[];
+  };
 }
 
 /**
@@ -34,7 +37,14 @@ interface IUsePollAllowances {
  * @param contract the address of the ERC20 token contract
  * @param tokens   the list of tokens to poll allowances for
  */
-export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
+export const usePollAllowances = ({
+  args,
+  config,
+  opts: { refreshInterval } = {
+    refreshInterval: POLLING.FAST,
+  },
+}: IUsePollAllowances) => {
+  const { contract, tokens } = args;
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
@@ -42,52 +52,19 @@ export const usePollAllowances = ({ contract, tokens }: IUsePollAllowances) => {
   useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (account) {
-        const call: Call[] = tokens.map((item: Token) => ({
-          address: item.address as `0x${string}`,
-          abi: erc20Abi,
-          functionName: "allowance",
-          args: [account, contract],
-        }));
-
-        const result = await publicClient.multicall({
-          contracts: call,
-          multicallAddress: multicallAddress,
-        });
-
-        const allowances = await Promise.all(
-          result.map(async (item: any, index: number) => {
-            const token = tokens[index];
-            if (item.error) {
-              await mutate([...QUERY_KEY, token?.address], {
-                allowance: 0,
-                formattedAllowance: "0",
-                ...token,
-              });
-              return { balance: 0, ...token };
-            }
-
-            const resultAllowanceToken: AllowanceToken = {
-              allowance: item.result,
-              formattedAllowance: formatUnits(
-                item.result,
-                token?.decimals || 18,
-              ),
-              ...token,
-            } as AllowanceToken;
-            await mutate([...QUERY_KEY, token?.address], resultAllowanceToken);
-            return resultAllowanceToken;
-          }),
-        );
-
-        return allowances;
-      }
-
-      return undefined;
+      return getAllowances({
+        tokens,
+        account,
+        config,
+        contract,
+        publicClient,
+        queryKey: QUERY_KEY,
+        mutate,
+        method: "allowance",
+      });
     },
     {
-      refreshInterval: REFRESH_BLOCK_INTERVAL,
+      refreshInterval,
     },
   );
 

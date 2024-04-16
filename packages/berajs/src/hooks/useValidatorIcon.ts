@@ -1,11 +1,23 @@
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
-import { type Address } from "viem";
 
-export const useValidatorIcon = (
-  identity: string | undefined,
-  address: Address,
-) => {
+import { getValidatorIcon } from "~/actions/bgt";
+
+interface IUseValidatorIconRequest {
+  identity: string;
+  address: string | undefined;
+}
+
+interface IUseValidatorIconResponse {
+  isLoading: boolean;
+  isValidating: boolean;
+  data: string | undefined;
+}
+
+export const useValidatorIcon = ({
+  identity,
+  address,
+}: IUseValidatorIconRequest): IUseValidatorIconResponse => {
   const [validatorIcon, setValidatorIcon] = useLocalStorage<string>(
     `VALIDATOR_ICON_${address}`,
     "",
@@ -21,31 +33,23 @@ export const useValidatorIcon = (
   };
 
   const fetchValidatorIcon = async (identity: string) => {
-    try {
-      if (validatorIcon) {
-        return validatorIcon;
-      }
-      const d = await keybase(identity);
-      if (Array.isArray(d.them)) {
-        const uri = String(d.them[0]?.pictures?.primary?.url).replace(
-          "https://s3.amazonaws.com/keybase_processed_uploads/",
-          "",
-        );
-        setValidatorIcon(uri);
-        return uri;
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    return getValidatorIcon({
+      validatorIcon,
+      identity,
+      setValidatorIcon,
+      keybase,
+    });
   };
 
-  const { isLoading, data = undefined } = useSWRImmutable(
-    identity,
-    fetchValidatorIcon,
-  );
+  const {
+    isLoading,
+    isValidating,
+    data = undefined,
+  } = useSWRImmutable(identity, fetchValidatorIcon);
 
   return {
     isLoading,
+    isValidating,
     data,
   };
 };

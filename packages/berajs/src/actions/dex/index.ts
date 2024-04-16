@@ -3,3 +3,7 @@ export * from "./getSwap";
 export * from "./getAddLiquidityPayload";
 export * from "./getWithdrawLiquidityPayload";
 export * from "./getSwapPayload";
+export * from "./getTokenInformation";
+export * from "./getTransactionCount";
+export * from "./getAllowance";
+export * from "./getAllowances";
