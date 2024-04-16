@@ -1,6 +1,5 @@
 import { Address, PublicClient } from "viem";
-
-import { lendPoolImplementationABI } from "~/config";
+import { LEND_POOL_IMPLEMENTATION_ABI } from "~/abi";
 
 export interface UserAccountData {
   totalCollateralBase: bigint;
@@ -30,7 +29,7 @@ export const getUserAccountData = async ({
   try {
     const result = await client.readContract({
       address: contractAddress,
-      abi: lendPoolImplementationABI,
+      abi: LEND_POOL_IMPLEMENTATION_ABI,
       functionName: "getUserAccountData",
       args: [accountAddress],
     });

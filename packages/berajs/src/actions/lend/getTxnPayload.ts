@@ -1,6 +1,5 @@
 import { Address, maxUint256, parseUnits } from "viem";
-
-import { Token } from "~/api";
+import { Token } from "~/types";
 
 export const getSupplyPayload = ({
   token,
