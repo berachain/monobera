@@ -1,7 +1,7 @@
 import useSWR from "swr";
 
 import { getTokenHoneyPrices } from "~/actions/honey";
-import POLLING from "~/config/constants/polling";
+import POLLING from "~/enum/polling";
 import { DefaultHookTypes } from "~/types/global";
 
 /**

@@ -1,10 +1,9 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatEther, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getBeraBalance } from "~/actions/dex/getBeraBalance";
-import POLLING from "~/config/constants/polling";
+import POLLING from "~/enum/polling";
 import { DefaultHookTypes } from "~/types/global";
 
 export interface UsePollBeraBalanceRequest extends DefaultHookTypes {

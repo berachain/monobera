@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useReducer } from "react";
 import { jsonRpcUrl } from "@bera/config";
 import { Wallet, providers } from "ethers";

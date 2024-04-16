@@ -4,7 +4,7 @@ import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";
-import POLLING from "~/config/constants/polling";
+import POLLING from "~/enum/polling";
 import { DefaultHookTypes } from "~/types/global";
 import { useBeraJs } from "../contexts";
 

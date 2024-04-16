@@ -4,8 +4,8 @@ import useSWRImmutable from "swr/immutable";
 import { erc20Abi, formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
+import POLLING from "~/enum/polling";
 
 export const usePollBHoneyBalance = () => {
   const publicClient = usePublicClient();

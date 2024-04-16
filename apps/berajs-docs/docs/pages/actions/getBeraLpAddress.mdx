@@ -1,0 +1,26 @@
+# getBeraLpAddress
+
+Helper function to deterministically calculating the contract address for a given pair of tokens.
+
+## Import
+
+```ts
+import { getBeraLpAddress } from "@bera/berajs";
+```
+
+## Usage
+
+```ts [example.ts]
+import { getBeraLpAddress } from "@bera/berajs";
+
+const lpTokenAddress = getBeraLpAddress({
+    base: '0x...',
+    quote: '0x...',
+});
+```
+
+## Parameters
+
+```ts
+import { type GetBeraLpAddress } from "berajs";
+```
