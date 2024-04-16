@@ -2,10 +2,9 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address, erc20Abi, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
-
-import POLLING from "~/config/constants/polling";
 import { honeyAddress } from "../../../config/env/index";
 import { useBeraJs } from "../contexts";
+import POLLING from "~/enum/polling";
 
 export const usePollHoneyBalance = () => {
   const publicClient = usePublicClient();

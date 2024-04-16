@@ -9,7 +9,7 @@ import { AddressZero } from '@ethersproject/constants';
 import { PoolInitEncoder } from "./encoding/init";
 import { CrocSurplusFlags, decodeSurplusFlag, encodeSurplusArg } from "./encoding/flags";
 import { BeraSdkResponse } from "./types";
-import { getCrocErc20LpAddress } from "./utils/getCrocErc20LpAddress";
+import { getBeraLpAddress } from "./utils/getBeraLpAddress";
 import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 
 export type PriceRange = [number, number]
@@ -151,12 +151,12 @@ export class CrocPoolView {
 
     async mintAmbientBase (qty: TokenQty, limits: PriceRange, opts?: CrocLpOpts): 
         Promise<BeraSdkResponse> {
-        return this.mintAmbient(qty, this.useTrueBase, limits, getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)), opts)
+        return this.mintAmbient(qty, this.useTrueBase, limits, getBeraLpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)), opts)
     }
 
     async mintAmbientQuote (qty: TokenQty, limits: PriceRange,opts?: CrocLpOpts): 
         Promise<BeraSdkResponse> {
-        return this.mintAmbient(qty, !this.useTrueBase, limits,getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)), opts)
+        return this.mintAmbient(qty, !this.useTrueBase, limits,getBeraLpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)), opts)
     }
 
     async mintRangeBase (qty: TokenQty, range: TickRange, limits: PriceRange, opts?: CrocLpOpts): 
@@ -173,7 +173,7 @@ export class CrocPoolView {
         Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
         const calldata = (await this.makeEncoderPoolIDx(poolIdx)).encodeBurnAmbient
-            (liq, lowerBound, upperBound, this.maskSurplusFlag(opts), getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
+            (liq, lowerBound, upperBound, this.maskSurplusFlag(opts), getBeraLpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
         return {
             calldata
         }
@@ -182,7 +182,7 @@ export class CrocPoolView {
     async burnAmbientAll (poolIdx: number, limits: PriceRange, opts?: CrocLpOpts): Promise<BeraSdkResponse> {
         let [lowerBound, upperBound] = await this.transformLimits(limits)
         const calldata = (await this.makeEncoderPoolIDx(poolIdx)).encodeBurnAmbientAll
-            (lowerBound, upperBound, this.maskSurplusFlag(opts), getCrocErc20LpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
+            (lowerBound, upperBound, this.maskSurplusFlag(opts), getBeraLpAddress(isBeratoken(this.baseToken.tokenAddr),isBeratoken(this.quoteToken.tokenAddr)))
         return {
             calldata
         }

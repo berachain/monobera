@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useReducer } from "react";
 import { jsonRpcUrl, perpsEndpoint } from "@bera/config";
 import { Contract, Wallet, providers } from "ethers";
@@ -8,7 +6,7 @@ import { usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
-import { TRADING_ABI } from "~/config";
+import { TRADING_ABI } from "~/enum";
 import { useBeraJs } from "~/contexts";
 import { useOct } from "../useOct";
 import {

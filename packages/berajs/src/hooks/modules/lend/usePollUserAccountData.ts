@@ -3,8 +3,8 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { lendPoolImplementationABI } from "~/config";
-import POLLING from "~/config/constants/polling";
+import { LEND_POOL_IMPLEMENTATION_ABI } from "~/enum";
+import POLLING from "~/enum/polling";
 import { useBeraJs } from "~/contexts";
 
 const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
@@ -23,7 +23,7 @@ export const usePollUserAccountData = () => {
         try {
           const result = await publicClient.readContract({
             address: lendPoolImplementationAddress,
-            abi: lendPoolImplementationABI,
+            abi: LEND_POOL_IMPLEMENTATION_ABI,
             functionName: "getUserAccountData",
             args: [account],
           });

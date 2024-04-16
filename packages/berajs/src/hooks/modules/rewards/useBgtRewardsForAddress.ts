@@ -1,10 +1,7 @@
-import { beraTokenAddress } from "@bera/config";
-import { type Weight } from "@bera/graphql";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 
-import POLLING from "~/config/constants/polling";
-import { useTokenHoneyPrice } from "~/hooks/useTokenHoneyPrice";
+import POLLING from "~/enum/polling";
 
 interface IBgtRewardsForAddress {
   bgtPerYear: number;

@@ -5,8 +5,8 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/config";
-import POLLING from "~/config/constants/polling";
+import { BTOKEN_ABI } from "~/enum";
+import POLLING from "~/enum/polling";
 import { useBeraJs } from "~/contexts";
 import { usePollBHoneyBalance } from "./usePollBHoneyBalance";
 

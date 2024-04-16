@@ -2,7 +2,7 @@ import { BigNumber, ethers } from "ethers"
 import { PoolInitEncoder } from "../encoding/init"
 import { BeraSdkResponse } from "../types"
 import { AddressZero } from '@ethersproject/constants';
-import { getCrocErc20LpAddress } from "./getCrocErc20LpAddress";
+import { getBeraLpAddress } from "./getBeraLpAddress";
 import { beraTokenAddress } from "@bera/config";
 // import { beraTokenAddress } from "@bera/config";
 
@@ -70,7 +70,7 @@ export const encodeWarmPath = (
       limitLow,
       limitHigh,
       useSurplus,
-      getCrocErc20LpAddress(baseAddress, quoteAddress),
+      getBeraLpAddress(baseAddress, quoteAddress),
     ])
     return abiCoder.encode([
         "uint8", // Type call
@@ -95,7 +95,7 @@ export const encodeWarmPath = (
       limitLow,
       limitHigh,
       useSurplus,
-      getCrocErc20LpAddress(baseAddress, quoteAddress),
+      getBeraLpAddress(baseAddress, quoteAddress),
     ]);
   }
 
