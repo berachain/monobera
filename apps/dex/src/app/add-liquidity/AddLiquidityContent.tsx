@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import {
   BEX_ABI,
   TransactionActionType,
-  getAddLiquidityPayload,
   usePollWalletBalances,
   useTokenHoneyPrice,
   type PoolV2,
   type Token,
 } from "@bera/berajs";
+import { getAddLiquidityPayload } from "@bera/berajs/actions";
 import { beraTokenAddress, cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
@@ -453,9 +453,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       ? maxBaseApprovalAmount
                       : maxQuoteApprovalAmount
                     : needsApproval[0]?.address.toLowerCase() ===
-                        baseToken.address.toLowerCase()
-                      ? maxBaseApprovalAmount
-                      : maxQuoteApprovalAmount
+                      baseToken.address.toLowerCase()
+                    ? maxBaseApprovalAmount
+                    : maxQuoteApprovalAmount
                 }
                 token={isNativeBera ? needsApprovalNoBera[0] : needsApproval[0]}
                 spender={crocDexAddress}

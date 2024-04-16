@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import {
   BEX_ABI,
   TransactionActionType,
-  getWithdrawLiquidityPayload,
   useTokenHoneyPrice,
   type PoolV2,
   type Token,
 } from "@bera/berajs";
+import { getWithdrawLiquidityPayload } from "@bera/berajs/actions";
 import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
