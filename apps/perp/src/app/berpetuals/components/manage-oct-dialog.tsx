@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   TRADING_ABI,
   TransactionActionType,
-  beraJsConfig,
   truncateHash,
   useBeraJs,
   useOct,
@@ -23,6 +22,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { beraJsConfig } from "@bera/wagmi";
 import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
 
@@ -387,7 +387,7 @@ export function ManageOctDialog({
             fundAmount={fundAmount}
             setFundAmount={setFundAmount}
             isReady={isReady}
-            userBalance={userBalance}
+            userBalance={userBalance.toString()}
             isFundingLoading={isFundingLoading}
             fundWrite={fundWrite}
             octAddress={octAddress}

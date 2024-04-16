@@ -15,7 +15,7 @@ export interface UsePollBeraBalanceRequest extends DefaultHookTypes {
 export interface UsePollBeraBalanceResponse {
   isLoading: boolean;
   isValidating: boolean;
-  useBalance: () => number | undefined;
+  useBalance: () => string | number;
 }
 
 export const usePollBeraBalance = ({
@@ -35,7 +35,7 @@ export const usePollBeraBalance = ({
       refreshInterval,
     },
   );
-  const useBalance = (): number | undefined => {
+  const useBalance = (): string | number => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };

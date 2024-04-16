@@ -11,8 +11,8 @@ import { useBeraJs } from "../contexts";
 export interface UsePollHoneyBalancesResponse {
   isLoading: boolean;
   isValidating: boolean;
-  useHoneyBalance: () => string | undefined;
-  useRawHoneyBalance: () => bigint | undefined;
+  useHoneyBalance: () => string;
+  useRawHoneyBalance: () => bigint;
 }
 
 export const usePollHoneyBalance = ({
@@ -27,17 +27,17 @@ export const usePollHoneyBalance = ({
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      return getHoneyBalance({ publicClient, config });
+      return getHoneyBalance({ publicClient, config, isConnected, account });
     },
     {
       refreshInterval,
     },
   );
-  const useHoneyBalance = (): string | undefined => {
+  const useHoneyBalance = (): string => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return formatUnits(data ?? 0n, 18);
   };
-  const useRawHoneyBalance = (): bigint | undefined => {
+  const useRawHoneyBalance = (): bigint => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };

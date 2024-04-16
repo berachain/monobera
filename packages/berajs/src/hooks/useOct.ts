@@ -152,7 +152,7 @@ export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
   const octTxCount = useTransactionCount();
 
   const isOctUnfunded = octBalance === undefined || octBalance === 0;
-  const isOctBalanceLow = octBalance !== undefined && octBalance < 0.1;
+  const isOctBalanceLow = octBalance !== undefined && Number(octBalance) < 0.1;
 
   return {
     isGenLoading: state.confirmState === "loading",

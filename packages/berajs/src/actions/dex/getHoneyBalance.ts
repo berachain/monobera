@@ -1,6 +1,5 @@
 import { Address, PublicClient, erc20Abi } from "viem";
 
-import { useBeraJs } from "~/contexts";
 import { BeraConfig } from "~/types";
 
 /**
@@ -10,12 +9,15 @@ import { BeraConfig } from "~/types";
 export const getHoneyBalance = async ({
   publicClient,
   config,
+  isConnected,
+  account,
 }: {
   publicClient: PublicClient | undefined;
   config: BeraConfig;
+  isConnected: boolean;
+  account: string | undefined;
 }): Promise<bigint | undefined> => {
   if (!publicClient) return undefined;
-  const { isConnected, account } = useBeraJs();
   if (isConnected && config.contracts?.honeyAddress) {
     try {
       const result = await publicClient.readContract({
