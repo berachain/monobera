@@ -1,11 +1,17 @@
 {
   "extends": "../../tsconfig.json",
+  // TODO: create like a tsconfig.apps.base.json
   "compilerOptions": {
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "target": "ES2021", // Setting this to `ES2021` enables native support for `Node v16+`: https://github.com/microsoft/TypeScript/wiki/Node-Target-Mapping.
+    "lib": [
+      "ES2022", // By using ES2022 we get access to the `.cause` property on `Error` instances.
+      "DOM" // We are adding `DOM` here to get the `fetch`, etc. types. This should be removed once these types are available via DefinitelyTyped.
+    ],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"],
-      "@bera/berajs/*": ["node_modules/@bera/berajs/*"],
-      "@bera/berajs": ["node_modules/@bera/berajs"]
+      "~/*": ["./src/*"]
     },
     "plugins": [
       {
@@ -14,7 +20,6 @@
     ],
     "strictNullChecks": true
   },
-  "exclude": ["**/auth/*", "../../packages/berajs/*"],
   "include": [
     "next-env.d.ts",
     "async-jsx.d.ts",
@@ -23,7 +28,5 @@
     "**/*.cjs",
     "**/*.mjs",
     ".next/types/**/*.ts",
-    "../../packages/shared-ui/src/terms-of-use/terms-of-use.tsx",
-    "../../packages/shared-ui/src/utils/analytics.ts"
   ]
 }

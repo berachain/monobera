@@ -1,4 +1,4 @@
-import { getBeraLpAddress, useBeraJs } from "@bera/berajs";
+import { PoolV2, getBeraLpAddress, useBeraJs } from "@bera/berajs";
 import { chainId } from "@bera/config";
 import { dexClient, getTokenHoneyPricesReq } from "@bera/graphql";
 import { POLLING } from "@bera/shared-ui/src/utils";
@@ -10,31 +10,6 @@ import { usePublicClient } from "wagmi";
 
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
 import { type IUserPosition } from "./usePollUserDeposited";
-
-interface AmbientPosition {
-  ambientLiq: string;
-  aprContributedLiq: string;
-  aprDuration: number;
-  aprEst: number;
-  aprPostLiq: string;
-  askTick: number;
-  base: string;
-  bidTick: number;
-  chainId: string;
-  concLiq: number;
-  firstMintTx: string;
-  isBid: boolean;
-  lastMintTx: string;
-  latestUpdateTime: number;
-  liqRefreshTime: number;
-  poolIdx: number;
-  positionId: string;
-  positionType: string;
-  quote: string;
-  rewardLiq: number;
-  timeFirstMint: number;
-  user: string;
-}
 
 interface IUserAmbientPositon {
   userPosition: IUserPosition | undefined;

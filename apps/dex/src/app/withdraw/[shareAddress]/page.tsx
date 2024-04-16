@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchPoolByAddress } from "@bera/berajs/src/utils/pools";
+import { fetchPoolByAddress } from "@bera/berajs/utils";
 import { dexName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import { isAddress } from "viem";
