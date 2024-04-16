@@ -1,7 +1,7 @@
 import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { PublicClient, formatUnits, getAddress } from "viem";
 
-import { MULTISWAP_ABI } from "~/config";
+import { MULTISWAP_ABI } from "~/enum";
 import { SwapInfoV3 } from "~/hooks";
 import { SwapRequest } from "~/types";
 import { BeraConfig } from "~/types/global";

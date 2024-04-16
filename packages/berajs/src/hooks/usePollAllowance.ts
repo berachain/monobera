@@ -3,8 +3,8 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, erc20Abi } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { type Token } from "~/api/currency/tokens";
 import { useBeraJs } from "~/contexts";
+import { Token } from "~/types";
 
 const REFRESH_BLOCK_INTERVAL = 10000;
 
