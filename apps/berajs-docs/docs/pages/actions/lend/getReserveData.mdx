@@ -1,0 +1,42 @@
+# getReserveData
+
+Action for creating the payload for performing an add liquidity operation on a pool.
+
+## Import
+
+```ts
+import { getAddLiquidityPayload } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getAddLiquidityPayload, type Token } from "@bera/berajs";
+
+const addLiqPayload = await getAddLiquidityPayload({
+  args: {
+    slippage: 0.1, // value between 0.1 and 100
+    poolPrice: 1,
+    baseToken: { address: "0x..." } as Token,
+    quoteToken: { address: "0x..." } as Token,
+    isAmountBaseDenominated: false,
+    baseAmount: 10,
+    quoteAmount: 10,
+    poolIdx: 1, // pool.poolIdx
+  },
+});
+```
+
+## Parameters
+
+```ts
+import { type getAddLiquidityPayload } from "berajs";
+```
+
+## Returns
+
+```ts
+import { type PayloadReturnType } from "berajs";
+
+type result = Promise<PayloadReturnType | undefined>;
+```
