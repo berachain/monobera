@@ -1,6 +1,6 @@
 import { FormatReserveUSDResponse, formatReserves } from "@aave/math-utils";
 import { Address, PublicClient } from "viem";
-import { LEND_POOL_IMPLEMENTATION_ABI } from "~/abi";
+import { LEND_UI_DATA_PROVIDER_ABI } from "~/abi";
 import { getReservesHumanized } from "~/utils";
 
 export interface ReserveData extends FormatReserveUSDResponse {
@@ -40,7 +40,7 @@ export const getReserveData = async ({
   try {
     const result = (await client.readContract({
       address: uiDataProviderAddress,
-      abi: LEND_POOL_IMPLEMENTATION_ABI,
+      abi: LEND_UI_DATA_PROVIDER_ABI,
       functionName: "getReservesData",
       args: [addressProviderAddress],
     })) as [any[], any];
