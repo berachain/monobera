@@ -1,6 +1,5 @@
 import { Token } from "..";
 
-
 export async function addTokenToWallet(token: Token | undefined) {
   if (token) {
     try {

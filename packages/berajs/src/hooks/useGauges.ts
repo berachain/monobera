@@ -1,4 +1,3 @@
-
 import { gaugeListUrl } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";

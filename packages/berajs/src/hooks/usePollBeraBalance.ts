@@ -4,7 +4,6 @@ import { formatEther, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 import POLLING from "~/enum/polling";
 
-
 export const usePollBeraBalance = ({
   address,
 }: {
