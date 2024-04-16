@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  lendPoolImplementationABI,
+  LEND_POOL_IMPLEMENTATION_ABI,
   useBeraJs,
   usePollAllowance,
   usePollWalletBalances,
@@ -231,7 +231,7 @@ const RepayModalContent = ({
           onClick={() => {
             write({
               address: lendPoolImplementationAddress,
-              abi: lendPoolImplementationABI,
+              abi: LEND_POOL_IMPLEMENTATION_ABI,
               functionName: "repay",
               params: [
                 honeyTokenAddress,

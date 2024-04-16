@@ -1,4 +1,4 @@
-import POLLING from "@bera/berajs/src/config/constants/polling";
+import { POLLING } from "@bera/shared-ui";
 import useSWRInfinite from "swr/infinite";
 
 import { getAbsoluteUrl } from "~/utils/vercel-utils";

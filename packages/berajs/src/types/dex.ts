@@ -1,5 +1,17 @@
 import { Address } from "viem";
-import { Token } from "..";
+
+export type Token = {
+  chainId?: number;
+  logoURI?: string;
+  tags?: string[];
+  address: Address;
+  decimals: number;
+  symbol: string;
+  name: string;
+  default?: boolean;
+  balance?: bigint;
+  formattedBalance?: string;
+};
 
 export interface SwapRequest {
   tokenIn: Address;
