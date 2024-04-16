@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchPoolByAddress } from "@bera/berajs";
+import { fetchPoolByAddress } from "@bera/berajs/src/utils/pools";
 import { isAddress } from "viem";
 
 import PoolPageContent from "../PoolPageContent";

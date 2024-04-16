@@ -3,7 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@bera/berajs/*": ["node_modules/@bera/berajs/*"],
+      "@bera/berajs": ["node_modules/@bera/berajs"]
     },
     "plugins": [
       {
@@ -12,7 +14,7 @@
     ],
     "strictNullChecks": true
   },
-  "exclude": ["**/auth/*"],
+  "exclude": ["**/auth/*", "../../packages/berajs/*"],
   "include": [
     "next-env.d.ts",
     "async-jsx.d.ts",
