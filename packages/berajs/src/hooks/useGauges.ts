@@ -1,11 +1,9 @@
-"use client";
 
 import { gaugeListUrl } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
-
-import { type Gauge } from "~/api";
-import POLLING from "~/config/constants/polling";
+import POLLING from "~/enum/polling";
+import { Gauge } from "..";
 
 interface IUseGaugess {
   gaugeList: Gauge[] | undefined;

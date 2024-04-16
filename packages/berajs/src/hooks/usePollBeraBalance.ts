@@ -2,8 +2,8 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatEther, type Address } from "viem";
 import { usePublicClient } from "wagmi";
+import POLLING from "~/enum/polling";
 
-import POLLING from "~/config/constants/polling";
 
 export const usePollBeraBalance = ({
   address,

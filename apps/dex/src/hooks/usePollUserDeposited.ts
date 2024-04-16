@@ -1,5 +1,5 @@
 import { decodeCrocPrice } from "@bera/beracrocswap";
-import { CROC_QUERY_ABI, getBeraLpAddress, useBeraJs } from "@bera/berajs";
+import { BEX_QUERY_ABI, getBeraLpAddress, useBeraJs } from "@bera/berajs";
 import {
   chainId,
   crocIndexerEndpoint,
@@ -116,7 +116,7 @@ export const usePollUserDeposited = (
 
         const calls: Call[] = positions.data.map((pool: AmbientPosition) => {
           return {
-            abi: CROC_QUERY_ABI,
+            abi: BEX_QUERY_ABI,
             address: crocQueryAddress,
             functionName: "queryPrice",
             args: [pool.base, pool.quote, pool.poolIdx],

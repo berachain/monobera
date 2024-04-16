@@ -13,7 +13,6 @@ type Props = {
   selectedTokens?: (Token | undefined)[];
   customTokenList?: (Token | undefined)[];
   selectable: boolean;
-  weight?: number;
   filter?: Address[];
   className?: string;
 };
@@ -24,7 +23,6 @@ export function SelectToken({
   selectedTokens = undefined,
   customTokenList = undefined,
   selectable,
-  weight = undefined,
   filter = [],
   className = "",
 }: Props) {
@@ -43,7 +41,6 @@ export function SelectToken({
             <span className="w-fit max-w-[140px] overflow-hidden truncate">
               {token?.symbol}{" "}
             </span>
-            {weight && <span className="text-muted-foreground">{weight}%</span>}
             {selectable && <Icons.chevronDown className="h-4 w-4" />}
           </>
         ) : (

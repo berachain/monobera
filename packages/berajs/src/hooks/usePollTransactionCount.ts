@@ -2,8 +2,7 @@ import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
-
-import POLLING from "~/config/constants/polling";
+import POLLING from "~/enum/polling";
 
 export const usePollTransactionCount = ({
   address,

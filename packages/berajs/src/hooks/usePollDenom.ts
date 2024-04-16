@@ -2,7 +2,7 @@ import { erc20ModuleAddress } from "@bera/config";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { ERC20_MODULE_ABI } from "~/config/abi";
+import { ERC20_MODULE_ABI } from "~/abi";
 
 export const usePollDenom = () => {
   const publicClient = usePublicClient();

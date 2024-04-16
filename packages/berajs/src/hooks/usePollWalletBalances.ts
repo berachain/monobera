@@ -8,8 +8,7 @@ import useSWRImmutable from "swr/immutable";
 import { Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookTypes, MULTICALL3_ABI } from "..";
-import { type Token } from "../api/currency/tokens";
+import { DefaultHookTypes, MULTICALL3_ABI, type Token } from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 

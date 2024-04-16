@@ -1,12 +1,12 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
-import { REFERRALS_ABI } from "~/config";
+import { REFERRALS_ABI } from "~/enum";
 import { perpsReferralsAddress } from "@bera/config";
 
-import POLLING from "~/config/constants/polling";
 import { useBeraJs } from "~/contexts";
 import { type Address } from "viem";
+import POLLING from "~/enum/polling";
 
 export const usePollReferralsDetails = () => {
   const publicClient = usePublicClient();

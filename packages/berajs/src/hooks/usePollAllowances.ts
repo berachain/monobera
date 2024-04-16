@@ -4,9 +4,9 @@ import useSWRImmutable from "swr/immutable";
 import { erc20Abi, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { type Token } from "~/api/currency/tokens";
-import POLLING from "~/config/constants/polling";
+import POLLING from "~/enum/polling";
 import { useBeraJs } from "~/contexts";
+import { Token } from "~/types";
 
 const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
 

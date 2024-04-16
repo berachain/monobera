@@ -4,8 +4,8 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/config";
-import POLLING from "~/config/constants/polling";
+import { BTOKEN_ABI } from "~/enum";
+import POLLING from "~/enum/polling";
 import { useBeraJs } from "~/contexts";
 
 export const usePollBalanceOfAssets = () => {

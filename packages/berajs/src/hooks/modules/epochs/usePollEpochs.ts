@@ -3,8 +3,8 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { EPOCHS_PRECOMPILE_ABI } from "~/config";
-import POLLING from "~/config/constants/polling";
+import { EPOCHS_PRECOMPILE_ABI } from "~/enum";
+import POLLING from "~/enum/polling";
 
 export interface IEpoch {
   current: number;

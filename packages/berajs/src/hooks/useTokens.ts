@@ -1,12 +1,9 @@
-"use client";
-
 import { useMemo } from "react";
 import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
-import { type Token } from "~/api";
-import { DefaultHookTypes } from "..";
+import { DefaultHookTypes, type Token } from "..";
 
 interface IUseTokens {
   isLoading: boolean;

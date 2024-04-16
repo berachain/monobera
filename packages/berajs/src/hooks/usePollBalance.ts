@@ -4,10 +4,10 @@ import useSWRImmutable from "swr/immutable";
 import { erc20Abi, formatEther, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { MULTICALL3_ABI } from "~/config";
-import POLLING from "~/config/constants/polling";
-import { type Token } from "../api/currency/tokens";
+import { MULTICALL3_ABI } from "~/enum";
+import POLLING from "~/enum/polling";
 import { useBeraJs } from "../contexts";
+import { Token } from "~/types";
 
 interface BalanceToken extends Token {
   balance: bigint;
