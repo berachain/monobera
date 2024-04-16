@@ -95,6 +95,14 @@ export default defineConfig({
               text: "getWithdrawLiquidityPayload",
               link: "/actions/getWithdrawLiquidityPayload/",
             },
+            {
+              text: "getBeraBalance",
+              link: "/actions/getBeraBalance/",
+            },
+            {
+              text: "getHoneyBalance",
+              link: "/actions/getHoneyBalance/",
+            },
           ],
         },
         {
