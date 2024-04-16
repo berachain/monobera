@@ -1,0 +1,42 @@
+# getBaseQuoteAddresses
+
+Helper function to determine the base and quote tokens of a given two token addresses.
+
+## Import
+
+```ts
+import { sortBaseQuoteAddresses } from "@bera/berajs";
+```
+
+## Usage
+
+```ts twoslash [example.ts]
+import { sortBaseQuoteAddresses } from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+const [base, quote] = sortBaseQuoteAddresses({
+    tokenA: "0x...",
+    tokenB: "0x...",
+    config: beraConfig,
+})
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+  contracts: {
+    wrappedTokenAddress: "0x...",
+  },
+};
+```
+
+:::
+
+## Parameters
+
+```ts
+import { type SortBaseQuoteAddress } from "berajs";
+```

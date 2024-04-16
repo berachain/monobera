@@ -11,4 +11,4 @@ export * from "./handle-native-bera";
 export * from "./timeFrame";
 export * from "./fixedPointEthers";
 export * from "./formatNumber";
-export * from "./getCrocErc20LpAddress";
+export * from "./getBeraLpAddress";

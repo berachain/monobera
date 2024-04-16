@@ -56,7 +56,6 @@ export function TokenInput({
   hideBalance = false,
   hidePrice = false,
   selectable = true,
-  weight = undefined,
   disabled = false,
   customTokenList = undefined,
   onTokenSelection = undefined,
@@ -125,7 +124,6 @@ export function TokenInput({
             onTokenSelection={onTokenSelection}
             selectedTokens={selectedTokens}
             selectable={selectable}
-            weight={weight}
             customTokenList={customTokenList}
             filter={[bgtTokenAddress]}
           />

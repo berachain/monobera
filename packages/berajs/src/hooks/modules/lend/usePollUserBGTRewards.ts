@@ -1,6 +1,7 @@
 import useSWR, { useSWRConfig } from "swr";
 import { usePublicClient } from "wagmi";
-import { LEND_REWARD_HELPER_ABI } from "~/config/abi";
+
+import { LEND_REWARD_HELPER_ABI } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookTypes } from "~/types";
 

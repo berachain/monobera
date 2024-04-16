@@ -1,13 +1,11 @@
-"use client";
-
 import { useCallback, useReducer, useState } from "react";
 import { useConfig, usePublicClient } from "wagmi";
 import { multicall } from "@wagmi/core";
 import { Address, erc20Abi } from "viem";
 
-import { type Token } from "~/api/currency/tokens";
 import { ActionEnum, initialState, reducer } from "../utils/stateReducer";
 import { multicallAddress } from "@bera/config";
+import { Token } from "..";
 
 interface IuseTokenInformation {
   address: Address;

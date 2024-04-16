@@ -17,7 +17,7 @@
     "esm",
     "cjs",
     "src/proto/cosmos-ts",
-    "src/config/abi/*"
+    "src/abi/*"
   ],
   "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
 }

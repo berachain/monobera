@@ -3,8 +3,8 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
-import { type Token } from "~/api";
-import { HONEY_ROUTER_ABI } from "~/config";
+import { HONEY_ROUTER_ABI } from "~/enum";
+import { Token } from "~/types";
 
 export const usePollHoneyPreview = (
   collateral: Token | undefined,

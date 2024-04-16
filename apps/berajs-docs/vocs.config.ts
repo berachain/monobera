@@ -3,7 +3,8 @@ import { defineConfig } from "vocs";
 export default defineConfig({
   title: "BeraJS",
   editLink: {
-    pattern: "https://github.com/berachain/monobera/edit/apps/berajs-doc/:path",
+    pattern:
+      "https://github.com/berachain/monobera/edit/v2/apps/berajs-docs/docs/pages/:path",
     text: "Suggest changes to this page",
   },
   socials: [
@@ -17,13 +18,7 @@ export default defineConfig({
     },
   ],
   sidebar: [
-    {
-      text: "Introduction",
-      collapsed: false,
-      items: [
-        { text: "Getting Started", link: "/introduction/getting-started/" },
-      ],
-    },
+    { text: "Getting Started", link: "/getting-started/" },
     {
       text: "React",
       collapsed: true,
@@ -120,6 +115,14 @@ export default defineConfig({
           text: "BGT",
           collapsed: true,
           items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "sortBaseQuoteAddresses",
+          link: "/actions/sortBaseQuoteAddresses/",
+        },
+        {
+          text: "getBeraLpAddress",
+          link: "/actions/getBeraLpAddress/",
         },
       ],
     },

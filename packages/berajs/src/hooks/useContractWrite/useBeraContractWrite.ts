@@ -1,5 +1,3 @@
-"use client";
-
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWriteContract } from "wagmi";
 

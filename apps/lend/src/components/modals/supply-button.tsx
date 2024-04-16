@@ -3,7 +3,7 @@ import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
   getSupplyPayload,
-  lendPoolImplementationABI,
+  LEND_POOL_IMPLEMENTATION_ABI,
   useBeraJs,
   usePollAllowance,
   usePollReservesDataList,
@@ -245,7 +245,7 @@ const SupplyModalContent = ({
           onClick={() => {
             write({
               address: lendPoolImplementationAddress,
-              abi: lendPoolImplementationABI,
+              abi: LEND_POOL_IMPLEMENTATION_ABI,
               functionName: "supply",
               params: payload,
             });
