@@ -104,7 +104,10 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: "getReserveData", link: "/actions/lend/getReserveData/" },
-            { text: "getUserAccountData", link: "/actions/lend/getUserAccountData/" },
+            {
+              text: "getUserAccountData",
+              link: "/actions/lend/getUserAccountData/",
+            },
             { text: "getTxnPayload", link: "/actions/lend/getTxnPayload/" },
           ],
         },
