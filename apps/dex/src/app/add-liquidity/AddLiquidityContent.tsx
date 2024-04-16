@@ -453,9 +453,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       ? maxBaseApprovalAmount
                       : maxQuoteApprovalAmount
                     : needsApproval[0]?.address.toLowerCase() ===
-                      baseToken.address.toLowerCase()
-                    ? maxBaseApprovalAmount
-                    : maxQuoteApprovalAmount
+                        baseToken.address.toLowerCase()
+                      ? maxBaseApprovalAmount
+                      : maxQuoteApprovalAmount
                 }
                 token={isNativeBera ? needsApprovalNoBera[0] : needsApproval[0]}
                 spender={crocDexAddress}
