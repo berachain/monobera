@@ -5,9 +5,9 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  MULTISWAP_ABI,
+  multiswapAbi,
   TransactionActionType,
-  WBERA_ABI,
+  wberaAbi,
   useBeraJs,
   usePollWalletBalances,
 } from "@bera/berajs";
@@ -226,7 +226,7 @@ export function SwapCard({
             onClick={() => {
               wrapWrite({
                 address: beraTokenAddress,
-                abi: WBERA_ABI,
+                abi: wberaAbi,
                 functionName:
                   wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
                 params:
@@ -265,7 +265,7 @@ export function SwapCard({
             write={() => {
               write({
                 address: crocMultiSwapAddress,
-                abi: MULTISWAP_ABI,
+                abi: multiswapAbi,
                 functionName: "multiSwap",
                 params: payload ?? [],
                 value: payloadValue,
@@ -291,7 +291,7 @@ export function SwapCard({
           write={() => {
             write({
               address: crocMultiSwapAddress,
-              abi: MULTISWAP_ABI,
+              abi: multiswapAbi,
               functionName: "multiSwap",
               params: payload ?? [],
               value: (swapInfo as any)?.value,

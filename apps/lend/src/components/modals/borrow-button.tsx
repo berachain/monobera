@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  LEND_POOL_IMPLEMENTATION_ABI,
+  lendPoolImplementationAbi,
   useBeraJs,
   usePollWalletBalances,
   usePollReservesDataList,
@@ -223,7 +223,7 @@ const BorrowModalContent = ({
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
-            abi: LEND_POOL_IMPLEMENTATION_ABI,
+            abi: lendPoolImplementationAbi,
             functionName: "borrow",
             params: [
               token?.address,

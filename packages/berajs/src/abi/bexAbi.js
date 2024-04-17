@@ -1,4 +1,4 @@
-export const BEX_ABI = [
+export const bexAbi = [
   {
     inputs: [],
     stateMutability: "nonpayable",

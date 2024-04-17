@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
-import { REFERRALS_ABI } from "~/abi";
+import { referralsAbi } from "~/abi";
 import { perpsReferralsAddress } from "@bera/config";
 
 import { useBeraJs } from "~/contexts";
@@ -20,7 +20,7 @@ export const usePollReferralsDetails = () => {
       try {
         const result = await publicClient.readContract({
           address: perpsReferralsAddress,
-          abi: REFERRALS_ABI,
+          abi: referralsAbi,
           functionName: method,
           args: [account as Address],
         });

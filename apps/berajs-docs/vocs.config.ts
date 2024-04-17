@@ -168,6 +168,60 @@ export default defineConfig({
       ],
     },
     {
+      text: "ABI",
+      collapsed: true,
+      items: [
+        {
+          text: "bTokenAbi",
+          link: "/abi/bTokenAbi/",
+        },
+        {
+          text: "bexQueryAbi",
+          link: "/abi/bexQueryAbi/",
+        },
+        {
+          text: "bexAbi",
+          link: "/abi/bexAbi/",
+        },
+        {
+          text: "honeyRouterAbi",
+          link: "/abi/honeyRouterAbi",
+        },
+        {
+          text: "lendPoolImplementationAbi",
+          link: "/abi/lendPoolImplementationAbi/",
+        },
+        {
+          text: "lendRewardHelperAbi",
+          link: "/abi/lendRewardHelperAbi/",
+        },
+        {
+          text: "lendUiDataProviderAbi",
+          link: "/abi/lendUiDataProviderAbi/",
+        },
+        {
+          text: "multicall3Abi",
+          link: "/abi/multicall3Abi/",
+        },
+        {
+          text: "multiswapAbi",
+          link: "/abi/multiswapAbi/",
+        },
+        {
+          text: "referralsAbi",
+          link: "/abi/referralsAbi/",
+        },
+        {
+          text: "tradingAbi",
+          link: "/abi/tradingAbi/",
+        },
+        {
+          text: "wberaAbi",
+          link: "/abi/wberaAbi/",
+        },
+      ],
+    },
+    {
       text: "Bera Config",
       link: "/bera-config/",
     },

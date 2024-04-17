@@ -1,4 +1,4 @@
-export const BEX_QUERY_ABI = [
+export const bexQueryAbi = [
   {
     inputs: [
       {
