@@ -3,7 +3,7 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { LEND_POOL_IMPLEMENTATION_ABI } from "~/enum";
+import { LEND_POOL_IMPLEMENTATION_ABI } from "~/abi";
 import POLLING from "~/enum/polling";
 import { useBeraJs } from "~/contexts";
 

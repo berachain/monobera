@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "sideEffects": false,
   "types": "dist/index.d.ts",
   "type": "module",
   "files": [
@@ -49,5 +50,20 @@
     "react": "18.2.0",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./actions": {
+      "types": "./dist/actions/index.d.ts",
+      "import": "./dist/actions/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    },
+    "./package.json": "./package.json"
   }
 }

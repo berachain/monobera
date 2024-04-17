@@ -5,7 +5,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { HONEY_ROUTER_ABI } from "~/enum";
+import { HONEY_ROUTER_ABI } from "~/abi";
 
 interface CollateralRates {
   mintFee: number;

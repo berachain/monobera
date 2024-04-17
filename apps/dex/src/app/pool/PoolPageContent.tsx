@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { truncateHash, useBeraJs } from "@bera/berajs";
+import { truncateHash, useBeraJs, type PoolV2 } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import { ApyTooltip, FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { truncateFloat } from "@bera/shared-ui/src/utils";
@@ -29,7 +29,6 @@ import {
   type IProvisions,
 } from "~/hooks/usePoolRecentProvisions";
 import { usePoolRecentSwaps, type ISwaps } from "~/hooks/usePoolRecentSwaps";
-import { type PoolV2 } from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 

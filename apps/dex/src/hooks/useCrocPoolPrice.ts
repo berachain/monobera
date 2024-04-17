@@ -1,8 +1,9 @@
+import { type PoolV2 } from "@bera/berajs";
 import { POLLING } from "@bera/shared-ui/src/utils";
 import useSWR from "swr";
-import { type PoolV2 } from "~/app/pools/fetchPools";
-import { useCrocPool } from "./useCrocPool";
 import useSWRImmutable from "swr/immutable";
+
+import { useCrocPool } from "./useCrocPool";
 
 export const useCrocPoolPrice = (pool: PoolV2 | undefined) => {
   const crocPool = useCrocPool(pool);

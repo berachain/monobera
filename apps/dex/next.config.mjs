@@ -9,7 +9,6 @@ const config = {
     "@bera/ui",
     "@bera/shared-ui",
     "@bera/berajs",
-    "@bera/beracrocswap",
     "@bera/wagmi",
   ],
   compiler: {

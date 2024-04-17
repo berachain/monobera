@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useTokens } from "@bera/berajs";
-import { type PoolV2 } from "../pools/fetchPools";
+import { useTokens, type PoolV2 } from "@bera/berajs";
+
 import { useCrocPoolPrice } from "~/hooks/useCrocPoolPrice";
 import { beraJsConfig } from "@bera/wagmi";
 

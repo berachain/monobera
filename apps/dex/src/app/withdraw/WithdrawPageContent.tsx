@@ -7,10 +7,11 @@ import { useRouter } from "next/navigation";
 import {
   BEX_ABI,
   TransactionActionType,
-  getWithdrawLiquidityPayload,
   useTokenHoneyPrice,
+  type PoolV2,
   type Token,
 } from "@bera/berajs";
+import { getWithdrawLiquidityPayload } from "@bera/berajs/actions";
 import { cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
@@ -34,7 +35,7 @@ import { usePublicClient } from "wagmi";
 
 import { SettingsPopover } from "~/components/settings-popover";
 import { usePollUserPosition } from "~/hooks/usePollUserPosition";
-import { getPoolUrl, type PoolV2 } from "../pools/fetchPools";
+import { getPoolUrl } from "../pools/fetchPools";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
 interface IWithdrawLiquidityContent {
