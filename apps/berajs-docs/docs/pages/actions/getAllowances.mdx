@@ -1,0 +1,52 @@
+# getAllowances
+
+Action for fetching the allowances of a given token array
+
+## Import
+
+```ts
+import { getAllowances } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getAllowances } from "@bera/berajs";
+import { usePublicClient } from "wagmi";
+
+interface AllowanceToken extends Token {
+  allowance: bigint;
+  formattedAllowance: string;
+}
+
+interface Call {
+  abi: typeof erc20Abi;
+  address: `0x${string}`;
+  functionName: string;
+  args: any[];
+}
+
+const client = usePublicClient();
+
+const { data } = await getAllowance({
+  tokens,
+  account,
+  config,
+  contract,
+  client,
+  queryKey,
+  mutate,
+});
+```
+
+## Parameters
+
+```ts
+import { type IGetAllowancesRequest } from "berajs";
+```
+
+## Returns
+
+```ts
+type result = Promise<AllowanceToken[] | undefined>;
+```

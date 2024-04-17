@@ -1,6 +1,6 @@
 import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatUnits } from "viem";
+import { Address, erc20Abi, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getAllowance } from "~/actions/dex/getAllowance";
@@ -52,9 +52,9 @@ export const usePollAllowance = ({
     QUERY_KEY,
     async () => {
       return getAllowance({
-        account,
+        account: account as Address,
         token,
-        contract,
+        contract: contract as Address,
         publicClient,
       });
     },

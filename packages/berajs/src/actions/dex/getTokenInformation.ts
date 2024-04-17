@@ -4,7 +4,7 @@ import { Address, erc20Abi } from "viem";
 import { BeraConfig } from "../../types";
 import { ActionEnum } from "../../utils/stateReducer";
 
-interface FetchTokenPriceInformationArgs {
+interface IFetchTokenPriceInformationArgs {
   dispatch: (action: { type: ActionEnum }) => void;
   address: Address;
   config: any;
@@ -24,7 +24,7 @@ export const getTokenInformation = async ({
   beraConfig,
   setTokenInformation,
   setError,
-}: FetchTokenPriceInformationArgs): Promise<void> => {
+}: IFetchTokenPriceInformationArgs): Promise<void> => {
   dispatch({ type: ActionEnum.LOADING });
   try {
     const result = await multicall(config as any, {
@@ -52,7 +52,7 @@ export const getTokenInformation = async ({
     dispatch({
       type: ActionEnum.SUCCESS,
     });
-    setTokenInformation(undefined);
+    setTokenInformation(result);
   } catch (e: any) {
     console.log(e);
     setError(e);

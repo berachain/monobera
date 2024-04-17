@@ -1,0 +1,39 @@
+# getAllowance
+
+Action for fetching the allowance of a given token
+
+## Import
+
+```ts
+import { getAllowance } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getAllowance } from "@bera/berajs";
+import { usePublicClient } from "wagmi";
+
+const client = usePublicClient();
+
+const { token, allowance, formattedAllowance } = await getAllowance({
+  account,
+  token,
+  contract,
+  publicClient: client,
+});
+```
+
+## Parameters
+
+```ts
+import { type IGetAllowanceRequest } from "berajs";
+```
+
+## Returns
+
+```ts
+import { type IGetAllowanceResponse } from "berajs";
+
+type result = Promise<IGetAllowanceResponse | undefined>;
+```

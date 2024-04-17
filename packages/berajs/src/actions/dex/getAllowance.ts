@@ -1,15 +1,22 @@
-import { PublicClient, erc20Abi, formatUnits } from "viem";
+import { Address, PublicClient, erc20Abi, formatUnits } from "viem";
 
 import { Token } from "../../types";
 
-interface IGetAllowanceResponse {
+export interface IGetAllowanceRequest {
+  account: Address | undefined;
+  token: Token | undefined;
+  contract: Address;
+  publicClient: PublicClient | undefined;
+}
+
+export interface IGetAllowanceResponse {
   token: Token;
   allowance: bigint;
   formattedAllowance: string;
 }
 
 /**
- * fetch the current bera balance of a given address
+ * fetch the allowance of a given token
  */
 
 export const getAllowance = async ({
@@ -17,19 +24,14 @@ export const getAllowance = async ({
   token,
   contract,
   publicClient,
-}: {
-  account: `0x${string}` | undefined;
-  token: Token | undefined;
-  contract: string;
-  publicClient: PublicClient | undefined;
-}): Promise<IGetAllowanceResponse | undefined> => {
+}: IGetAllowanceRequest): Promise<IGetAllowanceResponse | undefined> => {
   if (!publicClient) return undefined;
   if (account && token) {
     const allowance = await publicClient.readContract({
-      address: token.address as `0x${string}`,
+      address: token.address,
       abi: erc20Abi,
       functionName: "allowance",
-      args: [account, contract as `0x${string}`],
+      args: [account, contract],
     });
 
     return {

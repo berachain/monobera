@@ -2,6 +2,17 @@ import { PublicClient, erc20Abi, formatUnits } from "viem";
 
 import { BeraConfig, Token } from "../../types";
 
+export interface IGetAllowancesRequest {
+  tokens: Token[];
+  account: `0x${string}` | undefined;
+  config: BeraConfig;
+  method: string;
+  contract: string;
+  queryKey: (string | Token[] | undefined)[];
+  publicClient: PublicClient | undefined;
+  mutate: (key: any, data: any) => void;
+}
+
 interface AllowanceToken extends Token {
   allowance: bigint;
   formattedAllowance: string;
@@ -26,16 +37,7 @@ export const getAllowances = async ({
   publicClient,
   queryKey,
   mutate,
-}: {
-  tokens: Token[];
-  account: `0x${string}` | undefined;
-  config: BeraConfig;
-  method: string;
-  contract: string;
-  queryKey: (string | Token[] | undefined)[];
-  publicClient: PublicClient | undefined;
-  mutate: (key: any, data: any) => void;
-}) => {
+}: IGetAllowancesRequest) => {
   if (!publicClient) return undefined;
   if (account) {
     const call: Call[] = tokens.map((item: Token) => ({
