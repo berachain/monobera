@@ -16,10 +16,17 @@ const useOctValueSend = ({
   onError,
   onLoading,
   onSubmission,
-}: IUseContractWrite = {}): useTxnSendWriteApi => {
+  config,
+}: IUseContractWrite): useTxnSendWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const publicClient = usePublicClient();
-  const { isOctEnabled, octPrivKey } = useOct();
+
+  if (!config) {
+    throw new Error("Config is required");
+  }
+  const { isOctEnabled, octPrivKey } = useOct({
+    config,
+  });
 
   const write = useCallback(
     async ({ address, value }: IValueSend): Promise<void> => {

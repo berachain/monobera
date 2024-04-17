@@ -1,0 +1,34 @@
+# getBeraBalance
+
+Action for fetching the current bera balance of a given address
+
+## Import
+
+```ts
+import { getBeraBalance } from "@bera/berajs";
+```
+
+## Usage
+
+:::code-group
+
+```ts [example.ts]
+import { getBeraBalance } from "@bera/berajs";
+
+const exampleAddress = "0x1..";
+
+const data = await getBeraBalance({
+  address: exampleAddress,
+  publicClient,
+});
+```
+
+````
+
+:::
+
+## Returns
+
+```ts
+Promise<number | undefined>
+````

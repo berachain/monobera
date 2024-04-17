@@ -65,6 +65,14 @@ export default defineConfig({
           text: "useTokenHoneyPrices",
           link: "/react/useTokenHoneyPrices/",
         },
+        {
+          text: "usePollBeraBalance",
+          link: "/react/usePollBeraBalance/",
+        },
+        {
+          text: "usePollHoneyBalance",
+          link: "/react/usePollHoneyBalance/",
+        },
       ],
     },
     {
@@ -86,6 +94,14 @@ export default defineConfig({
             {
               text: "getWithdrawLiquidityPayload",
               link: "/actions/getWithdrawLiquidityPayload/",
+            },
+            {
+              text: "getBeraBalance",
+              link: "/actions/getBeraBalance/",
+            },
+            {
+              text: "getHoneyBalance",
+              link: "/actions/getHoneyBalance/",
             },
           ],
         },
