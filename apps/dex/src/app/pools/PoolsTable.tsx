@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { usePoolTable } from "@bera/berajs";
 import { DataTable, NotFoundBear, SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -11,8 +13,6 @@ import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { getPoolUrl } from "./fetchPools";
-import { usePoolTable } from "./usePoolTable";
-import { useRouter } from "next/navigation";
 
 export const PoolSearch = ({
   poolType,

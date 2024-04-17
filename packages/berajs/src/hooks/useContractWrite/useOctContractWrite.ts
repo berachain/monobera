@@ -6,7 +6,7 @@ import { usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
-import { TRADING_ABI } from "~/enum";
+import { TRADING_ABI } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import { useOct } from "../useOct";
 import {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { truncateHash } from "@bera/berajs";
+import { truncateHash, type PoolV2 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { ApyTooltip, TokenIconList } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -9,7 +9,6 @@ import { Icons } from "@bera/ui/icons";
 import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
-  type PoolV2,
 } from "../pools/fetchPools";
 
 export default function PoolHeader({ pool }: { pool: PoolV2 }) {

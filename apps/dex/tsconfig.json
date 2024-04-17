@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": ["../../tsconfig.json", "../../tsconfig.apps.base.json"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -12,7 +12,6 @@
     ],
     "strictNullChecks": true
   },
-  "exclude": ["**/auth/*"],
   "include": [
     "next-env.d.ts",
     "async-jsx.d.ts",
@@ -20,8 +19,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    ".next/types/**/*.ts",
-    "../../packages/shared-ui/src/terms-of-use/terms-of-use.tsx",
-    "../../packages/shared-ui/src/utils/analytics.ts"
+    ".next/types/**/*.ts"
   ]
 }
