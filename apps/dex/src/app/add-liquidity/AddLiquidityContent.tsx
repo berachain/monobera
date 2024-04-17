@@ -3,7 +3,7 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  BEX_ABI,
+  bexAbi,
   TransactionActionType,
   usePollWalletBalances,
   useTokenHoneyPrice,
@@ -199,7 +199,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       }
       write({
         address: crocDexAddress,
-        abi: BEX_ABI,
+        abi: bexAbi,
         functionName: "userCmd",
         params: addLiqPayload.payload,
         value: addLiqPayload?.value === 0n ? undefined : addLiqPayload?.value,

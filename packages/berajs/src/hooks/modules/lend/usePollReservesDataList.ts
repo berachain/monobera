@@ -8,7 +8,7 @@ import useSWRImmutable from "swr/immutable";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { LEND_UI_DATA_PROVIDER_ABI } from "../../../abi";
+import { lendUiDataProviderAbi } from "../../../abi";
 import { getReservesHumanized } from "../../../utils";
 
 export const usePollReservesDataList = () => {
@@ -21,7 +21,7 @@ export const usePollReservesDataList = () => {
     try {
       const result = (await publicClient.readContract({
         address: lendUIDataProviderAddress,
-        abi: LEND_UI_DATA_PROVIDER_ABI,
+        abi: lendUiDataProviderAbi,
         functionName: "getReservesData",
         args: [lendPoolAddressProviderAddress],
       })) as [any[], any];

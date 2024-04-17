@@ -1,4 +1,4 @@
-export const HONEY_ROUTER_ABI = [
+export const honeyRouterAbi = [
   {
     type: "function",
     name: "UPGRADE_INTERFACE_VERSION",

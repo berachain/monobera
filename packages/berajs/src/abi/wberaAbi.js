@@ -1,4 +1,4 @@
-export const WBERA_ABI = [
+export const wberaAbi = [
   {
     inputs: [],
     stateMutability: "nonpayable",

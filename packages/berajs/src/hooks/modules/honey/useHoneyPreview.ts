@@ -3,7 +3,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits, parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
-import { HONEY_ROUTER_ABI } from "~/abi";
+import { honeyRouterAbi } from "~/abi";
 import { Token } from "~/types";
 
 export const usePollHoneyPreview = (
@@ -36,7 +36,7 @@ export const usePollHoneyPreview = (
 
       const result = (await publicClient.readContract({
         address: honeyRouterAddress,
-        abi: HONEY_ROUTER_ABI,
+        abi: honeyRouterAbi,
         functionName: method,
         args: [collateral.address, formattedAmount],
       })) as bigint;

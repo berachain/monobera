@@ -1,4 +1,4 @@
-export const MULTISWAP_ABI = [
+export const multiswapAbi = [
   {
     inputs: [
       {
