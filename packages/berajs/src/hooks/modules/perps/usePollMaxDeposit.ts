@@ -3,7 +3,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/enum";
+import { BTOKEN_ABI } from "~/abi";
 import { useBeraJs } from "~/contexts";
 
 export const usePollMaxDeposit = () => {

@@ -8,9 +8,10 @@ import useSWRImmutable from "swr/immutable";
 import { Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookTypes, MULTICALL3_ABI, type Token } from "..";
+import { DefaultHookTypes, type Token } from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
+import { MULTICALL3_ABI } from "~/abi";
 
 interface BalanceToken extends Token {
   balance: bigint;

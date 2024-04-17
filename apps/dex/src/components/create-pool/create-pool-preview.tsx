@@ -17,7 +17,7 @@ import {
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
-import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+import { formatUsd } from "@bera/berajs/utils";
 import { crocDexAddress } from "@bera/config";
 import {
   ActionButton,

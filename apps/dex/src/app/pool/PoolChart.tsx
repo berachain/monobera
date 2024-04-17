@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { formatUsd } from "@bera/berajs";
+import { formatUsd, type PoolV2 } from "@bera/berajs";
 import { type PoolDayDataV2 } from "@bera/graphql";
 import { Dropdown, SSRSpinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
@@ -9,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { BigNumber } from "bignumber.js";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
-import { PoolV2 } from "../pools/fetchPools";
 
 const Options = {
   responsive: true,

@@ -1,7 +1,8 @@
+import { type PoolV2 } from "@bera/berajs";
 import useSWRInfinite from "swr/infinite";
-import { type PoolV2 } from "../pools/fetchPools";
-import { type ISwaps } from "~/hooks/usePoolRecentSwaps";
+
 import { type IProvisions } from "~/hooks/usePoolRecentProvisions";
+import { type ISwaps } from "~/hooks/usePoolRecentSwaps";
 
 const DEFAULT_SIZE = 10;
 

@@ -41,3 +41,32 @@ export interface WithdrawLiquidityRequest {
   percentRemoval: number;
   seeds: string;
 }
+
+export interface PoolV2 {
+  id: string;
+  base: Address;
+  quote: Address;
+  baseInfo: Token;
+  quoteInfo: Token;
+  timeCreate: number;
+  poolIdx: number;
+  poolName: string;
+  tokens: Token[];
+  tvlUsd: number;
+  volumeUsd: number;
+  feeRate: number;
+  feesUsd: number;
+  baseFees: number;
+  quoteFees: number;
+  baseVolume: number;
+  quoteVolume: number;
+  baseTokens: string;
+  quoteTokens: string;
+  volume24h: number;
+  fees24h: number;
+  baseTokenHoneyTvl: number;
+  quoteTokenHoneyTvl: number;
+  totalApy: number;
+  bgtApy: number;
+  shareAddress: string;
+}

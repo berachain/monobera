@@ -2,7 +2,7 @@ import { tradingContractAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { TRADING_ABI } from "~/enum";
+import { TRADING_ABI } from "~/abi";
 import { useBeraJs } from "~/contexts";
 
 export const useIsDelegated = () => {

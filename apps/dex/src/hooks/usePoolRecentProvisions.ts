@@ -1,8 +1,8 @@
-import { mutate } from "swr";
-import { type PoolV2 } from "~/app/pools/fetchPools";
-import useSWRImmutable from "swr/immutable";
+import { type PoolV2 } from "@bera/berajs";
 import { dexClient, getRecentProvisions } from "@bera/graphql";
-import { formatUnits, getAddress } from "viem";
+import { mutate } from "swr";
+import useSWRImmutable from "swr/immutable";
+import { formatUnits } from "viem";
 
 export interface IProvisions {
   user: string;

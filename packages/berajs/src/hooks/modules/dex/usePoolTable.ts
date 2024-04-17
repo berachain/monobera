@@ -1,8 +1,9 @@
 import { useState } from "react";
-
-import { formatPoolData, type PoolV2 } from "./fetchPools";
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
+
+import { PoolV2 } from "~/types";
+import { formatPoolData } from "~/utils";
 
 const DEFAULT_SIZE = 8;
 
