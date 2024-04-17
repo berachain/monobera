@@ -14,6 +14,7 @@ import { cn } from "@bera/ui";
 // import { Button } from "@bera/ui/button";
 // import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
+
 // import { formatEther } from "viem";
 
 import { BGTIcon } from "./bgt-icon";
