@@ -318,8 +318,7 @@ const TokenDialogRow = ({
   const { useSelectedWalletBalance } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const t = useSelectedWalletBalance(token?.address ?? "");
-  const tokenBalance = t?.formattedBalance;
+  const t = useSelectedWalletBalance(token?.address ?? "0x");
   return (
     <div>
       <Button
@@ -350,9 +349,8 @@ const TokenDialogRow = ({
         )}
         {!pendingAddition && isConnected && (
           <div className="ml-auto truncate text-muted-foreground">
-            {/* <p>{tokenBalance ?? 0}</p> */}
             <FormattedNumber
-              value={tokenBalance ?? "0"}
+              value={t?.formattedBalance ?? "0"}
               visibleDecimals={4}
               compact={false}
             />

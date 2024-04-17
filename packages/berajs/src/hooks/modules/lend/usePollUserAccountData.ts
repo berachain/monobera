@@ -1,67 +1,45 @@
-import { lendPoolImplementationAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { lendPoolImplementationAbi } from "~/abi";
-import POLLING from "~/enum/polling";
+import {
+  UserAccountData,
+  getUserAccountData,
+} from "~/actions/lend/getUserAccountData";
 import { useBeraJs } from "~/contexts";
+import { DefaultHookTypes } from "~/types";
 
-const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
-
-export const usePollUserAccountData = () => {
+export const usePollUserAccountData = ({ config, opts }: DefaultHookTypes) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
 
   const QUERY_KEY = [account, "getUserAccountData"];
-  useSWR(
+  const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (account) {
-        try {
-          const result = await publicClient.readContract({
-            address: lendPoolImplementationAddress,
-            abi: lendPoolImplementationAbi,
-            functionName: "getUserAccountData",
-            args: [account],
-          });
-
-          // Here we assert that result is of type any[] with at least six elements.
-          const [
-            totalCollateralBase,
-            totalDebtBase,
-            availableBorrowsBase,
-            currentLiquidationThreshold,
-            ltv,
-            healthFactor,
-          ] = result as [any, any, any, any, any, any];
-
-          return {
-            totalCollateralBase,
-            totalDebtBase,
-            availableBorrowsBase,
-            currentLiquidationThreshold,
-            ltv,
-            healthFactor,
-          };
-        } catch (e) {
-          console.log(e);
-          return undefined;
-        }
-      } else return undefined;
+      if (!config.contracts?.lendPoolProxyAddress) return undefined;
+      if (!account) return undefined;
+      return await getUserAccountData({
+        config,
+        client: publicClient,
+        account: account,
+      });
     },
     {
-      refreshInterval: REFRESH_BLOCK_INTERVAL,
+      ...opts,
     },
   );
 
-  const useUserAccountData = () => {
-    return useSWRImmutable(QUERY_KEY);
+  const useUserAccountData = (): UserAccountData | undefined => {
+    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    return data;
   };
 
   return {
+    isLoading,
+    isValidating,
     refetch: () => void mutate(QUERY_KEY),
     useUserAccountData,
   };

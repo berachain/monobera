@@ -7,6 +7,7 @@ import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
 import { useInView } from "framer-motion";
+import { beraJsConfig } from "@bera/wagmi";
 
 interface MarketColumnProps {
   className?: string;
@@ -141,9 +142,10 @@ function generateArrays(originalArray: any[], length: number) {
 
 function MarketGrid() {
   const containerRef = useRef(null);
-  const { useReservesDataList } = usePollReservesDataList();
-  const { data } = useReservesDataList();
-  const markets = Object.keys(data ?? {}).map((key) => data[key]);
+  const { useReservesDataList } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
+  const markets = useReservesDataList();
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
   const columns = generateArrays(markets, 20) as [any[], any[], any[]];
 

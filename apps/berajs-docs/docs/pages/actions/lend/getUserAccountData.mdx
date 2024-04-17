@@ -1,0 +1,42 @@
+# getUserAccountData
+
+Action for getting user data.
+
+## Import
+
+```ts
+import { getUserAccountData } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+const addLiqPayload = await getUserAccountData({
+  client,
+  config,
+  account,
+});
+```
+
+## Parameters
+
+```ts
+client: PublicClient;
+config: BeraConfig;
+account: Address;
+```
+
+## Returns
+
+```ts
+interface UserAccountData {
+  totalCollateralBase: bigint;
+  totalDebtBase: bigint;
+  availableBorrowsBase: bigint;
+  currentLiquidationThreshold: bigint;
+  ltv: bigint;
+  healthFactor: bigint;
+}
+
+type result = Promise<UserAccountData | undefined>;
+```

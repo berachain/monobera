@@ -7,7 +7,7 @@ import { getWalletBalances } from "../actions/dex";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 
-interface BalanceToken extends Token {
+export interface BalanceToken extends Token {
   balance: bigint;
   formattedBalance: string;
 }
