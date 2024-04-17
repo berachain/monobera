@@ -1,4 +1,4 @@
-export const LEND_UI_DATA_PROVIDER_ABI = [
+export const lendUiDataProviderAbi = [
   {
     inputs: [
       {

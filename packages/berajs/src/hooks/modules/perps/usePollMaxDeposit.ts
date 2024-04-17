@@ -3,7 +3,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/abi";
+import { bTokenAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 
 export const usePollMaxDeposit = () => {
@@ -16,7 +16,7 @@ export const usePollMaxDeposit = () => {
       if (!publicClient) return undefined;
       const result = await publicClient.readContract({
         address: gTokenContractAddress,
-        abi: BTOKEN_ABI,
+        abi: bTokenAbi,
         functionName: method,
         args: [account],
       });

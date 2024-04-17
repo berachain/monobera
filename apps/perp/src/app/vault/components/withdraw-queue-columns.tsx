@@ -1,6 +1,6 @@
 import Image from "next/image";
 import {
-  BTOKEN_ABI,
+  bTokenAbi,
   TransactionActionType,
   useBeraJs,
   usePollBHoneyEpochs,
@@ -48,7 +48,7 @@ const CancelWithdraw = ({
         onClick={() =>
           cancelWrite({
             address: gTokenContractAddress,
-            abi: BTOKEN_ABI,
+            abi: bTokenAbi,
             functionName: "cancelWithdrawRequest",
             params: [
               BigInt(withdrawRequest.shares),
@@ -67,7 +67,7 @@ const CancelWithdraw = ({
         onClick={() =>
           redeemWrite({
             address: gTokenContractAddress,
-            abi: BTOKEN_ABI,
+            abi: bTokenAbi,
             functionName: "redeem",
             params: [BigInt(withdrawRequest.shares), account, account],
           })

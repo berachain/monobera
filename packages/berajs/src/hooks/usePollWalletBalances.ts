@@ -11,7 +11,7 @@ import { usePublicClient } from "wagmi";
 import { DefaultHookTypes, type Token } from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
-import { MULTICALL3_ABI } from "~/abi";
+import { multicall3Abi } from "~/abi";
 
 interface BalanceToken extends Token {
   balance: bigint;
@@ -74,7 +74,7 @@ export const usePollWalletBalances = ({
           if (item.address === nativeTokenAddress) {
             return {
               address: config.contracts?.multicallAddress as Address,
-              abi: MULTICALL3_ABI,
+              abi: multicall3Abi,
               functionName: "getEthBalance",
               args: [account],
             };

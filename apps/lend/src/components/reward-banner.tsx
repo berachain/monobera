@@ -1,6 +1,6 @@
 import Image from "next/image";
 import {
-  LEND_REWARD_HELPER_ABI,
+  lendRewardHelperAbi,
   TransactionActionType,
   formatAmountSmall,
   useBeraJs,
@@ -82,7 +82,7 @@ export const Banner = () => {
           onClick={() =>
             write({
               address: lendRewardsAddress,
-              abi: LEND_REWARD_HELPER_ABI,
+              abi: lendRewardHelperAbi,
               functionName: "claimAllRewards",
               params: [account],
             })

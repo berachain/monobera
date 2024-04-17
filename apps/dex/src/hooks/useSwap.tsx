@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import {
-  MULTISWAP_ABI,
-  WBERA_ABI,
+  multiswapAbi,
+  wberaAbi,
   useBeraJs,
   useGasData,
   usePollAllowance,
@@ -311,7 +311,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   if (isWrap) {
     gasParams = {
       address: beraTokenAddress,
-      abi: WBERA_ABI,
+      abi: wberaAbi,
       functionName: wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
       args:
         wrapType === WRAP_TYPE.WRAP ? [] : [parseUnits(`${swapAmount}`, 18)],
@@ -321,7 +321,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   } else if (swapPayload?.payload && swapPayload?.payload?.length > 1) {
     gasParams = {
       address: crocMultiSwapAddress,
-      abi: MULTISWAP_ABI,
+      abi: multiswapAbi,
       functionName: "multiSwap",
       args: swapPayload?.payload,
       value: swapInfo?.value,

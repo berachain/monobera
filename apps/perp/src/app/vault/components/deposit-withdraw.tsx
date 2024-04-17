@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import {
-  BTOKEN_ABI,
+  bTokenAbi,
   TransactionActionType,
   useBeraJs,
   usePollAllowance,
@@ -163,7 +163,7 @@ export default function DepositWithdraw() {
                   onClick={() =>
                     depositWrite({
                       address: gTokenContractAddress,
-                      abi: BTOKEN_ABI,
+                      abi: bTokenAbi,
                       functionName: "deposit",
                       params: [
                         parseUnits(
@@ -226,7 +226,7 @@ export default function DepositWithdraw() {
                 onClick={() =>
                   withdrawWrite({
                     address: gTokenContractAddress,
-                    abi: BTOKEN_ABI,
+                    abi: bTokenAbi,
                     functionName: "makeWithdrawRequest",
                     params: withdrawPayload,
                   })
