@@ -15,7 +15,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "sourceMap": true
   },
   "exclude": ["**/auth/*"],
   "include": [
