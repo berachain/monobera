@@ -1,0 +1,63 @@
+# getTxnPayload
+
+Action for creating the payload for transaction in lend.
+
+## Import
+
+```ts
+import {
+  getBorrowPayload,
+  getRepayPayload,
+  getSupplyPayload,
+  getWithdrawPayload,
+} from "@bera/berajs";
+```
+
+## Payload interface
+
+```ts
+export interface bendTxnPayload {
+  token: Token;
+  amount: string;
+  account: Address;
+  max?: boolean;
+}
+```
+
+## Usage
+
+```ts
+getBorrowPayload({ args: { token, amount, account } });
+
+getSupplyPayload({ args: { token, amount, account } });
+
+getRepayPayload({
+  args: {
+    token,
+    amount,
+    max,
+    account,
+  },
+});
+
+getWithdrawPayload({
+  args: {
+    token,
+    amount,
+    max,
+    account,
+  },
+});
+```
+
+## Parameters and Returns
+
+```ts
+declare const getSupplyPayload: ({ args }: { args: bendTxnPayload }) => (number | bigint | `0x${string}`)[];
+
+declare const getWithdrawPayload: ({ args }: { args: bendTxnPayload }) => (bigint | `0x${string}`)[];
+
+declare const getBorrowPayload: ({ args }: { args: bendTxnPayload }) => (number | bigint | `0x${string}`)[];
+
+declare const getRepayPayload: ({ args }: { args: bendTxnPayload }) => (number | bigint | `0x${string}`)[];
+```
