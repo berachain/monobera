@@ -1,10 +1,10 @@
-import { mutate } from "swr";
-import { type PoolV2 } from "~/app/pools/fetchPools";
-import useSWRImmutable from "swr/immutable";
-import { type Token } from "@bera/berajs";
+import { type PoolV2, type Token } from "@bera/berajs";
 import { dexClient, getRecentSwaps } from "@bera/graphql";
-import { getSafeNumber } from "~/utils/getSafeNumber";
+import { mutate } from "swr";
+import useSWRImmutable from "swr/immutable";
 import { formatUnits, getAddress } from "viem";
+
+import { getSafeNumber } from "~/utils/getSafeNumber";
 
 export interface ISwaps {
   user: string;

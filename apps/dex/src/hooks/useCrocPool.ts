@@ -1,9 +1,8 @@
+import { useMemo } from "react";
 import { CrocPoolView } from "@bera/beracrocswap";
 import { type CrocContext } from "@bera/beracrocswap/dist/context";
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
-import { useCrocEnv } from "@bera/berajs";
-import { useMemo } from "react";
-import { type PoolV2 } from "~/app/pools/fetchPools";
+import { useCrocEnv, type PoolV2 } from "@bera/berajs";
 
 export const useCrocPool = (
   pool: PoolV2 | undefined,

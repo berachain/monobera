@@ -3,7 +3,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/enum";
+import { BTOKEN_ABI } from "~/abi";
 import POLLING from "~/enum/polling";
 
 interface Call {
