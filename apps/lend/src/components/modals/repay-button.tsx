@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  LEND_POOL_IMPLEMENTATION_ABI,
   TransactionActionType,
   getRepayPayload,
-  LEND_POOL_IMPLEMENTATION_ABI,
   useBeraJs,
   usePollAllowance,
   usePollReservesDataList,
@@ -172,10 +172,12 @@ const RepayModalContent = ({
   const payload =
     honey &&
     getRepayPayload({
-      token: honey,
-      amount: amount ?? "0",
-      repayMax: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
-      account,
+      args: {
+        token: honey,
+        amount: amount ?? "0",
+        max: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
+        account,
+      },
     });
 
   return (

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  LEND_POOL_IMPLEMENTATION_ABI,
   TransactionActionType,
   getBorrowPayload,
-  LEND_POOL_IMPLEMENTATION_ABI,
   useBeraJs,
   usePollReservesDataList,
   usePollUserAccountData,
@@ -166,7 +166,8 @@ const BorrowModalContent = ({
     : BigNumber(0);
 
   const payload =
-    token && getBorrowPayload({ token, amount: amount ?? "0", account });
+    token &&
+    getBorrowPayload({ args: { token, amount: amount ?? "0", account } });
 
   return (
     <div className="flex flex-col gap-6 pb-4">

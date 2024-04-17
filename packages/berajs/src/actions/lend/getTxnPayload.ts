@@ -1,15 +1,17 @@
 import { Address, maxUint256, parseUnits } from "viem";
+
 import { Token } from "~/types";
 
-export const getSupplyPayload = ({
-  token,
-  amount,
-  account,
-}: {
+export interface bendTxnPayload {
   token: Token;
   amount: string;
   account: Address;
-}) => {
+  max?: boolean;
+}
+
+export const getSupplyPayload = ({ args }: { args: bendTxnPayload }) => {
+  const { token, amount, account } = args;
+
   const payload = [
     token.address,
     parseUnits(amount, token.decimals),
@@ -19,34 +21,18 @@ export const getSupplyPayload = ({
   return payload;
 };
 
-export const getWithdrawPayload = ({
-  token,
-  amount,
-  withdrawMax,
-  account,
-}: {
-  token: Token;
-  amount: string;
-  withdrawMax?: boolean;
-  account: Address;
-}) => {
+export const getWithdrawPayload = ({ args }: { args: bendTxnPayload }) => {
+  const { token, amount, max, account } = args;
   const payload = [
     token.address,
-    withdrawMax ? maxUint256 : parseUnits(amount, token.decimals),
+    max ? maxUint256 : parseUnits(amount, token.decimals),
     account,
   ];
   return payload;
 };
 
-export const getBorrowPayload = ({
-  token,
-  amount,
-  account,
-}: {
-  token: Token;
-  amount: string;
-  account: Address;
-}) => {
+export const getBorrowPayload = ({ args }: { args: bendTxnPayload }) => {
+  const { token, amount, account } = args;
   const payload = [
     token.address,
     parseUnits(amount, token.decimals),
@@ -57,20 +43,11 @@ export const getBorrowPayload = ({
   return payload;
 };
 
-export const getRepayPayload = ({
-  token,
-  amount,
-  repayMax,
-  account,
-}: {
-  token: Token;
-  amount: string;
-  repayMax?: boolean;
-  account: Address;
-}) => {
+export const getRepayPayload = ({ args }: { args: bendTxnPayload }) => {
+  const { token, amount, max, account } = args;
   const payload = [
     token.address,
-    repayMax ? maxUint256 : parseUnits(amount, token.decimals),
+    max ? maxUint256 : parseUnits(amount, token.decimals),
     2,
     account,
   ];

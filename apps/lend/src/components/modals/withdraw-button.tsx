@@ -149,10 +149,12 @@ const WithdrawModalContent = ({
   const paylaod =
     token &&
     getWithdrawPayload({
-      token,
-      amount: amount ?? "0",
-      withdrawMax: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
-      account,
+      args: {
+        token,
+        amount: amount ?? "0",
+        max: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
+        account,
+      },
     });
 
   return (
