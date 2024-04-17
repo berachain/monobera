@@ -1,0 +1,57 @@
+# usePollAllowance
+
+React hook for poll the allowance of a given token
+
+## Import
+
+```ts
+import { usePollAllowance } from "@bera/berajs";
+```
+
+## Usage
+
+:::code-group
+
+```ts twoslash [example.ts]
+import { usePollAllowance } from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+const exampleContractAddress = "0x1..";
+const exampleTokenAddresses = ["0x1..", "0x2.."];
+
+const { useAllowance, refresh } = usePollAllowance({
+  config: beraConfig,
+  args: {
+    contract: exampleContractAddress,
+    tokens: exampleTokenAddresses,
+  },
+});
+
+const { data } = useAllowance();
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    tokenList: "https://..",
+  },
+};
+```
+
+:::
+
+## Parameters
+
+```ts
+import { type IUsePollAllowanceRequest } from "@bera/berajs";
+```
+
+## Returns
+
+```ts
+import { type IUsePollAllowanceResponse } from "@bera/berajs";
+```

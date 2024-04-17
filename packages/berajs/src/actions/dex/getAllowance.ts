@@ -20,7 +20,6 @@ export const getAllowance = async ({
 }: {
   account: `0x${string}` | undefined;
   token: Token | undefined;
-  method: string;
   contract: string;
   publicClient: PublicClient | undefined;
 }): Promise<IGetAllowanceResponse | undefined> => {

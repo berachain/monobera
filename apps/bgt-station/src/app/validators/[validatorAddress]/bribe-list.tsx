@@ -36,11 +36,9 @@ const BribeCard = ({
   const { tokenDictionary } = useTokens({
     config: beraJsConfig,
   });
-  const { read, tokenInformation } = useTokenInformation(
-    useTokenInformation({
-      config: beraJsConfig,
-    }),
-  );
+  const { read, tokenInformation } = useTokenInformation({
+    config: beraJsConfig,
+  });
 
   useEffect(() => {
     if (!tokenDictionary || !tokenAddress) setToken(undefined);

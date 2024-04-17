@@ -9,25 +9,22 @@ import { Token } from "~/types";
 import { getAllowances } from "../actions/dex";
 import { DefaultHookTypes } from "../types/global";
 
-const REFRESH_BLOCK_INTERVAL = POLLING.FAST;
-
 interface AllowanceToken extends Token {
   allowance: bigint;
   formattedAllowance: string;
 }
 
-interface Call {
-  abi: typeof erc20Abi;
-  address: `0x${string}`;
-  functionName: string;
-  args: any[];
-}
-
-interface IUsePollAllowances extends DefaultHookTypes {
+export interface IUsePollAllowancesRequest extends DefaultHookTypes {
   args: {
     contract: string;
     tokens: Token[];
   };
+}
+
+export interface IUsePollAllowancesResponse {
+  useCurrentAllowancesForContract: () => AllowanceToken[];
+  useSelectedAllowanceForContract: (address: string) => AllowanceToken;
+  refresh: () => void;
 }
 
 /**
@@ -43,7 +40,7 @@ export const usePollAllowances = ({
   opts: { refreshInterval } = {
     refreshInterval: POLLING.FAST,
   },
-}: IUsePollAllowances) => {
+}: IUsePollAllowancesRequest): IUsePollAllowancesResponse => {
   const { contract, tokens } = args;
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();

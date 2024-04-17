@@ -1,0 +1,45 @@
+# usePollTransactionCount
+
+React hook for polling transaction counts for a connected user
+
+## Import
+
+```ts
+import { usePollTransactionCount } from "@bera/berajs";
+```
+
+## Usage
+
+:::code-group
+
+```ts [example.ts]
+import { usePollWalletBalances } from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+const exampleAddress = "0x1..";
+
+const { useTransactionCount } = usePollTransactionCount({
+  config: beraConfig,
+  args: {
+    address: exampleAddress,
+  },
+});
+
+// number of transactions
+const txCounts = useTransactionCount();
+```
+
+:::
+
+## Parameters
+
+```ts
+import { type IUserPollTransactionCountRequest } from "@bera/berajs";
+```
+
+## Returns
+
+```ts
+import { type IUserPollTransactionCountResponse } from "@bera/berajs";
+```

@@ -1,8 +1,6 @@
-# useTokens
+# useTokenInformation
 
-React hook for providing an interface to a [token list](https://tokenlists.org/) compatible json file. For berachain, default token lists are maintained [here](https://github.com/berachain/default-token-list).
-
-`useTokens` allows for management of custom tokens to be added and removed in browser localStorage.
+React hook for grabbing token information.
 
 ## Import
 
@@ -34,9 +32,6 @@ const token = {
   symbol: "...",
   decimals: 18,
 };
-
-addNewToken(token);
-removeToken(token);
 ```
 
 ```ts twoslash [config.ts] filename="config.ts"
