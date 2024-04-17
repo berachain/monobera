@@ -7,3 +7,5 @@ export * from "./getTokenInformation";
 export * from "./getTransactionCount";
 export * from "./getAllowance";
 export * from "./getAllowances";
+export * from "./getHoneyBalance";
+export * from "./getBeraBalance";

@@ -6,6 +6,7 @@ import { usePollHoneyBalance } from "@bera/berajs";
 import { type GlobalParams } from "@bera/proto/src";
 import { FormattedNumber, usePrevious } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 
 import { MAX_GAIN, MAX_STOP_LOSS } from "~/utils/constants";
@@ -78,10 +79,14 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   }, [optionType, form.optionType]);
 
   const { useMarketIndexPrice } = usePricesSocket();
-  const { useHoneyBalance, useRawHoneyBalance } = usePollHoneyBalance();
+  const { useHoneyBalance, useRawHoneyBalance } = usePollHoneyBalance({
+    config: beraJsConfig,
+  });
   const honeyBalance = useHoneyBalance(); // string
   const rawHoneyBalance = useRawHoneyBalance(); // bigint
-  const rawHoneyBalanceBN = BigNumber(rawHoneyBalance ?? 0); // BigNumber
+  const rawHoneyBalanceBN = BigNumber(
+    rawHoneyBalance ? rawHoneyBalance.toString() : "0",
+  ); // BigNumber
   const rawPrice = useMarketIndexPrice(Number(market.pair_index) ?? 0); // string
   const priceBN = useMemo(
     () => formatFromBaseUnit(rawPrice ?? 0, 10),
@@ -300,9 +305,9 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     rawHoneyBalanceBN,
   ]);
 
-  const balanceExceeding =
-    rawHoneyBalance &&
-    BigNumber(rawHoneyBalance).isLessThan(formatToBaseUnit(safeAmount, 18));
+  const balanceExceeding = rawHoneyBalanceBN.isLessThan(
+    formatToBaseUnit(safeAmount, 18),
+  );
 
   return (
     <div className="m-2 flex h-[calc(100%-8px)] w-[calc(100%-16px)] flex-shrink-0 flex-col overflow-auto rounded-md border border-border lg:mt-0 lg:w-[400px]">

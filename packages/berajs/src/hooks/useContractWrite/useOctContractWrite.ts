@@ -20,13 +20,20 @@ const useOctContractWrite = ({
   onError,
   onLoading,
   onSubmission,
-}: IUseContractWrite = {}): useContractWriteApi => {
+  config,
+}: IUseContractWrite): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
-  const { isOctReady, octPrivKey } = useOct();
+  if (!config) {
+    throw new Error("Config is required");
+  }
+
+  const { isOctReady, octPrivKey } = useOct({
+    config,
+  });
 
   const write = useCallback(
     async ({

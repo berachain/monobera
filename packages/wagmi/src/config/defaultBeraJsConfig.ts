@@ -12,6 +12,7 @@ import {
   gasTokenIconUrl,
   gasTokenName,
   gasTokenSymbol,
+  honeyAddress,
   honeySubgraphUrl,
   jsonRpcUrl,
   lendSubgraphUrl,
@@ -22,6 +23,7 @@ import {
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
 import { createConfig, http } from "wagmi";
+
 import { NetworkConfig } from "~/context/context";
 import { crocMultiSwapAddress } from "../../../config/env/index";
 
@@ -101,5 +103,6 @@ export const beraJsConfig: BeraConfig = {
     crocMultiSwapAddress: crocMultiSwapAddress,
     wrappedTokenAddress: beraTokenAddress,
     dexAddress: crocDexAddress,
+    honeyAddress: honeyAddress,
   },
 };

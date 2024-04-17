@@ -5,12 +5,12 @@ import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
 import { createWalletClient, http, type Address } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { useSignMessage } from "wagmi";
-import { useChains } from "wagmi";
+import { useChains, useSignMessage } from "wagmi";
 
 import { decrypt, encrypt } from "~/utils/encoder";
 import {
   ActionEnum,
+  BeraConfig,
   initialState,
   reducer,
   useBeraJs,
@@ -28,12 +28,13 @@ interface IUseOct {
   onSuccess?: () => void;
   onError?: () => void;
   onLoading?: () => void;
+  config: BeraConfig;
 }
 
 const hash = new Keccak(256);
 
 const KEY = "deezNuts";
-export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
+export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
   const [octMap, setOctMap] = useLocalStorage<Record<Address, boolean>>(
     LOCAL_STORAGE_KEYS.OCT_ENABLED,
     {},
@@ -140,7 +141,8 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   };
 
   const { useBalance } = usePollBeraBalance({
-    address: octAddress,
+    config,
+    args: { address: account as Address },
   });
   const { useTransactionCount } = usePollTransactionCount({
     address: octAddress,
@@ -150,7 +152,7 @@ export const useOct = ({ onSuccess, onError, onLoading }: IUseOct = {}) => {
   const octTxCount = useTransactionCount();
 
   const isOctUnfunded = octBalance === undefined || octBalance === 0;
-  const isOctBalanceLow = octBalance !== undefined && octBalance < 0.1;
+  const isOctBalanceLow = octBalance !== undefined && Number(octBalance) < 0.1;
 
   return {
     isGenLoading: state.confirmState === "loading",

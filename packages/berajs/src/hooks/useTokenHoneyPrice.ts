@@ -33,16 +33,12 @@ export const useTokenHoneyPrice = ({
     refreshInterval: POLLING.REFRESH_BLOCK_INTERVAL,
   },
 }: UseTokenHoneyPriceRequest) => {
-  if (!config.subgraphs?.dexSubgraph) {
-    throw new Error("dex subgraph uri s not found in config");
-  }
   const method = "tokenHoneyPrice";
   const QUERY_KEY = [tokenAddress, method];
-  const subgraphEndpoint = config.subgraphs?.dexSubgraph;
   const { data, isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      return getTokenHoneyPrice({ tokenAddress, subgraphEndpoint });
+      return getTokenHoneyPrice({ tokenAddress, config });
     },
     {
       refreshInterval,
