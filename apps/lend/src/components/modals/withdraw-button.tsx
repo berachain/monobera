@@ -3,7 +3,7 @@ import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
   getWithdrawPayload,
-  LEND_POOL_IMPLEMENTATION_ABI,
+  lendPoolImplementationAbi,
   useBeraJs,
   usePollReservesDataList,
   usePollUserAccountData,
@@ -238,7 +238,7 @@ const WithdrawModalContent = ({
         onClick={() => {
           write({
             address: lendPoolImplementationAddress,
-            abi: LEND_POOL_IMPLEMENTATION_ABI,
+            abi: lendPoolImplementationAbi,
             functionName: "withdraw",
             params: paylaod,
           });

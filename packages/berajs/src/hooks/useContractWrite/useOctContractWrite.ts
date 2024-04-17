@@ -6,7 +6,7 @@ import { usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
-import { TRADING_ABI } from "~/enum";
+import { tradingAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import { useOct } from "../useOct";
 import {
@@ -20,13 +20,20 @@ const useOctContractWrite = ({
   onError,
   onLoading,
   onSubmission,
-}: IUseContractWrite = {}): useContractWriteApi => {
+  config,
+}: IUseContractWrite): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
-  const { isOctReady, octPrivKey } = useOct();
+  if (!config) {
+    throw new Error("Config is required");
+  }
+
+  const { isOctReady, octPrivKey } = useOct({
+    config,
+  });
 
   const write = useCallback(
     async ({
@@ -57,7 +64,7 @@ const useOctContractWrite = ({
 
           const ethersWallet = new Wallet(octPrivKey, provider);
 
-          const contract = new Contract(address, TRADING_ABI, ethersWallet);
+          const contract = new Contract(address, tradingAbi, ethersWallet);
 
           const data = encodeFunctionData({
             abi: abi,

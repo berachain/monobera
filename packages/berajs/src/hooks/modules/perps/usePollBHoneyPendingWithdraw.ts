@@ -5,7 +5,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/enum";
+import { bTokenAbi } from "~/abi";
 import POLLING from "~/enum/polling";
 import { useBeraJs } from "~/contexts";
 import { usePollBHoneyBalance } from "./usePollBHoneyBalance";
@@ -24,7 +24,7 @@ export const usePollBHoneyPendingWithdraw = () => {
         try {
           const result = await publicClient.readContract({
             address: gTokenContractAddress,
-            abi: BTOKEN_ABI,
+            abi: bTokenAbi,
             functionName: "totalSharesBeingWithdrawn",
             args: [account as Address],
           });

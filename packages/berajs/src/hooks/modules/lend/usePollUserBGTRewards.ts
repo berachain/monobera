@@ -1,7 +1,7 @@
 import useSWR, { useSWRConfig } from "swr";
 import { usePublicClient } from "wagmi";
 
-import { LEND_REWARD_HELPER_ABI } from "~/abi";
+import { lendRewardHelperAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookTypes } from "~/types";
 
@@ -19,7 +19,7 @@ export const usePollLendUserBGTRewards = ({
     // try {
     //   const result = await publicClient.readContract({
     //     address: lendRewardsAddress,
-    //     abi: LEND_REWARD_HELPER_ABI,
+    //     abi: lendRewardHelperAbi,
     //     functionName: "getAllRewards",
     //     args: [account],
     //   });

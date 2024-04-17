@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
+import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
 import { usePrevious } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -225,7 +225,7 @@ export function UpdateLimitOrderModal({
               write({
                 address: process.env
                   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: TRADING_ABI,
+                abi: tradingAbi,
                 functionName: "updateOpenLimitOrder",
                 params: payload,
               });

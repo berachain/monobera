@@ -65,6 +65,14 @@ export default defineConfig({
           text: "useTokenHoneyPrices",
           link: "/react/useTokenHoneyPrices/",
         },
+        {
+          text: "usePollBeraBalance",
+          link: "/react/usePollBeraBalance/",
+        },
+        {
+          text: "usePollHoneyBalance",
+          link: "/react/usePollHoneyBalance/",
+        },
       ],
     },
     {
@@ -86,6 +94,14 @@ export default defineConfig({
             {
               text: "getWithdrawLiquidityPayload",
               link: "/actions/dex/getWithdrawLiquidityPayload/",
+            },
+            {
+              text: "getBeraBalance",
+              link: "/actions/getBeraBalance/",
+            },
+            {
+              text: "getHoneyBalance",
+              link: "/actions/getHoneyBalance/",
             },
           ],
         },
@@ -123,6 +139,60 @@ export default defineConfig({
         {
           text: "getBeraLpAddress",
           link: "/actions/getBeraLpAddress/",
+        },
+      ],
+    },
+    {
+      text: "ABI",
+      collapsed: true,
+      items: [
+        {
+          text: "bTokenAbi",
+          link: "/abi/bTokenAbi/",
+        },
+        {
+          text: "bexQueryAbi",
+          link: "/abi/bexQueryAbi/",
+        },
+        {
+          text: "bexAbi",
+          link: "/abi/bexAbi/",
+        },
+        {
+          text: "honeyRouterAbi",
+          link: "/abi/honeyRouterAbi",
+        },
+        {
+          text: "lendPoolImplementationAbi",
+          link: "/abi/lendPoolImplementationAbi/",
+        },
+        {
+          text: "lendRewardHelperAbi",
+          link: "/abi/lendRewardHelperAbi/",
+        },
+        {
+          text: "lendUiDataProviderAbi",
+          link: "/abi/lendUiDataProviderAbi/",
+        },
+        {
+          text: "multicall3Abi",
+          link: "/abi/multicall3Abi/",
+        },
+        {
+          text: "multiswapAbi",
+          link: "/abi/multiswapAbi/",
+        },
+        {
+          text: "referralsAbi",
+          link: "/abi/referralsAbi/",
+        },
+        {
+          text: "tradingAbi",
+          link: "/abi/tradingAbi/",
+        },
+        {
+          text: "wberaAbi",
+          link: "/abi/wberaAbi/",
         },
       ],
     },

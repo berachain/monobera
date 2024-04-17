@@ -1,5 +1,5 @@
 import {
-  LEND_REWARD_HELPER_ABI,
+  lendRewardHelperAbi,
   TransactionActionType,
   useBeraJs,
   usePollLendUserBGTRewards,
@@ -37,7 +37,7 @@ export default function BGTRewardsClaimBtn() {
         onClick={() =>
           write({
             address: lendRewardsAddress,
-            abi: LEND_REWARD_HELPER_ABI,
+            abi: lendRewardHelperAbi,
             functionName: "claimAllRewards",
             params: [account],
           })

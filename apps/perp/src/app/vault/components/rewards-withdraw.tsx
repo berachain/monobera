@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import {
-  BTOKEN_ABI,
+  bTokenAbi,
   TransactionActionType,
   formatter,
   useBeraJs,
@@ -115,7 +115,7 @@ export const RewardsWithdraw = () => {
                 write({
                   address: process.env
                     .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address,
-                  abi: BTOKEN_ABI,
+                  abi: bTokenAbi,
                   functionName: "claimBGT",
                   params: [
                     parseUnits(`${Number(claimAmount ?? 0)}`, 18),

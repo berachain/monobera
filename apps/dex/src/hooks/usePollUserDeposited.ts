@@ -1,5 +1,11 @@
 import { decodeCrocPrice } from "@bera/beracrocswap";
-import { BEX_QUERY_ABI, getBeraLpAddress, useBeraJs } from "@bera/berajs";
+import {
+  bexQueryAbi,
+  PoolV2,
+  formatSubgraphPoolData,
+  getBeraLpAddress,
+  useBeraJs,
+} from "@bera/berajs";
 import {
   chainId,
   crocIndexerEndpoint,
@@ -18,8 +24,6 @@ import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { Address, erc20Abi, getAddress, toHex } from "viem";
 import { usePublicClient } from "wagmi";
-
-import { formatSubgraphPoolData, type PoolV2 } from "~/app/pools/fetchPools";
 
 interface AmbientPosition {
   ambientLiq: string;
@@ -116,7 +120,7 @@ export const usePollUserDeposited = (
 
         const calls: Call[] = positions.data.map((pool: AmbientPosition) => {
           return {
-            abi: BEX_QUERY_ABI,
+            abi: bexQueryAbi,
             address: crocQueryAddress,
             functionName: "queryPrice",
             args: [pool.base, pool.quote, pool.poolIdx],

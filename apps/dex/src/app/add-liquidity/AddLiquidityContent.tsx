@@ -3,13 +3,14 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  BEX_ABI,
+  bexAbi,
   TransactionActionType,
-  getAddLiquidityPayload,
   usePollWalletBalances,
   useTokenHoneyPrice,
+  type PoolV2,
   type Token,
 } from "@bera/berajs";
+import { getAddLiquidityPayload } from "@bera/berajs/actions";
 import { beraTokenAddress, cloudinaryUrl, crocDexAddress } from "@bera/config";
 import {
   ActionButton,
@@ -35,12 +36,7 @@ import { formatUnits, parseUnits } from "viem";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { SettingsPopover } from "~/components/settings-popover";
-import {
-  getBaseCost,
-  getPoolUrl,
-  getQuoteCost,
-  type PoolV2,
-} from "../pools/fetchPools";
+import { getBaseCost, getPoolUrl, getQuoteCost } from "../pools/fetchPools";
 import { useAddLiquidity } from "./useAddLiquidity";
 
 interface IAddLiquidityContent {
@@ -203,7 +199,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       }
       write({
         address: crocDexAddress,
-        abi: BEX_ABI,
+        abi: bexAbi,
         functionName: "userCmd",
         params: addLiqPayload.payload,
         value: addLiqPayload?.value === 0n ? undefined : addLiqPayload?.value,
@@ -312,7 +308,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
             />
 
             <TokenInput
-              key={quoteToken.address}
+              key={quoteToken?.address}
               selected={
                 isBeratoken(quoteToken)
                   ? isNativeBera
@@ -360,7 +356,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       value={poolPrice}
                       symbol={baseToken.symbol}
                     />{" "}
-                    = 1 {quoteToken.symbol}
+                    = 1 {quoteToken?.symbol}
                   </>
                 ) : (
                   "-"
@@ -428,7 +424,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                         value={poolPrice}
                         symbol={baseToken.symbol}
                       />{" "}
-                      = 1 {quoteToken.symbol}
+                      = 1 {quoteToken?.symbol}
                     </>
                   ) : (
                     "-"

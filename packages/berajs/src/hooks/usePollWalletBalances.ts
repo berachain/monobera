@@ -8,9 +8,10 @@ import useSWRImmutable from "swr/immutable";
 import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookTypes, MULTICALL3_ABI, type Token } from "..";
+import { DefaultHookTypes, type Token } from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
+import { multicall3Abi } from "~/abi";
 
 export interface BalanceToken extends Token {
   balance: bigint;
@@ -73,7 +74,7 @@ export const usePollWalletBalances = ({
           if (item.address === nativeTokenAddress) {
             return {
               address: config.contracts?.multicallAddress as Address,
-              abi: MULTICALL3_ABI,
+              abi: multicall3Abi,
               functionName: "getEthBalance",
               args: [account],
             };

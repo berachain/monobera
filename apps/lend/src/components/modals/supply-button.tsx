@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
-  LEND_POOL_IMPLEMENTATION_ABI,
-  TransactionActionType,
   getSupplyPayload,
+  TransactionActionType,
+  lendPoolImplementationAbi,
   useBeraJs,
   usePollAllowance,
   usePollReservesDataList,
@@ -246,7 +246,7 @@ const SupplyModalContent = ({
           onClick={() => {
             write({
               address: lendPoolImplementationAddress,
-              abi: LEND_POOL_IMPLEMENTATION_ABI,
+              abi: lendPoolImplementationAbi,
               functionName: "supply",
               params: payload,
             });

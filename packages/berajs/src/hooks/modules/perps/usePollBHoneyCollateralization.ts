@@ -1,10 +1,10 @@
 import { gTokenContractAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, type Address } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/enum";
+import { bTokenAbi } from "~/abi";
 import POLLING from "~/enum/polling";
 
 export const usePollBHoneyCollateralization = () => {
@@ -18,7 +18,7 @@ export const usePollBHoneyCollateralization = () => {
         if (!publicClient) return undefined;
         const result = await publicClient.readContract({
           address: gTokenContractAddress,
-          abi: BTOKEN_ABI,
+          abi: bTokenAbi,
           functionName: method,
           args: [],
         });

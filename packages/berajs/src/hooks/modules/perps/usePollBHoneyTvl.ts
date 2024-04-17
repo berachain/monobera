@@ -4,7 +4,7 @@ import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/enum";
+import { bTokenAbi } from "~/abi";
 import POLLING from "~/enum/polling";
 
 export const usePollBHoneyTvl = () => {
@@ -18,7 +18,7 @@ export const usePollBHoneyTvl = () => {
       try {
         const result = await publicClient.readContract({
           address: gTokenContractAddress,
-          abi: BTOKEN_ABI,
+          abi: bTokenAbi,
           functionName: method,
           args: [],
         });

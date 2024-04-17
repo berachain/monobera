@@ -1,6 +1,6 @@
 import { Address, PublicClient } from "viem";
 
-import { LEND_POOL_IMPLEMENTATION_ABI } from "~/abi";
+import { lendPoolImplementationAbi } from "~/abi";
 import { BeraConfig } from "~/types";
 
 export interface UserAccountData {
@@ -31,7 +31,7 @@ export const getUserAccountData = async ({
   try {
     const result = await client.readContract({
       address: config.contracts!.lendPoolProxyAddress,
-      abi: LEND_POOL_IMPLEMENTATION_ABI,
+      abi: lendPoolImplementationAbi,
       functionName: "getUserAccountData",
       args: [account],
     });

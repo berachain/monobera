@@ -1,4 +1,4 @@
-export const BTOKEN_ABI = [
+export const bTokenAbi = [
   {
     type: "function",
     name: "accBlockWeightedMarketCap",

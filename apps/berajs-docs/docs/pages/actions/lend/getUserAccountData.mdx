@@ -13,8 +13,8 @@ import { getUserAccountData } from "@bera/berajs";
 ```ts
 const addLiqPayload = await getUserAccountData({
   client,
-  contractAddress,
-  accountAddress,
+  config,
+  account,
 });
 ```
 
@@ -22,8 +22,8 @@ const addLiqPayload = await getUserAccountData({
 
 ```ts
 client: PublicClient;
-contractAddress: Address;
-accountAddress: Address;
+config: BeraConfig;
+account: Address;
 ```
 
 ## Returns

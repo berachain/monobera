@@ -13,55 +13,51 @@ import {
 } from "@bera/berajs";
 ```
 
+## Payload interface
+
+```ts
+export interface bendTxnPayload {
+  token: Token;
+  amount: string;
+  account: Address;
+  max?: boolean;
+}
+```
+
 ## Usage
 
 ```ts
-getBorrowPayload({ token, amount, account });
+getBorrowPayload({ args: { token, amount, account } });
 
-getSupplyPayload({ token, amount, account });
+getSupplyPayload({ args: { token, amount, account } });
 
 getRepayPayload({
-  token,
-  amount,
-  repayMax,
-  account,
+  args: {
+    token,
+    amount,
+    max,
+    account,
+  },
 });
 
 getWithdrawPayload({
-  token,
-  amount,
-  withdrawMax,
-  account,
+  args: {
+    token,
+    amount,
+    max,
+    account,
+  },
 });
-
 ```
 
 ## Parameters and Returns
 
 ```ts
-declare const getSupplyPayload: ({ token, amount, account, }: {
-    token: Token;
-    amount: string;
-    account: Address;
-}) => (number | bigint | `0x${string}`)[];
+declare const getSupplyPayload: ({ args }: { args: bendTxnPayload }) => (number | bigint | `0x${string}`)[];
 
-declare const getWithdrawPayload: ({ token, amount, withdrawMax, account, }: {
-    token: Token;
-    amount: string;
-    withdrawMax?: boolean;
-    account: Address;
-}) => (bigint | `0x${string}`)[];
+declare const getWithdrawPayload: ({ args }: { args: bendTxnPayload }) => (bigint | `0x${string}`)[];
 
-declare const getBorrowPayload: ({ token, amount, account, }: {
-    token: Token;
-    amount: string;
-    account: Address;
-}) => (number | bigint | `0x${string}`)[];
+declare const getBorrowPayload: ({ args }: { args: bendTxnPayload }) => (number | bigint | `0x${string}`)[];
 
-declare const getRepayPayload: ({ token, amount, repayMax, account, }: {
-    token: Token;
-    amount: string;
-    repayMax?: boolean;
-    account: Address;
-}) => (number | bigint | `0x${string}`)[];
+declare const getRepayPayload: ({ args }: { args: bendTxnPayload }) => (number | bigint | `0x${string}`)[];
 ```

@@ -1,4 +1,4 @@
-import { TRADING_ABI, TransactionActionType } from "@bera/berajs";
+import { tradingAbi, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -97,7 +97,7 @@ export function OrderHistoryHeader({
               onClick={() => {
                 const encodedData = closePositionsPayload.map((pos) => {
                   return encodeFunctionData({
-                    abi: TRADING_ABI,
+                    abi: tradingAbi,
                     functionName: "closeTradeMarket",
                     args: [pos.pairIndex, pos.index],
                   });
@@ -105,7 +105,7 @@ export function OrderHistoryHeader({
                 writePositionsClose({
                   address: process.env
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                  abi: TRADING_ABI,
+                  abi: tradingAbi,
                   functionName: "tryAggregate",
                   params: [true, encodedData],
                 });
@@ -128,7 +128,7 @@ export function OrderHistoryHeader({
               onClick={() => {
                 const encodedData = closeOrdersPayload.map((order) => {
                   return encodeFunctionData({
-                    abi: TRADING_ABI,
+                    abi: tradingAbi,
                     functionName: "cancelOpenLimitOrder",
                     args: [order.pairIndex, order.index],
                   });
@@ -136,7 +136,7 @@ export function OrderHistoryHeader({
                 writeOrdersClose({
                   address: process.env
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                  abi: TRADING_ABI,
+                  abi: tradingAbi,
                   functionName: "tryAggregate",
                   params: [true, encodedData],
                 });

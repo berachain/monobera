@@ -11,13 +11,13 @@ import {
   type PriceRange,
 } from "@bera/beracrocswap";
 import {
-  BEX_ABI,
+  bexAbi,
   TransactionActionType,
   formatNumber,
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
-import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+import { formatUsd } from "@bera/berajs/utils";
 import { crocDexAddress } from "@bera/config";
 import {
   ActionButton,
@@ -179,7 +179,7 @@ export function CreatePoolPreview({
       );
       write({
         address: crocDexAddress,
-        abi: BEX_ABI,
+        abi: bexAbi,
         functionName: "userCmd",
         params: [6, multiCmd],
       });

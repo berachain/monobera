@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  TRADING_ABI,
+  tradingAbi,
   TransactionActionType,
   truncateHash,
   useBeraJs,
@@ -22,11 +22,14 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { beraJsConfig } from "@bera/wagmi";
 import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
 
 const TradeWalletSection = () => {
-  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
+  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct({
+    config: beraJsConfig,
+  });
   const [copied, setCopied] = useState(false);
   const { account } = useBeraJs();
 
@@ -298,11 +301,16 @@ export function ManageOctDialog({
     isOctBalanceLow,
     octAddress,
     octBalance,
-  } = useOct();
+  } = useOct({
+    config: beraJsConfig,
+  });
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();
-  const { useBalance } = usePollBeraBalance({ address: account as string });
+  const { useBalance } = usePollBeraBalance({
+    config: beraJsConfig,
+    args: { address: account as Address },
+  });
   const userBalance = useBalance();
   const { isLoading, write } = useTxn({
     message: "Delegate One Click Trading Wallet",
@@ -330,7 +338,7 @@ export function ManageOctDialog({
   function revokeDelegation() {
     revokeWrite({
       address: tradingContractAddress,
-      abi: TRADING_ABI,
+      abi: tradingAbi,
       functionName: "removeDelegate",
       params: [],
     });
@@ -339,7 +347,7 @@ export function ManageOctDialog({
   function delegateWallet() {
     write({
       address: tradingContractAddress,
-      abi: TRADING_ABI,
+      abi: tradingAbi,
       functionName: "setDelegate",
       params: [octAddress],
     });
@@ -379,7 +387,7 @@ export function ManageOctDialog({
             fundAmount={fundAmount}
             setFundAmount={setFundAmount}
             isReady={isReady}
-            userBalance={userBalance}
+            userBalance={userBalance.toString()}
             isFundingLoading={isFundingLoading}
             fundWrite={fundWrite}
             octAddress={octAddress}

@@ -1,4 +1,4 @@
-export const LEND_POOL_IMPLEMENTATION_ABI = [
+export const lendPoolImplementationAbi = [
   {
     inputs: [
       {

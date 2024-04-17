@@ -15,23 +15,20 @@ import { getReserveData } from "@bera/berajs";
 
 const reserveData = await getReserveData({
   client,
-  uiDataProviderAddress,
-  addressProviderAddress,
+  config
 });
 ```
 
 ## Parameters
 
 ```ts
-  client: PublicClient;
-  uiDataProviderAddress: Address;
-  addressProviderAddress: Address;
+client: PublicClient;
+config: BeraConfig;
 ```
 
 ## Returns
 
 ```ts
-
 interface ReserveData extends FormatReserveUSDResponse {
   aTokenAddress: Address;
   variableDebtTokenAddress: Address;
@@ -51,5 +48,4 @@ type reserveData = Promise<
     }
   | undefined
 >;
-
 ```

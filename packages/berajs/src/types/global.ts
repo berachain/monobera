@@ -21,6 +21,7 @@ export interface BeraConfig {
     lendPoolProxyAddress: Address;
     lendUIDataProviderAddress: Address;
     lendRewardsAggregatorAddress: Address;
+    honeyAddress?: Address;
   };
   erc20?: {
     bera: Address;

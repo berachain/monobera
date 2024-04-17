@@ -1,4 +1,4 @@
-export const REFERRALS_ABI = [
+export const referralsAbi = [
   {
     type: "function",
     name: "distributePotentialReward",

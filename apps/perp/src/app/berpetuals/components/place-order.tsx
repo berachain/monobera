@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import {
-  TRADING_ABI,
+  tradingAbi,
   TransactionActionType,
   formatUsd,
   useBeraJs,
@@ -275,7 +275,7 @@ export function PlaceOrder({
             onClick={() =>
               write({
                 address: tradingContract,
-                abi: TRADING_ABI,
+                abi: tradingAbi,
                 functionName: "openTrade",
                 params: payload,
               })

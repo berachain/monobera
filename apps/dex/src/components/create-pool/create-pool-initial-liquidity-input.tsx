@@ -5,7 +5,7 @@ import {
   useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
-import { formatUsd } from "@bera/berajs/src/utils/formatUsd";
+import { formatUsd } from "@bera/berajs/utils";
 import { TokenIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";

@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useBeraJs, useTokens } from "@bera/berajs";
+import { useMemo, useState } from "react";
+import { useBeraJs, useTokens, type PoolV2 } from "@bera/berajs";
+import { crocDexAddress } from "@bera/config";
+import { beraJsConfig } from "@bera/wagmi";
 import { type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
-import { type PoolV2 } from "../pools/fetchPools";
 import { useCrocPoolPrice } from "~/hooks/useCrocPoolPrice";
-import { crocDexAddress } from "@bera/config";
 import useMultipleTokenApprovalsWithSlippage from "~/hooks/useMultipleTokenApprovalsWithSlippage";
-import { beraJsConfig } from "@bera/wagmi";
+import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
 
 export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   const { account: _account } = useBeraJs();

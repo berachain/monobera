@@ -4,7 +4,7 @@ import useSWRImmutable from "swr/immutable";
 import { erc20Abi, formatEther, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { MULTICALL3_ABI } from "~/enum";
+import { multicall3Abi } from "~/abi";
 import POLLING from "~/enum/polling";
 import { useBeraJs } from "../contexts";
 import { Token } from "~/types";
@@ -82,7 +82,7 @@ export const usePollBalance = ({
         }
         const call = {
           address: multicallAddress,
-          abi: MULTICALL3_ABI,
+          abi: multicall3Abi,
           functionName: "getEthBalance",
           args: [account],
         };

@@ -14,6 +14,7 @@ import {
   gasTokenIconUrl,
   gasTokenName,
   gasTokenSymbol,
+  honeyAddress,
   honeySubgraphUrl,
   honeyTokenAddress,
   jsonRpcUrl,
@@ -120,6 +121,7 @@ export const beraJsConfig: BeraConfig = {
     lendPoolProxyAddress: lendPoolImplementationAddress,
     lendUIDataProviderAddress: lendUIDataProviderAddress,
     lendRewardsAggregatorAddress: lendRewardsAddress,
+    honeyAddress: honeyAddress,
   },
   erc20: {
     bera: nativeTokenAddress,
@@ -131,5 +133,6 @@ export const beraJsConfig: BeraConfig = {
     wbtc: wbtcTokenAddress,
     ahoney: aHoneyTokenAddress,
     vdhoney: vdHoneyTokenAddress,
+    
   },
 };
