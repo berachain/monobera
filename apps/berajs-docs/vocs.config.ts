@@ -187,7 +187,7 @@ export default defineConfig({
           text: "wberaAbi",
           link: "/abi/wberaAbi/",
         },
-      ]
+      ],
     },
     {
       text: "Bera Config",
