@@ -6,13 +6,11 @@ import POLLING from "~/enum/polling";
 import { getTransactionCount } from "../actions/dex";
 import { DefaultHookTypes } from "../types/global";
 
-interface IUserPollTransactionCountRequest extends DefaultHookTypes {
-  args?: {
-    address: string | undefined;
-  };
+export interface IUserPollTransactionCountRequest {
+  address: string | undefined;
 }
 
-interface IUserPollTransactionCountResponse {
+export interface IUserPollTransactionCountResponse {
   isLoading: boolean;
   isValidating: boolean;
   useTransactionCount: () => string;
@@ -20,10 +18,7 @@ interface IUserPollTransactionCountResponse {
 }
 
 export const usePollTransactionCount = ({
-  args: { address } = { address: undefined },
-  opts: { refreshInterval } = {
-    refreshInterval: POLLING.SLOW,
-  },
+  address,
 }: IUserPollTransactionCountRequest): IUserPollTransactionCountResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [address, "txnCount"];
@@ -33,7 +28,7 @@ export const usePollTransactionCount = ({
       return getTransactionCount({ address, publicClient });
     },
     {
-      refreshInterval,
+      refreshInterval: POLLING.SLOW,
     },
   );
   const useTransactionCount = (): string => {

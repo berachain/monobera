@@ -13,15 +13,10 @@ import { usePollTransactionCount } from "@bera/berajs";
 ```ts [example.ts]
 import { usePollWalletBalances } from "@bera/berajs";
 
-import { beraConfig } from "./config";
-
 const exampleAddress = "0x1..";
 
 const { useTransactionCount } = usePollTransactionCount({
-  config: beraConfig,
-  args: {
-    address: exampleAddress,
-  },
+  address: exampleAddress,
 });
 
 // number of transactions

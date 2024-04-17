@@ -17,7 +17,6 @@ const useBeraContractWrite = ({
   onError,
   onLoading,
   onSubmission,
-  config: beraConfig,
 }: IUseContractWrite = {}): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -25,13 +24,8 @@ const useBeraContractWrite = ({
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
-  if (!beraConfig) {
-    throw new Error("Bera Config is not provided");
-  }
-
   const { useTransactionCount, refresh } = usePollTransactionCount({
-    config: beraConfig,
-    args: { address: account },
+    address: account,
   });
 
   const userNonce = useTransactionCount();
