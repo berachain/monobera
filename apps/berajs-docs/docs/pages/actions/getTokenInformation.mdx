@@ -1,45 +1,43 @@
 # getTokenInformation
 
-Action for creating the payload for performing a withdraw liquidity operation on a pool.
+Action for fetching token information
 
 ## Import
 
 ```ts
-import { getWithdrawLiquidityPayload } from "@bera/berajs";
+import { getTokenInformation } from "@bera/berajs";
 ```
 
 ## Usage
 
-```ts
-import { getWithdrawLiquidityPayload, type Token } from "@bera/berajs";
-import { usePublicClient } from "wagmi";
+```ts twoslash [example.ts]
+import { getTokenInformation } from "@bera/berajs";
 
-const client = usePublicClient();
+import { beraConfig } from "./config";
 
-const withdrawLiqPayload = await getWithdrawLiquidityPayload({
-  args: {
-    slippage: 0.1, // value between 0.1 and 100
-    poolPrice: 1,
-    baseToken: { address: "0x..." } as Token,
-    quoteToken: { address: "0x..." } as Token,
-    percentRemoval: 50, // value between 0 and 100
-    poolIdx: 1, // pool.poolIdx
-    seeds: "...",
-  },
-  publicClient: client,
+await getTokenInformation({
+  dispatch,
+  address,
+  config,
+  beraConfig,
+  setTokenInformation,
+  setError,
 });
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getSwap
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x...",
+  },
+};
 ```
 
 ## Parameters
 
 ```ts
-import { type getWithdrawLiquidityPayload } from "berajs";
-```
-
-## Returns
-
-```ts
-import { type PayloadReturnType } from "berajs";
-
-type result = Promise<PayloadReturnType | undefined>;
+import { type IFetchTokenPriceInformationArgs } from "berajs";
 ```
