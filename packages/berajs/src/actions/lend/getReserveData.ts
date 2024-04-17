@@ -1,5 +1,6 @@
 import { FormatReserveUSDResponse, formatReserves } from "@aave/math-utils";
 import { Address, PublicClient } from "viem";
+
 import { lendUiDataProviderAbi } from "~/abi";
 import { BeraConfig } from "~/types";
 import { getReservesHumanized } from "~/utils";
@@ -19,8 +20,7 @@ export interface BaseCurrencyData {
 /**
  * Retrieves the user account data.
  * @param {PublicClient} client
- * @param {Address} uiDataProviderAddress ui data provider contract.
- * @param {Address} addressProviderAddress address provider contract.
+ * @param {BeraConfig} config
  * @returns {UserAccountData | undefined}
  */
 export const getReserveData = async ({

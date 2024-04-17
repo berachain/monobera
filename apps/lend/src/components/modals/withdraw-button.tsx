@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  getWithdrawPayload,
+  getLendWithdrawPayload,
   lendPoolImplementationAbi,
   useBeraJs,
   usePollReservesDataList,
@@ -148,14 +148,14 @@ const WithdrawModalContent = ({
     : 0;
   const paylaod =
     token &&
-    getWithdrawPayload({
+    getLendWithdrawPayload({
       args: {
         token,
         amount: amount ?? "0",
         max: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
         account,
       },
-    });
+    }).payload;
 
   return (
     <div className="flex flex-col gap-6">

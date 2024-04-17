@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
-  getSupplyPayload,
+  getLendSupplyPayload,
   TransactionActionType,
   lendPoolImplementationAbi,
   useBeraJs,
@@ -152,7 +152,7 @@ const SupplyModalContent = ({
 
   const payload =
     token &&
-    getSupplyPayload({ args: { token, amount: amount ?? "0", account } });
+    getLendSupplyPayload({ args: { token, amount: amount ?? "0", account } }).payload;
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">

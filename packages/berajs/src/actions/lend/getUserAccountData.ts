@@ -15,8 +15,8 @@ export interface UserAccountData {
 /**
  * Retrieves the user account data.
  * @param {PublicClient} client
- * @param {Address} contractAddress pool poxy contract.
- * @param {Address} accountAddress user account.
+ * @param {BeraConfig} config
+ * @param {Address} account user account address.
  * @returns {UserAccountData | undefined}
  */
 export const getUserAccountData = async ({

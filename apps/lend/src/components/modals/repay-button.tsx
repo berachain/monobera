@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
-  getRepayPayload,
+  getLendRepayPayload,
   TransactionActionType,
   lendPoolImplementationAbi,
   useBeraJs,
@@ -171,14 +171,14 @@ const RepayModalContent = ({
 
   const payload =
     honey &&
-    getRepayPayload({
+    getLendRepayPayload({
       args: {
         token: honey,
         amount: amount ?? "0",
         max: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
         account,
       },
-    });
+    }).payload;
 
   return (
     <div className="flex flex-col gap-6 pb-4">
