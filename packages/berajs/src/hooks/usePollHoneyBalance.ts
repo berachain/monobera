@@ -1,48 +1,49 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, erc20Abi, formatUnits } from "viem";
+import { formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
-import { honeyAddress } from "../../../config/env/index";
-import { useBeraJs } from "../contexts";
-import POLLING from "~/enum/polling";
 
-export const usePollHoneyBalance = () => {
+import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";
+import POLLING from "~/enum/polling";
+import { DefaultHookTypes } from "~/types/global";
+import { useBeraJs } from "../contexts";
+
+export interface UsePollHoneyBalancesResponse {
+  isLoading: boolean;
+  isValidating: boolean;
+  useHoneyBalance: () => string;
+  useRawHoneyBalance: () => bigint;
+}
+
+export const usePollHoneyBalance = ({
+  config,
+  opts: { refreshInterval } = {
+    refreshInterval: POLLING.FAST,
+  },
+}: DefaultHookTypes): UsePollHoneyBalancesResponse => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
   const QUERY_KEY = [account, isConnected, "honeyBalance"];
-  const { isLoading } = useSWR(
+  const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (isConnected) {
-        try {
-          const result = await publicClient.readContract({
-            address: honeyAddress,
-            abi: erc20Abi,
-            functionName: "balanceOf",
-            args: [account as Address],
-          });
-          return result;
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      return undefined;
+      return getHoneyBalance({ publicClient, config, isConnected, account });
     },
     {
-      refreshInterval: POLLING.FAST,
+      refreshInterval,
     },
   );
-  const useHoneyBalance = () => {
+  const useHoneyBalance = (): string => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return formatUnits(data ?? 0n, 18);
   };
-  const useRawHoneyBalance = () => {
+  const useRawHoneyBalance = (): bigint => {
     const { data = undefined } = useSWRImmutable(QUERY_KEY);
     return data;
   };
   return {
     isLoading,
+    isValidating,
     useHoneyBalance,
     useRawHoneyBalance,
   };

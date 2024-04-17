@@ -27,8 +27,8 @@ const { data: tokePricesInHoney, isLoading } = useTokenHoneyPrices({
 ```ts twoslash [config.ts] filename="config.ts"
 import { BeraConfig } from "@bera/berajs";
 
-// required configs for getRoute
-export const beraConfig = {
+// required configs for getTokenHoneyPrices
+export const beraConfig: BeraConfig = {
   subgraphs: {
     dexSubgraph: "https://...",
   },
