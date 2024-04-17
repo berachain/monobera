@@ -1,11 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
     "incremental": false,
     "declaration": true,
     "paths": {
-      "~/*": ["./src/*"],
+      "~/*": ["./src/*"]
     },
     "typeRoots": ["./src/window.d.ts"]
   },
@@ -18,5 +17,5 @@
     "esm",
     "cjs",
   ],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"]
 }
