@@ -11,7 +11,7 @@ interface IUseTokenInformation {
   isDefault?: boolean;
 }
 
-export interface IUseTokenInformationApi {
+export interface IUseTokenInformationResponse {
   isLoading: boolean;
   isSuccess: boolean;
   isError: boolean;
@@ -22,7 +22,7 @@ export interface IUseTokenInformationApi {
 
 const useTokenInformation = ({
   config: beraConfig,
-}: DefaultHookTypes): IUseTokenInformationApi => {
+}: DefaultHookTypes): IUseTokenInformationResponse => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [error, setError] = useState<Error | undefined>(undefined);
   const [tokenInformation, setTokenInformation] = useState<Token | undefined>(

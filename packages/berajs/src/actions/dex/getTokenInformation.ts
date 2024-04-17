@@ -52,7 +52,8 @@ export const getTokenInformation = async ({
     dispatch({
       type: ActionEnum.SUCCESS,
     });
-    setTokenInformation(result);
+    // TODO: fix this
+    setTokenInformation(undefined);
   } catch (e: any) {
     console.log(e);
     setError(e);
