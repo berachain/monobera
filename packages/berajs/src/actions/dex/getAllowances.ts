@@ -32,7 +32,7 @@ export const getAllowances = async ({
   config: BeraConfig;
   method: string;
   contract: string;
-  queryKey: string[];
+  queryKey: (string | Token[] | undefined)[];
   publicClient: PublicClient | undefined;
   mutate: (key: any, data: any) => void;
 }) => {

@@ -19,6 +19,7 @@ interface IUserPollTransactionCountResponse {
 }
 
 export const usePollTransactionCount = ({
+  config = {},
   args: { address } = { address: undefined },
   opts: { refreshInterval } = {
     refreshInterval: POLLING.SLOW,

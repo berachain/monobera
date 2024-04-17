@@ -7,7 +7,8 @@ import { ActionEnum } from "../../utils/stateReducer";
 interface FetchTokenPriceInformationArgs {
   dispatch: (action: { type: ActionEnum }) => void;
   address: Address;
-  config: BeraConfig;
+  config: any;
+  beraConfig: BeraConfig;
   setTokenInformation: (tokenInformation: any) => void;
   setError: (error: Error) => void;
 }
@@ -20,6 +21,7 @@ export const getTokenInformation = async ({
   dispatch,
   address,
   config,
+  beraConfig,
   setTokenInformation,
   setError,
 }: FetchTokenPriceInformationArgs): Promise<void> => {
@@ -43,7 +45,7 @@ export const getTokenInformation = async ({
           functionName: "symbol",
         },
       ],
-      multicallAddress: config.contracts?.multicallAddress,
+      multicallAddress: beraConfig.contracts?.multicallAddress,
     });
 
     console.log({ result });

@@ -22,10 +22,10 @@ const useBeraContractWrite = ({
 
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
-  const { account } = useBeraJs();
+  const { account, config } = useBeraJs();
 
   const { useTransactionCount, refresh } = usePollTransactionCount({
-    address: account,
+    args: { address: account },
   });
 
   const userNonce = useTransactionCount();
@@ -51,7 +51,7 @@ const useBeraContractWrite = ({
           functionName: functionName,
           args: params,
           value: value,
-          nonce: userNonce,
+          nonce: Number(userNonce),
           account: account,
         });
         receipt = await writeContractAsync({ ...request });
