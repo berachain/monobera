@@ -142,7 +142,7 @@ export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
 
   const { useBalance } = usePollBeraBalance({
     config,
-    args: { address: account as string },
+    args: { address: account as Address },
   });
   const { useTransactionCount } = usePollTransactionCount({
     address: octAddress,

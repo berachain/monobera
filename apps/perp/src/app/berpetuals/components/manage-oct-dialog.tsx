@@ -309,7 +309,7 @@ export function ManageOctDialog({
   const { account, isReady } = useBeraJs();
   const { useBalance } = usePollBeraBalance({
     config: beraJsConfig,
-    args: { address: account as string },
+    args: { address: account as Address },
   });
   const userBalance = useBalance();
   const { isLoading, write } = useTxn({

@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getBeraBalance } from "~/actions/dex/getBeraBalance";
@@ -8,7 +9,7 @@ import { DefaultHookTypes } from "~/types/global";
 
 export interface UsePollBeraBalanceRequest extends DefaultHookTypes {
   args?: {
-    address: string | undefined;
+    address: Address | undefined;
   };
 }
 
