@@ -80,8 +80,10 @@ const useCreateTokenWeights = () => {
     return tokenB?.address === crocPool?.quoteToken.tokenAddr ? tokenB : tokenA;
   }, [JSON.stringify(crocPool)]);
 
-  const baseTokenBalance = useSelectedWalletBalance(baseToken?.address ?? "");
-  const quoteTokenBalance = useSelectedWalletBalance(quoteToken?.address ?? "");
+  const baseTokenBalance = useSelectedWalletBalance(baseToken?.address ?? "0x");
+  const quoteTokenBalance = useSelectedWalletBalance(
+    quoteToken?.address ?? "0x",
+  );
 
   // track any errors
   useEffect(() => {

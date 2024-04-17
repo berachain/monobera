@@ -1,0 +1,51 @@
+# getReserveData
+
+Action for getting global reserve info.
+
+## Import
+
+```ts
+import { getReserveData } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getReserveData } from "@bera/berajs";
+
+const reserveData = await getReserveData({
+  client,
+  config
+});
+```
+
+## Parameters
+
+```ts
+client: PublicClient;
+config: BeraConfig;
+```
+
+## Returns
+
+```ts
+interface ReserveData extends FormatReserveUSDResponse {
+  aTokenAddress: Address;
+  variableDebtTokenAddress: Address;
+}
+
+interface BaseCurrencyData {
+  marketReferenceCurrencyDecimals: number;
+  marketReferenceCurrencyPriceInUsd: string;
+  networkBaseTokenPriceInUsd: string;
+  networkBaseTokenPriceDecimals: number;
+}
+
+type reserveData = Promise<
+  | {
+      formattedReserves: ReserveData[];
+      baseCurrencyData: BaseCurrencyData;
+    }
+  | undefined
+>;
+```

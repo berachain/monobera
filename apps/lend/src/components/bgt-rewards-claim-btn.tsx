@@ -9,10 +9,15 @@ import { Spinner, TokenIcon, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function BGTRewardsClaimBtn() {
   const { account } = useBeraJs();
-  const { data: rewards, isLoading, refetch } = usePollLendUserBGTRewards();
+  const {
+    data: rewards,
+    isLoading,
+    refetch,
+  } = usePollLendUserBGTRewards({ config: beraJsConfig });
   const {
     write,
     isLoading: isClaimingLoading,

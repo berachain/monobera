@@ -5,7 +5,7 @@ import {
 } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Address, erc20Abi, formatUnits, getAddress } from "viem";
+import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { DefaultHookTypes, type Token } from "..";
@@ -13,7 +13,7 @@ import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 import { multicall3Abi } from "~/abi";
 
-interface BalanceToken extends Token {
+export interface BalanceToken extends Token {
   balance: bigint;
   formattedBalance: string;
 }
