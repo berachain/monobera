@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import {
-  TRADING_ABI,
+  tradingAbi,
   TransactionActionType,
   truncateHash,
   useBeraJs,
@@ -338,7 +338,7 @@ export function ManageOctDialog({
   function revokeDelegation() {
     revokeWrite({
       address: tradingContractAddress,
-      abi: TRADING_ABI,
+      abi: tradingAbi,
       functionName: "removeDelegate",
       params: [],
     });
@@ -347,7 +347,7 @@ export function ManageOctDialog({
   function delegateWallet() {
     write({
       address: tradingContractAddress,
-      abi: TRADING_ABI,
+      abi: tradingAbi,
       functionName: "setDelegate",
       params: [octAddress],
     });

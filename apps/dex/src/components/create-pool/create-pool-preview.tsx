@@ -11,7 +11,7 @@ import {
   type PriceRange,
 } from "@bera/beracrocswap";
 import {
-  BEX_ABI,
+  bexAbi,
   TransactionActionType,
   formatNumber,
   useTokenHoneyPrice,
@@ -179,7 +179,7 @@ export function CreatePoolPreview({
       );
       write({
         address: crocDexAddress,
-        abi: BEX_ABI,
+        abi: bexAbi,
         functionName: "userCmd",
         params: [6, multiCmd],
       });

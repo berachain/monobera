@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  REFERRALS_ABI,
+  referralsAbi,
   TransactionActionType,
   useBeraJs,
   usePollReferralsDetails,
@@ -97,7 +97,7 @@ export const ReferralModal = ({
                 onClick={() =>
                   write({
                     address: referralsContract,
-                    abi: REFERRALS_ABI,
+                    abi: referralsAbi,
                     functionName: "registerPotentialReferrer",
                     params: [referralAddress],
                   })

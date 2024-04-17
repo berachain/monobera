@@ -14,7 +14,7 @@ import { getSwapPayload } from "@bera/berajs";
 
 ```ts twoslash [example.ts]
 import {
-  MULTISWAP_ABI,
+  multiswapAbi,
   getSwap,
   getSwapPayload,
   useBeraContractWrite,
@@ -48,7 +48,7 @@ const swapPayload = getSwapPayload({
 const { write } = useBeraContractWrite();
 write({
   address: beraConfig.contracts.crocMultiSwapAddress,
-  abi: MULTISWAP_ABI,
+  abi: multiswapAbi,
   functionName: "multiSwap",
   params: swapPayload?.payload ?? [],
   value: swapPayload?.value,

@@ -1,4 +1,4 @@
-export const TRADING_ABI = [
+export const tradingAbi = [
   {
     type: "constructor",
     inputs: [],

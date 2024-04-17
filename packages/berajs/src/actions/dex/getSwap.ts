@@ -1,7 +1,7 @@
 import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { PublicClient, formatUnits, getAddress } from "viem";
 
-import { MULTISWAP_ABI } from "~/abi";
+import { multiswapAbi } from "~/abi";
 import { SwapInfoV3 } from "~/hooks";
 import { SwapRequest } from "~/types";
 import { BeraConfig } from "~/types/global";
@@ -52,7 +52,7 @@ export const getSwap = async ({
 
     const result = await publicClient.readContract({
       address: config.contracts.crocMultiSwapAddress,
-      abi: MULTISWAP_ABI,
+      abi: multiswapAbi,
       functionName: "previewMultiSwap",
       args: [previewBatchSwapSteps, swapInfo.amountIn],
     });
