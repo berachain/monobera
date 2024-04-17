@@ -55,10 +55,15 @@ export enum WRAP_TYPE {
 }
 
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
-  const { read: readInput, tokenInformation: inputToken } =
-    useTokenInformation();
+  const { read: readInput, tokenInformation: inputToken } = useTokenInformation(
+    {
+      config: beraJsConfig,
+    },
+  );
   const { read: readOutput, tokenInformation: outputToken } =
-    useTokenInformation();
+    useTokenInformation({
+      config: beraJsConfig,
+    });
   const { tokenDictionary } = useTokens({
     config: beraJsConfig,
   });

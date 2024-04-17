@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
@@ -26,7 +27,6 @@ import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
 import { TokenChip } from "./token-chip";
 import { TokenIcon } from "./token-icon";
-import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   open: boolean;
@@ -61,7 +61,9 @@ export function TokenDialog({
   } = useTokens({
     config: beraJsConfig,
   });
-  const { read, tokenInformation } = useTokenInformation();
+  const { read, tokenInformation } = useTokenInformation({
+    config: beraJsConfig,
+  });
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(

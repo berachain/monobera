@@ -1,11 +1,12 @@
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
+import { Address } from "viem";
 
 import { getValidatorIcon } from "~/actions/bgt";
 
 interface IUseValidatorIconRequest {
-  identity: string;
-  address: string | undefined;
+  identity: string | undefined;
+  address: Address | undefined;
 }
 
 interface IUseValidatorIconResponse {
@@ -23,7 +24,8 @@ export const useValidatorIcon = ({
     "",
   );
 
-  const keybase = async (identity: string) => {
+  const keybase = async (identity: string | undefined) => {
+    if (!identity) return Promise.resolve({ status: "error" });
     return (
       await fetch(
         `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`,
