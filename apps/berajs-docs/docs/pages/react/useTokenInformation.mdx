@@ -24,14 +24,9 @@ const {
   tokenInformation,
   error,
   read,
-} = useTokenInformation();
-
-const token = {
-  address: "0x...",
-  name: "...",
-  symbol: "...",
-  decimals: 18,
-};
+} = useTokenInformation({
+  config: beraJsConfig,
+});
 ```
 
 ```ts twoslash [config.ts] filename="config.ts"
@@ -39,8 +34,8 @@ import { BeraConfig } from "@bera/berajs";
 
 // required configs for getRoute
 export const beraConfig: BeraConfig = {
-  endpoints: {
-    tokenList: "https://..",
+  contracts: {
+    multicallAddress: "0x1..",
   },
 };
 ```
@@ -53,12 +48,8 @@ export const beraConfig: BeraConfig = {
 import { type DefaultHookTypes } from "@bera/berajs";
 ```
 
-- config.endpoints.tokenList
-  - Type: `string`
-  - Description: url to a [token list](https://tokenlists.org/) compatible json file
-
 ## Returns
 
 ```ts
-import { type IUseTokens } from "@bera/berajs";
+import { type IUseTokenInformationResponse } from "@bera/berajs";
 ```

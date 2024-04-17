@@ -10,9 +10,7 @@ import { usePollAllowance } from "@bera/berajs";
 
 ## Usage
 
-:::code-group
-
-```ts twoslash [example.ts]
+```ts [example.ts]
 import { usePollAllowance } from "@bera/berajs";
 
 import { beraConfig } from "./config";
@@ -27,22 +25,7 @@ const { useAllowance, refresh } = usePollAllowance({
     tokens: exampleTokenAddresses,
   },
 });
-
-const { data } = useAllowance();
 ```
-
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getRoute
-export const beraConfig: BeraConfig = {
-  endpoints: {
-    tokenList: "https://..",
-  },
-};
-```
-
-:::
 
 ## Parameters
 

@@ -10,6 +10,8 @@ import { getTokenInformation } from "@bera/berajs";
 
 ## Usage
 
+:::code-group
+
 ```ts twoslash [example.ts]
 import { getTokenInformation } from "@bera/berajs";
 
@@ -28,7 +30,7 @@ await getTokenInformation({
 ```ts twoslash [config.ts] filename="config.ts"
 import { BeraConfig } from "@bera/berajs";
 
-// required configs for getSwap
+// required configs for getTokenInformation
 export const beraConfig: BeraConfig = {
   contracts: {
     multicallAddress: "0x...",

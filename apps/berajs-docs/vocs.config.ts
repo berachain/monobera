@@ -73,6 +73,22 @@ export default defineConfig({
           text: "usePollHoneyBalance",
           link: "/react/usePollHoneyBalance/",
         },
+        {
+          text: "usePollAllowance",
+          link: "/react/usePollAllowance/",
+        },
+        {
+          text: "usePollAllowances",
+          link: "/react/usePollAllowances/",
+        },
+        {
+          text: "usePollTransactionCount",
+          link: "/react/usePollTransactionCount/",
+        },
+        {
+          text: "useTokenInformation",
+          link: "/react/useTokenInformation/",
+        },
       ],
     },
     {
@@ -102,6 +118,22 @@ export default defineConfig({
             {
               text: "getHoneyBalance",
               link: "/actions/getHoneyBalance/",
+            },
+            {
+              text: "getAllowance",
+              link: "/actions/getAllowance/",
+            },
+            {
+              text: "getAllowances",
+              link: "/actions/getAllowances/",
+            },
+            {
+              text: "getTokenInformation",
+              link: "/actions/getTokenInformation/",
+            },
+            {
+              text: "getTransactionCount",
+              link: "/actions/getTransactionCount/",
             },
           ],
         },
