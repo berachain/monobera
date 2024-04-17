@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  getLendBorrowPayload,
   TransactionActionType,
   lendPoolImplementationAbi,
   useBeraJs,
-  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import { lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,
+  POLLING,
   TokenInput,
   Tooltip,
   useAnalytics,
@@ -20,11 +22,11 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function BorrowBtn({
   honeyBorrowAllowance,
@@ -58,8 +60,15 @@ export default function BorrowBtn({
     actionType: TransactionActionType.BORROW,
   });
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userAccountRefetch } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -100,16 +109,23 @@ const BorrowModalContent = ({
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const { account } = useBeraJs();
-  const { useBaseCurrencyData } = usePollReservesDataList();
-  const { data: baseCurrencyData } = useBaseCurrencyData();
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const { account = "0x" } = useBeraJs();
+  const { useBaseCurrencyData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
+  const baseCurrencyData = useBaseCurrencyData();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const userAccountData = useUserAccountData();
 
   const { useSelectedWalletBalance } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const token = useSelectedWalletBalance(reserve.underlyingAsset);
+  const token = useSelectedWalletBalance(reserve?.underlyingAsset);
 
   const availableLiquidity = formatUnits(
     BigInt(reserve.availableLiquidity ?? "0"),
@@ -122,27 +138,37 @@ const BorrowModalContent = ({
     ? availableLiquidity
     : honeyBorrowAllowance;
 
-  const currentHealthFactor = formatUnits(userAccountData.healthFactor, 18);
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalCollateralBase,
-      baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
-    ),
-    borrowBalanceMarketReferenceCurrency:
-      Number(
-        formatUnits(
-          userAccountData.totalDebtBase,
+  const currentHealthFactor = formatUnits(
+    userAccountData?.healthFactor ?? 0n,
+    18,
+  );
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalCollateralBase,
           baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
         ),
-      ) +
-      Number(amount ?? "0") *
-        Number(reserve.formattedPriceInMarketReferenceCurrency),
+        borrowBalanceMarketReferenceCurrency:
+          Number(
+            formatUnits(
+              userAccountData.totalDebtBase,
+              baseCurrencyData?.networkBaseTokenPriceDecimals ?? 8,
+            ),
+          ) +
+          Number(amount ?? "0") *
+            Number(reserve.formattedPriceInMarketReferenceCurrency),
 
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
-  });
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : BigNumber(0);
+
+  const payload =
+    token &&
+    getLendBorrowPayload({ args: { token, amount: amount ?? "0", account } })
+      .payload;
 
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -225,13 +251,7 @@ const BorrowModalContent = ({
             address: lendPoolImplementationAddress,
             abi: lendPoolImplementationAbi,
             functionName: "borrow",
-            params: [
-              token?.address,
-              parseUnits(`${amount}` as `${number}`, token?.decimals ?? 18),
-              2,
-              0,
-              account,
-            ],
+            params: payload,
           });
         }}
       >

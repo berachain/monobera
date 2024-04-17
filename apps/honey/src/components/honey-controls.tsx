@@ -11,7 +11,7 @@ export function HoneyControls() {
   const { useSelectedWalletBalance } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const token = useSelectedWalletBalance(honeyAddress ?? "");
+  const token = useSelectedWalletBalance(honeyAddress ?? "0x");
   const tokenBalance = Number(token?.formattedBalance ?? "0");
   return (
     <div className="flex flex-row items-center gap-5">

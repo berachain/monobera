@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  getLendRepayPayload,
   TransactionActionType,
   lendPoolImplementationAbi,
   useBeraJs,
   usePollAllowance,
-  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
-  type Token,
+  usePollWalletBalances,
+  type BalanceToken,
 } from "@bera/berajs";
 import {
   honeyTokenAddress,
@@ -18,6 +19,7 @@ import {
 import {
   ApproveButton,
   FormattedNumber,
+  POLLING,
   TokenInput,
   useAnalytics,
   useTxn,
@@ -27,11 +29,11 @@ import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
-import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
+import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function RepayBtn({
   reserve,
@@ -69,8 +71,15 @@ export default function RepayBtn({
   const honey = useSelectedWalletBalance(honeyTokenAddress);
   const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userAccountRefetch } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -80,7 +89,9 @@ export default function RepayBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || !vdHoney || vdHoney?.balance === 0n}
+        disabled={
+          disabled || isLoading || !vdHoney || vdHoney?.balance === 0n || !honey
+        }
         variant={variant}
       >
         {isLoading ? "Loading" : "Repay"}
@@ -88,7 +99,14 @@ export default function RepayBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <RepayModalContent
-            {...({ reserve, vdHoney, honey, amount, setAmount, write } as any)}
+            {...{
+              reserve,
+              vdHoney: vdHoney!,
+              honey: honey!,
+              amount,
+              setAmount,
+              write,
+            }}
           />
         </DialogContent>
       </Dialog>
@@ -105,8 +123,8 @@ const RepayModalContent = ({
   write,
 }: {
   reserve: any;
-  vdHoney: Token;
-  honey: Token;
+  vdHoney: BalanceToken;
+  honey: BalanceToken;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
@@ -120,29 +138,47 @@ const RepayModalContent = ({
   const tokenBalance = honey.formattedBalance ?? "0";
   const debtBalance = vdHoney.formattedBalance ?? "0";
 
-  const { account } = useBeraJs();
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const { account = "0x" } = useBeraJs();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const userAccountData = useUserAccountData();
 
   const balance = BigNumber(debtBalance).gt(BigNumber(tokenBalance))
     ? tokenBalance
     : debtBalance;
 
-  const currentHealthFactor = formatEther(userAccountData.healthFactor);
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalCollateralBase,
-      8,
-    ),
-    borrowBalanceMarketReferenceCurrency:
-      Number(formatUnits(userAccountData.totalDebtBase, 8)) -
-      Number(amount ?? "0") *
-        Number(reserve?.formattedPriceInMarketReferenceCurrency),
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
-  });
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalCollateralBase,
+          8,
+        ),
+        borrowBalanceMarketReferenceCurrency:
+          Number(formatUnits(userAccountData.totalDebtBase, 8)) -
+          Number(amount ?? "0") *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency),
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : BigNumber(0);
+
+  const payload =
+    honey &&
+    getLendRepayPayload({
+      args: {
+        token: honey,
+        amount: amount ?? "0",
+        max: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
+        account,
+      },
+    }).payload;
 
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -233,14 +269,7 @@ const RepayModalContent = ({
               address: lendPoolImplementationAddress,
               abi: lendPoolImplementationAbi,
               functionName: "repay",
-              params: [
-                honeyTokenAddress,
-                (amount ?? "0") === (debtBalance ?? "0")
-                  ? maxUint256
-                  : parseUnits(amount as `${number}`, honey.decimals),
-                2,
-                account,
-              ],
+              params: payload,
             });
           }}
         >

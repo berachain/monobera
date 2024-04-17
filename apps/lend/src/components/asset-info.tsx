@@ -1,6 +1,4 @@
-import { usePollReservesDataList } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
-
 import DonutChart from "~/components/donut-chart";
 
 export default function AssetInfo({ asset }: { asset: any }) {

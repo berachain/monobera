@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  getLendSupplyPayload,
   TransactionActionType,
   lendPoolImplementationAbi,
   useBeraJs,
   usePollAllowance,
-  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
   type Token,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
   ApproveButton,
   FormattedNumber,
+  POLLING,
   TokenInput,
   Tooltip,
   useAnalytics,
@@ -23,11 +25,11 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function SupplyBtn({
   reserve,
@@ -66,8 +68,15 @@ export default function SupplyBtn({
   });
   const token = useSelectedWalletBalance(reserve.underlyingAsset);
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userAccountRefetch } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -85,7 +94,7 @@ export default function SupplyBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <SupplyModalContent
-            {...({ reserve, token, amount, setAmount, write } as any)}
+            {...{ reserve, token: token!, amount, setAmount, write }}
           />
         </DialogContent>
       </Dialog>
@@ -107,7 +116,7 @@ const SupplyModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const supply = token.address === honeyTokenAddress;
-  const { account } = useBeraJs();
+  const { account = "0x" } = useBeraJs();
 
   const { useAllowance } = usePollAllowance({
     contract: lendPoolImplementationAddress,
@@ -115,25 +124,36 @@ const SupplyModalContent = ({
   });
   const allowance = useAllowance();
 
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
-
-  const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency:
-      Number(formatUnits(userAccountData.totalCollateralBase, 8)) +
-      Number(amount ?? "0") *
-        Number(reserve?.formattedPriceInMarketReferenceCurrency),
-    borrowBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalDebtBase,
-      8,
-    ),
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
   });
+  const userAccountData = useUserAccountData();
 
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency:
+          Number(formatUnits(userAccountData.totalCollateralBase, 8)) +
+          Number(amount ?? "0") *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency),
+        borrowBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalDebtBase,
+          8,
+        ),
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : BigNumber(0);
+
+  const payload =
+    token &&
+    getLendSupplyPayload({ args: { token, amount: amount ?? "0", account } })
+      .payload;
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">
@@ -229,12 +249,7 @@ const SupplyModalContent = ({
               address: lendPoolImplementationAddress,
               abi: lendPoolImplementationAbi,
               functionName: "supply",
-              params: [
-                token.address,
-                parseUnits(`${amount ?? "0"}` as `${number}`, token.decimals),
-                account,
-                parseUnits("0", token.decimals),
-              ],
+              params: payload,
             });
           }}
         >

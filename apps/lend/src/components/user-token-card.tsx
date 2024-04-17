@@ -8,6 +8,7 @@ import { type Address } from "viem";
 import AssetInfo from "./asset-info";
 import SupplyBtn from "./modals/supply-button";
 import WithdrawBtn from "./modals/withdraw-button";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function UserTokenCard({
   token,
@@ -16,7 +17,9 @@ export default function UserTokenCard({
   token: Token;
   deposited?: boolean;
 }) {
-  const { useSelectedReserveData } = usePollReservesDataList();
+  const { useSelectedReserveData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const reserve = useSelectedReserveData(token.address as Address);
   const balance = token.formattedBalance ?? "0";
   return (

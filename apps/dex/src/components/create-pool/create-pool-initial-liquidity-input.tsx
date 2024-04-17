@@ -31,7 +31,7 @@ export default function CreatePoolInitialLiquidityInput({
   const { useSelectedWalletBalance } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const tokenBalanceData = useSelectedWalletBalance(token?.address ?? "");
+  const tokenBalanceData = useSelectedWalletBalance(token?.address ?? "0x");
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const tokenBalance = Number(tokenBalanceData?.formattedBalance || 0);
 

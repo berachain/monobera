@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  usePollWalletBalances,
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import {
   cloudinaryUrl,
@@ -13,34 +13,40 @@ import {
   lendHoneyDebtTokenAddress,
   vdHoneyTokenAddress,
 } from "@bera/config";
-import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, POLLING, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits } from "viem";
 
 import BGTRewardsClaimBtn from "./bgt-rewards-claim-btn";
 import BorrowBtn from "./modals/borrow-button";
 import RepayBtn from "./modals/repay-button";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
-    usePollLendUserBGTRewards();
+    usePollLendUserBGTRewards({ config: beraJsConfig });
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
   });
 
-  const { useTotalBorrowed } = usePollReservesDataList();
+  const { useTotalBorrowed, useSelectedReserveData } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
   const totalBorrowed = useTotalBorrowed();
   const bgtApr = useBgtApr(totalBorrowed);
 
-  const { useSelectedReserveData } = usePollReservesDataList();
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
 
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data: userData } = useUserAccountData();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const userData = useUserAccountData();
 
   const borrowAllowanceUSD = formatUnits(
     userData?.availableBorrowsBase ?? 0n,
@@ -101,7 +107,7 @@ export default function HoneyBorrowCard() {
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
               <FormattedNumber
-                value={-honeyReserve?.variableBorrowAPY ?? 0}
+                value={-(honeyReserve?.variableBorrowAPY ?? 0)}
                 percent
               />
             </div>

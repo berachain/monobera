@@ -1,11 +1,14 @@
-import { lendRewardsAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import { usePublicClient } from "wagmi";
 
 import { lendRewardHelperAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
+import { DefaultHookTypes } from "~/types";
 
-export const usePollLendUserBGTRewards = () => {
+export const usePollLendUserBGTRewards = ({
+  config,
+  opts,
+}: DefaultHookTypes) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();

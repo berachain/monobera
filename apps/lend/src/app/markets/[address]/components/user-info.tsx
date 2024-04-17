@@ -1,20 +1,20 @@
 import {
   useBeraJs,
-  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
-import { FormattedNumber, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, POLLING, Tooltip } from "@bera/shared-ui";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatUnits } from "viem";
 
-import { Card } from "@bera/ui/card";
 import BorrowBtn from "~/components/modals/borrow-button";
 import SupplyBtn from "~/components/modals/supply-button";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function UserInfo() {
   const { isReady } = useBeraJs();
@@ -24,14 +24,21 @@ export default function UserInfo() {
   const tokenBalance = useSelectedWalletBalance(honeyTokenAddress);
 
   const { useSelectedReserveData, useBaseCurrencyData } =
-    usePollReservesDataList();
+    usePollReservesDataList({
+      config: beraJsConfig,
+    });
   const reserve = useSelectedReserveData(honeyTokenAddress);
-  const { data: baseCurrencyData } = useBaseCurrencyData();
+  const baseCurrencyData = useBaseCurrencyData();
 
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const userAccountData = useUserAccountData();
 
-  const tokenPrice = reserve?.formattedPriceInMarketReferenceCurrency;
+  const tokenPrice = reserve?.formattedPriceInMarketReferenceCurrency ?? "0";
 
   const supplyAmount = isReady
     ? Number(reserve?.supplyCap) > Number(tokenBalance?.formattedBalance)
@@ -48,10 +55,12 @@ export default function UserInfo() {
     .times(0.99)
     .toFixed(reserve?.decimals ?? 18);
 
-  const availableLiquidity = BigNumber(reserve?.totalLiquidity)
-    .times(BigNumber(reserve?.formattedPriceInMarketReferenceCurrency))
-    .times(BigNumber(1 - reserve?.borrowUsageRatio))
-    .toFixed(baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8);
+  const availableLiquidity = reserve
+    ? BigNumber(reserve.totalLiquidity)
+        .times(BigNumber(reserve.formattedPriceInMarketReferenceCurrency))
+        .times(BigNumber(1 - Number(reserve.borrowUsageRatio)))
+        .toFixed(baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8)
+    : "0";
 
   const borrowAmout = BigNumber(borrowPower).gt(BigNumber(availableLiquidity))
     ? availableLiquidity

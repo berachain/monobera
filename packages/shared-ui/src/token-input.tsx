@@ -11,6 +11,7 @@ import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { beraJsConfig } from "@bera/wagmi";
 import { getAddress } from "viem";
 
 import {
@@ -21,7 +22,6 @@ import {
   useBreakpoint,
 } from ".";
 import { getPriceImpactColorClass } from "./utils/textStyling";
-import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   selected: Token | undefined;
@@ -73,7 +73,7 @@ export function TokenInput({
       config: beraJsConfig,
     });
   const token = useSelectedWalletBalance(
-    selected ? getAddress(selected?.address ?? "") ?? "" : "",
+    selected ? getAddress(selected?.address ?? "0x") ?? "0x" : "0x",
   );
 
   let tokenBalance = token?.formattedBalance || "0";
@@ -219,7 +219,7 @@ export function TokenInput({
               </div>
             )}
           </div>
-          {isConnected && selected && tokenBalance !== "0" && (
+          {isConnected && selected && Number(tokenBalance) !== 0 && (
             <div className="flex flex-row items-center justify-start gap-1 px-1">
               <Icons.wallet className="h-3 w-3 text-muted-foreground" />
               <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
