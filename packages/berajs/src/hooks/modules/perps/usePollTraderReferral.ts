@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
-import { REFERRALS_ABI } from "~/abi";
+import { referralsAbi } from "~/abi";
 import { perpsReferralsAddress } from "@bera/config";
 
 import POLLING from "~/enum/polling";
@@ -17,7 +17,7 @@ export const usePollTraderReferral = (traderAddress: string) => {
       try {
         const result = await publicClient.readContract({
           address: perpsReferralsAddress,
-          abi: REFERRALS_ABI,
+          abi: referralsAbi,
           functionName: method,
           args: [traderAddress],
         });

@@ -3,7 +3,7 @@ import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { BTOKEN_ABI } from "~/abi";
+import { bTokenAbi } from "~/abi";
 import POLLING from "~/enum/polling";
 
 interface Call {
@@ -30,19 +30,19 @@ export const usePollBHoneyEpochs = () => {
       try {
         const call: Call[] = [
           {
-            abi: BTOKEN_ABI,
+            abi: bTokenAbi,
             address: gTokenContractAddress,
             functionName: "currentEpoch",
             args: [],
           },
           {
-            abi: BTOKEN_ABI,
+            abi: bTokenAbi,
             address: gTokenContractAddress,
             functionName: "currentEpochStart",
             args: [],
           },
           {
-            abi: BTOKEN_ABI,
+            abi: bTokenAbi,
             address: gTokenContractAddress,
             functionName: "currentEpochEnd",
             args: [],

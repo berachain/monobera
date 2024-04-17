@@ -5,7 +5,7 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  BEX_ABI,
+  bexAbi,
   TransactionActionType,
   useTokenHoneyPrice,
   type PoolV2,
@@ -179,7 +179,7 @@ export default function WithdrawLiquidityContent({
 
       write({
         address: crocDexAddress,
-        abi: BEX_ABI,
+        abi: bexAbi,
         functionName: "userCmd",
         params: withdrawLiquidityRequest?.payload ?? [],
       });

@@ -6,7 +6,7 @@ import { usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
-import { TRADING_ABI } from "~/abi";
+import { tradingAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import { useOct } from "../useOct";
 import {
@@ -64,7 +64,7 @@ const useOctContractWrite = ({
 
           const ethersWallet = new Wallet(octPrivKey, provider);
 
-          const contract = new Contract(address, TRADING_ABI, ethersWallet);
+          const contract = new Contract(address, tradingAbi, ethersWallet);
 
           const data = encodeFunctionData({
             abi: abi,

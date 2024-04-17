@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { TRADING_ABI, TransactionActionType, formatUsd } from "@bera/berajs";
+import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -221,7 +221,7 @@ export function UpdatePositionModal({
               updateTpWrite({
                 address: process.env
                   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: TRADING_ABI,
+                abi: tradingAbi,
                 functionName: "updateTp",
                 params: updateTpParams,
               });
@@ -230,7 +230,7 @@ export function UpdatePositionModal({
               updateSlWrite({
                 address: process.env
                   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: TRADING_ABI,
+                abi: tradingAbi,
                 functionName: "updateSl",
                 params: updateSlParams,
               });

@@ -1,4 +1,4 @@
-export const LEND_REWARD_HELPER_ABI = [
+export const lendRewardHelperAbi = [
   {
     inputs: [
       {
