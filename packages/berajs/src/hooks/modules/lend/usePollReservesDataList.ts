@@ -18,9 +18,8 @@ export const usePollReservesDataList = ({ config, opts }: DefaultHookTypes) => {
       if (!config.contracts?.lendUIDataProviderAddress) return undefined;
       if (!config.contracts?.lendAddressProviderAddress) return undefined;
       const result = await getReserveData({
+        config,
         client: publicClient,
-        uiDataProviderAddress: config.contracts.lendUIDataProviderAddress,
-        addressProviderAddress: config.contracts.lendAddressProviderAddress,
       });
       if (result) {
         await mutate(

@@ -1,5 +1,7 @@
 import { Address, PublicClient } from "viem";
+
 import { LEND_POOL_IMPLEMENTATION_ABI } from "~/abi";
+import { BeraConfig } from "~/types";
 
 export interface UserAccountData {
   totalCollateralBase: bigint;
@@ -19,19 +21,19 @@ export interface UserAccountData {
  */
 export const getUserAccountData = async ({
   client,
-  contractAddress,
-  accountAddress,
+  config,
+  account,
 }: {
   client: PublicClient;
-  contractAddress: Address;
-  accountAddress: Address;
+  config: BeraConfig;
+  account: Address;
 }): Promise<UserAccountData | undefined> => {
   try {
     const result = await client.readContract({
-      address: contractAddress,
+      address: config.contracts!.lendPoolProxyAddress,
       abi: LEND_POOL_IMPLEMENTATION_ABI,
       functionName: "getUserAccountData",
-      args: [accountAddress],
+      args: [account],
     });
     const [
       totalCollateralBase,
@@ -41,7 +43,6 @@ export const getUserAccountData = async ({
       ltv,
       healthFactor,
     ] = result as [bigint, bigint, bigint, bigint, bigint, bigint];
-
     return {
       totalCollateralBase,
       totalDebtBase,

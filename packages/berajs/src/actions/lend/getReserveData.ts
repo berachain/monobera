@@ -1,6 +1,7 @@
 import { FormatReserveUSDResponse, formatReserves } from "@aave/math-utils";
 import { Address, PublicClient } from "viem";
 import { LEND_UI_DATA_PROVIDER_ABI } from "~/abi";
+import { BeraConfig } from "~/types";
 import { getReservesHumanized } from "~/utils";
 
 export interface ReserveData extends FormatReserveUSDResponse {
@@ -24,12 +25,10 @@ export interface BaseCurrencyData {
  */
 export const getReserveData = async ({
   client,
-  uiDataProviderAddress,
-  addressProviderAddress,
+  config,
 }: {
   client: PublicClient;
-  uiDataProviderAddress: Address;
-  addressProviderAddress: Address;
+  config: BeraConfig;
 }): Promise<
   | {
       formattedReserves: ReserveData[];
@@ -39,18 +38,16 @@ export const getReserveData = async ({
 > => {
   try {
     const result = (await client.readContract({
-      address: uiDataProviderAddress,
+      address: config.contracts!.lendUIDataProviderAddress,
       abi: LEND_UI_DATA_PROVIDER_ABI,
       functionName: "getReservesData",
-      args: [addressProviderAddress],
+      args: [config.contracts!.lendAddressProviderAddress],
     })) as [any[], any];
-
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const { reservesData, baseCurrencyData } = getReservesHumanized(
       result[0],
       result[1],
     );
-
     const formattedReserves = formatReserves({
       reserves: reservesData,
       currentTimestamp,

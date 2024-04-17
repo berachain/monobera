@@ -22,9 +22,9 @@ export const usePollUserAccountData = ({ config, opts }: DefaultHookTypes) => {
       if (!config.contracts?.lendPoolProxyAddress) return undefined;
       if (!account) return undefined;
       return await getUserAccountData({
+        config,
         client: publicClient,
-        contractAddress: config.contracts.lendPoolProxyAddress,
-        accountAddress: account,
+        account: account,
       });
     },
     {
