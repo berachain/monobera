@@ -6,11 +6,8 @@
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev -p 3008",
-    "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
-    "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start -p 3008",
-    "check-types": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@bera/config": "0.1.0",
