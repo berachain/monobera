@@ -2,6 +2,21 @@ import { defineConfig } from "vocs";
 
 export default defineConfig({
   title: "BeraJS",
+  description: "BeraJS is a library for interacting with Berachain",
+
+  iconUrl: {
+    dark: "https://res.cloudinary.com/duv0g402y/image/upload/v1713456719/BeraJS_Bracket_Light_bpkwd9.svg",
+    light:
+      "https://res.cloudinary.com/duv0g402y/image/upload/v1713456720/BeraJS_Bracket_Dark_rkiah6.svg",
+  },
+  logoUrl: {
+    dark: "https://res.cloudinary.com/duv0g402y/image/upload/v1713456719/BeraJS_Bracket_Light_bpkwd9.svg",
+    light:
+      "https://res.cloudinary.com/duv0g402y/image/upload/v1713456720/BeraJS_Bracket_Dark_rkiah6.svg",
+  },
+  theme: {
+    accentColor: "#76bae9",
+  },
   editLink: {
     pattern:
       "https://github.com/berachain/monobera/edit/v2/apps/berajs-docs/docs/pages/:path",
@@ -171,6 +186,14 @@ export default defineConfig({
         {
           text: "getBeraLpAddress",
           link: "/actions/getBeraLpAddress/",
+        },
+        {
+          text: "getBeraBalance",
+          link: "/actions/getBeraBalance/",
+        },
+        {
+          text: "getHoneyBalance",
+          link: "/actions/getHoneyBalance/",
         },
       ],
     },
