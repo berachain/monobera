@@ -17,7 +17,10 @@ export const ValidatorIcon = ({
   description?: string;
   className?: string;
 }) => {
-  const { data: validatorImg } = useValidatorIcon(description, address);
+  const { data: validatorImg } = useValidatorIcon({
+    identity: description,
+    address,
+  });
 
   return (
     <Avatar className={cn("", className)}>

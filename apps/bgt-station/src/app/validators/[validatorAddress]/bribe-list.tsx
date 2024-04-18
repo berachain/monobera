@@ -16,8 +16,8 @@ import {
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits } from "viem";
 import { beraJsConfig } from "@bera/wagmi";
+import { formatUnits } from "viem";
 
 const BribeCard = ({
   amountPerProposal,
@@ -36,7 +36,9 @@ const BribeCard = ({
   const { tokenDictionary } = useTokens({
     config: beraJsConfig,
   });
-  const { read, tokenInformation } = useTokenInformation();
+  const { read, tokenInformation } = useTokenInformation({
+    config: beraJsConfig,
+  });
 
   useEffect(() => {
     if (!tokenDictionary || !tokenAddress) setToken(undefined);
