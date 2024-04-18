@@ -19,7 +19,7 @@ export const useValidatorIcon = ({
   identity,
   address,
 }: IUseValidatorIconRequest): IUseValidatorIconResponse => {
-  const [validatorIcon, setValidatorIcon] = useLocalStorage<string>(
+  const [validatorIcon, setValidatorIcon] = useLocalStorage<string | undefined>(
     `VALIDATOR_ICON_${address}`,
     "",
   );
@@ -35,12 +35,12 @@ export const useValidatorIcon = ({
   };
 
   const fetchValidatorIcon = async (identity: string) => {
-    return getValidatorIcon({
+    const validatorIconURI = await getValidatorIcon({
       validatorIcon,
       identity,
-      setValidatorIcon,
       keybase,
     });
+    setValidatorIcon(validatorIconURI);
   };
 
   const {

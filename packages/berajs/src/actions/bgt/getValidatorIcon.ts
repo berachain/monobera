@@ -5,12 +5,10 @@
 export const getValidatorIcon = async ({
   validatorIcon,
   identity,
-  setValidatorIcon,
   keybase,
 }: {
   validatorIcon: string | undefined;
   identity: string;
-  setValidatorIcon: (uri: string) => void;
   keybase: (identity: string) => Promise<any>;
 }): Promise<string | undefined> => {
   try {
@@ -23,7 +21,6 @@ export const getValidatorIcon = async ({
         "https://s3.amazonaws.com/keybase_processed_uploads/",
         "",
       );
-      setValidatorIcon(uri);
       return uri;
     }
   } catch (error) {
