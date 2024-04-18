@@ -18,6 +18,11 @@ import { beraConfig } from "./config";
 
 const client = usePublicClient();
 
+interface BalanceToken extends Token {
+  balance: bigint;
+  formattedBalance: string;
+}
+
 const walletBalances = await getWalletBalances({
   account,
   tokenList,
@@ -38,5 +43,5 @@ import { type IFetchWalletBalancesRequestArgs } from "berajs";
 ## Returns
 
 ```ts
-type result = Promise<number | Token[] | undefined>;
+type result = Promise<number | BalanceToken[] | undefined>;
 ```

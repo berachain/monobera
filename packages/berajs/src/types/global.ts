@@ -36,17 +36,6 @@ export interface BeraConfig {
     ahoney: Address;
     vdhoney: Address;
   };
-  erc20?: {
-    bera: Address;
-    wbera: Address;
-    bgt: Address;
-    honey: Address;
-    stgusd: Address;
-    weth: Address;
-    wbtc: Address;
-    ahoney: Address;
-    vdhoney: Address;
-  };
 }
 
 export interface DefaultHookTypes {

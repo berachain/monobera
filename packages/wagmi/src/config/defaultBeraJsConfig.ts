@@ -136,15 +136,4 @@ export const beraJsConfig: BeraConfig = {
     ahoney: aHoneyTokenAddress,
     vdhoney: vdHoneyTokenAddress,
   },
-  erc20: {
-    bera: nativeTokenAddress,
-    wbera: beraTokenAddress,
-    bgt: bgtTokenAddress,
-    honey: honeyTokenAddress,
-    stgusd: stgusdcTokenAddress,
-    weth: wethTokenAddress,
-    wbtc: wbtcTokenAddress,
-    ahoney: aHoneyTokenAddress,
-    vdhoney: vdHoneyTokenAddress,
-  },
 };

@@ -143,20 +143,12 @@ export default defineConfig({
               link: "/actions/getTransactionCount/",
             },
             {
-              text: "getAllowance",
-              link: "/actions/getAllowance/",
+              text: "getTokens",
+              link: "/actions/getTokens/",
             },
             {
-              text: "getAllowances",
-              link: "/actions/getAllowances/",
-            },
-            {
-              text: "getTokenInformation",
-              link: "/actions/getTokenInformation/",
-            },
-            {
-              text: "getTransactionCount",
-              link: "/actions/getTransactionCount/",
+              text: "getWalletBalances",
+              link: "/actions/getWalletBalances/",
             },
           ],
         },

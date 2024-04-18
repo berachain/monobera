@@ -1,6 +1,6 @@
 import { Address, PublicClient, erc20Abi, formatUnits, getAddress } from "viem";
 
-import { MULTICALL3_ABI } from "~/abi";
+import { multicall3Abi as MULTICALL3_ABI } from "~/abi";
 import { BeraConfig } from "../../types";
 import { Token } from "../../types/dex";
 
