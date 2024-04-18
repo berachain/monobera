@@ -1,14 +1,7 @@
-import {
-  bgtTokenAddress,
-  multicallAddress,
-  nativeTokenAddress,
-} from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { MULTICALL3_ABI } from "~/abi";
 import { DefaultHookTypes, type Token } from "..";
 import { getWalletBalances } from "../actions/dex";
 import { useBeraJs } from "../contexts";

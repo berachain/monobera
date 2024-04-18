@@ -1,0 +1,43 @@
+# getTokens
+
+Action for fetching and formatting the token list
+
+## Import
+
+```ts
+import { getTokens } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getTokens, type Token } from "@bera/berajs";
+import { useLocalStorage } from "usehooks-ts";
+
+import { beraConfig } from "./config";
+
+const TOKEN_KEY = "tokens";
+
+const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
+  Token[]
+>(TOKEN_KEY, []);
+
+const tokens = await getTokens({
+  localStorageTokenList,
+  config: beraConfig,
+});
+```
+
+## Parameters
+
+```ts
+import { type IFetchTokensRequestArgs } from "berajs";
+```
+
+## Returns
+
+```ts
+import { type IFetchTokensResponse } from "berajs";
+
+type result = Promise<IFetchTokensResponse | Token[] | undefined>;
+```

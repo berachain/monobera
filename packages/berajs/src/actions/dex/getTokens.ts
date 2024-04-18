@@ -6,6 +6,13 @@ export interface IFetchTokensRequestArgs {
   config: BeraConfig;
 }
 
+export interface IFetchTokensResponse {
+  list: Token[];
+  customList?: Token[];
+  dictionary: { [key: string]: Token };
+  featured: [];
+}
+
 /**
  * fetch and format the token list
  */
@@ -21,7 +28,7 @@ function tokenListToDict(list: Token[]): { [key: string]: Token } {
 export const getTokens = async ({
   localStorageTokenList,
   config,
-}: IFetchTokensRequestArgs): Promise<any | undefined> => {
+}: IFetchTokensRequestArgs): Promise<IFetchTokensResponse | undefined> => {
   if (!config.endpoints?.tokenList) {
     return {
       list: [],

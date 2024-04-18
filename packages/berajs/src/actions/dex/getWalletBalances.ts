@@ -21,7 +21,7 @@ interface BalanceToken extends Token {
 
 interface Call {
   abi: any;
-  address: `0x${string}`;
+  address: Address;
   functionName: string;
   args: any[];
 }
@@ -65,7 +65,7 @@ export const getWalletBalances = async ({
         };
       }
       return {
-        address: item.address as `0x${string}`,
+        address: item.address as Address,
         abi: erc20Abi,
         functionName: "balanceOf",
         args: [account],
@@ -109,6 +109,5 @@ export const getWalletBalances = async ({
       console.log(error);
     }
   }
-
-  return 0;
+  return undefined;
 };
