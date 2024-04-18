@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { usePollAllowances, type Token } from "@bera/berajs";
-
-import { getSafeNumber } from "~/utils/getSafeNumber";
-import { type TokenInput } from "./useMultipleTokenInput";
-import { parseUnits } from "viem";
-import { useSlippage } from "@bera/shared-ui";
 import { beraTokenAddress } from "@bera/config";
+import { useSlippage } from "@bera/shared-ui";
+import { beraJsConfig } from "@bera/wagmi";
+import { parseUnits } from "viem";
+
+import { type TokenInput } from "./useMultipleTokenInput";
 
 const useMultipleTokenApprovalsWithSlippage = (
   tokenInput: TokenInput[],
@@ -20,8 +20,11 @@ const useMultipleTokenApprovalsWithSlippage = (
     .map((token) => token);
 
   const { useCurrentAllowancesForContract, refresh } = usePollAllowances({
-    contract: spender,
-    tokens,
+    args: {
+      contract: spender,
+      tokens,
+    },
+    config: beraJsConfig,
   });
 
   const allowances = useCurrentAllowancesForContract();

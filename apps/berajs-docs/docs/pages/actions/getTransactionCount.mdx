@@ -1,0 +1,35 @@
+# getTransactionCount
+
+Action for fetching the transaction count of a given address
+
+## Import
+
+```ts
+import { getTransactionCount } from "@bera/berajs";
+```
+
+## Usage
+
+```ts [example.ts]
+import { getTransactionCount } from "@bera/berajs";
+import { usePublicClient } from "wagmi";
+
+const client = usePublicClient();
+
+await getTransactionCount({
+  address,
+  client,
+});
+```
+
+## Parameters
+
+```ts
+import { type IFetchTransactionCountArgs } from "berajs";
+```
+
+## Returns
+
+```ts
+type result = Promise<number | undefined>;
+```

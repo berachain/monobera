@@ -7,13 +7,13 @@ import { getBeraBalance } from "~/actions/dex/getBeraBalance";
 import POLLING from "~/enum/polling";
 import { DefaultHookTypes } from "~/types/global";
 
-export interface UsePollBeraBalanceRequest extends DefaultHookTypes {
+export interface IUsePollBeraBalanceRequest extends DefaultHookTypes {
   args?: {
     address: Address | undefined;
   };
 }
 
-export interface UsePollBeraBalanceResponse {
+export interface IUsePollBeraBalanceResponse {
   isLoading: boolean;
   isValidating: boolean;
   useBalance: () => string | number;
@@ -24,7 +24,7 @@ export const usePollBeraBalance = ({
   opts: { refreshInterval } = {
     refreshInterval: POLLING.FAST,
   },
-}: UsePollBeraBalanceRequest): UsePollBeraBalanceResponse => {
+}: IUsePollBeraBalanceRequest): IUsePollBeraBalanceResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [address, "beraBalance"];
   const { isLoading, isValidating } = useSWR(
