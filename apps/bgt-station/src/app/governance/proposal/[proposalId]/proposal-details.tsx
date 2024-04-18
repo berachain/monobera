@@ -27,6 +27,8 @@ import { Badge } from "@bera/ui/badge";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { beraJsConfig } from "@bera/wagmi";
+import { Address } from "viem";
 
 import { decodeGovMsg } from "~/utils/decodeGovMsg";
 import { OverviewChart } from "../../components/overview-chart";
@@ -36,14 +38,15 @@ import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
 import { getProposalType } from "../../helper";
 import { useProposalDetails } from "./useProposalDetails";
-import { Address } from "viem";
 
 export default function ProposalDetails({
   proposalId,
 }: {
   proposalId: number;
 }) {
-  const { read, tokenInformation } = useTokenInformation();
+  const { read, tokenInformation } = useTokenInformation({
+    config: beraJsConfig,
+  });
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
