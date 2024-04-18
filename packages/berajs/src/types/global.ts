@@ -38,7 +38,7 @@ export interface BeraConfig {
 
 export type DefaultHookProps<
   ArgsType = any,
-  ArgsFieldOptional = true,
+  ArgsFieldOptional = false,
 > = ArgsType extends never
   ? { config: BeraConfig; opts?: SWRConfiguration | undefined }
   : ArgsFieldOptional extends true

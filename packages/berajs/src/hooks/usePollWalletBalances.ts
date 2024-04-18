@@ -5,7 +5,7 @@ import {
 } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
+import { erc20Abi, formatUnits, getAddress, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { multicall3Abi } from "~/abi";
@@ -25,9 +25,12 @@ interface Call {
   args: any[];
 }
 
-export type UsePollWalletBalancesRequest = DefaultHookProps<{
-  externalTokenList?: Token[];
-}>;
+export type UsePollWalletBalancesRequest = DefaultHookProps<
+  {
+    externalTokenList?: Token[];
+  },
+  true
+>;
 
 export interface UsePollBalancesResponse {
   isLoading: boolean;

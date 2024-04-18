@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { useAccount, usePublicClient } from "wagmi";
 
+import POLLING from "~/enum/polling";
 import { PoolV2, type IUserPosition } from "../../..";
 import { getPoolUserPosition } from "../../../actions";
 import { DefaultHookProps, DefaultHookReturnType } from "../../../types/global";
@@ -12,12 +13,9 @@ export const usePoolUserPosition = ({
   args: { pool },
   config,
   opts,
-}: DefaultHookProps<
-  {
-    pool: PoolV2;
-  },
-  false
->): DefaultHookReturnType<IUserPosition | undefined> => {
+}: DefaultHookProps<{
+  pool: PoolV2;
+}>): DefaultHookReturnType<IUserPosition | undefined> => {
   const { address: account } = useAccount();
   const publicClient = usePublicClient();
   const QUERY_KEY = ["usePoolUserPosition", account, pool.poolIdx];
@@ -34,7 +32,7 @@ export const usePoolUserPosition = ({
         publicClient,
       });
     },
-    opts,
+    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.FAST },
   );
 
   return swrResponse;
