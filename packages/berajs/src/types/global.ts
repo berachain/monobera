@@ -17,6 +17,8 @@ export interface BeraConfig {
     wrappedTokenAddress?: Address;
     dexAddress?: Address;
     honeyAddress?: Address;
+    bgtTokenAddress?: Address;
+    nativeTokenAddress?: Address;
   };
 }
 
