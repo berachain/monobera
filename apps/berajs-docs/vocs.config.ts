@@ -84,16 +84,16 @@ export default defineConfig({
           text: "Bex",
           collapsed: true,
           items: [
-            { text: "getRoute", link: "/actions/getRoute/" },
-            { text: "getSwap", link: "/actions/getSwap/" },
-            { text: "getSwapPayload", link: "/actions/getSwapPayload/" },
+            { text: "getRoute", link: "/actions/dex/getRoute/" },
+            { text: "getSwap", link: "/actions/dex/getSwap/" },
+            { text: "getSwapPayload", link: "/actions/dex/getSwapPayload/" },
             {
               text: "getAddLiquidityPayload",
-              link: "/actions/getAddLiquidityPayload/",
+              link: "/actions/dex/getAddLiquidityPayload/",
             },
             {
               text: "getWithdrawLiquidityPayload",
-              link: "/actions/getWithdrawLiquidityPayload/",
+              link: "/actions/dex/getWithdrawLiquidityPayload/",
             },
             {
               text: "getBeraBalance",
@@ -117,7 +117,14 @@ export default defineConfig({
         {
           text: "Bend",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            { text: "getReserveData", link: "/actions/lend/getReserveData/" },
+            {
+              text: "getUserAccountData",
+              link: "/actions/lend/getUserAccountData/",
+            },
+            { text: "getTxnPayload", link: "/actions/lend/getTxnPayload/" },
+          ],
         },
         {
           text: "Berps",

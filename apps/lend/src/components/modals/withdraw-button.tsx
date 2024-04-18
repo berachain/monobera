@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
+  getLendWithdrawPayload,
   lendPoolImplementationAbi,
   useBeraJs,
-  usePollWalletBalances,
   usePollReservesDataList,
   usePollUserAccountData,
-  type Token,
+  usePollWalletBalances,
+  type BalanceToken,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,
+  POLLING,
   TokenInput,
   useAnalytics,
   useTxn,
@@ -21,11 +23,11 @@ import { Alert, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
-import { formatEther, formatUnits, maxUint256, parseUnits } from "viem";
+import { formatEther, formatUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function WithdrawBtn({
   reserve,
@@ -60,16 +62,23 @@ export default function WithdrawBtn({
   const { useSelectedWalletBalance } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const atoken = useSelectedWalletBalance(reserve.aTokenAddress);
-  const otoken = useSelectedWalletBalance(reserve.underlyingAsset);
+  const atoken = useSelectedWalletBalance(reserve?.aTokenAddress);
+  const otoken = useSelectedWalletBalance(reserve?.underlyingAsset);
   const token = {
     ...otoken,
     balance: atoken?.balance ?? 0n,
     formattedBalance: atoken?.formattedBalance ?? "0",
-  };
+  } as BalanceToken;
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refetch: userAccountRefetch } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
+  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList({
+    config: beraJsConfig,
+  });
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -80,7 +89,7 @@ export default function WithdrawBtn({
       <Button
         onClick={() => setOpen(true)}
         className={cn("w-full xl:w-fit", className)}
-        disabled={disabled || isLoading || token.balance === 0n}
+        disabled={disabled || isLoading || !token || token.balance === 0n}
         variant={variant}
       >
         {isLoading ? "Loading" : "Withdraw"}
@@ -88,7 +97,7 @@ export default function WithdrawBtn({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full p-8 md:w-[480px]">
           <WithdrawModalContent
-            {...({ reserve, token, amount, setAmount, write } as any)}
+            {...{ reserve, token: token!, amount, setAmount, write }}
           />
         </DialogContent>
       </Dialog>
@@ -104,32 +113,49 @@ const WithdrawModalContent = ({
   write,
 }: {
   reserve: any;
-  token: Token;
+  token: BalanceToken;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
   const isHoney = reserve?.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
-  const { account } = useBeraJs();
-  const { useUserAccountData } = usePollUserAccountData();
-  const { data: userAccountData } = useUserAccountData();
-
-  const currentHealthFactor = formatEther(userAccountData?.healthFactor || "0");
-  const newHealthFactor = calculateHealthFactorFromBalancesBigUnits({
-    collateralBalanceMarketReferenceCurrency:
-      Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
-      Number(amount ?? "0") *
-        Number(reserve?.formattedPriceInMarketReferenceCurrency),
-    borrowBalanceMarketReferenceCurrency: formatUnits(
-      userAccountData.totalDebtBase,
-      8,
-    ),
-    currentLiquidationThreshold: formatUnits(
-      userAccountData.currentLiquidationThreshold,
-      4,
-    ),
+  const { account = "0x" } = useBeraJs();
+  const { useUserAccountData } = usePollUserAccountData({
+    config: beraJsConfig,
+    opts: {
+      refreshInterval: POLLING.FAST,
+    },
   });
+  const userAccountData = useUserAccountData();
+
+  const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
+  const newHealthFactor = userAccountData
+    ? calculateHealthFactorFromBalancesBigUnits({
+        collateralBalanceMarketReferenceCurrency:
+          Number(formatUnits(userAccountData.totalCollateralBase, 8)) -
+          Number(amount ?? "0") *
+            Number(reserve?.formattedPriceInMarketReferenceCurrency),
+        borrowBalanceMarketReferenceCurrency: formatUnits(
+          userAccountData.totalDebtBase,
+          8,
+        ),
+        currentLiquidationThreshold: formatUnits(
+          userAccountData.currentLiquidationThreshold,
+          4,
+        ),
+      })
+    : 0;
+  const paylaod =
+    token &&
+    getLendWithdrawPayload({
+      args: {
+        token,
+        amount: amount ?? "0",
+        max: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
+        account,
+      },
+    }).payload;
 
   return (
     <div className="flex flex-col gap-6">
@@ -189,7 +215,7 @@ const WithdrawModalContent = ({
         )}
       </div>
 
-      {!isHoney && userAccountData.totalDebtBase > 0n && (
+      {!isHoney && userAccountData && userAccountData.totalDebtBase > 0n && (
         <Alert variant="destructive">
           <AlertTitle>
             {" "}
@@ -206,6 +232,7 @@ const WithdrawModalContent = ({
           !amount ||
           BigNumber(amount).lte(BigNumber(0)) ||
           BigNumber(amount).gt(BigNumber(userBalance)) ||
+          !userAccountData ||
           (userAccountData.totalDebtBase > 0n && !isHoney)
         }
         onClick={() => {
@@ -213,13 +240,7 @@ const WithdrawModalContent = ({
             address: lendPoolImplementationAddress,
             abi: lendPoolImplementationAbi,
             functionName: "withdraw",
-            params: [
-              token.address,
-              BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0"))
-                ? maxUint256
-                : parseUnits((amount ?? "0") as `${number}`, token.decimals),
-              account,
-            ],
+            params: paylaod,
           });
         }}
       >

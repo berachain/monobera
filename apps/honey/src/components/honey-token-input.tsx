@@ -48,7 +48,7 @@ export function HoneyTokenInput({
   const { useSelectedWalletBalance } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const token = useSelectedWalletBalance(selected?.address ?? "");
+  const token = useSelectedWalletBalance(selected?.address ?? "0x");
   let tokenBalance: string = token?.formattedBalance ?? "0";
   if (balance !== undefined) tokenBalance = balance.toString();
 
