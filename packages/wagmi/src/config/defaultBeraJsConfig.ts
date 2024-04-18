@@ -1,14 +1,33 @@
 import { BeraConfig } from "@bera/berajs";
-import { beraTokenAddress, bgtTokenAddress, blockExplorerName, blockExplorerUrl, chainId, chainName, crocDexAddress, crocRouterEndpoint, crocSubgraphEndpoint, gasTokenDecimals, gasTokenIconUrl, gasTokenName, gasTokenSymbol, honeyAddress, honeySubgraphUrl, jsonRpcUrl, lendSubgraphUrl, multicallAddress, nativeTokenAddress, publicJsonRpcUrl, tokenListUrl } from "@bera/config";
+import {
+  beraTokenAddress,
+  bgtTokenAddress,
+  blockExplorerName,
+  blockExplorerUrl,
+  chainId,
+  chainName,
+  crocDexAddress,
+  crocRouterEndpoint,
+  crocSubgraphEndpoint,
+  gasTokenDecimals,
+  gasTokenIconUrl,
+  gasTokenName,
+  gasTokenSymbol,
+  honeyAddress,
+  honeySubgraphUrl,
+  jsonRpcUrl,
+  lendSubgraphUrl,
+  multicallAddress,
+  nativeTokenAddress,
+  publicJsonRpcUrl,
+  tokenListUrl,
+} from "@bera/config";
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
 import { createConfig, http } from "wagmi";
 
-
-
 import { NetworkConfig } from "~/context/context";
 import { crocMultiSwapAddress } from "../../../config/env/index";
-
 
 const BeraChain: Chain = {
   id: chainId,
@@ -88,6 +107,6 @@ export const beraJsConfig: BeraConfig = {
     dexAddress: crocDexAddress,
     honeyAddress: honeyAddress,
     bgtTokenAddress: bgtTokenAddress,
-    nativeTokenAddress: nativeTokenAddress
+    nativeTokenAddress: nativeTokenAddress,
   },
 };
