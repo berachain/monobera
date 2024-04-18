@@ -103,6 +103,10 @@ export default defineConfig({
               text: "getHoneyBalance",
               link: "/actions/getHoneyBalance/",
             },
+            {
+              text: "getPoolUserPosition",
+              link: "/actions/getPoolUserPosition/",
+            },
           ],
         },
         {

@@ -3,7 +3,8 @@
 Bera Config is a common object used to pass configuration options to Bera. It can either be used to point towards already hosted services or be used to point towards your own services.
 
 ```ts
-import { type BeraConfig } from 'berajs'
+import { type BeraConfig } from "berajs";
+
 export const beraJsConfig: BeraConfig = {
   endpoints: {
     dexRouter: "https://...",
@@ -25,7 +26,8 @@ export const beraJsConfig: BeraConfig = {
 All fields on `BeraConfig` are optional such that if you only want to interact with dex, you can provide a minimal config like so:
 
 ```ts
-import { type BeraConfig } from 'berajs'
+import { type BeraConfig } from "berajs";
+
 export const beraJsConfig: BeraConfig = {
   endpoints: {
     dexRouter: "https://...",
@@ -42,13 +44,47 @@ export const beraJsConfig: BeraConfig = {
 
 Required `BeraConfig` fields are documented on each hook / action.
 
+### Default BeraConfig
+
+You can import the default beraJsConfig object
+
+```ts
+import { beraJsConfig } from "@bera/wagmi";
+```
+
+:::info
+Note that if you're developing in the monorepo itself, `beraJsConfig` is populated at build time with environment variables from `.env` and `.env.local` at the monorepo root with the following mapping.
+:::
+
+```ts
+{
+  endpoints: {
+    tokenList: process.env.NEXT_PUBLIC_TOKEN_LIST,
+    dexRouter: process.env.NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT,
+  },
+  subgraphs: {
+    honeySubgraph: process.env.NEXT_PUBLIC_HONEY_SUBGRAPH_URL,
+    dexSubgraph: process.env.NEXT_PUBLIC_RPC_CROC_SUBGRAPH,
+    lendSubgraph: process.env.NEXT_PUBLIC_BEND_SUBGRAPH_URL,
+  },
+  contracts: {
+    multicallAddress: process.env.NEXT_PUBLIC_MULTICALL_ADDRESS,
+    crocMultiSwapAddress: process.env.NEXT_PUBLIC_RPC_CROC_MULTISWAP,
+    wrappedTokenAddress: process.env.NEXT_PUBLIC_WBERA_ADDRESS,
+    dexAddress: process.env.NEXT_PUBLIC_RPC_CROC_DEX,
+    honeyAddress: process.env.NEXT_PUBLIC_HONEY_ADDRESS,
+  },
+};
+
+```
+
 ## Berachain Services
 
 Berachain has a suite of open source indexers, subgraphs, and contracts required to run our frontends and BeraJs tooling.
 
 ### Router
 
-Berachain provides an open source router to calculate optimal swaps between pairs on dex. You can use our hosted one or run your own. 
+Berachain provides an open source router to calculate optimal swaps between pairs on dex. You can use our hosted one or run your own.
 https://github.com/berachain/subgraph-dex-router
 
 ### Subgraphs
