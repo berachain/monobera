@@ -2,6 +2,19 @@ import { defineConfig } from "vocs";
 
 export default defineConfig({
   title: "BeraJS",
+  description: "BeraJS is a library for interacting with Berachain",
+  iconUrl: {
+    dark: "https://res.cloudinary.com/duv0g402y/image/upload/v1713456719/BeraJS_Bracket_Light_bpkwd9.svg",
+    light:
+      "https://res.cloudinary.com/duv0g402y/image/upload/v1713456720/BeraJS_Bracket_Dark_rkiah6.svg",
+  },
+  logoUrl: {
+    dark: "https://res.cloudinary.com/duv0g402y/image/upload/v1713456719/BeraJS_Bracket_Light_bpkwd9.svg",
+    light:
+      "https://res.cloudinary.com/duv0g402y/image/upload/v1713456720/BeraJS_Bracket_Dark_rkiah6.svg",
+  },
+  ogImageUrl:
+    "https://vocs.dev/api/og?logo=%logo&title=%title&description=%description",
   editLink: {
     pattern:
       "https://github.com/berachain/monobera/edit/v2/apps/berajs-docs/docs/pages/:path",
