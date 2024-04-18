@@ -3,7 +3,7 @@ import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
-import { DefaultHookTypes, type Token } from "..";
+import { DefaultHookProps, type Token } from "..";
 
 interface IUseTokens {
   isLoading: boolean;
@@ -25,7 +25,7 @@ function tokenListToDict(list: Token[]): { [key: string]: Token } {
   }, {});
 }
 
-const useTokens = ({ config, opts }: DefaultHookTypes): IUseTokens => {
+const useTokens = ({ config, opts }: DefaultHookProps): IUseTokens => {
   const TOKEN_KEY = "tokens";
 
   const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<

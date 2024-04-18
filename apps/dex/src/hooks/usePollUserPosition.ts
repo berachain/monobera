@@ -1,4 +1,9 @@
-import { PoolV2, getBeraLpAddress, useBeraJs } from "@bera/berajs";
+import {
+  PoolV2,
+  getBeraLpAddress,
+  useBeraJs,
+  type IUserPosition,
+} from "@bera/berajs";
 import { chainId } from "@bera/config";
 import { dexClient, getTokenHoneyPricesReq } from "@bera/graphql";
 import { POLLING } from "@bera/shared-ui/src/utils";
@@ -9,7 +14,6 @@ import { erc20Abi, getAddress, toHex } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { useCrocPoolSpotPrice } from "./useCrocPoolSpotPrice";
-import { type IUserPosition } from "./usePollUserDeposited";
 
 interface IUserAmbientPositon {
   userPosition: IUserPosition | undefined;

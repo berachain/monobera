@@ -5,13 +5,11 @@ import { usePublicClient } from "wagmi";
 
 import { getBeraBalance } from "~/actions/dex/getBeraBalance";
 import POLLING from "~/enum/polling";
-import { DefaultHookTypes } from "~/types/global";
+import { DefaultHookProps } from "~/types/global";
 
-export interface UsePollBeraBalanceRequest extends DefaultHookTypes {
-  args?: {
-    address: Address | undefined;
-  };
-}
+export type UsePollBeraBalanceRequest = DefaultHookProps<{
+  address: Address | undefined;
+}>;
 
 export interface UsePollBeraBalanceResponse {
   isLoading: boolean;

@@ -8,10 +8,10 @@ import useSWRImmutable from "swr/immutable";
 import { Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookTypes, type Token } from "..";
+import { multicall3Abi } from "~/abi";
+import { DefaultHookProps, type Token } from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
-import { multicall3Abi } from "~/abi";
 
 interface BalanceToken extends Token {
   balance: bigint;
@@ -25,11 +25,9 @@ interface Call {
   args: any[];
 }
 
-export interface UsePollWalletBalancesRequest extends DefaultHookTypes {
-  args?: {
-    externalTokenList?: Token[];
-  };
-}
+export type UsePollWalletBalancesRequest = DefaultHookProps<{
+  externalTokenList?: Token[];
+}>;
 
 export interface UsePollBalancesResponse {
   isLoading: boolean;
