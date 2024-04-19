@@ -1,4 +1,4 @@
-import { SWRConfiguration } from "swr";
+import { SWRConfiguration, SWRResponse } from "swr";
 import { Address } from "viem";
 
 export interface BeraConfig {
@@ -38,10 +38,24 @@ export interface BeraConfig {
   };
 }
 
-export interface DefaultHookTypes {
-  config: BeraConfig;
-  opts?: SWRConfiguration | undefined;
-}
+export type DefaultHookProps<
+  ArgsType = any,
+  ArgsFieldOptional = false,
+> = ArgsType extends never
+  ? { config: BeraConfig; opts?: SWRConfiguration | undefined }
+  : ArgsFieldOptional extends true
+    ? {
+        args?: ArgsType;
+        config: BeraConfig;
+        opts?: SWRConfiguration | undefined;
+      }
+    : {
+        args: ArgsType;
+        config: BeraConfig;
+        opts?: SWRConfiguration | undefined;
+      };
+
+export type DefaultHookReturnType<T = any> = SWRResponse<T, any, any>;
 
 export interface PayloadReturnType<T = any[]> {
   payload: T;

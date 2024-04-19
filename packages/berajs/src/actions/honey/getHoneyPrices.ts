@@ -17,7 +17,7 @@ interface FetchHoneyPricesArgs {
 export const getTokenHoneyPrices = async ({
   tokenAddresses,
   config,
-}: FetchHoneyPricesArgs): Promise<string[] | undefined> => {
+}: FetchHoneyPricesArgs): Promise<{ [key: string]: string } | undefined> => {
   if (!config.subgraphs?.dexSubgraph) {
     throw new Error("dex subgraph uri s not found in config");
   }
@@ -28,7 +28,7 @@ export const getTokenHoneyPrices = async ({
   });
 
   if (!tokenAddresses || tokenAddresses.some((token) => token === undefined)) {
-    return [];
+    return {};
   }
   const swappedAddresses = tokenAddresses.map((token: string | undefined) =>
     handleNativeBera(token).toLowerCase(),

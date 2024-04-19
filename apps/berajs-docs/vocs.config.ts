@@ -150,6 +150,10 @@ export default defineConfig({
               text: "getWalletBalances",
               link: "/actions/getWalletBalances/",
             },
+            {
+              text: "getPoolUserPosition",
+              link: "/actions/getPoolUserPosition/",
+            },
           ],
         },
         {
