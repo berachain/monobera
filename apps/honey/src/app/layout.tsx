@@ -5,8 +5,7 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
 import { ApolloProvider } from "@apollo/client";
-import { BeraWagmi } from "@bera/wagmi";
-import { rpcBannerEnabled } from "@bera/config";
+import { honeyName } from "@bera/config";
 import { honeyClient } from "@bera/graphql";
 import {
   Footer,
@@ -15,6 +14,7 @@ import {
   TermOfUseModal,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { BeraWagmi, beraJsConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -71,11 +71,15 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 isHoney
                 navItems={navItems}
                 mobileNavItems={mobileNavItems}
+                appName={honeyName}
               />
               <main
                 className={cn(
                   "w-full pb-[72px]",
-                  rpcBannerEnabled ? "pt-[120px]" : "pt-[72px]",
+                  beraJsConfig?.banners?.global?.rpcBannerEnabled ||
+                    beraJsConfig?.banners?.[honeyName]?.rpcBannerEnabled
+                    ? "pt-[120px]"
+                    : "pt-[72px]",
                 )}
               >
                 {props.children}

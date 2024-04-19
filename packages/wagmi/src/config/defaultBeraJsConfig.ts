@@ -138,26 +138,30 @@ export const beraJsConfig: BeraConfig = {
   },
   banners: {
     global: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+    BEND: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+    Honey: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+    BEX: {
       lauchBannerEnabled: true,
       rpcBannerEnabled: true,
     },
-    bend: {
+    BERPS: {
       lauchBannerEnabled: false,
       rpcBannerEnabled: false,
     },
-    honey: {
+    "BGT Station": {
       lauchBannerEnabled: false,
       rpcBannerEnabled: false,
     },
-    bex: {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
-    berps: {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
-    bgtStation: {
+    Faucet: {
       lauchBannerEnabled: false,
       rpcBannerEnabled: false,
     },
