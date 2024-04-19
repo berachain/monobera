@@ -3,12 +3,12 @@ import { usePublicClient } from "wagmi";
 
 import { lendRewardHelperAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
-import { DefaultHookTypes } from "~/types";
+import { DefaultHookProps } from "~/types";
 
 export const usePollLendUserBGTRewards = ({
   config,
   opts,
-}: DefaultHookTypes) => {
+}: DefaultHookProps) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();

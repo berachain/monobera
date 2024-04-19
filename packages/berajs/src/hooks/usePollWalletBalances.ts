@@ -2,8 +2,7 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookTypes, type Token } from "..";
-import { getWalletBalances } from "../actions/dex";
+import { DefaultHookProps, getWalletBalances, type Token } from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 
@@ -19,11 +18,12 @@ interface Call {
   args: any[];
 }
 
-export interface UsePollWalletBalancesRequest extends DefaultHookTypes {
-  args?: {
+export type UsePollWalletBalancesRequest = DefaultHookProps<
+  {
     externalTokenList?: Token[];
-  };
-}
+  },
+  true
+>;
 
 export interface UsePollBalancesResponse {
   isLoading: boolean;

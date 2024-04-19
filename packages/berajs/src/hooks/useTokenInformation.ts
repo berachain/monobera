@@ -3,7 +3,7 @@ import { Address } from "viem";
 import { useConfig, usePublicClient } from "wagmi";
 
 import { getTokenInformation } from "~/actions/dex";
-import { DefaultHookTypes, Token } from "..";
+import { DefaultHookProps, Token } from "..";
 import { initialState, reducer } from "../utils/stateReducer";
 
 interface IUseTokenInformation {
@@ -22,7 +22,7 @@ export interface IUseTokenInformationResponse {
 
 const useTokenInformation = ({
   config: beraConfig,
-}: DefaultHookTypes): IUseTokenInformationResponse => {
+}: DefaultHookProps): IUseTokenInformationResponse => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [error, setError] = useState<Error | undefined>(undefined);
   const [tokenInformation, setTokenInformation] = useState<Token | undefined>(

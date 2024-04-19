@@ -1,0 +1,67 @@
+# getPoolUserPosition
+
+Returns a breakdown of the user's position of type `IUserPosition` in a given pool of type `PoolV2` including the user's overall estimated USD balance, and the balance of their individual staked tokens in the pool.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
+## Usage
+
+```ts
+import {
+  getPoolUserPosition,
+  useBeraJs,
+  type IUserPosition,
+} from "@bera/berajs";
+import { beraJsConfig } from "@bera/wagmi";
+import { useAccount, usePublicClient } from "wagmi";
+
+/**
+ * This is an example hook in a properly initialized (see steps above) react-based application
+ */
+const usePoolUserPosition = () => {
+  const { address: account } = useAccount();
+  const publicClient = usePublicClient();
+  const [userPositionBreakdown, setUserPositionBreakdown] = useState<
+    IUserPosition | undefined
+  >();
+  const [isLoading, setIsLoading] = useState<boolean>();
+
+  useEffect(() => {
+    if (!account || !publicClient) return;
+    getPoolUserPosition({
+      args: {
+        pool,
+        account,
+      },
+      config: beraJsConfig,
+      publicClient,
+    }).then((userPosition: IUserPosition) => {
+      setUserPositionBreakdown(userPosition);
+    });
+  }, [account, publicClient]);
+
+  return { data: userPositionBreakdown, isLoading };
+};
+```
+
+## Parameters
+
+| Name           | type           | Description                                                               | Required |
+| -------------- | :------------- | :------------------------------------------------------------------------ | :------: |
+| `args.pool`    | `PoolV2`       | The pool where the user staking position we are getting exists            |  `true`  |
+| `args.account` | `0x${string}`  | The account address of the user whose position in the pool we are getting |  `true`  |
+| `config`       | `BeraConfig`   | BeraConfig object containing addresses for relevant resources             |  `true`  |
+| `publicClient` | `PublicClient` | The viem public client used to interact with the blockchain               |  `true`  |
+
+## Returns
+
+| Name                   | type                                                             | Description                                                                     | Optional |
+| ---------------------- | :--------------------------------------------------------------- | :------------------------------------------------------------------------------ | :------: |
+| `baseAmount`           | [`BigNumber`](https://mikemcl.github.io/bignumber.js/#bignumber) | number of base tokens staked in pool by user                                    | `false`  |
+| `quoteAmount`          | [`BigNumber`](https://mikemcl.github.io/bignumber.js/#bignumber) | number of quote tokens staked in pool by user                                   | `false`  |
+| `formattedBaseAmount`  | `string`                                                         | formatted string of baseAmount                                                  | `false`  |
+| `formattedQuoteAmount` | `string`                                                         | formatted string of quoteAmount                                                 | `false`  |
+| `estimatedHoneyValue`  | `string`                                                         | formatted string of total estimated honey/USD value of user's stake in the pool | `false`  |
+| `seeds`                | [`BigNumber`](https://mikemcl.github.io/bignumber.js/#bignumber) | liquidity pool balance used to calculate amounts                                | `false`  |

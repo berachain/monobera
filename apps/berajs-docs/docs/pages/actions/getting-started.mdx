@@ -1,6 +1,10 @@
 # Getting Started With Actions [Get started integrating Berajs to your Typescript project]
 
-## Installation
+## Initialization
+
+::::steps
+
+### Install Dependencies
 
 :::code-group
 
@@ -22,25 +26,73 @@ bun i berajs@latest viem@latest
 
 :::
 
+### Initialize Public client
+
+You will need to initialize a viem public client like this at an earlier point in the application (could be in the same file).
+
+```ts
+import { createPublicClient } from "viem";
+import { berachain } from "viem/chains";
+
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain,
+  transport: http(),
+});
+```
+
+### BeraConfig
+
+You will need an object of type BeraConfig that contains the required config to execute actions. There are two approaches:
+
+#### Approach 1: import and use beraJsConfig
+
+```ts
+import { beraJsConfig } from "@bera/wagmi";
+```
+
+:::info
+If you are developing from the monorepo, note that [`beraJsConfig`](/bera-config) is populated at build time with environment variables from `.env` and `.env.local` at the monorepo root.
+Visit the [`beraJsConfig`](/bera-config#default-beraconfig) docs page for more information on environment variable mapping to config variables
+:::
+
+#### Approach 2: manually create and populate a beraJsConfig
+
+```ts
+import { type BeraConfig } from "@bera/berajs";
+
+/**
+ * intialize a beraconfig with the required fields for the desired action
+ */
+const beraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+};
+```
+
+::::
+
 ## Usage
+
 In this example, we will setup a public client and use that with berajs to easily interact with Berachain.
 
 ```tsx [app.ts]
 import { createPublicClient } from 'viem'
 import { berachain } from 'viem/chains'
-import { getSwap } from '@bera/berajs'
+import { getSwap, type BeraConfig } from '@bera/berajs'
 
 // first, intialize a public client with berachain
-const publicClient = createPublicClient({ 
+const publicClient = createPublicClient({
   chain: berachain,
   transport: http()
 })
 
 // intialize a beraconfig
-const beraConfig: {
+const beraConfig: BeraConfig = {
     endpoints: {
         dexRouter: 'https://'
-    }, 
+    },
     contracts: {
         crocMultiSwapAddress: '0x'
     }
