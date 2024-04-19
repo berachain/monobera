@@ -1,6 +1,7 @@
 import {
-  lendRewardHelperAbi,
   TransactionActionType,
+  defaultBeraConfig,
+  lendRewardHelperAbi,
   useBeraJs,
   usePollLendUserBGTRewards,
 } from "@bera/berajs";
@@ -9,7 +10,6 @@ import { Spinner, TokenIcon, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { formatEther } from "viem";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function BGTRewardsClaimBtn() {
   const { account } = useBeraJs();
@@ -17,7 +17,7 @@ export default function BGTRewardsClaimBtn() {
     data: rewards,
     isLoading,
     refetch,
-  } = usePollLendUserBGTRewards({ config: beraJsConfig });
+  } = usePollLendUserBGTRewards({ config: defaultBeraConfig });
   const {
     write,
     isLoading: isClaimingLoading,
@@ -45,7 +45,7 @@ export default function BGTRewardsClaimBtn() {
       >
         {!rewards || rewards === 0n ? (
           <>
-            <Icons.bgt className="w-6 h-6" />
+            <Icons.bgt className="h-6 w-6" />
             No Claimable BGT Rewards
           </>
         ) : isClaimingLoading ? (

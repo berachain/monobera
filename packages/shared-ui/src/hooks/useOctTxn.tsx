@@ -8,6 +8,7 @@ import {
   type ReactElement,
 } from "react";
 import {
+  defaultBeraConfig,
   useAddRecentTransaction,
   useOct,
   useOctContractWrite,
@@ -16,7 +17,6 @@ import {
   type IValueSend,
   type TransactionActionType,
 } from "@bera/berajs";
-import { beraJsConfig } from "@bera/wagmi";
 import toast from "react-hot-toast";
 import { useMediaQuery } from "usehooks-ts";
 
@@ -97,7 +97,7 @@ export const useOctTxn = ({
   const [identifier, setIdentifier] = useState("");
   const isMd = useMediaQuery("(min-width: 768px)");
   const { isOctReady } = useOct({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const [modalState, dispatch] = useReducer(modalReducer, initialState);
@@ -292,7 +292,7 @@ export const useOctTxn = ({
         }
         onSubmission?.(result);
       },
-      config: beraJsConfig,
+      config: defaultBeraConfig,
     });
 
   const {
@@ -472,7 +472,7 @@ export const useOctTxn = ({
       }
       onSubmission?.(result);
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const ModalPortal = () => {
     return (

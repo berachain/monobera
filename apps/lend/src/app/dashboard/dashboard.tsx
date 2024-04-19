@@ -1,6 +1,9 @@
 import React from "react";
-import { usePollReservesDataList, usePollWalletBalances } from "@bera/berajs";
-import { beraJsConfig } from "@bera/wagmi";
+import {
+  defaultBeraConfig,
+  usePollReservesDataList,
+  usePollWalletBalances,
+} from "@bera/berajs";
 
 import AvailableDeposit from "./available-deposit";
 import HoneyBorrow from "./honey-borrow";
@@ -10,10 +13,10 @@ import UserDeposits from "./user-deposits";
 
 export function Dashboard() {
   const { isLoading: isReservesDataLoading } = usePollReservesDataList({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { isLoading: isWalletBalanceLoading } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const isLoading = isReservesDataLoading || isWalletBalanceLoading;
   return (

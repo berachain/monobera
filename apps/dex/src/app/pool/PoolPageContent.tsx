@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  defaultBeraConfig,
   truncateHash,
   useBeraJs,
   usePoolUserPosition,
@@ -24,7 +25,6 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { beraJsConfig } from "@bera/wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
@@ -349,7 +349,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
       args: {
         pool,
       },
-      config: beraJsConfig,
+      config: defaultBeraConfig,
     });
 
   const { usePoolHistoryData, isLoading: isPoolHistoryLoading } =

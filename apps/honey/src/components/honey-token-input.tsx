@@ -1,14 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useBeraJs, usePollWalletBalances, type Token } from "@bera/berajs";
+import {
+  defaultBeraConfig,
+  useBeraJs,
+  usePollWalletBalances,
+  type Token,
+} from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import BigNumber from "bignumber.js";
 
 import { SelectToken } from "~/components/honey-select-token";
-import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   selected: Token | undefined;
@@ -46,7 +50,7 @@ export function HoneyTokenInput({
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const token = useSelectedWalletBalance(selected?.address ?? "0x");
   let tokenBalance: string = token?.formattedBalance ?? "0";
