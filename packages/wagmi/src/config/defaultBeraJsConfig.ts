@@ -122,6 +122,8 @@ export const beraJsConfig: BeraConfig = {
     lendUIDataProviderAddress: lendUIDataProviderAddress,
     lendRewardsAggregatorAddress: lendRewardsAddress,
     honeyAddress: honeyAddress,
+    bgtTokenAddress: bgtTokenAddress,
+    nativeTokenAddress: nativeTokenAddress,
   },
   erc20: {
     bera: nativeTokenAddress,

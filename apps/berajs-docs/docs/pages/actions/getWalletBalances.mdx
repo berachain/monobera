@@ -1,0 +1,47 @@
+# getWalletBalances
+
+Action for fetching the balances of a given wallet address
+
+## Import
+
+```ts
+import { getWalletBalances } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getWalletBalances, type Token } from "@bera/berajs";
+import { usePublicClient } from "wagmi";
+
+import { beraConfig } from "./config";
+
+const client = usePublicClient();
+
+interface BalanceToken extends Token {
+  balance: bigint;
+  formattedBalance: string;
+}
+
+const walletBalances = await getWalletBalances({
+  account,
+  tokenList,
+  externalTokenList,
+  queryKey,
+  config: beraConfig,
+  publicClient: client,
+  mutate,
+});
+```
+
+## Parameters
+
+```ts
+import { type IFetchWalletBalancesRequestArgs } from "berajs";
+```
+
+## Returns
+
+```ts
+type result = Promise<number | BalanceToken[] | undefined>;
+```
