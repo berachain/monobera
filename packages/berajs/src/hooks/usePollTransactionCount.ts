@@ -4,7 +4,6 @@ import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
 import { getTransactionCount } from "../actions/dex";
-import { DefaultHookTypes } from "../types/global";
 
 export interface IUserPollTransactionCountRequest {
   address: string | undefined;

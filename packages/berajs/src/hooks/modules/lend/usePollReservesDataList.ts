@@ -4,9 +4,9 @@ import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BaseCurrencyData, ReserveData, getReserveData } from "~/actions/lend";
-import { DefaultHookTypes } from "~/types";
+import { DefaultHookProps } from "~/types";
 
-export const usePollReservesDataList = ({ config, opts }: DefaultHookTypes) => {
+export const usePollReservesDataList = ({ config, opts }: DefaultHookProps) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
 

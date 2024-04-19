@@ -5,7 +5,7 @@ import { usePublicClient } from "wagmi";
 
 import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";
 import POLLING from "~/enum/polling";
-import { DefaultHookTypes } from "~/types/global";
+import { DefaultHookProps } from "~/types/global";
 import { useBeraJs } from "../contexts";
 
 export interface UsePollHoneyBalancesResponse {
@@ -20,7 +20,7 @@ export const usePollHoneyBalance = ({
   opts: { refreshInterval } = {
     refreshInterval: POLLING.FAST,
   },
-}: DefaultHookTypes): UsePollHoneyBalancesResponse => {
+}: DefaultHookProps): UsePollHoneyBalancesResponse => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
   const QUERY_KEY = [account, isConnected, "honeyBalance"];

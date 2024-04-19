@@ -1,10 +1,11 @@
 import { decodeCrocPrice } from "@bera/beracrocswap";
 import {
-  bexQueryAbi,
   PoolV2,
+  bexQueryAbi,
   formatSubgraphPoolData,
   getBeraLpAddress,
   useBeraJs,
+  type IUserPosition,
 } from "@bera/berajs";
 import {
   chainId,
@@ -48,15 +49,6 @@ interface AmbientPosition {
   rewardLiq: number;
   timeFirstMint: number;
   user: string;
-}
-
-export interface IUserPosition {
-  baseAmount: BigNumber;
-  quoteAmount: BigNumber;
-  formattedBaseAmount: string;
-  formattedQuoteAmount: string;
-  estimatedHoneyValue: number;
-  seeds: bigint;
 }
 
 export interface IUserPool extends PoolV2 {

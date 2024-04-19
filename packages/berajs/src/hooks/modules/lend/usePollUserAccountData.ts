@@ -7,9 +7,9 @@ import {
   getUserAccountData,
 } from "~/actions/lend/getUserAccountData";
 import { useBeraJs } from "~/contexts";
-import { DefaultHookTypes } from "~/types";
+import { DefaultHookProps } from "~/types";
 
-export const usePollUserAccountData = ({ config, opts }: DefaultHookTypes) => {
+export const usePollUserAccountData = ({ config, opts }: DefaultHookProps) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();

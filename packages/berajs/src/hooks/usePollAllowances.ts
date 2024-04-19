@@ -1,25 +1,22 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
 import { Token } from "~/types";
 import { getAllowances } from "../actions/dex";
-import { DefaultHookTypes } from "../types/global";
+import { DefaultHookProps } from "../types/global";
 
 interface AllowanceToken extends Token {
   allowance: bigint;
   formattedAllowance: string;
 }
 
-export interface IUsePollAllowancesRequest extends DefaultHookTypes {
-  args: {
-    contract: string;
-    tokens: Token[];
-  };
-}
+type UsePollAllowancesRequest = DefaultHookProps<{
+  contract: string;
+  tokens: Token[];
+}>;
 
 export interface IUsePollAllowancesResponse {
   useCurrentAllowancesForContract: () => AllowanceToken[];
@@ -40,7 +37,7 @@ export const usePollAllowances = ({
   opts: { refreshInterval } = {
     refreshInterval: POLLING.FAST,
   },
-}: IUsePollAllowancesRequest): IUsePollAllowancesResponse => {
+}: UsePollAllowancesRequest): IUsePollAllowancesResponse => {
   const { contract, tokens } = args;
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();

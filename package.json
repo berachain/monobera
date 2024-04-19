@@ -26,7 +26,7 @@
     "dev:lend": "turbo dev --filter=lend --filter='./packages/*' --concurrency=20",
     "dev:perp": "turbo dev --filter=perp --filter='./packages/*' --concurrency=20",
     "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*' --concurrency=20",
-    "dev:berajs-docs": "turbo dev --filter=berajs-docs --filter='./packages/*' --concurrency=20",
+    "dev:docs": "turbo dev --filter=berajs-docs --filter='./packages/*' --concurrency=20",
     "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*' --concurrency=20",
     "dev:ambassador": "turbo dev --filter=ambassador --filter='./packages/*' --concurrency=20",
     "dev:ecosystem": "turbo dev --filter=ecosystem --filter='./packages/*' --concurrency=20",

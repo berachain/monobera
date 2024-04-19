@@ -2,22 +2,20 @@ import useSWR from "swr";
 
 import { getTokenHoneyPrices } from "~/actions/honey";
 import POLLING from "~/enum/polling";
-import { DefaultHookTypes } from "~/types/global";
+import { DefaultHookProps } from "~/types/global";
 
 /**
  *
  * @returns the current honey price of a series of tokens
  */
-export interface UseTokenHoneyPricesRequest extends DefaultHookTypes {
-  args?: {
-    tokenAddresses: string[] | undefined;
-  };
-}
+export type UseTokenHoneyPricesRequest = DefaultHookProps<{
+  tokenAddresses: string[] | undefined;
+}>;
 
 export interface UseTokenHoneyPricesResponse {
   isLoading: boolean;
   isValidating: boolean;
-  data: string[] | undefined;
+  data: { [key: string]: string } | undefined;
 }
 
 export const useTokenHoneyPrices = ({
