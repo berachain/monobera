@@ -38,11 +38,12 @@ export interface BeraConfig {
     ahoney: Address;
     vdhoney: Address;
   };
-  banners?: {
-    [key: string]: {
-      lauchBannerEnabled: boolean;
-      rpcBannerEnabled: boolean;
-    };
+}
+
+export interface BannerConfig {
+  [key: string]: {
+    lauchBannerEnabled: boolean;
+    rpcBannerEnabled: boolean;
   };
 }
 
