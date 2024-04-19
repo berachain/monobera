@@ -37,7 +37,8 @@ const TradeWalletSection = () => {
     message: "Withdrawing All From One Click Trading Wallet",
   });
 
-  const isBalanceLessThanThreshold = Number(octBalance ?? 0) < 0.1;
+  const isBalanceLessThanThreshold =
+    Number(octBalance?.formattedBalance ?? 0) < 0.1;
   return (
     <div className={"relative rounded-md border border-border p-3"}>
       <p className="text-md pb-4 font-bold leading-normal">
@@ -58,7 +59,7 @@ const TradeWalletSection = () => {
       <div className="mt-2 flex flex-row gap-2">
         <TokenIcon address={nativeTokenAddress} />
         <div className="text-sm font-semibold">
-          {Number(octBalance ?? 0).toFixed(2)} BERA{" "}
+          {Number(octBalance?.formattedBalance ?? 0).toFixed(2)} BERA{" "}
           <span className="text-xs font-medium text-success-foreground">
             ~ {octTxCount} txns
           </span>
@@ -74,7 +75,7 @@ const TradeWalletSection = () => {
             writeValueSend({
               address: account as Address,
               value:
-                parseUnits(octBalance.toString(), 18) -
+                parseUnits(octBalance?.formattedBalance ?? "0", 18) -
                 parseEther(`${Number(0.1)}`),
             });
           }}
@@ -307,11 +308,11 @@ export function ManageOctDialog({
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();
-  const { useBalance } = usePollBeraBalance({
+  const { data: beraBalanceData } = usePollBeraBalance({
     config: beraJsConfig,
     args: { address: account as Address },
   });
-  const userBalance = useBalance();
+  const userBalance = beraBalanceData?.formattedBalance ?? "0";
   const { isLoading, write } = useTxn({
     message: "Delegate One Click Trading Wallet",
     actionType: TransactionActionType.DELEGATE_OCT,

@@ -61,3 +61,8 @@ export interface PayloadReturnType<T = any[]> {
   payload: T;
   value?: bigint;
 }
+
+export interface TokenBalance {
+  balance: bigint;
+  formattedBalance: string;
+}
