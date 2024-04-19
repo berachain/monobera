@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import { Address } from "viem";
 
 export type Token = {
@@ -69,4 +70,13 @@ export interface PoolV2 {
   totalApy: number;
   bgtApy: number;
   shareAddress: string;
+}
+
+export interface IUserPosition {
+  baseAmount: BigNumber;
+  quoteAmount: BigNumber;
+  formattedBaseAmount: string;
+  formattedQuoteAmount: string;
+  estimatedHoneyValue: number;
+  seeds: bigint;
 }

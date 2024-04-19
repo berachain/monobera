@@ -3,10 +3,9 @@ import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getSwap } from "~/actions/dex";
-import { SwapRequest, type DefaultHookTypes } from "~/types";
+import { SwapRequest, type DefaultHookProps } from "~/types";
 
-interface IUsePollSwaps extends DefaultHookTypes {
-  args: SwapRequest;
+interface IUsePollSwaps extends DefaultHookProps<SwapRequest, false> {
   isTyping?: boolean | undefined;
 }
 

@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { truncateHash, useBeraJs, type PoolV2 } from "@bera/berajs";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  truncateHash,
+  useBeraJs,
+  usePoolUserPosition,
+  type PoolV2,
+} from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import { ApyTooltip, FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { truncateFloat } from "@bera/shared-ui/src/utils";
@@ -19,10 +24,10 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { beraJsConfig } from "@bera/wagmi";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
-import { usePollUserPosition } from "~/hooks/usePollUserPosition";
 import { usePoolHistory } from "~/hooks/usePoolHistory";
 import {
   usePoolRecentProvisions,
@@ -339,11 +344,13 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   //   formatAmountSmall(bgtRewards);
   const { isReady, isConnected, isWrongNetwork } = useBeraJs();
 
-  const { usePosition, isLoading: isPositionBreakdownLoading } =
-    usePollUserPosition(pool);
-
-  const userAmbientPosition = usePosition();
-  const userPositionBreakdown = userAmbientPosition?.userPosition;
+  const { data: userPositionBreakdown, isLoading: isPositionBreakdownLoading } =
+    usePoolUserPosition({
+      args: {
+        pool,
+      },
+      config: beraJsConfig,
+    });
 
   const { usePoolHistoryData, isLoading: isPoolHistoryLoading } =
     usePoolHistory({
@@ -462,8 +469,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 {
                   address: pool.quoteInfo.address,
                   symbol: pool.quoteInfo.symbol,
-                  value: pool.baseTokens,
-                  valueUSD: pool.baseTokenHoneyTvl,
+                  value: pool.quoteTokens,
+                  valueUSD: pool.quoteTokenHoneyTvl,
                 },
               ]}
             />
