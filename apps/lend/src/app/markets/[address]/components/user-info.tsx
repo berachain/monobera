@@ -1,4 +1,5 @@
 import {
+  defaultBeraConfig,
   useBeraJs,
   usePollReservesDataList,
   usePollUserAccountData,
@@ -9,7 +10,6 @@ import { FormattedNumber, POLLING, Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatUnits } from "viem";
 
@@ -19,19 +19,19 @@ import SupplyBtn from "~/components/modals/supply-button";
 export default function UserInfo() {
   const { isReady } = useBeraJs();
   const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const tokenBalance = useSelectedWalletBalance(honeyTokenAddress);
 
   const { useSelectedReserveData, useBaseCurrencyData } =
     usePollReservesDataList({
-      config: beraJsConfig,
+      config: defaultBeraConfig,
     });
   const reserve = useSelectedReserveData(honeyTokenAddress);
   const baseCurrencyData = useBaseCurrencyData();
 
   const { useUserAccountData } = usePollUserAccountData({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },

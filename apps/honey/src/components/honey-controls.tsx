@@ -1,15 +1,14 @@
 "use client";
 
 import React from "react";
-import { usePollWalletBalances } from "@bera/berajs";
+import { defaultBeraConfig, usePollWalletBalances } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { beraJsConfig } from "@bera/wagmi";
 
 export function HoneyControls() {
   const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const token = useSelectedWalletBalance(honeyAddress ?? "0x");
   const tokenBalance = Number(token?.formattedBalance ?? "0");

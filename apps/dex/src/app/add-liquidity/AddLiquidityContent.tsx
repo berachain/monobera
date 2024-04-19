@@ -3,8 +3,9 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  bexAbi,
   TransactionActionType,
+  bexAbi,
+  defaultBeraConfig,
   usePollWalletBalances,
   useTokenHoneyPrice,
   type PoolV2,
@@ -31,7 +32,6 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { beraJsConfig } from "@bera/wagmi";
 import { formatUnits, parseUnits } from "viem";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
@@ -66,7 +66,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   } = useAddLiquidity(pool);
 
   const { refetch } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
@@ -93,11 +93,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   ) as Token;
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { tokenAddress: baseToken?.address },
   });
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { tokenAddress: quoteToken?.address },
   });
 

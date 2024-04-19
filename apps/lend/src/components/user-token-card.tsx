@@ -1,4 +1,8 @@
-import { usePollReservesDataList, type Token } from "@bera/berajs";
+import {
+  defaultBeraConfig,
+  usePollReservesDataList,
+  type Token,
+} from "@bera/berajs";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -8,7 +12,6 @@ import { type Address } from "viem";
 import AssetInfo from "./asset-info";
 import SupplyBtn from "./modals/supply-button";
 import WithdrawBtn from "./modals/withdraw-button";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function UserTokenCard({
   token,
@@ -18,7 +21,7 @@ export default function UserTokenCard({
   deposited?: boolean;
 }) {
   const { useSelectedReserveData } = usePollReservesDataList({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const reserve = useSelectedReserveData(token.address as Address);
   const balance = token.formattedBalance ?? "0";

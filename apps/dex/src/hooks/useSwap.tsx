@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import {
+  defaultBeraConfig,
   multiswapAbi,
-  wberaAbi,
   useBeraJs,
   useGasData,
   usePollAllowance,
@@ -12,6 +12,7 @@ import {
   useTokenHoneyPrice,
   useTokenInformation,
   useTokens,
+  wberaAbi,
   type Token,
 } from "@bera/berajs";
 import { getSwapPayload } from "@bera/berajs/actions";
@@ -22,7 +23,6 @@ import {
 } from "@bera/config";
 import { POLLING } from "@bera/shared-ui";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
-import { beraJsConfig } from "@bera/wagmi";
 import {
   formatEther,
   formatGwei,
@@ -57,15 +57,15 @@ export enum WRAP_TYPE {
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { read: readInput, tokenInformation: inputToken } = useTokenInformation(
     {
-      config: beraJsConfig,
+      config: defaultBeraConfig,
     },
   );
   const { read: readOutput, tokenInformation: outputToken } =
     useTokenInformation({
-      config: beraJsConfig,
+      config: defaultBeraConfig,
     });
   const { tokenDictionary } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   useEffect(() => {
@@ -106,11 +106,11 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   );
 
   const { data: tokenInPrice } = useTokenHoneyPrice({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { tokenAddress: selectedFrom?.address },
   });
   const { data: tokenOutPrice } = useTokenHoneyPrice({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { tokenAddress: selectedTo?.address },
   });
 
@@ -133,7 +133,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const [isTyping, setIsTyping] = useState(false);
 
   const { isLoading: isBalanceLoading } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   useEffect(() => {
@@ -162,7 +162,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     opts: {
       refreshInterval: POLLING.FAST,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     isTyping: isTyping,
   });
 
@@ -335,7 +335,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }
   const gasData = useGasData({ contractArgs: gasParams });
   const beraInUsd = useTokenHoneyPrice({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { tokenAddress: nativeTokenAddress },
   });
   const formattedGasPriceInBera = gasData ? parseFloat(formatGwei(gasData)) : 0;

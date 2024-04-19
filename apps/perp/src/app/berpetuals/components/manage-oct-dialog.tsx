@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import {
-  tradingAbi,
   TransactionActionType,
+  defaultBeraConfig,
+  tradingAbi,
   truncateHash,
   useBeraJs,
   useOct,
@@ -22,13 +23,12 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { beraJsConfig } from "@bera/wagmi";
 import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
 
 const TradeWalletSection = () => {
   const { octPrivKey, octAddress, octBalance, octTxCount } = useOct({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const [copied, setCopied] = useState(false);
   const { account } = useBeraJs();
@@ -302,13 +302,13 @@ export function ManageOctDialog({
     octAddress,
     octBalance,
   } = useOct({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();
   const { useBalance } = usePollBeraBalance({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { address: account as Address },
   });
   const userBalance = useBalance();

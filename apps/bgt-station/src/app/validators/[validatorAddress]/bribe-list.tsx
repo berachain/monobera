@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  defaultBeraConfig,
   formatUsd,
   usePollEpochs,
   useTokenInformation,
@@ -16,7 +17,6 @@ import {
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { beraJsConfig } from "@bera/wagmi";
 import { formatUnits } from "viem";
 
 const BribeCard = ({
@@ -34,10 +34,10 @@ const BribeCard = ({
 }) => {
   const [token, setToken] = useState<Token | undefined>(undefined);
   const { tokenDictionary } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { read, tokenInformation } = useTokenInformation({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   useEffect(() => {

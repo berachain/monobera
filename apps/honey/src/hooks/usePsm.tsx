@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   TransactionActionType,
+  defaultBeraConfig,
   useBeraJs,
   usePollAllowance,
   usePollBalance,
@@ -12,16 +13,15 @@ import {
   type Token,
 } from "@bera/berajs";
 import { honeyRouterAddress, honeyTokenAddress } from "@bera/config";
-import { useTxn, useAnalytics } from "@bera/shared-ui";
+import { useAnalytics, useTxn } from "@bera/shared-ui";
 import BigNumber from "bignumber.js";
 import { getAddress, parseUnits, type Address } from "viem";
-import { beraJsConfig } from "@bera/wagmi";
 
 export const usePsm = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   const { tokenDictionary, tokenList } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const collateralList = tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
