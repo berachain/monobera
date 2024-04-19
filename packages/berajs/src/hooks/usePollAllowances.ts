@@ -1,6 +1,5 @@
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
