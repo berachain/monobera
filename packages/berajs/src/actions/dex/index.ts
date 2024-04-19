@@ -9,3 +9,5 @@ export * from "./getAllowance";
 export * from "./getAllowances";
 export * from "./getHoneyBalance";
 export * from "./getBeraBalance";
+export * from "./getWalletBalances";
+export * from "./getTokens";

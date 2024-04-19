@@ -1,17 +1,11 @@
-import {
-  bgtTokenAddress,
-  multicallAddress,
-  nativeTokenAddress,
-} from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { type Address, erc20Abi, formatUnits, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { DefaultHookTypes, type Token } from "..";
+import { getWalletBalances } from "../actions/dex";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
-import { multicall3Abi } from "~/abi";
 
 export interface BalanceToken extends Token {
   balance: bigint;
@@ -60,70 +54,15 @@ export const usePollWalletBalances = ({
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (!account || !tokenList) return undefined;
-      if (!config.contracts?.multicallAddress) {
-        throw new Error("Multicall address not found in config");
-      }
-      if (account && tokenList) {
-        const fullTokenList = [
-          ...tokenList,
-          ...(args?.externalTokenList ?? []),
-        ].filter((token: Token) => token.address !== bgtTokenAddress);
-        const call: Call[] = fullTokenList.map((item: Token) => {
-          if (item.address === nativeTokenAddress) {
-            return {
-              address: config.contracts?.multicallAddress as Address,
-              abi: multicall3Abi,
-              functionName: "getEthBalance",
-              args: [account],
-            };
-          }
-          return {
-            address: item.address as `0x${string}`,
-            abi: erc20Abi,
-            functionName: "balanceOf",
-            args: [account],
-          };
-        });
-        try {
-          const result = await publicClient.multicall({
-            contracts: call,
-            multicallAddress: multicallAddress,
-          });
-
-          const balances = await Promise.all(
-            result.map(async (item: any, index: number) => {
-              const token = fullTokenList[index];
-              if (item.error) {
-                await mutate([...QUERY_KEY, getAddress(token?.address ?? "")], {
-                  balance: 0n,
-                  formattedBalance: "0",
-                  ...token,
-                });
-                return { balance: 0n, formattedBalance: "0", ...token };
-              }
-              const formattedBalance = formatUnits(
-                item.result,
-                token?.decimals || 18,
-              );
-
-              const resultBalanceToken: BalanceToken = {
-                balance: item.result,
-                formattedBalance: formattedBalance.includes("e")
-                  ? "0"
-                  : formattedBalance,
-                ...token,
-              } as BalanceToken;
-              await mutate([...QUERY_KEY, token?.address], resultBalanceToken);
-              return resultBalanceToken;
-            }),
-          );
-          return balances;
-        } catch (error) {
-          console.log(error);
-        }
-      }
+      return getWalletBalances({
+        account,
+        tokenList,
+        externalTokenList: args?.externalTokenList,
+        queryKey: QUERY_KEY,
+        config,
+        publicClient,
+        mutate,
+      });
     },
     {
       ...opts,
