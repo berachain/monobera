@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  defaultBeraConfig,
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
@@ -17,7 +18,6 @@ import { FormattedNumber, POLLING, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits } from "viem";
 
@@ -27,13 +27,13 @@ import RepayBtn from "./modals/repay-button";
 
 export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
-    usePollLendUserBGTRewards({ config: beraJsConfig });
+    usePollLendUserBGTRewards({ config: defaultBeraConfig });
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
   });
 
   const { useTotalBorrowed, useSelectedReserveData } = usePollReservesDataList({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const totalBorrowed = useTotalBorrowed();
   const bgtApr = useBgtApr(totalBorrowed);
@@ -41,7 +41,7 @@ export default function HoneyBorrowCard() {
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
 
   const { useUserAccountData } = usePollUserAccountData({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
@@ -58,7 +58,7 @@ export default function HoneyBorrowCard() {
     .toFixed(18);
 
   const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const vdHoneyBalance = useSelectedWalletBalance(vdHoneyTokenAddress);
   const userTotalBorrowAllowance = BigNumber(honeyBorrowAllowance)

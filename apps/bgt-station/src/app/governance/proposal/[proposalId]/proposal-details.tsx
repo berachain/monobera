@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   TransactionActionType,
+  defaultBeraConfig,
   truncateHash,
   usePollActiveValidators,
   usePollDenom,
@@ -27,7 +28,6 @@ import { Badge } from "@bera/ui/badge";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { beraJsConfig } from "@bera/wagmi";
 import { Address } from "viem";
 
 import { decodeGovMsg } from "~/utils/decodeGovMsg";
@@ -45,7 +45,7 @@ export default function ProposalDetails({
   proposalId: number;
 }) {
   const { read, tokenInformation } = useTokenInformation({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);

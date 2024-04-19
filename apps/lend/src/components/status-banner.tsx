@@ -1,4 +1,5 @@
 import {
+  defaultBeraConfig,
   useBeraJs,
   usePollBgtRewardsForAddress,
   usePollReservesDataList,
@@ -10,7 +11,6 @@ import { FormattedNumber, POLLING, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { beraJsConfig } from "@bera/wagmi";
 import { formatUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
@@ -19,7 +19,7 @@ import { RiskDetails } from "./risk-details";
 
 export default function StatusBanner() {
   const { useUserAccountData, isLoading } = usePollUserAccountData({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
@@ -29,13 +29,13 @@ export default function StatusBanner() {
   const { isReady } = useBeraJs();
 
   const { useReservesDataList, useBaseCurrencyData } = usePollReservesDataList({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const reservesDataList = useReservesDataList();
   const baseCurrency = useBaseCurrencyData();
 
   const { useCurrentWalletBalances } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const balanceToken = useCurrentWalletBalances();
 

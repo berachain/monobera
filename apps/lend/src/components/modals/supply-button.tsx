@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
-  getLendSupplyPayload,
   TransactionActionType,
+  defaultBeraConfig,
+  getLendSupplyPayload,
   lendPoolImplementationAbi,
   useBeraJs,
   usePollAllowance,
@@ -25,7 +26,6 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { beraJsConfig } from "@bera/wagmi";
 import BigNumber from "bignumber.js";
 import { formatEther, formatUnits, parseUnits } from "viem";
 
@@ -64,18 +64,18 @@ export default function SupplyBtn({
   });
 
   const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const token = useSelectedWalletBalance(reserve.underlyingAsset);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
   });
   const { refetch: reservesDataRefetch } = usePollReservesDataList({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -125,7 +125,7 @@ const SupplyModalContent = ({
   const allowance = useAllowance();
 
   const { useUserAccountData } = usePollUserAccountData({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },

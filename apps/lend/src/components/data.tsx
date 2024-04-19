@@ -1,16 +1,15 @@
 "use client";
 
 import React from "react";
-import { usePollReservesDataList } from "@bera/berajs";
+import { defaultBeraConfig, usePollReservesDataList } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import BGTApy from "./bgt-apy";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function Data() {
   const { useTotalBorrowed, useTotalMarketSize } = usePollReservesDataList({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const totalMarketSize = useTotalMarketSize();
   const totalBorrowed = useTotalBorrowed();

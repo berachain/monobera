@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePollAllowances, type Token } from "@bera/berajs";
+import { defaultBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui";
-import { beraJsConfig } from "@bera/wagmi";
 import { parseUnits } from "viem";
 
 import { type TokenInput } from "./useMultipleTokenInput";
@@ -24,7 +23,7 @@ const useMultipleTokenApprovalsWithSlippage = (
       contract: spender,
       tokens,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const allowances = useCurrentAllowancesForContract();

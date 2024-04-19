@@ -1,44 +1,20 @@
-import { BeraConfig } from "@bera/berajs";
 import {
-  aHoneyTokenAddress,
-  beraTokenAddress,
-  bgtTokenAddress,
   blockExplorerName,
   blockExplorerUrl,
   chainId,
   chainName,
-  crocDexAddress,
-  crocRouterEndpoint,
-  crocSubgraphEndpoint,
   gasTokenDecimals,
   gasTokenIconUrl,
   gasTokenName,
   gasTokenSymbol,
-  honeyAddress,
-  honeySubgraphUrl,
-  honeyTokenAddress,
   jsonRpcUrl,
-  lendOracleAddress,
-  lendPoolAddressProviderAddress,
-  lendPoolImplementationAddress,
-  lendRewardsAddress,
-  lendSubgraphUrl,
-  lendUIDataProviderAddress,
-  multicallAddress,
-  nativeTokenAddress,
   publicJsonRpcUrl,
-  stgusdcTokenAddress,
-  tokenListUrl,
-  vdHoneyTokenAddress,
-  wbtcTokenAddress,
-  wethTokenAddress,
 } from "@bera/config";
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
 import { createConfig, http } from "wagmi";
 
 import { NetworkConfig } from "~/context/context";
-import { crocMultiSwapAddress } from "../../../config/env/index";
 
 const BeraChain: Chain = {
   id: chainId,
@@ -100,40 +76,3 @@ export const wagmiConfig = createConfig({
     ),
   },
 });
-
-export const beraJsConfig: BeraConfig = {
-  endpoints: {
-    tokenList: tokenListUrl,
-    dexRouter: crocRouterEndpoint,
-  },
-  subgraphs: {
-    honeySubgraph: honeySubgraphUrl,
-    dexSubgraph: crocSubgraphEndpoint,
-    lendSubgraph: lendSubgraphUrl,
-  },
-  contracts: {
-    multicallAddress: multicallAddress,
-    crocMultiSwapAddress: crocMultiSwapAddress,
-    wrappedTokenAddress: beraTokenAddress,
-    dexAddress: crocDexAddress,
-    lendAddressProviderAddress: lendPoolAddressProviderAddress,
-    lendOracleAddress: lendOracleAddress,
-    lendPoolProxyAddress: lendPoolImplementationAddress,
-    lendUIDataProviderAddress: lendUIDataProviderAddress,
-    lendRewardsAggregatorAddress: lendRewardsAddress,
-    honeyAddress: honeyAddress,
-    bgtTokenAddress: bgtTokenAddress,
-    nativeTokenAddress: nativeTokenAddress,
-  },
-  erc20: {
-    bera: nativeTokenAddress,
-    wbera: beraTokenAddress,
-    bgt: bgtTokenAddress,
-    honey: honeyTokenAddress,
-    stgusd: stgusdcTokenAddress,
-    weth: wethTokenAddress,
-    wbtc: wbtcTokenAddress,
-    ahoney: aHoneyTokenAddress,
-    vdhoney: vdHoneyTokenAddress,
-  },
-};
