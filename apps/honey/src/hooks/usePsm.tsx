@@ -20,17 +20,17 @@ import { beraJsConfig } from "@bera/wagmi";
 export const usePsm = () => {
   const [isTyping, setIsTyping] = useState(false);
 
-  const { tokenDictionary, tokenList } = useTokens({
+  const { data: tokenData } = useTokens({
     config: beraJsConfig,
   });
-  const collateralList = tokenList?.filter((token: any) =>
+  const collateralList = tokenData?.tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
   );
   const defaultCollateral = collateralList?.find((token: any) =>
     token.tags.includes("defaultCollateral"),
   );
-  const honey = tokenDictionary
-    ? tokenDictionary[getAddress(honeyTokenAddress)]
+  const honey = tokenData?.tokenDictionary
+    ? tokenData?.tokenDictionary[getAddress(honeyTokenAddress)]
     : undefined;
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);

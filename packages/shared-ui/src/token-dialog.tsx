@@ -53,9 +53,7 @@ export function TokenDialog({
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
   const {
-    tokenList,
-    customTokenList,
-    featuredTokenList,
+    data: tokenData,
     addNewToken,
     removeToken,
   } = useTokens({
@@ -69,13 +67,15 @@ export function TokenDialog({
   >(
     customTokens
       ? customTokens
-      : tokenList?.filter((token) => !filter.includes(token.address)),
+      : tokenData?.tokenList?.filter(
+          (token) => !filter.includes(token.address),
+        ),
   );
 
   useEffect(() => {
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
-      const newFilteredTokens = tokenList?.filter(
+      const newFilteredTokens = tokenData?.tokenList?.filter(
         (token) => !filter.includes(token.address),
       );
       if (
@@ -84,7 +84,7 @@ export function TokenDialog({
         setFilteredTokens(newFilteredTokens);
       }
     }
-  }, [tokenList]);
+  }, [tokenData?.tokenList]);
 
   useEffect(() => {
     setManagingTokens(false);
@@ -94,7 +94,7 @@ export function TokenDialog({
 
   useEffect(() => {
     if (!customTokens) {
-      const filtered = tokenList?.filter(
+      const filtered = tokenData?.tokenList?.filter(
         (token) =>
           token.name.toLowerCase().includes(search.toLowerCase()) ||
           token.symbol.toLowerCase().includes(search.toLowerCase()) ||
@@ -184,7 +184,7 @@ export function TokenDialog({
             <div>
               {!customTokens && (
                 <div className="flex flex-wrap gap-2">
-                  {featuredTokenList
+                  {tokenData?.featuredTokenList
                     ?.filter((token) => !filter.includes(token.address))
                     ?.map((token) => {
                       return (
@@ -263,10 +263,10 @@ export function TokenDialog({
             <p className="self-center text-sm font-medium">Custom tokens</p>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             <div className="text-xs font-medium text-muted-foreground">
-              ({customTokenList?.length ?? 0}) Custom tokens
+              ({tokenData?.customTokenList?.length ?? 0}) Custom tokens
             </div>
             <div>
-              {customTokenList?.map((token) => {
+              {tokenData?.customTokenList?.map((token) => {
                 return (
                   <div
                     className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"

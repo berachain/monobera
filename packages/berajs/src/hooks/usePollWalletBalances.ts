@@ -2,20 +2,19 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookProps, getWalletBalances, type Token } from "..";
+import {
+  DefaultHookProps,
+  DefaultHookReturnType,
+  getWalletBalances,
+  type Token,
+} from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
+import POLLING from "~/enum/polling";
 
 export interface BalanceToken extends Token {
   balance: bigint;
   formattedBalance: string;
-}
-
-interface Call {
-  abi: any;
-  address: `0x${string}`;
-  functionName: string;
-  args: any[];
 }
 
 export type UsePollWalletBalancesRequest = DefaultHookProps<
@@ -25,11 +24,9 @@ export type UsePollWalletBalancesRequest = DefaultHookProps<
   true
 >;
 
-export interface UsePollBalancesResponse {
-  isLoading: boolean;
-  isValidating: boolean;
+export interface UsePollBalancesResponse
+  extends DefaultHookReturnType<BalanceToken[] | undefined> {
   refetch: () => void;
-  useCurrentWalletBalances: () => BalanceToken[] | undefined;
   useSelectedWalletBalance: (address: string) => BalanceToken | undefined;
   useSelectedTagWalletBalances: (tag: string) => BalanceToken[] | undefined;
 }
@@ -42,43 +39,32 @@ export const usePollWalletBalances = ({
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, isConnected } = useBeraJs();
-  const { tokenList } = useTokens({ config });
+  const { data: tokenData } = useTokens({ config });
   const QUERY_KEY = [
     account,
     isConnected,
-    tokenList,
+    tokenData?.tokenList,
     "assetWalletBalances",
     args?.externalTokenList,
   ];
-  const { isLoading, isValidating } = useSWR(
+  const swrResponse = useSWR<BalanceToken[] | undefined>(
     QUERY_KEY,
     async () => {
       return getWalletBalances({
         account,
-        tokenList,
+        tokenList: tokenData?.tokenList,
         externalTokenList: args?.externalTokenList,
         config,
         publicClient,
       });
     },
-    {
-      ...opts,
-    },
+    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
   );
-
-  const useCurrentWalletBalances = (): BalanceToken[] | undefined => {
-    const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
-    return data;
-  };
 
   const useSelectedWalletBalance = (
     address: string,
   ): BalanceToken | undefined => {
-    const { data = undefined } = useSWRImmutable<BalanceToken>([
-      ...QUERY_KEY,
-      address,
-    ]);
-    return data;
+    return swrResponse.data?.find((item: Token) => item.address === address);
   };
 
   const useSelectedTagWalletBalances = (
@@ -89,10 +75,8 @@ export const usePollWalletBalances = ({
   };
 
   return {
-    isLoading,
-    isValidating,
-    refetch: () => void mutate(QUERY_KEY),
-    useCurrentWalletBalances,
+    ...swrResponse,
+    refetch: () => mutate(QUERY_KEY),
     useSelectedWalletBalance,
     useSelectedTagWalletBalances,
   };

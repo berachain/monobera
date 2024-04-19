@@ -60,10 +60,9 @@ function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   );
 }
 export function TokenList() {
-  const { useCurrentWalletBalances, isLoading } = usePollWalletBalances({
+  const { data: assets, isLoading } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const assets = useCurrentWalletBalances();
 
   return (
     <div className="grid gap-4">

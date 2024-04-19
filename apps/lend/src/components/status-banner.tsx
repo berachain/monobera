@@ -34,10 +34,9 @@ export default function StatusBanner() {
   const reservesDataList = useReservesDataList();
   const baseCurrency = useBaseCurrencyData();
 
-  const { useCurrentWalletBalances } = usePollWalletBalances({
+  const { data: balanceToken } = usePollWalletBalances({
     config: beraJsConfig,
   });
-  const balanceToken = useCurrentWalletBalances();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,

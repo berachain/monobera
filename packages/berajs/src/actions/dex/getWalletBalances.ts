@@ -35,7 +35,7 @@ export const getWalletBalances = async ({
   externalTokenList,
   config,
   publicClient,
-}: IFetchWalletBalancesRequestArgs): Promise<any | undefined> => {
+}: IFetchWalletBalancesRequestArgs): Promise<BalanceToken[] | undefined> => {
   if (!publicClient) return undefined;
   if (!account || !tokenList) return undefined;
   if (!config.contracts?.multicallAddress) {
@@ -86,7 +86,7 @@ export const getWalletBalances = async ({
           return resultBalanceToken;
         }),
       );
-      return balances;
+      return balances as BalanceToken[];
     } catch (error) {
       console.log(error);
     }

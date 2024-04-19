@@ -64,13 +64,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     useTokenInformation({
       config: beraJsConfig,
     });
-  const { tokenDictionary } = useTokens({
+  const { data: tokenData } = useTokens({
     config: beraJsConfig,
   });
 
   useEffect(() => {
     if (inputCurrency) {
-      const token = tokenDictionary?.[inputCurrency];
+      const token = tokenData?.tokenDictionary?.[inputCurrency];
 
       if (!token) {
         void readInput({ address: inputCurrency });
@@ -79,14 +79,14 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       }
     }
     if (outputCurrency) {
-      const token = tokenDictionary?.[outputCurrency];
+      const token = tokenData?.tokenDictionary?.[outputCurrency];
       if (!token) {
         void readOutput({ address: outputCurrency });
       } else {
         setSelectedTo(token);
       }
     }
-  }, [tokenDictionary]);
+  }, [tokenData?.tokenDictionary]);
 
   useEffect(() => {
     if (inputToken && !selectedFrom) {
