@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { usePollAllowances, type Token } from "@bera/berajs";
-
-import { getSafeNumber } from "~/utils/getSafeNumber";
-import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 import { crocDexAddress } from "@bera/config";
+import { beraJsConfig } from "@bera/wagmi";
 import { parseUnits } from "viem";
+
+import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
 
 const useCreatePool = ({
   baseToken,
@@ -40,8 +40,11 @@ const useCreatePool = ({
 
   const { useCurrentAllowancesForContract, refresh: refreshAllowances } =
     usePollAllowances({
-      contract: crocDexAddress,
-      tokens,
+      config: beraJsConfig,
+      args: {
+        contract: crocDexAddress,
+        tokens,
+      },
     });
 
   const allowances = useCurrentAllowancesForContract();

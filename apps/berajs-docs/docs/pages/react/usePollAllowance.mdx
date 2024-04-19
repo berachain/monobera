@@ -1,0 +1,40 @@
+# usePollAllowance
+
+React hook for poll the allowance of a given token
+
+## Import
+
+```ts
+import { usePollAllowance } from "@bera/berajs";
+```
+
+## Usage
+
+```ts [example.ts]
+import { usePollAllowance } from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+const exampleContractAddress = "0x1..";
+const exampleTokenAddresses = ["0x1..", "0x2.."];
+
+const { useAllowance, refresh } = usePollAllowance({
+  config: beraConfig,
+  args: {
+    contract: exampleContractAddress,
+    tokens: exampleTokenAddresses,
+  },
+});
+```
+
+## Parameters
+
+```ts
+import { type IUsePollAllowanceRequest } from "@bera/berajs";
+```
+
+## Returns
+
+```ts
+import { type IUsePollAllowanceResponse } from "@bera/berajs";
+```

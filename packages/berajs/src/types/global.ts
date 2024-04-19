@@ -22,6 +22,8 @@ export interface BeraConfig {
     lendUIDataProviderAddress: Address;
     lendRewardsAggregatorAddress: Address;
     honeyAddress?: Address;
+    bgtTokenAddress?: Address;
+    nativeTokenAddress?: Address;
   };
   erc20?: {
     bera: Address;

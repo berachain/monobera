@@ -1,8 +1,9 @@
 import useSWR, { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { formatUnits, erc20Abi } from "viem";
+import { Address, erc20Abi, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
+import { getAllowance } from "~/actions/dex/getAllowance";
 import { useBeraJs } from "~/contexts";
 import { Token } from "~/types";
 
@@ -13,9 +14,16 @@ interface AllowanceToken extends Token {
   formattedAllowance: string;
 }
 
-interface IUsePollAllowances {
+export interface IUsePollAllowanceRequest {
   contract: string;
   token?: Token;
+}
+
+export interface IUsePollAllowanceResponse {
+  isLoading: boolean;
+  isValidating: boolean;
+  useAllowance: () => AllowanceToken;
+  refresh: () => void;
 }
 
 /**
@@ -25,7 +33,10 @@ interface IUsePollAllowances {
  * @param contract the address of the ERC20 token contract
  * @param tokens   the list of tokens to poll allowances for
  */
-export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
+export const usePollAllowance = ({
+  contract,
+  token,
+}: IUsePollAllowanceRequest): IUsePollAllowanceResponse => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
@@ -37,26 +48,15 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
     method,
   ];
 
-  useSWR(
+  const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (account && token) {
-        const allowance = await publicClient.readContract({
-          address: token.address as `0x${string}`,
-          abi: erc20Abi,
-          functionName: method,
-          args: [account, contract as `0x${string}`],
-        });
-
-        return {
-          ...token,
-          allowance: allowance,
-          formattedAllowance: formatUnits(allowance, token.decimals),
-        };
-      }
-
-      return undefined;
+      return getAllowance({
+        account: account as Address,
+        token,
+        contract: contract as Address,
+        publicClient,
+      });
     },
     {
       refreshInterval: REFRESH_BLOCK_INTERVAL,
@@ -73,6 +73,8 @@ export const usePollAllowance = ({ contract, token }: IUsePollAllowances) => {
   };
 
   return {
+    isLoading,
+    isValidating,
     useAllowance,
     refresh: () => mutate(QUERY_KEY),
   };

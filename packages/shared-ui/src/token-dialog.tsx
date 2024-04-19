@@ -61,7 +61,9 @@ export function TokenDialog({
   } = useTokens({
     config: beraJsConfig,
   });
-  const { read, tokenInformation } = useTokenInformation();
+  const { read, tokenInformation } = useTokenInformation({
+    config: beraJsConfig,
+  });
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(

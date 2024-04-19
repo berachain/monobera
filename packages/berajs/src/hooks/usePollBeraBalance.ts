@@ -11,7 +11,7 @@ export type UsePollBeraBalanceRequest = DefaultHookProps<{
   address: Address | undefined;
 }>;
 
-export interface UsePollBeraBalanceResponse {
+export interface IUsePollBeraBalanceResponse {
   isLoading: boolean;
   isValidating: boolean;
   useBalance: () => string | number;
@@ -22,7 +22,7 @@ export const usePollBeraBalance = ({
   opts: { refreshInterval } = {
     refreshInterval: POLLING.FAST,
   },
-}: UsePollBeraBalanceRequest): UsePollBeraBalanceResponse => {
+}: UsePollBeraBalanceRequest): IUsePollBeraBalanceResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [address, "beraBalance"];
   const { isLoading, isValidating } = useSWR(

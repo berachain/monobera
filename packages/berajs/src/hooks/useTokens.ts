@@ -4,6 +4,7 @@ import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
 import { DefaultHookProps, type Token } from "..";
+import { getTokens } from "../actions/dex";
 
 interface IUseTokens {
   isLoading: boolean;
@@ -17,14 +18,6 @@ interface IUseTokens {
   removeToken: (token: Token) => void;
 }
 
-function tokenListToDict(list: Token[]): { [key: string]: Token } {
-  return list.reduce((acc, item) => {
-    // @ts-ignore
-    acc[item.address] = item;
-    return acc;
-  }, {});
-}
-
 const useTokens = ({ config, opts }: DefaultHookProps): IUseTokens => {
   const TOKEN_KEY = "tokens";
 
@@ -34,53 +27,7 @@ const useTokens = ({ config, opts }: DefaultHookProps): IUseTokens => {
   const { data, isLoading } = useSWRImmutable(
     ["defaultTokenList", localStorageTokenList, config],
     async () => {
-      if (!config.endpoints?.tokenList) {
-        return {
-          list: [],
-          customList: [...localStorageTokenList],
-          dictionary: tokenListToDict(localStorageTokenList),
-          featured: [],
-        };
-      }
-      try {
-        const tokenList = await fetch(config.endpoints?.tokenList);
-        const temp = await tokenList.json();
-        if (!temp.tokens)
-          return { list: localStorageTokenList, featured: [], dictionary: {} };
-        const defaultList = temp.tokens.map((token: any) => {
-          return { ...token, default: true };
-        });
-
-        const defaultFeaturedList = temp.tokens
-          .filter((token: any) => {
-            const isFeatured = (tag: string) => tag === "featured";
-            return token.tags.some(isFeatured);
-            // return { ...token, default: true };
-          })
-          .map((token: any) => {
-            return { ...token, default: true };
-          });
-        const list = [...defaultList, ...localStorageTokenList];
-        // Make it unique
-        const uniqueList = list.filter(
-          (item, index) =>
-            list.findIndex((i) => i.address === item.address) === index,
-        );
-
-        return {
-          list: uniqueList,
-          customList: [...localStorageTokenList],
-          dictionary: tokenListToDict(list),
-          featured: defaultFeaturedList ?? [],
-        };
-      } catch (error) {
-        console.error("Error fetching token list", error);
-        return {
-          list: localStorageTokenList,
-          featured: [],
-          dictionary: tokenListToDict(localStorageTokenList),
-        };
-      }
+      return getTokens({ localStorageTokenList, config });
     },
     {
       ...opts,
@@ -97,7 +44,7 @@ const useTokens = ({ config, opts }: DefaultHookProps): IUseTokens => {
     // Check if the token already exists in tokenList
     if (
       data?.list.some(
-        (t) =>
+        (t: { address: string }) =>
           t.address.toLowerCase() === acceptedToken?.address?.toLowerCase(),
       )
     ) {

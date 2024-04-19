@@ -51,7 +51,7 @@ const useBeraContractWrite = ({
           functionName: functionName,
           args: params,
           value: value,
-          nonce: userNonce,
+          nonce: Number(userNonce),
           account: account,
         });
         receipt = await writeContractAsync({ ...request });
