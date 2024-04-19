@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import {
   STAKING_PRECOMPILE_ABI,
   TransactionActionType,
+  defaultBeraConfig,
   truncateHash,
   usePollAccountDelegations,
   usePollActiveValidators,
@@ -12,7 +13,6 @@ import {
 import { stakingAddress } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
 import { getAddress, parseUnits } from "viem";
-import { beraJsConfig } from "@bera/wagmi";
 
 export const useRedelegate = (fromAddress: `0x{string}`) => {
   const [redelegateAmount, setRedelegateAmount] = useState(0);
@@ -20,7 +20,7 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
   const { useActiveValidator } = usePollActiveValidators();
   const srcValidator = useActiveValidator(fromAddress);
   const { tokenList: tokens } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(fromAddress);

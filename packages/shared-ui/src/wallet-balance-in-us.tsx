@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  defaultBeraConfig,
   formatUsd,
   handleNativeBera,
   usePollWalletBalances,
@@ -9,18 +10,17 @@ import {
   type Token,
 } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
-import { beraJsConfig } from "@bera/wagmi";
 
 export function WalletBalanceInUs() {
   const { featuredTokenList } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { useCurrentWalletBalances } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const assets = useCurrentWalletBalances();
   const { data: pricesArray } = useTokenHoneyPrices({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: {
       tokenAddresses: featuredTokenList?.map(
         (featuredToken: Token) => featuredToken.address,

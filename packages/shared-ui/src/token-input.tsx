@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  defaultBeraConfig,
   formatInputTokenValue,
   useBeraJs,
   usePollWalletBalances,
@@ -11,7 +12,6 @@ import { bgtTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { beraJsConfig } from "@bera/wagmi";
 import { getAddress } from "viem";
 
 import {
@@ -70,7 +70,7 @@ export function TokenInput({
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
     usePollWalletBalances({
-      config: beraJsConfig,
+      config: defaultBeraConfig,
     });
   const token = useSelectedWalletBalance(
     selected ? getAddress(selected?.address ?? "0x") ?? "0x" : "0x",

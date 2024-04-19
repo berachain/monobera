@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   REWARDS_PRECOMPILE_ABI,
   TransactionActionType,
+  defaultBeraConfig,
   useBeraJs,
   useTokens,
 } from "@bera/berajs";
@@ -17,7 +18,6 @@ import {
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { parseEther, type Address } from "viem";
-import { beraJsConfig } from "@bera/wagmi";
 
 export function RewardBtn({ poolAddress, ...props }: any) {
   const { isReady } = useBeraJs();
@@ -86,7 +86,7 @@ const RewardModalContent = ({
   const exceeding = amount !== undefined && Number(amount) > Number(bgtRewards);
 
   const { tokenDictionary } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   return (
     <div className="flex w-full flex-col gap-8 ">
