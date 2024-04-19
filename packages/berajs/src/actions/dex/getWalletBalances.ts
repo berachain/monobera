@@ -1,17 +1,16 @@
 import { Address, PublicClient, erc20Abi, formatUnits, getAddress } from "viem";
 
-import { multicall3Abi as MULTICALL3_ABI } from "~/abi";
+import { multicall3Abi } from "~/abi";
 import { BeraConfig } from "../../types";
 import { Token } from "../../types/dex";
+import { ADDRESS_ZERO } from "~/constants";
 
 export interface IFetchWalletBalancesRequestArgs {
   account: string | undefined;
   tokenList: Token[] | undefined;
   externalTokenList: Token[] | undefined;
-  queryKey: (string | boolean | Token[] | undefined)[];
   config: BeraConfig;
   publicClient: PublicClient | undefined;
-  mutate: (key: any, data: any) => void;
 }
 
 interface BalanceToken extends Token {
@@ -28,38 +27,27 @@ interface Call {
 
 /**
  * fetch the balances of a given wallet address
- */
+*/
 
 export const getWalletBalances = async ({
   account,
   tokenList,
   externalTokenList,
-  queryKey,
   config,
   publicClient,
-  mutate,
 }: IFetchWalletBalancesRequestArgs): Promise<any | undefined> => {
   if (!publicClient) return undefined;
   if (!account || !tokenList) return undefined;
   if (!config.contracts?.multicallAddress) {
     throw new Error("Multicall address not found in config");
   }
-  if (!config.contracts?.bgtTokenAddress) {
-    throw new Error("BGT token address not found in config");
-  }
-
-  if (!config.contracts?.nativeTokenAddress) {
-    throw new Error("Native token address not found in config");
-  }
   if (account && tokenList) {
-    const fullTokenList = [...tokenList, ...(externalTokenList ?? [])].filter(
-      (token: Token) => token.address !== config.contracts?.bgtTokenAddress,
-    );
+    const fullTokenList = [...tokenList, ...(externalTokenList ?? [])];
     const call: Call[] = fullTokenList.map((item: Token) => {
-      if (item.address === config.contracts?.nativeTokenAddress) {
+      if (item.address === ADDRESS_ZERO) {
         return {
           address: config.contracts?.multicallAddress as Address,
-          abi: MULTICALL3_ABI,
+          abi: multicall3Abi,
           functionName: "getEthBalance",
           args: [account],
         };
@@ -81,11 +69,6 @@ export const getWalletBalances = async ({
         result.map(async (item: any, index: number) => {
           const token = fullTokenList[index];
           if (item.error) {
-            await mutate([...queryKey, getAddress(token?.address ?? "")], {
-              balance: 0n,
-              formattedBalance: "0",
-              ...token,
-            });
             return { balance: 0n, formattedBalance: "0", ...token };
           }
           const formattedBalance = formatUnits(
@@ -100,7 +83,6 @@ export const getWalletBalances = async ({
               : formattedBalance,
             ...token,
           } as BalanceToken;
-          await mutate([...queryKey, token?.address], resultBalanceToken);
           return resultBalanceToken;
         }),
       );

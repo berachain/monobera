@@ -34,7 +34,6 @@ export interface UsePollBalancesResponse {
   useSelectedTagWalletBalances: (tag: string) => BalanceToken[] | undefined;
 }
 
-// TODO optimize data access pattern to avoid double store
 export const usePollWalletBalances = ({
   config,
   args,
@@ -58,10 +57,8 @@ export const usePollWalletBalances = ({
         account,
         tokenList,
         externalTokenList: args?.externalTokenList,
-        queryKey: QUERY_KEY,
         config,
         publicClient,
-        mutate,
       });
     },
     {
@@ -90,6 +87,8 @@ export const usePollWalletBalances = ({
     const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
     return data?.filter((item: Token) => item.tags?.includes(tag));
   };
+
+
 
   return {
     isLoading,
