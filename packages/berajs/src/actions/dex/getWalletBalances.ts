@@ -27,7 +27,7 @@ interface Call {
 
 /**
  * fetch the balances of a given wallet address
-*/
+ */
 
 export const getWalletBalances = async ({
   account,

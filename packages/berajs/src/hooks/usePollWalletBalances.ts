@@ -88,8 +88,6 @@ export const usePollWalletBalances = ({
     return data?.filter((item: Token) => item.tags?.includes(tag));
   };
 
-
-
   return {
     isLoading,
     isValidating,
