@@ -55,34 +55,37 @@ export enum WRAP_TYPE {
 }
 
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
-  const { read: readInput, tokenInformation: inputToken } = useTokenInformation(
-    {
-      config: beraJsConfig,
+  const { data: inputToken } = useTokenInformation({
+    args: {
+      address: inputCurrency,
     },
-  );
-  const { read: readOutput, tokenInformation: outputToken } =
-    useTokenInformation({
-      config: beraJsConfig,
-    });
-  const { data: tokenData } = useTokens({
+    opts: {},
+    config: beraJsConfig,
+  });
+  const { data: outputToken } = useTokenInformation({
+    args: {
+      address: outputCurrency,
+    },
+    opts: {},
     config: beraJsConfig,
   });
 
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
+    opts: {},
+  });
+
   useEffect(() => {
-    if (inputCurrency) {
+    if (inputCurrency && !inputToken) {
       const token = tokenData?.tokenDictionary?.[inputCurrency];
 
-      if (!token) {
-        void readInput({ address: inputCurrency });
-      } else {
+      if (token) {
         setSelectedFrom(token);
       }
     }
-    if (outputCurrency) {
+    if (outputCurrency && !outputToken) {
       const token = tokenData?.tokenDictionary?.[outputCurrency];
-      if (!token) {
-        void readOutput({ address: outputCurrency });
-      } else {
+      if (token) {
         setSelectedTo(token);
       }
     }

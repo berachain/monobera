@@ -48,12 +48,12 @@ export type DefaultHookProps<
     ? {
         args?: ArgsType;
         config: BeraConfig;
-        opts?: SWRConfiguration | undefined;
+        opts?: SWRConfiguration;
       }
     : {
         args: ArgsType;
         config: BeraConfig;
-        opts?: SWRConfiguration | undefined;
+        opts?: SWRConfiguration;
       };
 
 export type DefaultHookReturnType<T = any> = SWRResponse<T, any, any>;

@@ -1,28 +1,23 @@
 import { multicall } from "@wagmi/core";
 import { Address, erc20Abi } from "viem";
 
-import { BeraConfig } from "../../types";
-import { ActionEnum } from "../../utils/stateReducer";
+import { BeraConfig, Token } from "~/types";
 
-interface IFetchTokenPriceInformationArgs {
-  dispatch: (action: { type: ActionEnum }) => void;
+export interface GetTokenInformation {
   address: Address;
-  config: any;
-  beraConfig: BeraConfig;
-  setTokenInformation: (tokenInformation: any) => void;
-  setError: (error: Error) => void;
+  config: BeraConfig;
+  wagmiConfig: any;
 }
 
 export const getTokenInformation = async ({
-  dispatch,
   address,
   config,
-  beraConfig,
-  setTokenInformation,
-  setError,
-}: IFetchTokenPriceInformationArgs): Promise<void> => {
-  dispatch({ type: ActionEnum.LOADING });
+  wagmiConfig,
+}: GetTokenInformation): Promise<Token | undefined> => {
   try {
+    if (!config.contracts?.multicallAddress) {
+      throw new Error("Multicall address not found in config");
+    }
     const result = await multicall(config as any, {
       contracts: [
         {
@@ -41,21 +36,19 @@ export const getTokenInformation = async ({
           functionName: "symbol",
         },
       ],
-      multicallAddress: beraConfig.contracts?.multicallAddress,
+      multicallAddress: config.contracts?.multicallAddress,
     });
 
-    console.log({ result });
-    dispatch({
-      type: ActionEnum.SUCCESS,
-    });
-    // TODO: fix this
-    setTokenInformation(undefined);
+    console.log("result", result);
+
+    return {
+      address,
+      decimals: result[0].result,
+      name: result[1].result,
+      symbol: result[2].result,
+    } as Token;
   } catch (e: any) {
     console.log(e);
-    setError(e);
-    dispatch({
-      type: ActionEnum.ERROR,
-    });
-    throw new Error(e);
+    throw new Error("Error fetching token information");
   }
 };

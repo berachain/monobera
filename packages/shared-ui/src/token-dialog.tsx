@@ -21,7 +21,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { beraJsConfig } from "@bera/wagmi";
 import { Balancer } from "react-wrap-balancer";
-import { isAddress } from "viem";
+import { Address, isAddress } from "viem";
 
 import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
@@ -59,9 +59,24 @@ export function TokenDialog({
   } = useTokens({
     config: beraJsConfig,
   });
-  const { read, tokenInformation } = useTokenInformation({
-    config: beraJsConfig,
+  const { data: tokenInformation, error: tokenInformationError } =
+    useTokenInformation({
+      config: beraJsConfig,
+      args: {
+        address: search as Address,
+      },
+    });
+
+  console.log({
+    tokenInformationError,
+    tokenInformation,
   });
+
+  useEffect(() => {
+    if (tokenInformationError) {
+      setError(tokenInformationError);
+    }
+  }, [tokenInformationError]);
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
@@ -102,16 +117,13 @@ export function TokenDialog({
       );
 
       if (isAddress(search) && filtered?.length === 0) {
-        void read({ address: search }).catch((error) => {
-          setError(error);
-        });
         setPendingAddition(true);
         return;
       }
       setPendingAddition(false);
       setFilteredTokens(filtered);
     }
-  }, [read, search]); // Include 'filteredTokens' in the dependency array
+  }, [search]); // Include 'filteredTokens' in the dependency array
 
   useEffect(() => {
     if (tokenInformation) {
