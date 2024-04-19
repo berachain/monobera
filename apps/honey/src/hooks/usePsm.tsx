@@ -70,12 +70,13 @@ export const usePsm = () => {
 
   const { isReady, account } = useBeraJs();
 
-  const { useAllowance } = usePollAllowance({
-    contract: honeyRouterAddress,
-    token: selectedFrom,
+  const { data: allowance } = usePollAllowance({
+    args: {
+      spender: honeyRouterAddress,
+      token: selectedFrom,
+    },
+    config: beraJsConfig,
   });
-
-  const allowance = useAllowance();
 
   const { useHoneyParams, isLoading: isFeeLoading } = usePollHoneyParams(
     collateralList?.map((token: any) => token.address) ?? [],

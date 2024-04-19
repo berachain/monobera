@@ -1,5 +1,6 @@
 import { SWRConfiguration, SWRResponse } from "swr";
 import { Address } from "viem";
+import { Token } from "./dex";
 
 export interface BeraConfig {
   endpoints?: {
@@ -65,4 +66,9 @@ export interface PayloadReturnType<T = any[]> {
 export interface TokenBalance {
   balance: bigint;
   formattedBalance: string;
+}
+
+export interface AllowanceToken extends Token {
+  allowance: bigint;
+  formattedAllowance: string;
 }

@@ -13,10 +13,6 @@ interface IFetchTokenPriceInformationArgs {
   setError: (error: Error) => void;
 }
 
-/**
- * read the token information
- */
-
 export const getTokenInformation = async ({
   dispatch,
   address,

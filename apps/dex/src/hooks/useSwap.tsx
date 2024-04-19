@@ -260,12 +260,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, selectedFrom, selectedTo, fromAmount, toAmount]);
 
-  const { useAllowance, refresh: refreshAllowance } = usePollAllowance({
-    contract: crocMultiSwapAddress,
-    token: selectedFrom,
+  const { data: allowance, refetch: refreshAllowance } = usePollAllowance({
+    args: {
+      spender: crocMultiSwapAddress,
+      token: selectedFrom,
+    },
+    config: beraJsConfig,
   });
-
-  const allowance = useAllowance();
 
   const slippage = useSlippage();
   const swapPayload = getSwapPayload({

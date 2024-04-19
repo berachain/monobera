@@ -25,6 +25,7 @@ import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
+import { beraJsConfig } from "@bera/wagmi";
 
 export default function DepositWithdraw() {
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -67,12 +68,13 @@ export default function DepositWithdraw() {
   const { useBHoneyEligibleWithdraw } = usePollBHoneyPendingWithdraw();
   const eligibleForWithdraw = useBHoneyEligibleWithdraw();
 
-  const { useAllowance } = usePollAllowance({
-    contract: gTokenContractAddress,
-    token: honey,
+  const { data: allowance } = usePollAllowance({
+    args: {
+      spender: gTokenContractAddress,
+      token: honey,
+    },
+    config: beraJsConfig,
   });
-
-  const allowance = useAllowance();
 
   const withdrawPayload = [
     parseUnits(withdrawAmount === "" ? "0" : withdrawAmount, 18),
@@ -140,7 +142,7 @@ export default function DepositWithdraw() {
             </Alert>
             <ActionButton>
               {allowance?.formattedAllowance === "0" ||
-              allowance?.allowance <
+              (allowance?.allowance ?? 0n) <
                 parseUnits(depositAmount === "" ? "0" : depositAmount, 18) ? (
                 <ApproveButton
                   token={honey}
