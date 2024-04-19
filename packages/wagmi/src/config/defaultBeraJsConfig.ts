@@ -136,4 +136,30 @@ export const beraJsConfig: BeraConfig = {
     ahoney: aHoneyTokenAddress,
     vdhoney: vdHoneyTokenAddress,
   },
+  banners: {
+    global: {
+      lauchBannerEnabled: true,
+      rpcBannerEnabled: true,
+    },
+    bend: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+    honey: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+    bex: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+    berps: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+    bgtStation: {
+      lauchBannerEnabled: false,
+      rpcBannerEnabled: false,
+    },
+  },
 };
