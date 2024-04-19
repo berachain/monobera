@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePollWalletBalances, type Token } from "@bera/berajs";
+import {
+  defaultBeraConfig,
+  usePollWalletBalances,
+  type Token,
+} from "@bera/berajs";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBeratoken } from "~/utils/isBeraToken";
 import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
-import { beraJsConfig } from "@bera/wagmi";
 
 export interface ITokenWeight {
   weight: number;
@@ -57,7 +60,7 @@ const useCreateTokenWeights = () => {
 
   const [initialPrice, setInitialPrice] = useState<string>("");
   const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const [isBaseTokenInput, setIsBaseTokenInput] = useState<boolean>(true);

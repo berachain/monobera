@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePollAllowances, type Token } from "@bera/berajs";
-import { beraJsConfig } from "@bera/wagmi";
+import { defaultBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
 
 import { type TokenInput } from "./useMultipleTokenInput";
 
@@ -17,7 +16,7 @@ const useMultipleTokenApprovals = (
     .map((token) => token);
 
   const { useCurrentAllowancesForContract } = usePollAllowances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: {
       contract: spender,
       tokens,

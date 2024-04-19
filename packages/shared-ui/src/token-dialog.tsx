@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  defaultBeraConfig,
   useBeraJs,
   usePollWalletBalances,
   useTokenInformation,
@@ -19,7 +20,6 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { beraJsConfig } from "@bera/wagmi";
 import { Balancer } from "react-wrap-balancer";
 import { isAddress } from "viem";
 
@@ -59,10 +59,10 @@ export function TokenDialog({
     addNewToken,
     removeToken,
   } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { read, tokenInformation } = useTokenInformation({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
@@ -316,7 +316,7 @@ const TokenDialogRow = ({
 }: RowProps) => {
   const { isConnected } = useBeraJs();
   const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const t = useSelectedWalletBalance(token?.address ?? "0x");
   return (

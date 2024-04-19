@@ -5,11 +5,12 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  multiswapAbi,
   TransactionActionType,
-  wberaAbi,
+  defaultBeraConfig,
+  multiswapAbi,
   useBeraJs,
   usePollWalletBalances,
+  wberaAbi,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -36,7 +37,6 @@ import { parseUnits, type Address } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
-import { beraJsConfig } from "@bera/wagmi";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
   loading: () => (
@@ -113,7 +113,7 @@ export function SwapCard({
   const { captureException, track } = useAnalytics();
 
   const { refetch, isLoading: isBalancesLoading } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER

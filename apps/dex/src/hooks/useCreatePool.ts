@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePollAllowances, type Token } from "@bera/berajs";
+import { defaultBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
-import { beraJsConfig } from "@bera/wagmi";
 import { parseUnits } from "viem";
 
 import { type ITokenWeight } from "~/hooks/useCreateTokenWeights";
@@ -40,7 +39,7 @@ const useCreatePool = ({
 
   const { useCurrentAllowancesForContract, refresh: refreshAllowances } =
     usePollAllowances({
-      config: beraJsConfig,
+      config: defaultBeraConfig,
       args: {
         contract: crocDexAddress,
         tokens,

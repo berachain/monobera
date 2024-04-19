@@ -8,7 +8,10 @@ import React, {
   type PropsWithChildren,
 } from "react";
 import { useAccount, useChains } from "wagmi";
+
+import { defaultBeraConfig } from "~/constants/defaultBeraConfig";
 import { TransactionStoreProvider } from "~/hooks";
+import { BeraConfig } from "~/types";
 import { CrocEnvContextProvider } from "../crocenv";
 
 export interface IBeraJsAPI {
@@ -16,11 +19,14 @@ export interface IBeraJsAPI {
   isConnected: boolean;
   isWrongNetwork?: boolean;
   isReady?: boolean;
+  config: BeraConfig;
 }
 
 export const BeraJsContext = createContext<IBeraJsAPI | undefined>(undefined);
 
-const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const BeraJsProvider: React.FC<
+  PropsWithChildren<{ configOverride?: BeraConfig }>
+> = ({ children, configOverride }) => {
   const chains = useChains();
   const { address: account, status } = useAccount();
   const [isMounted, setIsMounted] = useState(false);
@@ -44,6 +50,7 @@ const BeraJsProvider: React.FC<PropsWithChildren> = ({ children }) => {
           () => account && isMounted && !isWrongNetwork,
           [account, isMounted, chain?.id, status, isWrongNetwork],
         ),
+        config: configOverride ?? defaultBeraConfig,
       }}
     >
       <TransactionStoreProvider>

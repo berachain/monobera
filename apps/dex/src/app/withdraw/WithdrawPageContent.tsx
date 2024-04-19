@@ -5,8 +5,9 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  bexAbi,
   TransactionActionType,
+  bexAbi,
+  defaultBeraConfig,
   useTokenHoneyPrice,
   type PoolV2,
   type Token,
@@ -30,7 +31,6 @@ import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Slider } from "@bera/ui/slider";
-import { beraJsConfig } from "@bera/wagmi";
 import { usePublicClient } from "wagmi";
 
 import { SettingsPopover } from "~/components/settings-popover";
@@ -131,11 +131,11 @@ export default function WithdrawLiquidityContent({
   }, [userPositionBreakdown?.quoteAmount, amount]);
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { tokenAddress: baseToken?.address },
   });
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { tokenAddress: quoteToken?.address },
   });
 

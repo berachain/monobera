@@ -1,12 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { useTokens } from "@bera/berajs";
+import { defaultBeraConfig, useTokens } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { cva, type VariantProps } from "class-variance-authority";
 import { getAddress, isAddress } from "viem";
-import { beraJsConfig } from "@bera/wagmi";
 
 const IconVariants = cva(
   "aspect-square flex items-center justify-center rounded-full text-foreground",
@@ -43,7 +42,7 @@ export const TokenIcon = ({
   ...props
 }: IconProps) => {
   const { tokenDictionary } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const address = isAddress(adr ?? "") ? getAddress(adr ?? "") : adr;
   const img = useMemo(() => {
