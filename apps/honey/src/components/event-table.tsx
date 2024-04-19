@@ -1,6 +1,6 @@
 "use client";
 
-import { defaultBeraConfig, truncateHash, useTokens } from "@bera/berajs";
+import { truncateHash, useTokens } from "@bera/berajs";
 import { blockExplorerUrl, honeyTokenAddress } from "@bera/config";
 import { type HoneyTxn } from "@bera/graphql";
 import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
@@ -86,9 +86,7 @@ export const EventTable = ({
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary } = useTokens();
   return (
     <Table>
       <TableHeader>

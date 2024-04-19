@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  defaultBeraConfig,
   getLendWithdrawPayload,
   lendPoolImplementationAbi,
   useBeraJs,
@@ -59,9 +58,7 @@ export default function WithdrawBtn({
     actionType: TransactionActionType.WITHDRAW,
   });
 
-  const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedWalletBalance } = usePollWalletBalances();
   const atoken = useSelectedWalletBalance(reserve?.aTokenAddress);
   const otoken = useSelectedWalletBalance(reserve?.underlyingAsset);
   const token = {
@@ -71,14 +68,11 @@ export default function WithdrawBtn({
   } as BalanceToken;
 
   const { refetch: userAccountRefetch } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
   });
-  const { refetch: reservesDataRefetch } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -122,7 +116,6 @@ const WithdrawModalContent = ({
   const userBalance = token.formattedBalance ?? "0";
   const { account = "0x" } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },

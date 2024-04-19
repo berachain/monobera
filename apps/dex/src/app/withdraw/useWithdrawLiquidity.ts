@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { defaultBeraConfig, useTokens, type PoolV2 } from "@bera/berajs";
+import { useTokens, type PoolV2 } from "@bera/berajs";
 
 import { useCrocPoolPrice } from "~/hooks/useCrocPoolPrice";
 
@@ -7,9 +7,7 @@ export const useWithdrawLiquidity = (pool: PoolV2) => {
   const [amount, setAmount] = useState<number>(0);
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary } = useTokens();
   const { usePoolPrice } = useCrocPoolPrice(pool);
   const poolPrice = usePoolPrice();
   return {

@@ -31,7 +31,7 @@ export interface useTxnSendWriteApi {
   write: (props: IValueSend) => void;
 }
 
-export interface IUseContractWrite {
+export interface IUseContractWriteArgs {
   onSuccess?: (hash: string) => void;
   onError?: (e?: any) => void;
   onLoading?: () => void;

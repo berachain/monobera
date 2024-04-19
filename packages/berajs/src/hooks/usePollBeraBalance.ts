@@ -5,11 +5,11 @@ import { usePublicClient } from "wagmi";
 
 import { getBeraBalance } from "~/actions/dex/getBeraBalance";
 import POLLING from "~/enum/polling";
-import { DefaultHookProps } from "~/types/global";
+import { DefaultHookOptions } from "~/types/global";
 
-export type UsePollBeraBalanceRequest = DefaultHookProps<{
+export type UsePollBeraBalanceArgs = {
   address: Address | undefined;
-}>;
+};
 
 export interface IUsePollBeraBalanceResponse {
   isLoading: boolean;
@@ -17,12 +17,10 @@ export interface IUsePollBeraBalanceResponse {
   useBalance: () => string | number;
 }
 
-export const usePollBeraBalance = ({
-  args: { address } = { address: undefined },
-  opts: { refreshInterval } = {
-    refreshInterval: POLLING.FAST,
-  },
-}: UsePollBeraBalanceRequest): IUsePollBeraBalanceResponse => {
+export const usePollBeraBalance = (
+  { address = undefined }: UsePollBeraBalanceArgs,
+  options?: DefaultHookOptions,
+): IUsePollBeraBalanceResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [address, "beraBalance"];
   const { isLoading, isValidating } = useSWR(
@@ -31,7 +29,7 @@ export const usePollBeraBalance = ({
       return await getBeraBalance({ address, publicClient });
     },
     {
-      refreshInterval,
+      ...options?.opts,
     },
   );
   const useBalance = (): string | number => {

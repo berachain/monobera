@@ -3,7 +3,7 @@ import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
-import { DefaultHookProps, type Token } from "..";
+import { DefaultHookOptions, useBeraJs, type Token } from "..";
 import { getTokens } from "../actions/dex";
 
 interface IUseTokens {
@@ -18,8 +18,11 @@ interface IUseTokens {
   removeToken: (token: Token) => void;
 }
 
-const useTokens = ({ config, opts }: DefaultHookProps): IUseTokens => {
+const useTokens = (options?: DefaultHookOptions): IUseTokens => {
   const TOKEN_KEY = "tokens";
+
+  const { config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
 
   const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
     Token[]
@@ -30,7 +33,7 @@ const useTokens = ({ config, opts }: DefaultHookProps): IUseTokens => {
       return getTokens({ localStorageTokenList, config });
     },
     {
-      ...opts,
+      ...options?.opts,
     },
   );
 

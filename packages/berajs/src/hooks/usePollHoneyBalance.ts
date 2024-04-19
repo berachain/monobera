@@ -5,7 +5,7 @@ import { usePublicClient } from "wagmi";
 
 import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";
 import POLLING from "~/enum/polling";
-import { DefaultHookProps } from "~/types/global";
+import { DefaultHookOptions } from "~/types/global";
 import { useBeraJs } from "../contexts";
 
 export interface UsePollHoneyBalancesResponse {
@@ -15,22 +15,24 @@ export interface UsePollHoneyBalancesResponse {
   useRawHoneyBalance: () => bigint;
 }
 
-export const usePollHoneyBalance = ({
-  config,
-  opts: { refreshInterval } = {
-    refreshInterval: POLLING.FAST,
-  },
-}: DefaultHookProps): UsePollHoneyBalancesResponse => {
+export const usePollHoneyBalance = (
+  options?: DefaultHookOptions,
+): UsePollHoneyBalancesResponse => {
   const publicClient = usePublicClient();
-  const { isConnected, account } = useBeraJs();
+  const { isConnected, account, config: beraConfig } = useBeraJs();
   const QUERY_KEY = [account, isConnected, "honeyBalance"];
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      return getHoneyBalance({ publicClient, config, isConnected, account });
+      return getHoneyBalance({
+        publicClient,
+        config: options?.beraConfigOverride ?? beraConfig,
+        isConnected,
+        account,
+      });
     },
     {
-      refreshInterval,
+      ...options?.opts,
     },
   );
   const useHoneyBalance = (): string => {

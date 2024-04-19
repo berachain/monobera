@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import {
   STAKING_PRECOMPILE_ABI,
   TransactionActionType,
-  defaultBeraConfig,
   truncateHash,
   usePollAccountDelegations,
   usePollActiveValidators,
@@ -19,9 +18,7 @@ export const useRedelegate = (fromAddress: `0x{string}`) => {
   const [dstValidator, setDstValidator] = useState<Validator | null>(null);
   const { useActiveValidator } = usePollActiveValidators();
   const srcValidator = useActiveValidator(fromAddress);
-  const { tokenList: tokens } = useTokens({
-    config: defaultBeraConfig,
-  });
+  const { tokenList: tokens } = useTokens();
   const { useSelectedAccountDelegation } =
     usePollAccountDelegations(fromAddress);
   const accountDelegation = useSelectedAccountDelegation();

@@ -8,32 +8,33 @@ import { getErrorMessage } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { tradingAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
+import { BeraConfig } from "~/types";
 import { useOct } from "../useOct";
 import {
   type IContractWrite,
-  type IUseContractWrite,
+  type IUseContractWriteArgs,
   type useContractWriteApi,
 } from "./types";
 
-const useOctContractWrite = ({
-  onSuccess,
-  onError,
-  onLoading,
-  onSubmission,
-  config,
-}: IUseContractWrite): useContractWriteApi => {
+interface useOctContractWriteOptions {
+  beraConfigOverride?: BeraConfig;
+}
+
+const useOctContractWrite = (
+  { onSuccess, onError, onLoading, onSubmission }: IUseContractWriteArgs,
+  options?: useOctContractWriteOptions,
+): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
-  const { account } = useBeraJs();
+  const { account, config: beraConfig } = useBeraJs();
 
-  if (!config) {
-    throw new Error("Config is required");
-  }
-
-  const { isOctReady, octPrivKey } = useOct({
-    config,
-  });
+  const { isOctReady, octPrivKey } = useOct(
+    {},
+    {
+      beraConfigOverride: options?.beraConfigOverride ?? beraConfig,
+    },
+  );
 
   const write = useCallback(
     async ({

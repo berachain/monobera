@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { defaultBeraConfig, useTokenHoneyPrice } from "@bera/berajs";
+import { useTokenHoneyPrice } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
@@ -35,8 +35,7 @@ function DataCard({
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
   const { data: beraPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: beraTokenAddress },
+    tokenAddress: beraTokenAddress,
   });
 
   const isDataReady = useMemo(() => {

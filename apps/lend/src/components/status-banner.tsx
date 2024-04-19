@@ -1,5 +1,4 @@
 import {
-  defaultBeraConfig,
   useBeraJs,
   usePollBgtRewardsForAddress,
   usePollReservesDataList,
@@ -19,7 +18,6 @@ import { RiskDetails } from "./risk-details";
 
 export default function StatusBanner() {
   const { useUserAccountData, isLoading } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
@@ -28,15 +26,12 @@ export default function StatusBanner() {
 
   const { isReady } = useBeraJs();
 
-  const { useReservesDataList, useBaseCurrencyData } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { useReservesDataList, useBaseCurrencyData } =
+    usePollReservesDataList();
   const reservesDataList = useReservesDataList();
   const baseCurrency = useBaseCurrencyData();
 
-  const { useCurrentWalletBalances } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useCurrentWalletBalances } = usePollWalletBalances();
   const balanceToken = useCurrentWalletBalances();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({

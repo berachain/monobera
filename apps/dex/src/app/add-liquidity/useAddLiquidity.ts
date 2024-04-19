@@ -1,12 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  defaultBeraConfig,
-  useBeraJs,
-  useTokens,
-  type PoolV2,
-} from "@bera/berajs";
+import { useBeraJs, useTokens, type PoolV2 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
 import { type Address } from "viem";
 
@@ -48,9 +43,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     crocDexAddress as Address,
   );
 
-  const { tokenDictionary, beraToken, wBeraToken } = useTokens({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary, beraToken, wBeraToken } = useTokens();
 
   const reset = () => {
     setPreviewOpen(false);

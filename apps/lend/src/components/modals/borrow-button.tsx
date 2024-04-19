@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  defaultBeraConfig,
   getLendBorrowPayload,
   lendPoolImplementationAbi,
   useBeraJs,
@@ -61,14 +60,11 @@ export default function BorrowBtn({
   });
 
   const { refetch: userAccountRefetch } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
   });
-  const { refetch: reservesDataRefetch } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -110,21 +106,16 @@ const BorrowModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const { account = "0x" } = useBeraJs();
-  const { useBaseCurrencyData } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { useBaseCurrencyData } = usePollReservesDataList();
   const baseCurrencyData = useBaseCurrencyData();
   const { useUserAccountData } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
   });
   const userAccountData = useUserAccountData();
 
-  const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedWalletBalance } = usePollWalletBalances();
   const token = useSelectedWalletBalance(reserve?.underlyingAsset);
 
   const availableLiquidity = formatUnits(

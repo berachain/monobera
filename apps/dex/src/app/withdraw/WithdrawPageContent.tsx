@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import {
   TransactionActionType,
   bexAbi,
-  defaultBeraConfig,
   useTokenHoneyPrice,
   type PoolV2,
   type Token,
@@ -131,12 +130,10 @@ export default function WithdrawLiquidityContent({
   }, [userPositionBreakdown?.quoteAmount, amount]);
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: baseToken?.address },
+    tokenAddress: baseToken?.address,
   });
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: quoteToken?.address },
+    tokenAddress: quoteToken?.address,
   });
 
   const totalHoneyPrice = useMemo(() => {

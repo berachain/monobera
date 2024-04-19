@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  defaultBeraConfig,
   formatUsd,
   usePollEpochs,
   useTokenInformation,
@@ -33,12 +32,8 @@ const BribeCard = ({
   numBlockProposals: bigint;
 }) => {
   const [token, setToken] = useState<Token | undefined>(undefined);
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
-  });
-  const { read, tokenInformation } = useTokenInformation({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary } = useTokens();
+  const { read, tokenInformation } = useTokenInformation();
 
   useEffect(() => {
     if (!tokenDictionary || !tokenAddress) setToken(undefined);

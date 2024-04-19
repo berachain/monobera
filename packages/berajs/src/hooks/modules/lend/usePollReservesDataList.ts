@@ -4,12 +4,15 @@ import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BaseCurrencyData, ReserveData, getReserveData } from "~/actions/lend";
-import { DefaultHookProps } from "~/types";
+import { useBeraJs } from "~/contexts";
+import { DefaultHookOptions } from "~/types";
 
-export const usePollReservesDataList = ({ config, opts }: DefaultHookProps) => {
+export const usePollReservesDataList = (options?: DefaultHookOptions) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
 
+  const { config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = ["getReservesDataList"];
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
@@ -32,7 +35,7 @@ export const usePollReservesDataList = ({ config, opts }: DefaultHookProps) => {
       return [];
     },
     {
-      ...opts,
+      ...options?.opts,
     },
   );
 

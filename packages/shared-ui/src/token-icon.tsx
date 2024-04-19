@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { defaultBeraConfig, useTokens } from "@bera/berajs";
+import { useTokens } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -41,9 +41,7 @@ export const TokenIcon = ({
   symbol,
   ...props
 }: IconProps) => {
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary } = useTokens();
   const address = isAddress(adr ?? "") ? getAddress(adr ?? "") : adr;
   const img = useMemo(() => {
     if (tokenDictionary && address && isAddress(address)) {

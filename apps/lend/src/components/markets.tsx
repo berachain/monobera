@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { defaultBeraConfig, usePollReservesDataList } from "@bera/berajs";
+import { usePollReservesDataList } from "@bera/berajs";
 import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";
@@ -141,9 +141,7 @@ function generateArrays(originalArray: any[], length: number) {
 
 function MarketGrid() {
   const containerRef = useRef(null);
-  const { useReservesDataList } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { useReservesDataList } = usePollReservesDataList();
   const markets = useReservesDataList();
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
   const columns = generateArrays(markets, 20) as [any[], any[], any[]];
