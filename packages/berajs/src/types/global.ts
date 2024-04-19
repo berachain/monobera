@@ -1,5 +1,6 @@
 import { SWRConfiguration, SWRResponse } from "swr";
 import { Address } from "viem";
+
 import { Token } from "./dex";
 
 export interface BeraConfig {
@@ -36,6 +37,12 @@ export interface BeraConfig {
     wbtc: Address;
     ahoney: Address;
     vdhoney: Address;
+  };
+  banners?: {
+    [key: string]: {
+      lauchBannerEnabled: boolean;
+      rpcBannerEnabled: boolean;
+    };
   };
 }
 
