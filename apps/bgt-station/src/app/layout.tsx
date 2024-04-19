@@ -7,7 +7,7 @@ import Script from "next/script";
 import { bgtName } from "@bera/config";
 import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { beraJsConfig } from "@bera/wagmi";
+import { bannerConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -62,8 +62,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 <main
                   className={cn(
                     "w-full",
-                    beraJsConfig?.banners?.global?.rpcBannerEnabled ||
-                      beraJsConfig?.banners?.[bgtName]?.rpcBannerEnabled
+                    bannerConfig.global?.rpcBannerEnabled ||
+                      bannerConfig[bgtName]?.rpcBannerEnabled
                       ? "pt-start-lg"
                       : "pt-start",
                   )}

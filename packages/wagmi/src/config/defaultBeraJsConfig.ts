@@ -1,4 +1,4 @@
-import { BeraConfig } from "@bera/berajs";
+import { BannerConfig, BeraConfig } from "@bera/berajs";
 import {
   aHoneyTokenAddress,
   beraTokenAddress,
@@ -101,6 +101,37 @@ export const wagmiConfig = createConfig({
   },
 });
 
+export const bannerConfig: BannerConfig = {
+  global: {
+    lauchBannerEnabled: false,
+    rpcBannerEnabled: false,
+  },
+  BEND: {
+    lauchBannerEnabled: false,
+    rpcBannerEnabled: false,
+  },
+  Honey: {
+    lauchBannerEnabled: true,
+    rpcBannerEnabled: false,
+  },
+  BEX: {
+    lauchBannerEnabled: true,
+    rpcBannerEnabled: true,
+  },
+  BERPS: {
+    lauchBannerEnabled: false,
+    rpcBannerEnabled: false,
+  },
+  "BGT Station": {
+    lauchBannerEnabled: false,
+    rpcBannerEnabled: false,
+  },
+  Faucet: {
+    lauchBannerEnabled: false,
+    rpcBannerEnabled: false,
+  },
+};
+
 export const beraJsConfig: BeraConfig = {
   endpoints: {
     tokenList: tokenListUrl,
@@ -135,35 +166,5 @@ export const beraJsConfig: BeraConfig = {
     wbtc: wbtcTokenAddress,
     ahoney: aHoneyTokenAddress,
     vdhoney: vdHoneyTokenAddress,
-  },
-  banners: {
-    global: {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
-    BEND: {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
-    Honey: {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
-    BEX: {
-      lauchBannerEnabled: true,
-      rpcBannerEnabled: true,
-    },
-    BERPS: {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
-    "BGT Station": {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
-    Faucet: {
-      lauchBannerEnabled: false,
-      rpcBannerEnabled: false,
-    },
   },
 };

@@ -36,11 +36,12 @@ export interface BeraConfig {
     ahoney: Address;
     vdhoney: Address;
   };
-  banners?: {
-    [key: string]: {
-      lauchBannerEnabled: boolean;
-      rpcBannerEnabled: boolean;
-    };
+}
+
+export interface BannerConfig {
+  [key: string]: {
+    lauchBannerEnabled: boolean;
+    rpcBannerEnabled: boolean;
   };
 }
 
@@ -50,16 +51,16 @@ export type DefaultHookProps<
 > = ArgsType extends never
   ? { config: BeraConfig; opts?: SWRConfiguration | undefined }
   : ArgsFieldOptional extends true
-    ? {
-        args?: ArgsType;
-        config: BeraConfig;
-        opts?: SWRConfiguration | undefined;
-      }
-    : {
-        args: ArgsType;
-        config: BeraConfig;
-        opts?: SWRConfiguration | undefined;
-      };
+  ? {
+      args?: ArgsType;
+      config: BeraConfig;
+      opts?: SWRConfiguration | undefined;
+    }
+  : {
+      args: ArgsType;
+      config: BeraConfig;
+      opts?: SWRConfiguration | undefined;
+    };
 
 export type DefaultHookReturnType<T = any> = SWRResponse<T, any, any>;
 

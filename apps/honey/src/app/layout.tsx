@@ -14,7 +14,7 @@ import {
   TermOfUseModal,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { BeraWagmi, beraJsConfig } from "@bera/wagmi";
+import { BeraWagmi, bannerConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -76,8 +76,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <main
                 className={cn(
                   "w-full pb-[72px]",
-                  beraJsConfig?.banners?.global?.rpcBannerEnabled ||
-                    beraJsConfig?.banners?.[honeyName]?.rpcBannerEnabled
+                  bannerConfig.global?.rpcBannerEnabled ||
+                    bannerConfig[honeyName]?.rpcBannerEnabled
                     ? "pt-[120px]"
                     : "pt-[72px]",
                 )}

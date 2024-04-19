@@ -7,7 +7,7 @@ import { useBeraJs } from "@bera/berajs";
 import { faucetUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
-import { beraJsConfig } from "@bera/wagmi";
+import { bannerConfig } from "@bera/wagmi";
 
 import { LaunchBanner, RPCBanner } from "./banner";
 import { ConnectButton } from "./connect-button";
@@ -78,14 +78,12 @@ export function Header({
           <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
         </div>
       </div>
-      {(beraJsConfig?.banners?.global?.lauchBannerEnabled ||
-        (appName && beraJsConfig?.banners?.[appName]?.lauchBannerEnabled)) && (
+      {(bannerConfig.global?.lauchBannerEnabled ||
+        (appName && bannerConfig[appName]?.lauchBannerEnabled)) && (
         <LaunchBanner appName={appName ?? "Berachain Dapps"} />
       )}
-      {(beraJsConfig?.banners?.global?.rpcBannerEnabled ||
-        (appName && beraJsConfig?.banners?.[appName]?.rpcBannerEnabled)) && (
-        <RPCBanner />
-      )}
+      {(bannerConfig.global?.rpcBannerEnabled ||
+        (appName && bannerConfig[appName]?.rpcBannerEnabled)) && <RPCBanner />}
     </nav>
   );
 }
