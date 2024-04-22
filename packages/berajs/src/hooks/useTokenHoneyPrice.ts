@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 import { getTokenHoneyPrice } from "~/actions/honey";
 import POLLING from "~/enum/polling";
@@ -13,17 +13,16 @@ export type UseTokenHoneyPriceRequest = DefaultHookProps<{
   tokenAddress: `0x${string}` | undefined;
 }>;
 
-export interface UseTokenHoneyPriceResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  data: string | undefined;
+export interface UseTokenHoneyPriceResponse
+  extends DefaultHookReturnType<string | undefined> {
+  refetch: () => void;
 }
 
 export const useTokenHoneyPrice = ({
   config,
   args: { tokenAddress } = { tokenAddress: undefined },
   opts,
-}: UseTokenHoneyPriceRequest): DefaultHookReturnType<string | undefined> => {
+}: UseTokenHoneyPriceRequest): UseTokenHoneyPriceResponse => {
   const method = "tokenHoneyPrice";
   const QUERY_KEY = [tokenAddress, method];
   const swrResponse = useSWR<string | undefined>(
@@ -35,5 +34,6 @@ export const useTokenHoneyPrice = ({
   );
   return {
     ...swrResponse,
+    refetch: () => void mutate(QUERY_KEY),
   };
 };

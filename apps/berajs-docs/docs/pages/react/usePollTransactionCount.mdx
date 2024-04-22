@@ -4,7 +4,7 @@ React hook for polling the transaction count for a given address.
 
 ## Import
 
-```ts
+```ts twoslash
 import { usePollTransactionCount } from "@bera/berajs";
 ```
 
@@ -13,10 +13,8 @@ import { usePollTransactionCount } from "@bera/berajs";
 ```ts twoslash [example.ts]
 import { usePollTransactionCount } from "@bera/berajs";
 
-const exampleAddress = "0x1..";
-
 const { data: txnCount, refresh } = usePollTransactionCount({
-  address: exampleAddress,
+  address: "0x0...",
 });
 ```
 

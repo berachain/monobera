@@ -4,12 +4,12 @@ import { useLocalStorage } from "usehooks-ts";
 import { DefaultHookProps, DefaultHookReturnType, type Token } from "..";
 import { GetTokens, getTokens } from "../actions/dex";
 
-interface UseTokens extends DefaultHookReturnType<GetTokens> {
+export interface UseTokens extends DefaultHookReturnType<GetTokens> {
   addNewToken: (token: Token | undefined) => void;
   removeToken: (token: Token) => void;
 }
 
-const useTokens = ({ config, opts }: DefaultHookProps): UseTokens => {
+export const useTokens = ({ config, opts }: DefaultHookProps): UseTokens => {
   const TOKEN_KEY = "tokens";
 
   const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
@@ -64,5 +64,3 @@ const useTokens = ({ config, opts }: DefaultHookProps): UseTokens => {
     removeToken,
   };
 };
-
-export default useTokens;

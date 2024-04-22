@@ -4,7 +4,7 @@ React hook for polling the allowances of a given token array
 
 ## Import
 
-```ts
+```ts twoslash
 import { usePollAllowances } from "@bera/berajs";
 ```
 
@@ -14,8 +14,14 @@ import { usePollAllowances } from "@bera/berajs";
 
 ```ts twoslash [example.ts] filename="example.ts"
 import { usePollAllowances, type Token } from "@bera/berajs";
+import { type BeraConfig } from "@bera/berajs";
 
-import { beraConfig } from "./config";
+// required configs for usePollAllowances
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x0...",
+  },
+};
 
 const token1: Token = {
   address: "0x0",
@@ -37,7 +43,7 @@ const {
   data: allowances,
   useSelectedAllowance,
   refetch,
-} = usePollAllowance({
+} = usePollAllowances({
   config: beraConfig,
   args: {
     spender: "0x0...",
@@ -47,17 +53,6 @@ const {
 
 const selectedAllowance = useSelectedAllowance(token1.address);
 
-```
-
-```ts twoslash [config.ts] filename="config.ts"
-import { type BeraConfig } from "@bera/berajs";
-
-// required configs for usePollAllowances
-export const beraConfig: BeraConfig = {
-  contracts: {
-    multicallAddress: "0x0...",
-  },
-};
 ```
 
 ## Parameters

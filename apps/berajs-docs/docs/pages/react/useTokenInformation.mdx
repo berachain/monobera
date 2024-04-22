@@ -10,44 +10,35 @@ import { useTokenInformation } from "@bera/berajs";
 
 ## Usage
 
-:::code-group
-
 ```ts twoslash [example.ts]
 import { useTokenInformation } from "@bera/berajs";
+import { BeraConfig } from "@bera/berajs";
 
-import { beraConfig } from "./config";
+// required configs for useTokenInformation
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x1..",
+  },
+};
 
 const {
   data: tokenInformation
 } = useTokenInformation({
-  config: beraJsConfig,
+  config: beraConfig,
   args: {
     address: "0x0...",
   },
 });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getRoute
-export const beraConfig: BeraConfig = {
-  contracts: {
-    multicallAddress: "0x1..",
-  },
-};
-```
-
-:::
-
 ## Parameters
 
 ```ts twoslash
-import { type UseTokenInformation } from "@bera/berajs";
+import { type UseTokenInformationRequest } from "@bera/berajs";
 ```
 
 ## Returns
 
-```ts
-import { type DefaultHookReturnType<Token | undefined> } from "@bera/berajs";
+```ts twoslash
+import { type UseTokenInformationResponse } from "@bera/berajs";
 ```

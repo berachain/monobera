@@ -1,5 +1,4 @@
 import useSWR, { useSWRConfig } from "swr";
-import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import {
@@ -9,7 +8,7 @@ import {
   type Token,
 } from "..";
 import { useBeraJs } from "../contexts";
-import useTokens from "./useTokens";
+import { useTokens } from "./useTokens";
 import POLLING from "~/enum/polling";
 
 export interface BalanceToken extends Token {

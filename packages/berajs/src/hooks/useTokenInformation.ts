@@ -19,7 +19,7 @@ export type UseTokenInformationResponse = DefaultHookReturnType<
   Token | undefined
 >;
 
-const useTokenInformation = ({
+export const useTokenInformation = ({
   args,
   config,
   opts,
@@ -46,5 +46,3 @@ const useTokenInformation = ({
     ...swrResponse,
   };
 };
-
-export default useTokenInformation;
