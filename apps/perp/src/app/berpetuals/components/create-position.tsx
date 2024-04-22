@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { defaultBeraConfig, usePollHoneyBalance } from "@bera/berajs";
+import { honeyTokenAddress } from "@bera/config";
 import { type GlobalParams } from "@bera/proto/src";
 import { FormattedNumber, usePrevious } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -79,7 +80,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
 
   const { useMarketIndexPrice } = usePricesSocket();
   const { useHoneyBalance, useRawHoneyBalance } = usePollHoneyBalance({
-    config: defaultBeraConfig,
+    args: { erc20HoneyAddress: honeyTokenAddress },
   });
   const honeyBalance = useHoneyBalance(); // string
   const rawHoneyBalance = useRawHoneyBalance(); // bigint
