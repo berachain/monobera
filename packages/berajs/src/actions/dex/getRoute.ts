@@ -1,9 +1,11 @@
 import { nativeTokenAddress } from "@bera/config";
-import { parseUnits, getAddress } from "viem";
-import { SwapInfoV3, ICrocSwapStep } from "~/hooks";
-import { handleNativeBera } from "~/utils";
-import { BeraConfig } from "~/types/global";
+import { getAddress, parseUnits } from "viem";
+
+import { defaultBeraConfig } from "~/constants";
+import { ICrocSwapStep, SwapInfoV3 } from "~/hooks";
 import { SwapRequest } from "~/types";
+import { BeraConfig } from "~/types/global";
+import { handleNativeBera } from "~/utils";
 
 /**
  * Queries router for optimal swap path from one token to another
@@ -11,11 +13,11 @@ import { SwapRequest } from "~/types";
 
 export interface GetRoute {
   args: SwapRequest;
-  config: BeraConfig;
+  config?: BeraConfig;
 }
 export const getRoute = async ({
   args,
-  config,
+  config = defaultBeraConfig,
 }: GetRoute): Promise<SwapInfoV3> => {
   const { tokenIn, tokenOut, tokenInDecimals, amount } = args;
   const emptyRoute = {

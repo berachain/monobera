@@ -1,6 +1,7 @@
 import { Address, PublicClient, erc20Abi, formatUnits, getAddress } from "viem";
 
 import { multicall3Abi as MULTICALL3_ABI } from "~/abi";
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "../../types";
 import { Token } from "../../types/dex";
 
@@ -9,7 +10,7 @@ export interface IFetchWalletBalancesRequestArgs {
   tokenList: Token[] | undefined;
   externalTokenList: Token[] | undefined;
   queryKey: (string | boolean | Token[] | undefined)[];
-  config: BeraConfig;
+  config?: BeraConfig;
   publicClient: PublicClient | undefined;
   mutate: (key: any, data: any) => void;
 }
@@ -35,7 +36,7 @@ export const getWalletBalances = async ({
   tokenList,
   externalTokenList,
   queryKey,
-  config,
+  config = defaultBeraConfig,
   publicClient,
   mutate,
 }: IFetchWalletBalancesRequestArgs): Promise<any | undefined> => {

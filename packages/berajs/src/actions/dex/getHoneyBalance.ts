@@ -1,5 +1,6 @@
 import { Address, PublicClient, erc20Abi } from "viem";
 
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "~/types";
 
 /**
@@ -8,12 +9,12 @@ import { BeraConfig } from "~/types";
 
 export const getHoneyBalance = async ({
   publicClient,
-  config,
+  config = defaultBeraConfig,
   isConnected,
   account,
 }: {
   publicClient: PublicClient | undefined;
-  config: BeraConfig;
+  config?: BeraConfig;
   isConnected: boolean;
   account: string | undefined;
 }): Promise<bigint | undefined> => {

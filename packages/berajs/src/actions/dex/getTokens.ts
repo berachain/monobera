@@ -1,9 +1,10 @@
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "../../types";
 import { Token } from "../../types/dex";
 
 export interface IFetchTokensRequestArgs {
   localStorageTokenList: Token[];
-  config: BeraConfig;
+  config?: BeraConfig;
 }
 
 export interface IFetchTokensResponse {
@@ -27,7 +28,7 @@ function tokenListToDict(list: Token[]): { [key: string]: Token } {
 
 export const getTokens = async ({
   localStorageTokenList,
-  config,
+  config = defaultBeraConfig,
 }: IFetchTokensRequestArgs): Promise<IFetchTokensResponse | undefined> => {
   if (!config.endpoints?.tokenList) {
     return {

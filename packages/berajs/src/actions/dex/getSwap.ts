@@ -2,6 +2,7 @@ import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import { PublicClient, formatUnits, getAddress } from "viem";
 
 import { multiswapAbi } from "~/abi";
+import { defaultBeraConfig } from "~/constants";
 import { SwapInfoV3 } from "~/hooks";
 import { SwapRequest } from "~/types";
 import { BeraConfig } from "~/types/global";
@@ -13,11 +14,11 @@ import { getRoute } from "./getRoute";
 
 export const getSwap = async ({
   args,
-  config,
+  config = defaultBeraConfig,
   publicClient,
 }: {
   args: SwapRequest;
-  config: BeraConfig;
+  config?: BeraConfig;
   publicClient: PublicClient;
 }): Promise<SwapInfoV3 | undefined> => {
   const { tokenIn, tokenOutDecimals } = args;

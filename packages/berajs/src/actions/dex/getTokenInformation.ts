@@ -1,6 +1,7 @@
 import { multicall } from "@wagmi/core";
 import { Address, erc20Abi } from "viem";
 
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "../../types";
 import { ActionEnum } from "../../utils/stateReducer";
 
@@ -21,7 +22,7 @@ export const getTokenInformation = async ({
   dispatch,
   address,
   config,
-  beraConfig,
+  beraConfig = defaultBeraConfig,
   setTokenInformation,
   setError,
 }: IFetchTokenPriceInformationArgs): Promise<void> => {

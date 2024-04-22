@@ -1,6 +1,7 @@
 import { Address, PublicClient } from "viem";
 
 import { lendPoolImplementationAbi } from "~/abi";
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "~/types";
 
 export interface UserAccountData {
@@ -21,11 +22,11 @@ export interface UserAccountData {
  */
 export const getUserAccountData = async ({
   client,
-  config,
+  config = defaultBeraConfig,
   account,
 }: {
   client: PublicClient;
-  config: BeraConfig;
+  config?: BeraConfig;
   account: Address;
 }): Promise<UserAccountData | undefined> => {
   try {

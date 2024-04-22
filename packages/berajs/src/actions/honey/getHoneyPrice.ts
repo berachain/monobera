@@ -3,12 +3,13 @@ import { honeyTokenAddress } from "@bera/config";
 import { getTokenHoneyPriceReq } from "@bera/graphql";
 import { Address } from "viem";
 
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "~/types/global";
 import { handleNativeBera } from "~/utils";
 
 interface FetchHoneyPriceArgs {
   tokenAddress?: string | undefined;
-  config: BeraConfig;
+  config?: BeraConfig;
 }
 
 /**
@@ -17,7 +18,7 @@ interface FetchHoneyPriceArgs {
 
 export const getTokenHoneyPrice = async ({
   tokenAddress,
-  config,
+  config = defaultBeraConfig,
 }: FetchHoneyPriceArgs): Promise<string | undefined> => {
   if (!config.subgraphs?.dexSubgraph) {
     throw new Error("dex subgraph uri s not found in config");

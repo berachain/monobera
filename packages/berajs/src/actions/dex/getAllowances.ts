@@ -1,11 +1,12 @@
 import { PublicClient, erc20Abi, formatUnits } from "viem";
 
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig, Token } from "../../types";
 
 export interface IGetAllowancesRequest {
   tokens: Token[];
   account: `0x${string}` | undefined;
-  config: BeraConfig;
+  config?: BeraConfig;
   method: string;
   contract: string;
   queryKey: (string | Token[] | undefined)[];
@@ -32,7 +33,7 @@ interface Call {
 export const getAllowances = async ({
   tokens,
   account,
-  config,
+  config = defaultBeraConfig,
   contract,
   publicClient,
   queryKey,

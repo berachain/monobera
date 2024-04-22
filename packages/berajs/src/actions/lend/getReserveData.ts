@@ -2,6 +2,7 @@ import { FormatReserveUSDResponse, formatReserves } from "@aave/math-utils";
 import { Address, PublicClient } from "viem";
 
 import { lendUiDataProviderAbi } from "~/abi";
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "~/types";
 import { getReservesHumanized } from "~/utils";
 
@@ -25,10 +26,10 @@ export interface BaseCurrencyData {
  */
 export const getReserveData = async ({
   client,
-  config,
+  config = defaultBeraConfig,
 }: {
   client: PublicClient;
-  config: BeraConfig;
+  config?: BeraConfig;
 }): Promise<
   | {
       formattedReserves: ReserveData[];

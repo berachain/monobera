@@ -2,12 +2,13 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { getTokenHoneyPricesReq } from "@bera/graphql";
 import { getAddress } from "viem";
 
+import { defaultBeraConfig } from "~/constants";
 import { BeraConfig } from "~/types";
 import { handleNativeBera } from "~/utils";
 
 interface FetchHoneyPricesArgs {
   tokenAddresses?: string[] | undefined;
-  config: BeraConfig;
+  config?: BeraConfig;
 }
 
 /**
@@ -16,7 +17,7 @@ interface FetchHoneyPricesArgs {
 
 export const getTokenHoneyPrices = async ({
   tokenAddresses,
-  config,
+  config = defaultBeraConfig,
 }: FetchHoneyPricesArgs): Promise<{ [key: string]: string } | undefined> => {
   if (!config.subgraphs?.dexSubgraph) {
     throw new Error("dex subgraph uri s not found in config");

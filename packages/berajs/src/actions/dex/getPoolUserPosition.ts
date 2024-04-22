@@ -4,6 +4,7 @@ import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
 import BigNumber from "bignumber.js";
 import { PublicClient, erc20Abi, getAddress } from "viem";
 
+import { defaultBeraConfig } from "~/constants";
 import { clientToProvider } from "~/hooks/useEthersProvider";
 import { IUserPosition, PoolV2 } from "~/types";
 import { BeraConfig } from "~/types/global";
@@ -17,13 +18,13 @@ interface GetPoolUserPositionProps_Args {
 
 interface GetPoolUserPositionProps {
   args: GetPoolUserPositionProps_Args;
-  config: BeraConfig;
+  config?: BeraConfig;
   publicClient: PublicClient;
 }
 
 export const getPoolUserPosition = async ({
   args: { pool, account },
-  config,
+  config = defaultBeraConfig,
   publicClient,
 }: GetPoolUserPositionProps): Promise<IUserPosition | undefined> => {
   if (!publicClient) return undefined;
