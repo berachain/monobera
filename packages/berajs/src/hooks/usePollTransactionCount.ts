@@ -5,7 +5,7 @@ import POLLING from "~/enum/polling";
 import { getTransactionCount } from "../actions/dex";
 import { DefaultHookReturnType } from "~/types/global";
 
-export interface IUserPollTransactionCountRequest {
+export interface UserPollTransactionCountRequest {
   address: string | undefined;
 }
 
@@ -16,7 +16,7 @@ export interface UserPollTransactionCountResponse
 
 export const usePollTransactionCount = ({
   address,
-}: IUserPollTransactionCountRequest): UserPollTransactionCountResponse => {
+}: UserPollTransactionCountRequest): UserPollTransactionCountResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [address, "txnCount"];
   const swrResponse = useSWR<number | undefined>(

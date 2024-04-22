@@ -8,18 +8,22 @@ import {
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-export type UseTokenInformation = DefaultHookProps<
+export type UseTokenInformationRequest = DefaultHookProps<
   {
     address: Address | undefined;
   },
   false
 >;
 
+export type UseTokenInformationResponse = DefaultHookReturnType<
+  Token | undefined
+>;
+
 const useTokenInformation = ({
   args,
   config,
   opts,
-}: UseTokenInformation): DefaultHookReturnType<Token | undefined> => {
+}: UseTokenInformationRequest): UseTokenInformationResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [args?.address, config, publicClient];
   const swrResponse = useSWRImmutable<Token | undefined>(

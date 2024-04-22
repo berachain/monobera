@@ -1,6 +1,6 @@
 # useTokenInformation
 
-React hook for grabbing token information.
+React hook for grabbing token information for a given address.
 
 ## Import
 
@@ -18,14 +18,12 @@ import { useTokenInformation } from "@bera/berajs";
 import { beraConfig } from "./config";
 
 const {
-  isLoading, // boolean indicating if token information is still loading
-  isSuccess,
-  isError,
-  tokenInformation,
-  error,
-  read,
+  data: tokenInformation
 } = useTokenInformation({
   config: beraJsConfig,
+  args: {
+    address: "0x0...",
+  },
 });
 ```
 
@@ -44,12 +42,12 @@ export const beraConfig: BeraConfig = {
 
 ## Parameters
 
-```ts
-import { type DefaultHookTypes } from "@bera/berajs";
+```ts twoslash
+import { type UseTokenInformation } from "@bera/berajs";
 ```
 
 ## Returns
 
 ```ts
-import { type IUseTokenInformationResponse } from "@bera/berajs";
+import { type DefaultHookReturnType<Token | undefined> } from "@bera/berajs";
 ```

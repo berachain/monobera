@@ -8,7 +8,6 @@ import { ADDRESS_ZERO } from "~/constants";
 export interface IFetchWalletBalancesRequestArgs {
   account: string | undefined;
   tokenList: Token[] | undefined;
-  externalTokenList: Token[] | undefined;
   config: BeraConfig;
   publicClient: PublicClient | undefined;
 }
@@ -32,7 +31,6 @@ interface Call {
 export const getWalletBalances = async ({
   account,
   tokenList,
-  externalTokenList,
   config,
   publicClient,
 }: IFetchWalletBalancesRequestArgs): Promise<BalanceToken[] | undefined> => {
@@ -42,8 +40,7 @@ export const getWalletBalances = async ({
     throw new Error("Multicall address not found in config");
   }
   if (account && tokenList) {
-    const fullTokenList = [...tokenList, ...(externalTokenList ?? [])];
-    const call: Call[] = fullTokenList.map((item: Token) => {
+    const call: Call[] = tokenList.map((item: Token) => {
       if (item.address === ADDRESS_ZERO) {
         return {
           address: config.contracts?.multicallAddress as Address,
@@ -67,7 +64,7 @@ export const getWalletBalances = async ({
 
       const balances = await Promise.all(
         result.map(async (item: any, index: number) => {
-          const token = fullTokenList[index];
+          const token = tokenList[index];
           if (item.error) {
             return { balance: 0n, formattedBalance: "0", ...token };
           }

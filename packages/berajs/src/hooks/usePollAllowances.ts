@@ -1,5 +1,4 @@
 import useSWR, { useSWRConfig } from "swr";
-import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
@@ -23,7 +22,9 @@ type UsePollAllowancesRequest = DefaultHookProps<
 
 export interface UsePollAllowancesResponse
   extends DefaultHookReturnType<AllowanceToken[] | undefined> {
-  useSelectedAllowanceForContract: (address: string) => AllowanceToken;
+  useSelectedAllowance: (
+    address: Address | undefined,
+  ) => AllowanceToken | undefined;
   refetch: () => void;
 }
 
@@ -62,17 +63,18 @@ export const usePollAllowances = ({
    * @param address the address of the token to get the allowance for
    * @returns the current allowance for the contract for that token
    */
-  const useSelectedAllowanceForContract = (address: string): AllowanceToken => {
-    const { data: assetWalletBalances = undefined } = useSWRImmutable([
-      ...QUERY_KEY,
-      address,
-    ]);
-    return assetWalletBalances;
+  const useSelectedAllowance = (
+    address: Address | undefined,
+  ): AllowanceToken | undefined => {
+    if (!address) return undefined;
+    return swrResponse.data?.find(
+      (item: AllowanceToken) => item.address === address,
+    );
   };
 
   return {
     ...swrResponse,
-    useSelectedAllowanceForContract,
+    useSelectedAllowance,
     refetch: () => void mutate(QUERY_KEY),
   };
 };

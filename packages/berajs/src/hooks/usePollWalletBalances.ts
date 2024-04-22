@@ -47,13 +47,16 @@ export const usePollWalletBalances = ({
     "assetWalletBalances",
     args?.externalTokenList,
   ];
+
   const swrResponse = useSWR<BalanceToken[] | undefined>(
     QUERY_KEY,
     async () => {
       return getWalletBalances({
         account,
-        tokenList: tokenData?.tokenList,
-        externalTokenList: args?.externalTokenList,
+        tokenList: [
+          ...(tokenData?.tokenList ?? []),
+          ...(args?.externalTokenList ?? []),
+        ],
         config,
         publicClient,
       });
@@ -70,8 +73,7 @@ export const usePollWalletBalances = ({
   const useSelectedTagWalletBalances = (
     tag: string,
   ): BalanceToken[] | undefined => {
-    const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
-    return data?.filter((item: Token) => item.tags?.includes(tag));
+    return swrResponse.data?.filter((item: Token) => item.tags?.includes(tag));
   };
 
   return {
