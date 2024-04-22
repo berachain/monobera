@@ -3,7 +3,7 @@ import { Address } from "viem";
 import { useConfig, usePublicClient } from "wagmi";
 
 import { getTokenInformation } from "~/actions/dex";
-import { DefaultHookProps, Token } from "..";
+import { DefaultHookOptions, Token, useBeraJs } from "..";
 import { initialState, reducer } from "../utils/stateReducer";
 
 interface IUseTokenInformation {
@@ -20,15 +20,16 @@ export interface IUseTokenInformationResponse {
   read: (props: IUseTokenInformation) => Promise<void>;
 }
 
-const useTokenInformation = ({
-  config: beraConfig,
-}: DefaultHookProps): IUseTokenInformationResponse => {
+const useTokenInformation = (
+  options?: DefaultHookOptions,
+): IUseTokenInformationResponse => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [error, setError] = useState<Error | undefined>(undefined);
   const [tokenInformation, setTokenInformation] = useState<Token | undefined>(
     undefined,
   );
 
+  const { config: beraConfig } = useBeraJs();
   const publicClient = usePublicClient();
   const config = useConfig();
   const read = useCallback(
@@ -37,7 +38,7 @@ const useTokenInformation = ({
         dispatch,
         address,
         config,
-        beraConfig,
+        beraConfig: options?.beraConfigOverride ?? beraConfig,
         setTokenInformation,
         setError,
       });

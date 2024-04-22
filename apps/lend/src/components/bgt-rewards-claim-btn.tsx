@@ -1,6 +1,5 @@
 import {
   TransactionActionType,
-  defaultBeraConfig,
   lendRewardHelperAbi,
   useBeraJs,
   usePollLendUserBGTRewards,
@@ -13,11 +12,7 @@ import { formatEther } from "viem";
 
 export default function BGTRewardsClaimBtn() {
   const { account } = useBeraJs();
-  const {
-    data: rewards,
-    isLoading,
-    refetch,
-  } = usePollLendUserBGTRewards({ config: defaultBeraConfig });
+  const { data: rewards, isLoading, refetch } = usePollLendUserBGTRewards();
   const {
     write,
     isLoading: isClaimingLoading,

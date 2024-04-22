@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { defaultBeraConfig, usePollHoneyBalance } from "@bera/berajs";
+import { usePollHoneyBalance } from "@bera/berajs";
 import { type GlobalParams } from "@bera/proto/src";
 import { FormattedNumber, usePrevious } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -78,9 +78,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   }, [optionType, form.optionType]);
 
   const { useMarketIndexPrice } = usePricesSocket();
-  const { useHoneyBalance, useRawHoneyBalance } = usePollHoneyBalance({
-    config: defaultBeraConfig,
-  });
+  const { useHoneyBalance, useRawHoneyBalance } = usePollHoneyBalance();
   const honeyBalance = useHoneyBalance(); // string
   const rawHoneyBalance = useRawHoneyBalance(); // bigint
   const rawHoneyBalanceBN = BigNumber(

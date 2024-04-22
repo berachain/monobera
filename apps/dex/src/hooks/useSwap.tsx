@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import {
-  defaultBeraConfig,
   multiswapAbi,
   useBeraJs,
   useGasData,
@@ -55,18 +54,11 @@ export enum WRAP_TYPE {
 }
 
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
-  const { read: readInput, tokenInformation: inputToken } = useTokenInformation(
-    {
-      config: defaultBeraConfig,
-    },
-  );
+  const { read: readInput, tokenInformation: inputToken } =
+    useTokenInformation();
   const { read: readOutput, tokenInformation: outputToken } =
-    useTokenInformation({
-      config: defaultBeraConfig,
-    });
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
-  });
+    useTokenInformation();
+  const { tokenDictionary } = useTokens();
 
   useEffect(() => {
     if (inputCurrency) {
@@ -106,12 +98,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   );
 
   const { data: tokenInPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: selectedFrom?.address },
+    tokenAddress: selectedFrom?.address,
   });
   const { data: tokenOutPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: selectedTo?.address },
+    tokenAddress: selectedTo?.address,
   });
 
   const [isWrap, setIsWrap] = useState(false);
@@ -132,9 +122,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const [isTyping, setIsTyping] = useState(false);
 
-  const { isLoading: isBalanceLoading } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { isLoading: isBalanceLoading } = usePollWalletBalances();
 
   useEffect(() => {
     if (isWrap) {
@@ -151,20 +139,21 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     data: swapInfo,
     error: getSwapError,
     isLoading: isSwapLoading,
-  } = usePollCrocSwap({
-    args: {
+  } = usePollCrocSwap(
+    {
       tokenIn: selectedFrom?.address as Address,
       tokenOut: selectedTo?.address as Address,
       tokenInDecimals: selectedFrom?.decimals ?? 18,
       tokenOutDecimals: selectedTo?.decimals ?? 18,
       amount: swapAmount,
     },
-    opts: {
-      refreshInterval: POLLING.FAST,
+    {
+      opts: {
+        refreshInterval: POLLING.FAST,
+      },
+      isTyping: isTyping,
     },
-    config: defaultBeraConfig,
-    isTyping: isTyping,
-  });
+  );
 
   const priceImpactPercentage =
     swapInfo?.formattedReturnAmount &&
@@ -335,8 +324,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }
   const gasData = useGasData({ contractArgs: gasParams });
   const beraInUsd = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: nativeTokenAddress },
+    tokenAddress: nativeTokenAddress,
   });
   const formattedGasPriceInBera = gasData ? parseFloat(formatGwei(gasData)) : 0;
 

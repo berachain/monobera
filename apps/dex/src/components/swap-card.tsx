@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   TransactionActionType,
-  defaultBeraConfig,
   multiswapAbi,
   useBeraJs,
   usePollWalletBalances,
@@ -112,9 +111,7 @@ export function SwapCard({
 
   const { captureException, track } = useAnalytics();
 
-  const { refetch, isLoading: isBalancesLoading } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { refetch, isLoading: isBalancesLoading } = usePollWalletBalances();
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER

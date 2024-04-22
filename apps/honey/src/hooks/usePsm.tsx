@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import {
   TransactionActionType,
-  defaultBeraConfig,
   useBeraJs,
   usePollAllowance,
   usePollBalance,
@@ -20,9 +19,7 @@ import { getAddress, parseUnits, type Address } from "viem";
 export const usePsm = () => {
   const [isTyping, setIsTyping] = useState(false);
 
-  const { tokenDictionary, tokenList } = useTokens({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary, tokenList } = useTokens();
   const collateralList = tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
   );

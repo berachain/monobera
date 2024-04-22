@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   TransactionActionType,
   bexAbi,
-  defaultBeraConfig,
   usePollWalletBalances,
   useTokenHoneyPrice,
   type PoolV2,
@@ -65,9 +64,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     setIsNativeBera,
   } = useAddLiquidity(pool);
 
-  const { refetch } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { refetch } = usePollWalletBalances();
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
@@ -93,12 +90,10 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   ) as Token;
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: baseToken?.address },
+    tokenAddress: baseToken?.address,
   });
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: quoteToken?.address },
+    tokenAddress: quoteToken?.address,
   });
 
   const baseCost = useMemo(() => {
