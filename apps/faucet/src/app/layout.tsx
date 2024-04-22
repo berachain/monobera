@@ -8,7 +8,7 @@ import { faucetName } from "@bera/config";
 import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { FooterSM } from "@bera/shared-ui/src/footer";
 import { cn } from "@bera/ui";
-import { bannerConfig } from "@bera/wagmi";
+import { DappBannerType, bannerConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -70,8 +70,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <main
                 className={cn(
                   "min-h-[calc(100vh-72px)] w-full bg-sky-600 pb-[70px]",
-                  bannerConfig.global?.rpcBannerEnabled ||
-                    bannerConfig[faucetName]?.rpcBannerEnabled
+                  bannerConfig.global?.[DappBannerType.RPC]?.enabled ||
+                    bannerConfig[faucetName]?.[DappBannerType.RPC]?.enabled
                     ? "mt-[120px]"
                     : "mt-[72px]",
                 )}

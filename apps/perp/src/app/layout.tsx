@@ -7,7 +7,7 @@ import Script from "next/script";
 import { perpsName } from "@bera/config";
 import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { bannerConfig } from "@bera/wagmi";
+import { DappBannerType, bannerConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -61,8 +61,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <main
                 className={cn(
                   "w-full",
-                  bannerConfig.global?.rpcBannerEnabled ||
-                    bannerConfig[perpsName]?.rpcBannerEnabled
+                  bannerConfig.global?.[DappBannerType.RPC]?.enabled ||
+                    bannerConfig[perpsName]?.[DappBannerType.RPC]?.enabled
                     ? "pt-[120px]"
                     : "pt-[72px]",
                 )}

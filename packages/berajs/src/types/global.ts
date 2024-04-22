@@ -38,13 +38,6 @@ export interface BeraConfig {
   };
 }
 
-export interface BannerConfig {
-  [key: string]: {
-    lauchBannerEnabled: boolean;
-    rpcBannerEnabled: boolean;
-  };
-}
-
 export type DefaultHookProps<
   ArgsType = any,
   ArgsFieldOptional = false,
