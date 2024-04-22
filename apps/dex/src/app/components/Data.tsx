@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { defaultBeraConfig, useTokenHoneyPrice } from "@bera/berajs";
+import { useTokenHoneyPrice } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";

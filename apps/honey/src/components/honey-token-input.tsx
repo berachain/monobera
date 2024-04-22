@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  defaultBeraConfig,
-  useBeraJs,
-  usePollWalletBalances,
-  type Token,
-} from "@bera/berajs";
+import { useBeraJs, usePollWalletBalances, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";

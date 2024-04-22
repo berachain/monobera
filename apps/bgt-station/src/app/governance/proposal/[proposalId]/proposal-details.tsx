@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   TransactionActionType,
-  defaultBeraConfig,
   truncateHash,
   usePollActiveValidators,
   usePollDenom,
