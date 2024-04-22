@@ -7,14 +7,14 @@ export const useWithdrawLiquidity = (pool: PoolV2) => {
   const [amount, setAmount] = useState<number>(0);
 
   const [previewOpen, setPreviewOpen] = useState<boolean>(false);
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
   });
   const { usePoolPrice } = useCrocPoolPrice(pool);
   const poolPrice = usePoolPrice();
   return {
     poolPrice,
-    tokenDictionary,
+    tokenDictionary: tokenData?.tokenDictionary,
     amount,
     setAmount,
     previewOpen,

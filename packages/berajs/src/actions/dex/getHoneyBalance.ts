@@ -1,4 +1,5 @@
-import { Address, PublicClient, erc20Abi } from "viem";
+import { Address, PublicClient, erc20Abi, formatUnits } from "viem";
+import { TokenBalance } from "~/types";
 
 interface HoneyBalanceArgs {
   account: Address;
@@ -14,7 +15,7 @@ export const getHoneyBalance = async ({
 }: {
   publicClient: PublicClient;
   args: HoneyBalanceArgs;
-}): Promise<bigint | undefined> => {
+}): Promise<TokenBalance | undefined> => {
   const { account, erc20HoneyAddress } = args;
   try {
     const result = await publicClient.readContract({
@@ -23,7 +24,10 @@ export const getHoneyBalance = async ({
       functionName: "balanceOf",
       args: [account as Address],
     });
-    return result;
+    return {
+      balance: result ?? 0n,
+      formattedBalance: formatUnits(result ?? 0n, 18),
+    };
   } catch (e) {
     console.error(e);
     return undefined;

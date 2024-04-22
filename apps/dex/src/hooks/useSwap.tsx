@@ -55,38 +55,41 @@ export enum WRAP_TYPE {
 }
 
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
-  const { read: readInput, tokenInformation: inputToken } = useTokenInformation(
-    {
-      config: defaultBeraConfig,
+  const { data: inputToken } = useTokenInformation({
+    args: {
+      address: inputCurrency,
     },
-  );
-  const { read: readOutput, tokenInformation: outputToken } =
-    useTokenInformation({
-      config: defaultBeraConfig,
-    });
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
+    opts: {},
+    config: beraJsConfig,
+  });
+  const { data: outputToken } = useTokenInformation({
+    args: {
+      address: outputCurrency,
+    },
+    opts: {},
+    config: beraJsConfig,
+  });
+
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
+    opts: {},
   });
 
   useEffect(() => {
-    if (inputCurrency) {
-      const token = tokenDictionary?.[inputCurrency];
+    if (inputCurrency && !inputToken) {
+      const token = tokenData?.tokenDictionary?.[inputCurrency];
 
-      if (!token) {
-        void readInput({ address: inputCurrency });
-      } else {
+      if (token) {
         setSelectedFrom(token);
       }
     }
-    if (outputCurrency) {
-      const token = tokenDictionary?.[outputCurrency];
-      if (!token) {
-        void readOutput({ address: outputCurrency });
-      } else {
+    if (outputCurrency && !outputToken) {
+      const token = tokenData?.tokenDictionary?.[outputCurrency];
+      if (token) {
         setSelectedTo(token);
       }
     }
-  }, [tokenDictionary]);
+  }, [tokenData?.tokenDictionary]);
 
   useEffect(() => {
     if (inputToken && !selectedFrom) {
@@ -260,12 +263,13 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, selectedFrom, selectedTo, fromAmount, toAmount]);
 
-  const { useAllowance, refresh: refreshAllowance } = usePollAllowance({
-    contract: crocMultiSwapAddress,
-    token: selectedFrom,
+  const { data: allowance, refetch: refreshAllowance } = usePollAllowance({
+    args: {
+      spender: crocMultiSwapAddress,
+      token: selectedFrom,
+    },
+    config: beraJsConfig,
   });
-
-  const allowance = useAllowance();
 
   const slippage = useSlippage();
   const swapPayload = getSwapPayload({

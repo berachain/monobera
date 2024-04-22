@@ -140,19 +140,17 @@ export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
     void mutate(QUERY_KEY);
   };
 
-  const { useBalance } = usePollBeraBalance({
+  const { data: octBalance } = usePollBeraBalance({
     config,
     args: { address: account as Address },
   });
-  const { useTransactionCount } = usePollTransactionCount({
+  const { data: octTxCount } = usePollTransactionCount({
     address: octAddress,
   });
 
-  const octBalance = useBalance();
-  const octTxCount = useTransactionCount();
-
-  const isOctUnfunded = octBalance === undefined || octBalance === 0;
-  const isOctBalanceLow = octBalance !== undefined && Number(octBalance) < 0.1;
+  const isOctUnfunded = octBalance === undefined || octBalance.balance === 0n;
+  const isOctBalanceLow =
+    octBalance !== undefined && Number(octBalance.formattedBalance) < 0.1;
 
   return {
     isGenLoading: state.confirmState === "loading",

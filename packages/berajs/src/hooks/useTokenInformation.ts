@@ -1,57 +1,49 @@
-import { useCallback, useReducer, useState } from "react";
-import { Address } from "viem";
-import { useConfig, usePublicClient } from "wagmi";
+import { Address, isAddress } from "viem";
+import {
+  DefaultHookProps,
+  DefaultHookReturnType,
+  Token,
+  getTokenInformation,
+} from "..";
+import useSWRImmutable from "swr/immutable";
+import { usePublicClient } from "wagmi";
 
-import { getTokenInformation } from "~/actions/dex";
-import { DefaultHookProps, Token } from "..";
-import { initialState, reducer } from "../utils/stateReducer";
+export type UseTokenInformationRequest = DefaultHookProps<
+  {
+    address: Address | undefined;
+  },
+  false
+>;
 
-interface IUseTokenInformation {
-  address: Address;
-  isDefault?: boolean;
-}
-
-export interface IUseTokenInformationResponse {
-  isLoading: boolean;
-  isSuccess: boolean;
-  isError: boolean;
-  tokenInformation: Token | undefined;
-  error: Error | undefined;
-  read: (props: IUseTokenInformation) => Promise<void>;
-}
+export type UseTokenInformationResponse = DefaultHookReturnType<
+  Token | undefined
+>;
 
 const useTokenInformation = ({
-  config: beraConfig,
-}: DefaultHookProps): IUseTokenInformationResponse => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [error, setError] = useState<Error | undefined>(undefined);
-  const [tokenInformation, setTokenInformation] = useState<Token | undefined>(
-    undefined,
-  );
-
+  args,
+  config,
+  opts,
+}: UseTokenInformationRequest): UseTokenInformationResponse => {
   const publicClient = usePublicClient();
-  const config = useConfig();
-  const read = useCallback(
-    async ({ address }: IUseTokenInformation): Promise<void> => {
-      getTokenInformation({
-        dispatch,
-        address,
+  const QUERY_KEY = [args?.address, config, publicClient];
+  const swrResponse = useSWRImmutable<Token | undefined>(
+    QUERY_KEY,
+    async () => {
+      if (!args?.address) return undefined;
+      if (!isAddress(args.address, { strict: false })) {
+        throw new Error("Invalid address");
+      }
+      return await getTokenInformation({
+        address: args.address,
         config,
-        beraConfig,
-        setTokenInformation,
-        setError,
+        publicClient,
       });
     },
-    [publicClient],
+    { ...opts },
   );
 
   return {
-    isLoading: state.confirmState === "loading",
-    isSuccess: state.confirmState === "success",
-    isError: state.confirmState === "fail",
-    tokenInformation,
-    error,
-    read,
+    ...swrResponse,
   };
 };
 

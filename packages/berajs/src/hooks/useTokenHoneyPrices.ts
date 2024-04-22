@@ -1,8 +1,8 @@
 import useSWR from "swr";
 
-import { getTokenHoneyPrices } from "~/actions/honey";
+import { TokenHoneyPrices, getTokenHoneyPrices } from "~/actions/honey";
 import POLLING from "~/enum/polling";
-import { DefaultHookProps } from "~/types/global";
+import { DefaultHookProps, DefaultHookReturnType } from "~/types/global";
 
 /**
  *
@@ -21,25 +21,21 @@ export interface UseTokenHoneyPricesResponse {
 export const useTokenHoneyPrices = ({
   config,
   args: { tokenAddresses } = { tokenAddresses: undefined },
-  opts: { refreshInterval } = {
-    refreshInterval: POLLING.REFRESH_BLOCK_INTERVAL,
-  },
-}: UseTokenHoneyPricesRequest): UseTokenHoneyPricesResponse => {
+  opts,
+}: UseTokenHoneyPricesRequest): DefaultHookReturnType<
+  TokenHoneyPrices | undefined
+> => {
   const method = "tokenHoneyPrices";
   const QUERY_KEY = [tokenAddresses, method];
-  const { data, isLoading, isValidating } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
       return getTokenHoneyPrices({ tokenAddresses, config });
     },
-    {
-      refreshInterval,
-    },
+    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
   );
 
   return {
-    isLoading,
-    isValidating,
-    data,
+    ...swrResponse,
   };
 };

@@ -20,8 +20,8 @@ export default function IndividualMarketAnalytics({
 }: {
   address: Address;
 }) {
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
   });
   const { useSelectedReserveData } = usePollReservesDataList({
     config: defaultBeraConfig,
@@ -39,7 +39,7 @@ export default function IndividualMarketAnalytics({
 
       <TokenInfoCard
         {...{
-          token: tokenDictionary?.[address],
+          token: tokenData?.tokenDictionary?.[address],
           reserve:
             Number(reserve?.totalLiquidity) *
             Number(reserve?.formattedPriceInMarketReferenceCurrency),

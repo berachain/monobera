@@ -1,46 +1,37 @@
-import useSWR from "swr";
-import useSWRImmutable from "swr/immutable";
-import { Address } from "viem";
+import useSWR, { mutate } from "swr";
 import { usePublicClient } from "wagmi";
 
 import { getBeraBalance } from "~/actions/dex/getBeraBalance";
 import POLLING from "~/enum/polling";
-import { DefaultHookProps } from "~/types/global";
+import {
+  DefaultHookProps,
+  DefaultHookReturnType,
+  TokenBalance,
+} from "~/types/global";
+import { useBeraJs } from "../contexts";
 
-export type UsePollBeraBalanceRequest = DefaultHookProps<{
-  address: Address | undefined;
-}>;
+export type UsePollBeraBalanceRequest = DefaultHookProps;
 
-export interface IUsePollBeraBalanceResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  useBalance: () => string | number;
+export interface UsePollBeraBalancesResponse
+  extends DefaultHookReturnType<TokenBalance | undefined> {
+  refetch: () => void;
 }
 
 export const usePollBeraBalance = ({
-  args: { address } = { address: undefined },
-  opts: { refreshInterval } = {
-    refreshInterval: POLLING.FAST,
-  },
-}: UsePollBeraBalanceRequest): IUsePollBeraBalanceResponse => {
+  opts,
+}: UsePollBeraBalanceRequest): UsePollBeraBalancesResponse => {
   const publicClient = usePublicClient();
-  const QUERY_KEY = [address, "beraBalance"];
-  const { isLoading, isValidating } = useSWR(
+  const { account } = useBeraJs();
+  const QUERY_KEY = [account, "beraBalance"];
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
-      return await getBeraBalance({ address, publicClient });
+      return await getBeraBalance({ account, publicClient });
     },
-    {
-      refreshInterval,
-    },
+    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
   );
-  const useBalance = (): string | number => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
   return {
-    isLoading,
-    isValidating,
-    useBalance,
+    ...swrResponse,
+    refetch: () => void mutate(QUERY_KEY),
   };
 };

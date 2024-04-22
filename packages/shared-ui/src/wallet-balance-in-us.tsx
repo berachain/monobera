@@ -12,17 +12,16 @@ import {
 import { Skeleton } from "@bera/ui/skeleton";
 
 export function WalletBalanceInUs() {
-  const { featuredTokenList } = useTokens({
-    config: defaultBeraConfig,
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
   });
-  const { useCurrentWalletBalances } = usePollWalletBalances({
-    config: defaultBeraConfig,
+  const { data: assets } = usePollWalletBalances({
+    config: beraJsConfig,
   });
-  const assets = useCurrentWalletBalances();
   const { data: pricesArray } = useTokenHoneyPrices({
     config: defaultBeraConfig,
     args: {
-      tokenAddresses: featuredTokenList?.map(
+      tokenAddresses: tokenData?.featuredTokenList?.map(
         (featuredToken: Token) => featuredToken.address,
       ),
     },

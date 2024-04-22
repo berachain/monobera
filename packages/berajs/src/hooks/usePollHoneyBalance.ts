@@ -1,44 +1,39 @@
 import useSWR from "swr";
-import { Address, formatUnits } from "viem";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";
 import POLLING from "~/enum/polling";
-import { DefaultHookProps, DefaultHookReturnType } from "~/types/global";
+import {
+  DefaultHookProps,
+  DefaultHookReturnType,
+  TokenBalance,
+} from "~/types/global";
 import { useBeraJs } from "../contexts";
 
-interface IPollHoneyBalance
-  extends DefaultHookProps<{ erc20HoneyAddress: Address }, false> {}
-
-export interface UsePollHoneyBalancesResponse {
-  balance: bigint;
-  formattedBalance: string;
-}
+export interface PollHoneyBalanceRequest
+  extends DefaultHookProps<{ erc20HoneyAddress: Address }> {}
 
 export const usePollHoneyBalance = ({
-  opts,
   args: { erc20HoneyAddress },
-}: IPollHoneyBalance): DefaultHookReturnType<UsePollHoneyBalancesResponse> => {
+  opts,
+}: PollHoneyBalanceRequest): DefaultHookReturnType<
+  TokenBalance | undefined
+> => {
   const publicClient = usePublicClient();
-  const { isConnected, account } = useBeraJs();
-  const QUERY_KEY = [account, isConnected, "honeyBalance"];
-  const swrResponse = useSWR(
+  const { account } = useBeraJs();
+  const QUERY_KEY = [account, "honeyBalance"];
+  const swrResponse = useSWR<TokenBalance | undefined>(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (!isConnected || !account) return undefined;
-      if (!erc20HoneyAddress) return undefined;
+      if (!publicClient || !account) return undefined;
+
       return getHoneyBalance({
         publicClient,
         args: { account, erc20HoneyAddress },
       });
     },
-    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.FAST },
+    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
   );
-
-  return {
-    ...swrResponse,
-    balance: swrResponse.data ?? 0n,
-    formattedBalance: formatUnits(swrResponse.data ?? 0n, 18),
-  };
+  return swrResponse;
 };

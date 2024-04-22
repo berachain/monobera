@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { defaultBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
 
 import { type TokenInput } from "./useMultipleTokenInput";
+import { Address } from "viem";
 
 const useMultipleTokenApprovals = (
   tokenInput: TokenInput[],
-  spender: string,
+  spender: Address,
 ) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
 
@@ -15,15 +16,13 @@ const useMultipleTokenApprovals = (
     .filter((token: TokenInput) => token !== undefined)
     .map((token) => token);
 
-  const { useCurrentAllowancesForContract } = usePollAllowances({
-    config: defaultBeraConfig,
+  const { data: allowances } = usePollAllowances({
+    config: beraJsConfig,
     args: {
-      contract: spender,
+      spender,
       tokens,
     },
   });
-
-  const allowances = useCurrentAllowancesForContract();
 
   useEffect(() => {
     if (allowances) {

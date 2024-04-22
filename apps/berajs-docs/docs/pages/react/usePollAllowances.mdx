@@ -12,46 +12,62 @@ import { usePollAllowances } from "@bera/berajs";
 
 :::code-group
 
-```ts twoslash [example.ts]
-import { usePollAllowances } from "@bera/berajs";
+```ts twoslash [example.ts] filename="example.ts"
+import { usePollAllowances, type Token } from "@bera/berajs";
 
 import { beraConfig } from "./config";
 
-const exampleContractAddress = "0x1..";
-const exampleTokenAddresses = ["0x1..", "0x2.."];
+const token1: Token = {
+  address: "0x0",
+  decimals: 18,
+  symbol: "TKN",
+  name: "TKN",
+};
+
+const token2: Token = {
+  address: "0x0",
+  decimals: 18,
+  symbol: "TKN2",
+  name: "TKN2",
+};
+
+const exampleTokens: Token[] = [token1, token2];
 
 const {
-  useCurrentAllowancesForContract,
-  useSelectedAllowanceForContract,
-  refresh,
+  data: allowances,
+  useSelectedAllowance,
+  refetch,
 } = usePollAllowance({
   config: beraConfig,
   args: {
-    contract: exampleContractAddress,
-    tokens: exampleTokenAddresses,
+    spender: "0x0...",
+    tokens: exampleTokens,
   },
 });
+
+const selectedAllowance = useSelectedAllowance(token1.address);
+
 ```
 
 ```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
+import { type BeraConfig } from "@bera/berajs";
 
-// required configs for getRoute
+// required configs for usePollAllowances
 export const beraConfig: BeraConfig = {
   contracts: {
-    multicallAddress: "0x1..",
+    multicallAddress: "0x0...",
   },
 };
 ```
 
 ## Parameters
 
-```ts
-import { type IUsePollAllowancesRequest } from "@bera/berajs";
+```ts twoslash
+import { type UsePollAllowancesRequest } from "@bera/berajs";
 ```
 
 ## Returns
 
-```ts
-import { type IUsePollAllowancesResponse } from "@bera/berajs";
+```ts twoslash
+import { type UsePollAllowancesResponse } from "@bera/berajs";
 ```

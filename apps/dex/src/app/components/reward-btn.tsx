@@ -85,8 +85,8 @@ const RewardModalContent = ({
 }) => {
   const exceeding = amount !== undefined && Number(amount) > Number(bgtRewards);
 
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
   });
   return (
     <div className="flex w-full flex-col gap-8 ">
@@ -94,7 +94,9 @@ const RewardModalContent = ({
       <div className="rounded-md border border-border bg-input">
         <TokenInput
           selected={
-            tokenDictionary ? tokenDictionary[bgtTokenAddress] : undefined
+            tokenData?.tokenDictionary
+              ? tokenData?.tokenDictionary[bgtTokenAddress]
+              : undefined
           }
           amount={amount}
           balance={bgtRewards}

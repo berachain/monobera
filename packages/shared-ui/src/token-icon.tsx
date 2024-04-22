@@ -41,16 +41,16 @@ export const TokenIcon = ({
   symbol,
   ...props
 }: IconProps) => {
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
   });
   const address = isAddress(adr ?? "") ? getAddress(adr ?? "") : adr;
   const img = useMemo(() => {
-    if (tokenDictionary && address && isAddress(address)) {
-      return tokenDictionary[address]?.logoURI;
+    if (tokenData?.tokenDictionary && address && isAddress(address)) {
+      return tokenData?.tokenDictionary[address]?.logoURI;
     }
     return "";
-  }, [tokenDictionary, tokenDictionary?.[address ?? ""]]);
+  }, [tokenData?.tokenDictionary, tokenData?.tokenDictionary?.[address ?? ""]]);
 
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>

@@ -86,8 +86,8 @@ export const EventTable = ({
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
+  const { data: tokenData } = useTokens({
+    config: beraJsConfig,
   });
   return (
     <Table>
@@ -160,7 +160,7 @@ export const EventTable = ({
                   />
                 </TableCell>
                 <TableCell className="hidden font-medium sm:table-cell">
-                  {getTokenDisplay(event, tokenDictionary)}
+                  {getTokenDisplay(event, tokenData?.tokenDictionary)}
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   {truncateHash(event.id.split(":")[2] ?? "")}
