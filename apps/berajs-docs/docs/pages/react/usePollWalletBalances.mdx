@@ -41,10 +41,7 @@ const {
     useSelectedTagWalletBalances,
     refetch,
 } = usePollWalletBalances({
-    config: beraConfig,
-    args: {
-        externalTokenList: [token1, token2] // optional arg to extend the token list
-    }
+     externalTokenList: [token1, token2] // optional arg to extend the token list
 })
 
 // balance of selected asset

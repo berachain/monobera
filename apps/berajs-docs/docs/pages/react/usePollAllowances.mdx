@@ -14,14 +14,6 @@ import { usePollAllowances } from "@bera/berajs";
 
 ```ts twoslash [example.ts] filename="example.ts"
 import { usePollAllowances, type Token } from "@bera/berajs";
-import { type BeraConfig } from "@bera/berajs";
-
-// required configs for usePollAllowances
-export const beraConfig: BeraConfig = {
-  contracts: {
-    multicallAddress: "0x0...",
-  },
-};
 
 const token1: Token = {
   address: "0x0",
@@ -44,11 +36,8 @@ const {
   useSelectedAllowance,
   refetch,
 } = usePollAllowances({
-  config: beraConfig,
-  args: {
     spender: "0x0...",
     tokens: exampleTokens,
-  },
 });
 
 const selectedAllowance = useSelectedAllowance(token1.address);
