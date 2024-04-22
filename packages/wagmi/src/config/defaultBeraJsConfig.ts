@@ -61,18 +61,18 @@ const evmNetwork: EvmNetwork = {
   name: chainName,
 };
 
-export const defaultBeraConfig: NetworkConfig = {
+export const defaultBeraNetworkConfig: NetworkConfig = {
   chain: BeraChain,
   evmNetwork,
 };
 
 export const wagmiConfig = createConfig({
-  chains: [defaultBeraConfig.chain],
+  chains: [defaultBeraNetworkConfig.chain],
   multiInjectedProviderDiscovery: false,
   ssr: false,
   transports: {
-    [defaultBeraConfig.chain.id]: http(
-      defaultBeraConfig.chain.rpcUrls.default.http[0] || "",
+    [defaultBeraNetworkConfig.chain.id]: http(
+      defaultBeraNetworkConfig.chain.rpcUrls.default.http[0] || "",
     ),
   },
 });
