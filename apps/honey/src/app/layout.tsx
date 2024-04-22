@@ -12,6 +12,7 @@ import {
   Header,
   TailwindIndicator,
   TermOfUseModal,
+  useActiveBanners,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraWagmi, DappBannerType, bannerConfig } from "@bera/wagmi";
@@ -39,6 +40,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
+  const activeBanners = useActiveBanners();
   return (
     <html lang="en" suppressHydrationWarning>
       <Script
@@ -74,13 +76,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 appName={honeyName}
               />
               <main
-                className={cn(
-                  "w-full pb-[72px]",
-                  bannerConfig.global?.[DappBannerType.RPC]?.enabled ||
-                    bannerConfig[honeyName]?.[DappBannerType.RPC]?.enabled
-                    ? "pt-[120px]"
-                    : "pt-[72px]",
-                )}
+                className="w-full pt-start"
+                style={{ paddingTop: `${50 * activeBanners}px` }}
               >
                 {props.children}
               </main>

@@ -134,7 +134,7 @@ export const bannerConfig: BannerConfig = {
       text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
     },
     [DappBannerType.SLOW]: {
-      enabled: true,
+      enabled: false,
       text: "We are currently experiencing network congestion in our system, please be patient with us.",
     },
   },
@@ -154,17 +154,18 @@ export const bannerConfig: BannerConfig = {
   },
   BEX: {
     [DappBannerType.LAUNCH]: {
-      enabled: true,
+      enabled: false,
       text: "Welcome to BEX",
     },
     [DappBannerType.RPC]: {
-      enabled: true,
+      enabled: false,
       text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-      hrefs: ["/pools", "/swap"],
+      hrefs: ["/pools", "/swap", "/"],
     },
     [DappBannerType.SLOW]: {
-      enabled: true,
+      enabled: false,
       text: "We are currently experiencing network congestion in our system, please be patient with us.",
+      hrefs: ["/pools", "/"],
     },
   },
   Honey: {

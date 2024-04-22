@@ -6,7 +6,6 @@ import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import { TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { DappBannerType, bannerConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -59,16 +58,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               </div>
               <div className="z-10 flex-1">
                 <Header navItems={navItems} />
-                <main
-                  className={cn(
-                    "w-full",
-                    bannerConfig.global?.[DappBannerType.RPC]?.enabled
-                      ? "pt-start-lg"
-                      : "pt-start",
-                  )}
-                >
-                  {props.children}
-                </main>
+                <main className="w-full pt-start">{props.children}</main>
               </div>
             </div>
           </ThemeProvider>

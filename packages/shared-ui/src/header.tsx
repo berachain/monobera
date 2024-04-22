@@ -79,16 +79,6 @@ export function Header({
           <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
         </div>
       </div>
-
-      {/* {(bannerConfig.global?.[DappBannerType.LAUNCH]?.enabled ||
-        (appName &&
-          bannerConfig[appName]?.[DappBannerType.LAUNCH]?.enabled)) && (
-        <LaunchBanner appName={appName ?? "Berachain Dapps"} />
-      )}
-      {(bannerConfig.global?.[DappBannerType.RPC]?.enabled ||
-        (appName && bannerConfig[appName]?.[DappBannerType.RPC]?.enabled)) && (
-        <RPCBanner />
-      )} */}
       <BannerManager appName={appName} />
     </nav>
   );

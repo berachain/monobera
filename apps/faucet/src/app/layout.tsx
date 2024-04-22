@@ -5,10 +5,14 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import { faucetName } from "@bera/config";
-import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
+import {
+  Header,
+  TailwindIndicator,
+  TermOfUseModal,
+  useActiveBanners,
+} from "@bera/shared-ui";
 import { FooterSM } from "@bera/shared-ui/src/footer";
 import { cn } from "@bera/ui";
-import { DappBannerType, bannerConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -28,6 +32,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
+
+  const activeBanners = useActiveBanners();
   return (
     <html lang="en">
       <Script
@@ -68,13 +74,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 appName={faucetName}
               />
               <main
-                className={cn(
-                  "min-h-[calc(100vh-72px)] w-full bg-sky-600 pb-[70px]",
-                  bannerConfig.global?.[DappBannerType.RPC]?.enabled ||
-                    bannerConfig[faucetName]?.[DappBannerType.RPC]?.enabled
-                    ? "mt-[120px]"
-                    : "mt-[72px]",
-                )}
+                className="w-full pt-start"
+                style={{ paddingTop: `${50 * activeBanners}px` }}
               >
                 {props.children}
               </main>

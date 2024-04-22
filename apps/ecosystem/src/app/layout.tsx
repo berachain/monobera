@@ -59,16 +59,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               </div>
               <div className="z-10 flex-1">
                 <Header navItems={navItems} />
-                <main
-                  className={cn(
-                    "w-full",
-                    bannerConfig.global?.[DappBannerType.RPC]?.enabled
-                      ? "pt-start-lg"
-                      : "pt-start",
-                  )}
-                >
-                  {props.children}
-                </main>
+                <main className="w-full pt-start">{props.children}</main>
               </div>
             </div>
           </ThemeProvider>
