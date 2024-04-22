@@ -9,7 +9,7 @@ interface IFetchTokenPriceInformationArgs {
   dispatch: (action: { type: ActionEnum }) => void;
   address: Address;
   config: any;
-  beraConfig: BeraConfig;
+  beraConfig?: BeraConfig;
   setTokenInformation: (tokenInformation: any) => void;
   setError: (error: Error) => void;
 }
