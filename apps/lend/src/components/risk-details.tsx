@@ -1,5 +1,5 @@
 import React from "react";
-import { defaultBeraConfig, usePollUserAccountData } from "@bera/berajs";
+import { usePollUserAccountData } from "@bera/berajs";
 import { POLLING } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
@@ -19,7 +19,6 @@ export const RiskDetails = () => {
   const [open, setOpen] = React.useState(false);
 
   const { useUserAccountData } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },

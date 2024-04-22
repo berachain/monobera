@@ -5,7 +5,7 @@ import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
 import { TransactionFailedError } from "./error";
 import {
-  type IUseContractWrite,
+  type IUseContractWriteArgs,
   type IValueSend,
   type useTxnSendWriteApi,
 } from "./types";
@@ -15,7 +15,7 @@ const useValueSend = ({
   onError,
   onLoading,
   onSubmission,
-}: IUseContractWrite = {}): useTxnSendWriteApi => {
+}: IUseContractWriteArgs = {}): useTxnSendWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { data: walletClient } = useWalletClient();

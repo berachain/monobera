@@ -7,12 +7,13 @@ import {
   getUserAccountData,
 } from "~/actions/lend/getUserAccountData";
 import { useBeraJs } from "~/contexts";
-import { DefaultHookProps } from "~/types";
+import { DefaultHookOptions } from "~/types";
 
-export const usePollUserAccountData = ({ config, opts }: DefaultHookProps) => {
+export const usePollUserAccountData = (options?: DefaultHookOptions) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account } = useBeraJs();
+  const { account, config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
 
   const QUERY_KEY = [account, "getUserAccountData"];
   const { isLoading, isValidating } = useSWR(
@@ -28,7 +29,7 @@ export const usePollUserAccountData = ({ config, opts }: DefaultHookProps) => {
       });
     },
     {
-      ...opts,
+      ...options?.opts,
     },
   );
 

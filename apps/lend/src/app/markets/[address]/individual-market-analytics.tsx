@@ -1,11 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  defaultBeraConfig,
-  usePollReservesDataList,
-  useTokens,
-} from "@bera/berajs";
+import { usePollReservesDataList, useTokens } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
@@ -20,12 +16,8 @@ export default function IndividualMarketAnalytics({
 }: {
   address: Address;
 }) {
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
-  });
-  const { useSelectedReserveData } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary } = useTokens();
+  const { useSelectedReserveData } = usePollReservesDataList();
   const reserve = useSelectedReserveData(address);
 
   return (

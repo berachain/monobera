@@ -28,13 +28,19 @@ interface IUseOct {
   onSuccess?: () => void;
   onError?: () => void;
   onLoading?: () => void;
-  config: BeraConfig;
+}
+
+interface IUseOctOptions {
+  beraConfigOverride?: BeraConfig;
 }
 
 const hash = new Keccak(256);
 
 const KEY = "deezNuts";
-export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
+export const useOct = (
+  { onSuccess, onError, onLoading }: IUseOct = {},
+  options?: IUseOctOptions,
+) => {
   const [octMap, setOctMap] = useLocalStorage<Record<Address, boolean>>(
     LOCAL_STORAGE_KEYS.OCT_ENABLED,
     {},
@@ -52,7 +58,7 @@ export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { account } = useBeraJs();
+  const { account, config: beraConfig } = useBeraJs();
   const { signMessageAsync } = useSignMessage();
   const chains = useChains();
   const generateKey = useCallback(async () => {
@@ -140,10 +146,12 @@ export const useOct = ({ onSuccess, onError, onLoading, config }: IUseOct) => {
     void mutate(QUERY_KEY);
   };
 
-  const { useBalance } = usePollBeraBalance({
-    config,
-    args: { address: account as Address },
-  });
+  const config = options?.beraConfigOverride ?? beraConfig;
+
+  const { useBalance } = usePollBeraBalance(
+    { address: account as Address },
+    { beraConfigOverride: config },
+  );
   const { useTransactionCount } = usePollTransactionCount({
     address: octAddress,
   });

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  defaultBeraConfig,
   useBeraJs,
   usePollWalletBalances,
   useTokenInformation,
@@ -58,25 +57,21 @@ export function TokenDialog({
     featuredTokenList,
     addNewToken,
     removeToken,
-  } = useTokens({
-    config: defaultBeraConfig,
-  });
-  const { read, tokenInformation } = useTokenInformation({
-    config: defaultBeraConfig,
-  });
+  } = useTokens();
+  const { read, tokenInformation } = useTokenInformation();
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
     customTokens
       ? customTokens
-      : tokenList?.filter((token) => !filter.includes(token.address)),
+      : tokenList?.filter((token: Token) => !filter.includes(token.address)),
   );
 
   useEffect(() => {
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
       const newFilteredTokens = tokenList?.filter(
-        (token) => !filter.includes(token.address),
+        (token: Token) => !filter.includes(token.address),
       );
       if (
         JSON.stringify(newFilteredTokens) !== JSON.stringify(filteredTokens)
@@ -95,7 +90,7 @@ export function TokenDialog({
   useEffect(() => {
     if (!customTokens) {
       const filtered = tokenList?.filter(
-        (token) =>
+        (token: Token) =>
           token.name.toLowerCase().includes(search.toLowerCase()) ||
           token.symbol.toLowerCase().includes(search.toLowerCase()) ||
           token.address.toLowerCase().includes(search.toLowerCase()),
@@ -315,9 +310,7 @@ const TokenDialogRow = ({
   pendingAddition,
 }: RowProps) => {
   const { isConnected } = useBeraJs();
-  const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedWalletBalance } = usePollWalletBalances();
   const t = useSelectedWalletBalance(token?.address ?? "0x");
   return (
     <div>

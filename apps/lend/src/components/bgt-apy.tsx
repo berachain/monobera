@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  defaultBeraConfig,
   usePollBgtRewardsForAddress,
   usePollReservesDataList,
 } from "@bera/berajs";
@@ -10,9 +9,8 @@ import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 export default function BGTApy() {
-  const { useSelectedReserveData, useTotalBorrowed } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedReserveData, useTotalBorrowed } =
+    usePollReservesDataList();
   const honey = useSelectedReserveData(honeyTokenAddress);
   const totalBorrowed = useTotalBorrowed();
 

@@ -38,22 +38,10 @@ export interface BeraConfig {
   };
 }
 
-export type DefaultHookProps<
-  ArgsType = any,
-  ArgsFieldOptional = false,
-> = ArgsType extends never
-  ? { config: BeraConfig; opts?: SWRConfiguration | undefined }
-  : ArgsFieldOptional extends true
-    ? {
-        args?: ArgsType;
-        config: BeraConfig;
-        opts?: SWRConfiguration | undefined;
-      }
-    : {
-        args: ArgsType;
-        config: BeraConfig;
-        opts?: SWRConfiguration | undefined;
-      };
+export type DefaultHookOptions = {
+  beraConfigOverride?: BeraConfig; // hooks typically use the useBeraJS hook to get the beraConfig by default, this overrides the beraConfig explicitly
+  opts?: SWRConfiguration | undefined;
+};
 
 export type DefaultHookReturnType<T = any> = SWRResponse<T, any, any>;
 

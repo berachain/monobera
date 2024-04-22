@@ -3,9 +3,11 @@ import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getSwap } from "~/actions/dex";
-import { SwapRequest, type DefaultHookProps } from "~/types";
+import { useBeraJs } from "~/contexts";
+import { SwapRequest, type DefaultHookOptions } from "~/types";
 
-interface IUsePollSwaps extends DefaultHookProps<SwapRequest, false> {
+type IUsePollSwapsArgs = SwapRequest;
+interface IUsePollSwapsOptions extends DefaultHookOptions {
   isTyping?: boolean | undefined;
 }
 
@@ -33,21 +35,21 @@ export interface ICrocSwapStep {
 /**
  * Polls a pair for the optimal route and amount for a swap
  */
-export const usePollCrocSwap = ({
-  args,
-  config,
-  opts,
-  isTyping,
-}: IUsePollSwaps) => {
+export const usePollCrocSwap = (
+  args: IUsePollSwapsArgs,
+  options?: IUsePollSwapsOptions,
+) => {
   const { tokenIn, tokenOut, amount, tokenInDecimals, tokenOutDecimals } = args;
   const publicClient = usePublicClient();
-  const QUERY_KEY = [tokenIn, tokenOut, amount, isTyping];
+  const QUERY_KEY = [tokenIn, tokenOut, amount, options?.isTyping];
+  const { config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
   return useSWR<SwapInfoV3 | undefined>(
     QUERY_KEY,
     async () => {
       try {
         if (!publicClient || !config) return undefined;
-        if (isTyping !== undefined && isTyping === true) {
+        if (options?.isTyping !== undefined && options?.isTyping === true) {
           return {
             batchSwapSteps: [],
             formattedSwapAmount: amount ? amount.toString() : "0",
@@ -91,7 +93,7 @@ export const usePollCrocSwap = ({
       }
     },
     {
-      ...opts,
+      ...options?.opts,
     },
   );
 };

@@ -13,7 +13,6 @@ import {
 import {
   TransactionActionType,
   bexAbi,
-  defaultBeraConfig,
   formatNumber,
   useTokenHoneyPrice,
   type Token,
@@ -189,12 +188,10 @@ export function CreatePoolPreview({
   }, [baseToken, quoteToken, initialPrice, isBaseTokenInput, slippage, write]);
 
   const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: baseToken?.address },
+    tokenAddress: baseToken?.address,
   });
   const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: quoteToken?.address },
+    tokenAddress: quoteToken?.address,
   });
 
   const total = useMemo(() => {
