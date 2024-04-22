@@ -1,5 +1,4 @@
 import {
-  defaultBeraConfig,
   useBeraJs,
   usePollReservesDataList,
   usePollUserAccountData,
@@ -18,20 +17,15 @@ import SupplyBtn from "~/components/modals/supply-button";
 
 export default function UserInfo() {
   const { isReady } = useBeraJs();
-  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances();
   const tokenBalance = useSelectedWalletBalance(honeyTokenAddress);
 
   const { useSelectedReserveData, useBaseCurrencyData } =
-    usePollReservesDataList({
-      config: defaultBeraConfig,
-    });
+    usePollReservesDataList();
   const reserve = useSelectedReserveData(honeyTokenAddress);
   const baseCurrencyData = useBaseCurrencyData();
 
   const { useUserAccountData } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },

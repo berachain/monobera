@@ -2,7 +2,6 @@
 
 import React from "react";
 import {
-  defaultBeraConfig,
   usePollWalletBalances,
   useTokenHoneyPrice,
   type Token,
@@ -16,8 +15,7 @@ import { TokenIcon } from "./token-icon";
 
 function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   const { data: tokenPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: asset.address },
+    tokenAddress: asset.address,
   });
 
   return (
@@ -60,9 +58,7 @@ function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   );
 }
 export function TokenList() {
-  const { useCurrentWalletBalances, isLoading } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useCurrentWalletBalances, isLoading } = usePollWalletBalances();
   const assets = useCurrentWalletBalances();
 
   return (

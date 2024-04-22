@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import {
   REWARDS_PRECOMPILE_ABI,
   TransactionActionType,
-  defaultBeraConfig,
   useBeraJs,
   useTokens,
 } from "@bera/berajs";
@@ -85,9 +84,7 @@ const RewardModalContent = ({
 }) => {
   const exceeding = amount !== undefined && Number(amount) > Number(bgtRewards);
 
-  const { tokenDictionary } = useTokens({
-    config: defaultBeraConfig,
-  });
+  const { tokenDictionary } = useTokens();
   return (
     <div className="flex w-full flex-col gap-8 ">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>

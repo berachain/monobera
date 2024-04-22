@@ -1,18 +1,12 @@
 import React from "react";
-import {
-  defaultBeraConfig,
-  usePollWalletBalances,
-  type Token,
-} from "@bera/berajs";
+import { usePollWalletBalances, type Token } from "@bera/berajs";
 import { aHoneyTokenAddress } from "@bera/config";
 import { Card } from "@bera/ui/card";
 
 import UserTokenCard from "~/components/user-token-card";
 
 export default function UserDeposits() {
-  const { useSelectedTagWalletBalances } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedTagWalletBalances } = usePollWalletBalances();
   const atokens = useSelectedTagWalletBalances("aToken")?.filter(
     (atoken: Token) =>
       atoken?.balance &&

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   TransactionActionType,
-  defaultBeraConfig,
   tradingAbi,
   truncateHash,
   useBeraJs,
@@ -27,9 +26,7 @@ import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
 
 const TradeWalletSection = () => {
-  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct({
-    config: defaultBeraConfig,
-  });
+  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
   const [copied, setCopied] = useState(false);
   const { account } = useBeraJs();
 
@@ -301,16 +298,11 @@ export function ManageOctDialog({
     isOctBalanceLow,
     octAddress,
     octBalance,
-  } = useOct({
-    config: defaultBeraConfig,
-  });
+  } = useOct();
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();
-  const { useBalance } = usePollBeraBalance({
-    config: defaultBeraConfig,
-    args: { address: account as Address },
-  });
+  const { useBalance } = usePollBeraBalance({ address: account as Address });
   const userBalance = useBalance();
   const { isLoading, write } = useTxn({
     message: "Delegate One Click Trading Wallet",

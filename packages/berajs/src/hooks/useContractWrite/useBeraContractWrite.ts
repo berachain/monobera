@@ -8,7 +8,7 @@ import { usePollTransactionCount } from "../usePollTransactionCount";
 import { TransactionFailedError } from "./error";
 import {
   type IContractWrite,
-  type IUseContractWrite,
+  type IUseContractWriteArgs,
   type useContractWriteApi,
 } from "./types";
 
@@ -17,7 +17,7 @@ const useBeraContractWrite = ({
   onError,
   onLoading,
   onSubmission,
-}: IUseContractWrite = {}): useContractWriteApi => {
+}: IUseContractWriteArgs = {}): useContractWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const { writeContractAsync } = useWriteContract();

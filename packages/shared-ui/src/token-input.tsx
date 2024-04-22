@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  defaultBeraConfig,
   formatInputTokenValue,
   useBeraJs,
   usePollWalletBalances,
@@ -69,9 +68,7 @@ export function TokenInput({
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
-    usePollWalletBalances({
-      config: defaultBeraConfig,
-    });
+    usePollWalletBalances();
   const token = useSelectedWalletBalance(
     selected ? getAddress(selected?.address ?? "0x") ?? "0x" : "0x",
   );
