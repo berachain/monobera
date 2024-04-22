@@ -67,11 +67,6 @@ export function TokenDialog({
       },
     });
 
-  console.log({
-    tokenInformationError,
-    tokenInformation,
-  });
-
   useEffect(() => {
     if (tokenInformationError) {
       setError(tokenInformationError);

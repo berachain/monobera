@@ -1,4 +1,4 @@
-import { Address, getAddress, http, isAddress } from "viem";
+import { Address, isAddress } from "viem";
 import {
   DefaultHookProps,
   DefaultHookReturnType,
@@ -6,7 +6,7 @@ import {
   getTokenInformation,
 } from "..";
 import useSWRImmutable from "swr/immutable";
-import { createConfig, useChains } from "wagmi";
+import { usePublicClient } from "wagmi";
 
 export type UseTokenInformation = DefaultHookProps<
   {
@@ -20,18 +20,11 @@ const useTokenInformation = ({
   config,
   opts,
 }: UseTokenInformation): DefaultHookReturnType<Token | undefined> => {
-  const chains = useChains();
-  const wagmiConfig = createConfig({
-    chains: [chains[0]],
-    transports: {
-      [chains[0].id]: http(),
-    },
-  });
-  const QUERY_KEY = [args?.address, config];
+  const publicClient = usePublicClient();
+  const QUERY_KEY = [args?.address, config, publicClient];
   const swrResponse = useSWRImmutable<Token | undefined>(
     QUERY_KEY,
     async () => {
-      console.log("args", args);
       if (!args?.address) return undefined;
       if (!isAddress(args.address, { strict: false })) {
         throw new Error("Invalid address");
@@ -39,7 +32,7 @@ const useTokenInformation = ({
       return await getTokenInformation({
         address: args.address,
         config,
-        wagmiConfig,
+        publicClient,
       });
     },
     { ...opts },

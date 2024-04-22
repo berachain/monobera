@@ -1,4 +1,3 @@
-import { multicall } from "@wagmi/core";
 import { Address, erc20Abi } from "viem";
 
 import { BeraConfig, Token } from "~/types";
@@ -6,19 +5,19 @@ import { BeraConfig, Token } from "~/types";
 export interface GetTokenInformation {
   address: Address;
   config: BeraConfig;
-  wagmiConfig: any;
+  publicClient: any;
 }
 
 export const getTokenInformation = async ({
   address,
   config,
-  wagmiConfig,
+  publicClient,
 }: GetTokenInformation): Promise<Token | undefined> => {
   try {
     if (!config.contracts?.multicallAddress) {
       throw new Error("Multicall address not found in config");
     }
-    const result = await multicall(config as any, {
+    const result = await publicClient.multicall({
       contracts: [
         {
           address: address,
