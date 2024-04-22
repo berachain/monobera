@@ -150,7 +150,7 @@ export const useOct = (
     address: account as Address,
   });
   const { data: octTxCount } = usePollTransactionCount({
-    address: octAddress,
+    address: octAddress as Address,
   });
 
   const isOctUnfunded = octBalance === undefined || octBalance.balance === 0n;

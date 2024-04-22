@@ -3,10 +3,11 @@ import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
 import { getTransactionCount } from "../actions/dex";
-import { DefaultHookReturnType } from "~/types/global";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
+import { Address } from "viem";
 
-export interface UserPollTransactionCountRequest {
-  address: string | undefined;
+export interface UserPollTransactionCountArgs {
+  address: Address | undefined;
 }
 
 export interface UserPollTransactionCountResponse
@@ -14,18 +15,20 @@ export interface UserPollTransactionCountResponse
   refresh: () => void;
 }
 
-export const usePollTransactionCount = ({
-  address,
-}: UserPollTransactionCountRequest): UserPollTransactionCountResponse => {
+export const usePollTransactionCount = (
+  args: UserPollTransactionCountArgs,
+  options?: DefaultHookOptions,
+): UserPollTransactionCountResponse => {
   const publicClient = usePublicClient();
-  const QUERY_KEY = [address, "txnCount"];
+  const QUERY_KEY = [args.address, "txnCount"];
   const swrResponse = useSWR<number | undefined>(
     QUERY_KEY,
     async () => {
-      return getTransactionCount({ address, publicClient });
+      return getTransactionCount({ address: args.address, publicClient });
     },
     {
-      refreshInterval: POLLING.SLOW,
+      ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
 
