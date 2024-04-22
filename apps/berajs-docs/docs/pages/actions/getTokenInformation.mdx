@@ -2,6 +2,10 @@
 
 Action for fetching token information
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
@@ -13,33 +17,22 @@ import { getTokenInformation } from "@bera/berajs";
 :::code-group
 
 ```ts twoslash [example.ts]
-import { getTokenInformation } from "@bera/berajs";
+import { defaultBeraConfig, getTokenInformation } from "@bera/berajs";
+import { useConfig, usePublicClient } from "wagmi";
 
-import { beraConfig } from "./config";
+const config = useConfig();
 
 await getTokenInformation({
   dispatch,
   address,
-  config,
-  beraConfig,
   setTokenInformation,
   setError,
+  config, // wagmi config
 });
-```
-
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getTokenInformation
-export const beraConfig: BeraConfig = {
-  contracts: {
-    multicallAddress: "0x...",
-  },
-};
 ```
 
 ## Parameters
 
 ```ts
-import { type IFetchTokenPriceInformationArgs } from "berajs";
+import { type IFetchTokenPriceInformationArgs } from "@bera/berajs";
 ```

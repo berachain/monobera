@@ -2,6 +2,10 @@
 
 Action for fetching the balances of a given wallet address
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
@@ -12,32 +16,29 @@ import { getWalletBalances } from "@bera/berajs";
 
 ```ts
 import { getWalletBalances, type Token } from "@bera/berajs";
-import { usePublicClient } from "wagmi";
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
 
-import { beraConfig } from "./config";
-
-const client = usePublicClient();
-
-interface BalanceToken extends Token {
-  balance: bigint;
-  formattedBalance: string;
-}
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain,
+  transport: http(),
+});
 
 const walletBalances = await getWalletBalances({
   account,
   tokenList,
   externalTokenList,
   queryKey,
-  config: beraConfig,
-  publicClient: client,
+  publicClient,
   mutate,
 });
 ```
 
 ## Parameters
 
-```ts
-import { type IFetchWalletBalancesRequestArgs } from "berajs";
+```ts twoslash
+import { type IFetchWalletBalancesRequestArgs } from "@bera/berajs";
 ```
 
 ## Returns

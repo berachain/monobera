@@ -2,6 +2,10 @@
 
 Helper function to determine the base and quote tokens of a given two token addresses.
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
@@ -16,10 +20,10 @@ import { sortBaseQuoteAddresses } from "@bera/berajs";
 import { beraConfig } from "./config";
 
 const [base, quote] = sortBaseQuoteAddresses({
-    tokenA: "0x...",
-    tokenB: "0x...",
-    config: beraConfig,
-})
+  tokenA: "0x...",
+  tokenB: "0x...",
+  config: beraConfig,
+});
 ```
 
 ```ts twoslash [config.ts] filename="config.ts"

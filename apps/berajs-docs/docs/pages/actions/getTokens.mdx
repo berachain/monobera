@@ -2,6 +2,10 @@
 
 Action for fetching and formatting the token list
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
@@ -14,8 +18,6 @@ import { getTokens } from "@bera/berajs";
 import { getTokens, type Token } from "@bera/berajs";
 import { useLocalStorage } from "usehooks-ts";
 
-import { beraConfig } from "./config";
-
 const TOKEN_KEY = "tokens";
 
 const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
@@ -24,20 +26,19 @@ const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
 
 const tokens = await getTokens({
   localStorageTokenList,
-  config: beraConfig,
 });
 ```
 
 ## Parameters
 
 ```ts
-import { type IFetchTokensRequestArgs } from "berajs";
+import { type IFetchTokensRequestArgs } from "@bera/berajs";
 ```
 
 ## Returns
 
 ```ts
-import { type IFetchTokensResponse } from "berajs";
+import { type IFetchTokensResponse } from "@bera/berajs";
 
 type result = Promise<IFetchTokensResponse | Token[] | undefined>;
 ```

@@ -2,6 +2,10 @@
 
 Action for fetching the allowances of a given token array
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
@@ -12,7 +16,15 @@ import { getAllowances } from "@bera/berajs";
 
 ```ts
 import { getAllowances } from "@bera/berajs";
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
 import { usePublicClient } from "wagmi";
+
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain,
+  transport: http(),
+});
 
 interface AllowanceToken extends Token {
   allowance: bigint;
@@ -26,14 +38,12 @@ interface Call {
   args: any[];
 }
 
-const client = usePublicClient();
-
 const { data } = await getAllowance({
   tokens,
   account,
   config,
   contract,
-  client,
+  publicClient,
   queryKey,
   mutate,
 });

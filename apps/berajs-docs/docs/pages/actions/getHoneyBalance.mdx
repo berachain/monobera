@@ -2,6 +2,10 @@
 
 Action for fetching the honey bera balance of a given address
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
@@ -17,13 +21,12 @@ import { getHoneyBalance } from "@bera/berajs";
 
 import { beraConfig } from "./config";
 
-const exampleAccount = "0x1..";
+const account = "0x...";
 
 const data = await getBeraBalance({
   publicClient,
-  config: beraConfig,
   isConnected: true,
-  account: exampleAccount,
+  account,
 });
 ```
 
