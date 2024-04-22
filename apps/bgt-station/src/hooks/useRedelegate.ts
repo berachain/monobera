@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import {
   STAKING_PRECOMPILE_ABI,
   TransactionActionType,
+  defaultBeraConfig,
   truncateHash,
   usePollAccountDelegations,
   usePollActiveValidators,

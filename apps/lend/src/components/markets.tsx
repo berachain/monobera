@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { usePollReservesDataList } from "@bera/berajs";
+import { defaultBeraConfig, usePollReservesDataList } from "@bera/berajs";
 import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import clsx from "clsx";

@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePollWalletBalances, type Token } from "@bera/berajs";
+import {
+  defaultBeraConfig,
+  usePollWalletBalances,
+  type Token,
+} from "@bera/berajs";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBeratoken } from "~/utils/isBeraToken";

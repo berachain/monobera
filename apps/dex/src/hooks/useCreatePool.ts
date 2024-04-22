@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePollAllowances, type Token } from "@bera/berajs";
+import { defaultBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
 import { parseUnits } from "viem";
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  defaultBeraConfig,
   formatUsd,
   usePollEpochs,
   useTokenInformation,
