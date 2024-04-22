@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  defaultBeraConfig,
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
@@ -27,21 +26,19 @@ import RepayBtn from "./modals/repay-button";
 
 export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
-    usePollLendUserBGTRewards({ config: defaultBeraConfig });
+    usePollLendUserBGTRewards();
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,
   });
 
-  const { useTotalBorrowed, useSelectedReserveData } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { useTotalBorrowed, useSelectedReserveData } =
+    usePollReservesDataList();
   const totalBorrowed = useTotalBorrowed();
   const bgtApr = useBgtApr(totalBorrowed);
 
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
 
   const { useUserAccountData } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
@@ -57,9 +54,7 @@ export default function HoneyBorrowCard() {
     .times(0.99)
     .toFixed(18);
 
-  const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedWalletBalance } = usePollWalletBalances();
   const vdHoneyBalance = useSelectedWalletBalance(vdHoneyTokenAddress);
   const userTotalBorrowAllowance = BigNumber(honeyBorrowAllowance)
     .plus(BigNumber(vdHoneyBalance?.formattedBalance ?? 0))

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { defaultBeraConfig, useOct } from "@bera/berajs";
+import { useOct } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -71,9 +71,7 @@ export function OneClickBanner({ className }: { className?: string }) {
     isOctUnfunded,
     isOctBalanceLow,
     isOctDelegated,
-  } = useOct({
-    config: defaultBeraConfig,
-  });
+  } = useOct();
 
   const handleOctManageWalletModalOpen = (open: boolean) => {
     setOctManageWalletModalOpen(open);

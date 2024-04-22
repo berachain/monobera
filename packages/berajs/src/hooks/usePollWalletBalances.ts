@@ -2,7 +2,7 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookProps, getWalletBalances, type Token } from "..";
+import { getWalletBalances, type DefaultHookOptions, type Token } from "..";
 import { useBeraJs } from "../contexts";
 import useTokens from "./useTokens";
 
@@ -11,19 +11,9 @@ export interface BalanceToken extends Token {
   formattedBalance: string;
 }
 
-interface Call {
-  abi: any;
-  address: `0x${string}`;
-  functionName: string;
-  args: any[];
-}
-
-export type UsePollWalletBalancesRequest = DefaultHookProps<
-  {
-    externalTokenList?: Token[];
-  },
-  true
->;
+export type UsePollWalletBalancesArgs = {
+  externalTokenList?: Token[];
+};
 
 export interface UsePollBalancesResponse {
   isLoading: boolean;
@@ -35,15 +25,16 @@ export interface UsePollBalancesResponse {
 }
 
 // TODO optimize data access pattern to avoid double store
-export const usePollWalletBalances = ({
-  config,
-  args,
-  opts,
-}: UsePollWalletBalancesRequest): UsePollBalancesResponse => {
+export const usePollWalletBalances = (
+  args?: UsePollWalletBalancesArgs,
+  options?: DefaultHookOptions,
+): UsePollBalancesResponse => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, isConnected } = useBeraJs();
-  const { tokenList } = useTokens({ config });
+  const { account, isConnected, config: beraConfig } = useBeraJs();
+  const { tokenList } = useTokens({
+    beraConfigOverride: options?.beraConfigOverride,
+  });
   const QUERY_KEY = [
     account,
     isConnected,
@@ -59,13 +50,13 @@ export const usePollWalletBalances = ({
         tokenList,
         externalTokenList: args?.externalTokenList,
         queryKey: QUERY_KEY,
-        config,
+        config: options?.beraConfigOverride ?? beraConfig,
         publicClient,
         mutate,
       });
     },
     {
-      ...opts,
+      ...options?.opts,
     },
   );
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { defaultBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
+import { usePollAllowances, type Token } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui";
 import { parseUnits } from "viem";
@@ -19,11 +19,8 @@ const useMultipleTokenApprovalsWithSlippage = (
     .map((token) => token);
 
   const { useCurrentAllowancesForContract, refresh } = usePollAllowances({
-    args: {
-      contract: spender,
-      tokens,
-    },
-    config: defaultBeraConfig,
+    contract: spender,
+    tokens,
   });
 
   const allowances = useCurrentAllowancesForContract();

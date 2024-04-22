@@ -4,30 +4,32 @@ import { Wallet, providers } from "ethers";
 import { usePublicClient } from "wagmi";
 
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
+import { useBeraJs } from "~/contexts";
+import { BeraConfig } from "~/types";
 import { useOct } from "../useOct";
 import {
-  type IUseContractWrite,
+  type IUseContractWriteArgs,
   type IValueSend,
   type useTxnSendWriteApi,
 } from "./types";
 
-const useOctValueSend = ({
-  onSuccess,
-  onError,
-  onLoading,
-  onSubmission,
-  config,
-}: IUseContractWrite): useTxnSendWriteApi => {
+interface IUseOctValueSendOptions {
+  beraConfigOverride?: BeraConfig;
+}
+const useOctValueSend = (
+  { onSuccess, onError, onLoading, onSubmission }: IUseContractWriteArgs,
+  options?: IUseOctValueSendOptions,
+): useTxnSendWriteApi => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const publicClient = usePublicClient();
+  const { config: beraConfig } = useBeraJs();
 
-  if (!config) {
-    throw new Error("Config is required");
-  }
-  const { isOctEnabled, octPrivKey } = useOct({
-    config,
-  });
-
+  const { isOctEnabled, octPrivKey } = useOct(
+    {},
+    {
+      beraConfigOverride: options?.beraConfigOverride ?? beraConfig,
+    },
+  );
   const write = useCallback(
     async ({ address, value }: IValueSend): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });

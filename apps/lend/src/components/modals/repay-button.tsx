@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  defaultBeraConfig,
   getLendRepayPayload,
   lendPoolImplementationAbi,
   useBeraJs,
@@ -65,21 +64,16 @@ export default function RepayBtn({
     actionType: TransactionActionType.REPAY,
   });
 
-  const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedWalletBalance } = usePollWalletBalances();
   const honey = useSelectedWalletBalance(honeyTokenAddress);
   const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
   const { refetch: userAccountRefetch } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },
   });
-  const { refetch: reservesDataRefetch } = usePollReservesDataList({
-    config: defaultBeraConfig,
-  });
+  const { refetch: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
@@ -140,7 +134,6 @@ const RepayModalContent = ({
 
   const { account = "0x" } = useBeraJs();
   const { useUserAccountData } = usePollUserAccountData({
-    config: defaultBeraConfig,
     opts: {
       refreshInterval: POLLING.FAST,
     },

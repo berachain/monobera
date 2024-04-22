@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
-  defaultBeraConfig,
   truncateHash,
   useBeraJs,
   usePoolUserPosition,
@@ -346,10 +345,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   const { data: userPositionBreakdown, isLoading: isPositionBreakdownLoading } =
     usePoolUserPosition({
-      args: {
-        pool,
-      },
-      config: defaultBeraConfig,
+      pool,
     });
 
   const { usePoolHistoryData, isLoading: isPoolHistoryLoading } =

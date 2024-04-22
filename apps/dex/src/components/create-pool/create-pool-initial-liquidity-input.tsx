@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 import {
-  defaultBeraConfig,
   useBeraJs,
   usePollWalletBalances,
   useTokenHoneyPrice,
@@ -28,9 +27,7 @@ export default function CreatePoolInitialLiquidityInput({
   disabled,
   onTokenBalanceChange,
 }: Props) {
-  const { useSelectedWalletBalance } = usePollWalletBalances({
-    config: defaultBeraConfig,
-  });
+  const { useSelectedWalletBalance } = usePollWalletBalances();
   const tokenBalanceData = useSelectedWalletBalance(token?.address ?? "0x");
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const tokenBalance = Number(tokenBalanceData?.formattedBalance || 0);
@@ -38,8 +35,7 @@ export default function CreatePoolInitialLiquidityInput({
   const { isConnected } = useBeraJs();
 
   const { data: tokenHoneyPrice } = useTokenHoneyPrice({
-    config: defaultBeraConfig,
-    args: { tokenAddress: token?.address },
+    tokenAddress: token?.address,
   });
 
   useMemo(() => {

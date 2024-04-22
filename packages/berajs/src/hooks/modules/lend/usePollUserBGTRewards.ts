@@ -1,19 +1,19 @@
 import useSWR, { useSWRConfig } from "swr";
 import { usePublicClient } from "wagmi";
 
-import { lendRewardHelperAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
-import { DefaultHookProps } from "~/types";
+import { DefaultHookOptions } from "~/types";
 
-export const usePollLendUserBGTRewards = ({
-  config,
-  opts,
-}: DefaultHookProps) => {
+export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
+
+  // const { account, config: beraConfig } = useBeraJs();
+  // const config = options?.beraConfigOverride ?? beraConfig;
+
   const QUERY_KEY = ["getUserBGTRewardsLend", account];
-  const swrResponce = useSWR(QUERY_KEY, async () => {
+  const swrResponse = useSWR(QUERY_KEY, async () => {
     if (!publicClient) return undefined;
     // if (account) {
     // try {
@@ -36,6 +36,6 @@ export const usePollLendUserBGTRewards = ({
 
   return {
     refetch: () => void mutate(QUERY_KEY),
-    ...swrResponce,
+    ...swrResponse,
   };
 };

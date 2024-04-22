@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   GOVERNANCE_PRECOMPILE_ABI,
   TransactionActionType,
-  defaultBeraConfig,
   truncateHash,
   usePollActiveValidators,
   usePollDenom,
@@ -44,9 +43,7 @@ export default function ProposalDetails({
 }: {
   proposalId: number;
 }) {
-  const { read, tokenInformation } = useTokenInformation({
-    config: defaultBeraConfig,
-  });
+  const { read, tokenInformation } = useTokenInformation();
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
