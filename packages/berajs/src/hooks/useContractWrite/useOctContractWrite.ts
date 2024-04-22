@@ -92,17 +92,9 @@ const useOctContractWrite = (
             confirmations: 1,
           });
 
-        const botConfirmation = await fetch(
-          `${perpsEndpoint}/canceled/${hash}`,
-        );
-        const botConfirmationResult = await botConfirmation.json();
-        const cancelReason = botConfirmationResult.result.cancel_reason;
-        console.log("cancelReson", cancelReason);
-        if (confirmationReceipt?.status === "success" && cancelReason === "") {
+        if (confirmationReceipt?.status === "success") {
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess?.(hash);
-        } else if (cancelReason !== "") {
-          onError?.({ message: cancelReason, hash: hash });
         } else {
           onError?.({ message: "Transaction has failed", hash: hash });
         }
