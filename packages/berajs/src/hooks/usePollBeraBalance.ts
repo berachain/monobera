@@ -30,6 +30,7 @@ export const usePollBeraBalance = (
     },
     {
       ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
     },
   );
   const useBalance = (): string | number => {

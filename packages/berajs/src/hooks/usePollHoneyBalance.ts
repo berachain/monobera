@@ -33,6 +33,7 @@ export const usePollHoneyBalance = (
     },
     {
       ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
     },
   );
   const useHoneyBalance = (): string => {

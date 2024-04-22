@@ -1,6 +1,7 @@
 import useSWR from "swr";
 
 import { getTokenHoneyPrice } from "~/actions/honey";
+import POLLING from "~/enum/polling";
 import { DefaultHookOptions } from "~/types/global";
 import { useBeraJs } from "..";
 
@@ -36,6 +37,8 @@ export const useTokenHoneyPrice = (
     },
     {
       ...options?.opts,
+      refreshInterval:
+        options?.opts?.refreshInterval ?? POLLING.REFRESH_BLOCK_INTERVAL,
     },
   );
   return {

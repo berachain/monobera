@@ -36,6 +36,8 @@ export const useTokenHoneyPrices = (
     },
     {
       ...options?.opts,
+      refreshInterval:
+        options?.opts?.refreshInterval ?? POLLING.REFRESH_BLOCK_INTERVAL,
     },
   );
 

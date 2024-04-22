@@ -56,6 +56,7 @@ export const usePollAllowances = (
     },
     {
       ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
     },
   );
 
