@@ -26,7 +26,6 @@ import { parseUnits, type Address } from "viem";
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "~/types/order-type";
-import { beraJsConfig } from "@bera/wagmi";
 
 export function PlaceOrder({
   form,
@@ -132,11 +131,8 @@ export function PlaceOrder({
   };
 
   const { data: allowance } = usePollAllowance({
-    args: {
-      spender: storageContract,
-      token: honey,
-    },
-    config: beraJsConfig,
+    spender: storageContract,
+    token: honey,
   });
 
   return (

@@ -19,10 +19,8 @@ const useMultipleTokenApprovalsWithSlippage = (
     .map((token) => token);
 
   const { data: allowances, refetch } = usePollAllowances({
-    args: {
-      spender: spender,
-      tokens,
-    },
+    spender: spender,
+    tokens,
   });
 
   const slippage = useSlippage();

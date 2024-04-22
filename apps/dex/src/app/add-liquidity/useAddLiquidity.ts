@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useBeraJs, useTokens, type PoolV2 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
-import { beraJsConfig, beraToken, wBeraToken } from "@bera/wagmi";
+import { beraToken, wBeraToken } from "@bera/wagmi";
 import { type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";

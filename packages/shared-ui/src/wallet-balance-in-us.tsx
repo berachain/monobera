@@ -14,11 +14,9 @@ export function WalletBalanceInUs() {
   const { data: tokenData } = useTokens();
   const { data: assets } = usePollWalletBalances();
   const { data: pricesArray } = useTokenHoneyPrices({
-    args: {
-      tokenAddresses: tokenData?.featuredTokenList?.map(
-        (featuredToken: Token) => featuredToken.address,
-      ),
-    },
+    tokenAddresses: tokenData?.featuredTokenList?.map(
+      (featuredToken: Token) => featuredToken.address,
+    ),
   });
   const total =
     assets && pricesArray

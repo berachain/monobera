@@ -1,5 +1,11 @@
 import { Address, isAddress } from "viem";
-import { DefaultHookReturnType, Token, getTokenInformation } from "..";
+import {
+  DefaultHookOptions,
+  DefaultHookReturnType,
+  Token,
+  getTokenInformation,
+  useBeraJs,
+} from "..";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
@@ -7,13 +13,16 @@ export type UseTokenInformationResponse = DefaultHookReturnType<
   Token | undefined
 >;
 
-export const useTokenInformation = ({
-  args,
-  config,
-  opts,
-}: any): UseTokenInformationResponse => {
+export type useTokenInformationArgs = {
+  address: Address | undefined;
+};
+export const useTokenInformation = (
+  args: useTokenInformationArgs,
+  options?: DefaultHookOptions,
+): UseTokenInformationResponse => {
   const publicClient = usePublicClient();
-  const QUERY_KEY = [args?.address, config, publicClient];
+  const { config: beraConfig } = useBeraJs();
+  const QUERY_KEY = [args?.address, publicClient];
   const swrResponse = useSWRImmutable<Token | undefined>(
     QUERY_KEY,
     async () => {
@@ -23,11 +32,11 @@ export const useTokenInformation = ({
       }
       return await getTokenInformation({
         address: args.address,
-        config,
+        config: options?.beraConfigOverride ?? beraConfig,
         publicClient,
       });
     },
-    { ...opts },
+    { ...options?.opts },
   );
 
   return {

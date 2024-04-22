@@ -55,14 +55,10 @@ export enum WRAP_TYPE {
 
 export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const { data: inputToken } = useTokenInformation({
-    args: {
-      address: inputCurrency,
-    },
+    address: inputCurrency,
   });
   const { data: outputToken } = useTokenInformation({
-    args: {
-      address: outputCurrency,
-    },
+    address: outputCurrency,
   });
 
   const { data: tokenData } = useTokens();
@@ -253,10 +249,8 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   }, [swapInfo, selectedFrom, selectedTo, fromAmount, toAmount]);
 
   const { data: allowance, refetch: refreshAllowance } = usePollAllowance({
-    args: {
-      spender: crocMultiSwapAddress,
-      token: selectedFrom,
-    },
+    spender: crocMultiSwapAddress,
+    token: selectedFrom,
   });
 
   const slippage = useSlippage();

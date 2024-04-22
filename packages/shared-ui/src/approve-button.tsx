@@ -12,7 +12,6 @@ import { maxInt256, erc20Abi, Address } from "viem";
 
 import { useTxn } from "./hooks/useTxn";
 import { useAnalytics } from "./utils";
-import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   token: Token | undefined;
@@ -30,11 +29,8 @@ export const ApproveButton = ({
   onApproval,
 }: Props) => {
   const { refetch } = usePollAllowance({
-    args: {
-      spender,
-      token,
-    },
-    config: beraJsConfig,
+    spender,
+    token,
   });
   const { captureException, track } = useAnalytics();
   const { write, isLoading, isSubmitting } = useTxn({

@@ -1,7 +1,12 @@
 import useSWR, { useSWRConfig } from "swr";
 import { usePublicClient } from "wagmi";
 
-import { DefaultHookReturnType, getWalletBalances, type Token } from "..";
+import {
+  DefaultHookOptions,
+  DefaultHookReturnType,
+  getWalletBalances,
+  type Token,
+} from "..";
 import { useBeraJs } from "../contexts";
 import { useTokens } from "./useTokens";
 import POLLING from "~/enum/polling";
@@ -11,6 +16,9 @@ export interface BalanceToken extends Token {
   formattedBalance: string;
 }
 
+export type UsePollAllowancesArgs = {
+  externalTokenList?: Token[];
+};
 export interface UsePollBalancesResponse
   extends DefaultHookReturnType<BalanceToken[] | undefined> {
   refetch: () => void;
@@ -18,15 +26,16 @@ export interface UsePollBalancesResponse
   useSelectedTagWalletBalances: (tag: string) => BalanceToken[] | undefined;
 }
 
-export const usePollWalletBalances = ({
-  config,
-  args,
-  opts,
-}: any): UsePollBalancesResponse => {
+export const usePollWalletBalances = (
+  args?: UsePollAllowancesArgs,
+  options?: DefaultHookOptions,
+): UsePollBalancesResponse => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, isConnected } = useBeraJs();
-  const { data: tokenData } = useTokens({ config });
+  const { account, isConnected, config: beraConfig } = useBeraJs();
+  const { data: tokenData } = useTokens({
+    beraConfigOverride: options?.beraConfigOverride,
+  });
   const QUERY_KEY = [
     account,
     isConnected,
@@ -44,11 +53,14 @@ export const usePollWalletBalances = ({
           ...(tokenData?.tokenList ?? []),
           ...(args?.externalTokenList ?? []),
         ],
-        config,
+        config: options?.beraConfigOverride ?? beraConfig,
         publicClient,
       });
     },
-    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
+    {
+      ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
+    },
   );
 
   const useSelectedWalletBalance = (

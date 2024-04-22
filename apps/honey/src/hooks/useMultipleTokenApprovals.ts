@@ -17,10 +17,8 @@ const useMultipleTokenApprovals = (
     .map((token) => token);
 
   const { data: allowances } = usePollAllowances({
-    args: {
-      spender,
-      tokens,
-    },
+    spender,
+    tokens,
   });
 
   useEffect(() => {

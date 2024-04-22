@@ -2,11 +2,7 @@ import useSWR, { mutate } from "swr";
 
 import { TokenHoneyPrices, getTokenHoneyPrices } from "~/actions/honey";
 import POLLING from "~/enum/polling";
-import {
-  DefaultHookOptions,
-  DefaultHookProps,
-  DefaultHookReturnType,
-} from "~/types/global";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 import { useBeraJs } from "..";
 
 /**

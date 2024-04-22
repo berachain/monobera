@@ -68,11 +68,8 @@ export const usePsm = () => {
   const { isReady, account } = useBeraJs();
 
   const { data: allowance } = usePollAllowance({
-    args: {
-      spender: honeyRouterAddress,
-      token: selectedFrom,
-    },
-    config: beraJsConfig,
+    spender: honeyRouterAddress,
+    token: selectedFrom,
   });
 
   const { useHoneyParams, isLoading: isFeeLoading } = usePollHoneyParams(

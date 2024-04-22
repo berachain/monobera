@@ -51,18 +51,10 @@ export function TokenDialog({
   const [error, setError] = useState<Error | undefined>(undefined);
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
-  const {
-    data: tokenData,
-    addNewToken,
-    removeToken,
-  } = useTokens({
-    config: beraJsConfig,
-  });
+  const { data: tokenData, addNewToken, removeToken } = useTokens();
   const { data: tokenInformation, error: tokenInformationError } =
     useTokenInformation({
-      args: {
-        address: search as Address,
-      },
+      address: search as Address,
     });
 
   useEffect(() => {

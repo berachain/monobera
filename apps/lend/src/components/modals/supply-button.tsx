@@ -113,11 +113,8 @@ const SupplyModalContent = ({
   const { account = "0x" } = useBeraJs();
 
   const { data: allowance } = usePollAllowance({
-    args: {
-      spender: lendPoolImplementationAddress,
-      token,
-    },
-    config: beraJsConfig,
+    spender: lendPoolImplementationAddress,
+    token,
   });
 
   const { useUserAccountData } = usePollUserAccountData({

@@ -4,9 +4,18 @@ import { usePublicClient } from "wagmi";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
 import { getAllowances } from "../actions/dex";
-import { AllowanceToken, DefaultHookReturnType } from "~/types/global";
+import {
+  AllowanceToken,
+  DefaultHookOptions,
+  DefaultHookReturnType,
+} from "~/types/global";
 import { Address } from "viem";
+import { Token } from "~/types";
 
+type UsePollAllowancesArgs = {
+  spender: string;
+  tokens: Token[];
+};
 export interface UsePollAllowancesResponse
   extends DefaultHookReturnType<AllowanceToken[] | undefined> {
   useSelectedAllowance: (
@@ -22,14 +31,13 @@ export interface UsePollAllowancesResponse
  * @param contract the address of the ERC20 token contract
  * @param tokens   the list of tokens to poll allowances for
  */
-export const usePollAllowances = ({
-  args,
-  config,
-  opts,
-}: any): UsePollAllowancesResponse => {
+export const usePollAllowances = (
+  args: UsePollAllowancesArgs,
+  options?: DefaultHookOptions,
+): UsePollAllowancesResponse => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account } = useBeraJs();
+  const { account, config: beraConfig } = useBeraJs();
   const QUERY_KEY = [account, args?.tokens, args?.spender, "allowances"];
   const swrResponse = useSWR<AllowanceToken[] | undefined>(
     QUERY_KEY,
@@ -37,12 +45,15 @@ export const usePollAllowances = ({
       return getAllowances({
         tokens: args?.tokens,
         account,
-        config,
+        config: options?.beraConfigOverride ?? beraConfig,
         spender: args?.spender,
         publicClient,
       });
     },
-    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
+    {
+      ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
+    },
   );
 
   /**

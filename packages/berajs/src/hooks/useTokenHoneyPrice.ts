@@ -20,17 +20,17 @@ export interface UseTokenHoneyPriceResponse
 }
 
 export const useTokenHoneyPrice = (
-  { tokenAddress = undefined }: UseTokenHoneyPriceArgs,
+  args: UseTokenHoneyPriceArgs,
   options?: DefaultHookOptions,
 ): UseTokenHoneyPriceResponse => {
   const method = "tokenHoneyPrice";
-  const QUERY_KEY = [tokenAddress, method];
+  const QUERY_KEY = [args.tokenAddress, method];
   const { config: beraConfig } = useBeraJs();
   const swrResponse = useSWR<string | undefined>(
     QUERY_KEY,
     async () => {
       return getTokenHoneyPrice({
-        tokenAddress,
+        tokenAddress: args.tokenAddress,
         config: options?.beraConfigOverride ?? beraConfig,
       });
     },

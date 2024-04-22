@@ -7,19 +7,15 @@ import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
 import {
   AllowanceToken,
-  DefaultHookProps,
+  DefaultHookOptions,
   DefaultHookReturnType,
   Token,
 } from "~/types";
 
-export type UsePollAllowanceRequest = DefaultHookProps<
-  {
-    spender: Address;
-    token: Token | undefined;
-  },
-  false
->;
-
+type UsePollAllowanceArgs = {
+  spender: Address;
+  token: Token | undefined;
+};
 export interface UsePollAllowanceResponse
   extends DefaultHookReturnType<AllowanceToken | undefined> {
   refetch: () => void;
@@ -32,13 +28,12 @@ export interface UsePollAllowanceResponse
  * @param contract the address of the ERC20 token contract
  * @param tokens   the list of tokens to poll allowances for
  */
-export const usePollAllowance = ({
-  args,
-  opts,
-  config,
-}: UsePollAllowanceRequest): UsePollAllowanceResponse => {
+export const usePollAllowance = (
+  args: UsePollAllowanceArgs,
+  options?: DefaultHookOptions,
+): UsePollAllowanceResponse => {
   const publicClient = usePublicClient();
-  const { account } = useBeraJs();
+  const { account, config: beraConfig } = useBeraJs();
 
   const method = "allowance";
   const QUERY_KEY = [
@@ -46,7 +41,6 @@ export const usePollAllowance = ({
     args.token?.address.toLowerCase(),
     args.spender.toLowerCase(),
     method,
-    config,
   ];
 
   const swrResponse = useSWR(
@@ -59,7 +53,10 @@ export const usePollAllowance = ({
         publicClient,
       });
     },
-    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
+    {
+      ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
+    },
   );
 
   return {

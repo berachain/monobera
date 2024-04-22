@@ -124,11 +124,8 @@ const RepayModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const { data: allowance } = usePollAllowance({
-    args: {
-      spender: lendPoolImplementationAddress,
-      token: honey,
-    },
-    config: beraJsConfig,
+    spender: lendPoolImplementationAddress,
+    token: honey,
   });
 
   const tokenBalance = honey.formattedBalance ?? "0";
