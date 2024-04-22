@@ -74,7 +74,7 @@ export interface BannerConfig {
 export interface BannerProperty {
   enabled: boolean;
   text: string;
-  href?: string;
+  hrefs?: string[];
 }
 
 export enum DappBannerType {
