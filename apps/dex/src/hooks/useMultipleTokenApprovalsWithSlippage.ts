@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { usePollAllowances, type Token } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui";
-import { parseUnits } from "viem";
+import { Address, parseUnits } from "viem";
 
 import { type TokenInput } from "./useMultipleTokenInput";
 
 const useMultipleTokenApprovalsWithSlippage = (
   tokenInput: TokenInput[],
-  spender: string,
+  spender: Address,
 ) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
 
@@ -18,12 +18,12 @@ const useMultipleTokenApprovalsWithSlippage = (
     .filter((token: TokenInput) => token !== undefined)
     .map((token) => token);
 
-  const { useCurrentAllowancesForContract, refresh } = usePollAllowances({
-    contract: spender,
-    tokens,
+  const { data: allowances, refetch } = usePollAllowances({
+    args: {
+      spender: spender,
+      tokens,
+    },
   });
-
-  const allowances = useCurrentAllowancesForContract();
 
   const slippage = useSlippage();
 
@@ -54,7 +54,7 @@ const useMultipleTokenApprovalsWithSlippage = (
       (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
     ),
     slippage,
-    refresh,
+    refetch,
   };
 };
 

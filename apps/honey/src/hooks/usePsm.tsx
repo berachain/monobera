@@ -19,15 +19,15 @@ import { getAddress, parseUnits, type Address } from "viem";
 export const usePsm = () => {
   const [isTyping, setIsTyping] = useState(false);
 
-  const { tokenDictionary, tokenList } = useTokens();
-  const collateralList = tokenList?.filter((token: any) =>
+  const { data: tokenData } = useTokens();
+  const collateralList = tokenData?.tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
   );
   const defaultCollateral = collateralList?.find((token: any) =>
     token.tags.includes("defaultCollateral"),
   );
-  const honey = tokenDictionary
-    ? tokenDictionary[getAddress(honeyTokenAddress)]
+  const honey = tokenData?.tokenDictionary
+    ? tokenData?.tokenDictionary[getAddress(honeyTokenAddress)]
     : undefined;
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
@@ -67,12 +67,13 @@ export const usePsm = () => {
 
   const { isReady, account } = useBeraJs();
 
-  const { useAllowance } = usePollAllowance({
-    contract: honeyRouterAddress,
-    token: selectedFrom,
+  const { data: allowance } = usePollAllowance({
+    args: {
+      spender: honeyRouterAddress,
+      token: selectedFrom,
+    },
+    config: beraJsConfig,
   });
-
-  const allowance = useAllowance();
 
   const { useHoneyParams, isLoading: isFeeLoading } = usePollHoneyParams(
     collateralList?.map((token: any) => token.address) ?? [],

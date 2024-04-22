@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useBeraJs, useTokens, type PoolV2 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
+import { beraJsConfig, beraToken, wBeraToken } from "@bera/wagmi";
 import { type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
@@ -37,13 +38,13 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   const {
     needsApproval,
     needsApprovalNoBera,
-    refresh: refreshAllowances,
+    refetch: refreshAllowances,
   } = useMultipleTokenApprovalsWithSlippage(
     tokenInputs,
     crocDexAddress as Address,
   );
 
-  const { tokenDictionary, beraToken, wBeraToken } = useTokens();
+  const { data: tokenData } = useTokens();
 
   const reset = () => {
     setPreviewOpen(false);
@@ -95,7 +96,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     error,
     isMultipleInputDisabled: error !== undefined,
     totalValue,
-    tokenDictionary,
+    tokenDictionary: tokenData?.tokenDictionary,
     previewOpen,
     tokenInputs,
     areAllInputsEmpty,

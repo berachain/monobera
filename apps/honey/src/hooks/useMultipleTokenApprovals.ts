@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { usePollAllowances, type Token } from "@bera/berajs";
 
 import { type TokenInput } from "./useMultipleTokenInput";
+import { Address } from "viem";
 
 const useMultipleTokenApprovals = (
   tokenInput: TokenInput[],
-  spender: string,
+  spender: Address,
 ) => {
   const [needsApproval, setNeedsApproval] = useState<Token[]>([]);
 
@@ -15,12 +16,12 @@ const useMultipleTokenApprovals = (
     .filter((token: TokenInput) => token !== undefined)
     .map((token) => token);
 
-  const { useCurrentAllowancesForContract } = usePollAllowances({
-    contract: spender,
-    tokens,
+  const { data: allowances } = usePollAllowances({
+    args: {
+      spender,
+      tokens,
+    },
   });
-
-  const allowances = useCurrentAllowancesForContract();
 
   useEffect(() => {
     if (allowances) {

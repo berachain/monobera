@@ -37,13 +37,12 @@ const useCreatePool = ({
 
   const tokens = [baseToken, quoteToken];
 
-  const { useCurrentAllowancesForContract, refresh: refreshAllowances } =
-    usePollAllowances({
-      contract: crocDexAddress,
+  const { data: allowances, refetch: refreshAllowances } = usePollAllowances({
+    args: {
+      spender: crocDexAddress,
       tokens,
-    });
-
-  const allowances = useCurrentAllowancesForContract();
+    },
+  });
 
   useEffect(() => {
     if (allowances) {

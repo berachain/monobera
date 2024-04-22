@@ -1,8 +1,12 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
-import { getTokenHoneyPrices } from "~/actions/honey";
+import { TokenHoneyPrices, getTokenHoneyPrices } from "~/actions/honey";
 import POLLING from "~/enum/polling";
-import { DefaultHookOptions } from "~/types/global";
+import {
+  DefaultHookOptions,
+  DefaultHookProps,
+  DefaultHookReturnType,
+} from "~/types/global";
 import { useBeraJs } from "..";
 
 /**
@@ -13,10 +17,9 @@ export type UseTokenHoneyPricesArgs = {
   tokenAddresses: string[] | undefined;
 };
 
-export interface UseTokenHoneyPricesResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  data: { [key: string]: string } | undefined;
+export interface UseTokenHoneyPricesResponse
+  extends DefaultHookReturnType<TokenHoneyPrices | undefined> {
+  refetch: () => void;
 }
 
 export const useTokenHoneyPrices = (
@@ -26,7 +29,7 @@ export const useTokenHoneyPrices = (
   const method = "tokenHoneyPrices";
   const QUERY_KEY = [tokenAddresses, method];
   const { config: beraConfig } = useBeraJs();
-  const { data, isLoading, isValidating } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
       return getTokenHoneyPrices({
@@ -42,8 +45,7 @@ export const useTokenHoneyPrices = (
   );
 
   return {
-    isLoading,
-    isValidating,
-    data,
+    ...swrResponse,
+    refetch: () => void mutate(QUERY_KEY),
   };
 };

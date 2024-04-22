@@ -1,29 +1,28 @@
 import useSWR, { mutate } from "swr";
-import useSWRImmutable from "swr/immutable";
-import { Address, erc20Abi, formatUnits } from "viem";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getAllowance } from "~/actions/dex/getAllowance";
 import { useBeraJs } from "~/contexts";
-import { Token } from "~/types";
+import POLLING from "~/enum/polling";
+import {
+  AllowanceToken,
+  DefaultHookProps,
+  DefaultHookReturnType,
+  Token,
+} from "~/types";
 
-const REFRESH_BLOCK_INTERVAL = 10000;
+export type UsePollAllowanceRequest = DefaultHookProps<
+  {
+    spender: Address;
+    token: Token | undefined;
+  },
+  false
+>;
 
-interface AllowanceToken extends Token {
-  allowance: bigint;
-  formattedAllowance: string;
-}
-
-export interface IUsePollAllowanceRequest {
-  contract: string;
-  token?: Token;
-}
-
-export interface IUsePollAllowanceResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  useAllowance: () => AllowanceToken;
-  refresh: () => void;
+export interface UsePollAllowanceResponse
+  extends DefaultHookReturnType<AllowanceToken | undefined> {
+  refetch: () => void;
 }
 
 /**
@@ -34,48 +33,37 @@ export interface IUsePollAllowanceResponse {
  * @param tokens   the list of tokens to poll allowances for
  */
 export const usePollAllowance = ({
-  contract,
-  token,
-}: IUsePollAllowanceRequest): IUsePollAllowanceResponse => {
+  args,
+  opts,
+  config,
+}: UsePollAllowanceRequest): UsePollAllowanceResponse => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
   const method = "allowance";
   const QUERY_KEY = [
     account,
-    token?.address.toLowerCase(),
-    contract.toLowerCase(),
+    args.token?.address.toLowerCase(),
+    args.spender.toLowerCase(),
     method,
+    config,
   ];
 
-  const { isLoading, isValidating } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
       return getAllowance({
         account: account as Address,
-        token,
-        contract: contract as Address,
+        token: args.token,
+        spender: args.spender,
         publicClient,
       });
     },
-    {
-      refreshInterval: REFRESH_BLOCK_INTERVAL,
-    },
+    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
   );
 
-  /**
-   *
-   * @returns the current allowances for the given contract
-   */
-  const useAllowance = (): AllowanceToken => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
-
   return {
-    isLoading,
-    isValidating,
-    useAllowance,
-    refresh: () => mutate(QUERY_KEY),
+    ...swrResponse,
+    refetch: () => mutate(QUERY_KEY),
   };
 };

@@ -1,59 +1,36 @@
-import { useCallback, useReducer, useState } from "react";
-import { Address } from "viem";
-import { useConfig, usePublicClient } from "wagmi";
+import { Address, isAddress } from "viem";
+import { DefaultHookReturnType, Token, getTokenInformation } from "..";
+import useSWRImmutable from "swr/immutable";
+import { usePublicClient } from "wagmi";
 
-import { getTokenInformation } from "~/actions/dex";
-import { DefaultHookOptions, Token, useBeraJs } from "..";
-import { initialState, reducer } from "../utils/stateReducer";
+export type UseTokenInformationResponse = DefaultHookReturnType<
+  Token | undefined
+>;
 
-interface IUseTokenInformation {
-  address: Address;
-  isDefault?: boolean;
-}
-
-export interface IUseTokenInformationResponse {
-  isLoading: boolean;
-  isSuccess: boolean;
-  isError: boolean;
-  tokenInformation: Token | undefined;
-  error: Error | undefined;
-  read: (props: IUseTokenInformation) => Promise<void>;
-}
-
-const useTokenInformation = (
-  options?: DefaultHookOptions,
-): IUseTokenInformationResponse => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [error, setError] = useState<Error | undefined>(undefined);
-  const [tokenInformation, setTokenInformation] = useState<Token | undefined>(
-    undefined,
-  );
-
-  const { config: beraConfig } = useBeraJs();
+export const useTokenInformation = ({
+  args,
+  config,
+  opts,
+}: any): UseTokenInformationResponse => {
   const publicClient = usePublicClient();
-  const config = useConfig();
-  const read = useCallback(
-    async ({ address }: IUseTokenInformation): Promise<void> => {
-      getTokenInformation({
-        dispatch,
-        address,
+  const QUERY_KEY = [args?.address, config, publicClient];
+  const swrResponse = useSWRImmutable<Token | undefined>(
+    QUERY_KEY,
+    async () => {
+      if (!args?.address) return undefined;
+      if (!isAddress(args.address, { strict: false })) {
+        throw new Error("Invalid address");
+      }
+      return await getTokenInformation({
+        address: args.address,
         config,
-        beraConfig: options?.beraConfigOverride ?? beraConfig,
-        setTokenInformation,
-        setError,
+        publicClient,
       });
     },
-    [publicClient],
+    { ...opts },
   );
 
   return {
-    isLoading: state.confirmState === "loading",
-    isSuccess: state.confirmState === "success",
-    isError: state.confirmState === "fail",
-    tokenInformation,
-    error,
-    read,
+    ...swrResponse,
   };
 };
-
-export default useTokenInformation;

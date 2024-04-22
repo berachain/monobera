@@ -1,8 +1,8 @@
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 
 import { getTokenHoneyPrice } from "~/actions/honey";
 import POLLING from "~/enum/polling";
-import { DefaultHookOptions } from "~/types/global";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 import { useBeraJs } from "..";
 
 /**
@@ -14,20 +14,19 @@ export type UseTokenHoneyPriceArgs = {
   tokenAddress: `0x${string}` | undefined;
 };
 
-export interface UseTokenHoneyPriceResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  data: string | undefined;
+export interface UseTokenHoneyPriceResponse
+  extends DefaultHookReturnType<string | undefined> {
+  refetch: () => void;
 }
 
 export const useTokenHoneyPrice = (
   { tokenAddress = undefined }: UseTokenHoneyPriceArgs,
   options?: DefaultHookOptions,
-) => {
+): UseTokenHoneyPriceResponse => {
   const method = "tokenHoneyPrice";
   const QUERY_KEY = [tokenAddress, method];
   const { config: beraConfig } = useBeraJs();
-  const { data, isLoading, isValidating } = useSWR(
+  const swrResponse = useSWR<string | undefined>(
     QUERY_KEY,
     async () => {
       return getTokenHoneyPrice({
@@ -36,14 +35,12 @@ export const useTokenHoneyPrice = (
       });
     },
     {
-      ...options?.opts,
-      refreshInterval:
-        options?.opts?.refreshInterval ?? POLLING.REFRESH_BLOCK_INTERVAL,
+      ...options,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
     },
   );
   return {
-    isLoading,
-    isValidating,
-    data,
+    ...swrResponse,
+    refetch: () => void mutate(QUERY_KEY),
   };
 };

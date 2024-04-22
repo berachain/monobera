@@ -4,37 +4,39 @@ React hook for poll the allowance of a given token
 
 ## Import
 
-```ts
+```ts twoslash
 import { usePollAllowance } from "@bera/berajs";
 ```
 
 ## Usage
 
-```ts [example.ts]
-import { usePollAllowance } from "@bera/berajs";
+```ts twoslash [example.ts]
+import { usePollAllowance, type Token } from "@bera/berajs";
 
-import { beraConfig } from "./config";
-
-const exampleContractAddress = "0x1..";
-const exampleTokenAddresses = ["0x1..", "0x2.."];
-
-const { useAllowance, refresh } = usePollAllowance({
-  config: beraConfig,
+const exampleToken: Token = {
+  address: "0x0",
+  decimals: 18,
+  symbol: "TKN",
+  name: "TKN",
+}
+const { data: allowance, refetch } = usePollAllowance({
+  config: {},
   args: {
-    contract: exampleContractAddress,
-    tokens: exampleTokenAddresses,
+    spender: "0x0...",
+    token: exampleToken,
   },
 });
+
 ```
 
 ## Parameters
 
-```ts
-import { type IUsePollAllowanceRequest } from "@bera/berajs";
+```ts twoslash
+import { type UsePollAllowanceRequest } from "@bera/berajs";
 ```
 
 ## Returns
 
-```ts
-import { type IUsePollAllowanceResponse } from "@bera/berajs";
+```ts twoslash
+import { type UsePollAllowanceResponse } from "@bera/berajs";
 ```

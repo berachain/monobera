@@ -146,21 +146,16 @@ export const useOct = (
     void mutate(QUERY_KEY);
   };
 
-  const config = options?.beraConfigOverride ?? beraConfig;
-
-  const { useBalance } = usePollBeraBalance(
-    { address: account as Address },
-    { beraConfigOverride: config },
-  );
-  const { useTransactionCount } = usePollTransactionCount({
+  const { data: octBalance } = usePollBeraBalance({
+    args: { address: account as Address },
+  });
+  const { data: octTxCount } = usePollTransactionCount({
     address: octAddress,
   });
 
-  const octBalance = useBalance();
-  const octTxCount = useTransactionCount();
-
-  const isOctUnfunded = octBalance === undefined || octBalance === 0;
-  const isOctBalanceLow = octBalance !== undefined && Number(octBalance) < 0.1;
+  const isOctUnfunded = octBalance === undefined || octBalance.balance === 0n;
+  const isOctBalanceLow =
+    octBalance !== undefined && Number(octBalance.formattedBalance) < 0.1;
 
   return {
     isGenLoading: state.confirmState === "loading",

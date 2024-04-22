@@ -1,92 +1,71 @@
 import useSWR, { useSWRConfig } from "swr";
-import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { getWalletBalances, type DefaultHookOptions, type Token } from "..";
+import { DefaultHookReturnType, getWalletBalances, type Token } from "..";
 import { useBeraJs } from "../contexts";
-import useTokens from "./useTokens";
+import { useTokens } from "./useTokens";
+import POLLING from "~/enum/polling";
 
 export interface BalanceToken extends Token {
   balance: bigint;
   formattedBalance: string;
 }
 
-export type UsePollWalletBalancesArgs = {
-  externalTokenList?: Token[];
-};
-
-export interface UsePollBalancesResponse {
-  isLoading: boolean;
-  isValidating: boolean;
+export interface UsePollBalancesResponse
+  extends DefaultHookReturnType<BalanceToken[] | undefined> {
   refetch: () => void;
-  useCurrentWalletBalances: () => BalanceToken[] | undefined;
   useSelectedWalletBalance: (address: string) => BalanceToken | undefined;
   useSelectedTagWalletBalances: (tag: string) => BalanceToken[] | undefined;
 }
 
-// TODO optimize data access pattern to avoid double store
-export const usePollWalletBalances = (
-  args?: UsePollWalletBalancesArgs,
-  options?: DefaultHookOptions,
-): UsePollBalancesResponse => {
+export const usePollWalletBalances = ({
+  config,
+  args,
+  opts,
+}: any): UsePollBalancesResponse => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
-  const { account, isConnected, config: beraConfig } = useBeraJs();
-  const { tokenList } = useTokens({
-    beraConfigOverride: options?.beraConfigOverride,
-  });
+  const { account, isConnected } = useBeraJs();
+  const { data: tokenData } = useTokens({ config });
   const QUERY_KEY = [
     account,
     isConnected,
-    tokenList,
+    tokenData?.tokenList,
     "assetWalletBalances",
     args?.externalTokenList,
   ];
-  const { isLoading, isValidating } = useSWR(
+
+  const swrResponse = useSWR<BalanceToken[] | undefined>(
     QUERY_KEY,
     async () => {
       return getWalletBalances({
         account,
-        tokenList,
-        externalTokenList: args?.externalTokenList,
-        queryKey: QUERY_KEY,
-        config: options?.beraConfigOverride ?? beraConfig,
+        tokenList: [
+          ...(tokenData?.tokenList ?? []),
+          ...(args?.externalTokenList ?? []),
+        ],
+        config,
         publicClient,
-        mutate,
       });
     },
-    {
-      ...options?.opts,
-    },
+    { ...opts, refreshInterval: opts?.refreshInterval ?? POLLING.NORMAL },
   );
-
-  const useCurrentWalletBalances = (): BalanceToken[] | undefined => {
-    const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
-    return data;
-  };
 
   const useSelectedWalletBalance = (
     address: string,
   ): BalanceToken | undefined => {
-    const { data = undefined } = useSWRImmutable<BalanceToken>([
-      ...QUERY_KEY,
-      address,
-    ]);
-    return data;
+    return swrResponse.data?.find((item: Token) => item.address === address);
   };
 
   const useSelectedTagWalletBalances = (
     tag: string,
   ): BalanceToken[] | undefined => {
-    const { data = undefined } = useSWRImmutable<BalanceToken[]>(QUERY_KEY);
-    return data?.filter((item: Token) => item.tags?.includes(tag));
+    return swrResponse.data?.filter((item: Token) => item.tags?.includes(tag));
   };
 
   return {
-    isLoading,
-    isValidating,
-    refetch: () => void mutate(QUERY_KEY),
-    useCurrentWalletBalances,
+    ...swrResponse,
+    refetch: () => mutate(QUERY_KEY),
     useSelectedWalletBalance,
     useSelectedTagWalletBalances,
   };

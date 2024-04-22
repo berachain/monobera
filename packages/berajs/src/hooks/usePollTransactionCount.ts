@@ -1,27 +1,25 @@
 import useSWR, { mutate } from "swr";
-import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
 import { getTransactionCount } from "../actions/dex";
+import { DefaultHookReturnType } from "~/types/global";
 
-export interface IUserPollTransactionCountRequest {
+export interface UserPollTransactionCountRequest {
   address: string | undefined;
 }
 
-export interface IUserPollTransactionCountResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  useTransactionCount: () => string;
+export interface UserPollTransactionCountResponse
+  extends DefaultHookReturnType<number | undefined> {
   refresh: () => void;
 }
 
 export const usePollTransactionCount = ({
   address,
-}: IUserPollTransactionCountRequest): IUserPollTransactionCountResponse => {
+}: UserPollTransactionCountRequest): UserPollTransactionCountResponse => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [address, "txnCount"];
-  const { isLoading, isValidating } = useSWR(
+  const swrResponse = useSWR<number | undefined>(
     QUERY_KEY,
     async () => {
       return getTransactionCount({ address, publicClient });
@@ -30,14 +28,9 @@ export const usePollTransactionCount = ({
       refreshInterval: POLLING.SLOW,
     },
   );
-  const useTransactionCount = (): string => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
+
   return {
-    isLoading,
-    isValidating,
-    useTransactionCount,
+    ...swrResponse,
     refresh: () => mutate(QUERY_KEY),
   };
 };

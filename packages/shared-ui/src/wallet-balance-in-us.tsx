@@ -11,13 +11,14 @@ import {
 import { Skeleton } from "@bera/ui/skeleton";
 
 export function WalletBalanceInUs() {
-  const { featuredTokenList } = useTokens();
-  const { useCurrentWalletBalances } = usePollWalletBalances();
-  const assets = useCurrentWalletBalances();
+  const { data: tokenData } = useTokens();
+  const { data: assets } = usePollWalletBalances();
   const { data: pricesArray } = useTokenHoneyPrices({
-    tokenAddresses: featuredTokenList?.map(
-      (featuredToken: Token) => featuredToken.address,
-    ),
+    args: {
+      tokenAddresses: tokenData?.featuredTokenList?.map(
+        (featuredToken: Token) => featuredToken.address,
+      ),
+    },
   });
   const total =
     assets && pricesArray

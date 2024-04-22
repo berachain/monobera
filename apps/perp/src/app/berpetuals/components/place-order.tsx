@@ -26,6 +26,7 @@ import { parseUnits, type Address } from "viem";
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "~/types/order-type";
+import { beraJsConfig } from "@bera/wagmi";
 
 export function PlaceOrder({
   form,
@@ -130,12 +131,13 @@ export function PlaceOrder({
     name: "Honey",
   };
 
-  const { useAllowance } = usePollAllowance({
-    contract: storageContract,
-    token: honey,
+  const { data: allowance } = usePollAllowance({
+    args: {
+      spender: storageContract,
+      token: honey,
+    },
+    config: beraJsConfig,
   });
-
-  const allowance = useAllowance();
 
   return (
     <div className="flex w-full flex-col gap-1 rounded-md border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
@@ -248,7 +250,7 @@ export function PlaceOrder({
       </div>
       <ActionButton className="mt-4">
         {allowance?.formattedAllowance === "0" ||
-        BigNumber(allowance?.allowance?.toString()).isLessThan(
+        BigNumber((allowance?.allowance ?? 0n).toString()).isLessThan(
           formatToBaseUnit(safeAmount, 18),
         ) ? (
           <ApproveButton
