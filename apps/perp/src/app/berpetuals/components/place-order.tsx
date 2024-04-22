@@ -5,6 +5,7 @@ import {
   formatUsd,
   useBeraJs,
   usePollAllowance,
+  defaultBeraConfig
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
@@ -26,7 +27,6 @@ import { parseUnits, type Address } from "viem";
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "~/types/order-type";
-import { beraJsConfig } from "@bera/wagmi";
 
 export function PlaceOrder({
   form,
@@ -136,7 +136,7 @@ export function PlaceOrder({
       spender: storageContract,
       token: honey,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   return (

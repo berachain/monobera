@@ -25,7 +25,6 @@ import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
-import { beraJsConfig } from "@bera/wagmi";
 
 export default function DepositWithdraw() {
   const [depositAmount, setDepositAmount] = useState<string>("");
@@ -73,7 +72,7 @@ export default function DepositWithdraw() {
       spender: gTokenContractAddress,
       token: honey,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const withdrawPayload = [

@@ -45,7 +45,7 @@ export default function ProposalDetails({
   proposalId: number;
 }) {
   // const { read, tokenInformation } = useTokenInformation({
-  //   config: beraJsConfig,
+  //   config: defaultBeraConfig,
   // });
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);

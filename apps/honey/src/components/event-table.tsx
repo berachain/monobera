@@ -87,7 +87,7 @@ export const EventTable = ({
   arcade: boolean;
 }) => {
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   return (
     <Table>

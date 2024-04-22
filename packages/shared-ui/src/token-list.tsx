@@ -61,7 +61,7 @@ function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
 }
 export function TokenList() {
   const { data: assets, isLoading } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   return (

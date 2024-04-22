@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   TransactionActionType,
   usePollAllowance,
+  defaultBeraConfig,
   type Token,
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
@@ -12,7 +13,6 @@ import { maxInt256, erc20Abi, Address } from "viem";
 
 import { useTxn } from "./hooks/useTxn";
 import { useAnalytics } from "./utils";
-import { beraJsConfig } from "@bera/wagmi";
 
 type Props = {
   token: Token | undefined;
@@ -34,7 +34,7 @@ export const ApproveButton = ({
       spender,
       token,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { captureException, track } = useAnalytics();
   const { write, isLoading, isSubmitting } = useTxn({

@@ -21,7 +21,7 @@ export default function IndividualMarketAnalytics({
   address: Address;
 }) {
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { useSelectedReserveData } = usePollReservesDataList({
     config: defaultBeraConfig,

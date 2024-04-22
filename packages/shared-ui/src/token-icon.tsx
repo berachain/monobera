@@ -42,7 +42,7 @@ export const TokenIcon = ({
   ...props
 }: IconProps) => {
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const address = isAddress(adr ?? "") ? getAddress(adr ?? "") : adr;
   const img = useMemo(() => {

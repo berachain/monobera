@@ -86,7 +86,7 @@ const RewardModalContent = ({
   const exceeding = amount !== undefined && Number(amount) > Number(bgtRewards);
 
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   return (
     <div className="flex w-full flex-col gap-8 ">

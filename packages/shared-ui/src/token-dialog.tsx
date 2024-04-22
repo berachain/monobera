@@ -61,7 +61,7 @@ export function TokenDialog({
   });
   const { data: tokenInformation, error: tokenInformationError } =
     useTokenInformation({
-      config: beraJsConfig,
+      config: defaultBeraConfig,
       args: {
         address: search as Address,
       },

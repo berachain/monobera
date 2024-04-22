@@ -38,7 +38,7 @@ const useCreatePool = ({
   const tokens = [baseToken, quoteToken];
 
   const { data: allowances, refetch: refreshAllowances } = usePollAllowances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: {
       spender: crocDexAddress,
       tokens,

@@ -8,7 +8,7 @@ import {
   type PoolV2,
 } from "@bera/berajs";
 import { crocDexAddress } from "@bera/config";
-import { beraJsConfig, beraToken, wBeraToken } from "@bera/wagmi";
+import { beraToken, wBeraToken } from "@bera/wagmi";
 import { type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
@@ -50,7 +50,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   );
 
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const reset = () => {

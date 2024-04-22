@@ -309,7 +309,7 @@ export function ManageOctDialog({
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();
   const { data: beraBalanceData } = usePollBeraBalance({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: { address: account as Address },
   });
   const userBalance = beraBalanceData?.formattedBalance ?? "0";

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { defaultBeraConfig, usePollAllowances, type Token } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 import { useSlippage } from "@bera/shared-ui";
-import { beraJsConfig } from "@bera/wagmi";
 import { Address, parseUnits } from "viem";
 
 import { type TokenInput } from "./useMultipleTokenInput";

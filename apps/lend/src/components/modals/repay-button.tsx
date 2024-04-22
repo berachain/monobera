@@ -134,7 +134,7 @@ const RepayModalContent = ({
       spender: lendPoolImplementationAddress,
       token: honey,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const tokenBalance = honey.formattedBalance ?? "0";

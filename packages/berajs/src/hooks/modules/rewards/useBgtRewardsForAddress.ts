@@ -17,7 +17,7 @@ export const usePollBgtRewardsForAddress = ({
 
   // TODO: Fix this
   // const { data: beraPrice } = useTokenHoneyPrice({
-  //   config: beraJsConfig,
+  //   config: defaultBeraConfig,
   //   args: { tokenAddress: beraTokenAddress },
   // });
   // const beraPrice = useBeraPrice();

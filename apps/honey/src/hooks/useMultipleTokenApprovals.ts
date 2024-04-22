@@ -17,7 +17,7 @@ const useMultipleTokenApprovals = (
     .map((token) => token);
 
   const { data: allowances } = usePollAllowances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     args: {
       spender,
       tokens,

@@ -35,7 +35,7 @@ export default function StatusBanner() {
   const baseCurrency = useBaseCurrencyData();
 
   const { data: balanceToken } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const { useBgtApr } = usePollBgtRewardsForAddress({

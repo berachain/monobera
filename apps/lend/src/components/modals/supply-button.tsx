@@ -123,7 +123,7 @@ const SupplyModalContent = ({
       spender: lendPoolImplementationAddress,
       token,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const { useUserAccountData } = usePollUserAccountData({

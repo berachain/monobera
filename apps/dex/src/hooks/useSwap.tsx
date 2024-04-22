@@ -60,18 +60,18 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       address: inputCurrency,
     },
     opts: {},
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { data: outputToken } = useTokenInformation({
     args: {
       address: outputCurrency,
     },
     opts: {},
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
     opts: {},
   });
 
@@ -268,7 +268,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       spender: crocMultiSwapAddress,
       token: selectedFrom,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const slippage = useSlippage();

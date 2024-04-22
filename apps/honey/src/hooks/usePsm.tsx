@@ -21,7 +21,7 @@ export const usePsm = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const collateralList = tokenData?.tokenList?.filter((token: any) =>
     token.tags?.includes("collateral"),
@@ -75,7 +75,7 @@ export const usePsm = () => {
       spender: honeyRouterAddress,
       token: selectedFrom,
     },
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
 
   const { useHoneyParams, isLoading: isFeeLoading } = usePollHoneyParams(

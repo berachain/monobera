@@ -13,10 +13,10 @@ import { Skeleton } from "@bera/ui/skeleton";
 
 export function WalletBalanceInUs() {
   const { data: tokenData } = useTokens({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { data: assets } = usePollWalletBalances({
-    config: beraJsConfig,
+    config: defaultBeraConfig,
   });
   const { data: pricesArray } = useTokenHoneyPrices({
     config: defaultBeraConfig,
