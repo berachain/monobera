@@ -75,7 +75,7 @@ export interface BannerConfig {
 export interface BannerProperty {
   enabled: boolean;
   text: string;
-  href?: string;
+  hrefs?: string[];
 }
 
 export enum DappBannerType {
@@ -128,7 +128,6 @@ export const bannerConfig: BannerConfig = {
     [DappBannerType.LAUNCH]: {
       enabled: false,
       text: "Welcome to Berachain Dapps.",
-      href: "https://berachain.com",
     },
     [DappBannerType.RPC]: {
       enabled: false,
@@ -161,6 +160,7 @@ export const bannerConfig: BannerConfig = {
     [DappBannerType.RPC]: {
       enabled: true,
       text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
+      hrefs: ["/pools", "/swap"],
     },
     [DappBannerType.SLOW]: {
       enabled: true,
@@ -185,6 +185,7 @@ export const bannerConfig: BannerConfig = {
     [DappBannerType.LAUNCH]: {
       enabled: false,
       text: "Welcome to Berps",
+      hrefs: ["/leaderboard", "/portfolio"],
     },
     [DappBannerType.RPC]: {
       enabled: false,

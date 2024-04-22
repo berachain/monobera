@@ -10,6 +10,7 @@ import { Icons } from "@bera/ui/icons";
 import { DappBannerType, bannerConfig } from "@bera/wagmi";
 
 import { LaunchBanner, RPCBanner } from "./banner";
+import BannerManager from "./banner-manager";
 import { ConnectButton } from "./connect-button";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
@@ -78,10 +79,17 @@ export function Header({
           <MobileDropdown navItems={isHoney ? mobileNavItems : navItems} />
         </div>
       </div>
+
+      {/* {(bannerConfig.global?.[DappBannerType.LAUNCH]?.enabled ||
+        (appName &&
+          bannerConfig[appName]?.[DappBannerType.LAUNCH]?.enabled)) && (
+        <LaunchBanner appName={appName ?? "Berachain Dapps"} />
+      )}
       {(bannerConfig.global?.[DappBannerType.RPC]?.enabled ||
         (appName && bannerConfig[appName]?.[DappBannerType.RPC]?.enabled)) && (
         <RPCBanner />
-      )}
+      )} */}
+      <BannerManager appName={appName} />
     </nav>
   );
 }
