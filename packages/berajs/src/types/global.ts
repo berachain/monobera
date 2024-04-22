@@ -40,13 +40,6 @@ export interface BeraConfig {
   };
 }
 
-export interface BannerConfig {
-  [key: string]: {
-    lauchBannerEnabled: boolean;
-    rpcBannerEnabled: boolean;
-  };
-}
-
 export type DefaultHookOptions = {
   beraConfigOverride?: BeraConfig; // hooks typically use the useBeraJS hook to get the beraConfig by default, this overrides the beraConfig explicitly
   opts?: SWRConfiguration | undefined;
