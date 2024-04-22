@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, type PropsWithChildren } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from "react";
+import { useRouter } from "next/router";
 import { BeraJsProvider } from "@bera/berajs";
 import { dynamicWalletKey } from "@bera/config";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
@@ -15,7 +21,11 @@ import { useTheme } from "next-themes";
 import { type Chain } from "viem";
 import { WagmiProvider } from "wagmi";
 
-import { defaultBeraConfig, wagmiConfig } from "~/config/defaultBeraJsConfig";
+import {
+  bannerConfig,
+  defaultBeraConfig,
+  wagmiConfig,
+} from "~/config/defaultBeraJsConfig";
 
 export interface NetworkConfig {
   isTestnet?: boolean;
