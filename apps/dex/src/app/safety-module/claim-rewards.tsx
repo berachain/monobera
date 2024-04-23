@@ -15,7 +15,10 @@ export const ClaimRewardsCard = ({ rewards }: ClaimRewardsCardProps) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const numValue = Number(event.target.value);
-    if (!Number.isNaN(numValue) && (numValue >= 0 || event.target.value === "")) {
+    if (
+      !Number.isNaN(numValue) &&
+      (numValue >= 0 || event.target.value === "")
+    ) {
       setClaimAmount(event.target.value);
     }
   };
