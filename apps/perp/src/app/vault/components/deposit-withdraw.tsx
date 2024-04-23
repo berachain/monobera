@@ -67,12 +67,10 @@ export default function DepositWithdraw() {
   const { useBHoneyEligibleWithdraw } = usePollBHoneyPendingWithdraw();
   const eligibleForWithdraw = useBHoneyEligibleWithdraw();
 
-  const { useAllowance } = usePollAllowance({
-    contract: gTokenContractAddress,
+  const { data: allowance } = usePollAllowance({
+    spender: gTokenContractAddress,
     token: honey,
   });
-
-  const allowance = useAllowance();
 
   const withdrawPayload = [
     parseUnits(withdrawAmount === "" ? "0" : withdrawAmount, 18),
@@ -140,7 +138,7 @@ export default function DepositWithdraw() {
             </Alert>
             <ActionButton>
               {allowance?.formattedAllowance === "0" ||
-              allowance?.allowance <
+              (allowance?.allowance ?? 0n) <
                 parseUnits(depositAmount === "" ? "0" : depositAmount, 18) ? (
                 <ApproveButton
                   token={honey}
