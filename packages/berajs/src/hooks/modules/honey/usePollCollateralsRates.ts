@@ -10,7 +10,7 @@ import {
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
-export interface UseusePollCollateralsRatesResponse
+export interface UsePollCollateralsRatesResponse
   extends DefaultHookReturnType<CollateralRatesMap | undefined> {
   usePollCollateralRate: (collateral: string) => CollateralRates | undefined;
 }
@@ -18,7 +18,7 @@ export interface UseusePollCollateralsRatesResponse
 export const usePollCollateralsParams = (
   collateralList: Address[],
   options?: DefaultHookOptions,
-): UseusePollCollateralsRatesResponse => {
+): UsePollCollateralsRatesResponse => {
   const publicClient = usePublicClient();
   const method = "usePollCollateralsParams";
   const QUERY_KEY = [method, ...collateralList];

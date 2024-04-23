@@ -1,65 +1,39 @@
-import { honeyRouterAddress } from "@bera/config";
 import useSWR from "swr";
-import useSWRImmutable from "swr/immutable";
-import { formatUnits, parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
-import { honeyRouterAbi } from "~/abi";
-import { Token } from "~/types";
+
+import { HoneyPreviewMethod, getHoneyPreview } from "~/actions";
+import { useBeraJs } from "~/contexts";
+import { DefaultHookOptions, DefaultHookReturnType, Token } from "~/types";
 
 export const usePollHoneyPreview = (
   collateral: Token | undefined,
   amount: string,
   mint: boolean, // true mint, false redeem
   given_in: boolean, // true given in, false given out
-) => {
+  options?: DefaultHookOptions,
+): DefaultHookReturnType<string | undefined> => {
   const publicClient = usePublicClient();
   const method = mint
     ? given_in
-      ? "previewMint"
-      : "previewRequiredCollateral"
+      ? HoneyPreviewMethod.Mint
+      : HoneyPreviewMethod.RequiredCollateral
     : given_in
-      ? "previewRedeem"
-      : "previewHoneyToRedeem";
+    ? HoneyPreviewMethod.Redeem
+    : HoneyPreviewMethod.HoneyToRedeem;
+
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
-  const swrResponse = useSWR(QUERY_KEY, async () => {
+  const { config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
+  return useSWR(QUERY_KEY, async () => {
     if (!publicClient) return undefined;
-
-    try {
-      if (!collateral || Number(amount) <= 0) return undefined;
-
-      let formattedAmount = 0n;
-      if ((mint && given_in) || (!mint && !given_in)) {
-        formattedAmount = parseUnits(amount, collateral.decimals);
-      } else {
-        formattedAmount = parseUnits(amount, 18); //honey decimals
-      }
-
-      const result = (await publicClient.readContract({
-        address: honeyRouterAddress,
-        abi: honeyRouterAbi,
-        functionName: method,
-        args: [collateral.address, formattedAmount],
-      })) as bigint;
-
-      let formattedResult = "0";
-      if ((mint && given_in) || (!mint && !given_in)) {
-        formattedResult = formatUnits(result, 18); //honey decimals
-      } else {
-        formattedResult = formatUnits(result, collateral.decimals);
-      }
-      return formattedResult;
-    } catch (e) {
-      console.log("error", e);
-      return undefined;
-    }
+    if (!config.contracts?.honeyRouterAddress) return undefined;
+    if (!collateral || Number(amount) <= 0) return undefined;
+    return await getHoneyPreview({
+      client: publicClient,
+      config,
+      collateral,
+      amount,
+      method,
+    });
   });
-
-  const useHoneyPreview = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
-  return {
-    ...swrResponse,
-    useHoneyPreview,
-  };
 };
