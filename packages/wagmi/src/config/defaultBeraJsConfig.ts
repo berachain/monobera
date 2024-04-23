@@ -67,28 +67,6 @@ const BeraChain: Chain = {
   },
 };
 
-export interface BannerConfig {
-  [key: string]: DappBannerConfig;
-}
-
-export interface BannerProperty {
-  enabled: boolean;
-  text: string;
-  hrefs?: string[];
-}
-
-export enum DappBannerType {
-  LAUNCH = "LAUNCH",
-  RPC = "RPC",
-  SLOW = "SLOW",
-}
-
-export interface DappBannerConfig {
-  [DappBannerType.LAUNCH]: BannerProperty;
-  [DappBannerType.RPC]: BannerProperty;
-  [DappBannerType.SLOW]: BannerProperty;
-}
-
 const evmNetwork: EvmNetwork = {
   blockExplorerUrls: [blockExplorerUrl],
   chainId: chainId,
