@@ -46,19 +46,5 @@ export const defaultBeraConfig: BeraConfig = {
     lendPoolProxyAddress: lendPoolImplementationAddress,
     lendUIDataProviderAddress: lendUIDataProviderAddress,
     lendRewardsAggregatorAddress: lendRewardsAddress,
-    honeyAddress: honeyAddress,
-    bgtTokenAddress: bgtTokenAddress,
-    nativeTokenAddress: nativeTokenAddress,
-  },
-  erc20: {
-    bera: nativeTokenAddress,
-    wbera: beraTokenAddress,
-    bgt: bgtTokenAddress,
-    honey: honeyTokenAddress,
-    stgusd: stgusdcTokenAddress,
-    weth: wethTokenAddress,
-    wbtc: wbtcTokenAddress,
-    ahoney: aHoneyTokenAddress,
-    vdhoney: vdHoneyTokenAddress,
-  },
+  }
 };
