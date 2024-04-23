@@ -12,7 +12,7 @@ import { usePollWalletBalances } from '@bera/berajs'
 
 ```ts twoslash [example.ts] 
 import { usePollWalletBalances, type Token } from '@bera/berajs'
-import { BeraConfig } from "@bera/berajs";
+import { type BeraConfig } from "@bera/berajs";
 
 // required configs for usePollWalletBalances
 export const beraConfig: BeraConfig = {
@@ -40,9 +40,12 @@ const {
     useSelectedWalletBalance,
     useSelectedTagWalletBalances,
     refetch,
-} = usePollWalletBalances({
-     externalTokenList: [token1, token2] // optional arg to extend the token list
-})
+} = usePollWalletBalances({ 
+      externalTokenList: [token1, token2] // optional arg to extend the token list
+    }, 
+    {
+      beraConfigOverride: beraConfig // optional arg to override default beraConfig
+    })
 
 // balance of selected asset
 const selectedBalance = useSelectedWalletBalance('0x...')
@@ -54,7 +57,7 @@ const selectedTagBalance = useSelectedTagWalletBalances('atoken')
 
 ## Parameters
 ```ts twoslash
-import { type UsePollWalletBalancesRequest } from '@bera/berajs'
+import { type UsePollWalletBalancesArgs } from '@bera/berajs'
 ```
 
 ## Returns

@@ -12,7 +12,7 @@ import {
 import { Address } from "viem";
 import { Token } from "~/types";
 
-type UsePollAllowancesArgs = {
+export type UsePollAllowancesArgs = {
   spender: string;
   tokens: Token[];
 };
