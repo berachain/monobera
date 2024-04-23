@@ -84,14 +84,16 @@ const RewardModalContent = ({
 }) => {
   const exceeding = amount !== undefined && Number(amount) > Number(bgtRewards);
 
-  const { tokenDictionary } = useTokens();
+  const { data: tokenData } = useTokens();
   return (
     <div className="flex w-full flex-col gap-8 ">
       <div className="text-lg font-semibold leading-7">Unclaimed Rewards</div>
       <div className="rounded-md border border-border bg-input">
         <TokenInput
           selected={
-            tokenDictionary ? tokenDictionary[bgtTokenAddress] : undefined
+            tokenData?.tokenDictionary
+              ? tokenData?.tokenDictionary[bgtTokenAddress]
+              : undefined
           }
           amount={amount}
           balance={bgtRewards}

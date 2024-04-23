@@ -1,43 +1,39 @@
 import useSWR, { mutate } from "swr";
-import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
 import { getTransactionCount } from "../actions/dex";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
+import { Address } from "viem";
 
-export interface IUserPollTransactionCountRequest {
-  address: string | undefined;
+export interface UserPollTransactionCountArgs {
+  address: Address | undefined;
 }
 
-export interface IUserPollTransactionCountResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  useTransactionCount: () => string;
+export interface UserPollTransactionCountResponse
+  extends DefaultHookReturnType<number | undefined> {
   refresh: () => void;
 }
 
-export const usePollTransactionCount = ({
-  address,
-}: IUserPollTransactionCountRequest): IUserPollTransactionCountResponse => {
+export const usePollTransactionCount = (
+  args: UserPollTransactionCountArgs,
+  options?: DefaultHookOptions,
+): UserPollTransactionCountResponse => {
   const publicClient = usePublicClient();
-  const QUERY_KEY = [address, "txnCount"];
-  const { isLoading, isValidating } = useSWR(
+  const QUERY_KEY = [args.address, "txnCount"];
+  const swrResponse = useSWR<number | undefined>(
     QUERY_KEY,
     async () => {
-      return getTransactionCount({ address, publicClient });
+      return getTransactionCount({ address: args.address, publicClient });
     },
     {
-      refreshInterval: POLLING.SLOW,
+      ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
-  const useTransactionCount = (): string => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
+
   return {
-    isLoading,
-    isValidating,
-    useTransactionCount,
+    ...swrResponse,
     refresh: () => mutate(QUERY_KEY),
   };
 };
