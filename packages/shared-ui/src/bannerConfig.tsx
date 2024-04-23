@@ -67,12 +67,12 @@ export const bannerConfig: BannerConfig = {
       bannerComponent: <LaunchBanner appName={dexName} />,
     },
     [DappBannerType.RPC]: {
-      enabled: true,
+      enabled: false,
       bannerComponent: <RPCBanner />,
       hrefs: ["/pools", "/swap", "/"],
     },
     [DappBannerType.SLOW]: {
-      enabled: true,
+      enabled: false,
       bannerComponent: <NetworkCongestedBanner />,
       hrefs: ["/pools", "/"],
     },

@@ -1,21 +1,18 @@
 "use client";
 
 import React, { createContext, type PropsWithChildren } from "react";
-import { BeraJsProvider } from "@bera/berajs";
-import { dynamicWalletKey } from "@bera/config";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
-import {
-  DynamicContextProvider,
-  EvmNetwork,
-} from "@dynamic-labs/sdk-react-core";
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
-import { type Chain } from "viem";
 import { WagmiProvider } from "wagmi";
-
+import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
+import { type Chain } from "viem";
 import { defaultBeraConfig, wagmiConfig } from "~/config/defaultBeraJsConfig";
+import { dynamicWalletKey } from "@bera/config";
+import { BeraJsProvider } from "@bera/berajs";
 
 export interface NetworkConfig {
   isTestnet?: boolean;
