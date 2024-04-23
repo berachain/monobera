@@ -1,18 +1,18 @@
 import { Address } from "viem";
 
-import { BeraConfig, defaultBeraConfig } from "..";
+import { BeraConfig } from "..";
 
 const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
 
 export interface SortBaseQuoteAddress {
   tokenA: Address;
   tokenB: Address;
-  config?: BeraConfig;
+  config: BeraConfig;
 }
 export const sortBaseQuoteAddresses = ({
   tokenA,
   tokenB,
-  config = defaultBeraConfig,
+  config,
 }: SortBaseQuoteAddress): [Address, Address] => {
   if (!config.contracts?.wrappedTokenAddress) {
     throw new Error("Wrapped token address not found in config");
