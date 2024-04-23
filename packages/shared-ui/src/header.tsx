@@ -7,9 +7,7 @@ import { useBeraJs } from "@bera/berajs";
 import { faucetUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
-import { DappBannerType, bannerConfig } from "@bera/wagmi";
 
-import { LaunchBanner, RPCBanner } from "./banner";
 import BannerManager from "./banner-manager";
 import { ConnectButton } from "./connect-button";
 import { MainNav } from "./main-nav";

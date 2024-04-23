@@ -12,7 +12,6 @@ import {
   useActiveBanners,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { DappBannerType, bannerConfig } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";

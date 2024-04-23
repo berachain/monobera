@@ -42,10 +42,10 @@ export const RPCBanner = ({ className }: { className?: string }) => {
 };
 
 export const CustomizedBanner = ({
-  text,
+  textComponent,
   className,
 }: {
-  text?: string;
+  textComponent?: React.ReactNode;
   className?: string;
 }) => {
   return (
@@ -57,9 +57,7 @@ export const CustomizedBanner = ({
     >
       <div className="flex items-center gap-2">
         <Icons.clock8 className="h-4 w-4" />
-        <div className="md:text-md text-sm font-semibold leading-tight">
-          {text}
-        </div>
+        {textComponent}
       </div>
     </header>
   );

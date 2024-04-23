@@ -2,7 +2,7 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
-import { DappBannerType, bannerConfig } from "@bera/wagmi";
+import { DappBannerType, bannerConfig } from "@bera/config";
 
 import { CustomizedBanner, LaunchBanner, RPCBanner } from "./banner";
 
@@ -29,6 +29,13 @@ const BannerManager = ({ appName }: BannerManagerProps) => {
 
   const appNameOrDefault = appName || "Berachain Dapps";
 
+  const customizedBannerText = (
+    <div className="md:text-md text-sm font-semibold leading-tight">
+      We are currently experiencing network congestion in our system, please be
+      patient with us.
+    </div>
+  );
+
   return (
     <>
       {shouldShowBanner(DappBannerType.LAUNCH, appNameOrDefault) && (
@@ -36,12 +43,7 @@ const BannerManager = ({ appName }: BannerManagerProps) => {
       )}
       {shouldShowBanner(DappBannerType.RPC, appNameOrDefault) && <RPCBanner />}
       {shouldShowBanner(DappBannerType.SLOW, appNameOrDefault) && (
-        <CustomizedBanner
-          text={
-            bannerConfig[appNameOrDefault]?.[DappBannerType.SLOW]?.text ||
-            bannerConfig.global?.[DappBannerType.SLOW]?.text
-          }
-        />
+        <CustomizedBanner textComponent={customizedBannerText} />
       )}
     </>
   );

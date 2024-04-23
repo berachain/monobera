@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useEffect,
-  useState,
-  type PropsWithChildren,
-} from "react";
-import { useRouter } from "next/router";
+import React, { createContext, type PropsWithChildren } from "react";
 import { BeraJsProvider } from "@bera/berajs";
 import { dynamicWalletKey } from "@bera/config";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
@@ -21,11 +15,7 @@ import { useTheme } from "next-themes";
 import { type Chain } from "viem";
 import { WagmiProvider } from "wagmi";
 
-import {
-  bannerConfig,
-  defaultBeraConfig,
-  wagmiConfig,
-} from "~/config/defaultBeraJsConfig";
+import { defaultBeraConfig, wagmiConfig } from "~/config/defaultBeraJsConfig";
 
 export interface NetworkConfig {
   isTestnet?: boolean;
@@ -58,8 +48,8 @@ const Provider: React.FC<IBeraConfig> = ({
         ? "auto"
         : nextTheme
       : darkTheme
-        ? "dark"
-        : "light";
+      ? "dark"
+      : "light";
 
   return (
     <BeraWagmi.Provider value={{ networkConfig: defaultBeraConfig }}>

@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { BannerProperty, bannerConfig } from "@bera/wagmi";
+import { BannerProperty, bannerConfig } from "@bera/config";
 
 export const useActiveBanners = () => {
   const pathname = usePathname();

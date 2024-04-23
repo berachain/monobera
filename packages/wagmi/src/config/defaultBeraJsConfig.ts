@@ -68,28 +68,6 @@ const BeraChain: Chain = {
   },
 };
 
-export interface BannerConfig {
-  [key: string]: DappBannerConfig;
-}
-
-export interface BannerProperty {
-  enabled: boolean;
-  text: string;
-  hrefs?: string[];
-}
-
-export enum DappBannerType {
-  LAUNCH = "LAUNCH",
-  RPC = "RPC",
-  SLOW = "SLOW",
-}
-
-export interface DappBannerConfig {
-  [DappBannerType.LAUNCH]: BannerProperty;
-  [DappBannerType.RPC]: BannerProperty;
-  [DappBannerType.SLOW]: BannerProperty;
-}
-
 const evmNetwork: EvmNetwork = {
   blockExplorerUrls: [blockExplorerUrl],
   chainId: chainId,
@@ -122,110 +100,6 @@ export const wagmiConfig = createConfig({
     ),
   },
 });
-
-export const bannerConfig: BannerConfig = {
-  global: {
-    [DappBannerType.LAUNCH]: {
-      enabled: false,
-      text: "Welcome to Berachain Dapps.",
-    },
-    [DappBannerType.RPC]: {
-      enabled: false,
-      text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-    },
-    [DappBannerType.SLOW]: {
-      enabled: false,
-      text: "We are currently experiencing network congestion in our system, please be patient with us.",
-    },
-  },
-  BEND: {
-    [DappBannerType.LAUNCH]: {
-      enabled: false,
-      text: "Welcome to BEND",
-    },
-    [DappBannerType.RPC]: {
-      enabled: false,
-      text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-    },
-    [DappBannerType.SLOW]: {
-      enabled: false,
-      text: "We are currently experiencing network congestion in our system, please be patient with us.",
-    },
-  },
-  BEX: {
-    [DappBannerType.LAUNCH]: {
-      enabled: false,
-      text: "Welcome to BEX",
-    },
-    [DappBannerType.RPC]: {
-      enabled: false,
-      text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-      hrefs: ["/pools", "/swap", "/"],
-    },
-    [DappBannerType.SLOW]: {
-      enabled: false,
-      text: "We are currently experiencing network congestion in our system, please be patient with us.",
-      hrefs: ["/pools", "/"],
-    },
-  },
-  Honey: {
-    [DappBannerType.LAUNCH]: {
-      enabled: false,
-      text: "Welcome to Honey",
-    },
-    [DappBannerType.RPC]: {
-      enabled: false,
-      text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-    },
-    [DappBannerType.SLOW]: {
-      enabled: false,
-      text: "We are currently experiencing network congestion in our system, please be patient with us.",
-    },
-  },
-  BERPS: {
-    [DappBannerType.LAUNCH]: {
-      enabled: false,
-      text: "Welcome to Berps",
-      hrefs: ["/leaderboard", "/portfolio"],
-    },
-    [DappBannerType.RPC]: {
-      enabled: false,
-      text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-    },
-    [DappBannerType.SLOW]: {
-      enabled: false,
-      text: "We are currently experiencing network congestion in our system, please be patient with us.",
-    },
-  },
-  "BGT Station": {
-    [DappBannerType.LAUNCH]: {
-      enabled: false,
-      text: "Welcome to BGT station",
-    },
-    [DappBannerType.RPC]: {
-      enabled: false,
-      text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-    },
-    [DappBannerType.SLOW]: {
-      enabled: false,
-      text: "We are currently experiencing network congestion in our system, please be patient with us.",
-    },
-  },
-  Faucet: {
-    [DappBannerType.LAUNCH]: {
-      enabled: false,
-      text: "Welcome to Berachain Faucet",
-    },
-    [DappBannerType.RPC]: {
-      enabled: false,
-      text: "We are currently performing system-wide updates. Our services will be temporarily unavailable, but we&apos;ll be back up shortly.",
-    },
-    [DappBannerType.SLOW]: {
-      enabled: false,
-      text: "We are currently experiencing network congestion in our system, please be patient with us.",
-    },
-  },
-};
 
 export const beraJsConfig: BeraConfig = {
   endpoints: {
