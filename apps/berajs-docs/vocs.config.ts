@@ -90,10 +90,6 @@ export default defineConfig({
           link: "/react/usePollBeraBalance/",
         },
         {
-          text: "usePollHoneyBalance",
-          link: "/react/usePollHoneyBalance/",
-        },
-        {
           text: "usePollAllowance",
           link: "/react/usePollAllowance/",
         },
@@ -203,10 +199,6 @@ export default defineConfig({
         {
           text: "getBeraBalance",
           link: "/actions/getBeraBalance/",
-        },
-        {
-          text: "getHoneyBalance",
-          link: "/actions/getHoneyBalance/",
         },
         {
           text: "getAllowance",
