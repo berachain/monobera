@@ -1,2 +1,2 @@
-export * from "./useHoneyParams";
+export * from "./usePollCollateralsRates";
 export * from "./useHoneyPreview";

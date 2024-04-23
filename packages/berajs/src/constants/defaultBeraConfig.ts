@@ -1,14 +1,11 @@
 import {
-  aHoneyTokenAddress,
   beraTokenAddress,
-  bgtTokenAddress,
   crocDexAddress,
   crocMultiSwapAddress,
   crocRouterEndpoint,
   crocSubgraphEndpoint,
-  honeyAddress,
+  honeyRouterAddress,
   honeySubgraphUrl,
-  honeyTokenAddress,
   lendOracleAddress,
   lendPoolAddressProviderAddress,
   lendPoolImplementationAddress,
@@ -16,12 +13,7 @@ import {
   lendSubgraphUrl,
   lendUIDataProviderAddress,
   multicallAddress,
-  nativeTokenAddress,
-  stgusdcTokenAddress,
   tokenListUrl,
-  vdHoneyTokenAddress,
-  wbtcTokenAddress,
-  wethTokenAddress,
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -46,5 +38,6 @@ export const defaultBeraConfig: BeraConfig = {
     lendPoolProxyAddress: lendPoolImplementationAddress,
     lendUIDataProviderAddress: lendUIDataProviderAddress,
     lendRewardsAggregatorAddress: lendRewardsAddress,
+    honeyRouterAddress: honeyRouterAddress,
   },
 };

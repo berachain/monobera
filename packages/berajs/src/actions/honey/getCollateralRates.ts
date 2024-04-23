@@ -1,43 +1,51 @@
-import { honeyRouterAddress, multicallAddress } from "@bera/config";
 import BigNumber from "bignumber.js";
-import useSWR from "swr";
-import useSWRImmutable from "swr/immutable";
-import { formatUnits, getAddress, type Address } from "viem";
-import { usePublicClient } from "wagmi";
-
+import { Address, PublicClient, formatUnits } from "viem";
 import { honeyRouterAbi } from "~/abi";
+import { BeraConfig } from "~/types/global";
 
-interface CollateralRates {
+export interface CollateralRates {
   mintFee: number;
   redeemFee: number;
 }
 
-export const usePollHoneyParams = (collateralList: Address[]) => {
-  const publicClient = usePublicClient();
-  const method = "usePollHoneyParams";
-  const QUERY_KEY = [method, ...collateralList];
+export interface CollateralRatesMap {
+  [key: Address]: CollateralRates;
+}
 
-  const swrResponse = useSWR(QUERY_KEY, async () => {
-    if (!publicClient) return undefined;
+export interface collateralRatesArgs {
+  client: PublicClient;
+  config: BeraConfig;
+  collateralList: Address[];
+}
+
+/**
+ * fetch the mint and redeem rate of all colleteral tokens
+ */
+export const getCollateralRates = async ({
+  client,
+  config,
+  collateralList,
+}: collateralRatesArgs): Promise<CollateralRatesMap | undefined> => {
+  try {
     const calls: any[] = [];
     collateralList.forEach((collateral: Address) => {
       calls.push({
-        address: honeyRouterAddress,
+        address: config.contracts!.honeyRouterAddress,
         abi: honeyRouterAbi,
         functionName: "getMintRate",
         args: [collateral],
       });
       calls.push({
-        address: honeyRouterAddress,
+        address: config.contracts!.honeyRouterAddress,
         abi: honeyRouterAbi,
         functionName: "getRedeemRate",
         args: [collateral],
       });
     });
 
-    const results = await publicClient.multicall({
+    const results = await client.multicall({
       contracts: calls,
-      multicallAddress: multicallAddress,
+      multicallAddress: config.contracts!.multicallAddress,
     });
     const obj: Record<Address, CollateralRates> = {};
     results.map((result: any, index: number) => {
@@ -58,16 +66,8 @@ export const usePollHoneyParams = (collateralList: Address[]) => {
       }
     });
     return obj;
-  });
-
-  const useHoneyParams = (collateral: Address | undefined) => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    if (!data || !collateral) return undefined;
-    return data[getAddress(collateral)];
-  };
-
-  return {
-    ...swrResponse,
-    useHoneyParams,
-  };
+  } catch (e) {
+    console.log(e);
+    return undefined;
+  }
 };

@@ -6,7 +6,7 @@ import {
   useBeraJs,
   usePollAllowance,
   usePollBalance,
-  usePollHoneyParams,
+  usePollCollateralsParams,
   usePollHoneyPreview,
   useTokens,
   type Token,
@@ -72,13 +72,14 @@ export const usePsm = () => {
     token: selectedFrom,
   });
 
-  const { useHoneyParams, isLoading: isFeeLoading } = usePollHoneyParams(
-    collateralList?.map((token: any) => token.address) ?? [],
-  );
+  const { usePollCollateralRate, isLoading: isFeeLoading } =
+    usePollCollateralsParams(
+      collateralList?.map((token: any) => token.address) ?? [],
+    );
 
-  const params = useHoneyParams(
-    collateral ? (collateral.address as Address) : undefined,
-  );
+  const params = collateral
+    ? usePollCollateralRate(collateral.address as Address)
+    : undefined;
 
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
 
