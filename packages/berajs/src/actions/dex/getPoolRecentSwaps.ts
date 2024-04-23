@@ -18,7 +18,7 @@ interface ISwapWithHoneyValue extends Omit<ISwaps, "swapIn" | "swapOut"> {
   swapOutAmount: number;
 }
 
-type GetPoolRecentSwapsResult = ISwapWithHoneyValue[];
+export type GetPoolRecentSwapsResult = ISwapWithHoneyValue[];
 
 /**
  * Fetchs a list of recent swaps for a given pool
