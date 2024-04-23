@@ -31,8 +31,7 @@ export default function StatusBanner() {
   const reservesDataList = useReservesDataList();
   const baseCurrency = useBaseCurrencyData();
 
-  const { useCurrentWalletBalances } = usePollWalletBalances();
-  const balanceToken = useCurrentWalletBalances();
+  const { data: balanceToken } = usePollWalletBalances();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,

@@ -4,7 +4,7 @@ React hook to retrieve the current honey prices of a series of tokens
 
 ## Import
 
-```ts
+```ts twoslash
 import { useTokenHoneyPrices } from "@bera/berajs";
 ```
 
@@ -17,10 +17,9 @@ import { useTokenHoneyPrices, Token } from "@bera/berajs";
 
 import { beraConfig } from "./config";
 
-const exampleTokenAddresses = ["0x1", "0x2"];
-const { data: tokePricesInHoney, isLoading } = useTokenHoneyPrices({
+const { data: tokenPricesInHoney, refetch } = useTokenHoneyPrices({
   config: beraConfig,
-  args: { tokenAddresses: exampleTokenAddresses },
+  args: { tokenAddresses:  ["0x0...", "0x1..."] },
 });
 ```
 
@@ -39,16 +38,12 @@ export const beraConfig: BeraConfig = {
 
 ## Parameters
 
-```ts
+```ts twoslash
 import { type UseTokenHoneyPricesRequest } from "@bera/berajs";
 ```
 
-- args.tokenAddresses
-  - Type: `string[]`
-  - Description: Addresses of the given tokens
-
 ## Returns
 
-```ts
+```ts twoslash
 import { type UseTokenHoneyPricesResponse } from "@bera/berajs";
 ```

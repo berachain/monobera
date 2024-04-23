@@ -1,6 +1,6 @@
 # useTokenInformation
 
-React hook for grabbing token information.
+React hook for grabbing token information for a given address.
 
 ## Import
 
@@ -10,46 +10,35 @@ import { useTokenInformation } from "@bera/berajs";
 
 ## Usage
 
-:::code-group
-
 ```ts twoslash [example.ts]
 import { useTokenInformation } from "@bera/berajs";
-
-import { beraConfig } from "./config";
-
-const {
-  isLoading, // boolean indicating if token information is still loading
-  isSuccess,
-  isError,
-  tokenInformation,
-  error,
-  read,
-} = useTokenInformation({
-  config: beraJsConfig,
-});
-```
-
-```ts twoslash [config.ts] filename="config.ts"
 import { BeraConfig } from "@bera/berajs";
 
-// required configs for getRoute
+// required configs for useTokenInformation
 export const beraConfig: BeraConfig = {
   contracts: {
     multicallAddress: "0x1..",
   },
 };
-```
 
-:::
+const {
+  data: tokenInformation
+} = useTokenInformation({
+  config: beraConfig,
+  args: {
+    address: "0x0...",
+  },
+});
+```
 
 ## Parameters
 
-```ts
-import { type DefaultHookTypes } from "@bera/berajs";
+```ts twoslash
+import { type UseTokenInformationRequest } from "@bera/berajs";
 ```
 
 ## Returns
 
-```ts
-import { type IUseTokenInformationResponse } from "@bera/berajs";
+```ts twoslash
+import { type UseTokenInformationResponse } from "@bera/berajs";
 ```

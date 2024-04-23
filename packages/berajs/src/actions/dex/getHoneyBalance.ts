@@ -1,6 +1,6 @@
-import { Address, PublicClient, erc20Abi } from "viem";
+import { Address, PublicClient, erc20Abi, formatUnits } from "viem";
 
-import { BeraConfig } from "~/types";
+import { BeraConfig, TokenBalance } from "~/types";
 
 /**
  * fetch the current honey balance of a given address
@@ -9,16 +9,14 @@ import { BeraConfig } from "~/types";
 export const getHoneyBalance = async ({
   publicClient,
   config,
-  isConnected,
   account,
 }: {
   publicClient: PublicClient | undefined;
   config: BeraConfig;
-  isConnected: boolean;
   account: string | undefined;
-}): Promise<bigint | undefined> => {
-  if (!publicClient) return undefined;
-  if (isConnected && config.contracts?.honeyAddress) {
+}): Promise<TokenBalance | undefined> => {
+  if (!publicClient || !account) return undefined;
+  if (config.contracts?.honeyAddress) {
     try {
       const result = await publicClient.readContract({
         address: config.contracts.honeyAddress,
@@ -26,9 +24,13 @@ export const getHoneyBalance = async ({
         functionName: "balanceOf",
         args: [account as Address],
       });
-      return result;
+      return {
+        balance: result,
+        formattedBalance: formatUnits(result, 18),
+      };
     } catch (e) {
       console.error(e);
+      return undefined;
     }
   }
   return undefined;

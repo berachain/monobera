@@ -43,7 +43,9 @@ export default function ProposalDetails({
 }: {
   proposalId: number;
 }) {
-  const { read, tokenInformation } = useTokenInformation();
+  // const { read, tokenInformation } = useTokenInformation({
+  //   config: beraJsConfig,
+  // });
   const { useProposal, isLoading: isProposalLoading } =
     usePollProposal(proposalId);
   const { useTotalDelegated } = usePollActiveValidators();
@@ -105,7 +107,7 @@ export default function ProposalDetails({
     const updateCollateralAddress = async () => {
       const address = await getAddress(jsonMsg[0].params.psmDenoms[0].denom);
       setCollateralAddress(address as string);
-      void read({ address: address as Address });
+      // void read({ address: address as Address });
     };
 
     if (proposalType === "enable-collateral-for-honey" && jsonMsg)
@@ -227,7 +229,7 @@ export default function ProposalDetails({
                   <TokenIcon address={collateralAddress} size={"md"} />{" "}
                   {collateralAddress === beraTokenAddress // WBERA have no name, have to hardcode it bro ;<
                     ? "WBERA"
-                    : tokenInformation?.symbol}
+                    : "AAA"}
                 </div>
               </div>
               <div className="flex items-center justify-between">
