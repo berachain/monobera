@@ -79,7 +79,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   }, [optionType, form.optionType]);
 
   const { useMarketIndexPrice } = usePricesSocket();
-  const {useSelectedWalletBalance} = usePollWalletBalances();
+  const { useSelectedWalletBalance } = usePollWalletBalances();
   const honeyBalanceData = useSelectedWalletBalance(honeyTokenAddress);
   const honeyBalance = honeyBalanceData?.formattedBalance ?? "0"; // string
   const rawHoneyBalance = honeyBalanceData?.balance ?? 0n; // bigint

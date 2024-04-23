@@ -46,5 +46,5 @@ export const defaultBeraConfig: BeraConfig = {
     lendPoolProxyAddress: lendPoolImplementationAddress,
     lendUIDataProviderAddress: lendUIDataProviderAddress,
     lendRewardsAggregatorAddress: lendRewardsAddress,
-  }
+  },
 };
