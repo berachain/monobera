@@ -46,7 +46,7 @@ export type DefaultHookOptions = {
 };
 
 export type DefaultHookReturnType<T = any> = SWRResponse<T, any, any> & {
-  refetch: () => void;
+  refresh: () => void;
 };
 
 export interface PayloadReturnType<T = any[]> {

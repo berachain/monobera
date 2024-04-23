@@ -36,5 +36,5 @@ export const usePoolRecentSwaps = (
     },
   );
 
-  return { ...swrResponse, refetch: () => swrResponse?.mutate?.() };
+  return { ...swrResponse, refresh: () => swrResponse?.mutate?.() };
 };

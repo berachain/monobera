@@ -1,4 +1,4 @@
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
 import { getHoneyBalance } from "~/actions/dex/getHoneyBalance";
@@ -32,6 +32,6 @@ export const usePollHoneyBalance = (
   );
   return {
     ...swrResponse,
-    refetch: () => void mutate(QUERY_KEY),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };

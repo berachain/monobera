@@ -44,5 +44,5 @@ export const usePoolUserPosition = (
     },
   );
 
-  return { ...swrResponse, refetch: () => swrResponse?.mutate?.() };
+  return { ...swrResponse, refresh: () => swrResponse?.mutate?.() };
 };

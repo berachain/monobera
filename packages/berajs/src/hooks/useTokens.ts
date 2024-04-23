@@ -68,7 +68,7 @@ export const useTokens = (options?: DefaultHookOptions): IUseTokens => {
 
   return {
     ...swrResponse,
-    refetch: () => swrResponse?.mutate?.(),
+    refresh: () => swrResponse?.mutate?.(),
     addNewToken,
     removeToken,
   };

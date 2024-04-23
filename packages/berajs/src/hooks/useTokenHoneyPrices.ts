@@ -37,6 +37,6 @@ export const useTokenHoneyPrices = (
 
   return {
     ...swrResponse,
-    refetch: () => void mutate(QUERY_KEY),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };
