@@ -76,7 +76,7 @@ export const usePollWalletBalances = (
 
   return {
     ...swrResponse,
-    refetch: () => mutate(QUERY_KEY),
+    refresh: () => swrResponse?.mutate?.(),
     useSelectedWalletBalance,
     useSelectedTagWalletBalances,
   };

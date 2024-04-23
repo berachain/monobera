@@ -29,6 +29,6 @@ export const usePollTransactionCount = (
 
   return {
     ...swrResponse,
-    refetch: () => swrResponse?.mutate?.(),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };

@@ -42,6 +42,6 @@ export const useTokenInformation = (
 
   return {
     ...swrResponse,
-    refetch: () => swrResponse?.mutate?.(),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };
