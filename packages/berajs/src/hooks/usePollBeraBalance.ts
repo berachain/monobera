@@ -1,4 +1,5 @@
 import useSWR, { mutate } from "swr";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getBeraBalance } from "~/actions/dex/getBeraBalance";
@@ -9,20 +10,15 @@ import {
   TokenBalance,
 } from "~/types/global";
 import { useBeraJs } from "../contexts";
-import { Address } from "viem";
 
 export type UsePollBeraBalanceArgs = {
   address: Address | undefined;
 };
-export interface UsePollBeraBalancesResponse
-  extends DefaultHookReturnType<TokenBalance | undefined> {
-  refetch: () => void;
-}
 
 export const usePollBeraBalance = (
   args: UsePollBeraBalanceArgs,
   options?: DefaultHookOptions,
-): UsePollBeraBalancesResponse => {
+): DefaultHookReturnType<TokenBalance | undefined> => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [args.address, "beraBalance"];
   const swrResponse = useSWR(

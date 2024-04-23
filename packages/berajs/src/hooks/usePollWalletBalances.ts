@@ -1,6 +1,7 @@
 import useSWR, { useSWRConfig } from "swr";
 import { usePublicClient } from "wagmi";
 
+import POLLING from "~/enum/polling";
 import {
   DefaultHookOptions,
   DefaultHookReturnType,
@@ -9,7 +10,6 @@ import {
 } from "..";
 import { useBeraJs } from "../contexts";
 import { useTokens } from "./useTokens";
-import POLLING from "~/enum/polling";
 
 export interface BalanceToken extends Token {
   balance: bigint;
@@ -21,7 +21,6 @@ export type UsePollAllowancesArgs = {
 };
 export interface UsePollBalancesResponse
   extends DefaultHookReturnType<BalanceToken[] | undefined> {
-  refetch: () => void;
   useSelectedWalletBalance: (address: string) => BalanceToken | undefined;
   useSelectedTagWalletBalances: (tag: string) => BalanceToken[] | undefined;
 }

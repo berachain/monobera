@@ -1,24 +1,19 @@
 import useSWR, { mutate } from "swr";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
-import { getTransactionCount } from "../actions/dex";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
-import { Address } from "viem";
+import { getTransactionCount } from "../actions/dex";
 
 export interface UserPollTransactionCountArgs {
   address: Address | undefined;
 }
 
-export interface UserPollTransactionCountResponse
-  extends DefaultHookReturnType<number | undefined> {
-  refresh: () => void;
-}
-
 export const usePollTransactionCount = (
   args: UserPollTransactionCountArgs,
   options?: DefaultHookOptions,
-): UserPollTransactionCountResponse => {
+): DefaultHookReturnType<number | undefined> => {
   const publicClient = usePublicClient();
   const QUERY_KEY = [args.address, "txnCount"];
   const swrResponse = useSWR<number | undefined>(
@@ -34,6 +29,6 @@ export const usePollTransactionCount = (
 
   return {
     ...swrResponse,
-    refresh: () => mutate(QUERY_KEY),
+    refetch: () => swrResponse?.mutate?.(),
   };
 };
