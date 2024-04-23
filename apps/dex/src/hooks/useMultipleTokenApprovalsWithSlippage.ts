@@ -18,7 +18,7 @@ const useMultipleTokenApprovalsWithSlippage = (
     .filter((token: TokenInput) => token !== undefined)
     .map((token) => token);
 
-  const { data: allowances, refetch } = usePollAllowances({
+  const { data: allowances, refresh } = usePollAllowances({
     spender: spender,
     tokens,
   });
@@ -52,7 +52,7 @@ const useMultipleTokenApprovalsWithSlippage = (
       (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
     ),
     slippage,
-    refetch,
+    refresh,
   };
 };
 

@@ -111,7 +111,7 @@ export function SwapCard({
 
   const { captureException, track } = useAnalytics();
 
-  const { refetch, isLoading: isBalancesLoading } = usePollWalletBalances();
+  const { refresh, isLoading: isBalancesLoading } = usePollWalletBalances();
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -140,7 +140,7 @@ export function SwapCard({
       setToAmount(undefined);
       setOpenPreview(false);
       void refreshAllowance();
-      refetch();
+      refresh();
     },
     onError: (e: Error | undefined) => {
       track("swap_token_failed", {

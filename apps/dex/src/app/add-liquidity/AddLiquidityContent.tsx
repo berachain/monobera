@@ -64,12 +64,12 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     setIsNativeBera,
   } = useAddLiquidity(pool);
 
-  const { refetch } = usePollWalletBalances();
+  const { refresh } = usePollWalletBalances();
   const { write, ModalPortal } = useTxn({
     message: `Add liquidity to ${pool?.poolName}`,
     onSuccess: () => {
       reset();
-      refetch();
+      refresh();
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
