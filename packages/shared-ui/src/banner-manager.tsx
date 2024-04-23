@@ -2,9 +2,8 @@
 
 import React from "react";
 import { usePathname } from "next/navigation";
-import { DappBannerType, bannerConfig } from "@bera/config";
 
-import { CustomizedBanner, LaunchBanner, RPCBanner } from "./banner";
+import { DappBannerType, bannerConfig } from "./bannerConfig";
 
 interface BannerManagerProps {
   appName: string | undefined;
@@ -38,13 +37,12 @@ const BannerManager = ({ appName }: BannerManagerProps) => {
 
   return (
     <>
-      {shouldShowBanner(DappBannerType.LAUNCH, appNameOrDefault) && (
-        <LaunchBanner appName={appNameOrDefault} />
-      )}
-      {shouldShowBanner(DappBannerType.RPC, appNameOrDefault) && <RPCBanner />}
-      {shouldShowBanner(DappBannerType.SLOW, appNameOrDefault) && (
-        <CustomizedBanner textComponent={customizedBannerText} />
-      )}
+      {shouldShowBanner(DappBannerType.LAUNCH, appNameOrDefault) &&
+        bannerConfig[appNameOrDefault]?.[DappBannerType.LAUNCH].bannerComponent}
+      {shouldShowBanner(DappBannerType.RPC, appNameOrDefault) &&
+        bannerConfig[appNameOrDefault]?.[DappBannerType.RPC].bannerComponent}
+      {shouldShowBanner(DappBannerType.SLOW, appNameOrDefault) &&
+        bannerConfig[appNameOrDefault]?.[DappBannerType.SLOW].bannerComponent}
     </>
   );
 };

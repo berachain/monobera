@@ -41,6 +41,29 @@ export const RPCBanner = ({ className }: { className?: string }) => {
   );
 };
 
+export const NetworkCongestedBanner = ({
+  className,
+}: {
+  className?: string;
+}) => {
+  return (
+    <header
+      className={cn(
+        "top-[72px] z-50 flex h-12 w-[100vw] items-center justify-center gap-2 bg-info-foreground px-1 py-3 text-white",
+        className,
+      )}
+    >
+      <div className="flex items-center gap-2">
+        <Icons.clock8 className="h-4 w-4" />
+        <div className="md:text-md text-center text-xs font-semibold leading-tight md:text-sm">
+          We are currently experiencing network congestion in our system, please
+          be patient with us.
+        </div>
+      </div>
+    </header>
+  );
+};
+
 export const CustomizedBanner = ({
   textComponent,
   className,
