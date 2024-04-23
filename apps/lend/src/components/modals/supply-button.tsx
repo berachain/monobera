@@ -112,11 +112,10 @@ const SupplyModalContent = ({
   const supply = token.address === honeyTokenAddress;
   const { account = "0x" } = useBeraJs();
 
-  const { useAllowance } = usePollAllowance({
-    contract: lendPoolImplementationAddress,
+  const { data: allowance } = usePollAllowance({
+    spender: lendPoolImplementationAddress,
     token,
   });
-  const allowance = useAllowance();
 
   const { useUserAccountData } = usePollUserAccountData({
     opts: {
