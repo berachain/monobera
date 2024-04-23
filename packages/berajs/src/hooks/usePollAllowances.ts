@@ -72,6 +72,6 @@ export const usePollAllowances = (
   return {
     ...swrResponse,
     useSelectedAllowance,
-    refetch: () => void mutate(QUERY_KEY),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };

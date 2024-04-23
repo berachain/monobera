@@ -1,4 +1,4 @@
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
@@ -9,7 +9,6 @@ import {
   DefaultHookReturnType,
   TokenBalance,
 } from "~/types/global";
-import { useBeraJs } from "../contexts";
 
 export type UsePollBeraBalanceArgs = {
   address: Address | undefined;
@@ -33,6 +32,6 @@ export const usePollBeraBalance = (
   );
   return {
     ...swrResponse,
-    refetch: () => void mutate(QUERY_KEY),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };

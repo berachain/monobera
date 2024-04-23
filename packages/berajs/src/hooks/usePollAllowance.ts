@@ -57,6 +57,6 @@ export const usePollAllowance = (
 
   return {
     ...swrResponse,
-    refetch: () => mutate(QUERY_KEY),
+    refresh: () => mutate(QUERY_KEY),
   };
 };
