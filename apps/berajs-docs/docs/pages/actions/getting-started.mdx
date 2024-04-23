@@ -28,10 +28,10 @@ bun i berajs@latest viem@latest
 
 ### Initialize Public client
 
-You will need to initialize a viem public client like this at an earlier point in the application (could be in the same file).
+You will need to pass in `publicClient` to most actions, you can initialize a viem public client like this (could be in the same file).
 
 ```ts
-import { createPublicClient } from "viem";
+import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 
 // first, intialize a public client with berachain
@@ -41,44 +41,18 @@ const publicClient = createPublicClient({
 });
 ```
 
-### BeraConfig
+### BeraConfig (Optional)
 
-You will need an object of type BeraConfig that contains the required config to execute actions. There are two approaches:
-
-#### Approach 1: import and use beraJsConfig
-
-```ts
-import { beraJsConfig } from "@bera/wagmi";
-```
-
-:::info
-If you are developing from the monorepo, note that [`beraJsConfig`](/bera-config) is populated at build time with environment variables from `.env` and `.env.local` at the monorepo root.
-Visit the [`beraJsConfig`](/bera-config#default-beraconfig) docs page for more information on environment variable mapping to config variables
-:::
-
-#### Approach 2: manually create and populate a beraJsConfig
-
-```ts
-import { type BeraConfig } from "@bera/berajs";
-
-/**
- * intialize a beraconfig with the required fields for the desired action
- */
-const beraConfig: BeraConfig = {
-  subgraphs: {
-    dexSubgraph: "https://...",
-  },
-};
-```
+Most actions accept a `config` argument of type `BeraConfig`, this overrides the default configuration of contract and endpoint addresses that the actions act on. [Learn more about the `config` argument here.](/bera-config)
 
 ::::
 
 ## Usage
 
-In this example, we will setup a public client and use that with berajs to easily interact with Berachain.
+In this example, we will setup a public client and use that with a berajs action to easily interact with Berachain.
 
 ```tsx [app.ts]
-import { createPublicClient } from 'viem'
+import { createPublicClient, } from 'viem'
 import { berachain } from 'viem/chains'
 import { getSwap, type BeraConfig } from '@bera/berajs'
 
@@ -88,7 +62,7 @@ const publicClient = createPublicClient({
   transport: http()
 })
 
-// intialize a beraconfig
+// intialize a beraconfig (optional)
 const beraConfig: BeraConfig = {
     endpoints: {
         dexRouter: 'https://'
@@ -108,6 +82,6 @@ const swapInfo = await getSwap({
         tokenOutDecimals: 18,
         amountIn: '1.1',
     },
-    config: beraConfig
+    config: beraConfig // optional
 })
 ```
