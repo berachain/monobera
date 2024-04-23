@@ -152,7 +152,11 @@ export default defineConfig({
             },
             {
               text: "getPoolUserPosition",
-              link: "/actions/getPoolUserPosition/",
+              link: "/actions/dex/getPoolUserPosition/",
+            },
+            {
+              text: "getPoolRecentSwaps",
+              link: "/actions/dex/getPoolRecentSwaps/",
             },
           ],
         },
