@@ -48,8 +48,8 @@ const Provider: React.FC<IBeraConfig> = ({
         ? "auto"
         : nextTheme
       : darkTheme
-      ? "dark"
-      : "light";
+        ? "dark"
+        : "light";
 
   return (
     <BeraWagmi.Provider value={{ networkConfig: defaultBeraConfig }}>
