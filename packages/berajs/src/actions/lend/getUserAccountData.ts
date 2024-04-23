@@ -29,6 +29,10 @@ export const getUserAccountData = async ({
   account: Address;
 }): Promise<UserAccountData | undefined> => {
   try {
+    if (!config.contracts?.lendPoolProxyAddress) {
+      console.error("lendPoolProxyAddress contract address not found");
+      return undefined;
+    }
     const result = await client.readContract({
       address: config.contracts!.lendPoolProxyAddress,
       abi: lendPoolImplementationAbi,
