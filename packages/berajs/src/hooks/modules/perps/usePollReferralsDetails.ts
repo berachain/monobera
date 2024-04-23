@@ -25,9 +25,7 @@ export const usePollReferralsDetails = () => {
           args: [account as Address],
         });
         return result;
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     },
     {
       refreshInterval: POLLING.NORMAL,
