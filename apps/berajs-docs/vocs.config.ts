@@ -47,7 +47,16 @@ export default defineConfig({
         {
           text: "Honey",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            {
+              text: "usePollCollateralsRates",
+              link: "/react/honey/usePollCollateralsRates/",
+            },
+            {
+              text: "usePollHoneyPreview",
+              link: "/react/honey/usePollHoneyPreview/",
+            },
+          ],
         },
         {
           text: "Bend",
@@ -155,7 +164,16 @@ export default defineConfig({
         {
           text: "Honey",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            {
+              text: "getCollateralRates",
+              link: "/actions/honey/getCollateralRates/",
+            },
+            {
+              text: "getHoneyPreview",
+              link: "/actions/honey/getHoneyPreview/",
+            },
+          ],
         },
         {
           text: "Bend",

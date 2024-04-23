@@ -1,0 +1,31 @@
+# usePollHoneyPreview
+
+React hook for fetching preview swap amount
+
+## Import
+
+```ts
+import { usePollHoneyPreview } from "@bera/berajs";
+```
+
+## Usage
+
+```ts [example.ts]
+const { data: honeyPreview, isLoading: isHoneyPreviewLoading } =
+  usePollHoneyPreview(collateral, amount, isMint, givenIn);
+```
+
+## Parameters
+
+```ts
+ collateral: Token | undefined,
+  amount: string,
+  mint: boolean, // true mint, false redeem
+  given_in: boolean, // true given in, false given out
+  options?: DefaultHookOptions,
+```
+
+## Returns
+```ts
+DefaultHookReturnType<string | undefined>;
+```

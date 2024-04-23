@@ -1,0 +1,42 @@
+# getCollateralRates
+
+Action for fetching the mint rates and redeem rates for all collaterals
+
+## Import
+
+```ts
+import { getCollateralRates } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+await getCollateralRates({
+  client,
+  config,
+  collateralList,
+});
+```
+
+## Parameters
+
+```ts
+export interface collateralRatesArgs {
+  client: PublicClient;
+  config: BeraConfig;
+  collateralList: Address[];
+}
+```
+
+## Returns
+
+```ts
+export interface CollateralRates {
+  mintFee: number;
+  redeemFee: number;
+}
+
+export interface CollateralRatesMap {
+  [key: Address]: CollateralRates;
+}
+```

@@ -1,0 +1,38 @@
+# usePollCollateralsRates
+
+React hook for fetching the mint rates and redeem rates for all collaterals
+
+## Import
+
+```ts
+import { usePollCollateralsRates } from "@bera/berajs";
+```
+
+## Usage
+
+```ts [example.ts]
+// poll rates for all collateral
+const {
+  data: collateralRatesDictionary,
+  usePollCollateralRate,
+  isLoading: isFeeLoading,
+} = usePollCollateralsParams(collateralList);
+
+// poll rate for single collateral
+const collateralRate = usePollCollateralRate(address);
+```
+
+## Parameters
+
+```ts
+collateralList: Address[]
+```
+
+## Returns
+
+```ts
+export interface UsePollCollateralsRatesResponse
+  extends DefaultHookReturnType<CollateralRatesMap | undefined> {
+  usePollCollateralRate: (collateral: string) => CollateralRates | undefined;
+}
+```

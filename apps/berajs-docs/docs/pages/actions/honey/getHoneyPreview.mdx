@@ -1,0 +1,47 @@
+# getHoneyPreview
+
+Action for fetching preview swap amount
+
+## Import
+
+```ts
+import { getHoneyPreview } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+await getHoneyPreview({
+  client,
+  config,
+  collateral,
+  amount,
+  method,
+});
+```
+
+## Parameters
+
+```ts
+
+export enum HoneyPreviewMethod {
+  Mint = "previewMint", //mint, entered honey amount
+  RequiredCollateral = "previewRequiredCollateral", //mint, entered collateral amount
+  Redeem = "previewRedeem", //redeem, entered collateral amount
+  HoneyToRedeem = "previewHoneyToRedeem", //redeem, entered honey amount
+}
+
+export interface HoneyPreviewArgs {
+  client: PublicClient;
+  config: BeraConfig;
+  collateral: Token;
+  amount: string;
+  method: HoneyPreviewMethod;
+}
+```
+
+## Returns
+
+```ts
+type result = Promise<string | undefined>;
+```
