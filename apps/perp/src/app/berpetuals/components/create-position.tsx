@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { usePollHoneyBalance } from "@bera/berajs";
+import { usePollWalletBalances } from "@bera/berajs";
 import { type GlobalParams } from "@bera/proto/src";
 import { FormattedNumber, usePrevious } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -22,6 +22,7 @@ import { LeverageSlider } from "./leverage-slider";
 import { LongShortTab } from "./long-short-tab";
 import { PlaceOrder } from "./place-order";
 import { TPSL } from "./tpsl";
+import { honeyTokenAddress } from "@bera/config";
 
 interface ICreatePosition {
   market: IMarket;
@@ -78,7 +79,8 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   }, [optionType, form.optionType]);
 
   const { useMarketIndexPrice } = usePricesSocket();
-  const { data: honeyBalanceData } = usePollHoneyBalance();
+  const { useSelectedWalletBalance } = usePollWalletBalances();
+  const honeyBalanceData = useSelectedWalletBalance(honeyTokenAddress);
   const honeyBalance = honeyBalanceData?.formattedBalance ?? "0"; // string
   const rawHoneyBalance = honeyBalanceData?.balance ?? 0n; // bigint
   const rawHoneyBalanceBN = BigNumber(
