@@ -1,0 +1,61 @@
+# getPoolRecentSwaps
+
+Action for creating the payload for performing a withdraw liquidity operation on a pool.
+
+## Import
+
+```ts
+import { getPoolRecentSwaps } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { getPoolRecentSwaps } from "@bera/berajs";
+
+const pool: PoolV2 = ...;
+
+const poolRecentSwaps = await getPoolRecentSwaps({
+  args: {
+    pool
+  },
+  config
+});
+```
+
+```ts twoslash [config.ts] filename="config.ts"
+import { BeraConfig } from "@bera/berajs";
+
+// required config values for getPoolRecentSwaps
+export const beraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+};
+```
+
+## Parameters
+
+| Name        | type         | Description                                                   | Required |
+| ----------- | :----------- | :------------------------------------------------------------ | :------: |
+| `args.pool` | `PoolV2`     | pool of which to fetch recent swaps                           |  `true`  |
+| `config`    | `BeraConfig` | BeraConfig object containing addresses for relevant resources |  `true`  |
+
+## Returns
+
+Array of the following type:
+
+| Name                   | type     | Description                                                    | Optional |
+| ---------------------- | :------- | :------------------------------------------------------------- | :------: |
+| `user`                 | `string` | wallet address of user who performed the swap                  | `false`  |
+| `baseFlow`             | `string` | positive if swap was from pool base token to pool quote token  | `false`  |
+| `quoteFlow`            | `string` | positive if swap was from pool quote token to base quote token | `false`  |
+| `transactionHash`      | `string` | address/hash of swap's onchain transaction                     | `false`  |
+| `time`                 | `number` | UNIX timestamp of swap                                         | `false`  |
+| `baseAssetHoneyPrice`  | `string` | honey price of the base token in the swap                      | `false`  |
+| `quoteAssetHoneyPrice` | `string` | honey price of the quote token in the swap                     | `false`  |
+| `swapIn`               | `Token`  | Token given in swap                                            |  `true`  |
+| `swapOut`              | `Token`  | Token received from swap                                       |  `true`  |
+| `estimatedHoneyValue`  | `number` | estimated honey value of swap transaction                      | `false`  |
+| `swapInAmount`         | `number` | nominal amount of token given in swap                          | `false`  |
+| `swapOutAmount`        | `number` | nominal amount of token received from swap                     | `false`  |
