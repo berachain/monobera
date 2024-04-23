@@ -80,3 +80,18 @@ export interface IUserPosition {
   estimatedHoneyValue: number;
   seeds: bigint;
 }
+
+export interface ISwaps {
+  user: string;
+  baseFlow: string;
+  quoteFlow: string;
+  swapIn: Token;
+  swapOut: Token;
+  swapInAmount: number;
+  swapOutAmount: number;
+  transactionHash: string;
+  time: number;
+  estimatedHoneyValue?: number;
+  baseAssetHoneyPrice: string;
+  quoteAssetHoneyPrice: string;
+}
