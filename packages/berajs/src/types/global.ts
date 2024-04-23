@@ -2,8 +2,6 @@ import { SWRConfiguration, SWRResponse } from "swr";
 import { Address } from "viem";
 import { Token } from "./dex";
 
-import { Token } from "./dex";
-
 export interface BeraConfig {
   endpoints?: {
     dexRouter?: string;
