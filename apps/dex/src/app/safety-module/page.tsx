@@ -16,7 +16,7 @@ export default function safetyPage() {
       <div className="w-full sm:w-1/2">
         <SafetyModule rewards={123} />
       </div>
-      <div className="w-full sm:w-1/2 flex flex-col gap-2">
+      <div className="w-full sm:w-1/2 flex flex-col gap-4">
         <UserStats />
         <ClaimRewardsCard rewards={0} />
       </div>
