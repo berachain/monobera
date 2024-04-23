@@ -1,4 +1,7 @@
+import useSWRImmutable from "swr/immutable";
 import { Address, isAddress } from "viem";
+import { usePublicClient } from "wagmi";
+
 import {
   DefaultHookOptions,
   DefaultHookReturnType,
@@ -6,8 +9,6 @@ import {
   getTokenInformation,
   useBeraJs,
 } from "..";
-import useSWRImmutable from "swr/immutable";
-import { usePublicClient } from "wagmi";
 
 export type UseTokenInformationResponse = DefaultHookReturnType<
   Token | undefined
@@ -41,5 +42,6 @@ export const useTokenInformation = (
 
   return {
     ...swrResponse,
+    refetch: () => swrResponse?.mutate?.(),
   };
 };

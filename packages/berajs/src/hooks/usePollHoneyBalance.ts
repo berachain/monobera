@@ -9,14 +9,10 @@ import {
   TokenBalance,
 } from "~/types/global";
 import { useBeraJs } from "../contexts";
-export interface UsePollHoneyBalancesResponse
-  extends DefaultHookReturnType<TokenBalance | undefined> {
-  refetch: () => void;
-}
 
 export const usePollHoneyBalance = (
   options?: DefaultHookOptions,
-): UsePollHoneyBalancesResponse => {
+): DefaultHookReturnType<TokenBalance | undefined> => {
   const publicClient = usePublicClient();
   const { account, config: beraConfig } = useBeraJs();
   const QUERY_KEY = [account, "honeyBalance"];
