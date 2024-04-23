@@ -1,0 +1,62 @@
+# usePoolRecentSwaps
+
+Action for creating the payload for performing a withdraw liquidity operation on a pool.
+
+## Initialization
+
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
+
+## Import
+
+```ts
+import { usePoolRecentSwaps } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { usePoolRecentSwaps } from "@bera/berajs";
+
+const pool: PoolV2 = ...
+
+function App() {
+    const { data: recentSwaps, isLoading } = usePoolRecentSwaps({ pool });
+
+    ...
+};
+```
+
+## Parameters
+
+```ts
+usePoolRecentSwaps(args: {pool: PoolV2}, options?: {config: BeraConfig, opts: SWRConfiguration});
+```
+
+| Name             | type               | Description                                                   | Required |
+| ---------------- | :----------------- | :------------------------------------------------------------ | :------: |
+| `args.pool`      | `PoolV2`           | pool of which to fetch recent swaps                           |  `true`  |
+| `options.config` | `BeraConfig`       | BeraConfig object containing addresses for relevant resources | `false`  |
+| `options.opts`   | `SWRConfiguration` | SWR options for the underlying useSWR hook                    | `false`  |
+
+## Returns
+
+Return type: `DefaultHookReturnType<GetPoolRecentSwapsResult \| undefined>`
+
+| Name           | type                                           | Description                                                                | Optional |
+| -------------- | :--------------------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `GetPoolRecentSwapsResult \| undefined`        | pool recent swaps data                                                     |  `true`  |
+| `error`        | `any \| undefined`                             | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: GetPoolRecentSwapsResult) => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                                   | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                                      | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                                      | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+`GetPoolRecentSwapsResult` type is [documented here](/actions/dex/getPoolRecentSwaps).
+
+## Returns
+
+```ts
+import { type PayloadReturnType } from "berajs";
+
+type result = Promise<PayloadReturnType | undefined>;
+```
