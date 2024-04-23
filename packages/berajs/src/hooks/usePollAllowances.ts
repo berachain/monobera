@@ -1,27 +1,27 @@
 import useSWR, { useSWRConfig } from "swr";
-import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
-import { Token } from "~/types";
-import { DefaultHookOptions } from "..";
 import { getAllowances } from "../actions/dex";
-
-interface AllowanceToken extends Token {
-  allowance: bigint;
-  formattedAllowance: string;
-}
+import {
+  AllowanceToken,
+  DefaultHookOptions,
+  DefaultHookReturnType,
+} from "~/types/global";
+import { Address } from "viem";
+import { Token } from "~/types";
 
 type UsePollAllowancesArgs = {
-  contract: string;
+  spender: string;
   tokens: Token[];
 };
-
-export interface IUsePollAllowancesResponse {
-  useCurrentAllowancesForContract: () => AllowanceToken[];
-  useSelectedAllowanceForContract: (address: string) => AllowanceToken;
-  refresh: () => void;
+export interface UsePollAllowancesResponse
+  extends DefaultHookReturnType<AllowanceToken[] | undefined> {
+  useSelectedAllowance: (
+    address: Address | undefined,
+  ) => AllowanceToken | undefined;
+  refetch: () => void;
 }
 
 /**
@@ -34,58 +34,45 @@ export interface IUsePollAllowancesResponse {
 export const usePollAllowances = (
   args: UsePollAllowancesArgs,
   options?: DefaultHookOptions,
-): IUsePollAllowancesResponse => {
-  const { contract, tokens } = args;
+): UsePollAllowancesResponse => {
   const publicClient = usePublicClient();
   const { mutate } = useSWRConfig();
   const { account, config: beraConfig } = useBeraJs();
-  const QUERY_KEY = [account, tokens, contract, "allowances"];
-  useSWR(
+  const QUERY_KEY = [account, args?.tokens, args?.spender, "allowances"];
+  const swrResponse = useSWR<AllowanceToken[] | undefined>(
     QUERY_KEY,
     async () => {
       return getAllowances({
-        tokens,
+        tokens: args?.tokens,
         account,
         config: options?.beraConfigOverride ?? beraConfig,
-        contract,
+        spender: args?.spender,
         publicClient,
-        queryKey: QUERY_KEY,
-        mutate,
-        method: "allowance",
       });
     },
     {
       ...options?.opts,
-      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
     },
   );
-
-  /**
-   *
-   * @returns the current allowances for the given contract
-   */
-  const useCurrentAllowancesForContract = (): AllowanceToken[] => {
-    const { data: assetWalletBalances = undefined } =
-      useSWRImmutable(QUERY_KEY);
-    return assetWalletBalances;
-  };
 
   /**
    *
    * @param address the address of the token to get the allowance for
    * @returns the current allowance for the contract for that token
    */
-  const useSelectedAllowanceForContract = (address: string): AllowanceToken => {
-    const { data: assetWalletBalances = undefined } = useSWRImmutable([
-      ...QUERY_KEY,
-      address,
-    ]);
-    return assetWalletBalances;
+  const useSelectedAllowance = (
+    address: Address | undefined,
+  ): AllowanceToken | undefined => {
+    if (!address) return undefined;
+    return swrResponse.data?.find(
+      (item: AllowanceToken) => item.address === address,
+    );
   };
 
   return {
-    useCurrentAllowancesForContract,
-    useSelectedAllowanceForContract,
-    refresh: () => mutate(QUERY_KEY),
+    ...swrResponse,
+    useSelectedAllowance,
+    refetch: () => void mutate(QUERY_KEY),
   };
 };

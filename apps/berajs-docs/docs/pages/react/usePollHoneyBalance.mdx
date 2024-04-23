@@ -1,32 +1,17 @@
 # usePollHoneyBalance
 
-React hook to retrieve the current honey balance of an address.
+React hook to retrieve the current Honey balance of the connected account.
 
 ## Import
 
-```ts
+```ts twoslash
 import { usePollHoneyBalance } from "@bera/berajs";
 ```
 
 ## Usage
 
-:::code-group
-
 ```ts twoslash [example.ts]
 import { usePollHoneyBalance } from "@bera/berajs";
-
-import { beraConfig } from "./config";
-
-const { useHoneyBalance, useRawHoneyBalance, isLoading, isValidating } =
-  usePollHoneyBalance({
-    config: beraConfig,
-  });
-
-const { data: formattedHoneyPrice } = useHoneyBalance();
-const { data: rawHoneyPrice } = useRawHoneyBalance();
-```
-
-```ts twoslash [config.ts] filename="config.ts"
 import { BeraConfig } from "@bera/berajs";
 
 // required configs for getHoneyBalance
@@ -35,12 +20,23 @@ export const beraConfig: BeraConfig = {
     honeyAddress: "0x....",
   },
 };
+  
+const { data: honeyBalance, refetch } =
+  usePollHoneyBalance({
+    config: beraConfig,
+  });
+  
 ```
 
-:::
+## Parameters
+
+```ts twoslash
+import { type DefaultHookProps } from "@bera/berajs";
+```
+
 
 ## Returns
 
-```ts
+```ts twoslash
 import { type UsePollHoneyBalancesResponse } from "@bera/berajs";
 ```

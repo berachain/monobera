@@ -123,11 +123,10 @@ const RepayModalContent = ({
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;
 }) => {
-  const { useAllowance } = usePollAllowance({
-    contract: lendPoolImplementationAddress,
+  const { data: allowance } = usePollAllowance({
+    spender: lendPoolImplementationAddress,
     token: honey,
   });
-  const allowance = useAllowance();
 
   const tokenBalance = honey.formattedBalance ?? "0";
   const debtBalance = vdHoney.formattedBalance ?? "0";

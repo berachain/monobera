@@ -10,6 +10,9 @@ interface FetchHoneyPricesArgs {
   config: BeraConfig;
 }
 
+export interface TokenHoneyPrices {
+  [key: string]: string;
+}
 /**
  * fetch the current honey prices of a series of tokens
  */
@@ -17,7 +20,7 @@ interface FetchHoneyPricesArgs {
 export const getTokenHoneyPrices = async ({
   tokenAddresses,
   config,
-}: FetchHoneyPricesArgs): Promise<{ [key: string]: string } | undefined> => {
+}: FetchHoneyPricesArgs): Promise<TokenHoneyPrices | undefined> => {
   if (!config.subgraphs?.dexSubgraph) {
     throw new Error("dex subgraph uri s not found in config");
   }
@@ -46,7 +49,7 @@ export const getTokenHoneyPrices = async ({
         [getAddress(price.id)]: price.price,
       }),
       {},
-    );
+    ) as TokenHoneyPrices;
   } catch (e) {
     console.log(e);
     return undefined;
