@@ -10,7 +10,6 @@ export * from "./modules";
 export * from "./usePollBalance";
 export * from "./usePollAllowance";
 export * from "./useOct";
-export * from "./usePollHoneyBalance";
 export * from "./usePollBeraBalance";
 export * from "./usePollTransactionCount";
 export * from "./useGasData";
