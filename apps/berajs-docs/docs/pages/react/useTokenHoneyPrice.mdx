@@ -10,20 +10,8 @@ import { useTokenHoneyPrice } from "@bera/berajs";
 
 ## Usage
 
-:::code-group
-
 ```ts twoslash [example.ts]
 import { useTokenHoneyPrice } from "@bera/berajs";
-
-import { beraConfig } from "./config";
-
-const { data: tokenPriceInHoney } = useTokenHoneyPrice({
-  config: beraConfig,
-  args: { tokenAddress: "0x0..." },
-});
-```
-
-```ts twoslash [config.ts] filename="config.ts"
 import { BeraConfig } from "@bera/berajs";
 
 // required configs for getTokenHoneyPrice
@@ -32,14 +20,19 @@ export const beraConfig: BeraConfig = {
     dexSubgraph: "https://...",
   },
 };
-```
 
-:::
+const { data: tokenPriceInHoney, refetch } = useTokenHoneyPrice({
+   tokenAddress: "0x0..."
+  }, 
+  {
+    beraConfigOverride: beraConfig // optional arg to override default beraConfig
+  });
+```
 
 ## Parameters
 
 ```ts twoslash
-import { type UseTokenHoneyPriceRequest } from "@bera/berajs";
+import { type UseTokenHoneyPriceArgs } from "@bera/berajs";
 ```
 
 ## Returns
