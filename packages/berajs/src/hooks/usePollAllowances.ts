@@ -12,7 +12,7 @@ import {
 } from "~/types/global";
 import { getAllowances } from "../actions/dex";
 
-type UsePollAllowancesArgs = {
+export type UsePollAllowancesArgs = {
   spender: string;
   tokens: Token[];
 };

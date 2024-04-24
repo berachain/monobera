@@ -12,7 +12,7 @@ import {
   Token,
 } from "~/types";
 
-type UsePollAllowanceArgs = {
+export type UsePollAllowanceArgs = {
   spender: Address;
   token: Token | undefined;
 };
@@ -29,7 +29,7 @@ export const usePollAllowance = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType<AllowanceToken | undefined> => {
   const publicClient = usePublicClient();
-  const { account, config: beraConfig } = useBeraJs();
+  const { account } = useBeraJs();
 
   const method = "allowance";
   const QUERY_KEY = [
