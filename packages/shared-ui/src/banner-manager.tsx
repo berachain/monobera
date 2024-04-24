@@ -30,14 +30,12 @@ const BannerManager = ({ appName }: BannerManagerProps) => {
 
   return (
     <>
-      <div className="sticky pt-[74px]">
-        {Object.values(DappBannerType).map((type) => (
-          <div key={type}>
-            {shouldShowBanner(type, appNameOrDefault) &&
-              bannerConfig[appNameOrDefault]?.[type]?.bannerComponent}
-          </div>
-        ))}
-      </div>
+      {Object.values(DappBannerType).map((type) => (
+        <div key={type}>
+          {shouldShowBanner(type, appNameOrDefault) &&
+            bannerConfig[appNameOrDefault]?.[type]?.bannerComponent}
+        </div>
+      ))}
     </>
   );
 };
