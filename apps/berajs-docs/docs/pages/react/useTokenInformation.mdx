@@ -24,17 +24,16 @@ export const beraConfig: BeraConfig = {
 const {
   data: tokenInformation
 } = useTokenInformation({
-  config: beraConfig,
-  args: {
     address: "0x0...",
-  },
+}, {
+    beraConfigOverride: beraConfig // optional arg to override default beraConfig
 });
 ```
 
 ## Parameters
 
 ```ts twoslash
-import { type UseTokenInformationRequest } from "@bera/berajs";
+import { type useTokenInformationArgs } from "@bera/berajs";
 ```
 
 ## Returns

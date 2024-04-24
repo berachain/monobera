@@ -9,13 +9,14 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ## Import
 
 ```ts
-import { getWalletBalances } from "@bera/berajs";
+import { getWalletBalances } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getWalletBalances, type Token } from "@bera/berajs";
+import { getWalletBalances, type Token } from "@bera/berajs/actions";
+import { type BeraConfig } from "@bera/berajs";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 
@@ -25,24 +26,31 @@ const publicClient = createPublicClient({
   transport: http(),
 });
 
+// required configs for getWalletBalances
+export const beraConfig: BeraConfig = {
+    endpoints: {
+        tokenList: 'https://..',
+    }
+}
+
 const walletBalances = await getWalletBalances({
   account,
   tokenList,
-  externalTokenList,
-  queryKey,
+  config: beraConfig,
   publicClient,
-  mutate,
 });
 ```
 
 ## Parameters
 
-```ts twoslash
-import { type IFetchWalletBalancesRequestArgs } from "@bera/berajs";
+```ts
+import { type GetWalletBalances } from "@bera/berajs/actions";
 ```
 
 ## Returns
 
-```ts
-type result = Promise<number | BalanceToken[] | undefined>;
+```ts 
+import { type GetWalletBalancesResponse } from "@bera/berajs/actions";
+
+type result = Promise<GetWalletBalancesResponse>;
 ```

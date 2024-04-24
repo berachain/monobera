@@ -28,7 +28,7 @@ const {
     addNewToken,
     removeToken
 } = useTokens({
-    config: beraConfig
+    beraConfigOverride: beraConfig // optional arg to override default beraConfig
 })
 
 const newToken: Token = {

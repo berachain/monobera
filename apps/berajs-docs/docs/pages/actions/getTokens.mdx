@@ -9,36 +9,39 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ## Import
 
 ```ts
-import { getTokens } from "@bera/berajs";
+import { getTokens } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getTokens, type Token } from "@bera/berajs";
-import { useLocalStorage } from "usehooks-ts";
+import { getTokens, type Token } from "@bera/berajs/actions";
 
-const TOKEN_KEY = "tokens";
+import { beraConfig } from "./config";
 
-const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
-  Token[]
->(TOKEN_KEY, []);
+const customToken: Token = {
+  address: "0x0...",
+  decimals: 18,
+  symbol: "TKN",
+  name: "TKN",
+}
 
 const tokens = await getTokens({
-  localStorageTokenList,
+  externalList: [customToken], // optional list of Token Objects to combine with the token list in the config
+  config: beraConfig,
 });
 ```
 
 ## Parameters
 
-```ts
-import { type IFetchTokensRequestArgs } from "@bera/berajs";
+```ts 
+import { type GetTokensRequest } from "@bera/berajs/actions";
 ```
 
 ## Returns
 
 ```ts
-import { type IFetchTokensResponse } from "@bera/berajs";
+import { type GetTokens } from "@bera/berajs/actions";
 
-type result = Promise<IFetchTokensResponse | Token[] | undefined>;
+type result = Promise<GetTokens>;
 ```

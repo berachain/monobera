@@ -184,18 +184,6 @@ export default defineConfig({
           items: [{ text: "Getting Started", link: "/react/getting-started/" }],
         },
         {
-          text: "sortBaseQuoteAddresses",
-          link: "/actions/sortBaseQuoteAddresses/",
-        },
-        {
-          text: "getBeraLpAddress",
-          link: "/actions/getBeraLpAddress/",
-        },
-        {
-          text: "getBeraBalance",
-          link: "/actions/getBeraBalance/",
-        },
-        {
           text: "getAllowance",
           link: "/actions/getAllowance/",
         },
@@ -218,6 +206,22 @@ export default defineConfig({
         {
           text: "getWalletBalances",
           link: "/actions/getWalletBalances/",
+        },
+        {
+          text: "getPoolUserPosition",
+          link: "/actions/getPoolUserPosition/",
+        },
+        {
+          text: "sortBaseQuoteAddresses",
+          link: "/actions/sortBaseQuoteAddresses/",
+        },
+        {
+          text: "getBeraLpAddress",
+          link: "/actions/getBeraLpAddress/",
+        },
+        {
+          text: "getBeraBalance",
+          link: "/actions/getBeraBalance/",
         },
       ],
     },

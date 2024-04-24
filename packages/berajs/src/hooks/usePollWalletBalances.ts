@@ -16,7 +16,7 @@ export interface BalanceToken extends Token {
   formattedBalance: string;
 }
 
-export type UsePollAllowancesArgs = {
+export type UsePollWalletBalancesArgs = {
   externalTokenList?: Token[];
 };
 export interface UsePollBalancesResponse
@@ -27,7 +27,7 @@ export interface UsePollBalancesResponse
 }
 
 export const usePollWalletBalances = (
-  args?: UsePollAllowancesArgs,
+  args?: UsePollWalletBalancesArgs,
   options?: DefaultHookOptions,
 ): UsePollBalancesResponse => {
   const publicClient = usePublicClient();

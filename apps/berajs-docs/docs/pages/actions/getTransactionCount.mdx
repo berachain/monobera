@@ -9,13 +9,13 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ## Import
 
 ```ts
-import { getTransactionCount } from "@bera/berajs";
+import { getTransactionCount } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts [example.ts]
-import { getTransactionCount } from "@bera/berajs";
+import { getTransactionCount } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 
@@ -33,12 +33,13 @@ await getTransactionCount({
 
 ## Parameters
 
-```ts twoslash
-import { type IFetchTransactionCountArgs } from "berajs";
+```ts
+import { type GetTransactionCount } from "@bera/berajs/actions";
 ```
 
 ## Returns
 
 ```ts
-type result = Promise<number | undefined>;
+import { type GetTransactionCountResponse } from "@bera/berajs/actions";
+type result = Promise<GetTransactionCountResponse>;
 ```

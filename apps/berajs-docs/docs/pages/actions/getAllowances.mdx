@@ -9,13 +9,13 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ## Import
 
 ```ts
-import { getAllowances } from "@bera/berajs";
+import { getAllowances } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getAllowances } from "@bera/berajs";
+import { getAllowances } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 import { usePublicClient } from "wagmi";
@@ -42,15 +42,22 @@ const { data } = await getAllowance({
   tokens,
   account,
   config,
-  contract,
+  spender,
   publicClient,
-  queryKey,
-  mutate,
 });
 ```
 
 ## Parameters
 
 ```ts
-import { type IGetAllowancesRequest } from "berajs";
+import { type GetAllowances } from "@bera/berajs/actions";
 ```
+
+## Returns
+
+```ts
+import { type GetAllowancesResponse } from "@bera/berajs/actions";
+type result = Promise<GetAllowancesResponse>;
+
+```
+

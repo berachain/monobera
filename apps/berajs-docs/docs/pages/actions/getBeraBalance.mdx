@@ -9,15 +9,13 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ## Import
 
 ```ts
-import { getBeraBalance } from "@bera/berajs";
+import { getBeraBalance } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
-:::code-group
-
-```ts [example.ts]
-import { getBeraBalance } from "@bera/berajs";
+```ts
+import { getBeraBalance } from "@bera/berajs/actions";
 
 const exampleAddress = "0x1..";
 
@@ -27,12 +25,9 @@ const data = await getBeraBalance({
 });
 ```
 
-````
-
-:::
 
 ## Returns
 
 ```ts
 Promise<number | undefined>
-````
+```

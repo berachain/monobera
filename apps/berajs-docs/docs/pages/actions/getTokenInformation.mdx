@@ -9,30 +9,47 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ## Import
 
 ```ts
-import { getTokenInformation } from "@bera/berajs";
+import { getTokenInformation } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 :::code-group
 
-```ts twoslash [example.ts]
-import { defaultBeraConfig, getTokenInformation } from "@bera/berajs";
-import { useConfig, usePublicClient } from "wagmi";
+```ts [example.ts]
+import { getTokenInformation } from "@bera/berajs/actions";
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
 
-const config = useConfig();
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain,
+  transport: http(),
+});
+
+// required configs for getWalletBalances
+export const beraConfig: BeraConfig = {
+    contracts: {
+        multicallAddress: '0x...',
+    }
+}
 
 await getTokenInformation({
-  dispatch,
   address,
-  setTokenInformation,
-  setError,
-  config, // wagmi config
+  config: beraConfig,
+  publicClient 
 });
 ```
 
 ## Parameters
 
 ```ts
-import { type IFetchTokenPriceInformationArgs } from "@bera/berajs";
+import { type GetTokenInformation } from "@bera/berajs/actions";
+```
+
+## Returns
+
+```ts
+import { type GetTokenInformationResponse } from "@bera/berajs/actions";
+type result = Promise<GetTokenInformationResponse>;
 ```

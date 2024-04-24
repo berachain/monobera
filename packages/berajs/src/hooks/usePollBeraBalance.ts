@@ -8,7 +8,6 @@ import {
   DefaultHookReturnType,
   TokenBalance,
 } from "~/types/global";
-import { useBeraJs } from "../contexts";
 import { Address } from "viem";
 
 export type UsePollBeraBalanceArgs = {
