@@ -4,8 +4,13 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { rpcBannerEnabled } from "@bera/config";
-import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
+import { perpsName } from "@bera/config";
+import {
+  Header,
+  TailwindIndicator,
+  TermOfUseModal,
+  useActiveBanners,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -26,6 +31,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
+  const activeBanners = useActiveBanners();
 
   return (
     <html lang="en">
@@ -56,12 +62,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
             </div>
             <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-              <Header navItems={navItems} />
+              <Header navItems={navItems} appName={perpsName} />
               <main
-                className={cn(
-                  "w-full",
-                  rpcBannerEnabled ? "pt-[120px]" : "pt-[72px]",
-                )}
+                className="w-full pt-start"
+                style={{ paddingTop: `${50 * activeBanners}px` }}
               >
                 {props.children}
               </main>

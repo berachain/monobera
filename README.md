@@ -14,11 +14,9 @@
 
 ![CI](https://github.com/berachain/monobera/actions/workflows/quality.yml/badge.svg?branch=v2)
 
-
 #### Commands
 
 Monobera requires node 18+.
-
 
 | Script                   | Description                                                                                              |
 | ------------------------ | -------------------------------------------------------------------------------------------------------- |
@@ -85,18 +83,20 @@ To run Bex for example, run `pnpm i && pnpm dev:dex`
 | `packages/beracrocswap` | A forked version of [CrocSwap SDK](https://github.com/CrocSwap/sdk) to work better with `packages/berajs` |
 
 #### Environments
+
 All Berachain dapps are built to be single chain applications.
-| Environment Variables | Environment                                                                                    |
+| Environment Variables | Environment |
 | --------------------- | ---------------------------------------------------------------------------------------------- |
-| `.env.devnet`         | Environment variables for running the application against our Devnet. Subject to change often  |
-| `.env.testnet`        | Environment variables for running the application against our Testnet. Subject to change often |
-| `.env.prod`           | thoon                                                                                          |
+| `.env.devnet` | Environment variables for running the application against our Devnet. Subject to change often |
+| `.env.testnet` | Environment variables for running the application against our Testnet. Subject to change often |
+| `.env.prod` | thoon |
 
 To run our applications in one of these environments, simply copy and paste a `.env.*` file into your `.env` and run any application.
 
 #### Tooling & Libraries
 
 A short list of tooling and libraries we use across all apps and packages.
+
 - [biomejs](https://biomejs.dev/)
 - [knip](https://knip.dev/)
 - [turbo](https://turbo.build/)
@@ -107,3 +107,9 @@ A short list of tooling and libraries we use across all apps and packages.
 - [vocs](https://vocs.dev/)
 - [shadcn](https://ui.shadcn.com/)
 - [tailwind](https://tailwindcss.com/)
+
+#### Dapps banner management
+
+Banners serve as an essential tool for communicating urgent messages or event-related information to users across the site. The management of these banners is centralized in the Bannerconfig component, located within the `packages/shared-ui` directory. This allows for effective global notification during scenarios like RPC issues or network congestion.
+For targeted communications, banners can be configured to appear on specific pages by listing the desired paths in the hrefs field. For example, to display a banner only on the "Pools," "Swap," and homepage in BEX, you would set `hrefs` to `["/pools", "/swap", "/"]`.
+To modify the banner configuration, submit a PR with changes to the `enabled` field in the `bannerConfig`. This will update the banner's active status and display it as specified.

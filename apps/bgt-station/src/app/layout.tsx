@@ -4,8 +4,12 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { rpcBannerEnabled } from "@bera/config";
-import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
+import {
+  Header,
+  TailwindIndicator,
+  TermOfUseModal,
+  useActiveBanners,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -26,6 +30,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
+  const activeBanners = useActiveBanners();
 
   return (
     <html lang="en" className="bg-background">
@@ -59,10 +64,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <div className="z-10 flex-1">
                 <Header navItems={navItems} />
                 <main
-                  className={cn(
-                    "w-full",
-                    rpcBannerEnabled ? "pt-start-lg" : "pt-start",
-                  )}
+                  className="w-full pt-start"
+                  style={{ paddingTop: `${50 * activeBanners}px` }}
                 >
                   {props.children}
                 </main>
