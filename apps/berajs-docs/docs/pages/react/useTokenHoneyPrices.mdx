@@ -11,7 +11,17 @@ import { useTokenHoneyPrices } from "@bera/berajs";
 ## Usage
 
 ```ts twoslash [example.ts]
-import { useTokenHoneyPrices, Token } from "@bera/berajs";
+import { Token, useTokenHoneyPrices } from "@bera/berajs";
+
+import { beraConfig } from "./config";
+
+const { data: tokenPricesInHoney, refresh } = useTokenHoneyPrices({
+  config: beraConfig,
+  args: { tokenAddresses: ["0x0...", "0x1..."] },
+});
+```
+
+```ts twoslash [config.ts] filename="config.ts"
 import { BeraConfig } from "@bera/berajs";
 
 // required configs for getTokenHoneyPrices
@@ -21,12 +31,16 @@ export const beraConfig: BeraConfig = {
   },
 };
 
-const { data: tokenPricesInHoney, refetch } = useTokenHoneyPrices({
-  tokenAddresses:  ["0x0...", "0x1..."]
-}, {
-  beraConfigOverride: beraConfig // optional arg to override default beraConfig
-});
+const { data: tokenPricesInHoney, refetch } = useTokenHoneyPrices(
+  {
+    tokenAddresses: ["0x0...", "0x1..."],
+  },
+  {
+    beraConfigOverride: beraConfig, // optional arg to override default beraConfig
+  },
+);
 ```
+
 ## Parameters
 
 ```ts twoslash

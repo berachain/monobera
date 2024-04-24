@@ -18,12 +18,11 @@ const exampleToken: Token = {
   decimals: 18,
   symbol: "TKN",
   name: "TKN",
-}
-const { data: allowance, refetch } = usePollAllowance({
-    spender: "0x0...",
-    token: exampleToken,
+};
+const { data: allowance, refresh } = usePollAllowance({
+  spender: "0x0...",
+  token: exampleToken,
 });
-
 ```
 
 ## Parameters

@@ -11,8 +11,7 @@ import { useTokenInformation } from "@bera/berajs";
 ## Usage
 
 ```ts twoslash [example.ts]
-import { useTokenInformation } from "@bera/berajs";
-import { BeraConfig } from "@bera/berajs";
+import { BeraConfig, useTokenInformation } from "@bera/berajs";
 
 // required configs for useTokenInformation
 export const beraConfig: BeraConfig = {
@@ -21,9 +20,9 @@ export const beraConfig: BeraConfig = {
   },
 };
 
-const {
-  data: tokenInformation
-} = useTokenInformation({
+const { data: tokenInformation } = useTokenInformation({
+  config: beraConfig,
+  args: {
     address: "0x0...",
 }, {
     beraConfigOverride: beraConfig // optional arg to override default beraConfig

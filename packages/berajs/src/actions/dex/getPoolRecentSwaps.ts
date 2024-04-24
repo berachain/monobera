@@ -10,9 +10,7 @@ interface IGetPoolRecentSwapsProps {
   config: BeraConfig;
 }
 
-interface ISwapWithHoneyValue extends Omit<ISwaps, "swapIn" | "swapOut"> {
-  swapIn?: Token;
-  swapOut?: Token;
+interface ISwapWithHoneyValue extends ISwaps {
   estimatedHoneyValue: number;
   swapInAmount: number;
   swapOutAmount: number;
@@ -119,8 +117,8 @@ export const getPoolRecentSwaps = async ({
       return {
         ...swap,
         estimatedHoneyValue,
-        swapIn,
-        swapOut,
+        swapIn: swapIn as Token,
+        swapOut: swapOut as Token,
         swapInAmount,
         swapOutAmount,
       };
