@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { type GlobalParams } from "@bera/proto/src";
 import {
   ResizableHandle,
@@ -18,6 +18,16 @@ import { OrderChart } from "../components/order-chart";
 import { OrderHistory } from "../components/order-history";
 import { CreatePosition } from "./create-position";
 
+const calcWidth = (width: number) => {
+  if (width < 640) {
+    return "sm";
+  }
+  if (width < 1024) {
+    return "md";
+  }
+  return "lg";
+};
+
 type Props = {
   markets: IMarket[];
   defaultMarket: IMarket;
@@ -28,6 +38,20 @@ export default function OrderWrapper({
   defaultMarket,
   params,
 }: Props) {
+  const [size, setSize] = useState<"sm" | "md" | "lg">(
+    calcWidth(typeof window !== "undefined" ? window?.innerWidth : 0),
+  );
+  useEffect(() => {
+    const handleResize = () => {
+      const width = calcWidth(window?.innerWidth);
+      width !== size && setSize(width);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [size]);
+
   const [tabType, setTabType] = useState<TableTabTypes>("positions");
   const [selection, setSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -43,14 +67,16 @@ export default function OrderWrapper({
   return (
     <>
       <div className="mx-2 block h-[500px] rounded-md border border-border lg:hidden">
-        <OrderChart
-          setSelection={setSelection}
-          selection={selection}
-          pagination={pagination}
-          tabType={tabType}
-          markets={markets}
-          marketName={defaultMarket?.name}
-        />
+        {size !== "lg" && (
+          <OrderChart
+            setSelection={setSelection}
+            selection={selection}
+            pagination={pagination}
+            tabType={tabType}
+            markets={markets}
+            marketName={defaultMarket?.name}
+          />
+        )}
       </div>
       <div className="flex h-full w-full flex-col lg:flex-row lg:overflow-auto">
         <CreatePosition market={defaultMarket} params={params} />
@@ -61,14 +87,17 @@ export default function OrderWrapper({
           >
             <ResizablePanel>
               <div className="mr-2 hidden h-[calc(100%-8px)] flex-shrink-0 rounded-md border border-border lg:block">
-                <OrderChart
-                  pagination={pagination}
-                  setSelection={setSelection}
-                  markets={markets}
-                  marketName={defaultMarket.name}
-                  selection={selection}
-                  tabType={tabType}
-                />
+                {size === "lg" && (
+                  <OrderChart
+                    key="lg"
+                    pagination={pagination}
+                    setSelection={setSelection}
+                    markets={markets}
+                    marketName={defaultMarket.name}
+                    selection={selection}
+                    tabType={tabType}
+                  />
+                )}
               </div>
             </ResizablePanel>
             <ResizableHandle className="mx-2 mb-2 hidden !w-[calc(100%-24px)] lg:flex" />
@@ -81,6 +110,7 @@ export default function OrderWrapper({
                 tabType={tabType}
                 setTabType={handleTabTypes}
                 markets={markets}
+                size={size}
               />
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -93,6 +123,7 @@ export default function OrderWrapper({
               tabType={tabType}
               setTabType={handleTabTypes}
               markets={markets}
+              size={size}
             />
           </div>
         </div>

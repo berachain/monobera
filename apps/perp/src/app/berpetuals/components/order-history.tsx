@@ -6,7 +6,7 @@ import { getPnl } from "~/hooks/useCalculatePnl";
 import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
 import type { CloseOrderPayload } from "~/types/order-history";
 import type { TableTabTypes } from "~/types/table-tab-types";
@@ -22,6 +22,7 @@ export function OrderHistory({
   setSelection,
   pagination,
   setPagination,
+  size,
 }: {
   markets: IMarket[];
   tabType: TableTabTypes;
@@ -30,27 +31,15 @@ export function OrderHistory({
   setSelection: (selection: RowSelectionState) => void;
   pagination: PaginationState;
   setPagination: (pagination: PaginationState) => void;
+  size: "sm" | "md" | "lg";
 }) {
-  const [mobile, setMobile] = useState(false);
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640 && !mobile) {
-        setMobile(true);
-      } else if (window.innerWidth >= 640 && mobile) {
-        setMobile(false);
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [mobile]);
-
   const { useMarketOpenPositions } = usePollOpenPositions();
 
   const { useMarketClosedPositions } = usePollTradingHistory();
 
   const { useMarketOpenOrders } = usePollOpenOrders();
+
+  const { marketPrices } = usePollPrices();
 
   const openPositions = useMarketOpenPositions(markets);
 
@@ -120,20 +109,13 @@ export function OrderHistory({
     }, []);
   }, [openOrders, selection]);
 
-  const { usePriceFeed } = usePricesSocket();
-
-  const priceFeed = usePriceFeed();
-
   const allPositions = useMemo(() => {
     // performance errors can occur if too many positions
     if (openPositions === undefined || closedPositions === undefined) {
       return [];
     }
     const positions = openPositions?.map((position) => {
-      const price = priceFeed
-        ? JSON.parse(priceFeed)[Number(position.market?.pair_index ?? 0)]
-        : 0;
-
+      const price = marketPrices[position?.market?.name ?? ""] ?? "0";
       const estPnl = getPnl({
         currentPrice: price,
         openPosition: position,
@@ -166,11 +148,11 @@ export function OrderHistory({
     });
     const orders = [...positions, ...closedPositions];
     // sort the orders by open time on mobile cards
-    if (mobile && tabType === "history") {
+    if (size === "sm" && tabType === "history") {
       orders.sort((a, b) => Number(b.open_time) - Number(a.open_time));
     }
     return orders;
-  }, [openPositions, priceFeed, closedPositions, mobile, tabType]);
+  }, [openPositions, marketPrices, closedPositions, size, tabType]);
 
   return (
     <div className="mx-2 mb-10 flex h-full w-[calc(100%-16px)] flex-col overflow-auto rounded-md border border-border lg:mb-2 lg:ml-0 lg:w-[calc(100%-8px)]">
@@ -196,7 +178,7 @@ export function OrderHistory({
         allPositions={allPositions}
         history={closedPositions}
         markets={markets}
-        mobile={mobile}
+        size={size}
       />
     </div>
   );

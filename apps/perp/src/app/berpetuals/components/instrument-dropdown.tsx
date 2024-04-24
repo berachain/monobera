@@ -14,9 +14,8 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import { type IMarket } from "~/types/market";
 
 interface InstrumentProps {
@@ -32,22 +31,17 @@ const MarketPriceOverview = ({
   market: IMarket;
   priceChange: number[];
 }) => {
-  const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
-  const priceBN = useMemo(() => formatFromBaseUnit(price ?? 0, 10), [price]); // BigNumber
-  const formattedPrice = useMemo(() => priceBN.toString(10) ?? "0", [priceBN]); // string
-  const historicPrice = priceChange[Number(market.pair_index)];
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[market?.name ?? ""] ?? "0";
+  const historicPrice = priceChange[Number(market?.pair_index) ?? 0];
   const difference = useMemo(() => {
-    return calculatePercentDifference(
-      historicPrice?.toString() ?? "0",
-      formattedPrice,
-    );
-  }, [historicPrice, formattedPrice]);
+    return calculatePercentDifference(historicPrice?.toString() ?? "0", price);
+  }, [historicPrice, price]);
   return (
     <div>
-      <div className="text-lg font-semibold leading-7 text-foreground ">
+      <div className="text-lg font-semibold leading-7 text-foreground text-right">
         {price !== undefined ? (
-          formatUsd(formattedPrice)
+          formatUsd(price)
         ) : (
           <Skeleton className="h-[24px] w-[80px]" />
         )}

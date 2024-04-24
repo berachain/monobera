@@ -5,23 +5,22 @@ import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import type { ColumnDef } from "@tanstack/react-table";
+import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
 
-const MarketPrice = ({ pairIndex }: { pairIndex: number }) => {
-  const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(pairIndex);
+const MarketPrice = ({ name }: { name: string }) => {
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[name ?? ""] ?? "0";
 
   return (
     <div className="w-[88px]">
       {" "}
-      {price !== undefined ? (
-        <span>
-          {formatUsd(formatFromBaseUnit(price ?? "0", 10).toString(10))}
-        </span>
+      {price !== "0" ? (
+        <span>{formatUsd(price)}</span>
       ) : (
         <Skeleton className="h-[16px] w-[80px]" />
       )}
@@ -30,26 +29,27 @@ const MarketPrice = ({ pairIndex }: { pairIndex: number }) => {
 };
 
 const Change = ({
-  pairIndex,
+  name,
   dailyHistoricPrice,
 }: {
-  pairIndex: number;
+  name: string;
   dailyHistoricPrice: number;
 }) => {
-  const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(pairIndex ?? 0);
-  const priceBN = useMemo(() => formatFromBaseUnit(price ?? 0, 10), [price]); // BigNumber
-  const formattedPrice = useMemo(() => priceBN.toString(10) ?? "0", [priceBN]); // string
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[name ?? ""] ?? "0";
+
   const difference = useMemo(() => {
     return calculatePercentDifference(
       dailyHistoricPrice?.toString() ?? "0",
-      formattedPrice,
+      price,
     );
-  }, [dailyHistoricPrice, formattedPrice]);
+  }, [dailyHistoricPrice, price]);
 
   const priceDifference = useMemo(() => {
-    return priceBN.minus(dailyHistoricPrice ?? 0).toString(10);
-  }, [dailyHistoricPrice, priceBN]);
+    return BigNumber(price)
+      .minus(dailyHistoricPrice ?? 0)
+      .toString(10);
+  }, [dailyHistoricPrice, price]);
 
   return (
     <div className="flex w-[88px] flex-col gap-1">
@@ -61,7 +61,7 @@ const Change = ({
             : "text-destructive-foreground",
         )}
       >
-        {price !== undefined ? (
+        {price !== "0" ? (
           <span>
             {!difference.isNaN() ? difference.dp(2).toString(10) : 0}%
           </span>
@@ -70,7 +70,7 @@ const Change = ({
         )}
       </div>
       <div className="text-xs font-medium leading-tight text-muted-foreground">
-        {price !== undefined ? (
+        {price !== "0" ? (
           <span>{!difference.isNaN() ? formatUsd(priceDifference) : "$0"}</span>
         ) : (
           <Skeleton className="h-[16px] w-[80px]" />
@@ -113,9 +113,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Index Price" />
     ),
-    cell: ({ row }) => (
-      <MarketPrice pairIndex={Number(row.original.pair_index)} />
-    ),
+    cell: ({ row }) => <MarketPrice name={row.original.name} />,
     accessorKey: "index_price",
     enableSorting: false,
   },
@@ -126,7 +124,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     cell: ({ row }) => {
       return (
         <Change
-          pairIndex={Number(row.original.pair_index)}
+          name={row.original.name}
           dailyHistoricPrice={Number(row.original.dailyHistoricPrice)}
         />
       );

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
 
-import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import type { IMarketOrder } from "~/types/order-history";
 
 interface ICalculatePnl {
@@ -51,7 +51,7 @@ export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
     const leverage = BigNumber(openPosition.leverage);
 
     const pnl = openPrice
-      .minus(BigNumber(currentPrice))
+      .minus(formatToBaseUnit(currentPrice, 10))
       .times(leverage.times(collateral))
       .times(openPosition.buy ? -1 : 1)
       .div(openPrice)
