@@ -248,7 +248,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
   }, [swapInfo, selectedFrom, selectedTo, fromAmount, toAmount]);
 
-  const { data: allowance, refetch: refreshAllowance } = usePollAllowance({
+  const { data: allowance, refresh: refreshAllowance } = usePollAllowance({
     spender: crocMultiSwapAddress,
     token: selectedFrom,
   });

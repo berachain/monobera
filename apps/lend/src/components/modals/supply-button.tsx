@@ -65,12 +65,12 @@ export default function SupplyBtn({
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const token = useSelectedWalletBalance(reserve.underlyingAsset);
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData({
+  const { refresh: userAccountRefetch } = usePollUserAccountData({
     opts: {
       refreshInterval: POLLING.FAST,
     },
   });
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refresh: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);

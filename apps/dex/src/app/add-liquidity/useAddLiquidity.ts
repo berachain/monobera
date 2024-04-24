@@ -38,7 +38,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
   const {
     needsApproval,
     needsApprovalNoBera,
-    refetch: refreshAllowances,
+    refresh: refreshAllowances,
   } = useMultipleTokenApprovalsWithSlippage(
     tokenInputs,
     crocDexAddress as Address,
