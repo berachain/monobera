@@ -2,23 +2,21 @@ import { Address, PublicClient, erc20Abi, formatUnits } from "viem";
 
 import { AllowanceToken, Token } from "~/types";
 
-export interface IGetAllowanceRequest {
+export interface GetAllowance {
   account: Address | undefined;
   token: Token | undefined;
   spender: Address;
   publicClient: PublicClient | undefined;
 }
 
-/**
- * fetch the allowance of a given token
- */
+export type GetAllowanceResponse = AllowanceToken | undefined;
 
 export const getAllowance = async ({
   account,
   token,
   spender,
   publicClient,
-}: IGetAllowanceRequest): Promise<AllowanceToken | undefined> => {
+}: GetAllowance): Promise<GetAllowanceResponse> => {
   if (!publicClient) return undefined;
   if (account && token) {
     const allowance = await publicClient.readContract({
