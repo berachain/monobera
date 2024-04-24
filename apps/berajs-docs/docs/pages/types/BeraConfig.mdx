@@ -1,0 +1,29 @@
+## `BeraConfig`
+
+```ts
+export interface BeraConfig {
+  endpoints?: {
+    dexRouter?: string;
+    tokenList?: string;
+  };
+  subgraphs?: {
+    honeySubgraph?: string;
+    dexSubgraph?: string;
+    lendSubgraph?: string;
+  };
+  contracts?: {
+    multicallAddress?: Address;
+    crocMultiSwapAddress?: Address;
+    wrappedTokenAddress?: Address;
+    dexAddress?: Address;
+    lendAddressProviderAddress: Address;
+    lendOracleAddress: Address;
+    lendPoolProxyAddress: Address;
+    lendUIDataProviderAddress: Address;
+    lendRewardsAggregatorAddress: Address;
+    honeyAddress?: Address;
+    bgtTokenAddress?: Address;
+    nativeTokenAddress?: Address;
+  };
+}
+```
