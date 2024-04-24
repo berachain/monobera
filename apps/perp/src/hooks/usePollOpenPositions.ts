@@ -11,7 +11,7 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import type { IMarket } from "~/types/market";
 import type { IMarketOrder } from "~/types/order-history";
 import { getPnl } from "./useCalculatePnl";
-import { usePricesSocket } from "./usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 
 export const usePollOpenPositions = () => {
   const { account } = useBeraJs();
@@ -51,33 +51,18 @@ export const usePollOpenPositions = () => {
 
   const useTotalUnrealizedPnl = (markets: IMarket[]) => {
     const openPositions = useMarketOpenPositions(markets);
-    const { usePriceFeed } = usePricesSocket();
-    const prices = usePriceFeed();
+    const { marketPrices } = usePollPrices();
 
     return useMemo(() => {
       if (!Array.isArray(openPositions) || openPositions.length === 0) {
         return "0";
       }
 
-      let parsedPrices: any;
-      try {
-        parsedPrices = JSON.parse(prices);
-      } catch (error) {
-        console.error("Failed to parse prices:", error);
-        return "0"; // Return 0 if the prices are not available
-      }
-
-      if (!parsedPrices) {
-        return "0";
-      }
-
       const totalUnrealizedPnl = openPositions?.reduce(
         (acc: BigNumber, position: IMarketOrder) => {
-          const currentPrice = parsedPrices[position.market.pair_index];
-          if (currentPrice == null) {
-            console.warn(
-              `No price available for pair_index ${position.market.pair_index}`,
-            );
+          const currentPrice =
+            marketPrices[position?.market?.name ?? ""] ?? "0";
+          if (currentPrice === "0") {
             return acc; // Skip this position if the current price is not available
           }
 
@@ -92,7 +77,7 @@ export const usePollOpenPositions = () => {
       );
 
       return totalUnrealizedPnl.isNaN() ? "0" : totalUnrealizedPnl.toString(10);
-    }, [openPositions, prices]);
+    }, [openPositions, marketPrices]);
   };
 
   const useTotalPositionSize = () => {

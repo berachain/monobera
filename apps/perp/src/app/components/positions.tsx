@@ -10,7 +10,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { useInView } from "framer-motion";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
 
 interface PositionProps extends IMarket {
@@ -39,8 +39,9 @@ function Position({
     ];
   }, []);
 
-  const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(pair_index ?? 0));
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[name ?? ""] ?? "0";
+
   return (
     <figure
       className={cn(
@@ -67,7 +68,7 @@ function Position({
           </div>
         </div>
         <div className="text-lg font-semibold leading-normal text-popover-foreground">
-          {price ? formatUsd(formatFromBaseUnit(price, 10).toString(10)) : "-"}
+          {price !== "0" ? formatUsd(price) : "-"}
         </div>
 
         <div className="mt-2 text-sm font-semibold leading-7 text-popover-foreground">
