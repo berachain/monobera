@@ -1,6 +1,6 @@
 # usePoolRecentSwaps
 
-Action for creating the payload for performing a withdraw liquidity operation on a pool.
+Hook to fetch a list of recent swaps for a given pool.
 
 ## Initialization
 
@@ -28,19 +28,32 @@ function App() {
 
 ## Parameters
 
+#### Call signature
+
 ```ts
-usePoolRecentSwaps(args: {pool: PoolV2}, options?: {config: BeraConfig, opts: SWRConfiguration});
+function usePoolRecentSwaps(
+  args: { pool: PoolV2 },
+  options?: DefaultHookOptions,
+);
 ```
 
-| Name             | type               | Description                                                   | Required |
-| ---------------- | :----------------- | :------------------------------------------------------------ | :------: |
-| `args.pool`      | `PoolV2`           | pool of which to fetch recent swaps                           |  `true`  |
-| `options.config` | `BeraConfig`       | BeraConfig object containing addresses for relevant resources | `false`  |
-| `options.opts`   | `SWRConfiguration` | SWR options for the underlying useSWR hook                    | `false`  |
+#### args: `{pool: PoolV2}`
+
+| Name   | type     | Description                     | Required |
+| ------ | :------- | :------------------------------ | :------: |
+| `pool` | `PoolV2` | pool to fetch recent swaps from |  `true`  |
+
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
 
 ## Returns
 
-Return type: `DefaultHookReturnType<GetPoolRecentSwapsResult \| undefined>`
+#### Return type: `DefaultHookReturnType<GetPoolRecentSwapsResult | undefined>`
 
 | Name           | type                                           | Description                                                                | Optional |
 | -------------- | :--------------------------------------------- | :------------------------------------------------------------------------- | :------: |
@@ -51,12 +64,6 @@ Return type: `DefaultHookReturnType<GetPoolRecentSwapsResult \| undefined>`
 | `isValidating` | `boolean`                                      | boolean flag representing whether the hook is currently validating data    | `false`  |
 | `isLoading`    | `boolean`                                      | boolean flag representing whether the hook is currently loading data       | `false`  |
 
-`GetPoolRecentSwapsResult` type is [documented here](/actions/dex/getPoolRecentSwaps).
+See type [`GetPoolRecentSwapsResult`](/actions/dex/getPoolRecentSwaps/#returns)
 
-## Returns
-
-```ts
-import { type PayloadReturnType } from "berajs";
-
-type result = Promise<PayloadReturnType | undefined>;
-```
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

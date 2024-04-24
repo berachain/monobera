@@ -1,0 +1,10 @@
+## `IUserPosition`
+
+| Name                   | type                                                             | Description                                                                     | Optional |
+| ---------------------- | :--------------------------------------------------------------- | :------------------------------------------------------------------------------ | :------: |
+| `baseAmount`           | [`BigNumber`](https://mikemcl.github.io/bignumber.js/#bignumber) | number of base tokens staked in pool by user                                    | `false`  |
+| `quoteAmount`          | [`BigNumber`](https://mikemcl.github.io/bignumber.js/#bignumber) | number of quote tokens staked in pool by user                                   | `false`  |
+| `formattedBaseAmount`  | `string`                                                         | formatted string of baseAmount                                                  | `false`  |
+| `formattedQuoteAmount` | `string`                                                         | formatted string of quoteAmount                                                 | `false`  |
+| `estimatedHoneyValue`  | `number`                                                         | formatted string of total estimated honey/USD value of user's stake in the pool | `false`  |
+| `seeds`                | `BigInt`                                                         | liquidity pool balance used to calculate amounts                                | `false`  |
