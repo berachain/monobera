@@ -35,8 +35,8 @@ export enum DappBannerType {
 export const bannerConfig: BannerConfig = {
   global: {
     [DappBannerType.LAUNCH]: {
-      bannerComponent: <LaunchBanner appName="Berachain Dapps" />,
       enabled: false,
+      bannerComponent: <LaunchBanner appName="Berachain Dapps" />,
     },
     [DappBannerType.RPC]: {
       enabled: false,
