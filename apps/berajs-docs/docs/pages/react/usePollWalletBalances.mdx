@@ -2,24 +2,23 @@
 
 React hook for polling balance of a token list for a connected user
 
-## Import 
+## Import
 
 ```ts twoslash
-import { usePollWalletBalances } from '@bera/berajs'
+import { usePollWalletBalances } from "@bera/berajs";
 ```
 
 ## Usage
 
-```ts twoslash [example.ts] 
-import { usePollWalletBalances, type Token } from '@bera/berajs'
-import { BeraConfig } from "@bera/berajs";
+```ts twoslash [example.ts]
+import { BeraConfig, usePollWalletBalances, type Token } from "@bera/berajs";
 
 // required configs for usePollWalletBalances
 export const beraConfig: BeraConfig = {
-    endpoints: {
-        tokenList: 'https://..',
-    }
-}
+  endpoints: {
+    tokenList: "https://..",
+  },
+};
 
 const token1: Token = {
   address: "0x0",
@@ -36,29 +35,28 @@ const token2: Token = {
 };
 
 const {
-    data: balances,
-    useSelectedWalletBalance,
-    useSelectedTagWalletBalances,
-    refetch,
+  data: balances,
+  useSelectedWalletBalance,
+  useSelectedTagWalletBalances,
+  refresh,
 } = usePollWalletBalances({
-     externalTokenList: [token1, token2] // optional arg to extend the token list
-})
+  externalTokenList: [token1, token2], // optional arg to extend the token list
+});
 
 // balance of selected asset
-const selectedBalance = useSelectedWalletBalance('0x...')
+const selectedBalance = useSelectedWalletBalance("0x...");
 // balance of selected tag assets
-const selectedTagBalance = useSelectedTagWalletBalances('atoken')
-
+const selectedTagBalance = useSelectedTagWalletBalances("atoken");
 ```
 
-
 ## Parameters
+
 ```ts twoslash
-import { type UsePollWalletBalancesRequest } from '@bera/berajs'
+import { type UsePollWalletBalancesRequest } from "@bera/berajs";
 ```
 
 ## Returns
-```ts twoslash
-import { type UsePollBalancesResponse } from '@bera/berajs'
-```
 
+```ts twoslash
+import { type UsePollBalancesResponse } from "@bera/berajs";
+```
