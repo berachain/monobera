@@ -1,53 +1,54 @@
 # useTokens
 
-React hook for providing an interface to a [token list](https://tokenlists.org/) compatible json file. For berachain, default token lists are maintained [here](https://github.com/berachain/default-token-list). 
+React hook for providing an interface to a [token list](https://tokenlists.org/) compatible json file. For berachain, default token lists are maintained [here](https://github.com/berachain/default-token-list).
 
 `useTokens` allows for management of custom tokens to be added and removed in browser localStorage.
 
-## Import 
+## Import
 
 ```ts
-import { useTokens } from '@bera/berajs'
+import { useTokens } from "@bera/berajs";
 ```
 
 ## Usage
 
-```ts twoslash [example.ts] 
-import { useTokens, type Token } from '@bera/berajs'
-import { type BeraConfig } from "@bera/berajs";
+```ts twoslash [example.ts]
+import { useTokens, type BeraConfig, type Token } from "@bera/berajs";
 
 // required configs for useTokens
 export const beraConfig: BeraConfig = {
-    endpoints: {
-        tokenList: 'https://..',
-    }
-}
+  endpoints: {
+    tokenList: "https://..",
+  },
+};
 
 const {
-    data: tokens,
-    addNewToken,
-    removeToken
+  data: tokens,
+  addNewToken,
+  removeToken,
 } = useTokens({
-    config: beraConfig
-})
+  config: beraConfig,
+});
 
 const newToken: Token = {
-    address: '0x...',
-    name: '...',
-    symbol: '...',
-    decimals: 18
-}
+  address: "0x...",
+  name: "...",
+  symbol: "...",
+  decimals: 18,
+};
 
-addNewToken(newToken)
-removeToken(newToken)
+addNewToken(newToken);
+removeToken(newToken);
 ```
 
 ## Parameters
+
 ```ts
-import { type DefaultHookTypes } from '@bera/berajs'
+import { type DefaultHookTypes } from "@bera/berajs";
 ```
 
 ## Returns
+
 ```ts
-import { type UseTokens } from '@bera/berajs'
+import { type UseTokens } from "@bera/berajs";
 ```

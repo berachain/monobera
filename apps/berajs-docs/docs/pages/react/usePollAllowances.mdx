@@ -34,14 +34,13 @@ const exampleTokens: Token[] = [token1, token2];
 const {
   data: allowances,
   useSelectedAllowance,
-  refetch,
+  refresh,
 } = usePollAllowances({
-    spender: "0x0...",
-    tokens: exampleTokens,
+  spender: "0x0...",
+  tokens: exampleTokens,
 });
 
 const selectedAllowance = useSelectedAllowance(token1.address);
-
 ```
 
 ## Parameters
