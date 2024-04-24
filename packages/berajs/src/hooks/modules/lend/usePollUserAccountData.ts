@@ -1,4 +1,4 @@
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
@@ -11,12 +11,11 @@ import { DefaultHookOptions } from "~/types";
 
 export const usePollUserAccountData = (options?: DefaultHookOptions) => {
   const publicClient = usePublicClient();
-  const { mutate } = useSWRConfig();
   const { account, config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
 
   const QUERY_KEY = [account, "getUserAccountData"];
-  const { isLoading, isValidating } = useSWR(
+  const { isLoading, isValidating, mutate } = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
@@ -41,7 +40,7 @@ export const usePollUserAccountData = (options?: DefaultHookOptions) => {
   return {
     isLoading,
     isValidating,
-    refetch: () => void mutate(QUERY_KEY),
+    refresh: () => mutate?.(),
     useUserAccountData,
   };
 };
