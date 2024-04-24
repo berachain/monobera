@@ -40,40 +40,45 @@ export function UserStats() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-4">
             <InfoBoxList
               background="bg-background"
               rounded="rounded-md"
               border="border"
             >
-              <InfoBoxListItem title="Staking APR" value={undefined} />
-              <InfoBoxListItem
-                color="text-success-foreground"
-                title="6.69%"
-                value={undefined}
-              >
-                <FormattedNumber value={ethers.utils.formatUnits("1", 18)} />
-              </InfoBoxListItem>
+              <div className="flex flex-col">
+                <InfoBoxListItem
+                  title="Staking APR"
+                  color="text-success-foreground"
+                  value="690,420.69"
+                />
+              </div>
             </InfoBoxList>
             <InfoBoxList
               background="bg-background"
               rounded="rounded-md"
               border="border"
             >
-              <InfoBoxListItem title="Max Slashing" value={undefined} />
-              <InfoBoxListItem title="30.00%" value={undefined}>
-                <FormattedNumber value={ethers.utils.formatUnits("1", 18)} />
-              </InfoBoxListItem>
+              <div className="flex flex-col">
+                <InfoBoxListItem
+                  title="Max Slashing"
+                  color="text-foreground"
+                  value="30.00%"
+                />
+              </div>
             </InfoBoxList>
             <InfoBoxList
               background="bg-background"
               rounded="rounded-md"
               border="border"
             >
-              <InfoBoxListItem title="Wallet Balance" value={undefined} />
-              <InfoBoxListItem title="100.00" value={undefined}>
-                <FormattedNumber value={ethers.utils.formatUnits("1", 18)} />
-              </InfoBoxListItem>
+              <div className="flex flex-col">
+                <InfoBoxListItem
+                  title="Wallet Balance"
+                  color="text-foreground"
+                  value="100.00"
+                />
+              </div>
             </InfoBoxList>
           </div>
         </CardContent>

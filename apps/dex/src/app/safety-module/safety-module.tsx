@@ -96,12 +96,13 @@ export const SafetyModule = ({ rewards }: SafetyModuleProps) => {
           protection for the protocol. Learn more about risks involved.
         </p>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-row gap-4">
         <InfoBoxList background="bg-muted" rounded="rounded-md" border="border">
           <InfoBoxListItem
             title="Funds in Safety Module"
             color="text-success-foreground"
-            value="6.69%"
+            value="690,420.69"
+            icon="https://res.cloudinary.com/duv0g402y/image/upload/v1713973358/bears/hf5xhzbzyk3nrtbie9b4.png"
           />
         </InfoBoxList>
         <InfoBoxList background="bg-muted" rounded="rounded-md" border="border">
@@ -130,7 +131,7 @@ export const SafetyModule = ({ rewards }: SafetyModuleProps) => {
             {activeTab === "deposit" && (
               <>
                 <div className="flex flex-col pt-2 gap-4">
-                  <div className="border rounded-md p-1">
+                  <div className="border items-center rounded-md p-1">
                     <TokenInput
                       selected={selectedToken}
                       onTokenSelection={setSelectedToken}

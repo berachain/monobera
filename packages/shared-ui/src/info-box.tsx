@@ -1,3 +1,4 @@
+import { Icon } from "@bera/ui/icons";
 import { type PropsWithChildren } from "react";
 interface InfoBoxListProps extends PropsWithChildren {
   background?: string;
@@ -25,6 +26,7 @@ type InfoBoxListItemProps = {
   value: string | number | undefined | React.ReactNode;
   color?: string;
   children?: React.ReactNode;
+  icon?: string;
 };
 
 export const InfoBoxListItem = ({
@@ -32,17 +34,18 @@ export const InfoBoxListItem = ({
   value,
   color = "text-muted-foreground",
   children,
+  icon,
 }: InfoBoxListItemProps) => {
   return (
-    <div className="flex w-full flex-row justify-between">
+    <div className="flex w-full flex-col gap-1">
       <p className="text-xs font-medium text-muted-foreground sm:text-sm w-full">
         {title}
       </p>
-      <p
-        className={`whitespace-nowrap text-right text-xs font-medium sm:text-sm w-full justify-end items-end max-w-[350px] truncate ${color}`}
+      <span
+        className={`flex whitespace-nowrap text-right text-md font-medium w-full gap-2 max-w-[350px] truncate ${color}`}
       >
-        {value}
-      </p>
+        {value} <img src={icon} alt="" />
+      </span>
     </div>
   );
 };
