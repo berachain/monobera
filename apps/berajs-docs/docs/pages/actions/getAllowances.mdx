@@ -22,7 +22,7 @@ import { usePublicClient } from "wagmi";
 
 // first, intialize a public client with berachain
 const publicClient = createPublicClient({
-  chain: berachain,
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
   transport: http(),
 });
 
@@ -57,7 +57,6 @@ import { type GetAllowances } from "@bera/berajs/actions";
 
 ```ts
 import { type GetAllowancesResponse } from "@bera/berajs/actions";
+
 type result = Promise<GetAllowancesResponse>;
-
 ```
-

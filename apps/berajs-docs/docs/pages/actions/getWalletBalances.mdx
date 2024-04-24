@@ -15,23 +15,23 @@ import { getWalletBalances } from "@bera/berajs/actions";
 ## Usage
 
 ```ts
-import { getWalletBalances, type Token } from "@bera/berajs/actions";
 import { type BeraConfig } from "@bera/berajs";
+import { getWalletBalances, type Token } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 
 // first, intialize a public client with berachain
 const publicClient = createPublicClient({
-  chain: berachain,
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
   transport: http(),
 });
 
 // required configs for getWalletBalances
 export const beraConfig: BeraConfig = {
-    endpoints: {
-        tokenList: 'https://..',
-    }
-}
+  endpoints: {
+    tokenList: "https://..",
+  },
+};
 
 const walletBalances = await getWalletBalances({
   account,
@@ -49,7 +49,7 @@ import { type GetWalletBalances } from "@bera/berajs/actions";
 
 ## Returns
 
-```ts 
+```ts
 import { type GetWalletBalancesResponse } from "@bera/berajs/actions";
 
 type result = Promise<GetWalletBalancesResponse>;

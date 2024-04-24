@@ -21,7 +21,7 @@ import { berachain } from "viem/chains";
 
 // first, intialize a public client with berachain
 const publicClient = createPublicClient({
-  chain: berachain,
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
   transport: http(),
 });
 
@@ -41,5 +41,6 @@ import { type GetTransactionCount } from "@bera/berajs/actions";
 
 ```ts
 import { type GetTransactionCountResponse } from "@bera/berajs/actions";
+
 type result = Promise<GetTransactionCountResponse>;
 ```
