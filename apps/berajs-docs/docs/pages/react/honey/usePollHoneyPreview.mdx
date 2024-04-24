@@ -1,32 +1,41 @@
-# usePollHoneyPreview
+# usePollCollateralsRates
 
-React hook for fetching preview swap amount
+React hook for fetching the mint rates and redeem rates for all collaterals.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > getHoneyPreview](/actions/honey/getHoneyPreview) before getting started.
 
 ## Import
 
 ```ts
-import { usePollHoneyPreview } from "@bera/berajs";
+import { usePollCollateralsRates } from "@bera/berajs";
 ```
 
 ## Usage
 
-```ts [example.ts]
-const { data: honeyPreview, isLoading: isHoneyPreviewLoading } =
-  usePollHoneyPreview(collateral, amount, isMint, givenIn);
+```ts
+// Poll rates for all collaterals
+const {
+  data: collateralRatesDictionary,
+  usePollCollateralRate,
+} = usePollCollateralsRates(collateralList);
+
+// Poll rate for a single collateral
+const collateralRate = usePollCollateralRate(address);
 ```
 
 ## Parameters
 
-```ts
-  collateral: Token | undefined,
-  amount: string,
-  mint: boolean, // true mint, false redeem
-  given_in: boolean, // true given in, false given out
-  options?: DefaultHookOptions,
-```
+| Name            | type        | Description                                         | Required |
+| --------------- | :---------- | :-------------------------------------------------- | :------: |
+| `collateralList`| `Address[]` | List of collateral addresses to fetch rates for     |  `true`  |
 
 ## Returns
 
-```ts
-DefaultHookReturnType<string | undefined>;
-```
+| Name                        | type                                                               | Description                                         | Optional |
+| --------------------------- | :----------------------------------------------------------------- | :-------------------------------------------------- | :------: |
+| `data`                      | `CollateralRatesMap \| undefined`                                  | Dictionary of rates for all collaterals             | `false`  |
+| `usePollCollateralRate`     | `(collateral: string) => CollateralRates \| undefined`             | Function to get rates for a specific collateral     | `false`  |
+| `...swrResponse`            | `SWRResponse`                                                      | SWR response object including data and status       | `true`   |
+

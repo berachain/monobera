@@ -1,47 +1,60 @@
 # usePollCollateralsRates
 
-React hook for fetching the mint rates and redeem rates for all collaterals
+React hook for fetching the mint rates and redeem rates for all collaterals.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > getCollateralRates](/actions/honey/getCollateralRates) before getting started.
 
 ## Import
 
 ```ts
-import { usePollCollateralsRates } from "@bera/berajs";
+import { usePollCollateralsRates } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
-```ts [example.ts]
-// poll rates for all collateral
+```ts
+// Poll rates for all collaterals
 const {
   data: collateralRatesDictionary,
   usePollCollateralRate,
 } = usePollCollateralsRates(collateralList);
 
-// poll rate for single collateral
+// Poll rate for a single collateral
 const collateralRate = usePollCollateralRate(address);
 ```
 
 ## Parameters
 
-```ts
-collateralList: Address[]
-```
+| Name            | type        | Description                                         | Required |
+| --------------- | :---------- | :-------------------------------------------------- | :------: |
+| `collateralList`| `Address[]` | List of collateral addresses to fetch rates for     |  `true`  |
 
 ## Returns
 
-```ts
-export interface CollateralRates {
-  mintFee: number;
-  redeemFee: number;
-}
+| Name                        | type                                                               | Description                                                      | Optional |
+| --------------------------- | :----------------------------------------------------------------- | :--------------------------------------------------------------- | :------: |
+| `data`                      | `CollateralRatesMap \| undefined`                                  | Dictionary of rates for all collaterals                          | `false`  |
+| `usePollCollateralRate`     | `(collateral: string) => CollateralRates \| undefined`             | Function to get rates for a specific collateral                  | `false`  |
+| `...swrResponse`            | `SWRResponse`                                                      | Additional fields and methods from the useSWR hook (e.g., isLoading, error) | `true`   |
 
-export interface CollateralRatesMap {
-  [key: Address]: CollateralRates;
-}
 
-export interface {
-  data: CollateralRatesMap | undefined;
-  usePollCollateralRate: (collateral: string) => CollateralRates | undefined;
-  ...swrResponce
-}
+## Types
+
+### CollateralRates
+
+| Property  | Type    | Description        |
+|-----------|---------|--------------------|
+| `mintFee` | `number`| The fee for minting collateral. |
+| `redeemFee`| `number`| The fee for redeeming collateral. |
+
+### CollateralRatesMap
+
+| Key     | Value Type       | Description                        |
+|---------|------------------|------------------------------------|
+| `Address` | `CollateralRates` | Maps an address to its `CollateralRates`. |
+
+
 ```
+
