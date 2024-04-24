@@ -19,6 +19,7 @@ import {
 import { ClosePositionModal } from "../../components/close-position-modal";
 import type { ChartProps } from "./TVChartContainer";
 import { LoadingContainer } from "./loading-container";
+import { PYTH_IDS } from "~/utils/constants";
 
 export type OrderLine = {
   type: string;

@@ -2,15 +2,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePrevious } from "@bera/shared-ui";
 import { useTheme } from "next-themes";
 
+import { DatafeedFactory, subscribeOffChainPrices } from "~/utils/datafeed";
+import { useIsPythConnected, usePriceEvents } from "~/context/price-context";
+import { PricesListener } from "~/types/prices";
 import {
   widget,
   type ChartingLibraryWidgetOptions,
   type IChartingLibraryWidget,
   type IPositionLineAdapter,
   type LanguageCode,
+  type LibrarySymbolInfo,
   type ResolutionString,
+  type SubscribeBarsCallback,
+  type TimeFrameItem,
 } from "../../../../../public/static/charting_library";
-import Datafeed from "../../../../utils/tv-datafeed";
 import { type OrderLine } from "../order-chart";
 import styles from "./index.module.css";
 
@@ -33,10 +38,21 @@ export const TVChartContainer = (props: ChartProps) => {
   const toggleLinesButton = useRef<HTMLElement | null>(null);
   const toggleListener = useRef<(() => void) | null>(null);
   const [showOrderLines, setShowOrderLines] = useState(true);
+  const wsConnected = useIsPythConnected();
+  const priceEvents = usePriceEvents();
+  const priceListener = useRef<PricesListener | undefined>();
 
   const { theme: appTheme, systemTheme } = useTheme();
   const theme = (appTheme === "system" ? systemTheme : appTheme) || "dark";
   const prevTheme = usePrevious(theme);
+
+  useEffect(() => {
+    return () => {
+      if (priceListener.current) {
+        priceEvents.current?.off("prices_updated", priceListener.current);
+      }
+    };
+  }, []);
 
   const handleToggleShowOrderLines = useCallback(() => {
     setShowOrderLines((prev) => !prev);
@@ -158,7 +174,7 @@ export const TVChartContainer = (props: ChartProps) => {
       TV_BACKGROUND_COLOR[theme as keyof typeof TV_BACKGROUND_COLOR];
     const widgetOptions: ChartingLibraryWidgetOptions = {
       symbol: props.symbol,
-      datafeed: Datafeed,
+      datafeed: DatafeedFactory(onSubscribe),
       interval: props.interval as ResolutionString,
       container: chartContainerRef.current,
       library_path: props.library_path,
@@ -196,6 +212,16 @@ export const TVChartContainer = (props: ChartProps) => {
         "mainSeriesProperties.candleStyle.wickUpColor": "#336854",
         "mainSeriesProperties.candleStyle.wickDownColor": "#7f323f",
       },
+      time_frames: [
+        { text: "4H", resolution: "1", description: "4 hours" },
+        { text: "12H", resolution: "1", description: "1 Day" },
+        { text: "1D", resolution: "1", description: "1 Day" },
+        { text: "5D", resolution: "5", description: "5 Days" },
+        { text: "1M", resolution: "30", description: "1 Month" },
+        { text: "3M", resolution: "60", description: "3 Months" },
+        { text: "6M", resolution: "120", description: "6 Months" },
+        { text: "1Y", resolution: "1W", description: "1 Year" },
+      ] as TimeFrameItem[],
       toolbar_bg: backgroundColor,
     };
 
@@ -239,6 +265,7 @@ export const TVChartContainer = (props: ChartProps) => {
     props.autosize,
     theme,
     props.setChartReady,
+    wsConnected,
   ]);
 
   useEffect(() => {
@@ -262,6 +289,25 @@ export const TVChartContainer = (props: ChartProps) => {
         : "Show Orders";
     }
   }, [showOrderLines]);
+
+  const onSubscribe = useCallback(
+    (
+      symbolInfo: LibrarySymbolInfo,
+      resolution: ResolutionString,
+      onRealtimeCallback: SubscribeBarsCallback,
+    ) => {
+      priceListener.current &&
+        priceEvents.current?.off("prices_updated", priceListener.current);
+      const listener = subscribeOffChainPrices(
+        symbolInfo,
+        resolution,
+        onRealtimeCallback,
+      );
+      priceListener.current = listener;
+      priceEvents.current?.on("prices_updated", listener);
+    },
+    [],
+  );
 
   return <div ref={chartContainerRef} className={styles.TVChartContainer} />;
 };

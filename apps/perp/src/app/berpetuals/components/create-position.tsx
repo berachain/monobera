@@ -14,7 +14,7 @@ import { getPriceFromPercent } from "~/utils/getPriceFromPercent";
 import { HONEY_IMG } from "~/utils/marketImages";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useClientLocalStorage } from "~/hooks/useClientLocalStorage";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
 import type { OrderType } from "~/types/order-type";
 import { CustomizeInput } from "./customize-input";
@@ -50,7 +50,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     limitPrice: undefined,
     amount: "",
     quantity: "",
-    price: undefined,
+    price: "0",
     leverage: "2",
     tp: "",
     sl: "",
@@ -78,7 +78,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     }
   }, [optionType, form.optionType]);
 
-  const { useMarketIndexPrice } = usePricesSocket();
+  const { marketPrices } = usePollPrices();
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const honeyBalanceData = useSelectedWalletBalance(honeyTokenAddress);
   const honeyBalance = honeyBalanceData?.formattedBalance ?? "0"; // string
@@ -86,12 +86,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   const rawHoneyBalanceBN = BigNumber(
     rawHoneyBalance ? rawHoneyBalance.toString() : "0",
   ); // BigNumber
-  const rawPrice = useMarketIndexPrice(Number(market.pair_index) ?? 0); // string
-  const priceBN = useMemo(
-    () => formatFromBaseUnit(rawPrice ?? 0, 10),
-    [rawPrice],
-  ); // BigNumber
-  const formattedPrice = useMemo(() => priceBN.toString(10) ?? "0", [priceBN]); // string
+  const price = marketPrices[market?.name ?? ""] ?? "0"; // string
 
   const maxLeverage = params.max_leverage ?? "0";
   const formattedMaxCollateralBN = formatFromBaseUnit(
@@ -118,8 +113,9 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     const quantityBN = BigNumber(form.quantity ?? "0");
     const leveragedHoneyPriceBN = honeyAmountPrice.times(leverageBN);
     const limitPriceBN = BigNumber(form.limitPrice ?? "0");
+    const priceBN = BigNumber(price);
 
-    if (form.optionType === "market" && rawPrice !== undefined) {
+    if (form.optionType === "market" && price !== "0") {
       if (givenHoney) {
         const newQuantity = leveragedHoneyPriceBN.div(priceBN);
         setForm((prev) => ({
@@ -183,16 +179,15 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     form.limitPrice,
     form.quantity,
     setForm,
-    rawPrice,
+    price,
     givenHoney,
-    priceBN,
   ]);
 
   const liqPrice = useCalculateLiqPrice({
     bfLong: market.pair_borrowing_fee?.bf_long ?? "0",
     bfShort: market.pair_borrowing_fee?.bf_short ?? "0",
     orderType: form.orderType,
-    price: form.optionType === "market" ? rawPrice : form.limitPrice,
+    price: form.optionType === "market" ? price : form.limitPrice,
     leverage: form.leverage,
   });
 
@@ -204,22 +199,20 @@ export function CreatePosition({ market, params }: ICreatePosition) {
       form.orderType === "long",
       MAX_GAIN,
       form.leverage ?? "2",
-      form.optionType === "market" ? formattedPrice : form.limitPrice ?? "0",
+      form.optionType === "market" ? price : form.limitPrice ?? "0",
     ).toString(10);
     const maxSl = getPriceFromPercent(
       form.orderType === "long",
       MAX_STOP_LOSS,
       form.leverage ?? "2",
-      form.optionType === "market" ? formattedPrice : form.limitPrice ?? "0",
+      form.optionType === "market" ? price : form.limitPrice ?? "0",
     ).toString(10);
     const safeAmountBN = BigNumber(safeAmount);
     const leverageBN = BigNumber(form.leverage ?? "2");
     const tpBN = BigNumber(form.tp ?? "0");
     const slBN = BigNumber(form.sl ?? "0");
-    const minTP =
-      form.optionType === "market" ? formattedPrice : form.limitPrice ?? "0";
-    const minSL =
-      form.optionType === "market" ? formattedPrice : form.limitPrice ?? "0";
+    const minTP = form.optionType === "market" ? price : form.limitPrice ?? "0";
+    const minSL = form.optionType === "market" ? price : form.limitPrice ?? "0";
 
     if (!form.amount) {
       setError("An amount/collateral must be set.");
@@ -268,10 +261,10 @@ export function CreatePosition({ market, params }: ICreatePosition) {
         : slBN.lt(minSL) || slBN.gt(maxSl))
     ) {
       setError("Invalid Stop Loss Price.");
-    } else if (form.optionType === "limit" && rawPrice) {
+    } else if (form.optionType === "limit" && price !== "0") {
       if (
         form.orderType === "long" &&
-        BigNumber(form.limitPrice ?? "0").gt(formattedPrice)
+        BigNumber(form.limitPrice ?? "0").gt(price)
       ) {
         setError(
           "Limit Prices must be set below the current price for long positions.",
@@ -280,7 +273,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
       }
       if (
         form.orderType === "short" &&
-        BigNumber(form.limitPrice ?? "0").lt(formattedPrice)
+        BigNumber(form.limitPrice ?? "0").lt(price)
       ) {
         setError(
           "Limit Prices must be set above the current price for short positions.",
@@ -299,7 +292,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     form.limitPrice,
     form.orderType,
     form.price,
-    formattedPrice,
+    price,
     rawHoneyBalance,
     rawHoneyBalanceBN,
   ]);
@@ -381,7 +374,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
             />
             <CustomizeInput
               title="Quantity"
-              disabled={rawPrice === undefined}
+              disabled={price === "0"}
               subTitle={`Leverage: ${form.leverage}x`}
               value={form.quantity}
               isExceeding={balanceExceeding}
@@ -407,7 +400,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
                 title="Price"
                 subTitle={
                   <FormattedNumber
-                    value={rawPrice === undefined ? "0" : formattedPrice}
+                    value={price}
                     compact={false}
                     compactThreshold={999_999_999_999}
                     symbol="USD"
@@ -418,7 +411,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
                 onSubtitleClick={() => {
                   setForm({
                     ...form,
-                    limitPrice: rawPrice === undefined ? "0" : formattedPrice,
+                    limitPrice: price,
                   });
                 }}
                 onChange={(e) => {
@@ -447,7 +440,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
             className="my-8"
             leverage={form.leverage ?? "2"}
             formattedPrice={
-              form.optionType === "market" ? formattedPrice : form.limitPrice
+              form.optionType === "market" ? price : form.limitPrice
             }
             long={form.orderType === "long"}
             tp={form.tp}
@@ -458,8 +451,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
           <PlaceOrder
             form={form}
             error={error}
-            price={rawPrice}
-            formattedPrice={formattedPrice}
+            price={price}
             pairIndex={market.pair_index ?? "0"}
             openingFee={market.pair_fixed_fee?.open_fee_p ?? "0"}
             bfLong={market.pair_borrowing_fee?.bf_long ?? "0"}

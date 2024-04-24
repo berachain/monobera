@@ -154,8 +154,10 @@ export const perpsEndpoint = process.env
   .NEXT_PUBLIC_PERPS_ENDPOINT_URL as string;
 export const perpsCompetitionId = process.env
   .NEXT_PUBLIC_PERPS_COMPETITION_ID as string;
-export const perpsPriceFeed = process.env.NEXT_PUBLIC_PERPS_PRICEFEED as string;
-export const candleFeed = process.env.NEXT_PUBLIC_CANDLEFEED as string;
+export const perpsPricesEndpoint = process.env
+  .NEXT_PUBLIC_PERPS_PRICES_ENDPOINT_URL as string;
+export const perpsPricesBenchmark = process.env
+  .NEXT_PUBLIC_PERPS_PRICES_BENCHMARK_URL as string;
 
 // Validator clue
 export const validatorClueEndpoint = process.env

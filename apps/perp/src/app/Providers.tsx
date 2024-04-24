@@ -2,6 +2,7 @@
 
 import React, { type PropsWithChildren } from "react";
 import { BeraWagmi } from "@bera/wagmi";
+import { PriceContextProvider } from "~/context/price-context";
 
 import { ThemeProvider } from "next-themes";
 
@@ -9,7 +10,7 @@ export default function Providers({ children }: PropsWithChildren<any>) {
   return (
     <BeraWagmi>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-        {children}
+        <PriceContextProvider>{children}</PriceContextProvider>
       </ThemeProvider>
     </BeraWagmi>
   );

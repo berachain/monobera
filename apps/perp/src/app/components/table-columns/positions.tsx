@@ -11,19 +11,19 @@ import { EST_PNL_TOOLTIP_TEXT, TPSL_TOOLTIP_TEXT } from "~/utils/tooltip-text";
 import { PositionTitle } from "~/app/components/position-title";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
 import type { IMarketOrder } from "~/types/order-history";
 import { PnLRowHoverState } from "../../berpetuals/components/pnl-row-hover-state";
 
 const MarkPrice = ({ position }: { position: IMarketOrder }) => {
-  const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[position?.market?.name ?? ""] ?? "0";
 
   return (
     <div>
-      {price !== undefined ? (
-        formatUsd(formatFromBaseUnit(price, 10).toString(10))
+      {price !== "0" ? (
+        formatUsd(price)
       ) : (
         <Skeleton className="h-[28px] w-[80px]" />
       )}
@@ -87,9 +87,9 @@ export const ActivePositionPNL = ({
   className?: string;
   wrapped?: boolean;
 }) => {
-  const { useMarketIndexPrice } = usePricesSocket();
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[position?.market?.name ?? ""] ?? "0";
 
-  const price = useMarketIndexPrice(Number(position.market?.pair_index) ?? 0);
   const pnl = useCalculatePnl({
     currentPrice: price,
     openPosition: position,

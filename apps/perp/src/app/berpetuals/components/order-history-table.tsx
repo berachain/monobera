@@ -30,7 +30,7 @@ export function OrderHistoryTable({
   openOrders,
   history,
   markets,
-  mobile,
+  size,
   allPositions,
   selection,
   setSelection,
@@ -42,7 +42,7 @@ export function OrderHistoryTable({
   openOrders: ILimitOrder[];
   history: IClosedTrade[];
   markets: IMarket[];
-  mobile: boolean;
+  size: "sm" | "md" | "lg";
   allPositions: IPosition[];
   selection: RowSelectionState;
   setSelection: (selection: RowSelectionState) => void;
@@ -119,7 +119,7 @@ export function OrderHistoryTable({
             data={openPositions ?? []}
             className="hidden h-full w-full overflow-auto sm:block"
             embedded
-            enablePagination={!mobile}
+            enablePagination={size !== "sm"}
             enableSelection
             fetchData={fetchData}
             stickyHeaders
@@ -154,7 +154,7 @@ export function OrderHistoryTable({
           data={openOrders ?? []}
           className="hidden h-full w-full overflow-auto sm:block"
           embedded
-          enablePagination={!mobile}
+          enablePagination={size !== "sm"}
           enableSelection
           stickyHeaders
           additionalActions={[
@@ -188,7 +188,7 @@ export function OrderHistoryTable({
           className="hidden h-full w-full overflow-auto sm:block"
           embedded
           stickyHeaders
-          enablePagination={!mobile}
+          enablePagination={size !== "sm"}
           additionalActions={[
             <TotalAmount
               className="hidden flex-shrink-0 p-0 sm:flex"
@@ -220,13 +220,13 @@ export function OrderHistoryTable({
               spacer
             />,
           ]}
-          enablePagination={!mobile}
+          enablePagination={size !== "sm"}
           additionalTableProps={{
             autoResetPageIndex: false,
           }}
         />
       )}
-      {mobile && (
+      {size === "sm" && (
         <div className="mx-2 flex h-[calc(100%+32px)] w-[calc(100%-16px)] flex-col gap-4">
           {tab === "positions" && assetCardItems.marketList.length > 0 && (
             <>

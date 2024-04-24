@@ -22,9 +22,7 @@ export const usePollTraderReferral = (traderAddress: string) => {
           args: [traderAddress],
         });
         return result;
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     },
     {
       refreshInterval: POLLING.NORMAL,

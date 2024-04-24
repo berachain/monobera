@@ -30,15 +30,13 @@ import { type OrderType } from "~/types/order-type";
 export function PlaceOrder({
   form,
   price,
-  formattedPrice,
   openingFee,
   error,
   liqPrice,
   pairIndex,
 }: {
   form: OrderType;
-  price: string | undefined;
-  formattedPrice: string | undefined;
+  price: string;
   openingFee: string;
   error: string | undefined;
   bfLong: string;
@@ -112,7 +110,7 @@ export function PlaceOrder({
       positionSizeHoney: parsedPositionSize, // position size
       openPrice:
         form.optionType === "market"
-          ? BigInt(price ?? 0)
+          ? parseUnits(`${price ?? 0}`, 10)
           : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
       buy: form.orderType === "long" ? true : false,
       leverage: Number(form.leverage),
@@ -142,10 +140,10 @@ export function PlaceOrder({
         <div className="flex w-full justify-between">
           <div>EST. EXECUTION PRICE</div>
           <div className="text-foreground">
-            {price === undefined ? (
+            {price === "0" ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              formatUsd(formattedPrice ?? "0")
+              formatUsd(price)
             )}
           </div>
         </div>
@@ -153,7 +151,7 @@ export function PlaceOrder({
         <div className="flex w-full justify-between">
           <div>LIMIT ORDER PRICE</div>
           <div className="text-foreground">
-            {price === undefined ? (
+            {price === "0" ? (
               <Skeleton className="h-4 w-16" />
             ) : (
               formatUsd(form.limitPrice ?? "0")
@@ -164,7 +162,7 @@ export function PlaceOrder({
       <div className="flex w-full justify-between">
         <div>EST. LIQ. PRICE</div>
         <div className="flex flex-row text-foreground">
-          {price === undefined || liqPrice === undefined ? (
+          {price === "0" || liqPrice === undefined ? (
             <Skeleton className="h-4 w-14" />
           ) : (
             formatUsd(liqPrice)
@@ -199,7 +197,7 @@ export function PlaceOrder({
         <div className="flex flex-row items-center gap-1 text-foreground">
           {form.tp === "" ? (
             "None"
-          ) : price === undefined ? (
+          ) : price === "0" ? (
             <Skeleton className="h-4 w-14" />
           ) : (
             `${formatUsd(form.tp ?? 0)}`
@@ -214,7 +212,7 @@ export function PlaceOrder({
         <div className="flex flex-row items-center gap-1 text-foreground">
           {form.sl === "" ? (
             "None"
-          ) : price === undefined ? (
+          ) : price === "0" ? (
             <Skeleton className="h-4 w-14" />
           ) : (
             `${formatUsd(form.sl ?? 0)}`
