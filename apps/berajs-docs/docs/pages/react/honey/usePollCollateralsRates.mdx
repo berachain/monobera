@@ -15,8 +15,7 @@ import { usePollCollateralsRates } from "@bera/berajs";
 const {
   data: collateralRatesDictionary,
   usePollCollateralRate,
-  isLoading: isFeeLoading,
-} = usePollCollateralsParams(collateralList);
+} = usePollCollateralsRates(collateralList);
 
 // poll rate for single collateral
 const collateralRate = usePollCollateralRate(address);
@@ -31,8 +30,18 @@ collateralList: Address[]
 ## Returns
 
 ```ts
-export interface UsePollCollateralsRatesResponse
-  extends DefaultHookReturnType<CollateralRatesMap | undefined> {
+export interface CollateralRates {
+  mintFee: number;
+  redeemFee: number;
+}
+
+export interface CollateralRatesMap {
+  [key: Address]: CollateralRates;
+}
+
+export interface {
+  data: CollateralRatesMap | undefined;
   usePollCollateralRate: (collateral: string) => CollateralRates | undefined;
+  ...swrResponce
 }
 ```

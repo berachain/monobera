@@ -15,12 +15,12 @@ export interface UsePollCollateralsRatesResponse
   usePollCollateralRate: (collateral: string) => CollateralRates | undefined;
 }
 
-export const usePollCollateralsParams = (
+export const usePollCollateralsRates = (
   collateralList: Address[],
   options?: DefaultHookOptions,
 ): UsePollCollateralsRatesResponse => {
   const publicClient = usePublicClient();
-  const method = "usePollCollateralsParams";
+  const method = "usePollCollateralsRates";
   const QUERY_KEY = [method, ...collateralList];
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;

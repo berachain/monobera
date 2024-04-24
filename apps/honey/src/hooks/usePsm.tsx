@@ -6,7 +6,7 @@ import {
   useBeraJs,
   usePollAllowance,
   usePollBalance,
-  usePollCollateralsParams,
+  usePollCollateralsRates,
   usePollHoneyPreview,
   useTokens,
   type Token,
@@ -73,7 +73,7 @@ export const usePsm = () => {
   });
 
   const { usePollCollateralRate, isLoading: isFeeLoading } =
-    usePollCollateralsParams(
+  usePollCollateralsRates(
       collateralList?.map((token: any) => token.address) ?? [],
     );
 
