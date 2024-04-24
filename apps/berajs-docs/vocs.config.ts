@@ -122,34 +122,6 @@ export default defineConfig({
               text: "getWithdrawLiquidityPayload",
               link: "/actions/dex/getWithdrawLiquidityPayload/",
             },
-            {
-              text: "getAllowance",
-              link: "/actions/getAllowance/",
-            },
-            {
-              text: "getAllowances",
-              link: "/actions/getAllowances/",
-            },
-            {
-              text: "getTokenInformation",
-              link: "/actions/getTokenInformation/",
-            },
-            {
-              text: "getTransactionCount",
-              link: "/actions/getTransactionCount/",
-            },
-            {
-              text: "getTokens",
-              link: "/actions/getTokens/",
-            },
-            {
-              text: "getWalletBalances",
-              link: "/actions/getWalletBalances/",
-            },
-            {
-              text: "getPoolUserPosition",
-              link: "/actions/getPoolUserPosition/",
-            },
           ],
         },
         {
@@ -178,6 +150,34 @@ export default defineConfig({
           text: "BGT",
           collapsed: true,
           items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+        },
+        {
+          text: "getAllowance",
+          link: "/actions/getAllowance/",
+        },
+        {
+          text: "getAllowances",
+          link: "/actions/getAllowances/",
+        },
+        {
+          text: "getTokenInformation",
+          link: "/actions/getTokenInformation/",
+        },
+        {
+          text: "getTransactionCount",
+          link: "/actions/getTransactionCount/",
+        },
+        {
+          text: "getTokens",
+          link: "/actions/getTokens/",
+        },
+        {
+          text: "getWalletBalances",
+          link: "/actions/getWalletBalances/",
+        },
+        {
+          text: "getPoolUserPosition",
+          link: "/actions/getPoolUserPosition/",
         },
         {
           text: "sortBaseQuoteAddresses",
@@ -210,10 +210,6 @@ export default defineConfig({
         {
           text: "getTokens",
           link: "/actions/getTokens/",
-        },
-        {
-          text: "getWalletBalances",
-          link: "/actions/getWalletBalances/",
         },
       ],
     },

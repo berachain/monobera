@@ -5,13 +5,13 @@ Action for fetching the allowance of a given token
 ## Import
 
 ```ts
-import { getAllowance } from "@bera/berajs";
+import { getAllowance } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getAllowance } from "@bera/berajs";
+import { getAllowance } from "@bera/berajs/actions";
 import { usePublicClient } from "wagmi";
 
 const client = usePublicClient();
@@ -27,13 +27,13 @@ const { token, allowance, formattedAllowance } = await getAllowance({
 ## Parameters
 
 ```ts
-import { type IGetAllowanceRequest } from "berajs";
+import { type GetAllowance } from "@bera/berajs/actions";
 ```
 
 ## Returns
 
 ```ts
-import { type IGetAllowanceResponse } from "berajs";
+import { type GetAllowanceResponse } from "@bera/berajs/actions";
 
-type result = Promise<IGetAllowanceResponse | undefined>;
+type result = Promise<GetAllowanceResponse>;
 ```

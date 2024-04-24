@@ -5,16 +5,22 @@ Action for fetching the balances of a given wallet address
 ## Import
 
 ```ts
-import { getWalletBalances } from "@bera/berajs";
+import { getWalletBalances } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getWalletBalances, type Token } from "@bera/berajs";
+import { getWalletBalances, type Token } from "@bera/berajs/actions";
 import { usePublicClient } from "wagmi";
+import { type BeraConfig } from "@bera/berajs";
 
-import { beraConfig } from "./config";
+// required configs for getWalletBalances
+export const beraConfig: BeraConfig = {
+    endpoints: {
+        tokenList: 'https://..',
+    }
+}
 
 const client = usePublicClient();
 
@@ -26,22 +32,21 @@ interface BalanceToken extends Token {
 const walletBalances = await getWalletBalances({
   account,
   tokenList,
-  externalTokenList,
-  queryKey,
   config: beraConfig,
   publicClient: client,
-  mutate,
 });
 ```
 
 ## Parameters
 
 ```ts
-import { type IFetchWalletBalancesRequestArgs } from "berajs";
+import { type GetWalletBalances } from "@bera/berajs/actions";
 ```
 
 ## Returns
 
-```ts
-type result = Promise<number | BalanceToken[] | undefined>;
+```ts 
+import { type GetWalletBalancesResponse } from "@bera/berajs/actions";
+
+type result = Promise<GetWalletBalancesResponse>;
 ```

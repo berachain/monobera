@@ -1,8 +1,8 @@
 import { BeraConfig } from "../../types";
 import { Token } from "../../types/dex";
 
-export interface IFetchTokensRequestArgs {
-  localStorageTokenList: Token[];
+export interface GetTokensRequest {
+  externalList?: Token[];
   config: BeraConfig;
 }
 
@@ -25,14 +25,14 @@ function tokenListToDict(list: Token[]): { [key: string]: Token } {
 }
 
 export const getTokens = async ({
-  localStorageTokenList,
+  externalList,
   config,
-}: IFetchTokensRequestArgs): Promise<GetTokens> => {
+}: GetTokensRequest): Promise<GetTokens> => {
   if (!config.endpoints?.tokenList) {
     return {
       tokenList: [],
-      customTokenList: [...localStorageTokenList],
-      tokenDictionary: tokenListToDict(localStorageTokenList),
+      customTokenList: [...(externalList ?? [])],
+      tokenDictionary: tokenListToDict((externalList ?? [])),
       featuredTokenList: [],
     };
   }
@@ -41,8 +41,8 @@ export const getTokens = async ({
     const temp = await tokenList.json();
     if (!temp.tokens)
       return {
-        tokenList: localStorageTokenList,
-        customTokenList: localStorageTokenList,
+        tokenList: (externalList ?? []),
+        customTokenList: (externalList ?? []),
         featuredTokenList: [],
         tokenDictionary: {},
       };
@@ -59,7 +59,7 @@ export const getTokens = async ({
         return { ...token, default: true };
       });
 
-    const list = [...defaultList, ...localStorageTokenList];
+    const list = [...defaultList, ...(externalList ?? [])];
 
     const uniqueList = list.filter(
       (item, index) =>
@@ -68,17 +68,17 @@ export const getTokens = async ({
 
     return {
       tokenList: uniqueList,
-      customTokenList: [...localStorageTokenList],
+      customTokenList: [...(externalList ?? [])],
       tokenDictionary: tokenListToDict(list),
       featuredTokenList: defaultFeaturedList ?? [],
     };
   } catch (error) {
     console.error("Error fetching token list", error);
     return {
-      tokenList: [...localStorageTokenList],
-      customTokenList: [...localStorageTokenList],
+      tokenList: [...(externalList ?? [])],
+      customTokenList: [...(externalList ?? [])],
       featuredTokenList: [],
-      tokenDictionary: tokenListToDict(localStorageTokenList),
+      tokenDictionary: tokenListToDict((externalList ?? [])),
     };
   }
 };

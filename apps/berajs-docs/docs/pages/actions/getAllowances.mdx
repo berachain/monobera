@@ -5,13 +5,13 @@ Action for fetching the allowances of a given token array
 ## Import
 
 ```ts
-import { getAllowances } from "@bera/berajs";
+import { getAllowances } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getAllowances } from "@bera/berajs";
+import { getAllowances } from "@bera/berajs/actions";
 import { usePublicClient } from "wagmi";
 
 interface AllowanceToken extends Token {
@@ -42,5 +42,14 @@ const { data } = await getAllowance({
 ## Parameters
 
 ```ts
-import { type IGetAllowancesRequest } from "berajs";
+import { type GetAllowances } from "berajs";
 ```
+
+## Returns
+
+```ts
+import { type GetAllowancesResponse } from "berajs";
+type result = Promise<GetAllowancesResponse>;
+
+```
+
