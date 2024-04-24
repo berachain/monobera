@@ -37,7 +37,7 @@ const useCreatePool = ({
 
   const tokens = [baseToken, quoteToken];
 
-  const { data: allowances, refetch: refreshAllowances } = usePollAllowances({
+  const { data: allowances, refresh: refreshAllowances } = usePollAllowances({
     spender: crocDexAddress,
     tokens,
   });

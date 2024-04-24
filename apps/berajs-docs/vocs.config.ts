@@ -42,7 +42,12 @@ export default defineConfig({
         {
           text: "Bex",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            {
+              text: "usePoolRecentSwaps",
+              link: "/react/dex/usePoolRecentSwaps/",
+            },
+          ],
         },
         {
           text: "Honey",

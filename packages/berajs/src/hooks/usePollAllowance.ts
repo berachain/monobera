@@ -16,10 +16,6 @@ export type UsePollAllowanceArgs = {
   spender: Address;
   token: Token | undefined;
 };
-export interface UsePollAllowanceResponse
-  extends DefaultHookReturnType<AllowanceToken | undefined> {
-  refetch: () => void;
-}
 
 /**
  *
@@ -31,7 +27,7 @@ export interface UsePollAllowanceResponse
 export const usePollAllowance = (
   args: UsePollAllowanceArgs,
   options?: DefaultHookOptions,
-): UsePollAllowanceResponse => {
+): DefaultHookReturnType<AllowanceToken | undefined> => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
 
@@ -61,6 +57,6 @@ export const usePollAllowance = (
 
   return {
     ...swrResponse,
-    refetch: () => mutate(QUERY_KEY),
+    refresh: () => mutate(QUERY_KEY),
   };
 };

@@ -14,15 +14,10 @@ export type UseTokenHoneyPriceArgs = {
   tokenAddress: `0x${string}` | undefined;
 };
 
-export interface UseTokenHoneyPriceResponse
-  extends DefaultHookReturnType<string | undefined> {
-  refetch: () => void;
-}
-
 export const useTokenHoneyPrice = (
   args: UseTokenHoneyPriceArgs,
   options?: DefaultHookOptions,
-): UseTokenHoneyPriceResponse => {
+): DefaultHookReturnType<string | undefined> => {
   const method = "tokenHoneyPrice";
   const QUERY_KEY = [args.tokenAddress, method];
   const { config: beraConfig } = useBeraJs();
@@ -41,6 +36,6 @@ export const useTokenHoneyPrice = (
   );
   return {
     ...swrResponse,
-    refetch: () => void mutate(QUERY_KEY),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };
