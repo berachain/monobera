@@ -28,9 +28,9 @@ export const usePollCollateralsRates = (
   const swrResponse = useSWRImmutable(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (!config.contracts?.honeyRouterAddress) return undefined;
-      if (!config.contracts?.multicallAddress) return undefined;
+      if (!publicClient) throw new Error("publicClient is not defined");
+      if (!config.contracts?.honeyRouterAddress) throw new Error("missing contract address honeyRouterAddress");
+      if (!config.contracts?.multicallAddress) throw new Error("missing contract address multicallAddress");
       return await getCollateralRates({
         client: publicClient,
         config,

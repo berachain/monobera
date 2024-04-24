@@ -19,9 +19,11 @@ export const usePollUserAccountData = (options?: DefaultHookOptions) => {
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (!config.contracts?.lendPoolProxyAddress) return undefined;
-      if (!account) return undefined;
+      if (!publicClient) throw new Error("publicClient is not defined");
+      if (!config.contracts?.lendPoolProxyAddress)
+        throw new Error("missing contract address lendPoolProxyAddress");
+      if (!account) throw new Error("missing account address");
+
       return await getUserAccountData({
         config,
         client: publicClient,

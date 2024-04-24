@@ -17,9 +17,11 @@ export const usePollReservesDataList = (options?: DefaultHookOptions) => {
   const { isLoading, isValidating } = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (!config.contracts?.lendUIDataProviderAddress) return undefined;
-      if (!config.contracts?.lendAddressProviderAddress) return undefined;
+      if (!publicClient) throw new Error("publicClient is not defined");
+      if (!config.contracts?.lendUIDataProviderAddress)
+        throw new Error("missing contract address lendUIDataProviderAddress");
+      if (!config.contracts?.lendAddressProviderAddress)
+        throw new Error("missing contract address lendAddressProviderAddress");
       const result = await getReserveData({
         config,
         client: publicClient,

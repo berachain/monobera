@@ -25,9 +25,10 @@ export const usePollHoneyPreview = (
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   return useSWR(QUERY_KEY, async () => {
-    if (!publicClient) return undefined;
-    if (!config.contracts?.honeyRouterAddress) return undefined;
-    if (!collateral || Number(amount) <= 0) return undefined;
+    if (!publicClient) throw new Error("publicClient is not defined");
+    if (!config.contracts?.honeyRouterAddress) throw new Error("missing contract address honeyRouterAddress");
+    if (!collateral) throw new Error("invalid collateral");
+    if (Number(amount) <= 0) throw new Error("invalid amount");
     return await getHoneyPreview({
       client: publicClient,
       config,

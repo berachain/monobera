@@ -29,6 +29,9 @@ export const getHoneyPreview = async ({
   method,
 }: HoneyPreviewArgs): Promise<string | undefined> => {
   try {
+    if (!config.contracts?.honeyRouterAddress)
+      throw new Error("missing contract address honeyRouterAddress");
+
     let formattedAmount = 0n;
     if (
       method === HoneyPreviewMethod.Mint ||
@@ -40,7 +43,7 @@ export const getHoneyPreview = async ({
     }
 
     const result = (await client.readContract({
-      address: config.contracts!.honeyRouterAddress as Address,
+      address: config.contracts.honeyRouterAddress as Address,
       abi: honeyRouterAbi,
       functionName: method,
       args: [collateral.address, formattedAmount],
