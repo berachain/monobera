@@ -1,0 +1,69 @@
+# usePoolUserPosition
+
+Hook to fetch the current connected wallet's user stake position in a given pool.
+
+## Initialization
+
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
+
+## Import
+
+```ts
+import { usePoolUserPosition } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { usePoolUserPosition } from "@bera/berajs";
+
+const pool: PoolV2 = ...
+
+function App() {
+    const { data: userPosition, isLoading } = usePoolUserPosition({ pool });
+
+    ...
+};
+```
+
+## Parameters
+
+#### Call signature
+
+```ts
+function usePoolUserPosition(
+  args: { pool: PoolV2 },
+  options?: DefaultHookOptions,
+);
+```
+
+#### args: `{pool: PoolV2}`
+
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| `pool` | `PoolV2` | pool of which to fetch the connect wallet user's position |  `true`  |
+
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+## Returns
+
+#### Return type: `DefaultHookReturnType<IUserPosition | undefined>`
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `IUserPosition \| undefined`        | user's position data in the pool                                           |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: IUserPosition) => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+See type [`IUserPosition`](/types/IUserPosition/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

@@ -47,6 +47,10 @@ export default defineConfig({
               text: "usePoolRecentSwaps",
               link: "/react/dex/usePoolRecentSwaps/",
             },
+            {
+              text: "usePoolUserPosition",
+              link: "/react/dex/usePoolUserPosition/",
+            },
           ],
         },
         {
@@ -104,6 +108,19 @@ export default defineConfig({
         {
           text: "useTokenInformation",
           link: "/react/useTokenInformation/",
+        },
+      ],
+    },
+    {
+      text: "Types",
+      collapsed: true,
+      items: [
+        { text: "IUserPosition", link: "/types/IUserPosition/" },
+        { text: "BeraConfig", link: "/types/BeraConfig/" },
+        { text: "DefaultHookOptions", link: "/types/DefaultHookOptions/" },
+        {
+          text: "DefaultHookReturnType",
+          link: "/types/DefaultHookReturnType/",
         },
       ],
     },
