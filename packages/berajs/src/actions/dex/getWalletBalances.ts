@@ -12,7 +12,7 @@ export interface GetWalletBalances {
   publicClient: PublicClient | undefined;
 }
 
-export type GetWalletBalancesResponse = BalanceToken[] | undefined; 
+export type GetWalletBalancesResponse = BalanceToken[] | undefined;
 
 interface BalanceToken extends Token {
   balance: bigint;

@@ -32,7 +32,7 @@ export const getTokens = async ({
     return {
       tokenList: [],
       customTokenList: [...(externalList ?? [])],
-      tokenDictionary: tokenListToDict((externalList ?? [])),
+      tokenDictionary: tokenListToDict(externalList ?? []),
       featuredTokenList: [],
     };
   }
@@ -41,8 +41,8 @@ export const getTokens = async ({
     const temp = await tokenList.json();
     if (!temp.tokens)
       return {
-        tokenList: (externalList ?? []),
-        customTokenList: (externalList ?? []),
+        tokenList: externalList ?? [],
+        customTokenList: externalList ?? [],
         featuredTokenList: [],
         tokenDictionary: {},
       };
@@ -78,7 +78,7 @@ export const getTokens = async ({
       tokenList: [...(externalList ?? [])],
       customTokenList: [...(externalList ?? [])],
       featuredTokenList: [],
-      tokenDictionary: tokenListToDict((externalList ?? [])),
+      tokenDictionary: tokenListToDict(externalList ?? []),
     };
   }
 };

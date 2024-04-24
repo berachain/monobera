@@ -1,4 +1,5 @@
 import { Address } from "viem";
+
 import { BeraConfig } from "..";
 import { ADDRESS_ZERO } from "~/constants";
 

@@ -8,11 +8,13 @@ export interface GetTokenInformation {
   publicClient: any;
 }
 
+export type GetTokenInformationResponse = Token | undefined;
+
 export const getTokenInformation = async ({
   address,
   config,
   publicClient,
-}: GetTokenInformation): Promise<Token | undefined> => {
+}: GetTokenInformation): Promise<GetTokenInformationResponse> => {
   try {
     if (!config.contracts?.multicallAddress) {
       throw new Error("Multicall address not found in config");

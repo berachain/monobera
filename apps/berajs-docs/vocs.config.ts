@@ -191,26 +191,6 @@ export default defineConfig({
           text: "getBeraBalance",
           link: "/actions/getBeraBalance/",
         },
-        {
-          text: "getAllowance",
-          link: "/actions/getAllowance/",
-        },
-        {
-          text: "getAllowances",
-          link: "/actions/getAllowances/",
-        },
-        {
-          text: "getTokenInformation",
-          link: "/actions/getTokenInformation/",
-        },
-        {
-          text: "getTransactionCount",
-          link: "/actions/getTransactionCount/",
-        },
-        {
-          text: "getTokens",
-          link: "/actions/getTokens/",
-        },
       ],
     },
     {

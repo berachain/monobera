@@ -39,7 +39,7 @@ export const getReserveData = async ({
   try {
     if (!config.contracts?.lendUIDataProviderAddress) {
       console.error("lendUIDataProviderAddress contract not found");
-      return undefined
+      return undefined;
     }
     const result = (await client.readContract({
       address: config.contracts?.lendUIDataProviderAddress,
@@ -49,7 +49,7 @@ export const getReserveData = async ({
     })) as [any[], any];
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const { reservesData, baseCurrencyData } = getReservesHumanized(
-    result[0],
+      result[0],
       result[1],
     );
     const formattedReserves = formatReserves({
