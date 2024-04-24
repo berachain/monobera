@@ -38,7 +38,7 @@ export const getReserveData = async ({
 > => {
   try {
     if (!config.contracts?.lendUIDataProviderAddress) {
-      console.error("lendUIDataProviderAddress contract not found");
+throw new Error("lendUIDataProviderAddress contract not found")
       return undefined;
     }
     const result = (await client.readContract({
