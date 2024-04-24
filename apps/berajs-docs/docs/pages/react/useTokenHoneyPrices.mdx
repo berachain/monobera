@@ -13,13 +13,13 @@ import { useTokenHoneyPrices } from "@bera/berajs";
 :::code-group
 
 ```ts twoslash [example.ts]
-import { useTokenHoneyPrices, Token } from "@bera/berajs";
+import { Token, useTokenHoneyPrices } from "@bera/berajs";
 
 import { beraConfig } from "./config";
 
-const { data: tokenPricesInHoney, refetch } = useTokenHoneyPrices({
+const { data: tokenPricesInHoney, refresh } = useTokenHoneyPrices({
   config: beraConfig,
-  args: { tokenAddresses:  ["0x0...", "0x1..."] },
+  args: { tokenAddresses: ["0x0...", "0x1..."] },
 });
 ```
 
