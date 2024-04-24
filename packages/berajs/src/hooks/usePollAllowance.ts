@@ -1,29 +1,24 @@
 import useSWR, { mutate } from "swr";
-import useSWRImmutable from "swr/immutable";
-import { Address, erc20Abi, formatUnits } from "viem";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getAllowance } from "~/actions/dex/getAllowance";
 import { useBeraJs } from "~/contexts";
-import { Token } from "~/types";
+import POLLING from "~/enum/polling";
+import {
+  AllowanceToken,
+  DefaultHookOptions,
+  DefaultHookReturnType,
+  Token,
+} from "~/types";
 
-const REFRESH_BLOCK_INTERVAL = 10000;
-
-interface AllowanceToken extends Token {
-  allowance: bigint;
-  formattedAllowance: string;
-}
-
-export interface IUsePollAllowanceRequest {
-  contract: string;
-  token?: Token;
-}
-
-export interface IUsePollAllowanceResponse {
-  isLoading: boolean;
-  isValidating: boolean;
-  useAllowance: () => AllowanceToken;
-  refresh: () => void;
+type UsePollAllowanceArgs = {
+  spender: Address;
+  token: Token | undefined;
+};
+export interface UsePollAllowanceResponse
+  extends DefaultHookReturnType<AllowanceToken | undefined> {
+  refetch: () => void;
 }
 
 /**
@@ -33,49 +28,39 @@ export interface IUsePollAllowanceResponse {
  * @param contract the address of the ERC20 token contract
  * @param tokens   the list of tokens to poll allowances for
  */
-export const usePollAllowance = ({
-  contract,
-  token,
-}: IUsePollAllowanceRequest): IUsePollAllowanceResponse => {
+export const usePollAllowance = (
+  args: UsePollAllowanceArgs,
+  options?: DefaultHookOptions,
+): UsePollAllowanceResponse => {
   const publicClient = usePublicClient();
-  const { account } = useBeraJs();
+  const { account, config: beraConfig } = useBeraJs();
 
   const method = "allowance";
   const QUERY_KEY = [
     account,
-    token?.address.toLowerCase(),
-    contract.toLowerCase(),
+    args.token?.address.toLowerCase(),
+    args.spender.toLowerCase(),
     method,
   ];
 
-  const { isLoading, isValidating } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
       return getAllowance({
         account: account as Address,
-        token,
-        contract: contract as Address,
+        token: args.token,
+        spender: args.spender,
         publicClient,
       });
     },
     {
-      refreshInterval: REFRESH_BLOCK_INTERVAL,
+      ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
     },
   );
 
-  /**
-   *
-   * @returns the current allowances for the given contract
-   */
-  const useAllowance = (): AllowanceToken => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
-
   return {
-    isLoading,
-    isValidating,
-    useAllowance,
-    refresh: () => mutate(QUERY_KEY),
+    ...swrResponse,
+    refetch: () => mutate(QUERY_KEY),
   };
 };

@@ -85,10 +85,6 @@ export default defineConfig({
           link: "/react/usePollBeraBalance/",
         },
         {
-          text: "usePollHoneyBalance",
-          link: "/react/usePollHoneyBalance/",
-        },
-        {
           text: "usePollAllowance",
           link: "/react/usePollAllowance/",
         },
@@ -152,7 +148,11 @@ export default defineConfig({
             },
             {
               text: "getPoolUserPosition",
-              link: "/actions/getPoolUserPosition/",
+              link: "/actions/dex/getPoolUserPosition/",
+            },
+            {
+              text: "getPoolRecentSwaps",
+              link: "/actions/dex/getPoolRecentSwaps/",
             },
           ],
         },
@@ -196,8 +196,28 @@ export default defineConfig({
           link: "/actions/getBeraBalance/",
         },
         {
-          text: "getHoneyBalance",
-          link: "/actions/getHoneyBalance/",
+          text: "getAllowance",
+          link: "/actions/getAllowance/",
+        },
+        {
+          text: "getAllowances",
+          link: "/actions/getAllowances/",
+        },
+        {
+          text: "getTokenInformation",
+          link: "/actions/getTokenInformation/",
+        },
+        {
+          text: "getTransactionCount",
+          link: "/actions/getTransactionCount/",
+        },
+        {
+          text: "getTokens",
+          link: "/actions/getTokens/",
+        },
+        {
+          text: "getWalletBalances",
+          link: "/actions/getWalletBalances/",
         },
       ],
     },

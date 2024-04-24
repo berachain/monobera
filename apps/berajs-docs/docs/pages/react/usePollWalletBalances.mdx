@@ -4,55 +4,61 @@ React hook for polling balance of a token list for a connected user
 
 ## Import 
 
-```ts
+```ts twoslash
 import { usePollWalletBalances } from '@bera/berajs'
 ```
 
 ## Usage
 
-:::code-group
-```ts twoslash [example.ts]
-import { usePollWalletBalances } from '@bera/berajs'
-import { beraConfig } from './config'
+```ts twoslash [example.ts] 
+import { usePollWalletBalances, type Token } from '@bera/berajs'
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for usePollWalletBalances
+export const beraConfig: BeraConfig = {
+    endpoints: {
+        tokenList: 'https://..',
+    }
+}
+
+const token1: Token = {
+  address: "0x0",
+  decimals: 18,
+  symbol: "TKN",
+  name: "TKN",
+};
+
+const token2: Token = {
+  address: "0x0",
+  decimals: 18,
+  symbol: "TKN2",
+  name: "TKN2",
+};
 
 const {
-    useCurrentWalletBalances,
+    data: balances,
     useSelectedWalletBalance,
     useSelectedTagWalletBalances,
     refetch,
-    isLoading
-} = usePollWalletBalances(beraConfig)
+} = usePollWalletBalances({
+     externalTokenList: [token1, token2] // optional arg to extend the token list
+})
 
-// list of all balances
-const balances = useCurrentWalletBalances()
 // balance of selected asset
 const selectedBalance = useSelectedWalletBalance('0x...')
 // balance of selected tag assets
 const selectedTagBalance = useSelectedTagWalletBalances('atoken')
 
 ```
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getRoute
-export const beraConfig: BeraConfig = {
-    endpoints: {
-        tokenList: 'https://..',
-    }
-}
-```
-:::
 
 
 ## Parameters
-```ts
+```ts twoslash
 import { type UsePollWalletBalancesRequest } from '@bera/berajs'
 ```
 
-- config.endpoints.tokenList
-    - Type: `string`
-    - Description: url to a [token list](https://tokenlists.org/) compatible json file
 ## Returns
-```ts
+```ts twoslash
 import { type UsePollBalancesResponse } from '@bera/berajs'
 ```
+

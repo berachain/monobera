@@ -4,6 +4,9 @@ import { usePublicClient } from "wagmi";
 
 import { ERC20_MODULE_ABI } from "~/abi";
 
+/**
+ * @deprecated
+ */
 export const usePollDenom = () => {
   const publicClient = usePublicClient();
   const getDenom = async (address: Address) => {

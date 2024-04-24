@@ -58,8 +58,7 @@ function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
   );
 }
 export function TokenList() {
-  const { useCurrentWalletBalances, isLoading } = usePollWalletBalances();
-  const assets = useCurrentWalletBalances();
+  const { data: assets, isLoading } = usePollWalletBalances();
 
   return (
     <div className="grid gap-4">

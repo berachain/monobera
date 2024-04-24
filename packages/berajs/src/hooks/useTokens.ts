@@ -1,24 +1,20 @@
-import { useMemo } from "react";
-import { beraTokenAddress, nativeTokenAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { useLocalStorage } from "usehooks-ts";
 
-import { DefaultHookOptions, useBeraJs, type Token } from "..";
-import { getTokens } from "../actions/dex";
+import {
+  DefaultHookOptions,
+  DefaultHookReturnType,
+  useBeraJs,
+  type Token,
+} from "..";
+import { GetTokens, getTokens } from "../actions/dex";
 
-interface IUseTokens {
-  isLoading: boolean;
-  tokenList?: Token[] | undefined;
-  customTokenList?: Token[] | undefined;
-  tokenDictionary?: { [key: string]: Token } | undefined;
-  featuredTokenList?: Token[] | undefined;
-  beraToken?: Token | undefined;
-  wBeraToken?: Token | undefined;
+export interface IUseTokens extends DefaultHookReturnType<GetTokens> {
   addNewToken: (token: Token | undefined) => void;
   removeToken: (token: Token) => void;
 }
 
-const useTokens = (options?: DefaultHookOptions): IUseTokens => {
+export const useTokens = (options?: DefaultHookOptions): IUseTokens => {
   const TOKEN_KEY = "tokens";
 
   const { config: beraConfig } = useBeraJs();
@@ -27,7 +23,7 @@ const useTokens = (options?: DefaultHookOptions): IUseTokens => {
   const [localStorageTokenList, setLocalStorageTokenList] = useLocalStorage<
     Token[]
   >(TOKEN_KEY, []);
-  const { data, isLoading } = useSWRImmutable(
+  const swrResponse = useSWRImmutable<GetTokens>(
     ["defaultTokenList", localStorageTokenList, config],
     async () => {
       return getTokens({ localStorageTokenList, config });
@@ -46,7 +42,7 @@ const useTokens = (options?: DefaultHookOptions): IUseTokens => {
 
     // Check if the token already exists in tokenList
     if (
-      data?.list.some(
+      swrResponse.data?.tokenList?.some(
         (t: { address: string }) =>
           t.address.toLowerCase() === acceptedToken?.address?.toLowerCase(),
       )
@@ -70,27 +66,9 @@ const useTokens = (options?: DefaultHookOptions): IUseTokens => {
     setLocalStorageTokenList(updatedData);
   };
 
-  const beraToken: Token | undefined = useMemo(() => {
-    if (!data?.dictionary) return undefined;
-    return (data?.dictionary as { [key: string]: Token })[nativeTokenAddress];
-  }, [data?.dictionary]);
-
-  const wBeraToken: Token | undefined = useMemo(() => {
-    if (!data?.dictionary) return undefined;
-    return (data?.dictionary as { [key: string]: Token })[beraTokenAddress];
-  }, [data?.dictionary]);
-
   return {
-    isLoading: isLoading,
-    tokenList: data?.list ?? [],
-    customTokenList: data?.customList ?? [],
-    tokenDictionary: data?.dictionary ?? {},
-    featuredTokenList: data?.featured ?? [],
-    beraToken,
-    wBeraToken,
+    ...swrResponse,
     addNewToken,
     removeToken,
   };
 };
-
-export default useTokens;

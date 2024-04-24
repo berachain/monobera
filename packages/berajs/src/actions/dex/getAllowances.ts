@@ -1,21 +1,13 @@
 import { PublicClient, erc20Abi, formatUnits } from "viem";
 
-import { BeraConfig, Token } from "../../types";
+import { AllowanceToken, BeraConfig, Token } from "~/types";
 
 export interface IGetAllowancesRequest {
-  tokens: Token[];
+  tokens: Token[] | undefined;
   account: `0x${string}` | undefined;
   config: BeraConfig;
-  method: string;
-  contract: string;
-  queryKey: (string | Token[] | undefined)[];
+  spender: string | undefined;
   publicClient: PublicClient | undefined;
-  mutate: (key: any, data: any) => void;
-}
-
-interface AllowanceToken extends Token {
-  allowance: bigint;
-  formattedAllowance: string;
 }
 
 interface Call {
@@ -33,18 +25,16 @@ export const getAllowances = async ({
   tokens,
   account,
   config,
-  contract,
+  spender,
   publicClient,
-  queryKey,
-  mutate,
-}: IGetAllowancesRequest) => {
-  if (!publicClient) return undefined;
+}: IGetAllowancesRequest): Promise<AllowanceToken[] | undefined> => {
+  if (!publicClient || !tokens || !spender) return undefined;
   if (account) {
     const call: Call[] = tokens.map((item: Token) => ({
       address: item.address as `0x${string}`,
       abi: erc20Abi,
       functionName: "allowance",
-      args: [account, contract],
+      args: [account, spender],
     }));
 
     const result = await publicClient.multicall({
@@ -52,29 +42,20 @@ export const getAllowances = async ({
       multicallAddress: config.contracts?.multicallAddress,
     });
 
-    const allowances = await Promise.all(
-      result.map(async (item: any, index: number) => {
-        const token = tokens[index];
-        if (item.error) {
-          await mutate([...queryKey, token?.address], {
-            allowance: 0,
-            formattedAllowance: "0",
-            ...token,
-          });
-          return { balance: 0, ...token };
-        }
+    const allowances = result.map((item: any, index: number) => {
+      const token = tokens[index];
+      if (item.error) {
+        return { balance: 0, ...token };
+      }
 
-        const resultAllowanceToken: AllowanceToken = {
-          allowance: item.result,
-          formattedAllowance: formatUnits(item.result, token?.decimals || 18),
-          ...token,
-        } as AllowanceToken;
-        await mutate([...queryKey, token?.address], resultAllowanceToken);
-        return resultAllowanceToken;
-      }),
-    );
-
-    return allowances;
+      const resultAllowanceToken: AllowanceToken = {
+        allowance: item.result,
+        formattedAllowance: formatUnits(item.result, token?.decimals || 18),
+        ...token,
+      } as AllowanceToken;
+      return resultAllowanceToken;
+    });
+    return allowances as AllowanceToken[];
   }
 
   return undefined;

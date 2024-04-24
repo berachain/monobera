@@ -6,17 +6,16 @@ export interface IFetchTokensRequestArgs {
   config: BeraConfig;
 }
 
-export interface IFetchTokensResponse {
-  list: Token[];
-  customList?: Token[];
-  dictionary: { [key: string]: Token };
-  featured: [];
+export interface GetTokens {
+  tokenList?: Token[] | undefined;
+  customTokenList?: Token[] | undefined;
+  tokenDictionary?: { [key: string]: Token } | undefined;
+  featuredTokenList?: Token[] | undefined;
 }
 
 /**
  * fetch and format the token list
  */
-
 function tokenListToDict(list: Token[]): { [key: string]: Token } {
   return list.reduce((acc, item) => {
     // @ts-ignore
@@ -28,20 +27,25 @@ function tokenListToDict(list: Token[]): { [key: string]: Token } {
 export const getTokens = async ({
   localStorageTokenList,
   config,
-}: IFetchTokensRequestArgs): Promise<IFetchTokensResponse | undefined> => {
+}: IFetchTokensRequestArgs): Promise<GetTokens> => {
   if (!config.endpoints?.tokenList) {
     return {
-      list: [],
-      customList: [...localStorageTokenList],
-      dictionary: tokenListToDict(localStorageTokenList),
-      featured: [],
+      tokenList: [],
+      customTokenList: [...localStorageTokenList],
+      tokenDictionary: tokenListToDict(localStorageTokenList),
+      featuredTokenList: [],
     };
   }
   try {
     const tokenList = await fetch(config.endpoints?.tokenList);
     const temp = await tokenList.json();
     if (!temp.tokens)
-      return { list: localStorageTokenList, featured: [], dictionary: {} };
+      return {
+        tokenList: localStorageTokenList,
+        customTokenList: localStorageTokenList,
+        featuredTokenList: [],
+        tokenDictionary: {},
+      };
     const defaultList = temp.tokens.map((token: any) => {
       return { ...token, default: true };
     });
@@ -50,30 +54,31 @@ export const getTokens = async ({
       .filter((token: any) => {
         const isFeatured = (tag: string) => tag === "featured";
         return token.tags.some(isFeatured);
-        // return { ...token, default: true };
       })
       .map((token: any) => {
         return { ...token, default: true };
       });
+
     const list = [...defaultList, ...localStorageTokenList];
-    // Make it unique
+
     const uniqueList = list.filter(
       (item, index) =>
         list.findIndex((i) => i.address === item.address) === index,
     );
 
     return {
-      list: uniqueList,
-      customList: [...localStorageTokenList],
-      dictionary: tokenListToDict(list),
-      featured: defaultFeaturedList ?? [],
+      tokenList: uniqueList,
+      customTokenList: [...localStorageTokenList],
+      tokenDictionary: tokenListToDict(list),
+      featuredTokenList: defaultFeaturedList ?? [],
     };
   } catch (error) {
     console.error("Error fetching token list", error);
     return {
-      list: localStorageTokenList,
-      featured: [],
-      dictionary: tokenListToDict(localStorageTokenList),
+      tokenList: [...localStorageTokenList],
+      customTokenList: [...localStorageTokenList],
+      featuredTokenList: [],
+      tokenDictionary: tokenListToDict(localStorageTokenList),
     };
   }
 };

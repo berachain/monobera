@@ -1,38 +1,33 @@
 # usePollTransactionCount
 
-React hook for polling transaction counts for a connected user
+React hook for polling the transaction count for a given address.
 
 ## Import
 
-```ts
+```ts twoslash
 import { usePollTransactionCount } from "@bera/berajs";
 ```
 
 ## Usage
 
-```ts [example.ts]
-import { usePollWalletBalances } from "@bera/berajs";
+```ts twoslash [example.ts]
+import { usePollTransactionCount } from "@bera/berajs";
 
-const exampleAddress = "0x1..";
-
-const { useTransactionCount } = usePollTransactionCount({
-  address: exampleAddress,
+const { data: txnCount, refresh } = usePollTransactionCount({
+  address: "0x0...",
 });
-
-// number of transactions
-const txCounts = useTransactionCount();
 ```
 
 :::
 
 ## Parameters
 
-```ts
-import { type IUserPollTransactionCountRequest } from "@bera/berajs";
+```ts twoslash
+import { type UserPollTransactionCountRequest } from "@bera/berajs";
 ```
 
 ## Returns
 
 ```ts
-import { type IUserPollTransactionCountResponse } from "@bera/berajs";
+import { type UserPollTransactionCountResponse } from "@bera/berajs";
 ```

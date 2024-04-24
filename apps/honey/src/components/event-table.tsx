@@ -86,7 +86,7 @@ export const EventTable = ({
   isLoading: boolean | undefined;
   arcade: boolean;
 }) => {
-  const { tokenDictionary } = useTokens();
+  const { data: tokenData } = useTokens();
   return (
     <Table>
       <TableHeader>
@@ -158,7 +158,7 @@ export const EventTable = ({
                   />
                 </TableCell>
                 <TableCell className="hidden font-medium sm:table-cell">
-                  {getTokenDisplay(event, tokenDictionary)}
+                  {getTokenDisplay(event, tokenData?.tokenDictionary)}
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                   {truncateHash(event.id.split(":")[2] ?? "")}

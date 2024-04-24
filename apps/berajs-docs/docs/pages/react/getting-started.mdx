@@ -28,7 +28,7 @@ Berajs can be used with any wagmi compatible wallet library. Here is an example 
 
 ```tsx [app.tsx]
 import { WagmiProvider } from 'wagmi'
-import { config } from './config' 
+import { config } from './config'
 import { BeraJsProvider } from "@bera/berajs";  // [!code focus]
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
@@ -52,11 +52,15 @@ function App() {
                     </BeraJsProvider>  // [!code focus]
                 </DynamicWagmiConnector>
           </QueryClientProvider>
-        </WagmiProvider> 
+        </WagmiProvider>
     </DynamicContextProvider>
 
   )
 }
 ```
 
-This is just one of many configurations BeraJs can be used. 
+This is just one of many configurations BeraJs can be used.
+
+## Config Override
+
+`BeraJsProvider` by default is configured to point to the contracts and endpoints that the official dapps point to, in order to override these you can use the `configOverride` prop of `BeraJSProvider`. [Learn more about the `configOverride` argument here.](/bera-config)

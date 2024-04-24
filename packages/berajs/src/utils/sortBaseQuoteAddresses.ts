@@ -1,8 +1,7 @@
 import { Address } from "viem";
 
 import { BeraConfig } from "..";
-
-const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
+import { ADDRESS_ZERO } from "~/constants";
 
 export interface SortBaseQuoteAddress {
   tokenA: Address;

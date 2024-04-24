@@ -1,5 +1,5 @@
-export { default as useTokenInformation } from "./useTokenInformation";
-export { default as useTokens } from "./useTokens";
+export * from "./useTokenInformation";
+export * from "./useTokens";
 export { default as useGauges } from "./useGauges";
 export * from "./useValidatorIcon";
 export * from "./useChainId";
@@ -10,7 +10,6 @@ export * from "./modules";
 export * from "./usePollBalance";
 export * from "./usePollAllowance";
 export * from "./useOct";
-export * from "./usePollHoneyBalance";
 export * from "./usePollBeraBalance";
 export * from "./usePollTransactionCount";
 export * from "./useGasData";

@@ -1,34 +1,13 @@
-# Bera Config
+# BeraConfig
 
-Bera Config is a common object used to pass configuration options to Bera. It can either be used to point towards already hosted services or be used to point towards your own services.
-
-```ts
-import { type BeraConfig } from "berajs";
-
-export const beraJsConfig: BeraConfig = {
-  endpoints: {
-    dexRouter: "https://...",
-  },
-  subgraphs: {
-    honeySubgraph: "https://...",
-    dexSubgraph: "https://...",
-    lendSubgraph: "https://...",
-  },
-  contracts: {
-    multicallAddress: "0x...",
-    crocMultiSwapAddress: "0x...",
-    wrappedTokenAddress: "0x...",
-    dexAddress: "0x...",
-  },
-};
-```
+`BeraConfig` is a common object used to pass configuration options to BeraJs actions, hooks, and other functions. It can either be used to point towards already hosted services or be used to point towards your own services.
 
 All fields on `BeraConfig` are optional such that if you only want to interact with dex, you can provide a minimal config like so:
 
 ```ts
 import { type BeraConfig } from "berajs";
 
-export const beraJsConfig: BeraConfig = {
+export const myCustomBeraConfig: BeraConfig = {
   endpoints: {
     dexRouter: "https://...",
   },
@@ -46,18 +25,18 @@ Required `BeraConfig` fields are documented on each hook / action.
 
 ### Default BeraConfig
 
-You can import the default beraJsConfig object
+By default actions and hooks use the `defaultBeraConfig` constant that you can import to use explicitly or customize. Hooks default to the config from `BeraJsProvider`, if the provider does not have a `configOverride` prop of type `BeraConfig` passed in, it will also use the `defaultBeraConfig` internally, and consequetially so will the hooks. Hooks can also have their config explicitly overriden in their `opts` argument of type `DefaultHookOptions`
 
 ```ts
-import { beraJsConfig } from "@bera/wagmi";
+import { defaultBeraConfig } from "@bera/wagmi";
 ```
 
 :::info
-Note that if you're developing in the monorepo itself, `beraJsConfig` is populated at build time with environment variables from `.env` and `.env.local` at the monorepo root with the following mapping.
+Note that if you're developing in the monorepo itself, `defaultBeraConfig` is populated at build time with environment variables from `.env` and `.env.local` at the monorepo root with the following mapping.
 :::
 
 ```ts
-{
+const defaultBeraConfig = {
   endpoints: {
     tokenList: process.env.NEXT_PUBLIC_TOKEN_LIST,
     dexRouter: process.env.NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT,
@@ -75,7 +54,77 @@ Note that if you're developing in the monorepo itself, `beraJsConfig` is populat
     honeyAddress: process.env.NEXT_PUBLIC_HONEY_ADDRESS,
   },
 };
+```
 
+### Customizing BeraConfig
+
+In the case of the developer wanting to point to different contracts or subgraphs (example: a fork of dexSubgraph or the multicall contract), one can do so by building a custom object of type `BeraConfig` to either pass into actions' `config` option or the `configOverride` prop of `BeraJsProvider` in a React app to make it globally used by hooks.
+
+#### Approach 1: import and override/customize the defaultBeraConfig object
+
+```tsx
+import React from "react";
+import {
+  BeraJsProvider,
+  defaultBeraConfig,
+  getSwap,
+  type BeraConfig,
+} from "@bera/berajs";
+
+const customizedDefaultBeraConfig: BeraConfig = {
+  ...defaultBeraConfig,
+  subgraphs: {
+    ...defaultBeraConfig?.subgraphs,
+    dexSubgraph: "https://link.to.custom.dex.subgraph"
+  }
+};
+
+const swapInfo = await getSwap({
+    // ... other args
+    config: customizedDefaultBeraConfig // when using beraJs actions
+})
+
+// Global option with BeraJsProvider for hooks in React apps
+function App() {
+  return (
+    <BeraJsProvider configOverride={customizedDefaultBeraConfig}>
+      {/** ... */}
+    </BeraJsProvider>
+  );
+}
+```
+
+:::info
+If you are developing from the monorepo, note that [`defaultBeraConfig`](/bera-config) is populated at build time with environment variables from `.env` and `.env.local` at the monorepo root.
+Visit the [`beraConfig`](/bera-config#default-beraconfig) docs page for more information on environment variable mapping to config variables
+:::
+
+#### Approach 2: manually create and populate a beraConfig
+
+```tsx
+import React from "react"
+import { BeraJsProvider, type BeraConfig, getSwap } from "@bera/berajs";
+
+/**
+ * intialize a beraconfig with the required fields for the desired action
+ */
+const fullyCustomBeraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+};
+
+const swapInfo = await getSwap({
+    // ... other args
+    config: fullyCustomBeraConfig // when using beraJs actions
+})
+
+// Global option with BeraJsProvider for hooks in React apps
+function App() {
+  return (
+    <BeraJsProvider configOverride={fullyCustomBeraConfig}>{/** ... */}</BeraJsProvider>
+  );
+}
 ```
 
 ## Berachain Services
