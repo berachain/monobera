@@ -74,40 +74,46 @@ export default defineConfig({
           items: [{ text: "Getting Started", link: "/react/getting-started/" }],
         },
         {
-          text: "usePollWalletBalances",
-          link: "/react/usePollWalletBalances/",
-        },
-        {
-          text: "useTokens",
-          link: "/react/useTokens/",
-        },
-        {
-          text: "useTokenHoneyPrice",
-          link: "/react/useTokenHoneyPrice/",
-        },
-        {
-          text: "useTokenHoneyPrices",
-          link: "/react/useTokenHoneyPrices/",
-        },
-        {
-          text: "usePollBeraBalance",
-          link: "/react/usePollBeraBalance/",
-        },
-        {
-          text: "usePollAllowance",
-          link: "/react/usePollAllowance/",
-        },
-        {
-          text: "usePollAllowances",
-          link: "/react/usePollAllowances/",
-        },
-        {
-          text: "usePollTransactionCount",
-          link: "/react/usePollTransactionCount/",
-        },
-        {
-          text: "useTokenInformation",
-          link: "/react/useTokenInformation/",
+          text: "Utils",
+          collapsed: true,
+          items: [
+            {
+              text: "usePollWalletBalances",
+              link: "/react/utils/usePollWalletBalances/",
+            },
+            {
+              text: "useTokens",
+              link: "/react/utils/useTokens/",
+            },
+            {
+              text: "useTokenHoneyPrice",
+              link: "/react/utils/useTokenHoneyPrice/",
+            },
+            {
+              text: "useTokenHoneyPrices",
+              link: "/react/utils/useTokenHoneyPrices/",
+            },
+            {
+              text: "usePollBeraBalance",
+              link: "/react/utils/usePollBeraBalance/",
+            },
+            {
+              text: "usePollAllowance",
+              link: "/react/utils/usePollAllowance/",
+            },
+            {
+              text: "usePollAllowances",
+              link: "/react/utils/usePollAllowances/",
+            },
+            {
+              text: "usePollTransactionCount",
+              link: "/react/utils/usePollTransactionCount/",
+            },
+            {
+              text: "useTokenInformation",
+              link: "/react/utils/useTokenInformation/",
+            },
+          ],
         },
       ],
     },
@@ -145,36 +151,20 @@ export default defineConfig({
               link: "/actions/dex/getWithdrawLiquidityPayload/",
             },
             {
-              text: "getAllowance",
-              link: "/actions/getAllowance/",
-            },
-            {
-              text: "getAllowances",
-              link: "/actions/getAllowances/",
-            },
-            {
-              text: "getTokenInformation",
-              link: "/actions/getTokenInformation/",
-            },
-            {
-              text: "getTransactionCount",
-              link: "/actions/getTransactionCount/",
-            },
-            {
-              text: "getTokens",
-              link: "/actions/getTokens/",
-            },
-            {
-              text: "getWalletBalances",
-              link: "/actions/getWalletBalances/",
-            },
-            {
               text: "getPoolUserPosition",
               link: "/actions/dex/getPoolUserPosition/",
             },
             {
               text: "getPoolRecentSwaps",
               link: "/actions/dex/getPoolRecentSwaps/",
+            },
+            {
+              text: "sortBaseQuoteAddresses",
+              link: "/actions/dex/sortBaseQuoteAddresses/",
+            },
+            {
+              text: "getBeraLpAddress",
+              link: "/actions/dex/getBeraLpAddress/",
             },
           ],
         },
@@ -206,44 +196,39 @@ export default defineConfig({
           items: [{ text: "Getting Started", link: "/react/getting-started/" }],
         },
         {
-          text: "getAllowance",
-          link: "/actions/getAllowance/",
-        },
-        {
-          text: "getAllowances",
-          link: "/actions/getAllowances/",
-        },
-        {
-          text: "getTokenInformation",
-          link: "/actions/getTokenInformation/",
-        },
-        {
-          text: "getTransactionCount",
-          link: "/actions/getTransactionCount/",
-        },
-        {
-          text: "getTokens",
-          link: "/actions/getTokens/",
-        },
-        {
-          text: "getWalletBalances",
-          link: "/actions/getWalletBalances/",
-        },
-        {
-          text: "getPoolUserPosition",
-          link: "/actions/getPoolUserPosition/",
-        },
-        {
-          text: "sortBaseQuoteAddresses",
-          link: "/actions/sortBaseQuoteAddresses/",
-        },
-        {
-          text: "getBeraLpAddress",
-          link: "/actions/getBeraLpAddress/",
-        },
-        {
-          text: "getBeraBalance",
-          link: "/actions/getBeraBalance/",
+          text: "Utils",
+          collapsed: true,
+          items: [
+            {
+              text: "getAllowance",
+              link: "/actions/utils/getAllowance/",
+            },
+            {
+              text: "getAllowances",
+              link: "/actions/utils/getAllowances/",
+            },
+            {
+              text: "getTokenInformation",
+              link: "/actions/utils/getTokenInformation/",
+            },
+            {
+              text: "getTransactionCount",
+              link: "/actions/utils/getTransactionCount/",
+            },
+            {
+              text: "getTokens",
+              link: "/actions/utils/getTokens/",
+            },
+            {
+              text: "getWalletBalances",
+              link: "/actions/utils/getWalletBalances/",
+            },
+
+            {
+              text: "getBeraBalance",
+              link: "/actions/utils/getBeraBalance/",
+            },
+          ],
         },
       ],
     },

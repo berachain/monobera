@@ -27,5 +27,6 @@ import { type UsePollBeraBalanceArgs } from "@bera/berajs";
 ## Returns
 
 ```ts twoslash
-import { type UsePollBeraBalancesResponse } from "@bera/berajs";
+import { type DefaultHookReturnType, type TokenBalance } from "@bera/berajs";
+type result = DefaultHookReturnType<TokenBalance | undefined>
 ```
