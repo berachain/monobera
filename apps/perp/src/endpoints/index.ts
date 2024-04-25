@@ -38,9 +38,9 @@ export async function getDailyPriceChange(): Promise<any | undefined> {
   try {
     const res = await fetch(`${perpsEndpoint}/historical-prices/24h`);
     const jsonRes = await res.json();
-    return jsonRes.prices;
+    return jsonRes.prices ?? [];
   } catch (e) {
-    return [0, 0, 0];
+    return [];
   }
 }
 
@@ -69,8 +69,7 @@ export async function getHistoricalSummary(): Promise<any | undefined> {
     const res = await fetch(`${perpsEndpoint}/historical-summary/24h`);
     const jsonRes = await res.json();
     const historicalSummary = jsonRes.result;
-
-    return historicalSummary;
+    return historicalSummary ?? [];
   } catch (e) {
     return [];
   }
