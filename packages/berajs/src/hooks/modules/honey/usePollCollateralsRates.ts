@@ -13,6 +13,7 @@ import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 export interface UsePollCollateralsRatesResponse
   extends DefaultHookReturnType<CollateralRatesMap | undefined> {
   usePollCollateralRate: (collateral: string) => CollateralRates | undefined;
+  refetch: () => void;
 }
 
 export const usePollCollateralsRates = (
@@ -48,6 +49,7 @@ export const usePollCollateralsRates = (
 
   return {
     ...swrResponse,
+    refetch: () => void swrResponse.mutate(),
     usePollCollateralRate,
   };
 };

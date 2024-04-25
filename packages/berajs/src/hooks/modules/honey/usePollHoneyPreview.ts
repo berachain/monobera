@@ -5,13 +5,18 @@ import { HoneyPreviewMethod, getHoneyPreview } from "~/actions";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType, Token } from "~/types";
 
+export interface UsePollHoneyPreviewResponse
+  extends DefaultHookReturnType<string | undefined> {
+  refetch: () => void;
+}
+
 export const usePollHoneyPreview = (
   collateral: Token | undefined,
   amount: string,
   mint: boolean, // true mint, false redeem
   given_in: boolean, // true given in, false given out
   options?: DefaultHookOptions,
-): DefaultHookReturnType<string | undefined> => {
+): UsePollHoneyPreviewResponse => {
   const publicClient = usePublicClient();
   const method = mint
     ? given_in
@@ -24,7 +29,7 @@ export const usePollHoneyPreview = (
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  return useSWR(QUERY_KEY, async () => {
+  const swrResponse = useSWR(QUERY_KEY, async () => {
     if (!publicClient) throw new Error("publicClient is not defined");
     if (!config.contracts?.honeyRouterAddress)
       throw new Error("missing contract address honeyRouterAddress");
@@ -38,4 +43,8 @@ export const usePollHoneyPreview = (
       method,
     });
   });
+  return {
+    ...swrResponse,
+    refetch: () => void swrResponse.mutate(),
+  }
 };

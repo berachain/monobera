@@ -1,5 +1,4 @@
-import useSWR, { useSWRConfig } from "swr";
-import useSWRImmutable from "swr/immutable";
+import useSWR from "swr";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
@@ -53,7 +52,7 @@ export const usePollReservesDataList = (
   const useSelectedReserveData = (
     address: Address,
   ): ReserveData | undefined => {
-    const { data: reserves = [] } = useSWRImmutable<ReserveData[]>(QUERY_KEY);
+    const reserves = swrResponse.data?.formattedReserves ?? [];
     return reserves.find(
       (reserve: ReserveData) =>
         reserve.underlyingAsset === address ||

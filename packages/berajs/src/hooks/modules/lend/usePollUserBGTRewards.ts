@@ -6,7 +6,6 @@ import { DefaultHookOptions } from "~/types";
 
 export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
   const publicClient = usePublicClient();
-  const { mutate } = useSWRConfig();
   const { account } = useBeraJs();
 
   // const { account, config: beraConfig } = useBeraJs();
@@ -14,7 +13,7 @@ export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
 
   const QUERY_KEY = ["getUserBGTRewardsLend", account];
   const swrResponse = useSWR(QUERY_KEY, async () => {
-    if (!publicClient) return undefined;
+    if (!publicClient) throw new Error("publicClient is not defined");
     // if (account) {
     // try {
     //   const result = await publicClient.readContract({
@@ -35,7 +34,7 @@ export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
   });
 
   return {
-    refetch: () => void mutate(QUERY_KEY),
     ...swrResponse,
+    refetch: () => void swrResponse.mutate(),
   };
 };

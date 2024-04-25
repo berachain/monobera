@@ -1,4 +1,4 @@
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 import {
   UserAccountData,
@@ -17,7 +17,6 @@ export const usePollUserAccountData = (
   options?: DefaultHookOptions,
 ): UsePollUserAccountDataResponse => {
   const publicClient = usePublicClient();
-  const { mutate } = useSWRConfig();
   const { account, config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
 
@@ -44,6 +43,6 @@ export const usePollUserAccountData = (
 
   return {
     ...swrResponce,
-    refetch: () => void mutate(swrResponce.mutate()),
+    refetch: () => void swrResponce.mutate(),
   };
 };
