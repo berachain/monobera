@@ -137,6 +137,9 @@ export default defineConfig({
           text: "DefaultHookReturnType",
           link: "/types/DefaultHookReturnType/",
         },
+        { text: "HoneyPreviewMethod", link: "/types/HoneyPreviewMethod/" },
+        { text: "ReserveData", link: "/types/ReserveData/" },
+        { text: "BaseCurrencyData", link: "/types/BaseCurrencyData/" },
       ],
     },
     {

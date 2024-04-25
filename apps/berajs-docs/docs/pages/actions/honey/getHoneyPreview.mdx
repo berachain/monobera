@@ -14,25 +14,46 @@ import { getHoneyPreview } from "@bera/berajs/actions";
 
 ## Usage
 
-```ts
-const { data, isLoading } = useHoneyPreview({
-  client,
-  config,
-  collateral,
-  amount,
-  method,
+:::code
+```ts [example.ts]
+
+import { getHoneyPreview, HoneyPreviewMethod } from "@bera/berajs/actions";
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
+
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
+  transport: http(),
 });
+
+// required configs for getHoneyPreview
+export const beraConfig: BeraConfig = {
+  contracts: {
+    honeyRouterAddress: "0x...",
+  },
+};
+
+return await getHoneyPreview({
+  client: publicClient,
+  config,
+  collateral: { address: "0x..." } as Token,
+  amount: "69.420",
+  method: HoneyPreviewMethod.Mint,
+})
 ```
+:::
 
 ## Parameters
 
-| Name         | type                 | Description                                                        | Required |
+| Name         | Type                 | Description                                                        | Required |
 | ------------ | :------------------- | :----------------------------------------------------------------- | :------: |
 | `client`     | `PublicClient`       | The view public client used to interact with the blockchain        |  `true`  |
 | `config`     | `BeraConfig`         | BeraConfig object containing addresses for relevant resources      |  `true`  |
 | `collateral` | `Token`              | The token type of the collateral                                   |  `true`  |
 | `amount`     | `string`             | The amount for the transaction, as a string                        |  `true`  |
-| `method`     | `HoneyPreviewMethod` | The method for the preview (e.g., mint, redeem)                    |  `true`  |
+| `method`     | [`HoneyPreviewMethod`](/types/HoneyPreviewMethod) | The method for the preview (e.g., mint, redeem)                    |  `true`  |
+
 
 ## Returns
 

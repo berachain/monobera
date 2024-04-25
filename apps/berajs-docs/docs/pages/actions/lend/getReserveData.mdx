@@ -1,6 +1,10 @@
 # getReserveData
 
-Action for getting global reserve info.
+Action for getting global reserve information. This function fetches and returns details about reserves managed by Bera, including addresses and pricing information in various currencies.
+
+## Initialization
+
+Before using this function, ensure you have followed the initialization steps outlined in [Actions > Getting Started](/actions/getting-started).
 
 ## Import
 
@@ -10,38 +14,46 @@ import { getReserveData } from "@bera/berajs/actions";
 
 ## Usage
 
-```ts
-import { getReserveData } from "@bera/berajs/actions";
+:::code
+
+```ts [example.ts]
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
+
+// Initialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain, // For chain details see: https://github.com/wevm/viem/blob/main/src/chains/index.ts
+  transport: http(),
+});
+
+// Configuration needed for getReserveData
+const config: BeraConfig = {
+  contracts: {
+    lendUIDataProviderAddress: "0x...",
+    lendAddressProviderAddress: "0x..."
+  },
+};
 
 const reserveData = await getReserveData({
-  client,
-  config
+  client: publicClient,
+  config,
 });
 ```
+:::
 
 ## Parameters
 
-```ts
-client: PublicClient;
-config: BeraConfig;
-```
+| Name     | Type           | Description                                                 | Required |
+| -------- | -------------- | ----------------------------------------------------------- | :------: |
+| `client` | `PublicClient` | The public client used for blockchain interactions          |  `true`  |
+| `config` | `BeraConfig`   | Configuration object including necessary contract addresses |  `true`  |
+
 
 ## Returns
 
 ```ts
-interface ReserveData extends FormatReserveUSDResponse {
-  aTokenAddress: Address;
-  variableDebtTokenAddress: Address;
-}
 
-interface BaseCurrencyData {
-  marketReferenceCurrencyDecimals: number;
-  marketReferenceCurrencyPriceInUsd: string;
-  networkBaseTokenPriceInUsd: string;
-  networkBaseTokenPriceDecimals: number;
-}
-
-type reserveData = Promise<
+type return = Promise<
   | {
       formattedReserves: ReserveData[];
       baseCurrencyData: BaseCurrencyData;
@@ -49,3 +61,9 @@ type reserveData = Promise<
   | undefined
 >;
 ```
+
+| Name                | Type   | Description | Optional |
+| ------------------- | ------ | ----------- | :------: |
+| `formattedReserves` | [`ReserveData[]`](/types/ReserveData)  | Array of reserve data details, each containing token addresses and related information. |`false` |
+|`baseCurrencyData`      |[`BaseCurrencyData`](/types/BaseCurrencyData)                                | Data regarding the base currency including price and decimals. |`false` |
+
