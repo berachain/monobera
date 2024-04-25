@@ -15,7 +15,10 @@ import { useTheme } from "next-themes";
 import { type Chain } from "viem";
 import { WagmiProvider } from "wagmi";
 
-import { defaultBeraNetworkConfig, wagmiConfig } from "~/config/defaultBeraJsConfig";
+import {
+  defaultBeraNetworkConfig,
+  wagmiConfig,
+} from "~/config/defaultBeraJsConfig";
 
 export interface NetworkConfig {
   isTestnet?: boolean;

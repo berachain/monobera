@@ -23,7 +23,8 @@ export const usePollUserAccountData = (
     QUERY_KEY,
     async () => {
       if (!publicClient) throw new Error("publicClient is not defined");
-      if (!config?.contracts?.lendPoolProxyAddress)
+      if (!config) throw new Error("missing beraConfig");
+      if (!config.contracts?.lendPoolProxyAddress)
         throw new Error("missing contract address lendPoolProxyAddress");
       if (!account) throw new Error("missing account address");
 
