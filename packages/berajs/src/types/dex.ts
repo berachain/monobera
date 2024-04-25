@@ -3,7 +3,7 @@ import { Address } from "viem";
 
 export type Token = {
   logoURI?: string;
-  default ?: boolean; // TODO: deprecate this
+  default?: boolean; // TODO: deprecate this
   tags?: string[];
   address: Address;
   decimals: number;

@@ -10,6 +10,18 @@ React hook for providing an interface to a [token list](https://tokenlists.org/)
 import { useTokens } from "@bera/berajs";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    tokenList: "https://..",
+  },
+};
+```
+
 ## Usage
 
 ```ts twoslash [example.ts]
@@ -32,14 +44,32 @@ addNewToken(newToken);
 removeToken(newToken);
 ```
 
-## Parameters
+#### options: `DefaultHookOptions`
 
-```ts
-import { type DefaultHookTypes } from "@bera/berajs";
-```
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
 
-## Returns
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
 
-```ts
-import { type UseTokens } from "@bera/berajs";
-```
+
+## Returns `IUseTokens`
+
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `GetTokens`        | user's wallet balance data                                           |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+| `addNewToken`    | `(token: Token) => void`                   | function for adding custom tokens to the list using localStorage     | `false`  |
+| `removeToken`    | `(token: Token) => void`                         |  function for removing custom tokens to the list using localStorage   | `false`  |
+
+
+See type [`GetTokens`](/types/GetTokens/)
+
+See type [`Token`](/types/Token/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

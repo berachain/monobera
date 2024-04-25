@@ -13,7 +13,10 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
 
-function TokenRow({ asset, isLoading }: { asset: BalanceToken; isLoading: boolean }) {
+function TokenRow({
+  asset,
+  isLoading,
+}: { asset: BalanceToken; isLoading: boolean }) {
   const { data: tokenPrice } = useTokenHoneyPrice({
     tokenAddress: asset.address,
   });

@@ -139,7 +139,7 @@ export default defineConfig({
         {
           text: "BalanceToken",
           link: "/types/BalanceToken/",
-        }
+        },
       ],
     },
     {

@@ -1,4 +1,4 @@
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
