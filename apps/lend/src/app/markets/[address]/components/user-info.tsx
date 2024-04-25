@@ -20,9 +20,9 @@ export default function UserInfo() {
   const { useSelectedWalletBalance, isLoading } = usePollWalletBalances();
   const tokenBalance = useSelectedWalletBalance(honeyTokenAddress);
 
-  const { useSelectedReserveData, baseCurrencyData } =
+  const { getSelectedReserve, baseCurrencyData } =
     usePollReservesDataList();
-  const reserve = useSelectedReserveData(honeyTokenAddress);
+  const reserve = getSelectedReserve(honeyTokenAddress);
 
   const { data: userAccountData } = usePollUserAccountData();
 

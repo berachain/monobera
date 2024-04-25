@@ -10,20 +10,20 @@ import {
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
-export interface UsePollCollateralsRatesResponse
+export interface UseCollateralsRatesResponse
   extends DefaultHookReturnType<CollateralRatesMap | undefined> {
-  usePollCollateralRate: (collateral: string) => CollateralRates | undefined;
+    getCollateralRate: (collateral: string) => CollateralRates | undefined;
 }
 
-export const usePollCollateralsRates = ({
+export const useCollateralsRates = ({
   args: { collateralList },
   options,
 }: {
   args: { collateralList: Address[] };
   options?: DefaultHookOptions;
-}): UsePollCollateralsRatesResponse => {
+}): UseCollateralsRatesResponse => {
   const publicClient = usePublicClient();
-  const method = "usePollCollateralsRates";
+  const method = "useCollateralsRates";
   const QUERY_KEY = [method, ...collateralList];
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
@@ -46,13 +46,13 @@ export const usePollCollateralsRates = ({
     { ...options?.opts },
   );
 
-  const usePollCollateralRate = (
+  const getCollateralRate = (
     collateral: string,
   ): CollateralRates | undefined => swrResponse.data?.[getAddress(collateral)];
 
   return {
     ...swrResponse,
     refresh: () => void swrResponse.mutate(),
-    usePollCollateralRate,
+    getCollateralRate,
   };
 };

@@ -15,7 +15,7 @@ export interface UsePollReservesDataListResponse
       }
     | undefined
   > {
-  useSelectedReserveData: (address: Address) => ReserveData | undefined;
+  getSelectedReserve: (address: Address) => ReserveData | undefined;
   formattedReserves: ReserveData[];
   baseCurrencyData: BaseCurrencyData | undefined;
   totalBorrowed: number;
@@ -49,7 +49,7 @@ export const usePollReservesDataList = (
     },
   );
 
-  const useSelectedReserveData = (
+  const getSelectedReserve = (
     address: Address,
   ): ReserveData | undefined => {
     const reserves = swrResponse.data?.formattedReserves ?? [];
@@ -74,7 +74,7 @@ export const usePollReservesDataList = (
   return {
     ...swrResponse,
     refresh: () => void swrResponse.mutate(),
-    useSelectedReserveData,
+    getSelectedReserve,
     formattedReserves,
     baseCurrencyData,
     totalBorrowed,

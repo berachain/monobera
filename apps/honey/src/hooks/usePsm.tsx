@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import {
   TransactionActionType,
   useBeraJs,
+  useCollateralsRates,
   usePollAllowance,
   usePollBalance,
-  usePollCollateralsRates,
   usePollHoneyPreview,
   useTokens,
   type Token,
@@ -72,16 +72,14 @@ export const usePsm = () => {
     token: selectedFrom,
   });
 
-  const { usePollCollateralRate, isLoading: isFeeLoading } =
-    usePollCollateralsRates({
-      args: {
-        collateralList:
-          collateralList?.map((token: any) => token.address) ?? [],
-      },
-    });
+  const { getCollateralRate, isLoading: isFeeLoading } = useCollateralsRates({
+    args: {
+      collateralList: collateralList?.map((token: any) => token.address) ?? [],
+    },
+  });
 
   const params = collateral
-    ? usePollCollateralRate(collateral.address as Address)
+    ? getCollateralRate(collateral.address as Address)
     : undefined;
 
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
