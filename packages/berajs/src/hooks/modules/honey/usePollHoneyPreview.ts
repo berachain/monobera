@@ -46,5 +46,5 @@ export const usePollHoneyPreview = (
   return {
     ...swrResponse,
     refetch: () => void swrResponse.mutate(),
-  }
+  };
 };
