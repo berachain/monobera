@@ -67,7 +67,7 @@ export const usePollReservesDataList = (
   let marketSize = 0;
   formattedReserves.forEach((reserve: ReserveData) => {
     totalBorrowed += Number(reserve.totalDebt);
-    marketSize += Number(reserve.totalLiquidity)
+    marketSize += Number(reserve.totalLiquidity);
   });
 
   return {
@@ -77,6 +77,6 @@ export const usePollReservesDataList = (
     formattedReserves,
     baseCurrencyData,
     totalBorrowed,
-    marketSize
+    marketSize,
   };
 };
