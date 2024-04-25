@@ -49,9 +49,7 @@ export const usePollReservesDataList = (
     },
   );
 
-  const getSelectedReserve = (
-    address: Address,
-  ): ReserveData | undefined => {
+  const getSelectedReserve = (address: Address): ReserveData | undefined => {
     const reserves = swrResponse.data?.formattedReserves ?? [];
     return reserves.find(
       (reserve: ReserveData) =>
