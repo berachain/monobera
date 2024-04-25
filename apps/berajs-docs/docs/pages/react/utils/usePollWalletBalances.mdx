@@ -8,6 +8,18 @@ React hook for polling balance of a token list for a connected user
 import { usePollWalletBalances } from "@bera/berajs";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    tokenList: "https://..",
+  },
+};
+```
+
 ## Usage
 
 ```ts twoslash [example.ts]
@@ -55,12 +67,48 @@ const selectedTagBalance = useSelectedTagWalletBalances("atoken");
 
 ## Parameters
 
-```ts twoslash
-import { type UsePollWalletBalancesArgs } from "@bera/berajs";
+#### Call signature
+
+```ts
+usePollWalletBalances(
+  args?: { externalTokenList?: Token[] },
+  options?: DefaultHookOptions,
+);
 ```
 
-## Returns
+#### args: `{externalTokenList?: Token[]}`
 
-```ts twoslash
-import { type UsePollBalancesResponse } from "@bera/berajs";
-```
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| `externalTokenList` | `PoolV2` | pool of which to fetch the connect wallet user's position |  `false`  |
+
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+
+
+## Returns `UsePollBalancesResponse`
+
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `BalanceToken[] \| undefined`        | user's wallet balance data                                           |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+| `useSelectedWalletBalance`    | `(address: string) =>( BalanceToken \| undefined)`                   | hook used for getting a selected token's balance       | `false`  |
+| `useSelectedTagWalletBalances`    | `(tag: string) =>( BalanceToken[] \| undefined)`                           |  hook used for getting token balances of a certain tag      | `false`  |
+
+
+See type [`BalanceToken`](/types/BalanceToken/)
+
+See type [`Token`](/types/Token/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)
