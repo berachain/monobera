@@ -28,7 +28,6 @@ export const getCollateralRates = async ({
   collateralList,
 }: collateralRatesArgs): Promise<CollateralRatesMap | undefined> => {
   try {
-
     if (!config.contracts?.honeyRouterAddress)
       throw new Error("missing contract address honeyRouterAddress");
     if (!config.contracts?.multicallAddress)

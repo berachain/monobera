@@ -8,10 +8,8 @@ import { Skeleton } from "@bera/ui/skeleton";
 import BGTApy from "./bgt-apy";
 
 export default function Data() {
-  const { useTotalBorrowed, useTotalMarketSize } = usePollReservesDataList();
-  const totalMarketSize = useTotalMarketSize();
-  const totalBorrowed = useTotalBorrowed();
-
+  const { totalBorrowed, marketSize: totalMarketSize } =
+    usePollReservesDataList();
   return (
     <section className="m-auto max-w-[600px] py-24">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

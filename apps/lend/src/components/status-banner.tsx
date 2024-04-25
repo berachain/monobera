@@ -26,10 +26,10 @@ export default function StatusBanner() {
 
   const { isReady } = useBeraJs();
 
-  const { useReservesDataList, useBaseCurrencyData } =
-    usePollReservesDataList();
-  const reservesDataList = useReservesDataList();
-  const baseCurrency = useBaseCurrencyData();
+  const {
+    formattedReserves: reservesDataList,
+    baseCurrencyData: baseCurrency,
+  } = usePollReservesDataList();
 
   const { data: balanceToken } = usePollWalletBalances();
 

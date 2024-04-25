@@ -9,10 +9,8 @@ import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 export default function BGTApy() {
-  const { useSelectedReserveData, useTotalBorrowed } =
-    usePollReservesDataList();
+  const { useSelectedReserveData, totalBorrowed } = usePollReservesDataList();
   const honey = useSelectedReserveData(honeyTokenAddress);
-  const totalBorrowed = useTotalBorrowed();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
     address: lendHoneyDebtTokenAddress,

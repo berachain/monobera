@@ -14,6 +14,11 @@ export type Token = {
   formattedBalance?: string;
 };
 
+export interface BalanceToken extends Token {
+  balance: bigint;
+  formattedBalance: string;
+}
+
 export interface SwapRequest {
   tokenIn: Address;
   tokenOut: Address;

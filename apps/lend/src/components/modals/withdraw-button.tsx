@@ -8,7 +8,7 @@ import {
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
-  type BalanceToken,
+  BalanceToken,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {

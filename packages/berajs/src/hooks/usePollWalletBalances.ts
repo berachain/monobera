@@ -2,6 +2,7 @@ import useSWR, { useSWRConfig } from "swr";
 import { usePublicClient } from "wagmi";
 
 import {
+  BalanceToken,
   DefaultHookOptions,
   DefaultHookReturnType,
   getWalletBalances,
@@ -10,11 +11,6 @@ import {
 import { useBeraJs } from "../contexts";
 import { useTokens } from "./useTokens";
 import POLLING from "~/enum/polling";
-
-export interface BalanceToken extends Token {
-  balance: bigint;
-  formattedBalance: string;
-}
 
 export type UsePollAllowancesArgs = {
   externalTokenList?: Token[];

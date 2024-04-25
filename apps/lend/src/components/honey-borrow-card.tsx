@@ -31,9 +31,7 @@ export default function HoneyBorrowCard() {
     address: lendHoneyDebtTokenAddress,
   });
 
-  const { useTotalBorrowed, useSelectedReserveData } =
-    usePollReservesDataList();
-  const totalBorrowed = useTotalBorrowed();
+  const { totalBorrowed, useSelectedReserveData } = usePollReservesDataList();
   const bgtApr = useBgtApr(totalBorrowed);
 
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);

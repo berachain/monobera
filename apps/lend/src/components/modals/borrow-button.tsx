@@ -106,8 +106,7 @@ const BorrowModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const { account = "0x" } = useBeraJs();
-  const { useBaseCurrencyData } = usePollReservesDataList();
-  const baseCurrencyData = useBaseCurrencyData();
+  const { baseCurrencyData } = usePollReservesDataList();
   const { useUserAccountData } = usePollUserAccountData({
     opts: {
       refreshInterval: POLLING.FAST,

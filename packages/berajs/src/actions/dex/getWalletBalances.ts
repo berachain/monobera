@@ -1,8 +1,8 @@
-import { Address, PublicClient, erc20Abi, formatUnits, getAddress } from "viem";
+import { Address, PublicClient, erc20Abi, formatUnits } from "viem";
 
 import { multicall3Abi } from "~/abi";
 import { BeraConfig } from "../../types";
-import { Token } from "../../types/dex";
+import { BalanceToken, Token } from "../../types/dex";
 import { ADDRESS_ZERO } from "~/constants";
 
 export interface IFetchWalletBalancesRequestArgs {
@@ -10,11 +10,6 @@ export interface IFetchWalletBalancesRequestArgs {
   tokenList: Token[] | undefined;
   config: BeraConfig;
   publicClient: PublicClient | undefined;
-}
-
-interface BalanceToken extends Token {
-  balance: bigint;
-  formattedBalance: string;
 }
 
 interface Call {

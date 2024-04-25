@@ -9,7 +9,7 @@ import {
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
-  type BalanceToken,
+  BalanceToken,
 } from "@bera/berajs";
 import {
   honeyTokenAddress,
