@@ -39,7 +39,7 @@ export const usePollHoneyPreview = ({
     QUERY_KEY,
     async () => {
       if (!publicClient) throw new Error("publicClient is not defined");
-      if (!config.contracts?.honeyRouterAddress)
+      if (!config?.contracts?.honeyRouterAddress)
         throw new Error("missing contract address honeyRouterAddress");
       if (!collateral) throw new Error("invalid collateral");
       if (Number(amount) <= 0) throw new Error("invalid amount");

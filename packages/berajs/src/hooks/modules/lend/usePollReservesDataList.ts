@@ -33,9 +33,9 @@ export const usePollReservesDataList = (
     QUERY_KEY,
     async () => {
       if (!publicClient) throw new Error("publicClient is not defined");
-      if (!config.contracts?.lendUIDataProviderAddress)
+      if (!config?.contracts?.lendUIDataProviderAddress)
         throw new Error("missing contract address lendUIDataProviderAddress");
-      if (!config.contracts?.lendAddressProviderAddress)
+      if (!config?.contracts?.lendAddressProviderAddress)
         throw new Error("missing contract address lendAddressProviderAddress");
       return await getReserveData({
         config,
