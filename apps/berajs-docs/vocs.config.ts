@@ -58,8 +58,8 @@ export default defineConfig({
           collapsed: true,
           items: [
             {
-              text: "usePollCollateralsRates",
-              link: "/react/honey/usePollCollateralsRates/",
+              text: "useCollateralsRates",
+              link: "/react/honey/useCollateralsRates/",
             },
             {
               text: "usePollHoneyPreview",
