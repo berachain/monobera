@@ -33,7 +33,7 @@ export const getPoolRecentSwaps = async ({
   }
   if (!config.subgraphs?.dexSubgraph) {
     throw new Error(
-      "getPoolrecentSwaps: missing config from params - config.subgraphs.dexSubgraph",
+      "getPoolRecentSwaps: missing config from params - config.subgraphs.dexSubgraph",
     );
   }
 
