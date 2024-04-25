@@ -73,9 +73,12 @@ export const usePsm = () => {
   });
 
   const { usePollCollateralRate, isLoading: isFeeLoading } =
-    usePollCollateralsRates(
-      collateralList?.map((token: any) => token.address) ?? [],
-    );
+    usePollCollateralsRates({
+      args: {
+        collateralList:
+          collateralList?.map((token: any) => token.address) ?? [],
+      },
+    });
 
   const params = collateral
     ? usePollCollateralRate(collateral.address as Address)

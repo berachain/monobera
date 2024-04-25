@@ -73,7 +73,7 @@ export const usePollReservesDataList = (
 
   return {
     ...swrResponse,
-    refresh: () => swrResponse.mutate(),
+    refresh: () => void swrResponse.mutate(),
     useSelectedReserveData,
     formattedReserves,
     baseCurrencyData,
