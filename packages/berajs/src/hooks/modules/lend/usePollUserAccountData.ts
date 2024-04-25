@@ -19,7 +19,7 @@ export const usePollUserAccountData = (
   const config = options?.beraConfigOverride ?? beraConfig;
 
   const QUERY_KEY = [account, "getUserAccountData"];
-  const swrResponce = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) throw new Error("publicClient is not defined");
@@ -40,7 +40,7 @@ export const usePollUserAccountData = (
   );
 
   return {
-    ...swrResponce,
-    refresh: () => void swrResponce.mutate(),
+    ...swrResponse,
+    refresh: () => void swrResponse.mutate(),
   };
 };
