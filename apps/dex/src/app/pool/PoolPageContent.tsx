@@ -32,7 +32,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
-import { usePoolHistory } from "~/hooks/usePoolHistory";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 
