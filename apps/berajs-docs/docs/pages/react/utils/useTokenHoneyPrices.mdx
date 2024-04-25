@@ -1,0 +1,31 @@
+# useTokenHoneyPrice
+
+React hook to retrieve the current honey prices of a series of tokens
+
+## Import
+
+```ts twoslash
+import { useTokenHoneyPrices } from "@bera/berajs";
+```
+
+## Usage
+
+```ts twoslash [example.ts]
+import { Token, useTokenHoneyPrices } from "@bera/berajs";
+
+const { data: tokenPricesInHoney, refresh } = useTokenHoneyPrices({ tokenAddresses: ["0x0...", "0x1..."] });
+```
+
+
+## Parameters
+
+```ts twoslash
+import { type UseTokenHoneyPricesArgs } from "@bera/berajs";
+```
+
+## Returns
+
+```ts twoslash
+import { type DefaultHookReturnType, type TokenHoneyPrices } from "@bera/berajs";
+type result = DefaultHookReturnType<TokenHoneyPrices | undefined>
+```

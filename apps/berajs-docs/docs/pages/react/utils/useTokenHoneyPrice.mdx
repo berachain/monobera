@@ -21,7 +21,7 @@ export const beraConfig: BeraConfig = {
   },
 };
 
-const { data: tokenPriceInHoney, refetch } = useTokenHoneyPrice({
+const { data: tokenPriceInHoney, refresh } = useTokenHoneyPrice({
    tokenAddress: "0x0..."
   }, 
   {
@@ -38,5 +38,6 @@ import { type UseTokenHoneyPriceArgs } from "@bera/berajs";
 ## Returns
 
 ```ts twoslash
-import { type UseTokenHoneyPriceResponse } from "@bera/berajs";
+import { type DefaultHookReturnType } from "@bera/berajs";
+type result = DefaultHookReturnType<string | undefined>
 ```

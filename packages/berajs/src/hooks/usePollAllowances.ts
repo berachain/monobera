@@ -35,7 +35,6 @@ export const usePollAllowances = (
   options?: DefaultHookOptions,
 ): UsePollAllowancesResponse => {
   const publicClient = usePublicClient();
-  const { mutate } = useSWRConfig();
   const { account, config: beraConfig } = useBeraJs();
   const QUERY_KEY = [account, args?.tokens, args?.spender, "allowances"];
   const swrResponse = useSWR<AllowanceToken[] | undefined>(
