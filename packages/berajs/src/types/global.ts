@@ -6,6 +6,7 @@ import { Token } from "./dex";
 export interface BeraConfig {
   endpoints?: {
     dexRouter?: string;
+    dexIndexer?: string;
     tokenList?: string;
   };
   subgraphs?: {

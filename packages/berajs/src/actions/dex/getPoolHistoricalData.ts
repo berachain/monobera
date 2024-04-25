@@ -44,16 +44,19 @@ export const getPoolHistoricalData = ({
   shareAddress,
   config,
 }: getPoolHistoricalDataProps): Promise<PoolHistoryResponse> | undefined => {
-  if (!config.subgraphs?.dexSubgraph) {
+  if (!config.endpoints?.dexIndexer) {
     throw new Error(
-      "getPoolHistoricalData: one or more required values missing from config prop: config.subgraphs.dexSubgraph",
+      "getPoolHistoricalData: one or more required values missing from config prop: config.endpoints.dexIndexer",
     );
   }
   if (!shareAddress) return undefined;
+
   return fetch(
-    `${config.subgraphs.dexSubgraph}/v2/pool_history/${shareAddress}?days=90`,
+    `${config.endpoints.dexIndexer}/v2/pool_history/${shareAddress}?days=90`,
   )
-    .then((data) => data.json())
+    .then(async (res) => {
+      return res.json();
+    })
     .then((data) => {
       return data?.data;
     })
