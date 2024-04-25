@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import {
   truncateHash,
   useBeraJs,
+  usePoolHistoricalData,
   usePoolRecentProvisions,
   usePoolRecentSwaps,
   usePoolUserPosition,
@@ -345,12 +346,10 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
       pool,
     });
 
-  const { usePoolHistoryData, isLoading: isPoolHistoryLoading } =
-    usePoolHistory({
+  const { data: poolHistoryData, isLoading: isPoolHistoryLoading } =
+    usePoolHistoricalData({
       shareAddress: pool.shareAddress,
     });
-
-  const { data: poolHistoryData } = usePoolHistoryData();
 
   const poolHistory = poolHistoryData?.history;
   const timeCreated = poolHistoryData?.info?.timeCreate
