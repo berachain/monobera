@@ -1,0 +1,38 @@
+# useTokenInformation
+
+React hook for grabbing token information for a given address.
+
+## Import
+
+```ts
+import { useTokenInformation } from "@bera/berajs";
+```
+
+## Usage
+
+```ts twoslash [example.ts]
+import { BeraConfig, useTokenInformation } from "@bera/berajs";
+
+// required configs for useTokenInformation
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x1..",
+  },
+};
+
+const { data: tokenInformation } = useTokenInformation({
+    address: "0x0...",
+});
+```
+
+## Parameters
+
+```ts twoslash
+import { type useTokenInformationArgs } from "@bera/berajs";
+```
+
+## Returns
+
+```ts twoslash
+import { type UseTokenInformationResponse } from "@bera/berajs";
+```

@@ -12,7 +12,7 @@ import { type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarketOrder } from "~/types/order-history";
 import { TPSL } from "../berpetuals/components/tpsl";
 import { ActivePositionPNL } from "./table-columns/positions";
@@ -61,11 +61,8 @@ export function UpdatePositionModal({
     setOpen(state);
   };
 
-  const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(
-    Number(openPosition?.market?.pair_index ?? 0),
-  );
-  const formattedPrice = formatFromBaseUnit(price ?? "0", 10).toString(10);
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[openPosition?.market?.name ?? ""] ?? "0";
 
   const positionSize = formatFromBaseUnit(
     openPosition.position_size ?? "0",
@@ -161,8 +158,8 @@ export function UpdatePositionModal({
                   {size ?? "0"} {ticker}
                 </div>
                 <div className="text-xs font-medium leading-5 text-muted-foreground">
-                  {price !== undefined ? (
-                    `${formattedPrice} / ${ticker}`
+                  {price !== "0" ? (
+                    `${price} / ${ticker}`
                   ) : (
                     <Skeleton className="h-[28px] w-[80px]" />
                   )}

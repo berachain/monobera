@@ -5,16 +5,17 @@ import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
 import { ApolloProvider } from "@apollo/client";
-import { BeraWagmi } from "@bera/wagmi";
-import { rpcBannerEnabled } from "@bera/config";
+import { honeyName } from "@bera/config";
 import { honeyClient } from "@bera/graphql";
 import {
   Footer,
   Header,
   TailwindIndicator,
   TermOfUseModal,
+  useActiveBanners,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { BeraWagmi } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
@@ -39,6 +40,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
+  const activeBanners = useActiveBanners();
   return (
     <html lang="en" suppressHydrationWarning>
       <Script
@@ -71,12 +73,11 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 isHoney
                 navItems={navItems}
                 mobileNavItems={mobileNavItems}
+                appName={honeyName}
               />
               <main
-                className={cn(
-                  "w-full pb-[72px]",
-                  rpcBannerEnabled ? "pt-[120px]" : "pt-[72px]",
-                )}
+                className="w-full pt-start"
+                style={{ paddingTop: `${50 * activeBanners}px` }}
               >
                 {props.children}
               </main>

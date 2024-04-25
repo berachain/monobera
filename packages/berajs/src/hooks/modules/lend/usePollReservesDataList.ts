@@ -15,12 +15,11 @@ export interface UsePollReservesDataListResponse
       }
     | undefined
   > {
-  refetch: () => void;
+  useSelectedReserveData: (address: Address) => ReserveData | undefined;
   formattedReserves: ReserveData[];
   baseCurrencyData: BaseCurrencyData | undefined;
   totalBorrowed: number;
   marketSize: number;
-  useSelectedReserveData: (address: Address) => ReserveData | undefined;
 }
 
 export const usePollReservesDataList = (
@@ -73,7 +72,7 @@ export const usePollReservesDataList = (
 
   return {
     ...swrResponse,
-    refetch: () => void swrResponse.mutate(),
+    refresh: () => swrResponse.mutate(),
     useSelectedReserveData,
     formattedReserves,
     baseCurrencyData,

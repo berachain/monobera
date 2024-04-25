@@ -1,0 +1,32 @@
+# usePollBeraBalance
+
+React hook to retrieve the current Bera balance of the connected account.
+
+## Import
+
+```ts twoslash
+import { usePollBeraBalance } from "@bera/berajs";
+```
+
+## Usage
+
+```ts twoslash [example.ts]
+import { usePollBeraBalance } from "@bera/berajs";
+
+const { data: beraBalance, refresh } = usePollBeraBalance({
+  address: "0x...",
+});
+```
+
+## Parameters
+
+```ts twoslash
+import { type UsePollBeraBalanceArgs } from "@bera/berajs";
+```
+
+## Returns
+
+```ts twoslash
+import { type DefaultHookReturnType, type TokenBalance } from "@bera/berajs";
+type result = DefaultHookReturnType<TokenBalance | undefined>
+```

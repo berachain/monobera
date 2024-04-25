@@ -25,7 +25,7 @@ export const useCalculateLiqPrice = ({
       const formattedBorrowingL = formatFromBaseUnit(bfLong, 18);
       const formattedBorrowingS = formatFromBaseUnit(bfShort, 18);
       const long = orderType === "long";
-      const openPrice = formatFromBaseUnit(price ?? "0", 10);
+      const openPrice = BigNumber(price ?? "0");
 
       const liqPriceDistance = openPrice
         .times(
@@ -44,7 +44,6 @@ export const useCalculateLiqPrice = ({
         : "0";
       setLiqPrice(finalLiqPrice);
     } catch (e) {
-      console.log(e);
       setLiqPrice(undefined);
     }
   }, [bfLong, bfShort, orderType, price, leverage]);

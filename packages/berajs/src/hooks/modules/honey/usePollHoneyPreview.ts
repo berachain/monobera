@@ -6,9 +6,7 @@ import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType, Token } from "~/types";
 
 export interface UsePollHoneyPreviewResponse
-  extends DefaultHookReturnType<string | undefined> {
-  refetch: () => void;
-}
+  extends DefaultHookReturnType<string | undefined> {}
 
 export const usePollHoneyPreview = (
   collateral: Token | undefined,
@@ -45,6 +43,6 @@ export const usePollHoneyPreview = (
   });
   return {
     ...swrResponse,
-    refetch: () => void swrResponse.mutate(),
+    refresh: () => void swrResponse.mutate(),
   };
 };

@@ -67,8 +67,8 @@ export default function WithdrawBtn({
     formattedBalance: atoken?.formattedBalance ?? "0",
   } as BalanceToken;
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refresh: userAccountRefetch } = usePollUserAccountData();
+  const { refresh: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);

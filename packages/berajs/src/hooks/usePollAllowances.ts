@@ -1,18 +1,18 @@
 import useSWR, { useSWRConfig } from "swr";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
-import { getAllowances } from "../actions/dex";
+import { Token } from "~/types";
 import {
   AllowanceToken,
   DefaultHookOptions,
   DefaultHookReturnType,
 } from "~/types/global";
-import { Address } from "viem";
-import { Token } from "~/types";
+import { getAllowances } from "../actions/dex";
 
-type UsePollAllowancesArgs = {
+export type UsePollAllowancesArgs = {
   spender: string;
   tokens: Token[];
 };
@@ -21,7 +21,6 @@ export interface UsePollAllowancesResponse
   useSelectedAllowance: (
     address: Address | undefined,
   ) => AllowanceToken | undefined;
-  refetch: () => void;
 }
 
 /**
@@ -36,7 +35,6 @@ export const usePollAllowances = (
   options?: DefaultHookOptions,
 ): UsePollAllowancesResponse => {
   const publicClient = usePublicClient();
-  const { mutate } = useSWRConfig();
   const { account, config: beraConfig } = useBeraJs();
   const QUERY_KEY = [account, args?.tokens, args?.spender, "allowances"];
   const swrResponse = useSWR<AllowanceToken[] | undefined>(
@@ -73,6 +71,6 @@ export const usePollAllowances = (
   return {
     ...swrResponse,
     useSelectedAllowance,
-    refetch: () => void mutate(QUERY_KEY),
+    refresh: () => swrResponse?.mutate?.(),
   };
 };

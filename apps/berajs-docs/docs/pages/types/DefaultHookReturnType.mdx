@@ -1,0 +1,10 @@
+## `DefaultHookReturnType<T>`
+
+| Name           | type                    | Description                                                                | Optional |
+| -------------- | :---------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `T \| undefined`        | data fetched                                                               |  `true`  |
+| `error`        | `any \| undefined`      | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: T) => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`            | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`               | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`               | boolean flag representing whether the hook is currently loading data       | `false`  |

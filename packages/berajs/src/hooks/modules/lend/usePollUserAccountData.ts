@@ -9,9 +9,7 @@ import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
 export interface UsePollUserAccountDataResponse
-  extends DefaultHookReturnType<UserAccountData | undefined> {
-  refetch: () => void;
-}
+  extends DefaultHookReturnType<UserAccountData | undefined> {}
 
 export const usePollUserAccountData = (
   options?: DefaultHookOptions,
@@ -43,6 +41,6 @@ export const usePollUserAccountData = (
 
   return {
     ...swrResponce,
-    refetch: () => void swrResponce.mutate(),
+    refresh: () => void swrResponce.mutate(),
   };
 };

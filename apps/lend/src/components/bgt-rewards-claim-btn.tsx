@@ -12,7 +12,7 @@ import { formatEther } from "viem";
 
 export default function BGTRewardsClaimBtn() {
   const { account } = useBeraJs();
-  const { data: rewards, isLoading, refetch } = usePollLendUserBGTRewards();
+  const { data: rewards, isLoading, refresh } = usePollLendUserBGTRewards();
   const {
     write,
     isLoading: isClaimingLoading,
@@ -20,7 +20,7 @@ export default function BGTRewardsClaimBtn() {
   } = useTxn({
     message: `Claiming ${formatEther((rewards ?? 0n) as bigint)} BGT Rewards`,
     actionType: TransactionActionType.CLAIMING_REWARDS,
-    onSuccess: () => refetch(),
+    onSuccess: () => refresh(),
   });
   return (
     <>

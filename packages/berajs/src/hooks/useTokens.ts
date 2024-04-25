@@ -26,7 +26,7 @@ export const useTokens = (options?: DefaultHookOptions): IUseTokens => {
   const swrResponse = useSWRImmutable<GetTokens>(
     ["defaultTokenList", localStorageTokenList, config],
     async () => {
-      return getTokens({ localStorageTokenList, config });
+      return getTokens({ externalList: localStorageTokenList, config });
     },
     {
       ...options?.opts,
@@ -68,6 +68,7 @@ export const useTokens = (options?: DefaultHookOptions): IUseTokens => {
 
   return {
     ...swrResponse,
+    refresh: () => swrResponse?.mutate?.(),
     addNewToken,
     removeToken,
   };

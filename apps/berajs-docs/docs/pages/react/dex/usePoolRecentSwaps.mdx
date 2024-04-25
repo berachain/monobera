@@ -1,0 +1,69 @@
+# usePoolRecentSwaps
+
+Hook to fetch a list of recent swaps for a given pool.
+
+## Initialization
+
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
+
+## Import
+
+```ts
+import { usePoolRecentSwaps } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { usePoolRecentSwaps } from "@bera/berajs";
+
+const pool: PoolV2 = ...
+
+function App() {
+    const { data: recentSwaps, isLoading } = usePoolRecentSwaps({ pool });
+
+    ...
+};
+```
+
+## Parameters
+
+#### Call signature
+
+```ts
+function usePoolRecentSwaps(
+  args: { pool: PoolV2 },
+  options?: DefaultHookOptions,
+);
+```
+
+#### args: `{pool: PoolV2}`
+
+| Name   | type     | Description                     | Required |
+| ------ | :------- | :------------------------------ | :------: |
+| `pool` | `PoolV2` | pool to fetch recent swaps from |  `true`  |
+
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+## Returns
+
+#### Return type: `DefaultHookReturnType<GetPoolRecentSwapsResult | undefined>`
+
+| Name           | type                                           | Description                                                                | Optional |
+| -------------- | :--------------------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `GetPoolRecentSwapsResult \| undefined`        | pool recent swaps data                                                     |  `true`  |
+| `error`        | `any \| undefined`                             | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: GetPoolRecentSwapsResult) => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                                   | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                                      | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                                      | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+See type [`GetPoolRecentSwapsResult`](/actions/dex/getPoolRecentSwaps/#returns)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

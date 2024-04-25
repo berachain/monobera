@@ -36,14 +36,14 @@ import { berachain } from "viem/chains";
 
 // first, intialize a public client with berachain
 const publicClient = createPublicClient({
-  chain: berachain,
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
   transport: http(),
 });
 ```
 
-### BeraConfig (Optional)
+### BeraConfig
 
-Most actions accept a `config` argument of type `BeraConfig`, this overrides the default configuration of contract and endpoint addresses that the actions act on. [Learn more about the `config` argument here.](/bera-config)
+Most actions accept a `config` argument of type `BeraConfig`, there is a `defaultBeraConfig` constant with the default configuration of contract and endpoint addresses that the actions act on that you can import and use. [Learn more about the `config` argument here.](/bera-config)
 
 ::::
 
@@ -58,7 +58,7 @@ import { getSwap, type BeraConfig } from '@bera/berajs'
 
 // first, intialize a public client with berachain
 const publicClient = createPublicClient({
-  chain: berachain,
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
   transport: http()
 })
 

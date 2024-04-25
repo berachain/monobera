@@ -1,8 +1,11 @@
-import { type PoolV2 } from "@bera/berajs";
+import {
+  type GetPoolRecentSwapsResult,
+  type ISwaps,
+  type PoolV2,
+} from "@bera/berajs";
 import useSWRInfinite from "swr/infinite";
 
 import { type IProvisions } from "~/hooks/usePoolRecentProvisions";
-import { type ISwaps } from "~/hooks/usePoolRecentSwaps";
 
 const DEFAULT_SIZE = 10;
 
@@ -13,7 +16,7 @@ export const usePoolEvents = ({
   combinedEvents,
 }: {
   pool: PoolV2 | undefined;
-  swaps: ISwaps[] | undefined;
+  swaps: GetPoolRecentSwapsResult | undefined;
   provisions: IProvisions[] | undefined;
   combinedEvents: (ISwaps | IProvisions)[] | undefined;
 }) => {

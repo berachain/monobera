@@ -11,3 +11,5 @@ export * from "./getBeraBalance";
 export * from "./getPoolUserPosition";
 export * from "./getWalletBalances";
 export * from "./getTokens";
+export * from "./getPoolRecentSwaps";
+export * from "./getPoolRecentProvisions";

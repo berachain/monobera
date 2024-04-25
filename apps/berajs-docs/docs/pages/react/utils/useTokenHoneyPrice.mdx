@@ -1,0 +1,43 @@
+# useTokenHoneyPrice
+
+React hook to retrieve the current honey price of a given token from the Bex subgraph.
+
+## Import
+
+```ts twoslash
+import { useTokenHoneyPrice } from "@bera/berajs";
+```
+
+## Usage
+
+```ts twoslash [example.ts]
+import { useTokenHoneyPrice } from "@bera/berajs";
+import { BeraConfig } from "@bera/berajs";
+
+// required configs for getTokenHoneyPrice
+export const beraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+};
+
+const { data: tokenPriceInHoney, refresh } = useTokenHoneyPrice({
+   tokenAddress: "0x0..."
+  }, 
+  {
+    beraConfigOverride: beraConfig // optional arg to override default beraConfig
+  });
+```
+
+## Parameters
+
+```ts twoslash
+import { type UseTokenHoneyPriceArgs } from "@bera/berajs";
+```
+
+## Returns
+
+```ts twoslash
+import { type DefaultHookReturnType } from "@bera/berajs";
+type result = DefaultHookReturnType<string | undefined>
+```

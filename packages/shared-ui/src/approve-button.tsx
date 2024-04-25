@@ -8,7 +8,7 @@ import {
 } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { maxInt256, erc20Abi, Address } from "viem";
+import { Address, erc20Abi, maxInt256 } from "viem";
 
 import { useTxn } from "./hooks/useTxn";
 import { useAnalytics } from "./utils";
@@ -28,7 +28,7 @@ export const ApproveButton = ({
   className,
   onApproval,
 }: Props) => {
-  const { refetch } = usePollAllowance({
+  const { refresh } = usePollAllowance({
     spender,
     token,
   });
@@ -38,7 +38,7 @@ export const ApproveButton = ({
     actionType: TransactionActionType.APPROVAL,
     onSuccess: () => {
       track(`approve_token_${token?.symbol.toLowerCase()}`);
-      void refetch();
+      void refresh();
       onApproval?.();
     },
     onError: (e: Error | undefined) => {

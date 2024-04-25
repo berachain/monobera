@@ -1,0 +1,55 @@
+# usePollAllowances
+
+React hook for polling the allowances of a given token array
+
+## Import
+
+```ts twoslash
+import { usePollAllowances } from "@bera/berajs";
+```
+
+## Usage
+
+
+```ts twoslash [example.ts] filename="example.ts"
+import { usePollAllowances, type Token } from "@bera/berajs";
+
+const token1: Token = {
+  address: "0x0",
+  decimals: 18,
+  symbol: "TKN",
+  name: "TKN",
+};
+
+const token2: Token = {
+  address: "0x0",
+  decimals: 18,
+  symbol: "TKN2",
+  name: "TKN2",
+};
+
+const exampleTokens: Token[] = [token1, token2];
+
+const {
+  data: allowances,
+  useSelectedAllowance,
+  refresh,
+} = usePollAllowances({
+  spender: "0x0...",
+  tokens: exampleTokens,
+});
+
+const selectedAllowance = useSelectedAllowance(token1.address);
+```
+
+## Parameters
+
+```ts twoslash
+import { type UsePollAllowancesArgs } from "@bera/berajs";
+```
+
+## Returns
+
+```ts twoslash
+import { type UsePollAllowancesResponse } from "@bera/berajs";
+```

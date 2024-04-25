@@ -4,7 +4,11 @@ import React, { useMemo, useState } from "react";
 import {
   truncateHash,
   useBeraJs,
+  usePoolRecentProvisions,
+  usePoolRecentSwaps,
   usePoolUserPosition,
+  type IProvisions,
+  type ISwaps,
   type PoolV2,
 } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
@@ -28,11 +32,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import PoolHeader from "~/app/components/pool-header";
 import { usePoolHistory } from "~/hooks/usePoolHistory";
-import {
-  usePoolRecentProvisions,
-  type IProvisions,
-} from "~/hooks/usePoolRecentProvisions";
-import { usePoolRecentSwaps, type ISwaps } from "~/hooks/usePoolRecentSwaps";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 
@@ -232,16 +231,14 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
   // const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   // const { data: bgtRewards } = useBgtReward(pool?.pool);
 
-  const { useRecentSwaps, isLoading: isRecentSwapsLoading } =
-    usePoolRecentSwaps(pool);
+  const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
+    pool,
+  });
 
-  const { useRecentProvisions, isLoading: isRecentProvisionsLoading } =
-    usePoolRecentProvisions(pool);
+  const { data: provisions, isLoading: isRecentProvisionsLoading } =
+    usePoolRecentProvisions({ pool });
 
   const isLoading = isRecentSwapsLoading || isRecentProvisionsLoading;
-
-  const swaps = useRecentSwaps();
-  const provisions = useRecentProvisions();
 
   const combinedEvents: ISwapOrProvision[] | undefined = useMemo(() => {
     if (!swaps || !provisions) return undefined;

@@ -15,7 +15,7 @@ import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
-import { usePricesSocket } from "~/hooks/usePricesSocket";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import { type IMarket } from "~/types/market";
 
 interface IGeneralInfoBanner {
@@ -23,32 +23,24 @@ interface IGeneralInfoBanner {
   priceChange: number[];
 }
 export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
-  const { useMarketIndexPrice } = usePricesSocket();
-  const price = useMarketIndexPrice(Number(market.pair_index) ?? 0);
+  const { marketPrices } = usePollPrices();
+  const price = marketPrices[market?.name ?? ""] ?? "0";
   const [open, setOpen] = useState(false);
 
-  const formattedPriceBN = formatFromBaseUnit(price, 10);
   const historicPrice = priceChange[Number(market.pair_index)];
-  const historicPriceBN = BigNumber(historicPrice ?? 0);
-
   const difference = useMemo(() => {
-    return calculatePercentDifference(
-      historicPrice?.toString() ?? "0",
-      formattedPriceBN.toString(10),
-    );
-  }, [historicPrice, formattedPriceBN]);
+    return calculatePercentDifference(historicPrice?.toString() ?? "0", price);
+  }, [historicPrice, price]);
 
   const priceDifference = useMemo(() => {
-    return formattedPriceBN.minus(historicPrice ?? "0");
-  }, [historicPrice, formattedPriceBN]);
+    return BigNumber(price).minus(historicPrice ?? "0");
+  }, [historicPrice, price]);
 
   useEffect(() => {
     document.title =
-      price === undefined
+      price === "0"
         ? `${market.name} | ${perpsName}`
-        : `${formatFromBaseUnit(price, 10).toString(10)} | ${
-            market.name
-          } | ${perpsName}`;
+        : `${formatUsd(price)} | ${market.name} | ${perpsName}`;
   }, [price]);
 
   const formattedLongOi = formatFromBaseUnit(
@@ -77,14 +69,14 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
       <div className="flex items-center text-muted-foreground">
         <div className="mr-2">
           <div className="text-xl font-semibold leading-7 text-muted-foreground">
-            {price !== undefined ? (
-              formatUsd(formatFromBaseUnit(price, 10).toString(10))
+            {price !== "0" ? (
+              formatUsd(price)
             ) : (
               <Skeleton className="h-[28px] w-[80px]" />
             )}
           </div>
           <div className="text-sm">
-            {price !== undefined ? (
+            {price !== "0" ? (
               <div
                 className={
                   priceDifference.gt(0)
@@ -101,7 +93,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
         </div>
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
           24h Change
-          {price !== undefined ? (
+          {price !== "0" ? (
             <div
               className={
                 difference.gt(0)

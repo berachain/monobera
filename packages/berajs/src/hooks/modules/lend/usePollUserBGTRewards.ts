@@ -35,6 +35,6 @@ export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
 
   return {
     ...swrResponse,
-    refetch: () => void swrResponse.mutate(),
+    refresh: () => void swrResponse.mutate(),
   };
 };

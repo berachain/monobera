@@ -68,8 +68,8 @@ export default function RepayBtn({
   const honey = useSelectedWalletBalance(honeyTokenAddress);
   const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData();
-  const { refetch: reservesDataRefetch } = usePollReservesDataList();
+  const { refresh: userAccountRefetch } = usePollUserAccountData();
+  const { refresh: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
