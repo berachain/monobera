@@ -128,6 +128,18 @@ export default defineConfig({
           text: "DefaultHookReturnType",
           link: "/types/DefaultHookReturnType/",
         },
+        {
+          text: "Token",
+          link: "/types/Token/",
+        },
+        {
+          text: "AllowanceToken",
+          link: "/types/AllowanceToken/",
+        },
+        {
+          text: "BalanceToken",
+          link: "/types/BalanceToken/",
+        }
       ],
     },
     {

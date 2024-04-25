@@ -4,7 +4,7 @@ import React from "react";
 import {
   usePollWalletBalances,
   useTokenHoneyPrice,
-  type Token,
+  type BalanceToken,
 } from "@bera/berajs";
 import { bgtTokenAddress, blockExplorerUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
@@ -13,7 +13,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { FormattedNumber } from "./formatted-number";
 import { TokenIcon } from "./token-icon";
 
-function TokenRow({ asset, isLoading }: { asset: Token; isLoading: boolean }) {
+function TokenRow({ asset, isLoading }: { asset: BalanceToken; isLoading: boolean }) {
   const { data: tokenPrice } = useTokenHoneyPrice({
     tokenAddress: asset.address,
   });
@@ -65,11 +65,11 @@ export function TokenList() {
       {assets?.length ? (
         assets
           .filter(
-            (token: Token) =>
+            (token: BalanceToken) =>
               token.address !== bgtTokenAddress &&
               token.tags?.includes("featured"),
           )
-          .map((asset: Token) => (
+          .map((asset: BalanceToken) => (
             <TokenRow asset={asset} isLoading={isLoading} key={asset.address} />
           ))
       ) : (
