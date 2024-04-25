@@ -18,11 +18,11 @@ export interface BeraConfig {
     crocMultiSwapAddress?: Address;
     wrappedTokenAddress?: Address;
     dexAddress?: Address;
-    lendAddressProviderAddress: Address;
-    lendOracleAddress: Address;
-    lendPoolProxyAddress: Address;
-    lendUIDataProviderAddress: Address;
-    lendRewardsAggregatorAddress: Address;
+    lendAddressProviderAddress?: Address;
+    lendOracleAddress?: Address;
+    lendPoolProxyAddress?: Address;
+    lendUIDataProviderAddress?: Address;
+    lendRewardsAggregatorAddress?: Address;
     honeyRouterAddress?: Address;
   };
 }
