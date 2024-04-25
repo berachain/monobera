@@ -1,4 +1,4 @@
-# useTokenHoneyPrice
+# useTokenHoneyPrices
 
 React hook to retrieve the current honey prices of a series of tokens
 
@@ -6,6 +6,18 @@ React hook to retrieve the current honey prices of a series of tokens
 
 ```ts twoslash
 import { useTokenHoneyPrices } from "@bera/berajs";
+```
+
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+export const beraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+};
 ```
 
 ## Usage
@@ -17,15 +29,33 @@ const { data: tokenPricesInHoney, refresh } = useTokenHoneyPrices({ tokenAddress
 ```
 
 
-## Parameters
+#### args: `{tokenAddresses: Address[] | undefined}`
 
-```ts twoslash
-import { type UseTokenHoneyPricesArgs } from "@bera/berajs";
-```
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| `tokenAddresses` | `Address[] \| undefined` | token addresses we want price for |  `true`  |
 
-## Returns
+#### options: `DefaultHookOptions`
 
-```ts twoslash
-import { type DefaultHookReturnType, type TokenHoneyPrices } from "@bera/berajs";
-type result = DefaultHookReturnType<TokenHoneyPrices | undefined>
-```
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+
+
+## Returns `DefaultHookReturnType<{[key: string]: string}>`
+
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `{[key: string]: string}`        | dictionary of token prices                                           |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

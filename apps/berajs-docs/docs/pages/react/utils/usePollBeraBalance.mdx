@@ -18,15 +18,34 @@ const { data: beraBalance, refresh } = usePollBeraBalance({
 });
 ```
 
-## Parameters
+#### args: `{address: Address}`
 
-```ts twoslash
-import { type UsePollBeraBalanceArgs } from "@bera/berajs";
-```
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| `address` | `Address` | address we want bera balance for |  `true`  |
 
-## Returns
+#### options: `DefaultHookOptions`
 
-```ts twoslash
-import { type DefaultHookReturnType, type TokenBalance } from "@bera/berajs";
-type result = DefaultHookReturnType<TokenBalance | undefined>
-```
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+
+
+## Returns `DefaultHookReturnType<TokenBalance | undefined>`
+
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `TokenBalance \| undefined`        | Token Balance object representing balance data                                           |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+See type [`TokenBalance`](/types/TokenBalance/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)
