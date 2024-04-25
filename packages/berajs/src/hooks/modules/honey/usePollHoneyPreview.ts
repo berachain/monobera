@@ -18,8 +18,8 @@ export const usePollHoneyPreview = (
       ? HoneyPreviewMethod.Mint
       : HoneyPreviewMethod.RequiredCollateral
     : given_in
-      ? HoneyPreviewMethod.Redeem
-      : HoneyPreviewMethod.HoneyToRedeem;
+    ? HoneyPreviewMethod.Redeem
+    : HoneyPreviewMethod.HoneyToRedeem;
 
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
   const { config: beraConfig } = useBeraJs();

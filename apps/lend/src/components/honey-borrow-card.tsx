@@ -13,7 +13,7 @@ import {
   lendHoneyDebtTokenAddress,
   vdHoneyTokenAddress,
 } from "@bera/config";
-import { FormattedNumber, POLLING, TokenIcon, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -36,12 +36,7 @@ export default function HoneyBorrowCard() {
 
   const honeyReserve = useSelectedReserveData(honeyTokenAddress);
 
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const userData = useUserAccountData();
+  const { data: userData } = usePollUserAccountData();
 
   const borrowAllowanceUSD = formatUnits(
     userData?.availableBorrowsBase ?? 0n,

@@ -5,6 +5,7 @@ import { usePublicClient } from "wagmi";
 
 import { BaseCurrencyData, ReserveData, getReserveData } from "~/actions/lend";
 import { useBeraJs } from "~/contexts";
+import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
 export interface UsePollReservesDataListResponse
@@ -45,6 +46,7 @@ export const usePollReservesDataList = (
     },
     {
       ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
     },
   );
 

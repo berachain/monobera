@@ -6,7 +6,7 @@ import {
   usePollWalletBalances,
 } from "@bera/berajs";
 import { lendHoneyDebtTokenAddress } from "@bera/config";
-import { FormattedNumber, POLLING, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -17,12 +17,7 @@ import { getEligibleDepositAmount } from "~/utils/lendTokenHelper";
 import { RiskDetails } from "./risk-details";
 
 export default function StatusBanner() {
-  const { useUserAccountData, isLoading } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const data = useUserAccountData();
+  const { data, isLoading } = usePollUserAccountData();
 
   const { isReady } = useBeraJs();
 

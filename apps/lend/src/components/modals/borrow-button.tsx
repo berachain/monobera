@@ -12,7 +12,6 @@ import {
 import { lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,
-  POLLING,
   TokenInput,
   Tooltip,
   useAnalytics,
@@ -59,11 +58,7 @@ export default function BorrowBtn({
     actionType: TransactionActionType.BORROW,
   });
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -107,12 +102,7 @@ const BorrowModalContent = ({
 }) => {
   const { account = "0x" } = useBeraJs();
   const { baseCurrencyData } = usePollReservesDataList();
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const userAccountData = useUserAccountData();
+  const { data: userAccountData } = usePollUserAccountData();
 
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const token = useSelectedWalletBalance(reserve?.underlyingAsset);

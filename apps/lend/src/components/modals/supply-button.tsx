@@ -65,11 +65,7 @@ export default function SupplyBtn({
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const token = useSelectedWalletBalance(reserve.underlyingAsset);
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -117,12 +113,7 @@ const SupplyModalContent = ({
     token,
   });
 
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const userAccountData = useUserAccountData();
+  const { data: userAccountData } = usePollUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
   const newHealthFactor = userAccountData

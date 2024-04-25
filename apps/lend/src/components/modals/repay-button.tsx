@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  BalanceToken,
   TransactionActionType,
   getLendRepayPayload,
   lendPoolImplementationAbi,
@@ -9,7 +10,6 @@ import {
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
-  BalanceToken,
 } from "@bera/berajs";
 import {
   honeyTokenAddress,
@@ -68,11 +68,7 @@ export default function RepayBtn({
   const honey = useSelectedWalletBalance(honeyTokenAddress);
   const vdHoney = useSelectedWalletBalance(vdHoneyTokenAddress);
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -132,12 +128,7 @@ const RepayModalContent = ({
   const debtBalance = vdHoney.formattedBalance ?? "0";
 
   const { account = "0x" } = useBeraJs();
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const userAccountData = useUserAccountData();
+  const { data: userAccountData } = usePollUserAccountData();
 
   const balance = BigNumber(debtBalance).gt(BigNumber(tokenBalance))
     ? tokenBalance

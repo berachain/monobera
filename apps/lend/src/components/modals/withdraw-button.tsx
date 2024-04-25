@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
+  BalanceToken,
   TransactionActionType,
   getLendWithdrawPayload,
   lendPoolImplementationAbi,
@@ -8,7 +9,6 @@ import {
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
-  BalanceToken,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
@@ -67,11 +67,7 @@ export default function WithdrawBtn({
     formattedBalance: atoken?.formattedBalance ?? "0",
   } as BalanceToken;
 
-  const { refetch: userAccountRefetch } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
+  const { refetch: userAccountRefetch } = usePollUserAccountData();
   const { refetch: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -115,12 +111,7 @@ const WithdrawModalContent = ({
   const isHoney = reserve?.underlyingAsset === honeyTokenAddress;
   const userBalance = token.formattedBalance ?? "0";
   const { account = "0x" } = useBeraJs();
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const userAccountData = useUserAccountData();
+  const { data: userAccountData } = usePollUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
   const newHealthFactor = userAccountData
