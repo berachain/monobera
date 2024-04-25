@@ -40,8 +40,6 @@ export const getTokenInformation = async ({
       multicallAddress: config.contracts?.multicallAddress,
     });
 
-    console.log("result", result);
-
     return {
       address,
       decimals: result[0].result,
