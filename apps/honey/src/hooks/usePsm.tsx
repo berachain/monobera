@@ -110,12 +110,14 @@ export const usePsm = () => {
   });
 
   const { data: honeyPreview, isLoading: isHoneyPreviewLoading } =
-    usePollHoneyPreview(
-      isTyping ? undefined : collateral,
-      (givenIn ? fromAmount : toAmount) ?? "0",
-      isMint,
-      givenIn,
-    );
+    usePollHoneyPreview({
+      args: {
+        collateral: isTyping ? undefined : collateral,
+        amount: (givenIn ? fromAmount : toAmount) ?? "0",
+        mint: isMint,
+        given_in: givenIn,
+      },
+    });
 
   useEffect(() => {
     if (givenIn) setToAmount(honeyPreview);

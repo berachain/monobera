@@ -5,24 +5,31 @@ import { HoneyPreviewMethod, getHoneyPreview } from "~/actions";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType, Token } from "~/types";
 
+export interface UsePollHoneyPreviewArgs {
+  collateral: Token | undefined;
+  amount: string;
+  mint: boolean; // true mint, false redeem
+  given_in: boolean; // true given in, false given out
+}
+
 export interface UsePollHoneyPreviewResponse
   extends DefaultHookReturnType<string | undefined> {}
 
-export const usePollHoneyPreview = (
-  collateral: Token | undefined,
-  amount: string,
-  mint: boolean, // true mint, false redeem
-  given_in: boolean, // true given in, false given out
-  options?: DefaultHookOptions,
-): UsePollHoneyPreviewResponse => {
+export const usePollHoneyPreview = ({
+  args: { collateral, amount, mint, given_in },
+  options,
+}: {
+  args: UsePollHoneyPreviewArgs;
+  options?: DefaultHookOptions;
+}): UsePollHoneyPreviewResponse => {
   const publicClient = usePublicClient();
   const method = mint
     ? given_in
       ? HoneyPreviewMethod.Mint
       : HoneyPreviewMethod.RequiredCollateral
     : given_in
-      ? HoneyPreviewMethod.Redeem
-      : HoneyPreviewMethod.HoneyToRedeem;
+    ? HoneyPreviewMethod.Redeem
+    : HoneyPreviewMethod.HoneyToRedeem;
 
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
   const { config: beraConfig } = useBeraJs();
