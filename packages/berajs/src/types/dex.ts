@@ -95,3 +95,15 @@ export interface ISwaps {
   baseAssetHoneyPrice: string;
   quoteAssetHoneyPrice: string;
 }
+
+export interface IProvisions {
+  user: string;
+  baseFlow: number;
+  quoteFlow: number;
+  changeType: "mint" | "burn";
+  transactionHash: string;
+  time: number;
+  estimatedHoneyValue?: number;
+  baseAssetHoneyPrice: string;
+  quoteAssetHoneyPrice: string;
+}
