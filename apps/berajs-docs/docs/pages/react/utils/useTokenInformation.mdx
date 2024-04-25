@@ -21,11 +21,7 @@ export const beraConfig: BeraConfig = {
 };
 
 const { data: tokenInformation } = useTokenInformation({
-  config: beraConfig,
-  args: {
     address: "0x0...",
-}, {
-    beraConfigOverride: beraConfig // optional arg to override default beraConfig
 });
 ```
 

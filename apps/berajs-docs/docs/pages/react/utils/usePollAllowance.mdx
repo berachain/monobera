@@ -34,5 +34,6 @@ import { type UsePollAllowanceArgs } from "@bera/berajs";
 ## Returns
 
 ```ts twoslash
-import { type UsePollAllowanceResponse } from "@bera/berajs";
+import { type DefaultHookReturnType, type AllowanceToken  } from "@bera/berajs";
+type result = DefaultHookReturnType<AllowanceToken | undefined>
 ```
