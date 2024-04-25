@@ -13,22 +13,13 @@ import { useTokens } from "@bera/berajs";
 ## Usage
 
 ```ts twoslash [example.ts]
-import { useTokens, type BeraConfig, type Token } from "@bera/berajs";
-
-// required configs for useTokens
-export const beraConfig: BeraConfig = {
-  endpoints: {
-    tokenList: "https://..",
-  },
-};
+import { useTokens, type Token } from "@bera/berajs";
 
 const {
   data: tokens,
   addNewToken,
   removeToken,
-} = useTokens({
-  config: beraConfig,
-});
+} = useTokens();
 
 const newToken: Token = {
   address: "0x...",
