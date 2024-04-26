@@ -51,6 +51,10 @@ export default defineConfig({
               text: "usePoolUserPosition",
               link: "/react/dex/usePoolUserPosition/",
             },
+            {
+              text: "usePoolHistoricalData",
+              link: "/react/dex/usePoolHistoricalData/",
+            },
           ],
         },
         {
@@ -247,6 +251,10 @@ export default defineConfig({
             {
               text: "getBeraBalance",
               link: "/actions/utils/getBeraBalance/",
+            },
+            {
+              text: "fetchPoolByAddress",
+              link: "/actions/utils/fetchPoolByAddress/",
             },
           ],
         },

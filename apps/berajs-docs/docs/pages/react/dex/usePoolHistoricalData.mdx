@@ -1,0 +1,61 @@
+# usePoolHistoricalData
+
+Hook to fetch a list daily pool history data points up to the past 90 days given a pool's shareAddress.
+
+## Initialization
+
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
+
+## Import
+
+```ts
+import { usePoolHistoricalData } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { usePoolHistoricalData } from "@bera/berajs";
+
+const pool: PoolV2 = ...
+
+function App() {
+    const { data: recentSwaps, isLoading } = usePoolHistoricalData({ shareAddress: pool.shareAddress });
+
+    ...
+};
+```
+
+## Parameters
+
+#### Call signature
+
+```ts
+function usePoolHistoricalData(
+  args: { shareAddress: string },
+  options?: DefaultHookOptions,
+);
+```
+
+#### args: `{ shareAddress: string }`
+
+| Name           | type     | Description                                                                                   | Required |
+| -------------- | :------- | :-------------------------------------------------------------------------------------------- | :------: |
+| `shareAddress` | `string` | The blockchain address of a pool used to fetch pool information from the indexer ex ("0x...") |  `true`  |
+
+## Returns
+
+#### Return type: `DefaultHookReturnType<PoolHistoryResponse | undefined>`
+
+| Name           | type                                      | Description                                                                | Optional |
+| -------------- | :---------------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `PoolHistoryResponse \| undefined`        | The requested pool's historical data                                       |  `true`  |
+| `error`        | `any \| undefined`                        | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: PoolHistoryResponse) => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                              | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                                 | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                                 | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+See type [`PoolHistoryResponse`](/actions/dex/getPoolHistoricalData/#returns-poolhistoryresponse)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

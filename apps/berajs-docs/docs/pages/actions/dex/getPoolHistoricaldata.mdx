@@ -42,7 +42,7 @@ const poolHistoricalData = getPoolHistoricalData({
 | `shareAddress` | `string`                          | The id used to retrieve the pool                              |  `true`  |
 | `config`       | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources |  `true`  |
 
-## Returns
+## Returns `PoolHistoryResponse`
 
 - #### `info`: `PoolHistoryResponse_Info`
 
@@ -58,7 +58,7 @@ const poolHistoricalData = getPoolHistoricalData({
 | `template`     | `{feeRate?: number}` | Pool's fee rate structure                                 |  `true`  |
 | `shareAddress` | `{address?: string}` | The pool's id to fetch/retrieve pool details from indexer |  `true`  |
 
-- #### `history`: `PoolDayDataV2`
+- #### `history`: `PoolDayDataV2[]`
 
 :::info
 Type `PoolDayDataV2` is from `@bera/graphql`
