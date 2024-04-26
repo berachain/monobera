@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import {
   TransactionActionType,
   bexAbi,
+  usePoolUserPosition,
   useTokenHoneyPrice,
   type PoolV2,
   type Token,
@@ -33,7 +34,6 @@ import { Slider } from "@bera/ui/slider";
 import { usePublicClient } from "wagmi";
 
 import { SettingsPopover } from "~/components/settings-popover";
-import { usePollUserPosition } from "~/hooks/usePollUserPosition";
 import { getPoolUrl } from "../pools/fetchPools";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 
@@ -101,13 +101,10 @@ export default function WithdrawLiquidityContent({
   const quoteToken = pool.quoteInfo;
 
   const {
-    usePosition,
+    data: userPositionBreakdown,
     isLoading: isPositionBreakdownLoading,
     refresh,
-  } = usePollUserPosition(pool);
-
-  const userAmbientPosition = usePosition();
-  const userPositionBreakdown = userAmbientPosition?.userPosition;
+  } = usePoolUserPosition({ pool });
 
   const baseAmountWithdrawn = useMemo(() => {
     if (!userPositionBreakdown || amount === 0) {
