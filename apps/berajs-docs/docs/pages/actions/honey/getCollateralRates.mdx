@@ -11,6 +11,7 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ```ts
 import { getCollateralRates } from "@bera/berajs/actions";
 ```
+
 ## Usage
 
 :::code
@@ -41,9 +42,11 @@ return await getCollateralRates({
 });
 
 ```
+
 :::
 
 ## Parameters
+
 | Name             | type           | Description                                                   | Required |
 | ---------------- | :------------- | :------------------------------------------------------------ | :------: |
 | `client`         | `PublicClient` | The view public client used to interact with the blockchain   |  `true`  |
@@ -51,9 +54,7 @@ return await getCollateralRates({
 | `collateralList` | `Address[]`    | List of collateral addresses to fetch rates for               |  `true`  |
 
 ## Returns
-| Name                 | type                                  | Description                                           | Optional |
-| -------------------- | :------------------------------------ | :---------------------------------------------------- | :------: |
-| `mintFee`            | `number`                              | Fee rate for minting collaterals                      | `false`  |
-| `redeemFee`          | `number`                              | Fee rate for redeeming collaterals                    | `false`  |
-| `CollateralRatesMap` | `{ [key: Address]: CollateralRates }` | Map of collateral addresses to their respective rates | `false`  |
 
+| Name                 | type                                                          | Description                                           | Optional |
+| -------------------- | :------------------------------------------------------------ | :---------------------------------------------------- | :------: |
+| `CollateralRatesMap` | [`{[key: Address]: CollateralRates}`](/types/CollateralRates) | Map of collateral addresses to their respective rates | `false`  |

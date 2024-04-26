@@ -140,6 +140,8 @@ export default defineConfig({
         { text: "HoneyPreviewMethod", link: "/types/HoneyPreviewMethod/" },
         { text: "ReserveData", link: "/types/ReserveData/" },
         { text: "BaseCurrencyData", link: "/types/BaseCurrencyData/" },
+        { text: "CollateralRates", link: "/types/CollateralRates/" },
+        { text: "UserAccountData", link: "/types/UserAccountData/" },
       ],
     },
     {
