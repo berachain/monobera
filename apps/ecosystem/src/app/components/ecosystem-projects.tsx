@@ -156,7 +156,11 @@ export default function EcosystemProjects() {
       )}
 
       <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {(filteredProjectList as EcosystemProject[])?.length > 0 &&
+        {(filteredProjectList as EcosystemProject[])?.length === 0 ? (
+          <div className="mx-auto flex h-64 w-full items-center justify-center sm:h-[296px] sm:w-[260px]">
+            No project found in this category
+          </div>
+        ) : (
           (filteredProjectList as EcosystemProject[])
             ?.slice(0, visibleProjects)
             .map((project: EcosystemProject, index: number) => (
@@ -227,18 +231,18 @@ export default function EcosystemProjects() {
                   </div>
                 </div>
               </Link>
-            ))}
-      </div>
-      {filteredProjectList?.length &&
-        filteredProjectList?.length > ITEMS_PER_PAGE && (
-          <Button
-            variant="outline"
-            className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
-            onClick={toggleDisplay}
-          >
-            {viewMore ? "View More" : "View Less"}
-          </Button>
+            ))
         )}
+      </div>
+      {(filteredProjectList?.length ?? 0) > ITEMS_PER_PAGE && (
+        <Button
+          variant="outline"
+          className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
+          onClick={toggleDisplay}
+        >
+          {viewMore ? "View More" : "View Less"}
+        </Button>
+      )}
     </div>
   );
 }

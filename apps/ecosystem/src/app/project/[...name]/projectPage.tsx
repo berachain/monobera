@@ -23,8 +23,6 @@ export interface EcosystemProject {
 
 export default function ProjectPage({ name }: { name: string | undefined }) {
   const { projects: projectList, isLoading } = useProjects();
-  console.log(name);
-  console.log(projectList);
 
   const project = (projectList as EcosystemProject[])?.find(
     (p: EcosystemProject) => p.name === decodeURIComponent(name ?? ""),
@@ -41,7 +39,7 @@ export default function ProjectPage({ name }: { name: string | undefined }) {
   return (
     <div
       id="dapps"
-      className="flex flex-col items-center justify-center gap-6 px-4 text-center"
+      className="flex flex-col items-center justify-center gap-6 text-center"
     >
       <Avatar className="h-[96px] w-[96px]">
         <AvatarImage
