@@ -36,7 +36,7 @@ const collateralRate = getCollateralRate(address);
 | Name                        | type                                                               | Description                                                      | Optional |
 | --------------------------- | :----------------------------------------------------------------- | :--------------------------------------------------------------- | :------: |
 | `data`                      | `CollateralRatesMap`                                  | Dictionary of rates for all collaterals                          | `false`  |
-| `collateralRate`     | [`CollateralRates`](/types/CollateralRates/)            | Function to get rates for a specific collateral                  | `false`  |
+| `getCollateralRate`     | [`CollateralRates`](/types/CollateralRates/)            | Function to get rates for a specific collateral                  | `false`  |
 | `...swrResponse`            | `SWRResponse`                                                      | Additional fields and methods from the useSWR hook (e.g., isLoading, error) | `true`   |
 
 ```
