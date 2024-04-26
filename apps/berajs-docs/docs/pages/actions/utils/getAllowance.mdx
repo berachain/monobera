@@ -34,15 +34,14 @@ const { token, allowance, formattedAllowance } = await getAllowance({
 ```
 
 ## Parameters
-
-```ts
-import { type GetAllowance } from "@bera/berajs/actions";
-```
+| Name           | type                              | Description                                                               | Required |
+| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
+| tokens       | `Token[]` \| `undefined`     | Array of `Token` objects or undefined                         | true     |
+| account      | `` `0x${string}` `` \| `undefined` | Ethereum-style prefixed blockchain account address or undefined | true     |
+| config       | `BeraConfig`                 | Configuration settings specific to the allowance retrieval    | false    |
+| spender      | `string` \| `undefined`      | Identifier for the entity allowed to spend or undefined       | true     |
+| publicClient | `PublicClient` \| `undefined`| Client interface for public blockchain interactions or undefined | true     |
 
 ## Returns
 
-```ts
-import { type GetAllowanceResponse } from "@bera/berajs/actions";
-
-type result = Promise<GetAllowanceResponse>;
-```
+#### [`Promise<AllowanceToken[] | undefined>`](/types/AllowanceToken/)

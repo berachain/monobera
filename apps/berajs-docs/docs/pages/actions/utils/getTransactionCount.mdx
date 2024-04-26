@@ -31,16 +31,14 @@ await getTransactionCount({
 });
 ```
 
+
 ## Parameters
 
-```ts
-import { type GetTransactionCount } from "@bera/berajs/actions";
-```
+| Name           | type                              | Description                                                               | Required |
+| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
+| address      | `Address` \| `undefined`   | Blockchain address to query the transaction count | true     |
+| publicClient | `PublicClient` \| `undefined` | Client interface for public blockchain interactions | true     |
 
 ## Returns
 
-```ts
-import { type GetTransactionCountResponse } from "@bera/berajs/actions";
-
-type result = Promise<GetTransactionCountResponse>;
-```
+#### `Promise<number | undefined>`

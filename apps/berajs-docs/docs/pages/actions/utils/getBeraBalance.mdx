@@ -26,8 +26,13 @@ const data = await getBeraBalance({
 ```
 
 
+## Parameters
+
+| Name           | type                              | Description                                                               | Required |
+| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
+| account      | `string` \| `undefined`   | Blockchain account address or undefined                  | true     |
+| publicClient | `PublicClient` \| `undefined` | Client interface for public blockchain interactions or undefined | true     |
+
 ## Returns
 
-```ts
-Promise<number | undefined>
-```
+#### [`Promise<TokenBalance | undefined>`](/types/TokenBalance/)
