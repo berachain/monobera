@@ -1,7 +1,7 @@
 import { Address, PublicClient } from "viem";
 
 export interface GetTransactionCount {
-  address: string | undefined;
+  address: Address | undefined;
   publicClient: PublicClient | undefined;
 }
 
@@ -14,7 +14,7 @@ export const getTransactionCount = async ({
   if (!publicClient) return undefined;
   if (address) {
     const transactionCount = await publicClient.getTransactionCount({
-      address: address as Address,
+      address: address,
     });
     return transactionCount;
   }
