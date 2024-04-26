@@ -1,0 +1,29 @@
+# usePollUserAccountData
+
+React hook to fetching the user account.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > getHoneyPreview](/actions/honey/getHoneyPreview) before getting started.
+
+## Import
+
+```ts
+import { usePollUserAccountData } from "@bera/berajs";
+```
+
+## Usage
+
+:::code
+
+```ts [exmaple.ts]
+const { data: userData } = usePollUserAccountData()
+```
+:::
+
+## Returns
+
+| Name             | Type          | Description                                                          | Optional |
+| ---------------- | :------------ | :------------------------------------------------------------------- | :------: |
+| `userData`         | [`UserAccountData`](/types/UserAccountData)      | The computed amount resulting from the operation, formatted as a string. | `false`  |
+| `...swrResponse` | `SWRResponse` | An SWR response object that may include additional data and status information from the fetch operation. |  `true`  |

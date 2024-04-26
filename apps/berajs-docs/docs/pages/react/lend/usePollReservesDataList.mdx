@@ -1,0 +1,41 @@
+# usePollReservesDataList
+
+React hook for fetching the mint rates and redeem rates for all collaterals.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > getCollateralRates](/actions/honey/getCollateralRates) before getting started.
+
+## Import
+
+```ts
+import { useCollateralsRates } from "@bera/berajs";
+```
+
+
+## Usage
+
+:::code
+
+```ts [exmaple.ts]
+// Poll rates for all collaterals
+const {
+  data: collateralRatesDictionary,
+  usePollCollateralRate,
+} = usePollCollateralsRates(collateralList);
+
+// Poll rate for a single collateral
+const collateralRate = usePollCollateralRate(address);
+```
+:::
+
+
+## Returns
+
+| Property              | Type                                                  | Description                                                          | Optional |
+| --------------------- | ----------------------------------------------------- | -------------------------------------------------------------------- | :------: |
+| `getSelectedReserve` | `(address: Address) => ReserveData \| undefined`      | Function to retrieve a specific `ReserveData` by its address.        |  `false` |
+| `formattedReserves`  | [`ReserveData[]`](/types/ReserveData/)                                       | Array of `ReserveData`, each formatted for easy display.             |  `false` |
+| `baseCurrencyData`   | [`BaseCurrencyData \| undefined`](/types/BaseCurrencyData/)                       | Data about the base currency used in the reserve calculations.       |  `false` |
+| `totalBorrowed`      | `number`                                              | Total amount borrowed from all reserves, typically summed in base currency. |  `false` |
+| `marketSize`         | `number`                                              | Total market size of all reserves, often represented in base currency. |  `false` |

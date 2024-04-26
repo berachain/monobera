@@ -70,7 +70,16 @@ export default defineConfig({
         {
           text: "Bend",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            {
+              text: "usePollUserAccountData",
+              link: "/react/lend/usePollUserAccountData/",
+            },
+            {
+              text: "usePollReservesDataList",
+              link: "/react/lend/usePollReservesDataList/",
+            },
+          ],
         },
         {
           text: "Berps",
