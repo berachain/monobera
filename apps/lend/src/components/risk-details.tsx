@@ -1,6 +1,5 @@
 import React from "react";
 import { usePollUserAccountData } from "@bera/berajs";
-import { POLLING } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import {
@@ -18,12 +17,8 @@ import { getLTVColor, getLTVSpace } from "~/utils/get-ltv-color";
 export const RiskDetails = () => {
   const [open, setOpen] = React.useState(false);
 
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const data = useUserAccountData();
+  const { data } = usePollUserAccountData();
+
   const healthFactor = Number(formatEther(data?.healthFactor ?? 0n));
   const totalCollateralBase =
     !data?.totalCollateralBase || data?.totalCollateralBase === 0n

@@ -10,10 +10,10 @@ export interface bendTxnPayload {
 }
 
 export const getLendSupplyPayload = ({
-  args: { token, amount, account },
-}: {
-  args: bendTxnPayload;
-}): PayloadReturnType<[Address, bigint, Address, number]> => {
+  token,
+  amount,
+  account,
+}: bendTxnPayload): PayloadReturnType<[Address, bigint, Address, number]> => {
   const payload: [Address, bigint, Address, number] = [
     token.address,
     parseUnits(amount, token.decimals),
@@ -24,11 +24,11 @@ export const getLendSupplyPayload = ({
 };
 
 export const getLendWithdrawPayload = ({
-  args,
-}: {
-  args: bendTxnPayload;
-}): PayloadReturnType<[Address, bigint, Address]> => {
-  const { token, amount, max, account } = args;
+  token,
+  amount,
+  max,
+  account,
+}: bendTxnPayload): PayloadReturnType<[Address, bigint, Address]> => {
   const payload: [Address, bigint, Address] = [
     token.address,
     max ? maxUint256 : parseUnits(amount, token.decimals),
@@ -38,11 +38,10 @@ export const getLendWithdrawPayload = ({
 };
 
 export const getLendBorrowPayload = ({
-  args,
-}: {
-  args: bendTxnPayload;
-}): PayloadReturnType<[Address, bigint, 2, 0, Address]> => {
-  const { token, amount, account } = args;
+  token,
+  amount,
+  account,
+}: bendTxnPayload): PayloadReturnType<[Address, bigint, 2, 0, Address]> => {
   const payload: [Address, bigint, 2, 0, Address] = [
     token.address,
     parseUnits(amount, token.decimals),
@@ -54,11 +53,11 @@ export const getLendBorrowPayload = ({
 };
 
 export const getLendRepayPayload = ({
-  args,
-}: {
-  args: bendTxnPayload;
-}): PayloadReturnType<[Address, bigint, 2, Address]> => {
-  const { token, amount, max, account } = args;
+  token,
+  amount,
+  max,
+  account,
+}: bendTxnPayload): PayloadReturnType<[Address, bigint, 2, Address]> => {
   const payload: [Address, bigint, 2, Address] = [
     token.address,
     max ? maxUint256 : parseUnits(amount, token.decimals),

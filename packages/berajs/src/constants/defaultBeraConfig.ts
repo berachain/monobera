@@ -5,6 +5,7 @@ import {
   crocMultiSwapAddress,
   crocRouterEndpoint,
   crocSubgraphEndpoint,
+  honeyRouterAddress,
   honeySubgraphUrl,
   lendOracleAddress,
   lendPoolAddressProviderAddress,
@@ -39,5 +40,6 @@ export const defaultBeraConfig: BeraConfig = {
     lendPoolProxyAddress: lendPoolImplementationAddress,
     lendUIDataProviderAddress: lendUIDataProviderAddress,
     lendRewardsAggregatorAddress: lendRewardsAddress,
+    honeyRouterAddress: honeyRouterAddress,
   },
 };

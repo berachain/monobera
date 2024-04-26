@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import {
   TransactionActionType,
   useBeraJs,
+  useCollateralsRates,
   usePollAllowance,
   usePollBalance,
-  usePollHoneyParams,
   usePollHoneyPreview,
   useTokens,
   type Token,
@@ -72,13 +72,13 @@ export const usePsm = () => {
     token: selectedFrom,
   });
 
-  const { useHoneyParams, isLoading: isFeeLoading } = usePollHoneyParams(
-    collateralList?.map((token: any) => token.address) ?? [],
-  );
+  const { getCollateralRate, isLoading: isFeeLoading } = useCollateralsRates({
+    collateralList: collateralList?.map((token: any) => token.address) ?? [],
+  });
 
-  const params = useHoneyParams(
-    collateral ? (collateral.address as Address) : undefined,
-  );
+  const params = collateral
+    ? getCollateralRate(collateral.address as Address)
+    : undefined;
 
   const fee = params ? (isMint ? params.mintFee : params.redeemFee) : 0;
 
@@ -108,14 +108,13 @@ export const usePsm = () => {
     },
   });
 
-  const { useHoneyPreview, isLoading: isHoneyPreviewLoading } =
-    usePollHoneyPreview(
-      isTyping ? undefined : collateral,
-      (givenIn ? fromAmount : toAmount) ?? "0",
-      isMint,
-      givenIn,
-    );
-  const honeyPreview = useHoneyPreview();
+  const { data: honeyPreview, isLoading: isHoneyPreviewLoading } =
+    usePollHoneyPreview({
+      collateral: isTyping ? undefined : collateral,
+      amount: (givenIn ? fromAmount : toAmount) ?? "0",
+      mint: isMint,
+      given_in: givenIn,
+    });
 
   useEffect(() => {
     if (givenIn) setToAmount(honeyPreview);

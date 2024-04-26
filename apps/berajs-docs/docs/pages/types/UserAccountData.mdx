@@ -1,0 +1,10 @@
+## `UserAccountData`
+
+| Name                          | Type    | Description                                                         | Optional |
+| ----------------------------- | ------- | ------------------------------------------------------------------- | :------: |
+| `totalCollateralBase`         | `bigint`| The total value of collateral deposited by the user, in the base currency unit. | `false` |
+| `totalDebtBase`               | `bigint`| The total amount of debt taken by the user, in the base currency unit.         | `false` |
+| `availableBorrowsBase`        | `bigint`| The maximum additional amount the user can borrow, based on their current collateral. | `false` |
+| `currentLiquidationThreshold` | `bigint`| The threshold at which the user's collateral may begin to be liquidated, expressed as a percentage. | `false` |
+| `ltv`                         | `bigint`| Loan-to-value ratio, representing the maximum allowable loan amount relative to the collateral value. | `false` |
+| `healthFactor`                | `bigint`| A numeric representation of the safety of the user's account; higher values indicate a safer account. | `false` |

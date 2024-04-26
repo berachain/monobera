@@ -16,8 +16,8 @@ export default function UserTokenCard({
   token: BalanceToken;
   deposited?: boolean;
 }) {
-  const { useSelectedReserveData } = usePollReservesDataList();
-  const reserve = useSelectedReserveData(token.address as Address);
+  const { getSelectedReserve } = usePollReservesDataList();
+  const reserve = getSelectedReserve(token.address as Address);
   const balance = token.formattedBalance ?? "0";
   return (
     <>
