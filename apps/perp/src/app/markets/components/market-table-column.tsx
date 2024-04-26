@@ -138,11 +138,11 @@ export const market_table_column: ColumnDef<IMarket>[] = [
     cell: ({ row }) => {
       const formattedBorrowingL = formatUnits(
         BigInt(row.original?.pair_borrowing_fee?.bf_long ?? "0"),
-        18,
+        10,
       );
       const formattedBorrowingS = formatUnits(
         BigInt(row.original?.pair_borrowing_fee?.bf_short ?? "0"),
-        18,
+        10,
       );
       return (
         <div>

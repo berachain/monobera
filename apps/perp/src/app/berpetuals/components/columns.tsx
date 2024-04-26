@@ -62,11 +62,11 @@ export const PositionLiquidationPrice = ({
   );
   const formattedBfLong = formatUnits(
     BigInt(positionMarket?.pair_borrowing_fee?.bf_long ?? "0"),
-    18,
+    10,
   );
   const formattedBfShort = formatUnits(
     BigInt(positionMarket?.pair_borrowing_fee?.bf_short ?? "0"),
-    18,
+    10,
   );
 
   const liqPrice = useCalculateLiqPrice({
@@ -339,7 +339,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <DataTableColumnHeader column={column} title="Borrow Fee" />
       ),
       cell: ({ row }) => {
-        return <div>{formatBigIntUsd(row.original.borrowing_fee, 18)}</div>;
+        return <div>{formatBigIntUsd(row.original.borrowing_fee, 10)}</div>;
       },
       accessorKey: "borrow_fee",
       enableSorting: false,

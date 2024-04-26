@@ -104,11 +104,11 @@ export default function CreatePosition({ market, params }: ICreatePosition) {
 
   const formattedBfLong = formatUnits(
     BigInt(market.pair_borrowing_fee?.bf_long ?? "0"),
-    18,
+    10,
   );
   const formattedBfShort = formatUnits(
     BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
-    18,
+    10,
   );
 
   const liqPrice = useCalculateLiqPrice({
