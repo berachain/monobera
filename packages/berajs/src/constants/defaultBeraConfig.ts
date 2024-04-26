@@ -1,6 +1,7 @@
 import {
   beraTokenAddress,
   crocDexAddress,
+  crocIndexerEndpoint,
   crocMultiSwapAddress,
   crocRouterEndpoint,
   crocSubgraphEndpoint,
@@ -21,6 +22,7 @@ export const defaultBeraConfig: BeraConfig = {
   endpoints: {
     tokenList: tokenListUrl,
     dexRouter: crocRouterEndpoint,
+    dexIndexer: crocIndexerEndpoint,
   },
   subgraphs: {
     honeySubgraph: honeySubgraphUrl,
