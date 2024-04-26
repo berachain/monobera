@@ -135,8 +135,7 @@ const SupplyModalContent = ({
 
   const payload =
     token &&
-    getLendSupplyPayload({ token, amount: amount ?? "0", account })
-      .payload;
+    getLendSupplyPayload({ token, amount: amount ?? "0", account }).payload;
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">
