@@ -12,6 +12,21 @@ Before using this function, ensure you have followed the initialization steps ou
 import { getReserveData } from "@bera/berajs/actions";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+export const beraConfig: BeraConfig = {
+  contracts: {
+    lendUIDataProviderAddress: "0x...",
+    lendAddressProviderAddress: "0x...",
+  },
+};
+```
+
 ## Usage
 
 :::code
@@ -30,7 +45,7 @@ const publicClient = createPublicClient({
 const config: BeraConfig = {
   contracts: {
     lendUIDataProviderAddress: "0x...",
-    lendAddressProviderAddress: "0x..."
+    lendAddressProviderAddress: "0x...",
   },
 };
 
@@ -39,6 +54,7 @@ const reserveData = await getReserveData({
   config,
 });
 ```
+
 :::
 
 ## Parameters
@@ -47,7 +63,6 @@ const reserveData = await getReserveData({
 | -------- | -------------- | ----------------------------------------------------------- | :------: |
 | `client` | `PublicClient` | The public client used for blockchain interactions          |  `true`  |
 | `config` | `BeraConfig`   | Configuration object including necessary contract addresses |  `true`  |
-
 
 ## Returns
 
@@ -62,8 +77,7 @@ type return = Promise<
 >;
 ```
 
-| Name                | Type   | Description | Optional |
-| ------------------- | ------ | ----------- | :------: |
-| `formattedReserves` | [`ReserveData[]`](/types/ReserveData)  | Array of reserve data details, each containing token addresses and related information. |`false` |
-|`baseCurrencyData`      |[`BaseCurrencyData`](/types/BaseCurrencyData)                                | Data regarding the base currency including price and decimals. |`false` |
-
+| Name                | Type                                          | Description                                                                             | Optional |
+| ------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------- | :------: |
+| `formattedReserves` | [`ReserveData[]`](/types/ReserveData)         | Array of reserve data details, each containing token addresses and related information. | `false`  |
+| `baseCurrencyData`  | [`BaseCurrencyData`](/types/BaseCurrencyData) | Data regarding the base currency including price and decimals.                          | `false`  |

@@ -73,9 +73,7 @@ export const usePsm = () => {
   });
 
   const { getCollateralRate, isLoading: isFeeLoading } = useCollateralsRates({
-    args: {
-      collateralList: collateralList?.map((token: any) => token.address) ?? [],
-    },
+    collateralList: collateralList?.map((token: any) => token.address) ?? [],
   });
 
   const params = collateral
@@ -112,12 +110,10 @@ export const usePsm = () => {
 
   const { data: honeyPreview, isLoading: isHoneyPreviewLoading } =
     usePollHoneyPreview({
-      args: {
-        collateral: isTyping ? undefined : collateral,
-        amount: (givenIn ? fromAmount : toAmount) ?? "0",
-        mint: isMint,
-        given_in: givenIn,
-      },
+      collateral: isTyping ? undefined : collateral,
+      amount: (givenIn ? fromAmount : toAmount) ?? "0",
+      mint: isMint,
+      given_in: givenIn,
     });
 
   useEffect(() => {

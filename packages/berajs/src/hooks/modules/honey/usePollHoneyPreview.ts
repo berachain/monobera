@@ -16,21 +16,18 @@ export interface UsePollHoneyPreviewArgs {
 export interface UsePollHoneyPreviewResponse
   extends DefaultHookReturnType<string | undefined> {}
 
-export const usePollHoneyPreview = ({
-  args: { collateral, amount, mint, given_in },
-  options,
-}: {
-  args: UsePollHoneyPreviewArgs;
-  options?: DefaultHookOptions;
-}): UsePollHoneyPreviewResponse => {
+export const usePollHoneyPreview = (
+  { collateral, amount, mint, given_in }: UsePollHoneyPreviewArgs,
+  options?: DefaultHookOptions,
+): UsePollHoneyPreviewResponse => {
   const publicClient = usePublicClient();
   const method = mint
     ? given_in
       ? HoneyPreviewMethod.Mint
       : HoneyPreviewMethod.RequiredCollateral
     : given_in
-      ? HoneyPreviewMethod.Redeem
-      : HoneyPreviewMethod.HoneyToRedeem;
+    ? HoneyPreviewMethod.Redeem
+    : HoneyPreviewMethod.HoneyToRedeem;
 
   const QUERY_KEY = [method, collateral?.address, amount, mint, given_in];
   const { config: beraConfig } = useBeraJs();

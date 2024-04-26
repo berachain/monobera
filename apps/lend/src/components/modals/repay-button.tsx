@@ -155,12 +155,10 @@ const RepayModalContent = ({
   const payload =
     honey &&
     getLendRepayPayload({
-      args: {
-        token: honey,
-        amount: amount ?? "0",
-        max: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
-        account,
-      },
+      token: honey,
+      amount: amount ?? "0",
+      max: BigNumber(amount ?? "0").eq(BigNumber(debtBalance ?? "0")),
+      account,
     }).payload;
 
   return (

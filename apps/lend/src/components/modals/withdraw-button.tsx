@@ -133,12 +133,10 @@ const WithdrawModalContent = ({
   const paylaod =
     token &&
     getLendWithdrawPayload({
-      args: {
-        token,
-        amount: amount ?? "0",
-        max: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
-        account,
-      },
+      token,
+      amount: amount ?? "0",
+      max: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
+      account,
     }).payload;
 
   return (

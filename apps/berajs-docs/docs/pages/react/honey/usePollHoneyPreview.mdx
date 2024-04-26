@@ -16,28 +16,25 @@ import { usePollHoneyPreview } from "@bera/berajs";
 
 ```ts
 const { data: honeyPreview } = usePollHoneyPreview({
-  args: {
-    collateral,
-    amount,
-    mint: true,
-    given_in: true,
-  },
+  collateral,
+  amount,
+  mint: true,
+  given_in: true,
 });
 ```
 
 ## Parameters
 
-| Name       | Type          | Description                                            | Required |
-| ---------- | :------------ | :----------------------------------------------------- | :------: |
-| `collateral` | [`Token`](/types/Token/) | The token used as collateral in the transaction.        |  `true`  |
-| `amount`   | `string`      | The amount of the collateral or currency involved.      |  `true`  |
-| `mint`     | `boolean`     | Indicates whether the operation is minting.             |  `true`  |
-| `given_in` | `boolean`     | Specifies if the amount is given as input for calculations. |  `true`  |
-
+| Name         | Type                     | Description                                                 | Required |
+| ------------ | :----------------------- | :---------------------------------------------------------- | :------: |
+| `collateral` | [`Token`](/types/Token/) | The token used as collateral in the transaction.            |  `true`  |
+| `amount`     | `string`                 | The amount of the collateral or currency involved.          |  `true`  |
+| `mint`       | `boolean`                | Indicates whether the operation is minting.                 |  `true`  |
+| `given_in`   | `boolean`                | Specifies if the amount is given as input for calculations. |  `true`  |
 
 ## Returns
 
-| Name             | Type          | Description                                                          | Optional |
-| ---------------- | :------------ | :------------------------------------------------------------------- | :------: |
-| `amount`         | `string`      | The computed amount resulting from the operation, formatted as a string. | `false`  |
+| Name             | Type          | Description                                                                                              | Optional |
+| ---------------- | :------------ | :------------------------------------------------------------------------------------------------------- | :------: |
+| `amount`         | `string`      | The computed amount resulting from the operation, formatted as a string.                                 | `false`  |
 | `...swrResponse` | `SWRResponse` | An SWR response object that may include additional data and status information from the fetch operation. |  `true`  |

@@ -15,13 +15,10 @@ export interface UseCollateralsRatesResponse
   getCollateralRate: (collateral: string) => CollateralRates | undefined;
 }
 
-export const useCollateralsRates = ({
-  args: { collateralList },
-  options,
-}: {
-  args: { collateralList: Address[] };
-  options?: DefaultHookOptions;
-}): UseCollateralsRatesResponse => {
+export const useCollateralsRates = (
+  { collateralList }: { collateralList: Address[] },
+  options?: DefaultHookOptions,
+): UseCollateralsRatesResponse => {
   const publicClient = usePublicClient();
   const method = "useCollateralsRates";
   const QUERY_KEY = [method, ...collateralList];

@@ -147,8 +147,7 @@ const BorrowModalContent = ({
 
   const payload =
     token &&
-    getLendBorrowPayload({ args: { token, amount: amount ?? "0", account } })
-      .payload;
+    getLendBorrowPayload({ token, amount: amount ?? "0", account }).payload;
 
   return (
     <div className="flex flex-col gap-6 pb-4">
