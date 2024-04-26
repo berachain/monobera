@@ -1,0 +1,42 @@
+# getLendSupplyPayload
+
+Action for creating the supply payload for transaction in lend.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started.
+
+## Import
+
+```ts
+import { getLendSupplyPayload } from "@bera/berajs/actions";
+```
+
+
+
+## Usage
+
+:::code
+
+```ts [example.ts]
+const payload = getLendSupplyPayload({ args: { token, amount, account, max: true } });
+```
+
+:::
+
+## Parameters
+
+
+| Name     | Type    | Description                               | Required |
+| -------- | ------- | ----------------------------------------- | :------: |
+| `token`  | `Token` | The token involved in the transaction.    |  `true`  |
+| `amount` | `string`| The amount of the token to be transacted. |  `true`  |
+| `account`| `Address`| The blockchain address of the user account. |  `true` |
+
+
+## Returns
+
+| Return Type                     | Description                                                        |
+| ------------------------------- | ------------------------------------------------------------------ |
+| `[Address, bigint, Address, number]` | An array that can include token address, token amount in bigint, user account address, token decimals |
+
