@@ -13,3 +13,4 @@ export * from "./getWalletBalances";
 export * from "./getTokens";
 export * from "./getPoolRecentSwaps";
 export * from "./getPoolRecentProvisions";
+export * from "./getPoolHistoricalData";
