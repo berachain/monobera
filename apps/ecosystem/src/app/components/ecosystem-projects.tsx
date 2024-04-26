@@ -6,71 +6,32 @@ import { SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import MultipleSelector, { Option } from "@bera/ui/multiple-selector";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { useProjects } from "../hooks/useProjects";
 
 const ITEMS_PER_PAGE = 12;
 
-// TODO: add in other properties like ids
-const ecosystemTypeTabs = [
-  {
-    value: "All",
-  },
-  {
-    value: "Native",
-  },
-  {
-    value: "DeFi",
-  },
-  {
-    value: "RWA",
-  },
-  {
-    value: "Bridge",
-  },
-  {
-    value: "Oracle",
-  },
-  {
-    value: "Custody",
-  },
-  {
-    value: "Acct Abstraction",
-  },
-  {
-    value: "Security",
-  },
-  {
-    value: "Ramps/Payments",
-  },
-  {
-    value: "Wallets",
-  },
-  {
-    value: "GameFi",
-  },
-  {
-    value: "SocialFi",
-  },
-  {
-    value: "NFTfi",
-  },
-  {
-    value: "BetFi",
-  },
-  {
-    value: "Dev Exp",
-  },
-  {
-    value: "Dao",
-  },
-  {
-    value: "Other",
-  },
-  {
-    value: "Stable Coin",
-  },
+const OPTIONS: Option[] = [
+  { label: "Native", value: "Native" },
+  { label: "DeFi", value: "DeFi" },
+  { label: "RWA", value: "RWA" },
+  { label: "Bridge", value: "Bridge" },
+  { label: "Oracle", value: "Oracle" },
+  { label: "Custody", value: "Custody" },
+  { label: "Account Abstraction", value: "Account Abstraction" },
+  { label: "Security", value: "Security" },
+  { label: "Ramps/Payments", value: "Ramps/Payments" },
+  { label: "Wallets", value: "Wallets" },
+  { label: "GameFi", value: "GameFi" },
+  { label: "SocialFi", value: "SocialFi", disable: true },
+  { label: "NFTfi", value: "NFTfi", disable: true },
+  { label: "BetFi", value: "BetFi" },
+  { label: "Dev Exp", value: "Dev Exp" },
+  { label: "Dao", value: "Dao" },
+  { label: "Other", value: "Other" },
+  { label: "Stable Coin", value: "Stable Coin" },
 ];
 
 export interface EcosystemProject {
@@ -86,7 +47,7 @@ export interface EcosystemProject {
 
 export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
-  const [ecosystemType, setEcosystemType] = React.useState<string>("All");
+  const [ecosystemType, setEcosystemType] = React.useState<Option[]>([]);
   const [visibleProjects, setVisibleProjects] = React.useState<
     number | undefined
   >(ITEMS_PER_PAGE);
@@ -101,10 +62,13 @@ export default function EcosystemProjects() {
       project.description.toLowerCase().includes(keywords.toLowerCase()) ||
       project.ecosystemType1.toLowerCase().includes(keywords.toLowerCase()) ||
       project.ecosystemType2.toLowerCase().includes(keywords.toLowerCase());
+    const ecosystemValues = ecosystemType.map((option) =>
+      option.value.toLowerCase(),
+    );
     const matchesEcosystemType =
-      ecosystemType === "All" ||
-      project.ecosystemType1 === ecosystemType ||
-      project.ecosystemType2 === ecosystemType;
+      ecosystemValues.length === 0 ||
+      ecosystemValues.includes(project.ecosystemType1.toLowerCase()) ||
+      ecosystemValues.includes(project.ecosystemType2.toLowerCase());
     return matchesKeywords && matchesEcosystemType;
   });
 
@@ -122,14 +86,28 @@ export default function EcosystemProjects() {
       id="dapps"
       className="flex w-full flex-col items-center justify-center gap-6 px-4 text-center xl:w-[1280px]"
     >
-      <SearchInput
-        className="h-[40px] w-full rounded-md border border-solid bg-background"
-        placeholder="Search..."
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setKeywords(e.target.value)
-        }
-      />
-
+      <div className="flex w-full flex-row items-start gap-4">
+        <SearchInput
+          className="h-[40px] w-full rounded-md border border-solid bg-background"
+          placeholder="Search..."
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setKeywords(e.target.value)
+          }
+        />
+        <MultipleSelector
+          className="w-64"
+          value={ecosystemType}
+          onChange={setEcosystemType}
+          defaultOptions={OPTIONS}
+          placeholder="Browse by category"
+          emptyIndicator={
+            <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+              no results found.
+            </p>
+          }
+        />
+      </div>
+      {/* 
       <div className="flex w-full flex-row flex-wrap items-center">
         {ecosystemTypeTabs.map((type) => (
           <Button
@@ -143,7 +121,7 @@ export default function EcosystemProjects() {
             </div>
           </Button>
         ))}
-      </div>
+      </div> */}
 
       <div className="my-2 w-full border border-solid" />
       {isLoading && (
