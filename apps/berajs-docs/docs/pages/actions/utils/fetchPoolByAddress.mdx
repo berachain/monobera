@@ -1,10 +1,24 @@
-# getAllowance
+# fetchPoolByAddress
 
-Action for fetching the pool by address
+Action for fetching a pool's data given the pool's shareAddress (which is the pool's blockchain address)
 
 ## Initialization
 
 Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
+# Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexIndexer: "https://..",
+  },
+};
+```
 
 ## Import
 
@@ -15,18 +29,22 @@ import { fetchPoolByAddress } from "@bera/berajs";
 ## Usage
 
 ```ts
-import { fetchPoolByAddress } from "@bera/berajs";
+import { defaultBeraConfig, fetchPoolByAddress } from "@bera/berajs";
 
 const poolAddress = "0x...";
 
-const pool: PoolV2 = await fetchPoolByAddress(poolAddress);
+const pool: PoolV2 = await fetchPoolByAddress({
+  shareAddress: poolAddress,
+  config: defaultBeraConfig,
+});
 ```
 
 ## Parameters
 
-| Name        | type     | Description                                                        | Required |
-| ----------- | :------- | :----------------------------------------------------------------- | :------: |
-| poolAddress | `string` | The requested pool's share address on the blockchain ex: ("0x...") |   true   |
+| Name           | type                              | Description                                                        | Required |
+| -------------- | :-------------------------------- | :----------------------------------------------------------------- | :------: |
+| `shareAddress` | `string`                          | The requested pool's share address on the blockchain ex: ("0x...") |  `true`  |
+| `config`       | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources      |  `true`  |
 
 ## Returns `PoolV2`
 

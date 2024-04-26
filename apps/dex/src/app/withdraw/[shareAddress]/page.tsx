@@ -25,7 +25,9 @@ export default async function Withdraw({
     if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    const pool = await fetchPoolByAddress(params.shareAddress);
+    const pool = await fetchPoolByAddress({
+      shareAddress: params.shareAddress,
+    });
 
     if (!pool) {
       notFound();
