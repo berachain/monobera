@@ -8,6 +8,19 @@ React hook to retrieve the current honey price of a given token from the Bex sub
 import { useTokenHoneyPrice } from "@bera/berajs";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+export const beraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://...",
+  },
+};
+```
+
+
 ## Usage
 
 ```ts twoslash [example.ts]
@@ -31,13 +44,33 @@ const { data: tokenPriceInHoney, refresh } = useTokenHoneyPrice({
 
 ## Parameters
 
-```ts twoslash
-import { type UseTokenHoneyPriceArgs } from "@bera/berajs";
-```
+#### args: `{tokenAddress: Address | undefined}`
 
-## Returns
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| `tokenAddress` | `Address \| undefined` | token address we want price fore |  `true`  |
 
-```ts twoslash
-import { type DefaultHookReturnType } from "@bera/berajs";
-type result = DefaultHookReturnType<string | undefined>
-```
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+
+
+## Returns `DefaultHookReturnType<string | undefined>`
+
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `string \| undefined`        | price of token                                           |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

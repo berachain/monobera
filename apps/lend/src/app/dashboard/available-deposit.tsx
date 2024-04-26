@@ -1,5 +1,5 @@
 import React from "react";
-import { usePollWalletBalances, type Token } from "@bera/berajs";
+import { BalanceToken, usePollWalletBalances, type Token } from "@bera/berajs";
 import { NotFoundBear } from "@bera/shared-ui";
 
 import UserTokenCard from "~/components/user-token-card";
@@ -19,7 +19,7 @@ export default function AvailableDeposit() {
       </div>
       {(assets?.length ?? 0) > 0 ? (
         <>
-          {assets?.map((asset: Token, index: number) => (
+          {assets?.map((asset: BalanceToken, index: number) => (
             <UserTokenCard token={asset} key={index} />
           ))}
         </>

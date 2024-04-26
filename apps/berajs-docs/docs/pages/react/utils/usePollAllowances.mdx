@@ -8,6 +8,18 @@ React hook for polling the allowances of a given token array
 import { usePollAllowances } from "@bera/berajs";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x...",
+  },
+};
+```
+
 ## Usage
 
 
@@ -44,12 +56,39 @@ const selectedAllowance = useSelectedAllowance(token1.address);
 
 ## Parameters
 
-```ts twoslash
-import { type UsePollAllowancesArgs } from "@bera/berajs";
-```
+#### args: `{spender: Address, tokens: Token[] | undefined}`
 
-## Returns
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| spender | `Address`            | Blockchain address of the entity spending the token | true    |
+| tokens   | `Token[]` \| `undefined` | Array of Token Objects          | true     |
 
-```ts twoslash
-import { type UsePollAllowancesResponse } from "@bera/berajs";
-```
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+
+
+## Returns `UsePollAllowancesResponse`
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `AllowanceToken[] \| undefined`        | tokens with allowance data                                     |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+| `useSelectedAllowance`    | `(address: string) =>( AllowanceToken \| undefined)`                   | hook used for getting a selected token's allowance       | `false`  |
+
+
+
+See type [`AllowanceToken`](/types/AllowanceToken/)
+
+See type [`Token`](/types/Token/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

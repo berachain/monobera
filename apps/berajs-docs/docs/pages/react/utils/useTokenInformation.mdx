@@ -8,6 +8,19 @@ React hook for grabbing token information for a given address.
 import { useTokenInformation } from "@bera/berajs";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x1..",
+  },
+};
+```
+
+
 ## Usage
 
 ```ts twoslash [example.ts]
@@ -27,12 +40,35 @@ const { data: tokenInformation } = useTokenInformation({
 
 ## Parameters
 
-```ts twoslash
-import { type useTokenInformationArgs } from "@bera/berajs";
-```
+#### args: `{address: Address}`
 
-## Returns
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| `address` | `Address` | address we want token information for |  `false`  |
 
-```ts twoslash
-import { type UseTokenInformationResponse } from "@bera/berajs";
-```
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+
+
+## Returns `DefaultHookReturnType<Token | undefined>;`
+
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `Token \| undefined`        | Token object if address is a token                                           |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+
+See type [`Token`](/types/Token/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

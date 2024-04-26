@@ -34,14 +34,11 @@ const tokens = await getTokens({
 
 ## Parameters
 
-```ts 
-import { type GetTokensRequest } from "@bera/berajs/actions";
-```
+| Name           | type                              | Description                                                               | Required |
+| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
+| externalList | `Token[]`    | Optional array of `Token` objects from an external source    | true     |
+| config       | `BeraConfig` | Configuration settings specific to the token retrieval request | false    |
 
 ## Returns
 
-```ts
-import { type GetTokens } from "@bera/berajs/actions";
-
-type result = Promise<GetTokens>;
-```
+#### [`Promise<GetTokens>`](/types/GetTokens/)
