@@ -44,14 +44,12 @@ await getTokenInformation({
 
 ## Parameters
 
-```ts
-import { type GetTokenInformation } from "@bera/berajs/actions";
-```
+| Name           | type                              | Description                                                               | Required |
+| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
+| address      | `Address`    | Blockchain address of the token                      | false    |
+| config       | `BeraConfig` | Configuration settings specific to the token retrieval | false    |
+| publicClient | `any`        | Client interface for public blockchain interactions, type not specified | false    |
 
 ## Returns
 
-```ts
-import { type GetTokenInformationResponse } from "@bera/berajs/actions";
-
-type result = Promise<GetTokenInformationResponse>;
-```
+#### [`Promise<Token | undefined>`](/types/Token/)

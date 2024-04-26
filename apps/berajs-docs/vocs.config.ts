@@ -151,6 +151,12 @@ export default defineConfig({
         { text: "BaseCurrencyData", link: "/types/BaseCurrencyData/" },
         { text: "CollateralRates", link: "/types/CollateralRates/" },
         { text: "UserAccountData", link: "/types/UserAccountData/" },
+        { text: "Token", link: "/types/Token/" },
+        { text: "AllowanceToken", link: "/types/AllowanceToken/" },
+        {
+          text: "BalanceToken",
+          link: "/types/BalanceToken/",
+        },
       ],
     },
     {

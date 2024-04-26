@@ -47,16 +47,16 @@ const { data } = await getAllowance({
 });
 ```
 
+
 ## Parameters
 
-```ts
-import { type GetAllowances } from "@bera/berajs/actions";
-```
+| Name           | type                              | Description                                                               | Required |
+| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
+| account      | `Address` \| `undefined`  | Blockchain address of the account holder         | true     |
+| token        | `Token` \| `undefined`    | Reference to a `Token` object or undefined       | true     |
+| spender      | `Address`                 | Blockchain address of the entity spending the token | false    |
+| publicClient | `PublicClient` \| `undefined` | Client interface for public blockchain interactions | true     |
 
 ## Returns
 
-```ts
-import { type GetAllowancesResponse } from "@bera/berajs/actions";
-
-type result = Promise<GetAllowancesResponse>;
-```
+#### [`AllowanceToken | undefined`](/types/AllowanceToken/)

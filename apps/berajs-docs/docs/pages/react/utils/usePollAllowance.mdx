@@ -27,13 +27,38 @@ const { data: allowance, refresh } = usePollAllowance({
 
 ## Parameters
 
-```ts twoslash
-import { type UsePollAllowanceArgs } from "@bera/berajs";
-```
+#### args: `{spender: Address, token: Token | undefined}`
 
-## Returns
+| Name   | type     | Description                                               | Required |
+| ------ | :------- | :-------------------------------------------------------- | :------: |
+| spender | `Address`            | Blockchain address of the entity spending the token | true    |
+| token   | `Token` \| `undefined` | Reference to a `Token` object or undefined          | true     |
 
-```ts twoslash
-import { type DefaultHookReturnType, type AllowanceToken  } from "@bera/berajs";
-type result = DefaultHookReturnType<AllowanceToken | undefined>
-```
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+
+
+## Returns 
+Return type: `DefaultHookReturnType<AllowanceToken | undefined>`
+
+| Name           | type                                | Description                                                                | Optional |
+| -------------- | :---------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `AllowanceToken \| undefined`        | token with allowance data                                     |  `true`  |
+| `error`        | `any \| undefined`                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `() => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+
+See type [`AllowanceToken`](/types/AllowanceToken/)
+
+See type [`Token`](/types/Token/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

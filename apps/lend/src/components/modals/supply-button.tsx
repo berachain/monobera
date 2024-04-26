@@ -9,7 +9,7 @@ import {
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
-  type Token,
+  type BalanceToken,
 } from "@bera/berajs";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
@@ -100,7 +100,7 @@ const SupplyModalContent = ({
   write,
 }: {
   reserve: any;
-  token: Token;
+  token: BalanceToken;
   amount: string | undefined;
   setAmount: (amount: string | undefined) => void;
   write: (arg0: any) => void;

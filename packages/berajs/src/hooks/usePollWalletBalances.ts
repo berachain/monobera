@@ -1,4 +1,4 @@
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
@@ -26,7 +26,6 @@ export const usePollWalletBalances = (
   options?: DefaultHookOptions,
 ): UsePollBalancesResponse => {
   const publicClient = usePublicClient();
-  const { mutate } = useSWRConfig();
   const { account, isConnected, config: beraConfig } = useBeraJs();
   const { data: tokenData } = useTokens({
     beraConfigOverride: options?.beraConfigOverride,

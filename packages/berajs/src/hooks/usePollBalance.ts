@@ -71,7 +71,6 @@ export const usePollBalance = ({
             decimals: result[3]?.result as number,
             symbol: result[1]?.result as string,
             name: result[2]?.result as string,
-            default: false,
           };
           return balance;
         }
@@ -89,7 +88,6 @@ export const usePollBalance = ({
           decimals: 18,
           symbol: "BERA",
           name: "Berachain",
-          default: true,
         };
       }
       return undefined;
