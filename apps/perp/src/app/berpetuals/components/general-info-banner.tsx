@@ -56,11 +56,11 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
 
   const formattedBorrowingL = formatUnits(
     BigInt(market.pair_borrowing_fee?.bf_long ?? "0"),
-    18,
+    10,
   );
   const formattedBorrowingS = formatUnits(
     BigInt(market.pair_borrowing_fee?.bf_short ?? "0"),
-    18,
+    10,
   );
 
   return (

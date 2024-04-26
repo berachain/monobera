@@ -59,11 +59,11 @@ export function CloseOrderModal({
   const liqPrice = useCalculateLiqPrice({
     bfLong: formatUnits(
       BigInt(openOrder?.market.pair_borrowing_fee?.bf_long ?? 0n),
-      18,
+      10,
     ),
     bfShort: formatUnits(
       BigInt(openOrder?.market.pair_borrowing_fee?.bf_short ?? 0n),
-      18,
+      10,
     ),
     orderType: openOrder?.buy === true ? "long" : "short",
     price: formattedPrice,
