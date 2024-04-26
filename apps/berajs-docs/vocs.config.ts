@@ -205,10 +205,22 @@ export default defineConfig({
               text: "getUserAccountData",
               link: "/actions/lend/getUserAccountData/",
             },
-            { text: "getLendBorrowPayload", link: "/actions/lend/getLendBorrowPayload/" },
-            { text: "getLendRepayPayload", link: "/actions/lend/getLendRepayPayload/" },
-            { text: "getLendSupplyPayload", link: "/actions/lend/getLendSupplyPayload/" },
-            { text: "getLendWithdrawPayload", link: "/actions/lend/getLendWithdrawPayload/" },
+            {
+              text: "getLendBorrowPayload",
+              link: "/actions/lend/getLendBorrowPayload/",
+            },
+            {
+              text: "getLendRepayPayload",
+              link: "/actions/lend/getLendRepayPayload/",
+            },
+            {
+              text: "getLendSupplyPayload",
+              link: "/actions/lend/getLendSupplyPayload/",
+            },
+            {
+              text: "getLendWithdrawPayload",
+              link: "/actions/lend/getLendWithdrawPayload/",
+            },
           ],
         },
         {

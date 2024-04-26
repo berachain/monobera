@@ -1,6 +1,6 @@
-# usePollCollateralsRates
+# usePollHoneyPreview
 
-React hook for fetching the mint rates and redeem rates for all collaterals.
+React hook to fetching the preview of the swap amount for various transaction methods involving the "honey" token.
 
 ## Initialization
 
@@ -9,33 +9,35 @@ Ensure you have followed the steps from [Actions > getHoneyPreview](/actions/hon
 ## Import
 
 ```ts
-import { usePollCollateralsRates } from "@bera/berajs";
+import { usePollHoneyPreview } from "@bera/berajs";
 ```
 
 ## Usage
 
 ```ts
-// Poll rates for all collaterals
-const {
-  data: collateralRatesDictionary,
-  usePollCollateralRate,
-} = usePollCollateralsRates(collateralList);
-
-// Poll rate for a single collateral
-const collateralRate = usePollCollateralRate(address);
+const { data: honeyPreview } = usePollHoneyPreview({
+  args: {
+    collateral,
+    amount,
+    mint: true,
+    given_in: true,
+  },
+});
 ```
 
 ## Parameters
 
-| Name            | type        | Description                                         | Required |
-| --------------- | :---------- | :-------------------------------------------------- | :------: |
-| `collateralList`| `Address[]` | List of collateral addresses to fetch rates for     |  `true`  |
+| Name       | Type          | Description                                            | Required |
+| ---------- | :------------ | :----------------------------------------------------- | :------: |
+| `collateral` | [`Token`](/types/Token/) | The token used as collateral in the transaction.        |  `true`  |
+| `amount`   | `string`      | The amount of the collateral or currency involved.      |  `true`  |
+| `mint`     | `boolean`     | Indicates whether the operation is minting.             |  `true`  |
+| `given_in` | `boolean`     | Specifies if the amount is given as input for calculations. |  `true`  |
+
 
 ## Returns
 
-| Name                        | type                                                               | Description                                         | Optional |
-| --------------------------- | :----------------------------------------------------------------- | :-------------------------------------------------- | :------: |
-| `data`                      | `CollateralRatesMap \| undefined`                                  | Dictionary of rates for all collaterals             | `false`  |
-| `usePollCollateralRate`     | `(collateral: string) => CollateralRates \| undefined`             | Function to get rates for a specific collateral     | `false`  |
-| `...swrResponse`            | `SWRResponse`                                                      | SWR response object including data and status       | `true`   |
-
+| Name             | Type          | Description                                                          | Optional |
+| ---------------- | :------------ | :------------------------------------------------------------------- | :------: |
+| `amount`         | `string`      | The computed amount resulting from the operation, formatted as a string. | `false`  |
+| `...swrResponse` | `SWRResponse` | An SWR response object that may include additional data and status information from the fetch operation. |  `true`  |

@@ -35,26 +35,8 @@ const collateralRate = usePollCollateralRate(address);
 
 | Name                        | type                                                               | Description                                                      | Optional |
 | --------------------------- | :----------------------------------------------------------------- | :--------------------------------------------------------------- | :------: |
-| `data`                      | `CollateralRatesMap \| undefined`                                  | Dictionary of rates for all collaterals                          | `false`  |
-| `usePollCollateralRate`     | `(collateral: string) => CollateralRates \| undefined`             | Function to get rates for a specific collateral                  | `false`  |
+| `data`                      | `CollateralRatesMap`                                  | Dictionary of rates for all collaterals                          | `false`  |
+| `collateralRate`     | [`CollateralRates`](/types/CollateralRates/)            | Function to get rates for a specific collateral                  | `false`  |
 | `...swrResponse`            | `SWRResponse`                                                      | Additional fields and methods from the useSWR hook (e.g., isLoading, error) | `true`   |
 
-
-## Types
-
-### CollateralRates
-
-| Property  | Type    | Description        |
-|-----------|---------|--------------------|
-| `mintFee` | `number`| The fee for minting collateral. |
-| `redeemFee`| `number`| The fee for redeeming collateral. |
-
-### CollateralRatesMap
-
-| Key     | Value Type       | Description                        |
-|---------|------------------|------------------------------------|
-| `Address` | `CollateralRates` | Maps an address to its `CollateralRates`. |
-
-
 ```
-
