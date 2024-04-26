@@ -140,6 +140,10 @@ export default defineConfig({
           text: "BalanceToken",
           link: "/types/BalanceToken/",
         },
+        {
+          text: "PoolV2",
+          link: "/types/PoolV2/",
+        },
       ],
     },
     {
@@ -177,6 +181,10 @@ export default defineConfig({
             {
               text: "getBeraLpAddress",
               link: "/actions/dex/getBeraLpAddress/",
+            },
+            {
+              text: "getPoolHistoricalData",
+              link: "/actions/dex/getPoolHistoricalData/",
             },
           ],
         },
