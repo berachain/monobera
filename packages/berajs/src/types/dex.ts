@@ -2,16 +2,13 @@ import BigNumber from "bignumber.js";
 import { Address } from "viem";
 
 export type Token = {
-  chainId?: number;
   logoURI?: string;
+  default?: boolean; // TODO: deprecate this
   tags?: string[];
   address: Address;
   decimals: number;
   symbol: string;
   name: string;
-  default?: boolean;
-  balance?: bigint;
-  formattedBalance?: string;
 };
 
 export interface SwapRequest {

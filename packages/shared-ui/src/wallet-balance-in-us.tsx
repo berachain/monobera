@@ -6,6 +6,7 @@ import {
   usePollWalletBalances,
   useTokenHoneyPrices,
   useTokens,
+  type BalanceToken,
   type Token,
 } from "@bera/berajs";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -20,7 +21,7 @@ export function WalletBalanceInUs() {
   });
   const total =
     assets && pricesArray
-      ? assets?.reduce((acc: number, curr: Token) => {
+      ? assets?.reduce((acc: number, curr: BalanceToken) => {
           const address = handleNativeBera(curr.address);
           const price = pricesArray[address];
           const total = Number(curr.formattedBalance ?? 0) * Number(price ?? 0);
