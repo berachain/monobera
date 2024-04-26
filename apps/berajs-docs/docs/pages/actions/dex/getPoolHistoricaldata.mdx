@@ -1,0 +1,76 @@
+# getPoolHistoricalData
+
+Returns a list daily pool history data points up to the past 90 days.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
+# Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexIndexer: "https://..",
+  },
+};
+```
+
+## Usage
+
+```ts
+import { defaultBeraConfig, getPoolHistoricalData } from "@bera/berajs/actions";
+
+const poolShareAddress = "0x...";
+
+const poolHistoricalData = getPoolHistoricalData({
+  shareAddress: poolShareAddress,
+  config: defaultBeraConfig,
+});
+```
+
+## Parameters
+
+- #### `args`
+
+| Name           | type                              | Description                                                   | Required |
+| -------------- | :-------------------------------- | :------------------------------------------------------------ | :------: |
+| `shareAddress` | `string`                          | The id used to retrieve the pool                              |  `true`  |
+| `config`       | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources |  `true`  |
+
+## Returns
+
+- #### `info`: `PoolHistoryResponse_Info`
+
+| Name           | type                 | Description                                               | Optional |
+| -------------- | :------------------- | :-------------------------------------------------------- | :------: |
+| `id`           | `string`             | Id of pool                                                |  `true`  |
+| `poolIdx`      | `string`             | Pool idx                                                  |  `true`  |
+| `base`         | `string`             | The pool's base token's name                              |  `true`  |
+| `quote`        | `string`             | The pool's quote token's name                             |  `true`  |
+| `timeCreate`   | `string`             | UNIX timestamp of the time the pool was created           |  `true`  |
+| `baseInfo`     | `string`             | Base token details                                        |  `true`  |
+| `quoteInfo`    | `string`             | Quote token details                                       |  `true`  |
+| `template`     | `{feeRate?: number}` | Pool's fee rate structure                                 |  `true`  |
+| `shareAddress` | `{address?: string}` | The pool's id to fetch/retrieve pool details from indexer |  `true`  |
+
+- #### `history`: `PoolDayDataV2`
+
+:::info
+Type `PoolDayDataV2` is from `@bera/graphql`
+:::
+
+```ts
+import { type PoolDayDataV2 } from "@bera/graphql";
+```
+
+| Name               | type     | Description                                                                                 | Optional |
+| ------------------ | :------- | :------------------------------------------------------------------------------------------ | :------: |
+| `day`              | `number` | UNIX timestamp of day for this 24 hour data snapshot                                        | `false`  |
+| `volume24HInHoney` | `number` | Estimated USD value of the trade volume in the pool over the past 24 hours                  | `false`  |
+| `tvlInHoney`       | `number` | Estimated USD value of the total value locked in the pool at the end of this 24 hour period | `false`  |
+| `fees24HInHoney`   | `number` | Estimated USD value of the fees paid in pool transactions over the past 24 hours            | `false`  |
