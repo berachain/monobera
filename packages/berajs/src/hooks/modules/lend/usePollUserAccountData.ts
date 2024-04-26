@@ -1,26 +1,33 @@
 import useSWR from "swr";
-import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
-
 import {
   UserAccountData,
   getUserAccountData,
 } from "~/actions/lend/getUserAccountData";
 import { useBeraJs } from "~/contexts";
-import { DefaultHookOptions } from "~/types";
+import POLLING from "~/enum/polling";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
-export const usePollUserAccountData = (options?: DefaultHookOptions) => {
+export interface UsePollUserAccountDataResponse
+  extends DefaultHookReturnType<UserAccountData | undefined> {}
+
+export const usePollUserAccountData = (
+  options?: DefaultHookOptions,
+): UsePollUserAccountDataResponse => {
   const publicClient = usePublicClient();
   const { account, config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
 
   const QUERY_KEY = [account, "getUserAccountData"];
-  const { isLoading, isValidating, mutate } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (!config.contracts?.lendPoolProxyAddress) return undefined;
-      if (!account) return undefined;
+      if (!publicClient) throw new Error("publicClient is not defined");
+      if (!config) throw new Error("missing beraConfig");
+      if (!config.contracts?.lendPoolProxyAddress)
+        throw new Error("missing contract address lendPoolProxyAddress");
+      if (!account) throw new Error("missing account address");
+
       return await getUserAccountData({
         config,
         client: publicClient,
@@ -29,18 +36,12 @@ export const usePollUserAccountData = (options?: DefaultHookOptions) => {
     },
     {
       ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
     },
   );
 
-  const useUserAccountData = (): UserAccountData | undefined => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
-
   return {
-    isLoading,
-    isValidating,
-    refresh: () => mutate?.(),
-    useUserAccountData,
+    ...swrResponse,
+    refresh: () => void swrResponse.mutate(),
   };
 };

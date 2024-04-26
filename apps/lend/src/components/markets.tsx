@@ -141,8 +141,8 @@ function generateArrays(originalArray: any[], length: number) {
 
 function MarketGrid() {
   const containerRef = useRef(null);
-  const { useReservesDataList } = usePollReservesDataList();
-  const markets = useReservesDataList();
+  const { formattedReserves: markets } = usePollReservesDataList();
+
   const isInView = useInView(containerRef, { once: true, amount: 0.4 });
   const columns = generateArrays(markets, 20) as [any[], any[], any[]];
 

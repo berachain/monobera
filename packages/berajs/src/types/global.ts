@@ -24,6 +24,7 @@ export interface BeraConfig {
     lendPoolProxyAddress?: Address;
     lendUIDataProviderAddress?: Address;
     lendRewardsAggregatorAddress?: Address;
+    honeyRouterAddress?: Address;
   };
 }
 
