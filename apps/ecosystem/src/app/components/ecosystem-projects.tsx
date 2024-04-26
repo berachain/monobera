@@ -182,6 +182,7 @@ export default function EcosystemProjects() {
         {filteredProjectList
           .slice(0, visibleProjects)
           .map((project: EcosystemProject, index: number) => (
+            // <Link href={`/project/${project.name}`}>
             <div
               key={index}
               className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between sm:h-[296px] sm:w-[260px]"
@@ -189,7 +190,14 @@ export default function EcosystemProjects() {
               <div className="flip-card-inner transform-style relative w-full rounded-md border border-solid bg-background transition-transform duration-700 ease-in-out hover:bg-muted">
                 <div className="flip-card-front flex flex-col items-center justify-center">
                   <Avatar className="h-[96px] w-[96px]">
-                    <AvatarImage src={project.icon} className="rounded-full" />
+                    <AvatarImage
+                      src={
+                        project.icon?.endsWith(".svg")
+                          ? "https://artio-static-asset-public.s3.ap-southeast-1.amazonaws.com/assets/bera.png"
+                          : project.icon
+                      }
+                      className="rounded-full"
+                    />
                   </Avatar>
 
                   <div className="pt-4">
@@ -200,9 +208,11 @@ export default function EcosystemProjects() {
                       <Button variant="secondary" className="text-xs">
                         {project.ecosystemType1}
                       </Button>
-                      <Button variant="secondary" className="text-xs">
-                        {project.ecosystemType2}
-                      </Button>
+                      {project.ecosystemType2 && (
+                        <Button variant="secondary" className="text-xs">
+                          {project.ecosystemType2}
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -227,6 +237,7 @@ export default function EcosystemProjects() {
                 </div>
               </div>
             </div>
+            // </Link>
           ))}
       </div>
       {filteredProjectList.length > ITEMS_PER_PAGE && (
