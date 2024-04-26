@@ -1,5 +1,3 @@
-"use client";
-
 // import EcosystemAnnouncements from "./components/ecosystem-announcements";
 // import TopProjects from "./components/top-projects";
 import { Footer } from "@bera/shared-ui";

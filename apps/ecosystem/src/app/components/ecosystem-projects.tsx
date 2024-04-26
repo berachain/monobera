@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import Papa from "papaparse";
+
+import { useProjects } from "../hooks/useProjects";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -72,7 +73,7 @@ const ecosystemTypeTabs = [
   },
 ];
 
-interface EcosystemProject {
+export interface EcosystemProject {
   icon: string;
   name: string;
   subtitle: string;
@@ -83,50 +84,17 @@ interface EcosystemProject {
   ecosystemType2: string;
 }
 
-const CSV_URL = `https://docs.google.com/spreadsheets/d/e/${process.env.NEXT_PUBLIC_ECOSYSTEM_GOOGLE_SHEET_ID}/pub?output=csv`;
-
 export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
   const [ecosystemType, setEcosystemType] = React.useState<string>("All");
-  const [visibleProjects, setVisibleProjects] = React.useState(ITEMS_PER_PAGE);
+  const [visibleProjects, setVisibleProjects] = React.useState<
+    number | undefined
+  >(ITEMS_PER_PAGE);
   const [viewMore, setViewMore] = React.useState(true);
-  const [projectList, setProjectList] = useState<EcosystemProject[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  async function fetchData() {
-    try {
-      setIsLoading(true);
-      const data = await fetch(CSV_URL);
-      return data.text();
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-  }
+  const { projects: projectList, isLoading } = useProjects();
 
-  useEffect(() => {
-    fetchData().then((data) => {
-      if (data) {
-        Papa.parse(data, {
-          complete: (results: any) => {
-            setIsLoading(false);
-            setProjectList([...results.data]);
-          },
-          header: true,
-        });
-      }
-    });
-  }, []);
-
-  const toggleDisplay = () => {
-    if (viewMore) {
-      setVisibleProjects(projectList.length);
-    } else {
-      setVisibleProjects(ITEMS_PER_PAGE);
-    }
-    setViewMore(!viewMore);
-  };
-
-  const filteredProjectList = projectList.filter((project) => {
+  const filteredProjectList = projectList?.filter((project: any) => {
     const matchesKeywords =
       !keywords ||
       project.name.toLowerCase().includes(keywords.toLowerCase()) ||
@@ -139,6 +107,15 @@ export default function EcosystemProjects() {
       project.ecosystemType2 === ecosystemType;
     return matchesKeywords && matchesEcosystemType;
   });
+
+  const toggleDisplay = () => {
+    if (viewMore) {
+      setVisibleProjects(projectList?.length);
+    } else {
+      setVisibleProjects(ITEMS_PER_PAGE);
+    }
+    setViewMore(!viewMore);
+  };
 
   return (
     <div
@@ -179,76 +156,89 @@ export default function EcosystemProjects() {
       )}
 
       <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredProjectList
-          .slice(0, visibleProjects)
-          .map((project: EcosystemProject, index: number) => (
-            // <Link href={`/project/${project.name}`}>
-            <div
-              key={index}
-              className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between sm:h-[296px] sm:w-[260px]"
-            >
-              <div className="flip-card-inner transform-style relative w-full rounded-md border border-solid bg-background transition-transform duration-700 ease-in-out hover:bg-muted">
-                <div className="flip-card-front flex flex-col items-center justify-center">
-                  <Avatar className="h-[96px] w-[96px]">
-                    <AvatarImage
-                      src={
-                        project.icon?.endsWith(".svg")
-                          ? "https://artio-static-asset-public.s3.ap-southeast-1.amazonaws.com/assets/bera.png"
-                          : project.icon
-                      }
-                      className="rounded-full"
-                    />
-                  </Avatar>
+        {(filteredProjectList as EcosystemProject[])?.length > 0 &&
+          (filteredProjectList as EcosystemProject[])
+            ?.slice(0, visibleProjects)
+            .map((project: EcosystemProject, index: number) => (
+              <Link href={`/project/${project.name}`}>
+                <div
+                  key={index}
+                  className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between sm:h-[296px] sm:w-[260px]"
+                >
+                  <div className="flip-card-inner transform-style relative w-full rounded-md border border-solid bg-background transition-transform duration-700 ease-in-out hover:bg-muted">
+                    <div className="flip-card-front flex flex-col items-center justify-center">
+                      <Avatar className="h-[96px] w-[96px]">
+                        <AvatarImage
+                          src={
+                            project.icon?.endsWith(".svg")
+                              ? "https://artio-static-asset-public.s3.ap-southeast-1.amazonaws.com/assets/bera.png"
+                              : project.icon
+                          }
+                          className="rounded-full"
+                        />
+                      </Avatar>
 
-                  <div className="pt-4">
-                    <div className="text-lg font-semibold">{project.name}</div>
+                      <div className="pt-4">
+                        <div className="text-lg font-semibold">
+                          {project.name}
+                        </div>
 
-                    {/* Show 2 types */}
-                    <div className="items -center flex flex-wrap justify-center gap-2 pt-4 text-foreground">
-                      <Button variant="secondary" className="text-xs">
-                        {project.ecosystemType1}
-                      </Button>
-                      {project.ecosystemType2 && (
-                        <Button variant="secondary" className="text-xs">
-                          {project.ecosystemType2}
-                        </Button>
-                      )}
+                        {/* Show 2 types */}
+                        <div className="items center flex flex-wrap justify-center gap-2 pt-4 text-foreground">
+                          <Button variant="secondary" className="text-xs">
+                            {project.ecosystemType1}
+                          </Button>
+                          {project.ecosystemType2 && (
+                            <Button variant="secondary" className="text-xs">
+                              {project.ecosystemType2}
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flip-card-back flex flex-col items-center justify-center">
+                      <div className="text-lg font-semibold">
+                        {project.name}
+                      </div>
+
+                      <div
+                        className="flex p-6 text-center text-sm leading-5 text-foreground"
+                        style={{ maxHeight: "120px", overflowY: "auto" }}
+                      >
+                        {project.description}
+                      </div>
+
+                      <div className="flex items-center justify-center gap-2 pt-4">
+                        {project.goto && (
+                          <Link href={project.goto}>
+                            <Icons.externalLink />
+                          </Link>
+                        )}
+                        <Link
+                          href={
+                            project.twitter ? project.twitter : project.goto
+                          }
+                        >
+                          <Icons.twitter />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="flip-card-back flex flex-col items-center justify-center">
-                  <div className="text-lg font-semibold">{project.name}</div>
-
-                  <div className="flex p-6 text-center text-sm leading-5 text-foreground">
-                    {project.description}
-                  </div>
-
-                  <div className="flex items-center justify-center gap-2 pt-4">
-                    <Link href={project.goto}>
-                      <Icons.externalLink />
-                    </Link>
-                    <Link
-                      href={project.twitter ? project.twitter : project.goto}
-                    >
-                      <Icons.twitter />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-            // </Link>
-          ))}
+              </Link>
+            ))}
       </div>
-      {filteredProjectList.length > ITEMS_PER_PAGE && (
-        <Button
-          variant="outline"
-          className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
-          onClick={toggleDisplay}
-        >
-          {viewMore ? "View More" : "View Less"}
-        </Button>
-      )}
+      {filteredProjectList?.length &&
+        filteredProjectList?.length > ITEMS_PER_PAGE && (
+          <Button
+            variant="outline"
+            className="z-10 m-8 mt-12 h-[44px] w-[144px] p-4"
+            onClick={toggleDisplay}
+          >
+            {viewMore ? "View More" : "View Less"}
+          </Button>
+        )}
     </div>
   );
 }
