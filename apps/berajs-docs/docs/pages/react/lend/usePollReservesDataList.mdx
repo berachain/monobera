@@ -1,0 +1,45 @@
+# usePollReservesDataList
+
+React hook for lend global reserved data.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > getReserveData](/actions/lend/getReserveData) before getting started.
+
+## Import
+
+```ts
+import { usePollReservesDataList } from "@bera/berajs";
+```
+
+
+## Usage
+
+:::code
+
+```ts [exmaple.ts]
+// Poll global reserves data
+const {
+  data: collateralRatesDictionary,
+  formattedReserves,
+  baseCurrencyData,
+  totalBorrowed,
+  marketSize,
+  getSelectedReserve,
+} = usePollReservesDataList();
+
+// get selected reserve info
+const collateralRate = getSelectedReserve(address);
+```
+:::
+
+
+## Returns
+
+| Property              | Type                                                  | Description                                                          | Optional |
+| --------------------- | ----------------------------------------------------- | -------------------------------------------------------------------- | :------: |
+| `getSelectedReserve` | `(address: Address) => ReserveData \| undefined`      | Function to retrieve a specific `ReserveData` by its address.        |  `false` |
+| `formattedReserves`  | [`ReserveData[]`](/types/ReserveData/)                                       | Array of `ReserveData`, each formatted for easy display.             |  `false` |
+| `baseCurrencyData`   | [`BaseCurrencyData \| undefined`](/types/BaseCurrencyData/)                       | Data about the base currency used in the reserve calculations.       |  `false` |
+| `totalBorrowed`      | `number`                                              | Total amount borrowed from all reserves, typically summed in base currency. |  `false` |
+| `marketSize`         | `number`                                              | Total market size of all reserves, often represented in base currency. |  `false` |

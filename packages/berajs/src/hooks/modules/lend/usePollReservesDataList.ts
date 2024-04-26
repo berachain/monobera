@@ -1,53 +1,56 @@
-import useSWR, { useSWRConfig } from "swr";
-import useSWRImmutable from "swr/immutable";
+import useSWR from "swr";
 import { type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { BaseCurrencyData, ReserveData, getReserveData } from "~/actions/lend";
 import { useBeraJs } from "~/contexts";
-import { DefaultHookOptions } from "~/types";
+import POLLING from "~/enum/polling";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
-export const usePollReservesDataList = (options?: DefaultHookOptions) => {
+export interface UsePollReservesDataListResponse
+  extends DefaultHookReturnType<
+    | {
+        formattedReserves: ReserveData[];
+        baseCurrencyData: BaseCurrencyData;
+      }
+    | undefined
+  > {
+  getSelectedReserve: (address: Address) => ReserveData | undefined;
+  formattedReserves: ReserveData[];
+  baseCurrencyData: BaseCurrencyData | undefined;
+  totalBorrowed: number;
+  marketSize: number;
+}
+
+export const usePollReservesDataList = (
+  options?: DefaultHookOptions,
+): UsePollReservesDataListResponse => {
   const publicClient = usePublicClient();
-  const { mutate: mutateGlobal } = useSWRConfig();
-
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = ["getReservesDataList"];
-  const { isLoading, isValidating, mutate } = useSWR(
+  const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
-      if (!config.contracts?.lendUIDataProviderAddress) return undefined;
-      if (!config.contracts?.lendAddressProviderAddress) return undefined;
-      const result = await getReserveData({
+      if (!publicClient) throw new Error("publicClient is not defined");
+      if (!config) throw new Error("missing beraConfig");
+      if (!config.contracts?.lendUIDataProviderAddress)
+        throw new Error("missing contract address lendUIDataProviderAddress");
+      if (!config.contracts?.lendAddressProviderAddress)
+        throw new Error("missing contract address lendAddressProviderAddress");
+      return await getReserveData({
         config,
         client: publicClient,
       });
-      if (result) {
-        await mutateGlobal(
-          [...QUERY_KEY, "baseCurrencyData"],
-          result.baseCurrencyData,
-        );
-        return result.formattedReserves;
-      }
-      await mutateGlobal([...QUERY_KEY, "baseCurrencyData"], undefined);
-      return [];
     },
     {
       ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
     },
   );
 
-  const useReservesDataList = (): ReserveData[] => {
-    const { data = [] } = useSWRImmutable(QUERY_KEY);
-    return data;
-  };
-
-  const useSelectedReserveData = (
-    address: Address,
-  ): ReserveData | undefined => {
-    const { data: reserves = [] } = useSWRImmutable<ReserveData[]>(QUERY_KEY);
+  const getSelectedReserve = (address: Address): ReserveData | undefined => {
+    const reserves = swrResponse.data?.formattedReserves ?? [];
     return reserves.find(
       (reserve: ReserveData) =>
         reserve.underlyingAsset === address ||
@@ -56,38 +59,23 @@ export const usePollReservesDataList = (options?: DefaultHookOptions) => {
     );
   };
 
-  const useBaseCurrencyData = (): BaseCurrencyData | undefined => {
-    const { data: baseCurrency = undefined } =
-      useSWRImmutable<BaseCurrencyData>([...QUERY_KEY, "baseCurrencyData"]);
-    return baseCurrency;
-  };
+  const formattedReserves = swrResponse.data?.formattedReserves ?? [];
+  const baseCurrencyData = swrResponse.data?.baseCurrencyData;
 
-  const useTotalBorrowed = (): number => {
-    const { data: reserves = [] } = useSWRImmutable<ReserveData[]>(QUERY_KEY);
-    let totalBorrowed = 0;
-    reserves.forEach(
-      (reserve: ReserveData) => (totalBorrowed += Number(reserve.totalDebt)),
-    );
-    return totalBorrowed;
-  };
-
-  const useTotalMarketSize = (): number => {
-    const { data: reserves = [] } = useSWRImmutable<ReserveData[]>(QUERY_KEY);
-    let marketSize = 0;
-    reserves.forEach(
-      (reserve: ReserveData) => (marketSize += Number(reserve.totalLiquidity)),
-    );
-    return marketSize;
-  };
+  let totalBorrowed = 0;
+  let marketSize = 0;
+  formattedReserves.forEach((reserve: ReserveData) => {
+    totalBorrowed += Number(reserve.totalDebt);
+    marketSize += Number(reserve.totalLiquidity);
+  });
 
   return {
-    isLoading,
-    isValidating,
-    refresh: () => mutate?.(),
-    useReservesDataList,
-    useSelectedReserveData,
-    useBaseCurrencyData,
-    useTotalBorrowed,
-    useTotalMarketSize,
+    ...swrResponse,
+    refresh: () => void swrResponse.mutate(),
+    getSelectedReserve,
+    formattedReserves,
+    baseCurrencyData,
+    totalBorrowed,
+    marketSize,
   };
 };

@@ -65,11 +65,7 @@ export default function SupplyBtn({
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const token = useSelectedWalletBalance(reserve.underlyingAsset);
 
-  const { refresh: userAccountRefetch } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
+  const { refresh: userAccountRefetch } = usePollUserAccountData();
   const { refresh: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -117,12 +113,7 @@ const SupplyModalContent = ({
     token,
   });
 
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const userAccountData = useUserAccountData();
+  const { data: userAccountData } = usePollUserAccountData();
 
   const currentHealthFactor = formatEther(userAccountData?.healthFactor ?? 0n);
   const newHealthFactor = userAccountData
@@ -144,8 +135,7 @@ const SupplyModalContent = ({
 
   const payload =
     token &&
-    getLendSupplyPayload({ args: { token, amount: amount ?? "0", account } })
-      .payload;
+    getLendSupplyPayload({ token, amount: amount ?? "0", account }).payload;
   return (
     <div className="flex flex-col gap-6 pb-4">
       <div className="text-lg font-semibold leading-7">

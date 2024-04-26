@@ -3,6 +3,7 @@ import { usePublicClient } from "wagmi";
 
 import POLLING from "~/enum/polling";
 import {
+  BalanceToken,
   DefaultHookOptions,
   DefaultHookReturnType,
   getWalletBalances,
@@ -10,11 +11,6 @@ import {
 } from "..";
 import { useBeraJs } from "../contexts";
 import { useTokens } from "./useTokens";
-
-export interface BalanceToken extends Token {
-  balance: bigint;
-  formattedBalance: string;
-}
 
 export type UsePollWalletBalancesArgs = {
   externalTokenList?: Token[];

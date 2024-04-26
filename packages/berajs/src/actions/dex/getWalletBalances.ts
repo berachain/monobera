@@ -1,22 +1,15 @@
-import { Address, PublicClient, erc20Abi, formatUnits, getAddress } from "viem";
+import { Address, PublicClient, erc20Abi, formatUnits } from "viem";
 
 import { multicall3Abi } from "~/abi";
-import { BeraConfig } from "../../types";
-import { Token } from "../../types/dex";
 import { ADDRESS_ZERO } from "~/constants";
+import { BeraConfig } from "../../types";
+import { BalanceToken, Token } from "../../types/dex";
 
 export interface GetWalletBalances {
   account: string | undefined;
   tokenList: Token[] | undefined;
   config: BeraConfig;
   publicClient: PublicClient | undefined;
-}
-
-export type GetWalletBalancesResponse = BalanceToken[] | undefined;
-
-interface BalanceToken extends Token {
-  balance: bigint;
-  formattedBalance: string;
 }
 
 interface Call {
@@ -35,7 +28,7 @@ export const getWalletBalances = async ({
   tokenList,
   config,
   publicClient,
-}: GetWalletBalances): Promise<GetWalletBalancesResponse> => {
+}: GetWalletBalances): Promise<BalanceToken[] | undefined> => {
   if (!publicClient) return undefined;
   if (!account || !tokenList) return undefined;
   if (!config.contracts?.multicallAddress) {

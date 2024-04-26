@@ -7,12 +7,7 @@ import { usePublicClient } from "wagmi";
 import { multicall3Abi } from "~/abi";
 import POLLING from "~/enum/polling";
 import { useBeraJs } from "../contexts";
-import { Token } from "~/types";
-
-interface BalanceToken extends Token {
-  balance: bigint;
-  formattedBalance: string;
-}
+import { BalanceToken } from "~/types/dex";
 
 interface Call {
   abi: typeof erc20Abi;

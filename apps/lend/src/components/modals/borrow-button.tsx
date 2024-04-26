@@ -12,7 +12,6 @@ import {
 import { lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,
-  POLLING,
   TokenInput,
   Tooltip,
   useAnalytics,
@@ -59,11 +58,7 @@ export default function BorrowBtn({
     actionType: TransactionActionType.BORROW,
   });
 
-  const { refresh: userAccountRefetch } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
+  const { refresh: userAccountRefetch } = usePollUserAccountData();
   const { refresh: reservesDataRefetch } = usePollReservesDataList();
 
   useEffect(() => setOpen(false), [isSuccess]);
@@ -106,14 +101,8 @@ const BorrowModalContent = ({
   write: (arg0: any) => void;
 }) => {
   const { account = "0x" } = useBeraJs();
-  const { useBaseCurrencyData } = usePollReservesDataList();
-  const baseCurrencyData = useBaseCurrencyData();
-  const { useUserAccountData } = usePollUserAccountData({
-    opts: {
-      refreshInterval: POLLING.FAST,
-    },
-  });
-  const userAccountData = useUserAccountData();
+  const { baseCurrencyData } = usePollReservesDataList();
+  const { data: userAccountData } = usePollUserAccountData();
 
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const token = useSelectedWalletBalance(reserve?.underlyingAsset);
@@ -158,8 +147,7 @@ const BorrowModalContent = ({
 
   const payload =
     token &&
-    getLendBorrowPayload({ args: { token, amount: amount ?? "0", account } })
-      .payload;
+    getLendBorrowPayload({ token, amount: amount ?? "0", account }).payload;
 
   return (
     <div className="flex flex-col gap-6 pb-4">

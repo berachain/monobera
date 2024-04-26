@@ -1,0 +1,76 @@
+# ReserveData Interface
+
+This interface outlines the structure for reserve data within the system, encompassing all pertinent financial metrics, status flags, and identifiers necessary for comprehensive reserve management.
+
+## Fields
+
+| Field Name                             | Type      | Description                                                        | Optional |
+| -------------------------------------- | --------- | ------------------------------------------------------------------ | :------: |
+| `id`                                   | `string`  | Unique identifier for the reserve.                                 |  `false` |
+| `symbol`                               | `string`  | Symbol representing the reserve.                                   |  `false` |
+| `name`                                 | `string`  | Human-readable name of the reserve.                                |  `false` |
+| `decimals`                             | `number`  | Number of decimals for the reserve's token.                        |  `false` |
+| `underlyingAsset`                      | `string`  | Address of the underlying asset for the reserve.                   |  `false` |
+| `usageAsCollateralEnabled`             | `boolean` | Indicates if the reserve can be used as collateral.                |  `false` |
+| `reserveFactor`                        | `string`  | The reserve factor of the asset.                                   |  `false` |
+| `baseLTVasCollateral`                  | `string`  | Base loan-to-value ratio when used as collateral.                  |  `false` |
+| `averageStableRate`                    | `string`  | Average stable rate of the reserve.                                |  `false` |
+| `stableDebtLastUpdateTimestamp`        | `number`  | Timestamp of the last update to stable debt.                       |  `false` |
+| `liquidityIndex`                       | `string`  | Index representing the liquidity in the reserve.                   |  `false` |
+| `reserveLiquidationThreshold`          | `string`  | Threshold at which liquidation is triggered.                       |  `false` |
+| `reserveLiquidationBonus`              | `string`  | Bonus received for performing a liquidation.                       |  `false` |
+| `variableBorrowIndex`                  | `string`  | Index of variable borrow rates.                                    |  `false` |
+| `variableBorrowRate`                   | `string`  | Current variable borrow rate.                                      |  `false` |
+| `availableLiquidity`                   | `string`  | Liquidity available for borrowing.                                 |  `false` |
+| `stableBorrowRate`                     | `string`  | Current stable borrow rate.                                        |  `false` |
+| `liquidityRate`                        | `string`  | Rate of return on liquidity provided to the reserve.               |  `false` |
+| `totalPrincipalStableDebt`             | `string`  | Total principal amount of stable debt issued.                      |  `false` |
+| `totalScaledVariableDebt`              | `string`  | Scaled total variable debt.                                        |  `false` |
+| `lastUpdateTimestamp`                  | `number`  | Timestamp when the reserve data was last updated.                  |  `false` |
+| `eModeCategoryId`                      | `number`  | Category ID for reserves within the e-mode.                        |  `false` |
+| `borrowCap`                            | `string`  | Cap on total borrow amount from the reserve.                       |  `false` |
+| `supplyCap`                            | `string`  | Cap on total supply amount to the reserve.                         |  `false` |
+| `debtCeiling`                          | `string`  | Maximum allowable total debt for the reserve.                      |  `false` |
+| `debtCeilingDecimals`                  | `number`  | Number of decimals used in the debt ceiling.                       |  `false` |
+| `isolationModeTotalDebt`               | `string`  | Total debt in isolation mode.                                      |  `false` |
+| `eModeLtv`                             | `number`  | Loan-to-value ratio under e-mode conditions.                       |  `false` |
+| `eModeLiquidationThreshold`            | `number`  | Liquidation threshold under e-mode conditions.                     |  `false` |
+| `eModeLiquidationBonus`                | `number`  | Liquidation bonus under e-mode conditions.                         |  `false` |
+| `unbacked`                             | `string`  | Amount of unbacked debt.                                           |  `false` |
+| `formattedBaseLTVasCollateral`         | `string`  | Formatted base LTV as collateral.                                  |  `false` |
+| `formattedReserveLiquidationThreshold` | `string`  | Formatted liquidation threshold of the reserve.                    |  `false` |
+| `formattedReserveLiquidationBonus`     | `string`  | Formatted liquidation bonus of the reserve.                        |  `false` |
+| `formattedEModeLtv`                    | `string`  | Formatted e-mode loan-to-value ratio.                              |  `false` |
+| `formattedEModeLiquidationBonus`       | `string`  | Formatted e-mode liquidation bonus.                                |  `false` |
+| `formattedEModeLiquidationThreshold`   | `string`  | Formatted e-mode liquidation threshold.                            |  `false` |
+| `formattedAvailableLiquidity`          | `string`  | Formatted available liquidity.                                     |  `false` |
+| `totalDebt`                            | `string`  | Total debt of the reserve.                                         |  `false` |
+| `totalVariableDebt`                    | `string`  | Total variable debt of the reserve.                                |  `false` |
+| `totalStableDebt`                      | `string`  | Total stable debt of the reserve.                                  |  `false` |
+| `totalLiquidity`                       | `string`  | Total liquidity in the reserve.                                    |  `false` |
+| `borrowUsageRatio`                     | `string`  | Ratio of borrowed funds to available liquidity.                     |  `false` |
+| `supplyUsageRatio`                     | `string`  | Ratio of supplied funds to total capacity.                         |  `false` |
+| `supplyAPY`                            | `string`  | Annual Percentage Yield for supplying to the reserve.               |  `false` |
+| `variableBorrowAPY`                    | `string`  | Annual Percentage Yield for variable borrowing from the reserve.    |  `false` |
+| `stableBorrowAPY`                      | `string`  | Annual Percentage Yield for stable borrowing from the reserve.      |  `false` |
+| `unborrowedLiquidity`                  | `string`  | Liquidity available but not yet borrowed.                          |  `false` |
+| `supplyAPR`                            | `string`  | Annual Percentage Rate for supplying to the reserve.                |  `false` |
+| `variableBorrowAPR`                    | `string`  | Annual Percentage Rate for variable borrowing from the reserve.    |  `false` |
+| `stableBorrowAPR`                      | `string`  | Annual Percentage Rate for stable borrowing from the reserve.       |  `false` |
+| `isIsolated`                           | `boolean` | Indicates if the reserve is under isolation mode.                   |  `false` |
+| `isolationModeTotalDebtUSD`            | `string`  | Total debt in USD under isolation mode.                            |  `false` |
+| `availableDebtCeilingUSD`              | `string`  | Available debt ceiling in USD.                                      |  `false` |
+| `debtCeilingUSD`                       | `string`  | Debt ceiling expressed in USD.                                      |  `false` |
+| `totalLiquidityUSD`                    | `string`  | Total liquidity of the reserve expressed in USD.                    |  `false` |
+| `availableLiquidityUSD`                | `string`  | Available liquidity in the reserve expressed in USD.                |  `false` |
+| `totalDebtUSD`                         | `string`  | Total debt of the reserve expressed in USD.                         |  `false` |
+| `totalVariableDebtUSD`                 | `string`  | Total variable debt of the reserve expressed in USD.                |  `false` |
+| `totalStableDebtUSD`                   | `string`  | Total stable debt of the reserve expressed in USD.                  |  `false` |
+| `borrowCapUSD`                         | `string`  | Borrow cap for the reserve expressed in USD.                        |  `false` |
+| `supplyCapUSD`                         | `string`  | Supply cap for the reserve expressed in USD.                        |  `false` |
+| `unbackedUSD`                          | `string`  | Unbacked funds in the reserve expressed in USD.                     |  `false` |
+| `priceInMarketReferenceCurrency`       | `string`  | Price of the reserve's underlying asset in the market reference currency. |  `false` |
+| `formattedPriceInMarketReferenceCurrency` | `string` | Formatted price of the reserve's underlying asset in the market reference currency. |  `false` |
+| `priceInUSD`                           | `string`  | Price of the reserve's underlying asset in USD.                     |  `false` |
+| `aTokenAddress`                        | `Address` | Address of the associated aToken.                                   |  `false` |
+| `variableDebtTokenAddress`             | `Address` | Address of the associated variable debt token.                      |  `false` |
