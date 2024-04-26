@@ -56,12 +56,30 @@ export default defineConfig({
         {
           text: "Honey",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            {
+              text: "useCollateralsRates",
+              link: "/react/honey/useCollateralsRates/",
+            },
+            {
+              text: "usePollHoneyPreview",
+              link: "/react/honey/usePollHoneyPreview/",
+            },
+          ],
         },
         {
           text: "Bend",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            {
+              text: "usePollUserAccountData",
+              link: "/react/lend/usePollUserAccountData/",
+            },
+            {
+              text: "usePollReservesDataList",
+              link: "/react/lend/usePollReservesDataList/",
+            },
+          ],
         },
         {
           text: "Berps",
@@ -128,14 +146,13 @@ export default defineConfig({
           text: "DefaultHookReturnType",
           link: "/types/DefaultHookReturnType/",
         },
-        {
-          text: "Token",
-          link: "/types/Token/",
-        },
-        {
-          text: "AllowanceToken",
-          link: "/types/AllowanceToken/",
-        },
+        { text: "HoneyPreviewMethod", link: "/types/HoneyPreviewMethod/" },
+        { text: "ReserveData", link: "/types/ReserveData/" },
+        { text: "BaseCurrencyData", link: "/types/BaseCurrencyData/" },
+        { text: "CollateralRates", link: "/types/CollateralRates/" },
+        { text: "UserAccountData", link: "/types/UserAccountData/" },
+        { text: "Token", link: "/types/Token/" },
+        { text: "AllowanceToken", link: "/types/AllowanceToken/" },
         {
           text: "BalanceToken",
           link: "/types/BalanceToken/",
@@ -183,7 +200,16 @@ export default defineConfig({
         {
           text: "Honey",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            {
+              text: "getCollateralRates",
+              link: "/actions/honey/getCollateralRates/",
+            },
+            {
+              text: "getHoneyPreview",
+              link: "/actions/honey/getHoneyPreview/",
+            },
+          ],
         },
         {
           text: "Bend",
@@ -194,7 +220,22 @@ export default defineConfig({
               text: "getUserAccountData",
               link: "/actions/lend/getUserAccountData/",
             },
-            { text: "getTxnPayload", link: "/actions/lend/getTxnPayload/" },
+            {
+              text: "getLendBorrowPayload",
+              link: "/actions/lend/getLendBorrowPayload/",
+            },
+            {
+              text: "getLendRepayPayload",
+              link: "/actions/lend/getLendRepayPayload/",
+            },
+            {
+              text: "getLendSupplyPayload",
+              link: "/actions/lend/getLendSupplyPayload/",
+            },
+            {
+              text: "getLendWithdrawPayload",
+              link: "/actions/lend/getLendWithdrawPayload/",
+            },
           ],
         },
         {

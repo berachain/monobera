@@ -1,0 +1,42 @@
+# useCollateralsRates
+
+React hook for fetching the mint rates and redeem rates for all collaterals.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > getCollateralRates](/actions/honey/getCollateralRates) before getting started.
+
+## Import
+
+```ts
+import { useCollateralsRates } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+// Poll rates for all collaterals
+const {
+  data: collateralRatesDictionary,
+  getCollateralRate,
+} = useCollateralsRates(collateralList);
+
+// Poll rate for a single collateral
+const collateralRate = getCollateralRate(address);
+```
+
+## Parameters
+
+| Name            | type        | Description                                         | Required |
+| --------------- | :---------- | :-------------------------------------------------- | :------: |
+| `collateralList`| `Address[]` | List of collateral addresses to fetch rates for     |  `true`  |
+
+## Returns
+
+| Name                        | type                                                               | Description                                                      | Optional |
+| --------------------------- | :----------------------------------------------------------------- | :--------------------------------------------------------------- | :------: |
+| `data`                      | `CollateralRatesMap`                                  | Dictionary of rates for all collaterals                          | `false`  |
+| `getCollateralRate`     | [`CollateralRates`](/types/CollateralRates/)            | Function to get rates for a specific collateral                  | `false`  |
+| `...swrResponse`            | `SWRResponse`                                                      | Additional fields and methods from the useSWR hook (e.g., isLoading, error) | `true`   |
+
+```

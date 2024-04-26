@@ -17,8 +17,8 @@ export default function IndividualMarketAnalytics({
   address: Address;
 }) {
   const { data: tokenData } = useTokens();
-  const { useSelectedReserveData } = usePollReservesDataList();
-  const reserve = useSelectedReserveData(address);
+  const { getSelectedReserve } = usePollReservesDataList();
+  const reserve = getSelectedReserve(address);
 
   return (
     <div className="w-full">

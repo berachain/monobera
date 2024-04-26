@@ -1,0 +1,72 @@
+# getCollateralRates
+
+Returns the mint rates and redeem rates for all collaterals, providing a detailed mapping of each collateral's fees.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started.
+
+## Import
+
+```ts
+import { getCollateralRates } from "@bera/berajs/actions";
+```
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x...",
+    honeyRouterAddress: "0x...",
+  },
+};
+```
+
+## Usage
+
+:::code
+
+```ts [example.ts]
+import { getCollateralRates } from "@bera/berajs/actions";
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
+
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
+  transport: http(),
+});
+
+// required configs for getCollateralRates
+export const beraConfig: BeraConfig = {
+  contracts: {
+    multicallAddress: "0x...",
+    honeyRouterAddress: "0x...",
+  },
+};
+
+return await getCollateralRates({
+  client: publicClient,
+  config,
+  collateralList,
+});
+
+```
+
+:::
+
+## Parameters
+
+| Name             | type           | Description                                                   | Required |
+| ---------------- | :------------- | :------------------------------------------------------------ | :------: |
+| `client`         | `PublicClient` | The view public client used to interact with the blockchain   |  `true`  |
+| `config`         | `BeraConfig`   | BeraConfig object containing addresses for relevant resources |  `true`  |
+| `collateralList` | `Address[]`    | List of collateral addresses to fetch rates for               |  `true`  |
+
+## Returns
+
+| Name                 | type                                                          | Description                                           | Optional |
+| -------------------- | :------------------------------------------------------------ | :---------------------------------------------------- | :------: |
+| `CollateralRatesMap` | [`{[key: Address]: CollateralRates}`](/types/CollateralRates) | Map of collateral addresses to their respective rates | `false`  |

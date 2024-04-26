@@ -15,7 +15,10 @@ import { useTheme } from "next-themes";
 import { type Chain } from "viem";
 import { WagmiProvider } from "wagmi";
 
-import { defaultBeraConfig, wagmiConfig } from "~/config/defaultBeraJsConfig";
+import {
+  defaultBeraNetworkConfig,
+  wagmiConfig,
+} from "~/config/defaultBeraJsConfig";
 
 export interface NetworkConfig {
   isTestnet?: boolean;
@@ -52,13 +55,13 @@ const Provider: React.FC<IBeraConfig> = ({
         : "light";
 
   return (
-    <BeraWagmi.Provider value={{ networkConfig: defaultBeraConfig }}>
+    <BeraWagmi.Provider value={{ networkConfig: defaultBeraNetworkConfig }}>
       <DynamicContextProvider
         settings={{
           initialAuthenticationMode: "connect-only",
           environmentId: dynamicWalletKey,
           walletConnectors: [EthereumWalletConnectors],
-          overrides: { evmNetworks: [defaultBeraConfig.evmNetwork] },
+          overrides: { evmNetworks: [defaultBeraNetworkConfig.evmNetwork] },
         }}
         theme={theme ?? "auto"}
       >
