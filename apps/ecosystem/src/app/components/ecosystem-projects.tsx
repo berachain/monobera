@@ -95,7 +95,7 @@ export default function EcosystemProjects() {
           }
         />
         <MultipleSelector
-          className="w-64"
+          // className="w-64"
           value={ecosystemType}
           onChange={setEcosystemType}
           defaultOptions={OPTIONS}

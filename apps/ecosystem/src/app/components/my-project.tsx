@@ -13,25 +13,25 @@ export default function MyProject() {
         <div className="flex flex-col items-center justify-center p-8 sm:items-start">
           <div className="top-0 flex flex-col items-center leading-7 sm:items-start lg:left-0">
             <h1 className="text-lg font-extrabold tracking-tight text-foreground sm:text-2xl sm:leading-[72px]">
-              Get My Project Listed
+              Build-a-Bera
             </h1>
             <div className="flex-wrap items-center sm:max-w-[300px] md:max-w-[440px] lg:w-full">
               <h2 className="text-md flex-wrap text-center tracking-tight text-muted-foreground sm:text-left sm:text-lg">
-                Fellow builder in the making? Submit project details via this
-                form and please be sure to provide us as much information as
-                possible.
+                Zero to one incubator focused on fostering innovation on
+                Berachain
               </h2>
             </div>
           </div>
 
           <div className="flex items-start lg:mt-auto">
-            <Link href="https://forms.clickup.com/9014124274/f/8cmh7qj-2334/W32RVORQNXSRUJDSSB">
+            <Link href="https://buildabera.xyz/">
+              {/* <Link href="https://forms.clickup.com/9014124274/f/8cmh7qj-2334/W32RVORQNXSRUJDSSB"> */}
               <Button
                 className="rounded-18 mt-4 w-full text-lg font-semibold leading-7 sm:w-auto"
                 size={"sm"}
                 variant="outline"
               >
-                Submit
+                Check it out
               </Button>
             </Link>
           </div>

@@ -38,13 +38,13 @@ export default function Hero() {
 
         <div className="flex flex-col items-center justify-center gap-4 py-4 md:flex-row lg:justify-start">
           <div className="w-full">
-            <Link href={"/dashboard"}>
+            <Link href="https://forms.clickup.com/9014124274/f/8cmh7qj-2334/W32RVORQNXSRUJDSSB">
               <Button
                 className="rounded-18 w-full text-lg font-semibold leading-7 sm:whitespace-nowrap "
                 size={"lg"}
               >
                 <Icons.hammer />
-                <div className="px-2"> Build on Berachain</div>
+                <div className="px-2"> Get my project listed</div>
               </Button>
             </Link>
           </div>
