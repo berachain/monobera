@@ -1,15 +1,15 @@
 # usePollReservesDataList
 
-React hook for fetching the mint rates and redeem rates for all collaterals.
+React hook for lend global reserved data.
 
 ## Initialization
 
-Ensure you have followed the steps from [Actions > getCollateralRates](/actions/honey/getCollateralRates) before getting started.
+Ensure you have followed the steps from [Actions > getReserveData](/actions/lend/getReserveData) before getting started.
 
 ## Import
 
 ```ts
-import { useCollateralsRates } from "@bera/berajs";
+import { usePollReservesDataList } from "@bera/berajs";
 ```
 
 
@@ -18,14 +18,18 @@ import { useCollateralsRates } from "@bera/berajs";
 :::code
 
 ```ts [exmaple.ts]
-// Poll rates for all collaterals
+// Poll global reserves data
 const {
   data: collateralRatesDictionary,
-  usePollCollateralRate,
-} = usePollCollateralsRates(collateralList);
+  formattedReserves,
+  baseCurrencyData,
+  totalBorrowed,
+  marketSize,
+  getSelectedReserve,
+} = usePollReservesDataList();
 
-// Poll rate for a single collateral
-const collateralRate = usePollCollateralRate(address);
+// get selected reserve info
+const collateralRate = getSelectedReserve(address);
 ```
 :::
 

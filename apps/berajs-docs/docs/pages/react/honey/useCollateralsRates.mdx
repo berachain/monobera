@@ -18,11 +18,11 @@ import { useCollateralsRates } from "@bera/berajs";
 // Poll rates for all collaterals
 const {
   data: collateralRatesDictionary,
-  usePollCollateralRate,
-} = usePollCollateralsRates(collateralList);
+  getCollateralRate,
+} = useCollateralsRates(collateralList);
 
 // Poll rate for a single collateral
-const collateralRate = usePollCollateralRate(address);
+const collateralRate = getCollateralRate(address);
 ```
 
 ## Parameters
