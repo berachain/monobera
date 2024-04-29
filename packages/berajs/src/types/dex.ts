@@ -109,3 +109,7 @@ export interface IProvisions {
   baseAssetHoneyPrice: string;
   quoteAssetHoneyPrice: string;
 }
+
+export interface IUserPool extends PoolV2 {
+  userPosition: IUserPosition | undefined;
+}
