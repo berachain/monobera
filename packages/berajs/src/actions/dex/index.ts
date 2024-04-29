@@ -14,4 +14,4 @@ export * from "./getTokens";
 export * from "./getPoolRecentSwaps";
 export * from "./getPoolRecentProvisions";
 export * from "./getPoolHistoricalData";
-export * from "./getUserPools";
+export * from "./searchUserPools";

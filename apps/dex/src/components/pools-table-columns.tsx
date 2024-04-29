@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type PoolV2 } from "@bera/berajs";
+import { usePoolUserPosition, type IUserPool, type PoolV2 } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -17,14 +17,13 @@ import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "~/app/pools/fetchPools";
-import {
-  usePollUserDeposited,
-  type IUserPool,
-} from "~/hooks/usePollUserDeposited";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
-  const { useIsPoolDeposited } = usePollUserDeposited();
-  const isDeposited = useIsPoolDeposited(pool);
+  const { data: userPosition } = usePoolUserPosition({ pool });
+  const isDeposited =
+    userPosition?.formattedBaseAmount !== "0" &&
+    userPosition?.formattedQuoteAmount !== "0";
+
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
