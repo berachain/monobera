@@ -11,76 +11,44 @@ import ComponentTransition from "./component-transition";
 
 const highlights = [
   {
-    title: "Bera Bera",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Validator"],
-    description:
-      "Lorem Ipsum Saint Dolar set amet avec, adios bibbas Lorem Ipsum Saint Dolar set amet avec, adios bibbas ",
+    img: "/gummi.png",
+    title: "Gummi",
+    content:
+      "Gummi is a trading platform with an attached money market that supports any token by default including ERC20s, ERC721s, and ERC404s, with any amount of leverage.",
+    url: "https://twitter.com/GummiFi",
+    tags: ["DeFi", "GameFi"],
   },
   {
-    title: "Hello Bera world",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Bera"],
-    description: "Lorem Ipsum Saint",
+    img: "/iredbrand.png",
+    title: "Infrared",
+    content:
+      "Infrared is a core infrastructure solution that abstracts aways the complexities of participating in Berachain's innovative PoL consensus mechanism.",
+    url: "https://twitter.com/InfraredFinance",
+    tags: ["DeFi", "GameFi"],
   },
   {
-    title: "Ooga booga",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Bera"],
-    description: "Lorem Ipsum Saint",
+    img: "/kodiak.png",
+    title: "Kodiak",
+    content:
+      "Foundational building block for liquidity on Berachain, embodying the core principles of modularity and extensibility to establish a cutting-edge swaps venue",
+    url: "https://twitter.com/KodiakFi",
+    tags: ["DeFi", "GameFi"],
   },
   {
-    title: "The Future of DAOs",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Bera"],
-    description: "Lorem Ipsum Saint",
+    img: "/shogun.png",
+    title: "Shogun",
+    content:
+      "Shogun uses intents across modular blockchains like Berachain and Celestia to turn MEV into TEV (trader extractable value)",
+    url: "https://twitter.com/shogunfi",
+    tags: ["DeFi", "GameFi"],
   },
   {
-    title: "The Future of Bera",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Bera"],
-    description: "Lorem Ipsum Saint",
-  },
-  {
-    title: "The Future of Honey",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Bera"],
-    description: "Lorem Ipsum Saint",
-  },
-  {
-    title: "The Future of BGT",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Bera"],
-    description:
-      "Lorem Ipsum Saint Dolar set amet avec, adios bibbas Lorem Ipsum Saint Dolar set amet avec, adios bibbas ",
-  },
-  {
-    title: "Yayyyy",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Validator", "Staking", "Bera"],
-    description: "this is a test",
-  },
-  {
-    title: "Celestia",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Validator", "Bera"],
-    description: "Lorem Ipsum Saint",
-  },
-  {
-    title: "Henlo",
-    link: "",
-    image: "https://via.placeholder.com/150",
-    tags: ["Validator", "Staking"],
-    description: "Lorem Ipsum Saint",
+    img: "/beratone.png",
+    title: "Beratone",
+    content:
+      "a captivating NFT game that invites players to unwind and nurture their virtual haven. Developed with a perfect blend of creativity and technology",
+    url: "https://twitter.com/BeratoneGame",
+    tags: ["DeFi", "GameFi"],
   },
 ];
 
@@ -163,24 +131,26 @@ export default function ProjectHighlights() {
             }}
           >
             {highlights.map((section, index) => (
-              <Link href={section.link} key={index} target="_blank">
+              <Link href={section.url} key={index} target="_blank">
                 <div
                   key={section.title}
                   className="card-hover mx-auto flex h-[368px] w-[234px] flex-col items-center justify-start rounded-md border border-solid bg-background p-4 hover:opacity-80 hover:shadow-xl"
                 >
-                  <Image
-                    src="/partnerships_placeholder.png"
-                    alt="Project"
-                    width={194}
-                    height={148}
-                    layout="intrinsic"
-                    className="rounded-2 image-zoom h-[148px] w-[194px]"
-                  />
+                  <div className="justify-cente flex h-[96px] w-[96px] items-center ">
+                    <Image
+                      src={section.img}
+                      alt="Project"
+                      width={96}
+                      height={96}
+                      layout="intrinsic"
+                      className="image-zoom items-center justify-center transition-all"
+                    />
+                  </div>
                   <div className="flex w-full flex-col items-start justify-between gap-3 py-4">
                     <div className="text-xl font-semibold text-foreground">
                       {section.title}
                     </div>
-                    <div className="flex flex-row gap-2 text-foreground">
+                    {/* <div className="flex flex-row gap-2 text-foreground">
                       {section.tags.map((tag) => (
                         <Badge
                           key={tag}
@@ -190,11 +160,11 @@ export default function ProjectHighlights() {
                           {tag}
                         </Badge>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="self-stretch text-left text-sm text-muted-foreground">
-                    {section.description}
+                    {section.content}
                   </div>
                 </div>
               </Link>

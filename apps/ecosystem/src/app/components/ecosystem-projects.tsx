@@ -89,40 +89,47 @@ export default function EcosystemProjects() {
         className="flex w-full flex-col items-center justify-center gap-6 px-4 text-center xl:w-[1280px]"
       >
         <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
-          <SearchInput
-            className="h-[40px] w-full rounded-md border border-solid bg-background"
-            placeholder="Search..."
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setKeywords(e.target.value)
-            }
-          />
-          <MultipleSelector
-            value={ecosystemType}
-            onChange={setEcosystemType}
-            defaultOptions={OPTIONS}
-            placeholder="Browse by category"
-            emptyIndicator={
-              <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                no results found.
-              </p>
-            }
-          />
+          <div className="sm:w-7/10 w-full">
+            <SearchInput
+              className="h-[40px] rounded-md border border-solid bg-background"
+              placeholder="Search..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setKeywords(e.target.value)
+              }
+            />
+          </div>
+          <div className="sm:w-3/10">
+            <MultipleSelector
+              value={ecosystemType}
+              onChange={setEcosystemType}
+              defaultOptions={OPTIONS}
+              placeholder="Browse by category"
+              emptyIndicator={
+                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                  no results found.
+                </p>
+              }
+            />
+          </div>
         </div>
-        {/* 
-      <div className="flex w-full flex-row flex-wrap items-center">
-        {ecosystemTypeTabs.map((type) => (
-          <Button
-            onClick={() => setEcosystemType(type.value)}
-            key={type.value}
-            variant={type.value === ecosystemType ? "secondary" : "ghost"}
-            className="flex min-w-[50px] items-center justify-center border-none"
-          >
-            <div className="text-sm font-normal text-muted-foreground">
-              {type.value}
+        {ecosystemType.length > 0 && (
+          <div className="flex w-full flex-row flex-wrap items-center gap-2">
+            <div className="font-semibold">
+              {filteredProjectList?.length} Projects filtered by:
             </div>
-          </Button>
-        ))}
-      </div> */}
+            {ecosystemType.map((type) => (
+              <Button
+                key={type.value}
+                variant="secondary"
+                className="flex min-w-[50px] items-center justify-center border-none"
+              >
+                <div className="text-sm font-normal text-muted-foreground">
+                  {type.value}
+                </div>
+              </Button>
+            ))}
+          </div>
+        )}
 
         <div className="my-2 w-full border border-solid" />
         {isLoading && (
