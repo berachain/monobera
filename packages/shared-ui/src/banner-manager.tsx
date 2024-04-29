@@ -3,7 +3,7 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 
-import { DappBannerType, bannerConfig } from "./bannerConfig";
+import { DappBannerType, bannerConfig } from "./banner-config";
 
 interface BannerManagerProps {
   appName: string | undefined;
