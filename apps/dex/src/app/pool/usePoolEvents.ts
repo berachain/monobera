@@ -1,6 +1,6 @@
 import {
   type GetPoolRecentSwapsResult,
-  type IProvisions,
+  type IProvision,
   type ISwaps,
   type PoolV2,
 } from "@bera/berajs";
@@ -16,8 +16,8 @@ export const usePoolEvents = ({
 }: {
   pool: PoolV2 | undefined;
   swaps: GetPoolRecentSwapsResult | undefined;
-  provisions: IProvisions[] | undefined;
-  combinedEvents: (ISwaps | IProvisions)[] | undefined;
+  provisions: IProvision[] | undefined;
+  combinedEvents: (ISwaps | IProvision)[] | undefined;
 }) => {
   const {
     data: allData,
@@ -112,7 +112,7 @@ export const usePoolEvents = ({
 
   return {
     allData: allData
-      ? ([] as (ISwaps | IProvisions)[]).concat(...(allData as any))
+      ? ([] as (ISwaps | IProvision)[]).concat(...(allData as any))
       : [],
     allDataSize,
     setAllDataSize,
@@ -124,7 +124,7 @@ export const usePoolEvents = ({
     isSwapDataLoadingMore,
     isSwapDataReachingEnd,
     provisionData: provisionData
-      ? ([] as IProvisions[]).concat(...(provisionData as any))
+      ? ([] as IProvision[]).concat(...(provisionData as any))
       : [],
     provisionDataSize,
     setProvisionDataSize,

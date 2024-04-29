@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { getRecentProvisions } from "@bera/graphql";
 import { formatUnits } from "viem";
 
-import { IProvisions, PoolV2 } from "~/types";
+import { IProvision, PoolV2 } from "~/types";
 import { BeraConfig } from "~/types/global";
 
 interface IGetPoolRecentProvisionsProps {
@@ -10,15 +10,15 @@ interface IGetPoolRecentProvisionsProps {
   config: BeraConfig;
 }
 
-interface IProvisionsWithHoneyValue extends IProvisions {
+interface IProvisionWithHoneyValue extends IProvision {
   estimatedHoneyValue: number;
 }
 
-export type GetPoolRecentProvisionsResult = IProvisionsWithHoneyValue[];
+export type GetPoolRecentProvisionsResult = IProvisionWithHoneyValue[];
 
 /**
  * Fetchs a list of recent provisions for a given pool. provisions withdraw or deposit events in the pool.
- * @param {PoolV2} param.args.pool - pool of which to fetch recent swaps
+ * @param {PoolV2} param.args.pool - pool of which to fetch recent provisions.
  * @param {BeraConfig} param.config - config: required config.subgraphs.dexSubgraph
  * @returns {Promise<GetPoolRecentProvisionsResult | undefined>} returns undefined if no pool
  */
@@ -44,7 +44,7 @@ export const getPoolRecentProvisions = async ({
   });
 
   try {
-    const provisions: IProvisions[] | undefined = await dexClient
+    const provisions: IProvision[] | undefined = await dexClient
       .query({
         query: getRecentProvisions,
         variables: {
@@ -60,7 +60,7 @@ export const getPoolRecentProvisions = async ({
       });
 
     const provisionsWithHoneyValue = provisions?.map(
-      (provision: IProvisions) => {
+      (provision: IProvision) => {
         let estimatedHoneyValue = 0;
         if (provision.changeType === "mint") {
           const formattedQuoteFlow = formatUnits(

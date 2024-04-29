@@ -1,0 +1,69 @@
+# usePoolRecentProvisions
+
+Hook to fetch a list of recent provisions for a given pool. Provisions are pool liquidity add and withdraw events.
+
+## Initialization
+
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
+
+## Import
+
+```ts
+import { usePoolRecentProvisions } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { usePoolRecentProvisions } from "@bera/berajs";
+
+const pool: PoolV2 = ...
+
+function App() {
+    const { data: recentProvisions, isLoading } = usePoolRecentProvisions({ pool });
+
+    ...
+};
+```
+
+## Parameters
+
+#### Call signature
+
+```ts
+function usePoolRecentProvisions(
+  args: { pool: PoolV2 },
+  options?: DefaultHookOptions,
+);
+```
+
+#### args: `{pool: PoolV2}`
+
+| Name   | type                      | Description                          | Required |
+| ------ | :------------------------ | :----------------------------------- | :------: |
+| `pool` | [`PoolV2`](/types/PoolV2) | pool to fetch recent provisions from |  `true`  |
+
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+## Returns
+
+#### Return type: `DefaultHookReturnType<GetPoolRecentProvisionsResult | undefined>`
+
+| Name           | type                                                | Description                                                                | Optional |
+| -------------- | :-------------------------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `GetPoolRecentProvisionsResult \| undefined`        | pool recent provisions data                                                |  `true`  |
+| `error`        | `any \| undefined`                                  | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: GetPoolRecentProvisionsResult) => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                                        | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                                           | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                                           | boolean flag representing whether the hook is currently loading data       | `false`  |
+
+See type [`GetPoolRecentProvisionsResult`](/actions/dex/getPoolRecentProvisions/#returns)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)
