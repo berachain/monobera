@@ -179,9 +179,11 @@ const RepayModalContent = ({
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between  text-sm leading-tight">
-          <div className="text-muted-foreground ">Outstanding Honey</div>
+          <div className="text-muted-foreground ">Remaining Debt</div>
           <FormattedNumber
-            value={debtBalance}
+            value={BigNumber(debtBalance ?? "0").minus(
+              BigNumber(amount ?? "0"),
+            )}
             symbol="HONEY"
             className="w-[200px] justify-end truncate text-right font-semibold"
           />
@@ -234,8 +236,9 @@ const RepayModalContent = ({
               <Icons.info className="mr-1 inline-block h-4 w-4" />
               You owe more HONEY than you have in your wallet
             </AlertTitle>
-            You can still preceed with the repay, but you will need to repay
-            again to fully repay your debt.
+            You don't have enough funds in your wallet to repay the full amount.
+            If you proceed to repay with your current amount of funds, you will
+            still have a small borrowing position in your dashboard.
           </Alert>
         )}
 
