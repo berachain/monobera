@@ -1,0 +1,32 @@
+## `PoolV2`
+
+| Name               | Type                       | Description                                                                      | Optional |
+| ------------------ | -------------------------- | -------------------------------------------------------------------------------- | -------- |
+| shareAddress       | `string`                   | Pool Id used to retrieve/fetch pool from indexer                                 | false    |
+| id                 | `string`                   | Blockchain address of the Pool                                                   | false    |
+| base               | `Address`                  | Blockchain address of the pool's base token                                      | false    |
+| quote              | `Address`                  | Blockchain address of the pool's quote token                                     | false    |
+| baseInfo           | [`Token`](/types/Token/)   | Base token details                                                               | false    |
+| quoteInfo          | [`Token`](/types/Token/)   | Quote token details                                                              | false    |
+| timeCreate         | `number`                   | UNIX timestamp of creation time of the pool                                      | false    |
+| poolIdx            | `number`                   | Pool's Idx                                                                       | false    |
+| poolName           | `string`                   | Name of the pool                                                                 | false    |
+| tokens             | [`Token[]`](/types/Token/) | List of tokens in the pool                                                       | false    |
+| tvlUsd             | `number`                   | Estimated USD value of total token value staked in the pool                      | false    |
+| volumeUsd          | `number`                   | Estimated USD value of the trade volume in the pool                              | false    |
+| feesUsd            | `number`                   | Estimated USD value of fees paid in pool transactions                            | false    |
+| feeRate            | `number`                   | Fee percentage rate on pool transactions                                         | false    |
+| baseFees           | `number`                   | Fees charged in base token                                                       | false    |
+| quoteFees          | `number`                   | Fees charged in quote token                                                      | false    |
+| baseVolume         | `number`                   | Volume traded in base token                                                      | false    |
+| quoteVolume        | `number`                   | Volume traded in quote token                                                     | false    |
+| baseTokens         | `string`                   | String representation of base token name                                         | false    |
+| quoteTokens        | `string`                   | String representation of quote token name                                        | false    |
+| volume24h          | `number`                   | Estimated USD value of the trade volume in the pool over the past 24 hours       | false    |
+| fees24h            | `number`                   | Estimated USD value of the fees paid in pool transactions over the past 24 hours | false    |
+| baseTokenHoneyTvl  | `number`                   | Estimated USD value of the total base tokens staked in the pool                  | false    |
+| quoteTokenHoneyTvl | `number`                   | Estimated USD value of the total quote tokens staked in the pool                 | false    |
+| totalApy           | `number`                   | Total pool APY                                                                   | false    |
+| bgtApy             | `number`                   | Total pool APY in Bera Governance Tokens                                         | false    |
+
+See type [`Token`](/types/Token/)

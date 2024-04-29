@@ -6,6 +6,20 @@ Returns a breakdown of the user's position of type `IUserPosition` in a given po
 
 Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
 
+# Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+export const beraConfig: BeraConfig = {
+  subgraphs: {
+    dexSubgraph: "https://..",
+  },
+};
+```
+
 ## Usage
 
 ```ts
