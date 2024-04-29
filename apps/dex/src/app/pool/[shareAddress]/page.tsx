@@ -24,7 +24,9 @@ export default async function PoolPage({
       notFound();
     }
     // const pool = null;
-    const pool = await fetchPoolByAddress(params.shareAddress);
+    const pool = await fetchPoolByAddress({
+      shareAddress: params.shareAddress,
+    });
 
     if (!pool) {
       notFound();
