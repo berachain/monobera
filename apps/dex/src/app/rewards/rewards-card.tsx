@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { type IUserPool } from "@bera/berajs";
 import { ApyTooltip, FormattedNumber, TokenIconList } from "@bera/shared-ui";
 
 import { RewardBtn } from "~/app/components/reward-btn";
-import { type IUserPool } from "~/hooks/usePollUserDeposited";
 import { getPoolUrl } from "../pools/fetchPools";
 
 export default function RewardsCard({ pool }: { pool: IUserPool }) {
