@@ -3,13 +3,14 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { perpsName } from "@bera/config";
 import {
   Header,
   TailwindIndicator,
   TermOfUseModal,
-  useActiveBanners,
+  getBannerCount,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
@@ -31,7 +32,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
-  const activeBanners = useActiveBanners();
+  const pathName = usePathname();
+  const activeBanners = getBannerCount(perpsName, pathName);
 
   return (
     <html lang="en">
@@ -64,8 +66,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
               <Header navItems={navItems} appName={perpsName} />
               <main
-                className="w-full pt-start"
-                style={{ paddingTop: `${50 * activeBanners}px` }}
+                className="w-full"
+                style={{ paddingTop: `${48 * activeBanners + 72}px` }}
               >
                 {props.children}
               </main>
