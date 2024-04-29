@@ -83,12 +83,12 @@ export default function EcosystemProjects() {
   };
 
   return (
-    <ComponentTransition>
+    <ComponentTransition className="w-full">
       <div
         id="dapps"
         className="flex w-full flex-col items-center justify-center gap-6 px-4 text-center xl:w-[1280px]"
       >
-        <div className="flex w-full flex-row items-start gap-4">
+        <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
           <SearchInput
             className="h-[40px] w-full rounded-md border border-solid bg-background"
             placeholder="Search..."
@@ -97,7 +97,6 @@ export default function EcosystemProjects() {
             }
           />
           <MultipleSelector
-            // className="w-64"
             value={ecosystemType}
             onChange={setEcosystemType}
             defaultOptions={OPTIONS}
