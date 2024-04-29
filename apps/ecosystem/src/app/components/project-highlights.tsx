@@ -157,8 +157,10 @@ export default function ProjectHighlights() {
         <div className="w-full overflow-hidden">
           <div
             onTouchStart={(e) => e.stopPropagation()}
-            className="my-8 flex gap-4 scroll-smooth transition-transform duration-200 ease-linear "
-            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            className="my-8 flex gap-4 scroll-smooth transition-transform duration-500 ease-linear "
+            style={{
+              transform: `translateX(-${currentIndex * cardsVisible * 10}%)`,
+            }}
           >
             {highlights.map((section, index) => (
               <Link href={section.link} key={index} target="_blank">

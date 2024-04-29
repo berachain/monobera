@@ -83,7 +83,7 @@ export default function EcosystemProjects() {
   };
 
   return (
-    <ComponentTransition className="w-full">
+    <ComponentTransition className="w-full xl:w-[1280px]">
       <div
         id="dapps"
         className="flex w-full flex-col items-center justify-center gap-6 px-4 text-center xl:w-[1280px]"
