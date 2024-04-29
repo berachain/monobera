@@ -1,6 +1,7 @@
 import { chainId, crocIndexerEndpoint } from "@bera/config";
 import BigNumber from "bignumber.js";
 
+import { BeraConfig } from "~/types/global";
 import { PoolV2 } from "..";
 
 export const formatPoolData = (result: any): PoolV2 => {
@@ -134,15 +135,19 @@ export const formatSubgraphPoolData = (result: any): PoolV2 => {
   };
 };
 
-export const fetchPoolByAddress = async (
-  shareAddress?: string,
-): Promise<PoolV2 | null> => {
+export const fetchPoolByAddress = async ({
+  shareAddress,
+  config,
+}: {
+  shareAddress: string;
+  config?: BeraConfig;
+}): Promise<PoolV2 | null> => {
   if (!shareAddress) return null;
   try {
     const result = await fetch(
-      `${crocIndexerEndpoint}/v2/pool_stats/${shareAddress}?chainId=0x${chainId.toString(
-        16,
-      )}`,
+      `${
+        config?.endpoints?.dexIndexer ?? crocIndexerEndpoint
+      }/v2/pool_stats/${shareAddress}?chainId=0x${chainId.toString(16)}`,
     );
 
     const response = await result.json();

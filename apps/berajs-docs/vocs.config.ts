@@ -51,6 +51,10 @@ export default defineConfig({
               text: "usePoolUserPosition",
               link: "/react/dex/usePoolUserPosition/",
             },
+            {
+              text: "usePoolHistoricalData",
+              link: "/react/dex/usePoolHistoricalData/",
+            },
           ],
         },
         {
@@ -157,6 +161,10 @@ export default defineConfig({
           text: "BalanceToken",
           link: "/types/BalanceToken/",
         },
+        {
+          text: "PoolV2",
+          link: "/types/PoolV2/",
+        },
       ],
     },
     {
@@ -194,6 +202,10 @@ export default defineConfig({
             {
               text: "getBeraLpAddress",
               link: "/actions/dex/getBeraLpAddress/",
+            },
+            {
+              text: "getPoolHistoricalData",
+              link: "/actions/dex/getPoolHistoricalData/",
             },
           ],
         },
@@ -280,6 +292,10 @@ export default defineConfig({
             {
               text: "getBeraBalance",
               link: "/actions/utils/getBeraBalance/",
+            },
+            {
+              text: "fetchPoolByAddress",
+              link: "/actions/utils/fetchPoolByAddress/",
             },
           ],
         },
