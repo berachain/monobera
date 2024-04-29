@@ -3,8 +3,10 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { formatUsd } from "@bera/berajs";
-import { SearchInput } from "@bera/shared-ui";
+import { perpsName } from "@bera/config";
+import { SearchInput, getBannerCount } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import {
   DropdownMenu,
@@ -24,6 +26,22 @@ interface InstrumentProps {
   priceChange: number[];
 }
 
+const DYNAMIC_DROPDOWN_MOBILE_HEIGHTS: { [key: number]: string } = {
+  0: "h-[calc(100vh-256px)]",
+  1: "h-[calc(100vh-304px)]",
+  2: "h-[calc(100vh-352px)]",
+  3: "h-[calc(100vh-400px)]",
+  4: "h-[calc(100vh-448px)]",
+};
+
+const DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS: { [key: number]: string } = {
+  0: "lg:h-[calc(100vh-194px)]",
+  1: "lg:h-[calc(100vh-242px)]",
+  2: "lg:h-[calc(100vh-290px)]",
+  3: "lg:h-[calc(100vh-338px)]",
+  4: "lg:h-[calc(100vh-386px)]",
+};
+
 const MarketPriceOverview = ({
   market,
   priceChange,
@@ -39,7 +57,7 @@ const MarketPriceOverview = ({
   }, [historicPrice, price]);
   return (
     <div>
-      <div className="text-lg font-semibold leading-7 text-foreground text-right">
+      <div className="text-right text-lg font-semibold leading-7 text-foreground">
         {price !== undefined ? (
           formatUsd(price)
         ) : (
@@ -72,6 +90,8 @@ export function InstrumentDropdown({
 }: InstrumentProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const pathName = usePathname();
+  const activeBanners = getBannerCount(perpsName, pathName);
 
   return (
     <DropdownMenu
@@ -114,7 +134,9 @@ export function InstrumentDropdown({
           )}
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mx-2 my-1 flex h-[calc(100vh-256px)] w-[calc(100vw-16px)] flex-col rounded-md border border-border bg-background p-0 lg:h-[calc(100vh-194px)] lg:w-[400px]">
+      <DropdownMenuContent
+        className={`mx-2 my-1 flex w-[calc(100vw-24px)] flex-col rounded-md border border-border bg-background p-0 lg:w-[400px] ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
+      >
         <div className="w-full bg-muted px-4 py-2 ">
           <SearchInput
             className="w-full border-none bg-muted"

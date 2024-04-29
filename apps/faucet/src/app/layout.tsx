@@ -4,12 +4,13 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import { faucetName } from "@bera/config";
 import {
   Header,
   TailwindIndicator,
   TermOfUseModal,
-  useActiveBanners,
+  getBannerCount,
 } from "@bera/shared-ui";
 import { FooterSM } from "@bera/shared-ui/src/footer";
 import { cn } from "@bera/ui";
@@ -33,7 +34,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     true,
   );
 
-  const activeBanners = useActiveBanners();
+  const pathName = usePathname();
+  const activeBanners = getBannerCount(faucetName, pathName);
   return (
     <html lang="en">
       <Script
@@ -74,8 +76,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 appName={faucetName}
               />
               <main
-                className="w-full pt-start"
-                style={{ paddingTop: `${50 * activeBanners}px` }}
+                className={cn(
+                  "min-h-[calc(100vh-72px)] w-full bg-sky-600 pb-[70px]",
+                )}
+                style={{ marginTop: `${48 * activeBanners + 72}px` }}
               >
                 {props.children}
               </main>
