@@ -2,6 +2,7 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
+import { usePathname } from "next/navigation";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import { dexName } from "@bera/config";
@@ -9,7 +10,7 @@ import {
   Header,
   TailwindIndicator,
   TermOfUseModal,
-  useActiveBanners,
+  getBannerCount,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
@@ -31,7 +32,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
-  const activeBanners = useActiveBanners();
+  const pathName = usePathname();
+  const activeBanners = getBannerCount(dexName, pathName);
 
   return (
     <html lang="en" className="bg-background">
@@ -67,8 +69,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 <span className="hidden text-amber-300 text-green-300 text-green-400 text-green-500 text-neutral-400 text-red-400 text-red-500" />
                 <Header navItems={navItems} appName={dexName} />
                 <main
-                  className="w-full pt-start"
-                  style={{ paddingTop: `${50 * activeBanners}px` }}
+                  className="w-full"
+                  style={{ paddingTop: `${48 * activeBanners + 72}px` }}
                 >
                   {props.children}
                 </main>

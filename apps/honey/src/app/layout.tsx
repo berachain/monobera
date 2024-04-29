@@ -4,6 +4,7 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
+import { usePathname } from "next/navigation";
 import { ApolloProvider } from "@apollo/client";
 import { honeyName } from "@bera/config";
 import { honeyClient } from "@bera/graphql";
@@ -12,7 +13,7 @@ import {
   Header,
   TailwindIndicator,
   TermOfUseModal,
-  useActiveBanners,
+  getBannerCount,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraWagmi } from "@bera/wagmi";
@@ -40,7 +41,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
-  const activeBanners = useActiveBanners();
+  const pathName = usePathname();
+  const activeBanners = getBannerCount(honeyName, pathName);
   return (
     <html lang="en" suppressHydrationWarning>
       <Script
@@ -77,7 +79,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               />
               <main
                 className="w-full pt-start"
-                style={{ paddingTop: `${50 * activeBanners}px` }}
+                style={{ paddingTop: `${48 * activeBanners + 72}px` }}
               >
                 {props.children}
               </main>
