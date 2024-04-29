@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { usePollDelegatorUnbonding } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -23,9 +22,6 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
   };
 
   // TODO: switch to use the new hook
-  const { useDelegatorUnbondingQueue } = usePollDelegatorUnbonding();
-
-  const { result: unbondingQueue, isLoading } = useDelegatorUnbondingQueue();
 
   return (
     <div className="mx-auto flex w-full max-w-[720px] flex-col gap-8 md:px-8">
@@ -82,11 +78,11 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
               </div>
             </div>
 
-            {isLoading ? (
+            {/* {true ? (
               <Skeleton className="h-10 w-full" />
             ) : (
-              <UnbondingQueueTable unbondingQueue={unbondingQueue} />
-            )}
+              <UnbondingQueueTable unbondingQueue={[] as any} />
+            )} */}
           </div>
         </>
       )}

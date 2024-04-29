@@ -4,13 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  truncateHash,
-  useGauges,
-  usePollGlobalValidatorBribes,
-  usePollValidatorCuttingBoard,
-  type PoLValidator,
-} from "@bera/berajs";
+import { truncateHash, useGauges } from "@bera/berajs";
 import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
 import { DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -103,18 +97,14 @@ export const GaugeCategoryIcon = ({
   );
 };
 export const ValidatorGauge = ({ address }: { address: string }) => {
-  const { useValidatorCuttingBoard } = usePollValidatorCuttingBoard(
-    address as Address,
-  );
-  const cuttingBoard = useValidatorCuttingBoard();
-  const highestVotedGauge = React.useMemo(() => {
-    return cuttingBoard ? cuttingBoard[0].receiver : undefined;
-  }, [cuttingBoard]);
+  // const highestVotedGauge = React.useMemo(() => {
+  //   return cuttingBoard ? cuttingBoard[0].receiver : undefined;
+  // }, [cuttingBoard]);
   const { gaugeDictionary } = useGauges();
 
   return (
     <>
-      {highestVotedGauge === undefined || gaugeDictionary === undefined ? (
+      {/* {highestVotedGauge === undefined || gaugeDictionary === undefined ? (
         "no gauges"
       ) : (
         <Link
@@ -129,36 +119,36 @@ export const ValidatorGauge = ({ address }: { address: string }) => {
               truncateHash(highestVotedGauge)}
           </span>
         </Link>
-      )}
+      )} */}
     </>
   );
 };
 export default function ValidatorsTable() {
   const router = useRouter();
   const prices = undefined;
-  const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
-  const [keyword, setKeyword] = React.useState("");
-  const validators = usePolValidators();
+  // const { usePolValidators, isLoading } = usePollGlobalValidatorBribes(prices);
+  // const [keyword, setKeyword] = React.useState("");
+  // const validators = usePolValidators();
 
-  const filteredValidators = React.useMemo(() => {
-    return validators
-      ?.sort(
-        (a: PoLValidator, b: PoLValidator) =>
-          Number(b.tokens) - Number(a.tokens),
-      )
-      .filter((validator: PoLValidator) => {
-        return (
-          validator.description.moniker
-            .toLowerCase()
-            .includes(keyword.toLowerCase()) ||
-          validator.operatorAddr.toLowerCase().includes(keyword.toLowerCase())
-        );
-      });
-  }, [validators, keyword]);
+  // const filteredValidators = React.useMemo(() => {
+  //   return validators
+  //     ?.sort(
+  //       (a: PoLValidator, b: PoLValidator) =>
+  //         Number(b.tokens) - Number(a.tokens),
+  //     )
+  //     .filter((validator: PoLValidator) => {
+  //       return (
+  //         validator.description.moniker
+  //           .toLowerCase()
+  //           .includes(keyword.toLowerCase()) ||
+  //         validator.operatorAddr.toLowerCase().includes(keyword.toLowerCase())
+  //       );
+  //     });
+  // }, [validators, keyword]);
 
   return (
     <div className="mt-16">
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <SearchInput
           className="w-full md:w-[400px]"
           placeholder="Search by name or address"
@@ -180,7 +170,7 @@ export default function ValidatorsTable() {
             router.push(`/validators/${row.original.operatorAddr}`)
           }
         />
-      )}
+      )} */}
     </div>
   );
 }

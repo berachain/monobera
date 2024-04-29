@@ -2,13 +2,12 @@ import { truncateHash, useGauges } from "@bera/berajs";
 import { getAddress } from "viem";
 
 import { GaugeIcon } from "~/app/validators/validators-table";
-import { GaugeWeight } from "~/hooks/useGaugeWeights";
 import { OTHERS_GAUGES } from "./global-gauge-weight-chart";
 
 type ChartToolTipProps = {
   color: string;
   visible: boolean;
-  gauge: GaugeWeight;
+  gauge: any;
   numOthers?: number;
 };
 export function ChartTooltip({

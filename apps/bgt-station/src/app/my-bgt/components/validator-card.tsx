@@ -2,9 +2,9 @@ import { useRouter } from "next/navigation";
 import {
   BRIBE_PRECOMPILE_ABI,
   TransactionActionType,
+  formatUsd,
   useBeraJs,
 } from "@bera/berajs";
-import { formatUsd } from "@bera/berajs/src/utils";
 import { erc20BribeModule } from "@bera/config";
 import {
   BribeApyTooltip,

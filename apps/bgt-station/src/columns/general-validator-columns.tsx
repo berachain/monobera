@@ -1,5 +1,4 @@
 import React from "react";
-import { type PoLValidator } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   TokenIconList,
@@ -13,7 +12,7 @@ import { formatCommission } from "~/utils/formatCommission";
 import { VP } from "~/components/validator-selector";
 import { ValidatorGauge } from "~/app/validators/validators-table";
 
-export const general_validator_columns: ColumnDef<PoLValidator>[] = [
+export const general_validator_columns: ColumnDef<any>[] = [
   // {
   //   header: ({ column }) => (
   //     <DataTableColumnHeader column={column} title="Rank" />
