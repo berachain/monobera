@@ -2,25 +2,25 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 import Hero from "~/components/hero";
 import { HoneyMachine } from "~/components/honey-machine";
 import { SwapCard } from "~/components/swap-card";
 
-export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
+export default function HoneyPage() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const arcade = resolvedTheme === "dark";
+
   useEffect(() => {
     if (window?.innerWidth) {
-      if (window.innerWidth < 1280 && arcade) {
-        router.push("/?mode=pro");
-      }
+      if (window.innerWidth < 1280 && arcade) setTheme("light");
     }
   }, []);
 
   useEffect(() => {
     const handleResize = () => {
-      if (arcade && window?.innerWidth < 1280) {
-        router.push("/?mode=pro");
-      }
+      if (arcade && window?.innerWidth < 1280) setTheme("light");
     };
     window.addEventListener("resize", handleResize);
     return () => {
@@ -28,10 +28,8 @@ export default function HoneyPage({ arcade = false }: { arcade: boolean }) {
     };
   }, [arcade]);
 
-  const router = useRouter();
-
   if (arcade && typeof window !== "undefined" && window?.innerWidth < 1280) {
-    router.push("/?mode=pro");
+    setTheme("light");
   }
 
   return (

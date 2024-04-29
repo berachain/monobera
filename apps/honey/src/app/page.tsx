@@ -1,9 +1,9 @@
 import { type Metadata } from "next";
 import Image from "next/image";
 import { cloudinaryUrl, honeyName } from "@bera/config";
+import { getMetaTitle } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 
-import { getMetaTitle } from "@bera/shared-ui";
 import Data from "~/components/data";
 import { HoneyChart } from "~/components/honey-chart";
 import HoneyPage from "~/components/honey-page";
@@ -28,44 +28,40 @@ export default function Home({
   return (
     <div
       className={cn(
-        arcade ? "bg-backgroundSecondary font-honey" : "pro-mode-background",
+        "dark:font-honey dark:bg-backgroundSecondary bg-[url('./background.svg')] bg-cover bg-top dark:bg-none",
       )}
     >
       <ModeSwitch arcade={arcade} />
-      <HoneyPage arcade={arcade} />
+      <HoneyPage />
       <div
-        className={cn(
-          arcade
-            ? "bg-gradient-to-b from-backgroundSecondary text-foregroundSecondary xl:to-background"
-            : "",
-        )}
+        className={
+          "dark:bg-gradient-to-b dark:from-backgroundSecondary dark:text-foregroundSecondary dark:to-background"
+        }
       >
         <div className="container max-w-[1200px]">
-          <Data arcade={arcade} />
+          <Data />
           <div className="py-4">
-            {arcade ? (
-              <h3 className="mb-4 flex items-center gap-3 text-lg text-foregroundSecondary md:text-3xl">
-                <Image
-                  src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
-                  className="w-8"
-                  alt="honey"
-                  width={32}
-                  height={32}
-                />
-                Total Honey Supply & Volume
-              </h3>
-            ) : (
-              <h3 className="mb-12 flex items-center justify-center gap-2 text-3xl font-bold md:text-5xl">
-                <Image
-                  src={`${cloudinaryUrl}/honey/gugztuverdsqvzw5co8a`}
-                  className="w-12"
-                  alt="honey"
-                  width={48}
-                  height={48}
-                />
-                Honey Stats
-              </h3>
-            )}
+            <h3 className="mb-4 hidden items-center gap-3 text-lg dark:flex md:text-3xl">
+              <Image
+                src={`${cloudinaryUrl}/honey/qqyo5g3phzdwezvazsih`}
+                className="w-8"
+                alt="honey"
+                width={32}
+                height={32}
+              />
+              Total Honey Supply & Volume
+            </h3>
+            <h3 className="mb-12 flex items-center justify-center gap-2 text-3xl font-bold dark:hidden md:text-5xl">
+              <Image
+                src={`${cloudinaryUrl}/honey/gugztuverdsqvzw5co8a`}
+                className="w-12"
+                alt="honey"
+                width={48}
+                height={48}
+              />
+              Honey Stats
+            </h3>
+
             <HoneyChart arcade={arcade} />
           </div>
           <HoneyTransactionsTable arcade={arcade} />

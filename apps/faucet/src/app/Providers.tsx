@@ -8,7 +8,7 @@ import { ThemeProvider } from "next-themes";
 export default function Providers({ children }: PropsWithChildren<any>) {
   return (
     <BeraWagmi>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      <ThemeProvider attribute="class" forcedTheme="light">
         {children}
       </ThemeProvider>
     </BeraWagmi>

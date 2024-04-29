@@ -17,6 +17,7 @@ import {
 import { cn } from "@bera/ui";
 import { BeraWagmi } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
 import { SWRDevTools } from "swr-devtools";
 import { useLocalStorage } from "usehooks-ts";
@@ -69,22 +70,28 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
           <ApolloProvider client={honeyClient}>
             <BeraWagmi>
-              <Header
-                isHoney
-                navItems={navItems}
-                mobileNavItems={mobileNavItems}
-                appName={honeyName}
-              />
-              <main
-                className="w-full pt-start"
-                style={{ paddingTop: `${50 * activeBanners}px` }}
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem={false}
               >
-                {props.children}
-              </main>
-              <Toaster position="bottom-right" />
-              <Footer />
-              <TailwindIndicator />
-              <Analytics />
+                <Header
+                  // isHoney
+                  navItems={navItems}
+                  mobileNavItems={mobileNavItems}
+                  appName={honeyName}
+                />
+                <main
+                  className="w-full pt-start"
+                  style={{ paddingTop: `${50 * activeBanners}px` }}
+                >
+                  {props.children}
+                </main>
+                <Toaster position="bottom-right" />
+                <Footer />
+                <TailwindIndicator />
+                <Analytics />
+              </ThemeProvider>
             </BeraWagmi>
           </ApolloProvider>
         </body>

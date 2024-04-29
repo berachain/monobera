@@ -7,7 +7,7 @@
     --hover: 20deg 6% 90%;
 
     --background: 60deg 9% 98%;
-    --background-secondary: 198deg 100% 56%;
+    --background-secondary: 0deg 0% 100%;
 
     --foreground: 12deg 6% 15%;
     --foreground-secondary: 224deg 64% 33%;
@@ -27,12 +27,12 @@
 
     --secondary: 20deg 6% 90%;
     --secondary-foreground: 33deg 5% 32%;
-    /* 33deg 3% 38% */
+
     --accent: 43deg 96% 56%;
     --accent-foreground: 60deg 9% 98%;
 
     --border: 20deg 6% 90%;
-    --border-secondary: 27deg 32% 76%; /* deprecated */
+    --border-secondary: 0deg 0% 100%;
 
     --input: 60deg 5% 96%;
 
@@ -59,9 +59,9 @@
     --hover: 20deg 6% 90%;
 
     --background: 60deg 9% 98%;
-    --background-secondary: 208deg 56% 54%
+    --background-secondary: 198deg 100% 56%;
 
-    --foreground: 12deg 6% 15%;
+    --foreground: 224deg 64% 33%;
     --foreground-secondary: 224deg 64% 33%;
     --foreground-tetriary: 0deg 0% 60%; /* deprecated */
 
@@ -79,12 +79,12 @@
 
     --secondary: 20deg 6% 90%;
     --secondary-foreground: 33deg 5% 32%;
-    /* 33deg 3% 38% */
+  
     --accent: 43deg 96% 56%;
     --accent-foreground: 60deg 9% 98%;
 
     --border: 20deg 6% 90%;
-    --border-secondary: 27deg 32% 76%; /* deprecated */
+    --border-secondary: 224deg 64% 33%;
 
     --input: 60deg 5% 96%;
 
@@ -164,11 +164,6 @@ input[type="number"] {
   background-position-x: center;
 }
 
-.pro-mode-background {
-  background-image: url("./background.svg");
-  background-size: cover;
-  background-position: top center;
-}
 
 @keyframes moveUpDown {
   0%,
