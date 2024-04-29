@@ -49,13 +49,13 @@ export default function Hero() {
             </Link>
           </div>
           <div className="w-full">
-            <Link href={"/dashboard"}>
+            <Link href="https://blog.berachain.com/blog/flow-of-value-examining-the-differences-between-pos-and-pol-a-case-for-a-new-paradigm-in-sustainable-incentive-alignment-at-the-protocol-layer">
               <Button
                 className="rounded-18 w-full text-lg font-semibold leading-7 sm:whitespace-nowrap"
                 size={"lg"}
                 variant="secondary"
               >
-                Read about $150M Ecosystem Fund
+                Read about Proof of Liquidity
               </Button>
             </Link>
           </div>

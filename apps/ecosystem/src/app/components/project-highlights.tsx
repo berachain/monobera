@@ -7,6 +7,8 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
+import ComponentTransition from "./component-transition";
+
 const highlights = [
   {
     title: "Bera Bera",
@@ -124,78 +126,80 @@ export default function ProjectHighlights() {
     highlights.length - currentIndex * cardsVisible;
 
   return (
-    <div className="w-full px-4 pb-1 pt-16 xl:w-[1280px]">
-      <div className="flex flex-col items-center justify-between gap-4 lg:flex-row">
-        <div className="text-center text-5xl font-bold text-foreground">
-          Project Spotlight
+    <ComponentTransition>
+      <div className="w-full px-4 pb-1 pt-16 xl:w-[1280px]">
+        <div className="flex flex-col items-center justify-between gap-4 lg:flex-row">
+          <div className="text-center text-5xl font-bold text-foreground">
+            Project Spotlight
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex">
+              <Button
+                onClick={goToPrevious}
+                disabled={isAtStart}
+                className="rounded-full"
+                variant="ghost"
+              >
+                <Icons.arrowLeft onClick={goToPrevious} />
+              </Button>
+              <Button
+                onClick={goToNext}
+                disabled={isAtEnd}
+                className="rounded-full"
+                variant="ghost"
+              >
+                <Icons.arrowRight />
+              </Button>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col items-center justify-center">
-          <div className="flex">
-            <Button
-              onClick={goToPrevious}
-              disabled={isAtStart}
-              className="rounded-full"
-              variant="ghost"
-            >
-              <Icons.arrowLeft onClick={goToPrevious} />
-            </Button>
-            <Button
-              onClick={goToNext}
-              disabled={isAtEnd}
-              className="rounded-full"
-              variant="ghost"
-            >
-              <Icons.arrowRight />
-            </Button>
+
+        <div className="w-full overflow-hidden">
+          <div
+            onTouchStart={(e) => e.stopPropagation()}
+            className="my-8 flex gap-4 scroll-smooth transition-transform duration-200 ease-linear "
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {highlights.map((section, index) => (
+              <Link href={section.link} key={index} target="_blank">
+                <div
+                  key={section.title}
+                  className="card-hover mx-auto flex h-[368px] w-[234px] flex-col items-center justify-start rounded-md border border-solid bg-background p-4 hover:opacity-80 hover:shadow-xl"
+                >
+                  <Image
+                    src="/partnerships_placeholder.png"
+                    alt="Project"
+                    width={194}
+                    height={148}
+                    layout="intrinsic"
+                    className="rounded-2 image-zoom h-[148px] w-[194px]"
+                  />
+                  <div className="flex w-full flex-col items-start justify-between gap-3 py-4">
+                    <div className="text-xl font-semibold text-foreground">
+                      {section.title}
+                    </div>
+                    <div className="flex flex-row gap-2 text-foreground">
+                      {section.tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="info"
+                          className="flex items-center justify-center text-[10px]"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="self-stretch text-left text-sm text-muted-foreground">
+                    {section.description}
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
-
-      <div className="w-full overflow-hidden">
-        <div
-          onTouchStart={(e) => e.stopPropagation()}
-          className="my-8 flex gap-4 scroll-smooth transition-transform duration-200 ease-linear "
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {highlights.map((section, index) => (
-            <Link href={section.link} key={index} target="_blank">
-              <div
-                key={section.title}
-                className="card-hover mx-auto flex h-[368px] w-[234px] flex-col items-center justify-start rounded-md border border-solid bg-background p-4 hover:opacity-80 hover:shadow-xl"
-              >
-                <Image
-                  src="/partnerships_placeholder.png"
-                  alt="Project"
-                  width={194}
-                  height={148}
-                  layout="intrinsic"
-                  className="rounded-2 image-zoom h-[148px] w-[194px]"
-                />
-                <div className="flex w-full flex-col items-start justify-between gap-3 py-4">
-                  <div className="text-xl font-semibold text-foreground">
-                    {section.title}
-                  </div>
-                  <div className="flex flex-row gap-2 text-foreground">
-                    {section.tags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="info"
-                        className="flex items-center justify-center text-[10px]"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="self-stretch text-left text-sm text-muted-foreground">
-                  {section.description}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
+    </ComponentTransition>
   );
 }
