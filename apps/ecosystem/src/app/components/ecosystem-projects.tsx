@@ -195,7 +195,7 @@ export default function EcosystemProjects() {
                         <div className="flex items-center justify-center gap-2 pt-4">
                           {project.goto && (
                             <Link href={project.goto}>
-                              <Icons.externalLink />
+                              <Icons.globe />
                             </Link>
                           )}
                           <Link
