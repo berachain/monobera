@@ -58,7 +58,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               </div>
               <div className="z-10 flex-1">
                 <Header navItems={navItems} />
-                <main className="w-full pt-start">{props.children}</main>
+                <main className="w-full pt-[72px]">{props.children}</main>
               </div>
             </div>
           </ThemeProvider>
