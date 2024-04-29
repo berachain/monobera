@@ -8,7 +8,7 @@ import {
   usePoolRecentProvisions,
   usePoolRecentSwaps,
   usePoolUserPosition,
-  type IProvisions,
+  type IProvision,
   type ISwaps,
   type PoolV2,
 } from "@bera/berajs";
@@ -40,10 +40,10 @@ interface IPoolPageContent {
 }
 
 const getTokenDisplay = (
-  event: ISwapOrProvision | ISwaps | IProvisions,
+  event: ISwapOrProvision | ISwaps | IProvision,
   pool: PoolV2,
 ) => {
-  if ((event as IProvisions).changeType === undefined) {
+  if ((event as IProvision).changeType === undefined) {
     return (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
@@ -81,11 +81,11 @@ const getTokenDisplay = (
   );
 };
 
-const getAction = (event: ISwapOrProvision | ISwaps | IProvisions) => {
-  if ((event as IProvisions).changeType === undefined) {
+const getAction = (event: ISwapOrProvision | ISwaps | IProvision) => {
+  if ((event as IProvision).changeType === undefined) {
     return <p>Swap</p>;
   }
-  if ((event as IProvisions).changeType === "mint") {
+  if ((event as IProvision).changeType === "mint") {
     return <p className="text-positive">Add</p>;
   }
   return <p className="text-destructive-foreground">Withdraw</p>;
@@ -155,7 +155,7 @@ const EventTable = ({
   isLoading,
 }: {
   pool: PoolV2;
-  events: (ISwapOrProvision[] | ISwaps[] | IProvisions[]) | undefined;
+  events: (ISwapOrProvision[] | ISwaps[] | IProvision[]) | undefined;
   isLoading: boolean | undefined;
 }) => {
   return (
@@ -175,7 +175,7 @@ const EventTable = ({
       </TableHeader>
       <TableBody>
         {events?.length ? (
-          events?.map((event: ISwapOrProvision | ISwaps | IProvisions) => {
+          events?.map((event: ISwapOrProvision | ISwaps | IProvision) => {
             if (!event) return null;
             const txHash = event.transactionHash;
             return (
@@ -226,7 +226,7 @@ const EventTable = ({
   );
 };
 
-type ISwapOrProvision = ISwaps | IProvisions;
+type ISwapOrProvision = ISwaps | IProvision;
 export default function PoolPageContent({ pool }: IPoolPageContent) {
   // const { useBgtReward } = usePollBgtRewards([pool?.pool]);
   // const { data: bgtRewards } = useBgtReward(pool?.pool);

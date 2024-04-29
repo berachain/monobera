@@ -1,0 +1,15 @@
+## `IProvision`
+
+A provision is a liquidity add or withdraw event on a pool.
+
+| Name                   | type               | Description                                                         | Optional |
+| ---------------------- | :----------------- | :------------------------------------------------------------------ | :------: |
+| `user`                 | `string`           | wallet address of user who performed the provision                  | `false`  |
+| `baseFlow`             | `string`           | positive if provision was from pool base token to pool quote token  | `false`  |
+| `quoteFlow`            | `string`           | positive if provision was from pool quote token to base quote token | `false`  |
+| `changeType`           | `"mint" \| "burn"` | address/hash of provision's onchain transaction                     | `false`  |
+| `transactionHash`      | `string`           | address/hash of provision's onchain transaction                     | `false`  |
+| `time`                 | `number`           | UNIX timestamp of provision                                         | `false`  |
+| `estimatedHoneyValue`  | `number`           | estimated honey value of provision transaction                      | `false`  |
+| `baseAssetHoneyPrice`  | `string`           | honey price of the base token in the provision                      | `false`  |
+| `quoteAssetHoneyPrice` | `string`           | honey price of the quote token in the provision                     | `false`  |

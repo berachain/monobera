@@ -98,7 +98,7 @@ export interface ISwaps {
   quoteAssetHoneyPrice: string;
 }
 
-export interface IProvisions {
+export interface IProvision {
   user: string;
   baseFlow: number;
   quoteFlow: number;
