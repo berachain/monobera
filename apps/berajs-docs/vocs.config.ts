@@ -51,6 +51,10 @@ export default defineConfig({
               text: "usePoolUserPosition",
               link: "/react/dex/usePoolUserPosition/",
             },
+            {
+              text: "usePoolRecentProvisions",
+              link: "/react/dex/usePoolRecentProvisions/",
+            },
           ],
         },
         {
@@ -194,6 +198,10 @@ export default defineConfig({
             {
               text: "getBeraLpAddress",
               link: "/actions/dex/getBeraLpAddress/",
+            },
+            {
+              text: "getPoolRecentProvisions",
+              link: "/actions/dex/getPoolRecentProvisions/",
             },
           ],
         },
