@@ -5,13 +5,14 @@ Action for creating the payload for performing a withdraw liquidity operation on
 ## Import
 
 ```ts
-import { getWithdrawLiquidityPayload } from "@bera/berajs";
+import { getWithdrawLiquidityPayload } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getWithdrawLiquidityPayload, type Token } from "@bera/berajs";
+import { type Token } from "@bera/berajs";
+import { getWithdrawLiquidityPayload } from "@bera/berajs/actions";
 import { usePublicClient } from "wagmi";
 
 const client = usePublicClient();
