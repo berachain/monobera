@@ -83,7 +83,7 @@ export default function HoneyBorrowCard() {
         <div className="flex w-full justify-between sm:w-[250px]">
           <div>
             <div className="text-xs font-medium leading-5 text-yellow-900 opacity-60 dark:text-yellow-200">
-              Earning BGT APY
+              BGT APY
             </div>
             <div className=" text-xl font-semibold leading-7  text-success-foreground">
               +<FormattedNumber value={bgtApr ?? "0"} percent />
@@ -91,7 +91,7 @@ export default function HoneyBorrowCard() {
           </div>
           <div>
             <div className="text-xs font-medium leading-5 text-yellow-900 opacity-60 dark:text-yellow-200">
-              Paying Loan APY
+              Borrow APY
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
               <FormattedNumber

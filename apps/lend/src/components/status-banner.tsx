@@ -5,7 +5,7 @@ import {
   usePollUserAccountData,
   usePollWalletBalances,
 } from "@bera/berajs";
-import { lendHoneyDebtTokenAddress } from "@bera/config";
+import { vdHoneyTokenAddress } from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -29,7 +29,7 @@ export default function StatusBanner() {
   const { data: balanceToken } = usePollWalletBalances();
 
   const { useBgtApr } = usePollBgtRewardsForAddress({
-    address: lendHoneyDebtTokenAddress,
+    address: vdHoneyTokenAddress,
   });
   const bgtApr = useBgtApr(
     Number(
@@ -42,7 +42,7 @@ export default function StatusBanner() {
 
   let positiveProportion = 0;
   let negativeProportion = 0;
-
+  let suppliedHoney = 0;
   reservesDataList.forEach((reserve: any) => {
     const atoken = balanceToken?.find(
       (token: any) => token.address === reserve.aTokenAddress,
@@ -52,6 +52,11 @@ export default function StatusBanner() {
         Number(atoken.formattedBalance) *
         Number(reserve.supplyAPY) *
         Number(reserve.formattedPriceInMarketReferenceCurrency);
+      if (reserve.symbol === "HONEY") {
+        suppliedHoney =
+          Number(atoken.formattedBalance) *
+          Number(reserve.formattedPriceInMarketReferenceCurrency);
+      }
     }
     const debtToken = balanceToken?.find(
       (token: any) => token.address === reserve.variableDebtTokenAddress,
@@ -72,12 +77,13 @@ export default function StatusBanner() {
       ),
     ) * Number(bgtApr ?? "0");
 
-  const totalLiquidityUSD = Number(
-    formatUnits(
-      data?.totalCollateralBase ?? 0n,
-      baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
-    ),
-  );
+  const totalLiquidityUSD =
+    Number(
+      formatUnits(
+        data?.totalCollateralBase ?? 0n,
+        baseCurrency?.marketReferenceCurrencyDecimals ?? 8,
+      ),
+    ) + suppliedHoney;
   const totalBorrowsUSD = Number(
     formatUnits(
       data?.totalDebtBase ?? 0n,
