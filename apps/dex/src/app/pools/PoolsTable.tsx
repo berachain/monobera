@@ -9,7 +9,6 @@ import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { columns } from "~/components/pools-table-columns";
-import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { getPoolUrl } from "./fetchPools";
@@ -52,7 +51,6 @@ export const PoolSearch = ({
     setSorting(newSort);
   };
 
-  usePollUserDeposited();
   const [isTyping, setIsTyping] = useState(false);
 
   let typingTimer: NodeJS.Timeout;
