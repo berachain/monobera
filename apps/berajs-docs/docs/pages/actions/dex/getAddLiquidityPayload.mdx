@@ -5,13 +5,14 @@ Action for creating the payload for performing an add liquidity operation on a p
 ## Import
 
 ```ts
-import { getAddLiquidityPayload } from "@bera/berajs";
+import { getAddLiquidityPayload } from "@bera/berajs/actions";
 ```
 
 ## Usage
 
 ```ts
-import { getAddLiquidityPayload, type Token } from "@bera/berajs";
+import { type Token } from "@bera/berajs";
+import { getAddLiquidityPayload } from "@bera/berajs/actions";
 
 const addLiqPayload = await getAddLiquidityPayload({
   args: {
