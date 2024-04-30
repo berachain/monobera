@@ -95,8 +95,8 @@ export default function ProjectHighlights() {
 
   return (
     <ComponentTransition>
-      <div className="w-full px-4 pb-1 pt-16 xl:w-[1280px]">
-        <div className="flex flex-col items-center justify-between gap-4 lg:flex-row">
+      <div className="w-full px-4 pb-1 xl:w-[1280px]">
+        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:justify-between">
           <div className="text-center text-5xl font-bold text-foreground">
             Project Spotlight
           </div>

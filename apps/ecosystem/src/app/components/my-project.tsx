@@ -59,7 +59,7 @@ export default function MyProject() {
               <div className="flex-wrap items-center sm:max-w-[300px] md:max-w-[440px] lg:w-full">
                 <h2 className="text-md flex-wrap text-center tracking-tight text-muted-foreground sm:text-left sm:text-lg">
                   Fellow builder in the making? Submit project details via this
-                  form and please be sure to provide us as much information as
+                  form.
                 </h2>
               </div>
             </div>

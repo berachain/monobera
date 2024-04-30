@@ -1,14 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { SearchInput } from "@bera/shared-ui";
 import { Avatar, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
-
-import { useProjects } from "../../hooks/useProjects";
 
 export interface EcosystemProject {
   icon: string;
@@ -22,7 +18,23 @@ export interface EcosystemProject {
 }
 
 export default function ProjectPage({ name }: { name: string | undefined }) {
-  const { projects: projectList, isLoading } = useProjects();
+  const [projectList, setProjectList] = useState<EcosystemProject[] | null>(
+    null,
+  );
+
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const fetchPosts = async () => {
+    setLoading(true);
+    const res = await fetch("/api/projects");
+    const data = await res.json();
+    console.log(data);
+    setProjectList(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   const project = (projectList as EcosystemProject[])?.find(
     (p: EcosystemProject) => p.name === decodeURIComponent(name ?? ""),

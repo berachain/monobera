@@ -9,7 +9,7 @@ import { Icons } from "@bera/ui/icons";
 import MultipleSelector, { Option } from "@bera/ui/multiple-selector";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { useProjects } from "../hooks/useProjects";
+import MultiSelectFormField from "./category-multi-select";
 import ComponentTransition from "./component-transition";
 
 const ITEMS_PER_PAGE = 12;
@@ -48,13 +48,28 @@ export interface EcosystemProject {
 
 export default function EcosystemProjects() {
   const [keywords, setKeywords] = useState<string | null>(null);
-  const [ecosystemType, setEcosystemType] = React.useState<Option[]>([]);
+  const [ecosystemType, setEcosystemType] = React.useState<string[]>([]);
   const [visibleProjects, setVisibleProjects] = React.useState<
     number | undefined
   >(ITEMS_PER_PAGE);
   const [viewMore, setViewMore] = React.useState(true);
+  const [projectList, setProjectList] = useState<EcosystemProject[] | null>(
+    null,
+  );
 
-  const { projects: projectList, isLoading } = useProjects();
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const fetchPosts = async () => {
+    setLoading(true);
+    const res = await fetch("/api/projects");
+    const data = await res.json();
+    console.log(data);
+    setProjectList(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   const filteredProjectList = projectList?.filter((project: any) => {
     const matchesKeywords =
@@ -63,9 +78,9 @@ export default function EcosystemProjects() {
       project.description.toLowerCase().includes(keywords.toLowerCase()) ||
       project.ecosystemType1.toLowerCase().includes(keywords.toLowerCase()) ||
       project.ecosystemType2.toLowerCase().includes(keywords.toLowerCase());
-    const ecosystemValues = ecosystemType.map((option) =>
-      option.value.toLowerCase(),
-    );
+    console.log(ecosystemType);
+    const ecosystemValues = ecosystemType.map((option) => option.toLowerCase());
+    console.log(ecosystemValues);
     const matchesEcosystemType =
       ecosystemValues.length === 0 ||
       ecosystemValues.includes(project.ecosystemType1.toLowerCase()) ||
@@ -89,7 +104,17 @@ export default function EcosystemProjects() {
         className="flex w-full flex-col items-center justify-center gap-6 px-4 text-center xl:w-[1280px]"
       >
         <div className="flex w-full flex-col items-start gap-4 sm:flex-row">
-          <div className="sm:w-7/10 w-full">
+          <div className="w-full">
+            <MultiSelectFormField
+              options={OPTIONS}
+              defaultValue={ecosystemType}
+              onValueChange={setEcosystemType}
+              placeholder="Browse by category"
+              variant="inverted"
+              numberOfProjects={filteredProjectList?.length}
+            />
+          </div>
+          <div className="w-full">
             <SearchInput
               className="h-[40px] rounded-md border border-solid bg-background"
               placeholder="Search..."
@@ -98,38 +123,25 @@ export default function EcosystemProjects() {
               }
             />
           </div>
-          <div className="sm:w-3/10">
-            <MultipleSelector
-              value={ecosystemType}
-              onChange={setEcosystemType}
-              defaultOptions={OPTIONS}
-              placeholder="Browse by category"
-              emptyIndicator={
-                <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                  no results found.
-                </p>
-              }
-            />
-          </div>
         </div>
-        {ecosystemType.length > 0 && (
+        {/* {ecosystemType.length > 0 && (
           <div className="flex w-full flex-row flex-wrap items-center gap-2">
             <div className="font-semibold">
               {filteredProjectList?.length} Projects filtered by:
             </div>
             {ecosystemType.map((type) => (
               <Button
-                key={type.value}
+                key={type}
                 variant="secondary"
                 className="flex min-w-[50px] items-center justify-center border-none"
               >
                 <div className="text-sm font-normal text-muted-foreground">
-                  {type.value}
+                  {type}
                 </div>
               </Button>
             ))}
           </div>
-        )}
+        )} */}
 
         <div className="my-2 w-full border border-solid" />
         {isLoading && (
