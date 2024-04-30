@@ -1,20 +1,15 @@
 "use client";
 
-import { useBeraJs } from "@bera/berajs";
+import { useBeraJs, useUserPools, type IUserPool } from "@bera/berajs";
 import { ConnectWalletBear, NotFoundBear } from "@bera/shared-ui";
 
 import Loading from "./loading-component";
 import { Banner } from "./reward-banner";
 import RewardsCard from "./rewards-card";
-import {
-  type IUserPool,
-  usePollUserDeposited,
-} from "~/hooks/usePollUserDeposited";
 
 export const Rewards = () => {
   const { isReady } = useBeraJs();
-  const { usePositions, isLoading } = usePollUserDeposited();
-  const userPools = usePositions();
+  const { data: userPools, isLoading } = useUserPools();
 
   return (
     <div>

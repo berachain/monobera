@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
-import { useBeraJs } from "@bera/berajs";
+import { useBeraJs, useUserPools } from "@bera/berajs";
 import { ConnectWalletBear, DataTable, NotFoundBear } from "@bera/shared-ui";
 
 import { my_columns } from "~/components/pools-table-columns";
-import { usePollUserDeposited } from "~/hooks/usePollUserDeposited";
 import { getPoolUrl } from "../../fetchPools";
 import TableViewLoading from "./table-view-loading";
 
-export default function MyPool({
-  keyword,
-}: {
-  keyword: string;
-}) {
+export default function MyPool({ keyword }: { keyword: string }) {
   const { isReady } = useBeraJs();
-  const { isLoading, data } = usePollUserDeposited({ keyword });
+  const { isLoading, data } = useUserPools({ keyword });
 
   const [userPools, setUserPools] = useState<any>(undefined);
   useEffect(() => {
