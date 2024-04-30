@@ -147,8 +147,11 @@ export default function ProjectHighlights() {
                     />
                   </div>
                   <div className="flex w-full flex-col items-start justify-between gap-3 py-4">
-                    <div className="text-xl font-semibold text-foreground">
-                      {section.title}
+                    <div className="flex flex-row items-center justify-center gap-2">
+                      <div className="text-xl font-semibold text-foreground">
+                        {section.title}
+                      </div>
+                      <Icons.bnb className="h-6 w-6" />
                     </div>
                     {/* <div className="flex flex-row gap-2 text-foreground">
                       {section.tags.map((tag) => (

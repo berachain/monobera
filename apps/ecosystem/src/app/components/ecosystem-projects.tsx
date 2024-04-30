@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { SearchInput } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Avatar, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -172,7 +173,14 @@ export default function EcosystemProjects() {
                     key={index}
                     className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between sm:h-[296px] sm:w-[260px]"
                   >
-                    <div className="flip-card-inner transform-style relative w-full rounded-md border border-solid bg-background transition-transform duration-700 ease-in-out hover:bg-muted">
+                    <div
+                      className={cn(
+                        "flip-card-inner transform-style relative w-full rounded-md border  transition-transform duration-700 ease-in-out",
+                        isBeranative(project)
+                          ? "border-solid border-warning-foreground bg-warning bg-opacity-20 hover:bg-warning"
+                          : "border-solid bg-background hover:bg-muted",
+                      )}
+                    >
                       <div className="flip-card-front flex flex-col items-center justify-center">
                         <Avatar className="h-[96px] w-[96px]">
                           <AvatarImage
@@ -186,13 +194,8 @@ export default function EcosystemProjects() {
                         </Avatar>
 
                         <div className="pt-4">
-                          <div className="flex flex-row items-center justify-center gap-2">
-                            <div className="text-lg font-semibold">
-                              {project.name}
-                            </div>
-                            {isBeranative(project) && (
-                              <Icons.bera className="h-4 w-4" />
-                            )}
+                          <div className="text-lg font-semibold">
+                            {project.name}
                           </div>
 
                           {/* Show 2 types */}
