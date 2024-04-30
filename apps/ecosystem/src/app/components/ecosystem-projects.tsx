@@ -62,7 +62,6 @@ export default function EcosystemProjects() {
     setLoading(true);
     const res = await fetch("/api/projects");
     const data = await res.json();
-    console.log(data);
     setProjectList(data);
     setLoading(false);
   };
