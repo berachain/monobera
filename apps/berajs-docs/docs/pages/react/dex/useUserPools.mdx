@@ -1,0 +1,73 @@
+# useUserPools
+
+SWR hook that, given a user's wallet address and optional search keyword, returns a list of pools that a user has positions including the user's position data per pool.
+
+## Initialization
+
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
+
+## Import
+
+```ts
+import { useUserPools } from "@bera/berajs";
+```
+
+## Usage
+
+```ts
+import { useUserPools } from "@bera/berajs";
+
+const userWalletAddress = "0x...";
+
+function App() {
+    const { data: userPoolsAndPositions, isLoading } = useUserPools({ account: userWalletAddress });
+
+    ...
+};
+```
+
+## Parameters
+
+#### Call signature
+
+```ts
+function useUserPools(
+  args: {
+    account?: Address;
+    keyword?: string;
+  },
+  options?: DefaultHookOptions,
+);
+```
+
+#### args: `{ account?: Address; keyword?: string; }`
+
+| Name      | type          | Description                                                                                                                                                                     | Required |
+| --------- | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :------: |
+| `account` | `0x${string}` | The wallet address of the user whose pools and positions we want to retrieve. Defaults to wagmi connected wallet if not provided. Fails if no connected wallet or given address | `false`  |
+| `keyword` | `string`      | The keyword to search and filter pool names with. Empty string will return all results.                                                                                         | `false`  |
+
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
+## Returns
+
+#### Return type: `DefaultHookReturnType<IUserPool[] | undefined>`
+
+| Name           | type                              | Description                                                                          | Optional |
+| -------------- | :-------------------------------- | :----------------------------------------------------------------------------------- | :------: |
+| `data`         | `IUserPool[] \| undefined`        | list of pools that a user has positions including the user's position data per pool. |  `true`  |
+| `error`        | `any \| undefined`                | any errors while fetching the data                                                   |  `true`  |
+| `mutate`       | `(newData?: IUserPool[]) => void` | swr mutate to refetch or manually update the data in cache if arg provided           |  `true`  |
+| `refetch`      | `() => void`                      | swr mutate to refetch the data                                                       |  `true`  |
+| `isValidating` | `boolean`                         | boolean flag representing whether the hook is currently validating data              | `false`  |
+| `isLoading`    | `boolean`                         | boolean flag representing whether the hook is currently loading data                 | `false`  |
+
+See type [`IUserPool`](/types/IUserPool/)
+
+See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)
