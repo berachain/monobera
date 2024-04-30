@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  formatter,
-  truncateHash,
-  useInfiniteValidatorDelegations,
-  usePollActiveValidators,
-} from "@bera/berajs";
+import { formatter, truncateHash } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
@@ -25,40 +20,33 @@ export default function ValidatorActivitiesTable({
   const [tab, _setTab] = React.useState<"recent-votes" | "delegators">(
     "delegators",
   );
-  const { useActiveValidator } = usePollActiveValidators();
-  const validator = useActiveValidator(validatorAddress);
 
-  const {
-    data,
-    // size, isLoading, isReachingEnd, setSize
-  } = useInfiniteValidatorDelegations(validatorAddress);
+  // const getDelegatorPercentage = (shares: bigint) => {
+  //   const s = Number(formatUnits(shares, 18));
+  //   const total = Number(formatUnits(validator?.delegatorShares ?? 0n, 18));
+  //   return s / total;
+  // };
 
-  const getDelegatorPercentage = (shares: bigint) => {
-    const s = Number(formatUnits(shares, 18));
-    const total = Number(formatUnits(validator?.delegatorShares ?? 0n, 18));
-    return s / total;
-  };
-
-  const delegatorData = data?.map(
-    (data: { delegator: Address; shares: bigint; balance: bigint }) => ({
-      delegator_address: (
-        <div className="flex w-[145px] items-center gap-2 hover:underline">
-          <Identicon account={data.delegator} />
-          {truncateHash(data.delegator)}
-        </div>
-      ),
-      bgt_amount: (
-        <div className="flex gap-1">
-          <div>
-            {formatter.format(Number(formatUnits(data.balance, 18)))} BGT
-          </div>
-          <div>({(getDelegatorPercentage(data.shares) * 100).toFixed(2)}%)</div>
-        </div>
-      ),
-      bgt: data.balance,
-      // delegated_since: <div className="flex w-[108px] gap-1">21 days ago</div>,
-    }),
-  );
+  // const delegatorData = data?.map(
+  //   (data: { delegator: Address; shares: bigint; balance: bigint }) => ({
+  //     delegator_address: (
+  //       <div className="flex w-[145px] items-center gap-2 hover:underline">
+  //         <Identicon account={data.delegator} />
+  //         {truncateHash(data.delegator)}
+  //       </div>
+  //     ),
+  //     bgt_amount: (
+  //       <div className="flex gap-1">
+  //         <div>
+  //           {formatter.format(Number(formatUnits(data.balance, 18)))} BGT
+  //         </div>
+  //         <div>({(getDelegatorPercentage(data.shares) * 100).toFixed(2)}%)</div>
+  //       </div>
+  //     ),
+  //     bgt: data.balance,
+  //     // delegated_since: <div className="flex w-[108px] gap-1">21 days ago</div>,
+  //   }),
+  // );
 
   return (
     <div className="flex flex-col gap-4">
@@ -86,7 +74,7 @@ export default function ValidatorActivitiesTable({
           />
         ) : (
           <div className="flex w-full flex-col items-center gap-4">
-            <DataTable
+            {/* <DataTable
               columns={delegators_columns}
               data={delegatorData ?? []}
               className="min-w-[926px]"
@@ -98,7 +86,7 @@ export default function ValidatorActivitiesTable({
                   "_blank",
                 )
               }
-            />
+            /> */}
             {/* <Button
               onClick={() => setSize(size + 1)}
               disabled={isLoading || isReachingEnd}

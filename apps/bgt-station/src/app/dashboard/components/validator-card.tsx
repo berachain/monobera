@@ -2,8 +2,6 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePollGlobalValidatorBribes, type PoLValidator } from "@bera/berajs";
-import { formatter } from "@bera/berajs/src/utils";
 import { BribeApyTooltip, TokenIconList, ValidatorIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -17,25 +15,20 @@ export default function ValidatorCard({
   validator,
   keyword,
 }: {
-  validator: PoLValidator;
+  validator: any;
   keyword: string;
 }) {
   const prices = undefined;
-  const { useValidatorvAPY, useValidatorTotalActiveBribeValue } =
-    usePollGlobalValidatorBribes(prices);
-  const bribeValue = useValidatorTotalActiveBribeValue(validator.operatorAddr);
-  const vApy = useValidatorvAPY(validator.operatorAddr);
-  const formattedBGTRewards =
-    validator.tokens < 0.01
-      ? "< 0.01"
-      : formatter.format(parseFloat(formatUnits(BigInt(validator.tokens), 18)));
+  const bribeValue = undefined;
+  const vApy = undefined;
+  const formattedBGTRewards = validator.tokens < 0.01 ? "< 0.01" : "0";
   const info = [
     {
-      amount: `${String(vApy?.toFixed(2) ?? 0)}%`,
+      amount: `${String(0)}%`,
       text: "APY",
     },
     {
-      amount: `$${formatter.format(Number(bribeValue ?? 0))}`,
+      amount: `$${0}`,
       text: "Bribe value",
     },
     {
@@ -81,9 +74,8 @@ export default function ValidatorCard({
           <div
             className={cn(
               "text-sm font-medium",
-              bribeValue > 0
-                ? "text-success-foreground"
-                : "text-muted-foreground",
+              "",
+              // true ? "text-success-foreground" : "text-muted-foreground",
             )}
           >
             {info[0]!.amount}

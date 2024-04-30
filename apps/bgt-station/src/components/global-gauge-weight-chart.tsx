@@ -3,11 +3,10 @@ import { truncateHash, useGauges } from "@bera/berajs";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { type Chart, type TooltipModel } from "chart.js";
 
-import { type GaugeWeight } from "~/hooks/useGaugeWeights";
 import { ChartTooltip } from "./chart-tooltip";
 
 interface Props {
-  gaugeWeights: GaugeWeight[] | undefined;
+  gaugeWeights: any[] | undefined;
 }
 
 interface ColorPalettes {
@@ -54,7 +53,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   const tooltipRef = useRef<string | null>(null);
   const { gaugeDictionary } = useGauges();
   const [tooltipVisible, setTooltipVisible] = React.useState<boolean>(false);
-  const [selectedGauge, setSelectedGauge] = React.useState<GaugeWeight>();
+  const [selectedGauge, setSelectedGauge] = React.useState<any>();
   const [color, setColor] = React.useState<string>("");
   const [numOthers, setNumOthers] = React.useState<number>(-1);
   const [othersIndex, setOthersIndex] = React.useState<number>(-1);
@@ -100,7 +99,7 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
   }, [gaugeWeights]);
 
   useEffect(() => {
-    const temp = combinedGauges?.map((data: GaugeWeight) => {
+    const temp = combinedGauges?.map((data: any) => {
       return {
         label:
           data.label === OTHERS_GAUGES

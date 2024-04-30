@@ -1,12 +1,10 @@
-import { type Proposal } from "@bera/berajs";
-
 import {
   updateFriendsOfTheChefTypeUrl,
   updateHoneyCollateralTypeUrl,
   updateLendMarkeyTypeUrl,
 } from "./create/useCreateProposal";
 
-export function getProposalType(proposal: Proposal | undefined) {
+export function getProposalType(proposal: any | undefined) {
   if (proposal) {
     if (proposal.messages.length === 0) {
       return "text-proposal";

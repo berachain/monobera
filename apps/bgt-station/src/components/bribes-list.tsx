@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
-import { type Bribe } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 
 type Props = {
-  bribes: Bribe | undefined;
+  bribes: any | undefined;
 };
 export default function BribesList({ bribes }: Props) {
   return (

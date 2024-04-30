@@ -14,10 +14,9 @@ import {
   global_gauge_weight_columns_v2,
   type GlobalGaugeColumns,
 } from "~/columns/global-gauge-weight-columns";
-import { type GaugeWeight } from "~/hooks/useGaugeWeights";
 
 interface Props {
-  gaugeWeights: GaugeWeight[] | undefined;
+  gaugeWeights: any[] | undefined;
   keywords?: string;
 }
 
@@ -73,7 +72,7 @@ export default function GlobalGaugeWeightTable({
   const { gaugeDictionary } = useGauges();
   useEffect(() => {
     if (!keywords) {
-      const temp = gaugeWeights?.map((data: GaugeWeight) => {
+      const temp = gaugeWeights?.map((data: any) => {
         return {
           label: data.address,
           percentage: data.percentage,
@@ -86,23 +85,21 @@ export default function GlobalGaugeWeightTable({
     // Normalize keywords for case-insensitive comparison
     const normalizedKeywords = keywords.toLowerCase();
 
-    const filteredGaugeWeights = gaugeWeights?.filter(
-      (gaugeWeight: GaugeWeight) => {
-        const address = gaugeWeight.address;
-        const name = (gaugeDictionary as any)[getAddress(address)]?.name ?? "";
+    const filteredGaugeWeights = gaugeWeights?.filter((gaugeWeight: any) => {
+      const address = gaugeWeight.address;
+      const name = (gaugeDictionary as any)[getAddress(address)]?.name ?? "";
 
-        const normalizedName = name.toLowerCase();
-        const normalizedAddress = address.toLowerCase();
+      const normalizedName = name.toLowerCase();
+      const normalizedAddress = address.toLowerCase();
 
-        return (
-          normalizedName.includes(normalizedKeywords) ||
-          normalizedAddress.includes(normalizedKeywords)
-        );
-      },
-    );
+      return (
+        normalizedName.includes(normalizedKeywords) ||
+        normalizedAddress.includes(normalizedKeywords)
+      );
+    });
 
     // Map the filtered gaugeWeights to the format needed for cuttingBoardData
-    const temp = filteredGaugeWeights?.map((data: GaugeWeight) => ({
+    const temp = filteredGaugeWeights?.map((data: any) => ({
       label: data.address,
       percentage: data.percentage,
       amount: data.amount,

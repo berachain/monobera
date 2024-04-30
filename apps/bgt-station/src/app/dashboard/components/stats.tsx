@@ -1,6 +1,5 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import { usePollActiveValidators } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -13,8 +12,7 @@ const SemiCircleProgress = dynamic(
 );
 
 export function Stats() {
-  const { usePercentOfStakedBGT } = usePollActiveValidators();
-  const percentOfStakedBGT = usePercentOfStakedBGT();
+  const percentOfStakedBGT = 0;
 
   const beraToBgtRatio = 0.1;
   return (

@@ -4,11 +4,6 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  usePollAllProposals,
-  type Proposal,
-  type TallyResult,
-} from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -40,42 +35,42 @@ export default function GovernanceByStatus({
 }) {
   const [keywords, setKeywords] = React.useState<string | null>(null);
 
-  const getSum = (item: TallyResult) =>
-    Object.values(item).reduce(
-      (acc: number, curr: string) => acc + Number(curr),
-      0,
-    );
+  // const getSum = (item: TallyResult) =>
+  //   Object.values(item).reduce(
+  //     (acc: number, curr: string) => acc + Number(curr),
+  //     0,
+  //   );
 
-  const { useAllProposals, isLoading } = usePollAllProposals(
-    mappedStatusEnum[proposalStatus],
-  );
-  const data = useAllProposals();
-  const sortedProposalList: Proposal[] = useMemo(
-    () =>
-      data
-        ?.filter((proposal: Proposal) => {
-          if (!keywords) return true;
+  // const { useAllProposals, isLoading } = usePollAllProposals(
+  //   mappedStatusEnum[proposalStatus],
+  // );
+  // const data = useAllProposals();
+  // const sortedProposalList: Proposal[] = useMemo(
+  //   () =>
+  //     data
+  //       ?.filter((proposal: Proposal) => {
+  //         if (!keywords) return true;
 
-          return proposal.title.toLowerCase().includes(keywords.toLowerCase());
-        })
-        .sort((a: Proposal, b: Proposal) => {
-          switch (orderBy) {
-            case OrderByEnum.HIGHEST_PARTICIPATION:
-              return getSum(b.finalTallyResult) - getSum(a.finalTallyResult);
-            case OrderByEnum.LOWEST_PARTICIPATION:
-              return getSum(a.finalTallyResult) - getSum(b.finalTallyResult);
-            case OrderByEnum.MOST_RECENT:
-              return Number(b.submitTime - a.submitTime);
-            case OrderByEnum.NEWEST:
-              return Number(b.submitTime - a.submitTime);
-            case OrderByEnum.OLDEST:
-              return Number(a.submitTime - b.submitTime);
-            default:
-              return 0;
-          }
-        }),
-    [data, proposalStatus, orderBy, keywords],
-  );
+  //         return proposal.title.toLowerCase().includes(keywords.toLowerCase());
+  //       })
+  //       .sort((a: Proposal, b: Proposal) => {
+  //         switch (orderBy) {
+  //           case OrderByEnum.HIGHEST_PARTICIPATION:
+  //             return getSum(b.finalTallyResult) - getSum(a.finalTallyResult);
+  //           case OrderByEnum.LOWEST_PARTICIPATION:
+  //             return getSum(a.finalTallyResult) - getSum(b.finalTallyResult);
+  //           case OrderByEnum.MOST_RECENT:
+  //             return Number(b.submitTime - a.submitTime);
+  //           case OrderByEnum.NEWEST:
+  //             return Number(b.submitTime - a.submitTime);
+  //           case OrderByEnum.OLDEST:
+  //             return Number(a.submitTime - b.submitTime);
+  //           default:
+  //             return 0;
+  //         }
+  //       }),
+  //   [data, proposalStatus, orderBy, keywords],
+  // );
 
   const router = useRouter();
   return (
@@ -143,7 +138,7 @@ export default function GovernanceByStatus({
           setKeywords(e.target.value)
         }
       />
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {/* <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {!isLoading &&
           sortedProposalList?.map((proposal: Proposal, index: number) => (
             <ProposalCard
@@ -172,7 +167,7 @@ export default function GovernanceByStatus({
             No Proposals found.{" "}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

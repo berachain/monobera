@@ -1,11 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  truncateHash,
-  usePollProposalVotes,
-  type Proposal,
-} from "@bera/berajs";
+import { truncateHash } from "@bera/berajs";
 import Identicon from "@bera/shared-ui/src/identicon";
 import {
   formatUnixTimestamp,
@@ -20,7 +16,7 @@ import { StatusEnum, VoteColorMap, mappedStatusEnum } from "../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 
 type ProposalCard = {
-  proposal: Proposal;
+  proposal: any;
   type?: string;
   onClick?: () => void;
   className?: string;
@@ -65,7 +61,7 @@ const getBadge = (proposalStatus: number) => {
   }
 };
 
-const getTimeText = (proposal: Proposal) => {
+const getTimeText = (proposal: any) => {
   switch (proposal.status) {
     case mappedStatusEnum[StatusEnum.ACTIVE]:
       return `Voting ends in ${timeDifferenceFromNow(
@@ -117,8 +113,7 @@ export function ProposalCard({
   onClick,
   className,
 }: ProposalCard) {
-  const { useProposalTallyResult } = usePollProposalVotes(Number(proposal.id));
-  const normalizedTally = useProposalTallyResult(Number(proposal.id));
+  const normalizedTally = undefined;
 
   return (
     <div
@@ -160,12 +155,13 @@ export function ProposalCard({
           </div>
         )}
         <ProgressBarChart
-          dataList={getDataList(
-            normalizedTally?.globalAbstainPercentage ?? 0,
-            normalizedTally?.globalNoPercentage ?? 0,
-            normalizedTally?.globalYesPercentage ?? 0,
-            normalizedTally?.globalVetoPercentage ?? 0,
-          )}
+          // dataList={getDataList(
+          //   normalizedTally?.globalAbstainPercentage ?? 0,
+          //   normalizedTally?.globalNoPercentage ?? 0,
+          //   normalizedTally?.globalYesPercentage ?? 0,
+          //   normalizedTally?.globalVetoPercentage ?? 0,
+          // )}
+          dataList={[] as any}
           labelList={
             proposal.status === mappedStatusEnum[StatusEnum.IN_QUEUE]
               ? []
@@ -184,10 +180,7 @@ export function ProposalCard({
             Submitted by {truncateHash(proposal.proposer, 6, 4)}
           </div>
           {/* show more accurate participation rate */}
-          <div>
-            {(normalizedTally?.participationRate ?? 0).toFixed(8)}%
-            participation rate
-          </div>
+          <div>{(0).toFixed(8)}% participation rate</div>
         </div>
       )}
     </div>
