@@ -19,13 +19,13 @@ export default function Hero() {
           Earn Interest And Rewards <br className="hidden sm:block" />
           By{" "}
           <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
-            Supplying
+            Supplying{" "}
           </span>{" "}
           Your Assets <br className="hidden sm:block" />
           And{" "}
           <span className="bg-gradient-to-b from-yellow-300 to-orange-600 bg-clip-text text-transparent">
-            Borrowing
-          </span>{" "}
+            Borrowing{" "}
+          </span>
           Honey
         </h1>
         <Link href={"/dashboard"}>
