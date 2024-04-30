@@ -87,6 +87,12 @@ export default function EcosystemProjects() {
     return matchesKeywords && matchesEcosystemType;
   });
 
+  const isBeranative = (project: EcosystemProject) => {
+    return (
+      project.ecosystemType1 === "Native" || project.ecosystemType2 === "Native"
+    );
+  };
+
   const toggleDisplay = () => {
     if (viewMore) {
       setVisibleProjects(projectList?.length);
@@ -171,7 +177,7 @@ export default function EcosystemProjects() {
                         <Avatar className="h-[96px] w-[96px]">
                           <AvatarImage
                             src={
-                              project.icon?.endsWith(".svg")
+                              project.icon?.endsWith(".svg") || !project.icon
                                 ? "https://artio-static-asset-public.s3.ap-southeast-1.amazonaws.com/assets/bera.png"
                                 : project.icon
                             }
@@ -180,8 +186,13 @@ export default function EcosystemProjects() {
                         </Avatar>
 
                         <div className="pt-4">
-                          <div className="text-lg font-semibold">
-                            {project.name}
+                          <div className="flex flex-row items-center justify-center gap-2">
+                            <div className="text-lg font-semibold">
+                              {project.name}
+                            </div>
+                            {isBeranative(project) && (
+                              <Icons.bera className="h-4 w-4" />
+                            )}
                           </div>
 
                           {/* Show 2 types */}
@@ -212,15 +223,15 @@ export default function EcosystemProjects() {
 
                         <div className="flex items-center justify-center gap-2 pt-4">
                           {project.goto && (
-                            <Link href={project.goto}>
+                            <Link
+                              href={
+                                project.goto ? project.goto : project.twitter
+                              }
+                            >
                               <Icons.globe />
                             </Link>
                           )}
-                          <Link
-                            href={
-                              project.twitter ? project.twitter : project.goto
-                            }
-                          >
+                          <Link href={project.twitter}>
                             <Icons.twitter />
                           </Link>
                         </div>
