@@ -1,0 +1,68 @@
+# searchUserPools
+
+Given a user's wallet address and optional search keyword, returns a list of pools that a user has positions including the user's position data per pool.
+
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
+## Import
+
+```ts
+import { searchUserPools } from "@bera/berajs/actions";
+```
+
+# Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexIndexer: "https://..",
+  },
+  subgraphs: {
+    dexSubgraph: "https://..",
+  },
+};
+```
+
+## Usage
+
+```ts
+import { defaultBeraConfig, searchUserPools } from "@bera/berajs/actions";
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
+
+// first, intialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
+  transport: http(),
+});
+
+const userWalletAddress = "0x...";
+
+const userPoolsAndPositions = searchUserPools({
+  args: {
+    account: userWalletAddress,
+    // keyword: "WBERA", // optional, if empty string returns all user pools
+  },
+  config: defaultBeraConfig,
+  publicClient,
+});
+```
+
+## Parameters
+
+| Name           | type                              | Description                                                                             | Required |
+| -------------- | :-------------------------------- | :-------------------------------------------------------------------------------------- | :------: |
+| `args.account` | `0x${string}`                     | The wallet address of the user whose pools and positions we want to retrieve            |  `true`  |
+| `args.keyword` | `string`                          | The keyword to search and filter pool names with. Empty string will return all results. | `false`  |
+| `config`       | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources                           |  `true`  |
+| `publicClient` | `PublicClient`                    | The viem public client used to interact with the blockchain                             |  `true`  |
+
+## Returns `IUserPool[]`
+
+See type [`IUserPool`](/types/IUserPool/)
