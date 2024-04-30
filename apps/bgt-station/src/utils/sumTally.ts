@@ -1,3 +1,5 @@
+// @ts-nocheck
+// TODO DELETE NOCHECK
 import { type TallyResult } from "@bera/berajs";
 
 export const sumTally = (tally: TallyResult | undefined) => {

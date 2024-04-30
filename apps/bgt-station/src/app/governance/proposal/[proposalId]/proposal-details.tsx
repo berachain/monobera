@@ -6,16 +6,8 @@ import {
   GOVERNANCE_PRECOMPILE_ABI,
   TransactionActionType,
   truncateHash,
-  usePollActiveValidators,
   usePollDenom,
-  usePollProposal,
-  usePollProposalVotes,
-  usePollTotalDelegated,
-  useTokenInformation,
-  type IVote,
-  type Proposal,
 } from "@bera/berajs";
-import { formatter } from "@bera/berajs/src/utils/formatAmount";
 import {
   beraTokenAddress,
   blockExplorerUrl,
@@ -46,13 +38,8 @@ export default function ProposalDetails({
   // const { read, tokenInformation } = useTokenInformation({
   //   config: beraJsConfig,
   // });
-  const { useProposal, isLoading: isProposalLoading } =
-    usePollProposal(proposalId);
-  const { useTotalDelegated } = usePollActiveValidators();
-  const { useTotalDelegatorDelegated, isLoading: isUserVotingPowerLoading } =
-    usePollTotalDelegated();
   const { getAddress } = usePollDenom();
-  const proposal: Proposal | undefined = useProposal();
+  const proposal: undefined = undefined;
 
   const [proposalType, setProposalType] = useState<
     | "text-proposal"
@@ -62,14 +49,11 @@ export default function ProposalDetails({
     | undefined
   >(undefined);
 
-  const globalTotal = useTotalDelegated();
-  const userTotal = useTotalDelegatorDelegated();
+  const globalTotal = undefined;
+  const userTotal = undefined;
 
-  const { useProposalVotes, isLoading, useProposalTallyResult } =
-    usePollProposalVotes(proposalId);
-
-  const votes = useProposalVotes();
-  const normalizedTally = useProposalTallyResult(proposalId);
+  const votes = undefined;
+  const normalizedTally = undefined;
   const { open, setOpen, comment, setComment, selected, setSelected } =
     useProposalDetails();
 
@@ -97,7 +81,7 @@ export default function ProposalDetails({
 
   const jsonMsg = useMemo(() => {
     if (proposal) {
-      return decodeGovMsg(proposal.messages);
+      return decodeGovMsg([] as any);
     }
     return {};
   }, [proposal]);
@@ -131,8 +115,7 @@ export default function ProposalDetails({
             Governance
           </Link>
           <div className="flex items-center gap-3">
-            {proposal?.status ===
-              ProposalStatus.PROPOSAL_STATUS_VOTING_PERIOD && (
+            {true && (
               <VoteDialog
                 open={open}
                 setOpen={setOpen}
@@ -150,7 +133,7 @@ export default function ProposalDetails({
                   });
                 }}
                 isLoading={isTxnLoading}
-                isVotingPowerLoading={isUserVotingPowerLoading}
+                isVotingPowerLoading={true}
               />
             )}
             {/* {proposal?.status ===
@@ -159,20 +142,17 @@ export default function ProposalDetails({
         </div>
 
         <div className="mt-4 rounded-[18px] shadow">
-          {isProposalLoading ? (
+          {/* {true ? (
             <Skeleton className="h-[235px] w-full rounded-[18px]" />
           ) : (
             proposal && <ProposalCard proposal={proposal} type={proposalType} />
-          )}
+          )} */}
         </div>
 
         <div className="mt-4 flex gap-4">
           <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
             <div className="text-2xl font-semibold leading-loose text-foreground">
-              {normalizedTally !== undefined
-                ? formatter.format(normalizedTally.totalVotes)
-                : 0}{" "}
-              BGT
+              {normalizedTally !== undefined ? 0 : 0} BGT
             </div>
             <div className="mt-[-4px] flex items-center gap-0.5 text-sm font-medium leading-[14px] text-muted-foreground">
               Total votes
@@ -180,10 +160,10 @@ export default function ProposalDetails({
             </div>
           </Card>
           <VoteCard
-            abstainPercentage={normalizedTally?.abstainPercentage ?? 0}
-            noPercentage={normalizedTally?.noPercentage ?? 0}
-            vetoPercentage={normalizedTally?.vetoPercentage ?? 0}
-            yesPercentage={normalizedTally?.yesPercentage ?? 0}
+            abstainPercentage={0}
+            noPercentage={0}
+            vetoPercentage={0}
+            yesPercentage={0}
           />
         </div>
 
@@ -253,7 +233,7 @@ export default function ProposalDetails({
               Description
             </div>
             <Card className="mt-1 h-full max-h-[376px] overflow-y-auto bg-background p-8 text-sm font-normal leading-normal text-muted-foreground">
-              {proposal?.summary ?? ""}
+              {""}
             </Card>
           </div>
           {proposalType !== "text-proposal" && (
@@ -272,14 +252,14 @@ export default function ProposalDetails({
           <div className="h-7 text-lg font-semibold leading-7 text-foreground">
             Overview
           </div>
-          <OverviewChart votes={votes as IVote[]} isLoading={isLoading} />
+          <OverviewChart votes={[] as any} isLoading={true} />
         </div>
 
         <div className="mt-16 ">
           <div className="mt-4 h-7 text-lg font-semibold leading-7 text-foreground">
             Voters
           </div>
-          <VoterTable votes={votes as IVote[]} isLoading={isLoading} />
+          <VoterTable votes={[] as any} isLoading={true} />
         </div>
       </div>
     </div>

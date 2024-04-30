@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { formatter, truncateHash, type IVote } from "@bera/berajs";
+import { formatter, truncateHash } from "@bera/berajs";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { NotFoundBear } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
@@ -65,7 +65,7 @@ export function VoterTable({
   votes,
   isLoading,
 }: {
-  votes: IVote[];
+  votes: any[];
   isLoading: boolean;
 }) {
   // const [voterTypes, setVoterTypes] = React.useState<ALL | VOTER_TYPE>("all");

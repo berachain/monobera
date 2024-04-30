@@ -2,11 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import {
-  formatter,
-  usePollActiveValidators,
-  usePollGlobalValidatorBribes,
-} from "@bera/berajs";
+import { formatter } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -20,15 +16,11 @@ export default function Validators({
   activeGauges: number;
   bgtSupply: number;
 }) {
-  const { useTotalValidators, isLoading: isActiveValidatorsLoading } =
-    usePollActiveValidators();
-  const totalValidators: number = useTotalValidators();
+  const totalValidators: number = 0;
   const prices = undefined;
-  const { useGlobalActiveBribeValue, isLoading: isGlobalBribeLoading } =
-    usePollGlobalValidatorBribes(prices);
-  const totalBribeValue = useGlobalActiveBribeValue();
+  const totalBribeValue = 0;
 
-  const isDataLoading = isActiveValidatorsLoading || isGlobalBribeLoading;
+  const isDataLoading = true;
   const generalInfo = [
     {
       amount: isDataLoading ? (

@@ -5,13 +5,7 @@ import {
   formatter,
   truncateHash,
   useBeraJs,
-  usePollBribes,
-  usePollDelegatorUnbonding,
-  usePollDelegatorValidators,
-  usePollTotalDelegated,
-  type Validator,
 } from "@bera/berajs";
-import { formatUsd } from "@bera/berajs/src/utils";
 import { blockExplorerUrl, cloudinaryUrl, docsUrl } from "@bera/config";
 import { TokenIconList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -19,11 +13,9 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
-import { useUserGaugeWeight } from "~/hooks/useGaugeWeights";
 import AverageGaugeWeight from "./components/average-gauge-weight";
 import { Banner } from "./components/banner";
 import { ClaimBribesDialog } from "./components/claim-bribes-dialog";
-import UnbondingQueue from "./components/unbonding-queue";
 import YourDelegations from "./components/your-delegations";
 import { BGTSelectionEnum, type BGTselection } from "./types";
 
@@ -34,27 +26,18 @@ export default function Portfolio() {
     BGTSelectionEnum.YOUR_DELEGATIONS,
   );
   const [open, setOpen] = React.useState(false);
-  const { useTotalValidatorsDelegated, useDelegatorValidators } =
-    usePollDelegatorValidators();
-  const delegatedValidators = useDelegatorValidators();
+  const delegatedValidators = undefined;
 
-  const { useTotalDelegatorDelegated } = usePollTotalDelegated();
-  const total = useTotalDelegatorDelegated();
-  const totalValidators = useTotalValidatorsDelegated();
-  const {
-    useDelegatorUnbondingQueue,
-    useDelegatorTotalUnbonding,
-    useDelegatorTotalUnbondingValidators,
-  } = usePollDelegatorUnbonding();
+  const total = undefined;
+  const totalValidators = undefined;
 
-  const totalUnbonding = useDelegatorTotalUnbonding();
-  const { result: unbondingQueue } = useDelegatorUnbondingQueue();
-  const unbondingValidatorCount = useDelegatorTotalUnbondingValidators();
+  const totalUnbonding = undefined;
+  const unbondingQueue = undefined;
+  const unbondingValidatorCount = undefined;
   const prices = undefined;
-  const { useTotalBribes, useBribeTokens, useBribes } = usePollBribes();
-  const totalBribes = useTotalBribes(prices);
-  const bribeTokenList = useBribeTokens();
-  const bribes = useBribes();
+  const totalBribes = undefined;
+  const bribeTokenList = undefined;
+  const bribes = undefined;
   const { write, isLoading, ModalPortal } = useTxn({
     message: "Claiming all bribes",
     actionType: TransactionActionType.CLAIMING_BRIBES,
@@ -65,7 +48,6 @@ export default function Portfolio() {
       console.log(e);
     },
   });
-  useUserGaugeWeight();
   return (
     <div>
       {ModalPortal}
@@ -115,7 +97,7 @@ export default function Portfolio() {
             you have...
           </div>
           <div className="flex flex-col gap-8 md:flex-row">
-            <YellowCard
+            {/* <YellowCard
               tooltip={
                 <div className="flex flex-col gap-1 p-2">
                   {delegatedValidators?.map((validator) => (
@@ -151,7 +133,7 @@ export default function Portfolio() {
             </YellowCard>
             <YellowCard className="flex flex-1 flex-col justify-between">
               <div className="text-5xl font-bold leading-[48px] text-foreground">
-                {formatUsd(totalBribes ?? 0)}
+                0
               </div>
               <div className="flex flex-col items-center py-[8px] text-center text-sm font-semibold leading-tight text-muted-foreground">
                 <TokenIconList size="xl" tokenList={bribeTokenList} />
@@ -200,7 +182,7 @@ export default function Portfolio() {
               >
                 See my queue
               </Button>
-            </YellowCard>
+            </YellowCard> */}
           </div>
           <div className="mt-16 flex flex-col gap-4">
             <div className="mx-auto">
@@ -261,9 +243,9 @@ export default function Portfolio() {
               {tab === BGTSelectionEnum.AVERAGE_GAUGE_WEIGHT && (
                 <AverageGaugeWeight />
               )}
-              {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
+              {/* {tab === BGTSelectionEnum.UNBONDING_QUEUE && (
                 <UnbondingQueue unbondingQueue={unbondingQueue} />
-              )}
+              )} */}
             </div>
           </div>
         </>
@@ -272,13 +254,13 @@ export default function Portfolio() {
   );
 }
 
-const MyValidator = ({ validator }: { validator: Validator }) => {
-  const { useValidatorDelegation } = usePollTotalDelegated();
-  const userDelegated = useValidatorDelegation(validator.operatorAddr);
-  return (
-    <div className="flex w-[200px] justify-between leading-5 text-muted-foreground">
-      <div>{validator.description.moniker}</div>
-      <div>{formatter.format(Number(userDelegated))} BGT</div>
-    </div>
-  );
-};
+// const MyValidator = ({ validator }: { validator: Validator }) => {
+//   const { useValidatorDelegation } = usePollTotalDelegated();
+//   const userDelegated = useValidatorDelegation(validator.operatorAddr);
+//   return (
+//     <div className="flex w-[200px] justify-between leading-5 text-muted-foreground">
+//       <div>{validator.description.moniker}</div>
+//       <div>{formatter.format(Number(userDelegated))} BGT</div>
+//     </div>
+//   );
+// };

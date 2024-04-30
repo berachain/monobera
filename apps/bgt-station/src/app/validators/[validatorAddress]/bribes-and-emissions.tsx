@@ -2,7 +2,6 @@ import React from "react";
 import {
   // formatUsd,
   // usePollActiveValidators,
-  usePollValidatorBribes,
 } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { type Address } from "viem";
@@ -18,9 +17,6 @@ export default function BribesAndEmissions({
   currentBribeValue: number;
   validatorAddress: Address;
 }) {
-  const { useActiveValidatorBribes, isLoading: isBribesLoading } =
-    usePollValidatorBribes(validatorAddress);
-
   // const { useValidatorTokens } = usePollActiveValidators();
   // const totalDelegated = useValidatorTokens(validatorAddress);
   // const amountPerBgt = useMemo(() => {
@@ -31,7 +27,7 @@ export default function BribesAndEmissions({
   //   return Number(currentBribeValue) / totalDelegated;
   // }, [totalDelegated, currentBribeValue]);
 
-  const bribes = useActiveValidatorBribes();
+  const bribes = undefined;
 
   return (
     <div className="flex flex-col gap-4">
@@ -39,7 +35,7 @@ export default function BribesAndEmissions({
         Bribes
         <Tooltip text="Overview of bribe information on this validator" />
       </div>
-      {isBribesLoading ? (
+      {/* {true ? (
         <div>
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
             {[0, 0, 0].map((_: any, index: number) => (
@@ -63,7 +59,7 @@ export default function BribesAndEmissions({
             </>
           )}
         </>
-      )}
+      )} */}
     </div>
   );
 }
