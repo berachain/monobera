@@ -5,7 +5,7 @@ Action that returns the appropriate payload / arguments for the swap smart contr
 ## Import
 
 ```ts
-import { getSwapPayload } from "@bera/berajs";
+import { getSwapPayload } from "@bera/berajs/actions";
 ```
 
 ## Usage
@@ -13,12 +13,8 @@ import { getSwapPayload } from "@bera/berajs";
 :::code-group
 
 ```ts twoslash [example.ts]
-import {
-  getSwap,
-  getSwapPayload,
-  multiswapAbi,
-  useBeraContractWrite,
-} from "@bera/berajs";
+import { multiswapAbi, useBeraContractWrite } from "@bera/berajs";
+import { getSwap, getSwapPayload } from "@bera/berajs/actions";
 
 import { beraConfig } from "./config";
 
@@ -74,13 +70,13 @@ export const beraConfig: BeraConfig = {
 ## Parameters
 
 ```ts twoslash
-import { type getSwapPayload } from "@bera/berajs";
+import { type getSwapPayload } from "@bera/berajs/actions";
 ```
 
 ## Returns
 
 ```ts twoslash
-import { type PayloadReturnType } from "@bera/berajs";
+import { type PayloadReturnType } from "@bera/berajs/actions";
 
 type getSwapPayloadResult =
   | PayloadReturnType<[ICrocSwapStep[], bigint, bigint]>
