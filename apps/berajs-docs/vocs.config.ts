@@ -59,6 +59,10 @@ export default defineConfig({
               text: "usePoolHistoricalData",
               link: "/react/dex/usePoolHistoricalData/",
             },
+            {
+              text: "useUserPools",
+              link: "/react/dex/useUserPools/",
+            },
           ],
         },
         {
@@ -169,6 +173,10 @@ export default defineConfig({
           text: "PoolV2",
           link: "/types/PoolV2/",
         },
+        {
+          text: "IUserPool",
+          link: "/types/IUserPool/",
+        },
       ],
     },
     {
@@ -214,6 +222,10 @@ export default defineConfig({
             {
               text: "getPoolHistoricalData",
               link: "/actions/dex/getPoolHistoricalData/",
+            },
+            {
+              text: "searchUserPools",
+              link: "/actions/dex/searchUserPools/",
             },
           ],
         },
