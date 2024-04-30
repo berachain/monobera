@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  getLendBorrowPayload,
   lendPoolImplementationAbi,
   useBeraJs,
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
 } from "@bera/berajs";
+import { getLendBorrowPayload } from "@bera/berajs/actions";
 import { lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,

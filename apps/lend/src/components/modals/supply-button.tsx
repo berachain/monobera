@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   TransactionActionType,
-  getLendSupplyPayload,
   lendPoolImplementationAbi,
   useBeraJs,
   usePollAllowance,
@@ -11,6 +10,7 @@ import {
   usePollWalletBalances,
   type BalanceToken,
 } from "@bera/berajs";
+import { getLendSupplyPayload } from "@bera/berajs/actions";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
   ApproveButton,
