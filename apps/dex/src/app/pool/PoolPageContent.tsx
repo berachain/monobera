@@ -283,8 +283,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -304,8 +304,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -327,8 +327,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -558,7 +558,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               value={Selection.Swaps}
               className="mt-0 overflow-x-auto"
             >
-              <EventTable pool={pool} events={swaps} isLoading={isLoading} />
+              <EventTable pool={pool} events={swapData} isLoading={isLoading} />
             </TabsContent>
             <TabsContent
               value={Selection.AddsWithdrawals}
@@ -566,7 +566,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             >
               <EventTable
                 pool={pool}
-                events={provisions}
+                events={provisionData}
                 isLoading={isLoading}
               />
             </TabsContent>
