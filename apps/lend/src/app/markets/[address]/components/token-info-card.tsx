@@ -5,6 +5,7 @@ import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 export default function TokenInfoCard({
   token,
@@ -58,6 +59,9 @@ export default function TokenInfoCard({
       ),
     },
   ];
+
+  const { walletConnector } = useDynamicContext();
+
   return (
     <Card className="flex flex-col gap-6 rounded-lg border border-border bg-background p-6 lg:flex-row lg:justify-between">
       <div className="flex items-center gap-4 ">
@@ -77,12 +81,14 @@ export default function TokenInfoCard({
           >
             <Icons.external className="relative h-4 w-4 text-muted-foreground" />
           </Link>
-          <div
-            className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl"
-            onClick={() => addTokenToWallet(token)}
-          >
-            <Icons.wallet className="relative h-4 w-4 text-muted-foreground" />
-          </div>
+          {walletConnector?.name === "MetaMask" && (
+            <div
+              className="h-fit w-fit rounded-full border border-border bg-muted p-2 hover:cursor-pointer md:rounded-xl"
+              onClick={() => addTokenToWallet(token)}
+            >
+              <Icons.wallet className="relative h-4 w-4 text-muted-foreground" />
+            </div>
+          )}
         </div>
       </div>
 
