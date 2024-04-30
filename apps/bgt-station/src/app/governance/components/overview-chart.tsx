@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { formatter, truncateHash, type IVote } from "@bera/berajs";
+import { formatter, truncateHash } from "@bera/berajs";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card } from "@bera/ui/card";
@@ -62,7 +62,7 @@ const Options = {
   },
 };
 
-const getChartData = (data: IVote[]) => {
+const getChartData = (data: any[]) => {
   return {
     labels: data.map(
       (da, _) =>
@@ -94,7 +94,7 @@ export function OverviewChart({
   votes,
   isLoading,
 }: {
-  votes: IVote[];
+  votes: any[];
   isLoading: boolean;
 }) {
   const [voteType, setVoteType] = React.useState<any>("all");

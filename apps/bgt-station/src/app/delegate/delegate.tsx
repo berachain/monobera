@@ -3,15 +3,7 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import {
-  TransactionActionType,
-  useBeraJs,
-  usePollAccountDelegations,
-  usePollActiveValidators,
-  usePollDelegatorValidators,
-  usePollGlobalValidatorBribes,
-} from "@bera/berajs";
-import { STAKING_PRECOMPILE_ABI } from "@bera/berajs/src/config";
+import { TransactionActionType, useBeraJs } from "@bera/berajs";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -44,17 +36,10 @@ export default function Delegate({
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
   const [activeAction, setActiveAction] = React.useState<DelegateEnum>(action);
 
-  const { useSelectedAccountDelegation } = usePollAccountDelegations(validator);
-  usePollActiveValidators();
-  usePollDelegatorValidators();
   const prices = undefined;
-  const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
-  const { useDelegatorValidators } = usePollDelegatorValidators();
-  const delegatedValidators = useDelegatorValidators();
-  const _ = useDelegatorPolValidators(
-    delegatedValidators?.map((d: any) => d.operatorAddr),
-  );
-  const bgtDelegated = useSelectedAccountDelegation();
+  const delegatedValidators = undefined;
+  const _ = undefined;
+  const bgtDelegated = undefined;
 
   const isBadRedelegate =
     validator === redelegateValidator &&
@@ -236,7 +221,7 @@ export default function Delegate({
                 case DelegateEnum.DELEGATE:
                   write({
                     address: stakingAddress,
-                    abi: STAKING_PRECOMPILE_ABI,
+                    abi: [] as any,
                     functionName: "delegate",
                     params: [validator, parseUnits(amount ?? "0", 18)],
                   });
@@ -244,7 +229,7 @@ export default function Delegate({
                 case DelegateEnum.REDELEGATE:
                   unbondRedelegate({
                     address: stakingAddress,
-                    abi: STAKING_PRECOMPILE_ABI,
+                    abi: [] as any,
                     functionName: "beginRedelegate",
                     params: [
                       validator,
@@ -257,7 +242,7 @@ export default function Delegate({
                 case DelegateEnum.UNBOND:
                   unbondWrite({
                     address: stakingAddress,
-                    abi: STAKING_PRECOMPILE_ABI,
+                    abi: [] as any,
                     functionName: "undelegate",
                     params: [validator, parseUnits(amount ?? "0", 18)],
                   });

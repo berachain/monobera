@@ -2,11 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  truncateHash,
-  usePollActiveValidators,
-  usePollGlobalValidatorBribes,
-} from "@bera/berajs";
+import { truncateHash } from "@bera/berajs";
 import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
@@ -24,10 +20,8 @@ export default function Validator({
   validatorAddress: Address;
 }) {
   const prices = undefined;
-  const { usePolValidator } = usePollGlobalValidatorBribes(prices);
-  const validator = usePolValidator(validatorAddress);
-  const { usePercentageDelegated } = usePollActiveValidators();
-  const percentageDelegated = usePercentageDelegated(validatorAddress);
+  const validator = undefined;
+  const percentageDelegated = undefined;
 
   return (
     <div className="relative flex flex-col gap-16">
@@ -41,7 +35,7 @@ export default function Validator({
             Validators
           </Link>
           <div className="text-center">
-            {validator?.status === "BOND_STATUS_BONDED" ? (
+            {/* {validator?.status === "BOND_STATUS_BONDED" ? (
               <Badge
                 variant="success"
                 className="border-none bg-success px-2 py-1 text-xs"
@@ -55,20 +49,20 @@ export default function Validator({
               >
                 Inactive
               </Badge>
-            )}
+            )} */}
           </div>
           <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
-            <ValidatorIcon
+            {/* <ValidatorIcon
               address={validatorAddress}
               description={validator?.description?.identity ?? undefined}
               className="h-12 w-12"
             />
             {validator?.description.moniker ?? (
               <Skeleton className="inline-block h-12 w-[100px]" />
-            )}
+            )} */}
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-2">
+          {/* <div className="flex flex-col items-center justify-center gap-2">
             <div className="text-sm font-medium leading-none text-muted-foreground">
               Operator address:{" "}
               {validator ? (
@@ -85,10 +79,10 @@ export default function Validator({
                 <Skeleton className="inline-block h-[14px] w-[100px]" />
               )}
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="mt-8 flex flex-col items-center gap-16 lg:flex-row lg:gap-4">
-          <ValidatorDetails
+          {/* <ValidatorDetails
             address={validatorAddress}
             decription={
               validator ? validator?.description.details ?? "" : undefined
@@ -104,11 +98,11 @@ export default function Validator({
             votingPower={`${percentageDelegated?.toFixed(2) ?? 0}%`}
             website={validator?.description.website ?? ""}
             vApy={validator?.vApy ? validator.vApy.toFixed(2) : "0"}
-          />
+          /> */}
           {/* <Uptime address={validatorAddress} /> */}
         </div>
       </div>
-
+      {/* 
       <BribesAndEmissions
         // historicalBribes={
         //   (data as any)?.historicalBribes as FormattedHistoricalBribes[]
@@ -116,7 +110,7 @@ export default function Validator({
         // cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
         currentBribeValue={validator?.totalActiveBribeUsdAmount}
         validatorAddress={validatorAddress}
-      />
+      /> */}
 
       <div className="">
         <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">

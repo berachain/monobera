@@ -1,31 +1,20 @@
 import React from "react";
-import {
-  usePollDelegatorValidators,
-  usePollGlobalValidatorBribes,
-  type PoLValidator,
-} from "@bera/berajs";
 import { cloudinaryUrl, docsUrl } from "@bera/config";
 
 import { Banner } from "./banner";
 import ValidatorCard from "./validator-card";
 
 export default function YourDelegations() {
-  const { useDelegatorValidators, useTotalValidatorsDelegated } =
-    usePollDelegatorValidators();
-  const total = useTotalValidatorsDelegated();
-  const delegatedValidators = useDelegatorValidators();
+  const total = undefined;
+  const delegatedValidators = undefined;
 
   const prices = undefined;
-  const { useDelegatorPolValidators } = usePollGlobalValidatorBribes(prices);
-  const delegatorPolValidators = useDelegatorPolValidators(
-    delegatedValidators?.map((d: any) => d.operatorAddr),
-  );
-
+  const delegatorPolValidators = [] as any[];
   return (
     <div>
       {total !== 0 && !Number.isNaN(total) ? (
         <div className="flex flex-col gap-3">
-          {delegatorPolValidators?.map((validator: PoLValidator) => (
+          {delegatorPolValidators?.map((validator: any) => (
             <ValidatorCard validator={validator} key={validator.operatorAddr} />
           ))}
           {delegatorPolValidators?.length === 0 && (

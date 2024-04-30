@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  defaultBeraConfig,
   formatUsd,
   usePollEpochs,
   useTokenInformation,
@@ -33,25 +32,22 @@ const BribeCard = ({
   numBlockProposals: bigint;
 }) => {
   const [token, setToken] = useState<Token | undefined>(undefined);
-  const { tokenDictionary } = useTokens();
-  const { read, tokenInformation } = useTokenInformation();
+  // useEffect(() => {
+  //   if (!tokenDictionary || !tokenAddress) setToken(undefined);
+  //   if (tokenDictionary && tokenAddress) {
+  //     if (!tokenDictionary[tokenAddress]) {
+  //       void read({ address: tokenAddress });
+  //     } else {
+  //       setToken(tokenDictionary[tokenAddress]);
+  //     }
+  //   }
+  // }, [tokenDictionary, tokenAddress]);
 
-  useEffect(() => {
-    if (!tokenDictionary || !tokenAddress) setToken(undefined);
-    if (tokenDictionary && tokenAddress) {
-      if (!tokenDictionary[tokenAddress]) {
-        void read({ address: tokenAddress });
-      } else {
-        setToken(tokenDictionary[tokenAddress]);
-      }
-    }
-  }, [tokenDictionary, tokenAddress]);
-
-  useEffect(() => {
-    if (tokenInformation) {
-      setToken(tokenInformation);
-    }
-  }, [tokenInformation]);
+  // useEffect(() => {
+  //   if (tokenInformation) {
+  //     setToken(tokenInformation);
+  //   }
+  // }, [tokenInformation]);
 
   const price = 0;
   const formattedAmountPerProposal = Number(

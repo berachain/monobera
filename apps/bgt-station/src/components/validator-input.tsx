@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useBeraJs, usePollAccountDelegations } from "@bera/berajs";
+import { useBeraJs } from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -34,9 +34,7 @@ export default function ValidatorInput({
 }) {
   const router = useRouter();
   const { isReady } = useBeraJs();
-  const { useSelectedAccountDelegation } =
-    usePollAccountDelegations(validatorAddress);
-  const bgtDelegated = useSelectedAccountDelegation();
+  const bgtDelegated = 0;
 
   return (
     <div className="relative">
@@ -97,7 +95,7 @@ export default function ValidatorInput({
               <span
                 className="underline hover:cursor-pointer"
                 onClick={() => {
-                  if (bgtDelegated) onAmountChange(bgtDelegated.toString());
+                  if (bgtDelegated) onAmountChange("0");
                 }}
               >
                 MAX

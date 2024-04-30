@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { formatUsd, usePollBribes, type FormattedBribe } from "@bera/berajs";
+import { formatUsd } from "@bera/berajs";
 import { TokenIcon, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -32,12 +32,6 @@ export function ClaimBribesDialog({
   isLoading,
 }: Props) {
   const prices = undefined;
-  const { useFormattedValidatorUserBribes, useBribeTokensSymbol } =
-    usePollBribes();
-  const formattedBribes: FormattedBribe[] =
-    useFormattedValidatorUserBribes(prices);
-
-  const { data: symbols } = useBribeTokensSymbol();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -64,7 +58,7 @@ export function ClaimBribesDialog({
               </span>
             </div>
           </div>
-          {formattedBribes
+          {/* {formattedBribes
             .filter((reward) => reward.totalValue !== 0)
             .map((bribe: FormattedBribe, index) => {
               return (
@@ -111,7 +105,7 @@ export function ClaimBribesDialog({
                   </div>
                 </div>
               );
-            })}
+            })} */}
           <Button
             onClick={() => write()}
             disabled={isLoading}

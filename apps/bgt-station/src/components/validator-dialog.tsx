@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  truncateHash,
-  usePollActiveValidators,
-  type Validator,
-} from "@bera/berajs";
+import { truncateHash } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import {
@@ -17,7 +13,7 @@ import { Input } from "@bera/ui/input";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onSelectedValidator: (validator: Validator) => void;
+  onSelectedValidator: (validator: any) => void;
   selectedValidators: string[];
   fromAddress: `0x{string}`;
 };
@@ -29,55 +25,55 @@ export default function ValidatorDialog({
   selectedValidators,
   fromAddress,
 }: Props) {
-  const { useActiveValidators } = usePollActiveValidators();
+  // const { useActiveValidators } = usePollActiveValidators();
 
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
 
-  const validators = useActiveValidators();
+  // const validators = useActiveValidators();
 
-  const [filteredValidators, setFilteredValidators] = useState<Validator[]>(
-    validators?.filter(
-      (validator: Validator) =>
-        validator.operatorAddr !== fromAddress &&
-        !selectedValidators?.some(
-          (selectedValidatorAddress: string) =>
-            selectedValidatorAddress === validator.operatorAddr,
-        ),
-    ) ?? [],
-  );
+  // const [filteredValidators, setFilteredValidators] = useState<Validator[]>(
+  //   validators?.filter(
+  //     (validator: Validator) =>
+  //       validator.operatorAddr !== fromAddress &&
+  //       !selectedValidators?.some(
+  //         (selectedValidatorAddress: string) =>
+  //           selectedValidatorAddress === validator.operatorAddr,
+  //       ),
+  //   ) ?? [],
+  // );
 
-  useEffect(() => {
-    if (search.length !== 0) {
-      const filteredValidators = validators?.filter(
-        (validator: Validator) =>
-          validator.description.moniker
-            .toLowerCase()
-            .includes(search.toLowerCase()) ||
-          validator.operatorAddr.toLowerCase().includes(search.toLowerCase()),
-      );
+  // useEffect(() => {
+  //   if (search.length !== 0) {
+  //     const filteredValidators = validators?.filter(
+  //       (validator: Validator) =>
+  //         validator.description.moniker
+  //           .toLowerCase()
+  //           .includes(search.toLowerCase()) ||
+  //         validator.operatorAddr.toLowerCase().includes(search.toLowerCase()),
+  //     );
 
-      setFilteredValidators(filteredValidators ?? []);
-    }
-  }, [search]); // Include 'filteredValidators' in the dependency array
+  //     setFilteredValidators(filteredValidators ?? []);
+  //   }
+  // }, [search]); // Include 'filteredValidators' in the dependency array
 
-  const onValidatorSelect = (validator: Validator) => {
-    onSelectedValidator(validator);
-    setOpen(false);
-    setSearch("");
-  };
+  // const onValidatorSelect = (validator: Validator) => {
+  //   onSelectedValidator(validator);
+  //   setOpen(false);
+  //   setSearch("");
+  // };
 
-  const handleOpenChange = () => {
-    if (open) {
-      setSearch("");
-      setOpen(false);
-    } else {
-      setOpen(true);
-    }
-  };
+  // const handleOpenChange = () => {
+  //   if (open) {
+  //     setSearch("");
+  //     setOpen(false);
+  //   } else {
+  //     setOpen(true);
+  //   }
+  // };
 
   return (
     <>
-      <Dialog open={open} onOpenChange={handleOpenChange}>
+      {/* <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="px-4 sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Validator search</DialogTitle>
@@ -99,14 +95,14 @@ export default function ValidatorDialog({
               : "No validators found"}
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }
 
 type RowProps = {
-  validator: Validator;
-  onValidatorSelect: (validator: Validator) => void;
+  validator: any;
+  onValidatorSelect: (validator: any) => void;
 };
 const ValidatorDialogRow = ({ validator, onValidatorSelect }: RowProps) => {
   return (
