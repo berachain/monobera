@@ -283,8 +283,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isAllDataLoadingMore
                 ? "Loading..."
                 : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -304,8 +304,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isSwapDataLoadingMore
                 ? "Loading..."
                 : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -327,8 +327,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               {isProvisionDataLoadingMore
                 ? "Loading..."
                 : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
+                ? "No more transactions"
+                : "Load more"}
             </Button>
           )}
         </>
@@ -466,59 +466,62 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
               ]}
             />
           </Card>
-          {isConnected && !isWrongNetwork && (
-            <Card>
-              <CardContent className="flex items-center justify-between gap-4 p-4">
-                <div className="w-full ">
-                  <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
-                    <h3 className="text-sm font-medium text-muted-foreground">
-                      My pool balance
-                    </h3>
-                    <div className="text-2xl">
-                      {isReady ? (
-                        isPositionBreakdownLoading ? (
-                          <Skeleton className="h-[32px] w-[150px]" />
+          {isConnected &&
+            !isWrongNetwork &&
+            userPositionBreakdown &&
+            userPositionBreakdown.estimatedHoneyValue > 0 && (
+              <Card>
+                <CardContent className="flex items-center justify-between gap-4 p-4">
+                  <div className="w-full ">
+                    <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        My pool balance
+                      </h3>
+                      <div className="text-2xl">
+                        {isReady ? (
+                          isPositionBreakdownLoading ? (
+                            <Skeleton className="h-[32px] w-[150px]" />
+                          ) : (
+                            <FormattedNumber
+                              value={
+                                userPositionBreakdown?.estimatedHoneyValue ?? 0
+                              }
+                              symbol="USD"
+                            />
+                          )
                         ) : (
-                          <FormattedNumber
-                            value={
-                              userPositionBreakdown?.estimatedHoneyValue ?? 0
-                            }
-                            symbol="USD"
-                          />
-                        )
-                      ) : (
-                        <Skeleton className="h-[32px] w-[150px]" />
-                      )}
+                          <Skeleton className="h-[32px] w-[150px]" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="mt-4 lg:mt-8">
+                      <TokenView
+                        tokens={[
+                          {
+                            address: pool.baseInfo.address,
+                            symbol: pool.baseInfo.symbol,
+                            value:
+                              truncateFloat(
+                                userPositionBreakdown?.formattedBaseAmount,
+                                6,
+                              )?.toString() ?? "0",
+                          },
+                          {
+                            address: pool.quoteInfo.address,
+                            symbol: pool.quoteInfo.symbol,
+                            value:
+                              truncateFloat(
+                                userPositionBreakdown?.formattedQuoteAmount,
+                                6,
+                              )?.toString() ?? "0",
+                          },
+                        ]}
+                      />
                     </div>
                   </div>
-                  <div className="mt-4 lg:mt-8">
-                    <TokenView
-                      tokens={[
-                        {
-                          address: pool.baseInfo.address,
-                          symbol: pool.baseInfo.symbol,
-                          value:
-                            truncateFloat(
-                              userPositionBreakdown?.formattedBaseAmount,
-                              6,
-                            )?.toString() ?? "0",
-                        },
-                        {
-                          address: pool.quoteInfo.address,
-                          symbol: pool.quoteInfo.symbol,
-                          value:
-                            truncateFloat(
-                              userPositionBreakdown?.formattedQuoteAmount,
-                              6,
-                            )?.toString() ?? "0",
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                </CardContent>
+              </Card>
+            )}
         </div>
       </div>
 
