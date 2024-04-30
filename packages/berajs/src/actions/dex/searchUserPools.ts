@@ -57,7 +57,7 @@ export const searchUserPools = async ({
   args: { account, keyword = "" },
   config,
   publicClient,
-}: GetUserPoolsProps) => {
+}: GetUserPoolsProps): Promise<IUserPool[] | undefined> => {
   if (!publicClient) return undefined;
   const hexChainId = toHex(chainId);
   if (!account || !hexChainId) {
