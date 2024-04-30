@@ -48,13 +48,13 @@ interface Call {
 }
 
 interface GetUserPoolsProps {
-  args: { account: Address };
+  args: { account: Address; keyword?: string };
   config: BeraConfig;
   publicClient: PublicClient;
 }
 
-export const getUserPools = async ({
-  args: { account },
+export const searchUserPools = async ({
+  args: { account, keyword = "" },
   config,
   publicClient,
 }: GetUserPoolsProps) => {
@@ -155,7 +155,7 @@ export const getUserPools = async ({
         variables: {
           baseAssets: baseTokenAddresses,
           quoteAssets: quoteTokenAddresses,
-          keyword: "",
+          keyword,
         },
       })
       .then((res: any) => {
