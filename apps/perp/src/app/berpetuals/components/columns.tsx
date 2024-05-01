@@ -339,7 +339,7 @@ export const getPositionColumns = (markets: IMarket[]) => {
         <DataTableColumnHeader column={column} title="Borrow Fee" />
       ),
       cell: ({ row }) => {
-        return <div>{formatBigIntUsd(row.original.borrowing_fee, 10)}</div>;
+        return <div>{formatBigIntUsd(row.original.borrowing_fee, 18)}</div>;
       },
       accessorKey: "borrow_fee",
       enableSorting: false,
