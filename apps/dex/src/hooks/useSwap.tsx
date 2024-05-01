@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   multiswapAbi,
   useBeraJs,
@@ -254,14 +254,18 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   });
 
   const slippage = useSlippage();
-  const swapPayload = getSwapPayload({
-    args: {
-      swapInfo,
-      slippage,
-      baseToken: selectedFrom,
-      quoteToken: selectedTo,
-    },
-  });
+  const swapPayload = useMemo(
+    () =>
+      getSwapPayload({
+        args: {
+          swapInfo,
+          slippage,
+          baseToken: selectedFrom,
+          quoteToken: selectedTo,
+        },
+      }),
+    [swapInfo, slippage, selectedFrom, selectedTo],
+  );
 
   const onSwitch = () => {
     const tempFrom = selectedFrom;
@@ -298,27 +302,31 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   // Calculate gas for connected wallet user (more accurate)
   const { account } = useBeraJs();
 
-  let gasParams = null;
-  if (isWrap) {
-    gasParams = {
-      address: beraTokenAddress,
-      abi: wberaAbi,
-      functionName: wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
-      args:
-        wrapType === WRAP_TYPE.WRAP ? [] : [parseUnits(`${swapAmount}`, 18)],
-      value: wrapType === WRAP_TYPE.WRAP ? parseUnits(`${swapAmount}`, 18) : 0n,
-      account,
-    };
-  } else if (swapPayload?.payload && swapPayload?.payload?.length > 1) {
-    gasParams = {
-      address: crocMultiSwapAddress,
-      abi: multiswapAbi,
-      functionName: "multiSwap",
-      args: swapPayload?.payload,
-      value: swapInfo?.value,
-      account,
-    };
-  }
+  const gasParams = useMemo(() => {
+    if (isWrap) {
+      return {
+        address: beraTokenAddress,
+        abi: wberaAbi,
+        functionName: wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
+        args:
+          wrapType === WRAP_TYPE.WRAP ? [] : [parseUnits(`${swapAmount}`, 18)],
+        value:
+          wrapType === WRAP_TYPE.WRAP ? parseUnits(`${swapAmount}`, 18) : 0n,
+        account,
+      };
+    }
+    if (swapPayload?.payload && swapPayload?.payload?.length > 1) {
+      return {
+        address: crocMultiSwapAddress,
+        abi: multiswapAbi,
+        functionName: "multiSwap",
+        args: swapPayload?.payload,
+        value: swapInfo?.value,
+        account,
+      };
+    }
+    return undefined;
+  }, [swapInfo, swapPayload]);
   const gasData = useGasData({ contractArgs: gasParams });
   const beraInUsd = useTokenHoneyPrice({
     tokenAddress: nativeTokenAddress,
@@ -327,6 +335,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   // Calculate general gas for unconnected wallet user (less accurate)
   const generalGasEstimateData = useGasPrice();
+
   const generalGasEstimateInBera = generalGasEstimateData.data
     ? parseFloat(
         formatEther(
