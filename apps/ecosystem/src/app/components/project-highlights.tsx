@@ -94,12 +94,12 @@ export default function ProjectHighlights() {
     highlights.length - currentIndex * cardsVisible;
 
   return (
-    <ComponentTransition>
-      <div className="w-full px-4 pb-1 xl:w-[1280px]">
-        <div className="flex flex-col items-center justify-center gap-4 lg:flex-row xl:justify-between">
-          <div className="text-center text-5xl font-bold text-foreground">
+    <ComponentTransition className="w-full xl:w-[1280px]">
+      <div className="flex w-full flex-col px-4 pb-1 xl:w-[1280px]">
+        <div className="== flex flex-col items-center justify-center gap-4 lg:flex-row lg:justify-start">
+          <h1 className="text-center text-5xl font-bold text-foreground">
             Project Spotlight
-          </div>
+          </h1>
           <div className="flex flex-col items-center justify-center">
             <div className="flex">
               <Button
@@ -121,11 +121,10 @@ export default function ProjectHighlights() {
             </div>
           </div>
         </div>
-
         <div className="w-full overflow-hidden">
           <div
             onTouchStart={(e) => e.stopPropagation()}
-            className="my-8 flex gap-4 scroll-smooth transition-transform duration-500 ease-linear "
+            className="my-8 flex gap-4 scroll-smooth transition-transform duration-500 ease-linear"
             style={{
               transform: `translateX(-${currentIndex * cardsVisible * 10}%)`,
             }}
