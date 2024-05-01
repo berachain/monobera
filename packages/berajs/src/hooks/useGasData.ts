@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { EstimateContractGasParameters } from "viem";
-import { useGasPrice, usePublicClient } from "wagmi";
+import { usePublicClient } from "wagmi";
 
 export const useGasData = ({
   contractArgs,
@@ -10,10 +10,14 @@ export const useGasData = ({
   const publicClient = usePublicClient();
 
   const [gasData, setGasData] = useState<bigint | undefined>();
-  const generalGasPriceEstimate = useGasPrice();
   useEffect(() => {
-    if (contractArgs === undefined && generalGasPriceEstimate.data) {
-      setGasData(BigInt(parseFloat(`${generalGasPriceEstimate.data}`)));
+    if (contractArgs === undefined) {
+      publicClient
+        ?.getGasPrice()
+        .then((generalGasPrice) => {
+          setGasData(BigInt(parseFloat(`${generalGasPrice}`)));
+        })
+        .catch();
       return;
     }
     if (!contractArgs) {
@@ -25,7 +29,7 @@ export const useGasData = ({
       .then((data) => {
         setGasData(data);
       })
-      .catch((e) => {
+      .catch((e: unknown) => {
         setGasData(undefined);
 
         const isFalseAlarm =
@@ -33,10 +37,10 @@ export const useGasData = ({
           `${e}`.includes("insufficient allowance");
 
         if (!isFalseAlarm) {
-          console.log(e);
+          console.error("useGasData: ", e);
         }
       });
-  }, [contractArgs, generalGasPriceEstimate]);
+  }, [contractArgs]);
 
   return gasData;
 };
