@@ -1,4 +1,4 @@
-import { gTokenContractAddress, multicallAddress } from "@bera/config";
+import { bhoneyVaultContractAddress, multicallAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
@@ -31,19 +31,19 @@ export const usePollBHoneyEpochs = () => {
         const call: Call[] = [
           {
             abi: bTokenAbi,
-            address: gTokenContractAddress,
+            address: bhoneyVaultContractAddress,
             functionName: "currentEpoch",
             args: [],
           },
           {
             abi: bTokenAbi,
-            address: gTokenContractAddress,
+            address: bhoneyVaultContractAddress,
             functionName: "currentEpochStart",
             args: [],
           },
           {
             abi: bTokenAbi,
-            address: gTokenContractAddress,
+            address: bhoneyVaultContractAddress,
             functionName: "currentEpochEnd",
             args: [],
           },
