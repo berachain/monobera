@@ -1,9 +1,5 @@
-import {
-  type GetPoolRecentSwapsResult,
-  type IProvision,
-  type ISwaps,
-  type PoolV2,
-} from "@bera/berajs";
+import { type IProvision, type ISwaps, type PoolV2 } from "@bera/berajs";
+import { type GetPoolRecentSwapsResult } from "@bera/berajs/actions";
 import useSWRInfinite from "swr/infinite";
 
 const DEFAULT_SIZE = 10;

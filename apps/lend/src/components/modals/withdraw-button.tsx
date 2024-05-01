@@ -3,17 +3,16 @@ import { calculateHealthFactorFromBalancesBigUnits } from "@aave/math-utils";
 import {
   BalanceToken,
   TransactionActionType,
-  getLendWithdrawPayload,
   lendPoolImplementationAbi,
   useBeraJs,
   usePollReservesDataList,
   usePollUserAccountData,
   usePollWalletBalances,
 } from "@bera/berajs";
+import { getLendWithdrawPayload } from "@bera/berajs/actions";
 import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
   FormattedNumber,
-  POLLING,
   TokenInput,
   useAnalytics,
   useTxn,

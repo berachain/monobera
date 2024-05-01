@@ -2,11 +2,11 @@ import useSWRImmutable from "swr/immutable";
 import { Address, isAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
+import { getTokenInformation } from "~/actions";
 import {
   DefaultHookOptions,
   DefaultHookReturnType,
   Token,
-  getTokenInformation,
   useBeraJs,
 } from "..";
 
