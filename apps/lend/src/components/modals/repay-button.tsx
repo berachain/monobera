@@ -260,16 +260,7 @@ const RepayModalContent = ({
           {Number(amount) === 0 ? "Enter Amount" : "Repay"}
         </Button>
       ) : (
-        <ApproveButton
-          token={honey}
-          spender={lendPoolImplementationAddress}
-          amount={parseUnits(
-            BigNumber(amount ?? "0")
-              .times(2)
-              .toString() as `${number}`,
-            honey.decimals,
-          )}
-        />
+        <ApproveButton token={honey} spender={lendPoolImplementationAddress} />
       )}
     </div>
   );

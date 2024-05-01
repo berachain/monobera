@@ -63,7 +63,7 @@ export default function TokenInfoCard({
   const { walletConnector } = useDynamicContext();
 
   return (
-    <Card className="flex flex-col gap-6 rounded-lg border border-border bg-background p-6 lg:flex-row lg:justify-between">
+    <Card className="flex flex-col gap-6 rounded-md border border-border bg-background p-6 lg:flex-row lg:justify-between">
       <div className="flex items-center gap-4 ">
         {token ? (
           <TokenIcon address={token.address} size="2xl" />
