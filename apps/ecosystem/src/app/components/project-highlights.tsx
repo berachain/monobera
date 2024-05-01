@@ -90,7 +90,7 @@ export default function ProjectHighlights() {
 
   const isAtStart = currentIndex === 0;
   const isAtEnd =
-    currentIndex * cardsVisible >=
+    (currentIndex + 1) * cardsVisible >=
     highlights.length - currentIndex * cardsVisible;
 
   return (
@@ -126,7 +126,7 @@ export default function ProjectHighlights() {
             onTouchStart={(e) => e.stopPropagation()}
             className="my-8 flex gap-4 scroll-smooth transition-transform duration-500 ease-linear"
             style={{
-              transform: `translateX(-${currentIndex * cardsVisible * 10}%)`,
+              transform: `translateX(-${currentIndex * 80}%)`,
             }}
           >
             {highlights.map((section, index) => (
