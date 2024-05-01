@@ -1,12 +1,12 @@
 import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
+import { getWalletBalances } from "~/actions";
 import POLLING from "~/enum/polling";
 import {
   BalanceToken,
   DefaultHookOptions,
   DefaultHookReturnType,
-  getWalletBalances,
   type Token,
 } from "..";
 import { useBeraJs } from "../contexts";

@@ -1,33 +1,20 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { chainId, crocIndexerEndpoint, dexName } from "@bera/config";
-import { Documentation, Footer, useAnalytics } from "@bera/shared-ui";
+import {
+  getGlobalDexStats,
+  type GetGlobalDexStatsResponse,
+} from "@bera/berajs/actions";
+import { dexName } from "@bera/config";
+import {
+  Documentation,
+  Footer,
+  getMetaTitle,
+  useAnalytics,
+} from "@bera/shared-ui";
 
-import { getMetaTitle } from "@bera/shared-ui";
 import Data from "./components/Data";
 import Hero from "./components/Hero";
-
-const getTvlAndVolume = (): Promise<{ tvl?: number; volume?: number }> => {
-  return new Promise((res, rej) =>
-    fetch(
-      `${crocIndexerEndpoint}/v2/global_stats?chainId=0x${chainId.toString(
-        16,
-      )}`,
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        res({
-          tvl: data?.data?.formattedTVL,
-          volume: data?.data?.formattedVolume24H,
-        });
-      })
-      .then()
-      .catch((e) => {
-        rej(e);
-      }),
-  );
-};
 
 export const metadata: Metadata = {
   title: getMetaTitle("Home", dexName),
@@ -38,9 +25,9 @@ export const revalidate = 60;
 
 export default async function Homepage() {
   const { captureException } = useAnalytics();
-  const data = await getTvlAndVolume()
-    .then((res) => res)
-    .catch((e) => {
+  const data = await getGlobalDexStats()
+    .then((res: GetGlobalDexStatsResponse) => res)
+    .catch((e: unknown) => {
       captureException(e);
     });
 
@@ -49,7 +36,7 @@ export default async function Homepage() {
       <>
         <div className="container max-w-1280 pb-16">
           <Hero />
-          <Data tvl={data?.tvl} volume={data?.volume} />
+          <Data tvl={data?.formattedTVL} volume={data?.formattedVolume24H} />
           <Documentation className="my-24" />
         </div>
         <Footer />
