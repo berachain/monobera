@@ -23,7 +23,7 @@ export const usePoolTable = (sorting: any) => {
       : "desc";
 
   const { data, fetchNextPage, isFetching, isFetchingNextPage } =
-    useInfiniteQuery({
+    useInfiniteQuery<any, any, { pages: any[] }>({
       queryKey: ["projects", sortOption, sortOrder, keyword],
       queryFn: async ({ pageParam = 1, queryKey }: any) => {
         try {
@@ -36,10 +36,15 @@ export const usePoolTable = (sorting: any) => {
           );
 
           const response = await res.json();
-          return response.data.pools.map((r: any) => formatPoolData(r));
+          return {
+            data: response.data.pools.map((r: any) =>
+              formatPoolData(r),
+            ) as any[],
+            totalCount: response.data.totalCount,
+          };
         } catch (e) {
           console.error(e);
-          return [];
+          return {};
         }
       },
       initialPageParam: 1,
@@ -49,7 +54,14 @@ export const usePoolTable = (sorting: any) => {
       staleTime: 1000 * 60 * 5, // 5 mins
     });
 
-  const concatData = data ? ([] as PoolV2[]).concat(...data.pages) : [];
+  let concatData: PoolV2[] = [];
+  let totalCount = undefined;
+
+  data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
+    if (!page.data) return;
+    concatData = concatData.concat(page.data);
+    totalCount = page.totalCount;
+  });
 
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
@@ -57,11 +69,11 @@ export const usePoolTable = (sorting: any) => {
     }
   };
 
-  const isReachingEnd =
-    data && data.pages[data.pages.length - 1].length < DEFAULT_SIZE;
+  const isReachingEnd = totalCount ? concatData.length >= totalCount : true;
 
   return {
     data: concatData,
+    totalCount,
     fetchNextPage,
     isReachingEnd,
     search,
