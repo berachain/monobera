@@ -15,7 +15,7 @@ export default function Hero() {
   return (
     <div className="flex flex-col justify-around lg:flex-row">
       <div className="my-16 flex w-full flex-col items-center gap-4 md:my-24 md:gap-8 lg:w-[450px] lg:items-start ">
-        <div className="!whitespace-pre-line text-center text-3xl font-extrabold md:text-4xl lg:text-left lg:text-4xl xl:text-6xl">
+        <div className="!whitespace-pre-line text-center text-3xl font-extrabold md:text-4xl md:text-4xl lg:text-left xl:text-6xl">
           Swap Tokens on <br />
           <span className="bg-gradient-to-r from-[#FFC738] to-[#FF8A00F5] bg-clip-text text-transparent">
             Berachain&apos;s
