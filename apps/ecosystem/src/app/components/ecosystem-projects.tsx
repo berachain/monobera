@@ -130,24 +130,6 @@ export default function EcosystemProjects() {
             />
           </div>
         </div>
-        {/* {ecosystemType.length > 0 && (
-          <div className="flex w-full flex-row flex-wrap items-center gap-2">
-            <div className="font-semibold">
-              {filteredProjectList?.length} Projects filtered by:
-            </div>
-            {ecosystemType.map((type) => (
-              <Button
-                key={type}
-                variant="secondary"
-                className="flex min-w-[50px] items-center justify-center border-none"
-              >
-                <div className="text-sm font-normal text-muted-foreground">
-                  {type}
-                </div>
-              </Button>
-            ))}
-          </div>
-        )} */}
 
         <div className="my-2 w-full border border-solid" />
         {isLoading && (
@@ -168,80 +150,78 @@ export default function EcosystemProjects() {
             (filteredProjectList as EcosystemProject[])
               ?.slice(0, visibleProjects)
               .map((project: EcosystemProject, index: number) => (
-                <Link href={`/project/${project.name}`}>
+                // <Link href={`/project/${project.name}`}>
+                <div
+                  key={index}
+                  className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between sm:h-[296px] sm:w-[260px]"
+                >
                   <div
-                    key={index}
-                    className="flip-card perspective mx-auto flex h-64 w-full flex-col justify-between sm:h-[296px] sm:w-[260px]"
+                    className={cn(
+                      "flip-card-inner transform-style relative w-full rounded-md border  transition-transform duration-700 ease-in-out",
+                      isBeranative(project)
+                        ? "border-solid border-warning-foreground bg-warning bg-opacity-20 hover:bg-warning"
+                        : "border-solid bg-background hover:bg-muted",
+                    )}
                   >
-                    <div
-                      className={cn(
-                        "flip-card-inner transform-style relative w-full rounded-md border  transition-transform duration-700 ease-in-out",
-                        isBeranative(project)
-                          ? "border-solid border-warning-foreground bg-warning bg-opacity-20 hover:bg-warning"
-                          : "border-solid bg-background hover:bg-muted",
-                      )}
-                    >
-                      <div className="flip-card-front flex flex-col items-center justify-center">
-                        <Avatar className="h-[96px] w-[96px]">
-                          <AvatarImage
-                            src={
-                              project.icon?.endsWith(".svg") || !project.icon
-                                ? "https://artio-static-asset-public.s3.ap-southeast-1.amazonaws.com/assets/bera.png"
-                                : project.icon
-                            }
-                            className="rounded-full"
-                          />
-                        </Avatar>
+                    <div className="flip-card-front flex flex-col items-center justify-center">
+                      <Avatar className="h-[96px] w-[96px]">
+                        <AvatarImage
+                          src={
+                            project.icon?.endsWith(".svg") || !project.icon
+                              ? "https://artio-static-asset-public.s3.ap-southeast-1.amazonaws.com/assets/bera.png"
+                              : project.icon
+                          }
+                          className="rounded-full"
+                        />
+                      </Avatar>
 
-                        <div className="pt-4">
-                          <div className="text-lg font-semibold">
-                            {project.name}
-                          </div>
-
-                          {/* Show 2 types */}
-                          <div className="items center flex flex-wrap justify-center gap-2 pt-4 text-foreground">
-                            <Button variant="secondary" className="text-xs">
-                              {project.ecosystemType1}
-                            </Button>
-                            {project.ecosystemType2 && (
-                              <Button variant="secondary" className="text-xs">
-                                {project.ecosystemType2}
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flip-card-back flex flex-col items-center justify-center">
+                      <div className="pt-4">
                         <div className="text-lg font-semibold">
                           {project.name}
                         </div>
 
-                        <div
-                          className="flex p-6 text-center text-sm leading-5 text-foreground"
-                          style={{ maxHeight: "120px", overflowY: "auto" }}
-                        >
-                          {project.description}
-                        </div>
-
-                        <div className="flex items-center justify-center gap-2 pt-4">
-                          {project.goto && (
-                            <Link
-                              href={
-                                project.goto ? project.goto : project.twitter
-                              }
-                            >
-                              <Icons.globe />
-                            </Link>
+                        {/* Show 2 types */}
+                        <div className="items center flex flex-wrap justify-center gap-2 pt-4 text-foreground">
+                          <Button variant="secondary" className="text-xs">
+                            {project.ecosystemType1}
+                          </Button>
+                          {project.ecosystemType2 && (
+                            <Button variant="secondary" className="text-xs">
+                              {project.ecosystemType2}
+                            </Button>
                           )}
-                          <Link href={project.twitter}>
-                            <Icons.twitter />
-                          </Link>
                         </div>
                       </div>
                     </div>
+
+                    <div className="flip-card-back flex flex-col items-center justify-center">
+                      <div className="text-lg font-semibold">
+                        {project.name}
+                      </div>
+
+                      <div
+                        className="flex p-6 text-center text-sm leading-5 text-foreground"
+                        style={{ maxHeight: "120px", overflowY: "auto" }}
+                      >
+                        {project.description}
+                      </div>
+
+                      <div className="flex items-center justify-center gap-2 pt-4">
+                        {project.goto && (
+                          <Link
+                            href={project.goto ? project.goto : project.twitter}
+                          >
+                            <Icons.globe />
+                          </Link>
+                        )}
+                        <Link href={project.twitter}>
+                          <Icons.twitter />
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </Link>
+                </div>
+                // </Link>
               ))
           )}
         </div>

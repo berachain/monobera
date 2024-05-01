@@ -120,7 +120,7 @@ const MultiSelectFormField = React.forwardRef<
               className="flex h-auto min-h-10 w-full items-center justify-between rounded-md border bg-inherit hover:bg-card"
             >
               <div className="mx-auto flex w-full items-center justify-between">
-                <span className="text-sm font-normal text-muted-foreground">
+                <span className="mx-3 text-sm font-normal text-muted-foreground">
                   {placeholder}
                 </span>
               </div>
@@ -194,7 +194,7 @@ const MultiSelectFormField = React.forwardRef<
                 </CommandGroup>
                 <CommandSeparator />
                 <CommandGroup>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-1">
                     {selectedValues.length > 0 && (
                       <>
                         <CommandItem
@@ -207,7 +207,7 @@ const MultiSelectFormField = React.forwardRef<
                             pointerEvents: "auto",
                             opacity: 1,
                           }}
-                          className="flex-1 cursor-pointer justify-center"
+                          className="cursor-pointer justify-center"
                         >
                           Clear
                         </CommandItem>
@@ -224,7 +224,7 @@ const MultiSelectFormField = React.forwardRef<
                         pointerEvents: "auto",
                         opacity: 1,
                       }}
-                      className="flex-1 cursor-pointer justify-center"
+                      className="cursor-pointer justify-center"
                     >
                       Close
                     </CommandItem>
