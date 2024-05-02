@@ -156,6 +156,7 @@ export const PoolSearch = ({
                   router.replace(getPoolUrl(row.original))
                 }
                 onCustomSortingChange={(a: any) => handleNewSort(a)}
+                additionalTableProps={{ state: { sorting } }}
               />
             </div>
           ) : (

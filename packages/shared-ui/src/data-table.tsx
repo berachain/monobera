@@ -77,8 +77,8 @@ function RowSelectHeader<TData, TValue>({
             table.getIsAllPageRowsSelected()
               ? true
               : table.getIsSomePageRowsSelected()
-                ? "indeterminate"
-                : false
+              ? "indeterminate"
+              : false
           }
           onClick={table.getToggleAllPageRowsSelectedHandler()}
         />
@@ -89,8 +89,8 @@ function RowSelectHeader<TData, TValue>({
             table.getIsAllRowsSelected()
               ? true
               : table.getIsSomeRowsSelected()
-                ? "indeterminate"
-                : false
+              ? "indeterminate"
+              : false
           }
           onClick={table.getToggleAllRowsSelectedHandler()}
         />
@@ -205,11 +205,10 @@ export function DataTable<TData, TValue>({
     meta: {
       ...additionalTableProps?.meta,
     },
+    onSortingChange: (value: any) => {
+      onCustomSortingChange?.(value());
+    },
   });
-
-  useEffect(() => {
-    onCustomSortingChange?.(state?.sorting);
-  }, [state]);
 
   return (
     <div
