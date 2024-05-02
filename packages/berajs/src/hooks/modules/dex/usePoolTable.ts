@@ -51,6 +51,7 @@ export const usePoolTable = (sorting: any) => {
       getNextPageParam: (_lastPage, pages) => {
         return pages.length + 1;
       },
+      placeholderData: (prev) => prev,
       staleTime: 1000 * 60 * 5, // 5 mins
     });
 

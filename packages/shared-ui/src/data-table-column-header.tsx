@@ -39,7 +39,7 @@ export function DataTableColumnHeader<TData, TValue>({
           if (column.getIsSorted() === "desc") {
             column.toggleSorting(false);
           } else if (column.getIsSorted() === "asc") {
-            column.toggleSorting(true);
+            column.clearSorting();
           } else {
             column.toggleSorting(true);
           }
