@@ -101,7 +101,7 @@ export const ApproveButton = ({
           });
         }}
       >
-        {isLoading ? "Loading..." : "Approve Infinite"}
+        {isLoading ? "Loading..." : amount ? "Approve Infinite" : "Approve"}
       </Button>
     </div>
   );

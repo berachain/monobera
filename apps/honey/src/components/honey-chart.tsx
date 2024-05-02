@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { GetSupplyDay, GetVolumeDay } from "@bera/graphql";
+import {
+  GetFirstHoneyTxnDate,
+  GetSupplyDay,
+  GetVolumeDay,
+} from "@bera/graphql";
 import { FormattedNumber, Spinner } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraChart } from "@bera/ui/bera-chart";
@@ -165,15 +169,22 @@ export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
     variables: { timestamp_gt: getTime(timeFrame) },
   });
 
+  const { data: FirstTxnData } = useQuery(GetFirstHoneyTxnDate);
+  const firstDateTimeStamp = Number(FirstTxnData?.honeyTxns[0]?.timestamp) ?? 0;
+  const startingTimeStamp = getTime(timeFrame);
   const data =
     chart === Chart.VOLUME
       ? fillVolumeDataByDay(
           graphdata?.honeyVolumeDayDatas ?? [],
-          getTime(timeFrame),
+          firstDateTimeStamp > startingTimeStamp
+            ? firstDateTimeStamp
+            : startingTimeStamp,
         )
       : fillSupplyDataByDay(
           graphdata?.honeySupplyDayDatas ?? [],
-          getTime(timeFrame),
+          firstDateTimeStamp > startingTimeStamp
+            ? firstDateTimeStamp
+            : startingTimeStamp,
         );
 
   const chartData = getData(data, arcade);
