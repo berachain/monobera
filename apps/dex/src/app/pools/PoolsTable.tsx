@@ -41,6 +41,7 @@ export const PoolSearch = ({
     setKeyword,
     setSearch,
     data,
+    totalCount,
     fetchNextPage,
     isLoadingMore,
     isReachingEnd,
@@ -149,7 +150,7 @@ export const PoolSearch = ({
                 key={data.length}
                 data={data ?? []}
                 columns={columns}
-                title={`All Pools (${data?.length ?? "0"})`}
+                title={`All Pools (${totalCount ?? data?.length ?? "0"})`}
                 className="min-w-[1000px]"
                 onRowClick={(row: any) =>
                   router.replace(getPoolUrl(row.original))
