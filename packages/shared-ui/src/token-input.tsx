@@ -219,9 +219,10 @@ export function TokenInput({
           {isConnected && selected && Number(tokenBalance) !== 0 && (
             <div className="flex flex-row items-center justify-start gap-1 px-1">
               <Icons.wallet className="h-3 w-3 text-muted-foreground" />
-              <p className="w-fit max-w-[60px] overflow-hidden truncate p-0 text-xs text-muted-foreground">
-                {tokenBalance ? tokenBalance : "0"}
-              </p>
+              <FormattedNumber
+                value={tokenBalance ? tokenBalance : "0"}
+                className="text-xs text-muted-foreground"
+              />
               {!hideMax && (
                 <p
                   className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
