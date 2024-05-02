@@ -52,6 +52,7 @@ export function TokenDialog({
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
   const { data: tokenData, addNewToken, removeToken } = useTokens();
+  console.log("data", tokenData);
   const { data: tokenInformation, error: tokenInformationError } =
     useTokenInformation({
       address: search as Address,
@@ -68,7 +69,10 @@ export function TokenDialog({
     customTokens
       ? customTokens
       : tokenData?.tokenList?.filter(
-          (token) => !filter.includes(token.address),
+          (token) =>
+            !filter.includes(token.address) &&
+            !token.tags?.includes("supply") &&
+            !token.tags?.includes("debt"),
         ),
   );
 
@@ -76,7 +80,10 @@ export function TokenDialog({
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
       const newFilteredTokens = tokenData?.tokenList?.filter(
-        (token) => !filter.includes(token.address),
+        (token) =>
+          !filter.includes(token.address) &&
+          !token.tags?.includes("supply") &&
+          !token.tags?.includes("debt"),
       );
       if (
         JSON.stringify(newFilteredTokens) !== JSON.stringify(filteredTokens)
@@ -96,9 +103,11 @@ export function TokenDialog({
     if (!customTokens) {
       const filtered = tokenData?.tokenList?.filter(
         (token) =>
-          token.name.toLowerCase().includes(search.toLowerCase()) ||
-          token.symbol.toLowerCase().includes(search.toLowerCase()) ||
-          token.address.toLowerCase().includes(search.toLowerCase()),
+          (token.name.toLowerCase().includes(search.toLowerCase()) ||
+            token.symbol.toLowerCase().includes(search.toLowerCase()) ||
+            token.address.toLowerCase().includes(search.toLowerCase())) &&
+          !token.tags?.includes("supply") &&
+          !token.tags?.includes("debt"),
       );
 
       if (isAddress(search) && filtered?.length === 0) {
@@ -201,7 +210,7 @@ export function TokenDialog({
               )}
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
-            <div className="max-h-[min(600px,60vh)] overflow-y-scroll">
+            <div className="max-h-[min(600px,60vh)] overflow-y-auto">
               {!error ? (
                 filteredTokens?.length ? (
                   filteredTokens
