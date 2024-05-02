@@ -22,7 +22,7 @@ export default function IndividualMarketAnalytics({
 
   return (
     <div className="w-full">
-      <div className="mb-4 inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 hover:cursor-pointer">
+      <div className="mb-4 inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border px-4 py-2 hover:cursor-pointer">
         <Icons.arrowLeft className="relative h-4 w-4" />
         <Link className="text-sm font-medium leading-normal" href="/dashboard">
           Go Back

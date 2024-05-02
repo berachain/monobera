@@ -111,3 +111,11 @@ export const GetGlobalData = gql`
     }
   }
 `;
+
+export const GetFirstHoneyTxnDate = gql`
+  query {
+    honeyTxns(first: 1) {
+      timestamp
+    }
+  }
+`;
