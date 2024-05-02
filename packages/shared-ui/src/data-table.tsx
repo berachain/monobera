@@ -77,8 +77,8 @@ function RowSelectHeader<TData, TValue>({
             table.getIsAllPageRowsSelected()
               ? true
               : table.getIsSomePageRowsSelected()
-              ? "indeterminate"
-              : false
+                ? "indeterminate"
+                : false
           }
           onClick={table.getToggleAllPageRowsSelectedHandler()}
         />
@@ -89,8 +89,8 @@ function RowSelectHeader<TData, TValue>({
             table.getIsAllRowsSelected()
               ? true
               : table.getIsSomeRowsSelected()
-              ? "indeterminate"
-              : false
+                ? "indeterminate"
+                : false
           }
           onClick={table.getToggleAllRowsSelectedHandler()}
         />
