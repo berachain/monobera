@@ -35,6 +35,7 @@ type Props = {
   focusedToken: Token | undefined;
   customTokens?: (Token | undefined)[];
   filter?: string[];
+  filteredTokenTags?: string[]; // list of tags excluded from visible token list
 };
 
 export function TokenDialog({
@@ -45,6 +46,7 @@ export function TokenDialog({
   focusedToken = undefined,
   customTokens = undefined,
   filter = [],
+  filteredTokenTags = [],
 }: Props) {
   const [search, setSearch] = useState("");
   const [addTokenOpen, setAddTokenOpen] = useState(false);
@@ -52,7 +54,17 @@ export function TokenDialog({
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
   const { data: tokenData, addNewToken, removeToken } = useTokens();
-  console.log("data", tokenData);
+  const hasFilteredTag = (tags?: string[]) => {
+    if (!tags) return false;
+    let result = false;
+    filteredTokenTags?.forEach((filteredTag) => {
+      if (tags.includes(filteredTag)) {
+        result = true;
+      }
+    });
+    return result;
+  };
+
   const { data: tokenInformation, error: tokenInformationError } =
     useTokenInformation({
       address: search as Address,
@@ -63,6 +75,7 @@ export function TokenDialog({
       setError(tokenInformationError);
     }
   }, [tokenInformationError]);
+
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
@@ -70,9 +83,7 @@ export function TokenDialog({
       ? customTokens
       : tokenData?.tokenList?.filter(
           (token) =>
-            !filter.includes(token.address) &&
-            !token.tags?.includes("supply") &&
-            !token.tags?.includes("debt"),
+            !filter.includes(token.address) && !hasFilteredTag(token.tags),
         ),
   );
 
@@ -81,9 +92,7 @@ export function TokenDialog({
       // Only update the state if the filtered list is different from the current state
       const newFilteredTokens = tokenData?.tokenList?.filter(
         (token) =>
-          !filter.includes(token.address) &&
-          !token.tags?.includes("supply") &&
-          !token.tags?.includes("debt"),
+          !filter.includes(token.address) && !hasFilteredTag(token.tags),
       );
       if (
         JSON.stringify(newFilteredTokens) !== JSON.stringify(filteredTokens)
@@ -106,8 +115,7 @@ export function TokenDialog({
           (token.name.toLowerCase().includes(search.toLowerCase()) ||
             token.symbol.toLowerCase().includes(search.toLowerCase()) ||
             token.address.toLowerCase().includes(search.toLowerCase())) &&
-          !token.tags?.includes("supply") &&
-          !token.tags?.includes("debt"),
+          !hasFilteredTag(token.tags),
       );
 
       if (isAddress(search) && filtered?.length === 0) {
