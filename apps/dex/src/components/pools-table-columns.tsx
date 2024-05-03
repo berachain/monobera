@@ -55,12 +55,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       <DataTableColumnHeader
         column={column}
         className="flex items-center gap-1"
-        tooltip={
-          <>
-            Specific combination and ratio of assets in a liquidity pool, <br />
-            influencing how users trade and liquidity providers earn fees
-          </>
-        }
+        tooltip={"Base and Quote assets in the liquidity pool."}
         title={"Pool Composition"}
       />
     ),
@@ -213,12 +208,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
       <DataTableColumnHeader
         column={column}
         className="flex items-center gap-1"
-        tooltip={
-          <>
-            Specific combination and ratio of assets in a liquidity pool, <br />
-            influencing how users trade and liquidity providers earn fees
-          </>
-        }
+        tooltip={"Base and quote assets in the liquidity pool."}
         title={"Pool Composition"}
       />
     ),
