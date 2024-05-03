@@ -202,8 +202,8 @@ img{
   user-select: none;
 }
 .card-hover:hover .image-zoom {
-  transform: scale(1.05); 
-  transition: transform 0.05s ease-in-out;
+  transform: scale(1.25); 
+  transition: transform 0.3s ease-in-out;
 }
 
 .flip-card {
