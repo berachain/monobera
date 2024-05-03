@@ -144,7 +144,7 @@ export const PoolSearch = ({
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <TableViewLoading />
             </div>
-          ) : data?.length || (data.length === 0 && isLoadingMore) ? (
+          ) : data?.length ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <DataTable
                 key={data.length}
@@ -156,6 +156,7 @@ export const PoolSearch = ({
                   router.replace(getPoolUrl(row.original))
                 }
                 onCustomSortingChange={(a: any) => handleNewSort(a)}
+                additionalTableProps={{ state: { sorting } }}
               />
             </div>
           ) : (
