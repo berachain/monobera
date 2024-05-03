@@ -144,7 +144,7 @@ export const PoolSearch = ({
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <TableViewLoading />
             </div>
-          ) : data?.length || (data.length === 0 && isLoadingMore) ? (
+          ) : data?.length ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <DataTable
                 key={data.length}
