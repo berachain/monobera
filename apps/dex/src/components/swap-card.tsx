@@ -394,6 +394,7 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setFromAmount(amount);
                     }}
+                    filteredTokenTags={["supply", "debt"]}
                   />
                   <div className="relative">
                     <div
