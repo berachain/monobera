@@ -4,14 +4,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   formatInputTokenValue,
   useBeraJs,
+  useGasData,
   usePollWalletBalances,
   type Token,
 } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { getAddress } from "viem";
+import { formatGwei, getAddress } from "viem";
 
 import {
   BREAKPOINTS,
@@ -113,6 +114,28 @@ export function TokenInput({
   );
 
   const breakpoint = useBreakpoint();
+  const gasPrice = useGasData();
+
+  const handleMaxClick = () => {
+    if (
+      !setAmount ||
+      !tokenBalance ||
+      tokenBalance === "" ||
+      tokenBalance === "0" ||
+      Number.isNaN(Number(tokenBalance))
+    ) {
+      return;
+    }
+
+    // ensure that we leave at least twice the estimated gas price when attempting to trade MAX amount if we're trading in native bera token
+    // for all other tokens we set the amount to the total balance of that token in the connected wallet
+    const gasPriceWithSafetyMargin = parseFloat(formatGwei(gasPrice)) * 2;
+    const newAmount =
+      selected?.address === nativeTokenAddress
+        ? (parseFloat(tokenBalance) - gasPriceWithSafetyMargin).toString() ?? ""
+        : tokenBalance.toString() ?? "";
+    setAmount(newAmount);
+  };
 
   return (
     <li className={"flex flex-col flex-wrap px-3"}>
@@ -229,13 +252,7 @@ export function TokenInput({
               {!hideMax && (
                 <p
                   className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
-                  onClick={() => {
-                    setAmount &&
-                      tokenBalance !== "" &&
-                      tokenBalance !== "0" &&
-                      !Number.isNaN(Number(tokenBalance)) &&
-                      setAmount(tokenBalance?.toString() ?? "");
-                  }}
+                  onClick={handleMaxClick}
                 >
                   MAX
                 </p>
