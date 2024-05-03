@@ -1,8 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
-import { dexUrl, faucetDripAmount, faucetDripTimeGap } from "@bera/config";
+import {
+  dexUrl,
+  faucetDripAmount,
+  faucetDripTimeGap,
+  faucetEndpointUrl,
+} from "@bera/config";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
@@ -19,6 +24,7 @@ export default function Content() {
   >(undefined);
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
   const [inputError, setInputError] = React.useState<string | null>(null);
+  const [queueSize, setQueueSize] = React.useState<number | null>(null);
 
   const handleFaucetAddressChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -32,6 +38,19 @@ export default function Content() {
     if (showAlet) setShowAlert(false);
     setAlert(undefined);
   };
+
+  useEffect(() => {
+    if (alert === "success") {
+      try {
+        fetch(`${faucetEndpointUrl}/api/info`)
+          .then((res) => res.json())
+          .then((data) => setQueueSize(data.queue_size));
+      } catch (e) {
+        console.error(e);
+        setAlert("error");
+      }
+    }
+  }, [alert]);
 
   return (
     <div className="flex w-full max-w-[600px] flex-col gap-8 text-stone-50 xl:max-w-[473px]">
@@ -64,25 +83,30 @@ export default function Content() {
               }}
             />
           </div>
-          {inputError && (
-            <Alert variant={"destructive"}>
-              <AlertTitle className="align-center flex gap-1">
-                <Icons.alertCircle className="inline-block h-4 w-4" />
-                {inputError}
-              </AlertTitle>
-            </Alert>
-          )}
         </NonSSRWrapper>
       </div>
+      {inputError && (
+        <Alert variant={"destructive"}>
+          <AlertTitle className="align-center flex gap-1">
+            <Icons.alertCircle className="inline-block h-4 w-4" />
+            {inputError}
+          </AlertTitle>
+        </Alert>
+      )}
       {showAlet && alert === "success" && (
         <Alert variant={"success"}>
           <AlertTitle>
-            <Icons.checkCircle className="inline-block h-4 w-4" /> Request
+            <Icons.checkCircle className="inline-block h-4 w-4 -mt-0.5" /> Request
             Submitted
           </AlertTitle>
           <AlertDescription>
-            You’ll receive the testnet tokens in your wallet in about 2 minutes.
-            Use your BERA to acquire a basket of other tokens from our{" "}
+            {queueSize !== null && (
+              <>
+                You are now in the queue: {queueSize}<br />
+              </>
+            )}
+            You’ll receive the testnet tokens in your wallet thoon. Use your
+            BERA to acquire a basket of other tokens from our{" "}
             <Link
               href={dexUrl}
               target="_blank"
