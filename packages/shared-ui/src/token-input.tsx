@@ -225,6 +225,7 @@ export function TokenInput({
               <FormattedNumber
                 value={tokenBalance ? tokenBalance : "0"}
                 className="text-xs text-muted-foreground"
+                showIsSmallerThanMin
               />
               {!hideMax && (
                 <p
