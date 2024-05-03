@@ -214,6 +214,7 @@ export function TokenInput({
                     value={safeNumberAmount * price}
                     symbol="USD"
                     compact={false}
+                    showIsSmallerThanMin
                   />
                 )}
               </div>
@@ -225,6 +226,7 @@ export function TokenInput({
               <FormattedNumber
                 value={tokenBalance ? tokenBalance : "0"}
                 className="text-xs text-muted-foreground"
+                showIsSmallerThanMin
               />
               {!hideMax && (
                 <p
