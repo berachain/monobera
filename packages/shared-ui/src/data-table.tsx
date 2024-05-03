@@ -205,11 +205,10 @@ export function DataTable<TData, TValue>({
     meta: {
       ...additionalTableProps?.meta,
     },
+    onSortingChange: (value: any) => {
+      onCustomSortingChange?.(value());
+    },
   });
-
-  useEffect(() => {
-    onCustomSortingChange?.(state?.sorting);
-  }, [state]);
 
   return (
     <div
