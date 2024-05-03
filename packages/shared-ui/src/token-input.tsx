@@ -6,6 +6,7 @@ import {
   useBeraJs,
   useGasData,
   usePollWalletBalances,
+  useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
 import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
@@ -115,6 +116,25 @@ export function TokenInput({
 
   const breakpoint = useBreakpoint();
   const gasPrice = useGasData();
+  const { data: beraInUsd } = useTokenHoneyPrice({
+    tokenAddress: nativeTokenAddress,
+  });
+  // Formula: gas price in usd divided by BERA price in usd = estimate gas required in BERA, multiply by 30% for safety margin
+  const gasPriceWithSafetyMargin =
+    gasPrice &&
+    beraInUsd &&
+    (parseFloat(formatGwei(gasPrice)) / parseFloat(beraInUsd)) * 1.3;
+  let hasMaxGasWarning = false;
+  if (
+    selected?.address === nativeTokenAddress &&
+    gasPriceWithSafetyMargin &&
+    parseFloat(tokenBalance) - gasPriceWithSafetyMargin < 0
+  ) {
+    hasMaxGasWarning = true;
+  } else {
+    hasMaxGasWarning = false;
+  }
+  const gasMaxTooltipHiddenStyles = hasMaxGasWarning ? {} : { hidden: true };
 
   const handleMaxClick = () => {
     if (
@@ -129,10 +149,12 @@ export function TokenInput({
 
     // ensure that we leave at least twice the estimated gas price when attempting to trade MAX amount if we're trading in native bera token
     // for all other tokens we set the amount to the total balance of that token in the connected wallet
-    const gasPriceWithSafetyMargin = parseFloat(formatGwei(gasPrice)) * 2;
     const newAmount =
       selected?.address === nativeTokenAddress
-        ? (parseFloat(tokenBalance) - gasPriceWithSafetyMargin).toString() ?? ""
+        ? Math.max(
+            parseFloat(tokenBalance) - gasPriceWithSafetyMargin,
+            0,
+          ).toString() ?? ""
         : tokenBalance.toString() ?? "";
     setAmount(newAmount);
   };
@@ -250,12 +272,39 @@ export function TokenInput({
                 className="text-xs text-muted-foreground"
               />
               {!hideMax && (
-                <p
-                  className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
-                  onClick={handleMaxClick}
+                <span
+                  className={`${
+                    hasMaxGasWarning ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
                 >
-                  MAX
-                </p>
+                  <TooltipCustom
+                    tooltipContent={
+                      <div className="w-[150px]">
+                        <p className="text-xs">
+                          Your Bera balance is below the estimated gas prices,
+                          this transaction would likely fail.
+                        </p>
+                      </div>
+                    }
+                    {...gasMaxTooltipHiddenStyles}
+                  >
+                    <span
+                      className={`flex select-none flex-row items-center gap-1 text-xs text-muted-foreground underline ${
+                        hasMaxGasWarning
+                          ? "text-warning-foreground"
+                          : "hover:text-foreground"
+                      }`}
+                      onClick={hasMaxGasWarning ? undefined : handleMaxClick}
+                    >
+                      MAX
+                      {hasMaxGasWarning && (
+                        <span>
+                          <Icons.alertCircle size={12} />
+                        </span>
+                      )}
+                    </span>
+                  </TooltipCustom>
+                </span>
               )}
             </div>
           )}
