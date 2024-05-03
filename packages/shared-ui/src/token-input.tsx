@@ -214,6 +214,7 @@ export function TokenInput({
                     value={safeNumberAmount * price}
                     symbol="USD"
                     compact={false}
+                    showIsSmallerThanMin
                   />
                 )}
               </div>
