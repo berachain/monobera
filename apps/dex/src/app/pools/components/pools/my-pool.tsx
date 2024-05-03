@@ -30,7 +30,7 @@ export default function MyPool({ keyword }: { keyword: string }) {
           <TableViewLoading />
         </div>
       ) : (userPools === undefined || userPools.length === 0) && !isLoading ? (
-        <NotFoundBear title="No Pools found." />
+        <NotFoundBear title="You currently are not staked in any pools." />
       ) : (
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <DataTable
