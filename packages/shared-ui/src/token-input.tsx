@@ -42,6 +42,7 @@ type Props = {
   setIsTyping?: (isTyping: boolean) => void;
   isActionLoading?: boolean | undefined;
   difference?: number | null;
+  filteredTokenTags?: string[];
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -65,6 +66,7 @@ export function TokenInput({
   hideMax = false,
   isActionLoading = undefined,
   difference,
+  filteredTokenTags = [],
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
@@ -123,6 +125,7 @@ export function TokenInput({
             selectable={selectable}
             customTokenList={customTokenList}
             filter={[bgtTokenAddress]}
+            filteredTokenTags={filteredTokenTags}
           />
           {selected &&
             isActionLoading !== undefined &&

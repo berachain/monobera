@@ -35,6 +35,7 @@ type Props = {
   focusedToken: Token | undefined;
   customTokens?: (Token | undefined)[];
   filter?: string[];
+  filteredTokenTags?: string[]; // list of tags excluded from visible token list
 };
 
 export function TokenDialog({
@@ -45,6 +46,7 @@ export function TokenDialog({
   focusedToken = undefined,
   customTokens = undefined,
   filter = [],
+  filteredTokenTags = [],
 }: Props) {
   const [search, setSearch] = useState("");
   const [addTokenOpen, setAddTokenOpen] = useState(false);
@@ -52,6 +54,17 @@ export function TokenDialog({
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
   const { data: tokenData, addNewToken, removeToken } = useTokens();
+  const hasFilteredTag = (tags?: string[]) => {
+    if (!tags) return false;
+    let result = false;
+    filteredTokenTags?.forEach((filteredTag) => {
+      if (tags.includes(filteredTag)) {
+        result = true;
+      }
+    });
+    return result;
+  };
+
   const { data: tokenInformation, error: tokenInformationError } =
     useTokenInformation({
       address: search as Address,
@@ -62,13 +75,15 @@ export function TokenDialog({
       setError(tokenInformationError);
     }
   }, [tokenInformationError]);
+
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
     customTokens
       ? customTokens
       : tokenData?.tokenList?.filter(
-          (token) => !filter.includes(token.address),
+          (token) =>
+            !filter.includes(token.address) && !hasFilteredTag(token.tags),
         ),
   );
 
@@ -76,7 +91,8 @@ export function TokenDialog({
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
       const newFilteredTokens = tokenData?.tokenList?.filter(
-        (token) => !filter.includes(token.address),
+        (token) =>
+          !filter.includes(token.address) && !hasFilteredTag(token.tags),
       );
       if (
         JSON.stringify(newFilteredTokens) !== JSON.stringify(filteredTokens)
@@ -96,9 +112,10 @@ export function TokenDialog({
     if (!customTokens) {
       const filtered = tokenData?.tokenList?.filter(
         (token) =>
-          token.name.toLowerCase().includes(search.toLowerCase()) ||
-          token.symbol.toLowerCase().includes(search.toLowerCase()) ||
-          token.address.toLowerCase().includes(search.toLowerCase()),
+          (token.name.toLowerCase().includes(search.toLowerCase()) ||
+            token.symbol.toLowerCase().includes(search.toLowerCase()) ||
+            token.address.toLowerCase().includes(search.toLowerCase())) &&
+          !hasFilteredTag(token.tags),
       );
 
       if (isAddress(search) && filtered?.length === 0) {
@@ -201,7 +218,7 @@ export function TokenDialog({
               )}
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
-            <div className="max-h-[min(600px,60vh)] overflow-y-scroll">
+            <div className="max-h-[min(600px,60vh)] overflow-y-auto">
               {!error ? (
                 filteredTokens?.length ? (
                   filteredTokens
