@@ -96,13 +96,14 @@ export default function Content() {
       {showAlet && alert === "success" && (
         <Alert variant={"success"}>
           <AlertTitle>
-            <Icons.checkCircle className="inline-block h-4 w-4 -mt-0.5" /> Request
-            Submitted
+            <Icons.checkCircle className="inline-block h-4 w-4 -mt-0.5" />{" "}
+            Request Submitted
           </AlertTitle>
           <AlertDescription>
             {queueSize !== null && (
               <>
-                You are now in the queue: {queueSize}<br />
+                You are now in the queue: {queueSize}
+                <br />
               </>
             )}
             You’ll receive the testnet tokens in your wallet thoon. Use your
