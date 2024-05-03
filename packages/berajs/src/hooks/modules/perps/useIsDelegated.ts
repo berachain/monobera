@@ -1,40 +1,41 @@
-import { tradingContractAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
 
-import { tradingAbi } from "~/abi";
+import { getIsDelegated } from "~/actions/perps/getIsDelegated";
 import { useBeraJs } from "~/contexts";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
-export const useIsDelegated = () => {
+export const useIsDelegated = (
+  options?: DefaultHookOptions,
+): DefaultHookReturnType => {
   const publicClient = usePublicClient();
   const method = "delegations";
-  const { account } = useBeraJs();
+  const { account, config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = [account, method];
-  const { data: isDelegated, isLoading } = useSWRImmutable(
+  const swrResponse = useSWRImmutable(
     QUERY_KEY,
     async () => {
-      if (!publicClient) return undefined;
       try {
-        const result = await publicClient.readContract({
-          address: tradingContractAddress,
-          abi: tradingAbi,
-          functionName: method,
-          args: [account],
+        if (!publicClient) throw new Error("Public client not found");
+        if (!account) throw new Error("Account not found");
+        return await getIsDelegated({
+          args: { account },
+          config,
+          client: publicClient,
         });
-        return (
-          result !== undefined &&
-          result !== "0x0000000000000000000000000000000000000000"
-        );
       } catch (e) {
         console.error(e);
         return false;
       }
     },
+    {
+      ...options?.opts,
+    },
   );
 
   return {
-    QUERY_KEY,
-    isDelegated,
-    isLoading,
+    ...swrResponse,
+    refresh: () => void swrResponse.mutate(),
   };
 };

@@ -25,6 +25,7 @@ export interface BeraConfig {
     lendUIDataProviderAddress?: Address;
     lendRewardsAggregatorAddress?: Address;
     honeyRouterAddress?: Address;
+    perpsTradingContractAddress?: Address;
   };
 }
 

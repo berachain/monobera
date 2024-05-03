@@ -129,8 +129,8 @@ export const perpsReferralsAddress = process.env
   .NEXT_PUBLIC_REFERRALS_CONTRACT_ADDRESS as Address;
 export const tradingContractAddress = process.env
   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
-export const gTokenContractAddress = process.env
-  .NEXT_PUBLIC_GTOKEN_CONTRACT_ADDRESS as Address;
+export const bhoneyVaultContractAddress = process.env
+  .NEXT_PUBLIC_BHONEY_VAULT_CONTRACT_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env
