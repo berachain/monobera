@@ -1,4 +1,4 @@
-import { gTokenContractAddress } from "@bera/config";
+import { bhoneyVaultContractAddress } from "@bera/config";
 import useSWR, { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
@@ -20,7 +20,7 @@ export const usePollPerpsBgtRewards = () => {
       if (!publicClient) return undefined;
       try {
         const result = await publicClient.readContract({
-          address: gTokenContractAddress,
+          address: bhoneyVaultContractAddress,
           abi: bTokenAbi,
           functionName: method,
           args: [account],

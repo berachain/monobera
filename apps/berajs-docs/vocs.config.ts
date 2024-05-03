@@ -96,7 +96,9 @@ export default defineConfig({
         {
           text: "Berps",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            { text: "useIsDelegated", link: "/react/perps/useIsDelegated/" },
+          ],
         },
         {
           text: "BGT",
@@ -273,7 +275,9 @@ export default defineConfig({
         {
           text: "Berps",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [
+            { text: "getIsDelegated", link: "/actions/perps/getIsDelegated/" },
+          ],
         },
         {
           text: "BGT",

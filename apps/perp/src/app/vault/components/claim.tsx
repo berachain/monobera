@@ -6,7 +6,7 @@ import {
   usePollBgtRewardsForAddress,
   usePollHoneyVaultBalance,
 } from "@bera/berajs";
-import { cloudinaryUrl, gTokenContractAddress } from "@bera/config";
+import { cloudinaryUrl, bhoneyVaultContractAddress } from "@bera/config";
 import { ApyTooltip, Tooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -26,7 +26,7 @@ export default function Claim() {
 
   const { isLoading: isBgtRewardsLoading, useBgtApr } =
     usePollBgtRewardsForAddress({
-      address: gTokenContractAddress,
+      address: bhoneyVaultContractAddress,
     });
 
   const bgtApr = useBgtApr(honeyLocked);

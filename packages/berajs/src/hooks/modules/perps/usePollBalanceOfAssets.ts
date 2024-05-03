@@ -1,4 +1,4 @@
-import { gTokenContractAddress } from "@bera/config";
+import { bhoneyVaultContractAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { formatUnits } from "viem";
@@ -20,7 +20,7 @@ export const usePollBalanceOfAssets = () => {
       try {
         if (account) {
           const result = await publicClient.readContract({
-            address: gTokenContractAddress,
+            address: bhoneyVaultContractAddress,
             abi: bTokenAbi,
             functionName: method,
             args: [account],

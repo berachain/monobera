@@ -1,0 +1,73 @@
+# getIsDelegated
+
+Action for getting the delegation status of an account. This function fetches and returns whether an account has been delegated to allow for one click trading in the perps platform.
+
+## Initialization
+
+Before using this function, ensure you have followed the initialization steps outlined in [Actions > Getting Started](/actions/getting-started).
+
+## Import
+
+```ts
+import { getIsDelegated } from "@bera/berajs/actions";
+```
+
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+export const beraConfig: BeraConfig = {
+  contracts: {
+    perpsTradingContractAddress: "0x...",
+  },
+};
+```
+
+## Usage
+
+:::code
+
+```ts [example.ts]
+import { createPublicClient, http } from "viem";
+import { berachain } from "viem/chains";
+
+const account = "0x...";
+
+// Initialize a public client with berachain
+const publicClient = createPublicClient({
+  chain: berachain, // For chain details see: https://github.com/wevm/viem/blob/main/src/chains/index.ts
+  transport: http(),
+});
+
+// Configuration needed for getIsDelegated
+const config: BeraConfig = {
+  contracts: {
+    perpsTradingContractAddress: "0x...",
+  },
+};
+
+const isDelegated = await getIsDelegated({
+  args: { account },
+  config,
+  client: publicClient,
+});
+```
+
+:::
+
+## Parameters
+
+| Name           | Type           | Description                                                               | Required |
+| -------------- | -------------- | ------------------------------------------------------------------------- | :------: |
+| `args.account` | `0x${string}	`  | The account address of the user whose delegation status is being fetched. |  `true`  |
+| `config`       | `BeraConfig`   | Configuration object including necessary contract addresses.              |  `true`  |
+| `client`       | `PublicClient` | The public client used for blockchain interactions.                       |  `true`  |
+
+## Returns
+
+| Type               | Description                                                   |
+| :----------------- | :------------------------------------------------------------ |
+| `boolean` | This represents the delegation status of the account provided. |

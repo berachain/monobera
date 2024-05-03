@@ -5,7 +5,7 @@ import {
   useBeraJs,
   usePollBHoneyEpochs,
 } from "@bera/berajs";
-import { gTokenContractAddress } from "@bera/config";
+import { bhoneyVaultContractAddress } from "@bera/config";
 import { type HoneyWithdrawalRequest } from "@bera/proto/src";
 import { DataTableColumnHeader, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -47,7 +47,7 @@ const CancelWithdraw = ({
         disabled={isCancelLoading}
         onClick={() =>
           cancelWrite({
-            address: gTokenContractAddress,
+            address: bhoneyVaultContractAddress,
             abi: bTokenAbi,
             functionName: "cancelWithdrawRequest",
             params: [
@@ -66,7 +66,7 @@ const CancelWithdraw = ({
         disabled={isRedeemLoading || isEpochLoading || !isReady}
         onClick={() =>
           redeemWrite({
-            address: gTokenContractAddress,
+            address: bhoneyVaultContractAddress,
             abi: bTokenAbi,
             functionName: "redeem",
             params: [BigInt(withdrawRequest.shares), account, account],

@@ -15,6 +15,7 @@ import {
   lendUIDataProviderAddress,
   multicallAddress,
   tokenListUrl,
+  tradingContractAddress,
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -41,5 +42,6 @@ export const defaultBeraConfig: BeraConfig = {
     lendUIDataProviderAddress: lendUIDataProviderAddress,
     lendRewardsAggregatorAddress: lendRewardsAddress,
     honeyRouterAddress: honeyRouterAddress,
+    perpsTradingContractAddress: tradingContractAddress,
   },
 };
