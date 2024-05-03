@@ -235,6 +235,10 @@
     "./skeleton": {
       "import": "./dist/skeleton.mjs",
       "types": "./dist/skeleton.d.ts"
+    },
+    "./multiple-selector": {
+      "import": "./dist/multiple-selector.mjs",
+      "types": "./dist/multiple-selector.d.ts"
     }
   },
   "typesVersions": {
@@ -349,6 +353,12 @@
       ],
       "hover-card": [
         "dist/hover-card.d.ts"
+      ],
+      "multiselect": [
+        "dist/multiselect.d.ts"
+      ],
+      "multiple-selector": [
+        "dist/multiple-selector.d.ts"
       ]
     }
   },

@@ -45,6 +45,7 @@ const server = [
   "./src/table.tsx",
   "./src/toast.tsx",
   "./src/skeleton.tsx",
+  "./src/multiple-selector.tsx",
 ];
 
 export default defineConfig((opts) => {
