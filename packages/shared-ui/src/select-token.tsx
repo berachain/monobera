@@ -15,6 +15,7 @@ type Props = {
   selectable: boolean;
   filter?: Address[];
   className?: string;
+  filteredTokenTags?: string[];
 };
 
 export function SelectToken({
@@ -25,6 +26,7 @@ export function SelectToken({
   selectable,
   filter = [],
   className = "",
+  filteredTokenTags = [],
 }: Props) {
   const [open, setOpen] = React.useState(false);
 
@@ -66,6 +68,7 @@ export function SelectToken({
           focusedToken={token}
           customTokens={customTokenList}
           filter={filter}
+          filteredTokenTags={filteredTokenTags}
         />
       )}
     </div>
