@@ -140,10 +140,10 @@ export const useOct = (
     return undefined;
   };
 
-  const { isDelegated, QUERY_KEY } = useIsDelegated();
+  const { data: isDelegated, refresh } = useIsDelegated();
 
   const refetchDelegated = () => {
-    void mutate(QUERY_KEY);
+    refresh();
   };
 
   const { data: octBalance } = usePollBeraBalance({

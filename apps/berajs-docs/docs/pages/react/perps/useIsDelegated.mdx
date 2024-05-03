@@ -1,0 +1,34 @@
+# useIsDelegated
+
+React hook for fetching the delegation status for accounts to allow them to one click trade on Berps.
+
+## Initialization
+
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started.
+
+## Import
+
+```ts
+import { useIsDelegated } from "@bera/berajs";
+```
+
+## Usage
+
+:::code
+
+```ts [exmaple.ts]
+const { data: isDelegated, refresh } = useIsDelegated();
+```
+
+:::
+
+## Returns
+
+| Name           | Type                                                            | Description                                                                                                                                                                                                   |
+| -------------- | :-------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `data`         | `boolean`                                                       | This property returns the delegation status for accounts to allow them to one click trade.                                                                                                                                              |
+| `error`        | `any \| undefined`                                              | This property contains any error that occurred during the data fetching process.                                                                                                                              |
+| `mutate`       | [`KeyedMutator<boolean>`](https://swr.vercel.app/docs/mutation) | This function allows programmatic revalidation of data. You can call mutate() to trigger a revalidation. Optionally, you can pass new data to directly update the local cache without a revalidation request. |
+| `refresh`      | `() => void`                                                    | This function is a simplified version of mutate(), specifically designed to easily trigger a revalidation of the data.                                                                                        |
+| `isValidating` | `boolean`                                                       | This flag indicates whether the hook is currently revalidating the data. It returns true when a request is in progress, including for the initial load and subsequent revalidation.                           |
+| `isLoading`    | `boolean`                                                       | This flag indicates whether the initial data fetching process is ongoing. Specifically, isLoading is true when SWR is fetching data for the first time and there is no data yet available.                    |

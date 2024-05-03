@@ -1,4 +1,4 @@
-import { gTokenContractAddress } from "@bera/config";
+import { bhoneyVaultContractAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 import { erc20Abi, formatUnits, type Address } from "viem";
@@ -19,7 +19,7 @@ export const usePollBHoneyBalance = () => {
       if (isConnected) {
         try {
           const result = await publicClient.readContract({
-            address: gTokenContractAddress,
+            address: bhoneyVaultContractAddress,
             abi: erc20Abi,
             functionName: "balanceOf",
             args: [account as Address],

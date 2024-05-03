@@ -9,7 +9,7 @@ import {
   usePollBHoneyPendingWithdraw,
   usePollMaxDeposit,
 } from "@bera/berajs";
-import { gTokenContractAddress, honeyAddress } from "@bera/config";
+import { bhoneyVaultContractAddress, honeyAddress } from "@bera/config";
 import {
   ActionButton,
   ApproveButton,
@@ -68,7 +68,7 @@ export default function DepositWithdraw() {
   const eligibleForWithdraw = useBHoneyEligibleWithdraw();
 
   const { data: allowance } = usePollAllowance({
-    spender: gTokenContractAddress,
+    spender: bhoneyVaultContractAddress,
     token: honey,
   });
 
@@ -142,7 +142,7 @@ export default function DepositWithdraw() {
                 parseUnits(depositAmount === "" ? "0" : depositAmount, 18) ? (
                 <ApproveButton
                   token={honey}
-                  spender={gTokenContractAddress}
+                  spender={bhoneyVaultContractAddress}
                   amount={parseUnits(
                     depositAmount === "" ? "0" : depositAmount,
                     18,
@@ -160,7 +160,7 @@ export default function DepositWithdraw() {
                   }
                   onClick={() =>
                     depositWrite({
-                      address: gTokenContractAddress,
+                      address: bhoneyVaultContractAddress,
                       abi: bTokenAbi,
                       functionName: "deposit",
                       params: [
@@ -203,7 +203,7 @@ export default function DepositWithdraw() {
                   balance={eligibleForWithdraw}
                   selected={{
                     symbol: "bHONEY",
-                    address: gTokenContractAddress,
+                    address: bhoneyVaultContractAddress,
                     decimals: 18,
                     name: "bHONEY",
                   }}
@@ -223,7 +223,7 @@ export default function DepositWithdraw() {
                 }
                 onClick={() =>
                   withdrawWrite({
-                    address: gTokenContractAddress,
+                    address: bhoneyVaultContractAddress,
                     abi: bTokenAbi,
                     functionName: "makeWithdrawRequest",
                     params: withdrawPayload,
