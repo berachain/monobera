@@ -6,7 +6,6 @@ import {
   useBeraJs,
   useGasData,
   usePollWalletBalances,
-  useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
 import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
@@ -116,14 +115,9 @@ export function TokenInput({
 
   const breakpoint = useBreakpoint();
   const gasPrice = useGasData();
-  const { data: beraInUsd } = useTokenHoneyPrice({
-    tokenAddress: nativeTokenAddress,
-  });
-  // Formula: gas price in usd divided by BERA price in usd = estimate gas required in BERA, multiply by 30% for safety margin
+  // estimate gas required in BERA, multiply by 30% for safety margin
   const gasPriceWithSafetyMargin =
-    gasPrice &&
-    beraInUsd &&
-    (parseFloat(formatGwei(gasPrice)) / parseFloat(beraInUsd)) * 1.3;
+    gasPrice && parseFloat(formatGwei(gasPrice)) * 1.3;
   let hasMaxGasWarning = false;
   if (
     selected?.address === nativeTokenAddress &&
