@@ -69,7 +69,12 @@ export default function GaugeInfoCard() {
             <div className="text-xs leading-5 text-muted-foreground">
               My Claimable BGT
             </div>
-            <Link className="underline cursor-pointer text-warning-foreground" href="/rewards">420.69 BGT</Link>
+            <Link
+              className="underline cursor-pointer text-warning-foreground"
+              href="/rewards"
+            >
+              420.69 BGT
+            </Link>
           </div>
         </div>
         <Image //please make this the right bear, ty mista coin :3

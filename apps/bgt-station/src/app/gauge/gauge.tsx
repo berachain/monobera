@@ -22,7 +22,7 @@ export default function Gauge() {
             <Skeleton className="h-[350px] w-[350px] flex-shrink-0 rounded-full" />
           </div>
         ) : ( */}
-          {/* <GlobalGaugeWeightChart gaugeWeights={[]} /> */}
+        {/* <GlobalGaugeWeightChart gaugeWeights={[]} /> */}
         {/* )} */}
         <Skeleton className="h-[350px] w-[350px] flex-shrink-0 rounded-full" />
       </div>
