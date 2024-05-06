@@ -61,7 +61,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 <Header navItems={navItems} />
                 <main
                   className="w-full pt-start"
-                  style={{ paddingTop: `${50 * activeBanners}px` }}
+                  style={{ paddingTop: `${150 + 50 * activeBanners}px` }}
                 >
                   {props.children}
                 </main>

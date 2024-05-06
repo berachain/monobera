@@ -21,9 +21,9 @@ export default function Gauge() {
           <div className="flex flex-col gap-16 md:flex-row">
             <Skeleton className="h-[350px] w-[350px] flex-shrink-0 rounded-full" />
           </div>
-        ) : (
-          <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
-        )} */}
+        ) : ( */}
+          <GlobalGaugeWeightChart gaugeWeights={[]} />
+        {/* )} */}
       </div>
       <div className="flex flex-col">
         <SearchInput
