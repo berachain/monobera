@@ -14,16 +14,17 @@ export default function Gauge() {
   const [keywords, setKeywords] = React.useState<string | undefined>(undefined);
   // TODO: switch to use the new subgraph
   return (
-    <div className="container mx-auto mb-20 flex w-full flex-col">
-      <div className="flex flex-col items-center gap-12 py-12 lg:flex-row xl:gap-[160px]">
+    <div className="flex flex-col gap-12">
+      <div className="flex flex-col items-center gap-8 xs:gap-3 lg:flex-row">
         <GaugeInfoCard />
         {/* {isLoading || !data || !data.length ? (
           <div className="flex flex-col gap-16 md:flex-row">
             <Skeleton className="h-[350px] w-[350px] flex-shrink-0 rounded-full" />
           </div>
-        ) : (
-          <GlobalGaugeWeightChart gaugeWeights={data ?? []} />
-        )} */}
+        ) : ( */}
+        {/* <GlobalGaugeWeightChart gaugeWeights={[]} /> */}
+        {/* )} */}
+        <Skeleton className="h-[350px] w-[350px] flex-shrink-0 rounded-full" />
       </div>
       <div className="flex flex-col">
         <SearchInput
