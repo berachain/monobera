@@ -327,31 +327,23 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
     return undefined;
   }, [swapInfo, swapPayload]);
-  const gasData = useGasData({ contractArgs: gasParams });
+  const { estimatedBeraFee } = useGasData({ contractArgs: gasParams });
   const beraInUsd = useTokenHoneyPrice({
     tokenAddress: nativeTokenAddress,
   });
-  const formattedGasPriceInBera = gasData ? parseFloat(formatGwei(gasData)) : 0;
 
   // Calculate general gas for unconnected wallet user (less accurate)
-  const generalGasEstimateData = useGasPrice();
-
-  const generalGasEstimateInBera = generalGasEstimateData.data
-    ? parseFloat(
-        formatEther(
-          BigInt(parseFloat(`${generalGasEstimateData.data}`) * 30000),
-        ),
-      )
-    : 0;
+  const { estimatedBeraFee: generalGasEstimateInBera } = useGasData();
 
   // Format and output final gas price
-  const beraGasPriceToUSD = (priceInBera: number) => {
+  const beraGasPriceToUSD = (priceInBera?: number) => {
     return beraInUsd.data && priceInBera
       ? parseFloat(beraInUsd.data) * priceInBera
       : null;
   };
-  const formattedGasPrice = formattedGasPriceInBera
-    ? beraGasPriceToUSD(formattedGasPriceInBera)
+
+  const formattedGasPrice = estimatedBeraFee
+    ? beraGasPriceToUSD(estimatedBeraFee)
     : beraGasPriceToUSD(generalGasEstimateInBera);
 
   return {

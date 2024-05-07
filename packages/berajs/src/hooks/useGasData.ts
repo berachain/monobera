@@ -3,7 +3,6 @@ import { crocMultiSwapAddress, nativeTokenAddress } from "@bera/config";
 import {
   ContractFunctionArgs,
   EstimateContractGasParameters,
-  PublicClient,
   formatEther,
   parseEther,
 } from "viem";
@@ -27,7 +26,13 @@ const getGeneralGasEstimate = async (
       const estimatedTxFeeInBera =
         feesPerGasEstimate.maxFeePerGas &&
         parseFloat(`${feesPerGasEstimate.maxFeePerGas * gas}`) * 4;
-      return { estimatedTxFeeInBera: formatEther(estimatedTxFeeInBera) };
+      return estimatedTxFeeInBera
+        ? {
+            estimatedTxFeeInBera: parseFloat(
+              formatEther(BigInt(estimatedTxFeeInBera)),
+            ),
+          }
+        : undefined;
     });
 };
 
@@ -42,7 +47,13 @@ const getContractGasEstimate = async (
       const estimatedTxFeeInBera =
         feesPerGasEstimate.maxPriorityFeePerGas &&
         parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`) * 1.3;
-      return { estimatedTxFeeInBera: formatEther(estimatedTxFeeInBera) };
+      return estimatedTxFeeInBera
+        ? {
+            estimatedTxFeeInBera: parseFloat(
+              formatEther(BigInt(estimatedTxFeeInBera)),
+            ),
+          }
+        : undefined;
     });
 };
 
@@ -72,10 +83,6 @@ export const useGasData = ({
           setEstimatedBeraFee(res.estimatedTxFeeInBera);
         })
         .catch();
-      return;
-    }
-    if (!contractArgs) {
-      setEstimatedBeraFee(undefined);
       return;
     }
     getContractGasEstimate(publicClient, contractArgs)

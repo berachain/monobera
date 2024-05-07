@@ -116,11 +116,11 @@ export function TokenInput({
 
   const breakpoint = useBreakpoint();
   const { estimatedBeraFee } = useGasData();
-  const beraSafetyMargin = estimatedBeraFee * 4; // multiswaps can include 4 transaction steps
+  const beraSafetyMargin = estimatedBeraFee && estimatedBeraFee * 4; // multiswaps can include 4 transaction steps
   let hasMaxGasWarning = false;
   if (
     selected?.address === nativeTokenAddress &&
-    estimatedBeraFee &&
+    beraSafetyMargin &&
     parseFloat(tokenBalance) - beraSafetyMargin < 0
   ) {
     hasMaxGasWarning = true;
@@ -140,10 +140,10 @@ export function TokenInput({
       return;
     }
 
-    // ensure that we leave at least twice the estimated gas price when attempting to trade MAX amount if we're trading in native bera token
+    // ensure that we leave at a padded margin with the estimated gas price when attempting to trade MAX amount if we're trading in native bera token
     // for all other tokens we set the amount to the total balance of that token in the connected wallet
     const newAmount =
-      selected?.address === nativeTokenAddress
+      selected?.address === nativeTokenAddress && beraSafetyMargin
         ? Math.max(parseFloat(tokenBalance) - beraSafetyMargin, 0).toString() ??
           ""
         : tokenBalance.toString() ?? "";
