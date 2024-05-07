@@ -429,6 +429,7 @@ export function SwapCard({
                     difference={differenceUSD}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
+                    filteredTokenTags={["supply", "debt"]}
                   />
                 </ul>
                 {!!priceImpact && priceImpact < -10 && (
