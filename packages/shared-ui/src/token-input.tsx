@@ -6,13 +6,14 @@ import {
   useBeraJs,
   useGasData,
   usePollWalletBalances,
+  useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
 import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatGwei, getAddress } from "viem";
+import { formatEther, formatGwei, getAddress } from "viem";
 
 import {
   BREAKPOINTS,
@@ -114,15 +115,13 @@ export function TokenInput({
   );
 
   const breakpoint = useBreakpoint();
-  const gasPrice = useGasData();
-  // estimate gas required in BERA, multiply by 30% for safety margin
-  const gasPriceWithSafetyMargin =
-    gasPrice && parseFloat(formatGwei(gasPrice)) * 1.3;
+  const { estimatedBeraFee } = useGasData();
+  const beraSafetyMargin = estimatedBeraFee * 4; // multiswaps can include 4 transaction steps
   let hasMaxGasWarning = false;
   if (
     selected?.address === nativeTokenAddress &&
-    gasPriceWithSafetyMargin &&
-    parseFloat(tokenBalance) - gasPriceWithSafetyMargin < 0
+    estimatedBeraFee &&
+    parseFloat(tokenBalance) - beraSafetyMargin < 0
   ) {
     hasMaxGasWarning = true;
   } else {
@@ -145,10 +144,8 @@ export function TokenInput({
     // for all other tokens we set the amount to the total balance of that token in the connected wallet
     const newAmount =
       selected?.address === nativeTokenAddress
-        ? Math.max(
-            parseFloat(tokenBalance) - gasPriceWithSafetyMargin,
-            0,
-          ).toString() ?? ""
+        ? Math.max(parseFloat(tokenBalance) - beraSafetyMargin, 0).toString() ??
+          ""
         : tokenBalance.toString() ?? "";
     setAmount(newAmount);
   };
