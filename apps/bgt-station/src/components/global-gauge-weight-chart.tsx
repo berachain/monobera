@@ -130,12 +130,12 @@ export default function GlobalGaugeWeightChart({
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 sm:w-[340px]">
+    <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 md:w-[340px]">
       <div className="text-sm leading-5 text-muted-foreground">
         Gauge Weight
       </div>
 
-      <div className="relative h-[230px] w-[230px]">
+      <div className="relative h-[230px] w-[230px] mx-auto">
         <BeraChart
           data={dataP}
           options={{
