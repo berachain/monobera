@@ -372,6 +372,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     error: getSwapError,
     swapInfo,
     exchangeRate,
+    gasEstimateInBera: estimatedBeraFee ?? generalGasEstimateInBera,
     gasPrice: formattedGasPrice,
     isRouteLoading: isSwapLoading || isTyping,
     isWrap,
