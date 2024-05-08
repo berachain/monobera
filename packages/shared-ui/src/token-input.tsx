@@ -46,6 +46,7 @@ type Props = {
   isActionLoading?: boolean | undefined;
   difference?: number | null;
   filteredTokenTags?: string[];
+  beraSafetyMargin?: number;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -70,6 +71,7 @@ export function TokenInput({
   isActionLoading = undefined,
   difference,
   filteredTokenTags = [],
+  beraSafetyMargin,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
@@ -116,10 +118,8 @@ export function TokenInput({
   );
 
   const breakpoint = useBreakpoint();
-  const { estimatedBeraFee } = useGasData({
-    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP,
-  });
-  const beraSafetyMargin = estimatedBeraFee && estimatedBeraFee * 2; // multiplied by 2 to allow for a follow up swap
+
+  // Logic to show warning by the max button if a safety margin for Bera swaps is provided and user's native bera balance is less than the safety margin
   let hasMaxGasWarning = false;
   if (
     selected?.address === nativeTokenAddress &&
