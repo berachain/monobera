@@ -28,7 +28,7 @@ export const useUserPools = (
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const publicClient = usePublicClient();
-  const QUERY_KEY = ["UseUserPools", account];
+  const QUERY_KEY = ["UseUserPools", account, keyword];
   const swrResponse = useSWR<IUserPool[] | undefined, any, any>(
     QUERY_KEY,
     async () => {

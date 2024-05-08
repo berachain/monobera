@@ -10,9 +10,11 @@ export default function MyPool({ keyword }: { keyword: string }) {
   const { isReady } = useBeraJs();
   const { isLoading, data } = useUserPools({ keyword });
 
+  const [hasLoaded, setHasLoaded] = useState<any>(false);
   const [userPools, setUserPools] = useState<any>(undefined);
   useEffect(() => {
     if (data) {
+      setHasLoaded(true);
       setUserPools(data);
     }
   }, [data]);
@@ -25,11 +27,7 @@ export default function MyPool({ keyword }: { keyword: string }) {
           message="You need to connect your wallet to see deposited pools and
         rewards"
         />
-      ) : isLoading && (userPools === undefined || userPools.length === 0) ? (
-        <div className="flex w-full flex-col items-center justify-center gap-4">
-          <TableViewLoading />
-        </div>
-      ) : (userPools === undefined || userPools.length === 0) && !isLoading ? (
+      ) : userPools === undefined || userPools.length === 0 ? (
         <NotFoundBear title="You currently are not staked in any pools." />
       ) : (
         <div className="flex w-full flex-col items-center justify-center gap-4">
