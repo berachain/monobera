@@ -79,7 +79,7 @@ export default function GaugeInfoCard() {
         </div>
         <Image //please make this the right bear, ty mista coin :3
           src={`${cloudinaryUrl}/bears/m7abj0nxzpkh5mcuz5g2`}
-          className="absolute bottom-0 right-0 scale-x-[-1] hidden md:block"
+          className="absolute bottom-0 right-0 scale-x-[-1] hidden lg:block"
           alt="proposal-bear"
           width={200}
           height={300}
