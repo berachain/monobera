@@ -426,13 +426,13 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
-                    difference={differenceUSD}
+                    difference={isWrap ? undefined : differenceUSD}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                     filteredTokenTags={["supply", "debt"]}
                   />
                 </ul>
-                {!!priceImpact && priceImpact < -10 && (
+                {!!priceImpact && priceImpact < -10 && !isWrap && (
                   <TooltipCustom
                     anchor={
                       breakpoint !== undefined && breakpoint! > BREAKPOINTS.md
