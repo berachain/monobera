@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  TXN_GAS_USED_ESTIMATES,
   multiswapAbi,
   useBeraJs,
   useGasData,
@@ -327,7 +328,10 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     }
     return undefined;
   }, [swapInfo, swapPayload]);
-  const { estimatedBeraFee } = useGasData({ contractArgs: gasParams });
+  const { estimatedBeraFee } = useGasData({
+    contractArgs: gasParams,
+    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP,
+  });
   const beraInUsd = useTokenHoneyPrice({
     tokenAddress: nativeTokenAddress,
   });

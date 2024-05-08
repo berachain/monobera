@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  TXN_GAS_USED_ESTIMATES,
   formatInputTokenValue,
   useBeraJs,
   useGasData,
@@ -115,8 +116,10 @@ export function TokenInput({
   );
 
   const breakpoint = useBreakpoint();
-  const { estimatedBeraFee } = useGasData();
-  const beraSafetyMargin = estimatedBeraFee && estimatedBeraFee * 4; // multiswaps can include 4 transaction steps
+  const { estimatedBeraFee } = useGasData({
+    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP,
+  });
+  const beraSafetyMargin = estimatedBeraFee && estimatedBeraFee * 2; // multiplied by 2 to allow for a follow up swap
   let hasMaxGasWarning = false;
   if (
     selected?.address === nativeTokenAddress &&

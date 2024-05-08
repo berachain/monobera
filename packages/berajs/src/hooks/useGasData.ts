@@ -8,12 +8,15 @@ import {
 } from "viem";
 import { usePublicClient } from "wagmi";
 
-interface UseGasDataReturnType {
-  estimatedBeraFee: number | undefined;
+export enum TXN_GAS_USED_ESTIMATES {
+  SWAP = 250000,
+  WRAP = 100000,
+  SIMPLE = 25000,
 }
 
 const getGeneralGasEstimate = async (
   publicClient: ReturnType<typeof usePublicClient>,
+  gasUsedOverride?: number,
 ) => {
   return publicClient
     ?.estimateGas({
@@ -25,7 +28,12 @@ const getGeneralGasEstimate = async (
       const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
       const estimatedTxFeeInBera =
         feesPerGasEstimate.maxFeePerGas &&
-        parseFloat(`${feesPerGasEstimate.maxFeePerGas * gas}`) * 4;
+        parseFloat(
+          `${
+            feesPerGasEstimate.maxFeePerGas *
+            (gasUsedOverride ? BigInt(gasUsedOverride) : gas)
+          }`,
+        ) * 4;
       return estimatedTxFeeInBera
         ? {
             estimatedTxFeeInBera: parseFloat(
@@ -39,6 +47,7 @@ const getGeneralGasEstimate = async (
 const getContractGasEstimate = async (
   publicClient: ReturnType<typeof usePublicClient>,
   contractArgs: any,
+  gasUsedOverride?: number,
 ) => {
   return publicClient
     ?.estimateContractGas({ ...(contractArgs as any) })
@@ -46,7 +55,12 @@ const getContractGasEstimate = async (
       const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
       const estimatedTxFeeInBera =
         feesPerGasEstimate.maxPriorityFeePerGas &&
-        parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`) * 4;
+        parseFloat(
+          `${
+            feesPerGasEstimate.maxPriorityFeePerGas *
+            (gasUsedOverride ? BigInt(gasUsedOverride) : gas)
+          }`,
+        ) * 4;
       return estimatedTxFeeInBera
         ? {
             estimatedTxFeeInBera: parseFloat(
@@ -57,6 +71,10 @@ const getContractGasEstimate = async (
     });
 };
 
+interface UseGasDataReturnType {
+  estimatedBeraFee: number | undefined;
+}
+
 /**
  * Hook that returns estimated gas data, for a general unspecified transaction or a specific one.
  * When contract args are provided, performs a more exact estimate with a 4x safety margin, performs an 4x padded but inaccurate estimation if not.
@@ -65,8 +83,10 @@ const getContractGasEstimate = async (
  */
 export const useGasData = ({
   contractArgs,
+  gasUsedOverride,
 }: {
   contractArgs?: EstimateContractGasParameters<any> | null;
+  gasUsedOverride?: number;
 } = {}): UseGasDataReturnType => {
   const publicClient = usePublicClient();
 
@@ -75,7 +95,7 @@ export const useGasData = ({
   >();
   useEffect(() => {
     if (contractArgs === undefined) {
-      getGeneralGasEstimate(publicClient)
+      getGeneralGasEstimate(publicClient, gasUsedOverride)
         .then((res: { estimatedTxFeeInBera: number } | undefined) => {
           if (!res) {
             throw new Error("failed to get general gas estimate");
@@ -85,7 +105,7 @@ export const useGasData = ({
         .catch();
       return;
     }
-    getContractGasEstimate(publicClient, contractArgs)
+    getContractGasEstimate(publicClient, contractArgs, gasUsedOverride)
       .then((res: { estimatedTxFeeInBera: number } | undefined) => {
         if (!res) {
           throw new Error("failed to get contract gas estimate");
