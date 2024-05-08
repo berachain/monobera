@@ -534,7 +534,7 @@ export function SwapCard({
                 ) : (
                   false
                 )}
-                {shouldShowGasBalanceWarning ? (
+                {shouldShowGasBalanceWarning && !hasInsufficientBalanceError ? (
                   <Alert variant="warning">
                     <AlertTitle>
                       {" "}

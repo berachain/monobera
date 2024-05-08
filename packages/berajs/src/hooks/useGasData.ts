@@ -18,30 +18,26 @@ const getGeneralGasEstimate = async (
   publicClient: ReturnType<typeof usePublicClient>,
   gasUsedOverride?: number,
 ) => {
-  return publicClient
-    ?.estimateGas({
-      account: nativeTokenAddress,
-      to: crocMultiSwapAddress,
-      value: parseEther("1"),
-    })
-    .then(async (gas: bigint) => {
-      const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
-      const estimatedTxFeeInBera =
-        feesPerGasEstimate.maxFeePerGas &&
-        parseFloat(
-          `${
-            feesPerGasEstimate.maxFeePerGas *
-            (gasUsedOverride ? BigInt(gasUsedOverride) : gas)
-          }`,
-        ) * 4;
-      return estimatedTxFeeInBera
-        ? {
-            estimatedTxFeeInBera: parseFloat(
-              formatEther(BigInt(estimatedTxFeeInBera)),
-            ),
-          }
-        : undefined;
-    });
+  const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
+  const gas = gasUsedOverride
+    ? BigInt(gasUsedOverride)
+    : await publicClient?.estimateGas({
+        account: nativeTokenAddress,
+        to: crocMultiSwapAddress,
+        value: parseEther("1"),
+      });
+  const estimatedTxFeeInBera =
+    feesPerGasEstimate?.maxPriorityFeePerGas &&
+    gas &&
+    parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`) * 4;
+
+  return estimatedTxFeeInBera
+    ? {
+        estimatedTxFeeInBera: parseFloat(
+          formatEther(BigInt(estimatedTxFeeInBera)),
+        ),
+      }
+    : undefined;
 };
 
 const getContractGasEstimate = async (
@@ -49,26 +45,21 @@ const getContractGasEstimate = async (
   contractArgs: any,
   gasUsedOverride?: number,
 ) => {
-  return publicClient
-    ?.estimateContractGas({ ...(contractArgs as any) })
-    .then(async (gas) => {
-      const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
-      const estimatedTxFeeInBera =
-        feesPerGasEstimate.maxPriorityFeePerGas &&
-        parseFloat(
-          `${
-            feesPerGasEstimate.maxPriorityFeePerGas *
-            (gasUsedOverride ? BigInt(gasUsedOverride) : gas)
-          }`,
-        ) * 4;
-      return estimatedTxFeeInBera
-        ? {
-            estimatedTxFeeInBera: parseFloat(
-              formatEther(BigInt(estimatedTxFeeInBera)),
-            ),
-          }
-        : undefined;
-    });
+  const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
+  const gas = gasUsedOverride
+    ? BigInt(gasUsedOverride)
+    : await publicClient?.estimateContractGas({ ...(contractArgs as any) });
+  const estimatedTxFeeInBera =
+    feesPerGasEstimate?.maxPriorityFeePerGas &&
+    gas &&
+    parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`) * 4;
+  return estimatedTxFeeInBera
+    ? {
+        estimatedTxFeeInBera: parseFloat(
+          formatEther(BigInt(estimatedTxFeeInBera)),
+        ),
+      }
+    : undefined;
 };
 
 interface UseGasDataReturnType {
