@@ -136,7 +136,7 @@ export function SwapCard({
   const [openPreview, setOpenPreview] = useState(false);
 
   const { estimatedBeraFee } = useGasData({
-    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 4 * 2, // multiplied by 4 for the multiswap steps in a swap, then by 2 to allow for a follow up swap
+    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
 
   // fetch user's native BERA balance

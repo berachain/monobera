@@ -29,7 +29,7 @@ const getGeneralGasEstimate = async (
   const estimatedTxFeeInBera =
     feesPerGasEstimate?.maxPriorityFeePerGas &&
     gas &&
-    parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`) * 4;
+    parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`);
 
   return estimatedTxFeeInBera
     ? {
@@ -52,7 +52,7 @@ const getContractGasEstimate = async (
   const estimatedTxFeeInBera =
     feesPerGasEstimate?.maxPriorityFeePerGas &&
     gas &&
-    parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`) * 4;
+    parseFloat(`${feesPerGasEstimate.maxPriorityFeePerGas * gas}`);
   return estimatedTxFeeInBera
     ? {
         estimatedTxFeeInBera: parseFloat(
@@ -68,7 +68,7 @@ interface UseGasDataReturnType {
 
 /**
  * Hook that returns estimated gas data, for a general unspecified transaction or a specific one.
- * When contract args are provided, performs a more exact estimate with a 4x safety margin, performs an 4x padded but inaccurate estimation if not.
+ * When contract args are provided, performs a more exact estimate, performs an inaccurate estimation if not.
  * @param {ContractFunctionArgs} param0.contractArgs - contract args for a transaction that we want to estimate gas for.
  * @returns {UseGasDataReturnType} - returns the estimated gas data
  */
