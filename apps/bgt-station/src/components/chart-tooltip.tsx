@@ -1,14 +1,8 @@
-import { truncateHash, useGauges } from "@bera/berajs";
-import { cn } from "@bera/ui";
 import uniqolor from "uniqolor";
-import { getAddress } from "viem";
-
 import { GaugeIcon } from "~/app/validators/validators-table";
-import { OTHERS_GAUGES } from "./global-gauge-weight-chart";
 
 export function ChartTooltip({ gauge }: { gauge: any }) {
   if (!gauge) return null;
-  const { gaugeDictionary } = useGauges();
   const otherInfo = "BERPS HONEY VAULT";
   return (
     <div className="z-1000 flex min-w-[220px] gap-2 rounded-md border p-3 backdrop-blur-md">

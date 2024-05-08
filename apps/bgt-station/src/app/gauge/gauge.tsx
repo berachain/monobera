@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { useBeraJs } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
-import { Skeleton } from "@bera/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
+import MarketSelector from "./market-selector";
 
 const mockChartData = [
   {
@@ -78,38 +80,41 @@ const mockChartData = [
 ];
 
 export default function Gauge() {
-  const [keywords, setKeywords] = React.useState<string | undefined>(undefined);
-  // TODO: switch to use the new subgraph
+  const { isConnected } = useBeraJs();
+  const [keywords, setKeywords] = useState<string | undefined>(undefined);
   return (
     <div className="flex flex-col gap-12">
       <div className="xs:gap-3 flex flex-col items-center gap-8 md:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart gaugeWeights={mockChartData} />
       </div>
-      <div className="flex flex-col">
-        <SearchInput
-          placeholder="Search..."
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setKeywords(e.target.value)
-          }
-        />
-        <div className="py-4">
-          {/* {isLoading || !data || !data.length ? (
-            <div className="mt-10 flex w-full flex-col gap-2">
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
-            </div>
-          ) : (
-            <GlobalGaugeWeightTable
-              gaugeWeights={data ?? []}
-              keywords={keywords}
+
+      <Tabs defaultValue="all-gauges" className="flex flex-col gap-4">
+        <div className="flex justify-between">
+          <TabsList className="w-fit">
+            <TabsTrigger value="all-gauges">All Gauges</TabsTrigger>
+            <TabsTrigger value="my-gauges" disabled={!isConnected}>
+              My Gauges
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="flex gap-3">
+            <SearchInput
+              placeholder="Search..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setKeywords(e.target.value)
+              }
             />
-          )} */}
+            <MarketSelector />
+          </div>
         </div>
-      </div>
+        <TabsContent value="all-gauges">
+          {/* <GlobalGaugeWeightTable gaugeWeights={[]} keywords={keywords} /> */}
+        </TabsContent>
+        <TabsContent value="my-gauges">
+          {/* <GlobalGaugeWeightTable gaugeWeights={[]} keywords={keywords} /> */}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

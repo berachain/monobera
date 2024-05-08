@@ -62,6 +62,7 @@ const Gauge = ({ address }: { address: string | undefined }) => {
     </Link>
   );
 };
+
 export default function GlobalGaugeWeightTable({
   gaugeWeights = [],
   keywords = "",

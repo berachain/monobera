@@ -99,13 +99,7 @@ export default function GlobalGaugeWeightChart({
   }, [gauges]);
 
   const externalTooltipHandler = useCallback(
-    ({
-      tooltip,
-      chart,
-    }: {
-      tooltip: TooltipModel<"doughnut">;
-      chart: Chart;
-    }) => {
+    ({ tooltip }: { tooltip: TooltipModel<"doughnut">; chart: Chart }) => {
       // hide tooltip
       if (tooltip.opacity === 0) {
         setSelectedGauge(undefined);
@@ -135,7 +129,7 @@ export default function GlobalGaugeWeightChart({
         Gauge Weight
       </div>
 
-      <div className="relative h-[230px] w-[230px] mx-auto">
+      <div className="relative mx-auto h-[230px] w-[230px]">
         <BeraChart
           data={dataP}
           options={{
