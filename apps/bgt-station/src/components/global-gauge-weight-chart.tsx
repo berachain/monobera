@@ -113,6 +113,7 @@ export default function GlobalGaugeWeightChart({
       // set tooltip visible
       tooltipRef.current = `${tooltip.x},${tooltip.y}`;
       setSelectedGauge(tooltip.title[0]);
+      console.log(tooltip.x, tooltip.y)
       setTooltipPosition({ x: tooltip.x, y: tooltip.y });
     },
     [gaugeWeights],
@@ -124,7 +125,7 @@ export default function GlobalGaugeWeightChart({
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 md:w-[340px]">
+    <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[340px]">
       <div className="text-sm leading-5 text-muted-foreground">
         Gauge Weight
       </div>
@@ -159,7 +160,7 @@ export default function GlobalGaugeWeightChart({
         </div>
 
         <div
-          className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block"
+          className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block "
           style={{
             top: `${tooltipPosition.y}px`,
             ...(tooltipPosition.x < 230 / 2

@@ -29,6 +29,7 @@ export default function GlobalGaugeWeightTable({
         columns={global_gauge_weight_columns as any}
         data={[]}
         className="max-h-[300px] min-w-[1000px] shadow"
+        enablePagination
       />
     </div>
   );

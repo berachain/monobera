@@ -84,7 +84,7 @@ export default function Gauge() {
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   return (
     <div className="flex flex-col gap-12">
-      <div className="xs:gap-3 flex flex-col gap-8 md:flex-row">
+      <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart gaugeWeights={mockChartData} />
       </div>
