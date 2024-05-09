@@ -113,7 +113,6 @@ export default function GlobalGaugeWeightChart({
       // set tooltip visible
       tooltipRef.current = `${tooltip.x},${tooltip.y}`;
       setSelectedGauge(tooltip.title[0]);
-      console.log(tooltip.x, tooltip.y)
       setTooltipPosition({ x: tooltip.x, y: tooltip.y });
     },
     [gaugeWeights],
