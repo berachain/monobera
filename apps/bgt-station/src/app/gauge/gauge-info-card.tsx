@@ -24,23 +24,6 @@ const fakeValidators = [
 ];
 
 
-const fakeValidators = [
-  {
-    icon: <Icons.bgt className="h-4 w-4" />,
-    name: "Validator 1",
-    bgtAmount: 100,
-  },
-  {
-    icon: <Icons.bgt className="h-4 w-4" />,
-    name: "Validator 1",
-    bgtAmount: 100,
-  },
-  {
-    icon: <Icons.bgt className="h-4 w-4" />,
-    name: "Validator 1",
-    bgtAmount: 100,
-  },
-];
 
 export default function GaugeInfoCard() {
   return (
