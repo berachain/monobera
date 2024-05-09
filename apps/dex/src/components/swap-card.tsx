@@ -59,6 +59,15 @@ const Connect = dynamic(
   },
 );
 
+function extractReason(inputString: string) {
+  const regex = /reason: ([\w\s]+)/;
+  const match = inputString.match(regex);
+  if (match && match.length > 1) {
+    return match[1];
+  }
+  return null; // Return null if no match found
+}
+
 interface ISwapCard {
   inputCurrency?: Address | undefined;
   outputCurrency?: Address | undefined;
@@ -426,12 +435,13 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
-                    difference={differenceUSD}
+                    difference={isWrap ? undefined : differenceUSD}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
+                    // filteredTokenTags={["supply", "debt"]}
                   />
                 </ul>
-                {!!priceImpact && priceImpact < -10 && (
+                {!!priceImpact && priceImpact < -10 && !isWrap && (
                   <TooltipCustom
                     anchor={
                       breakpoint !== undefined && breakpoint! > BREAKPOINTS.md
@@ -479,7 +489,7 @@ export function SwapCard({
                   <Alert variant="destructive">
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription className="text-xs">
-                      {error.message}
+                      {extractReason(error) ?? "An error has occured."}
                     </AlertDescription>
                   </Alert>
                 )}

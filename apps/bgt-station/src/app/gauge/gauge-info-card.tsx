@@ -5,6 +5,24 @@ import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
+const fakeValidators = [
+  {
+    icon: <Icons.bgt className="h-4 w-4" />,
+    name: "Validator 1",
+    bgtAmount: 100,
+  },
+  {
+    icon: <Icons.bgt className="h-4 w-4" />,
+    name: "Validator 1",
+    bgtAmount: 100,
+  },
+  {
+    icon: <Icons.bgt className="h-4 w-4" />,
+    name: "Validator 1",
+    bgtAmount: 100,
+  },
+];
+
 
 const fakeValidators = [
   {
