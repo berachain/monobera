@@ -23,8 +23,6 @@ const fakeValidators = [
   },
 ];
 
-
-
 export default function GaugeInfoCard() {
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
