@@ -84,35 +84,48 @@ export default function Gauge() {
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   return (
     <div className="flex flex-col gap-12">
-      <div className="xs:gap-3 flex flex-col items-center gap-8 md:flex-row">
+      <div className="xs:gap-3 flex flex-col gap-8 md:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart gaugeWeights={mockChartData} />
       </div>
 
       <Tabs defaultValue="all-gauges" className="flex flex-col gap-4">
-        <div className="flex justify-between">
-          <TabsList className="w-fit">
-            <TabsTrigger value="all-gauges">All Gauges</TabsTrigger>
-            <TabsTrigger value="my-gauges" disabled={!isConnected}>
+        <div className="flex items-center justify-between md:flex-row flex-col gap-4">
+          <TabsList className="w-full md:w-fit">
+            <TabsTrigger value="all-gauges" className="w-full md:w-fit">
+              All Gauges
+            </TabsTrigger>
+            <TabsTrigger
+              value="my-gauges"
+              className="w-full md:w-fit"
+              disabled={!isConnected}
+            >
               My Gauges
             </TabsTrigger>
           </TabsList>
 
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3 w-full md:w-fit">
             <SearchInput
               placeholder="Search..."
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setKeywords(e.target.value)
               }
+              className="w-full md:w-[300px]"
             />
             <MarketSelector />
           </div>
         </div>
         <TabsContent value="all-gauges">
-          {/* <GlobalGaugeWeightTable gaugeWeights={[]} keywords={keywords} /> */}
+          <GlobalGaugeWeightTable
+            gaugeWeights={mockChartData}
+            keywords={keywords}
+          />
         </TabsContent>
         <TabsContent value="my-gauges">
-          {/* <GlobalGaugeWeightTable gaugeWeights={[]} keywords={keywords} /> */}
+          <GlobalGaugeWeightTable
+            gaugeWeights={mockChartData}
+            keywords={keywords}
+          />
         </TabsContent>
       </Tabs>
     </div>

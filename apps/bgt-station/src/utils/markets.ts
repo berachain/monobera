@@ -15,4 +15,20 @@ export const DEFAULT_MARKETS = {
     market: "Bridge",
     checked: false,
   },
+  oracle: {
+    market: "Oracle",
+    checked: false,
+  },
+  custody: {
+    market: "Custody",
+    checked: false,
+  },
+  account: {
+    market: "Account Abstraction",
+    checked: false,
+  },
+  security: {
+    market: "Security",
+    checked: false,
+  },
 };

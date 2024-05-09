@@ -22,7 +22,7 @@ export default function MarketSelector() {
   return (
     <DropdownMenu open={open}>
       <DropdownMenuTrigger asChild onClick={() => setOpen(true)}>
-        <div className="flex cursor-pointer items-center gap-4 whitespace-nowrap rounded-md border border-border bg-muted px-3 py-2 leading-6">
+        <div className="flex cursor-pointer items-center gap-4 whitespace-nowrap rounded-md border border-border bg-muted px-3 py-2 text-sm leading-6">
           Select Market
           <Icons.chevronDown className="h-4 w-4" />
         </div>
@@ -40,7 +40,7 @@ export default function MarketSelector() {
           className="rounded-none border-none"
         />
         <DropdownMenuSeparator className="my-0" />
-        <div className="p-1">
+        <div className="p-1 max-h-[200px] overflow-auto">
           {Object.keys(markets).map((market: string) => (
             <DropdownMenuCheckboxItem
               className="hover:bg-muted hover:text-foreground"
