@@ -20,7 +20,7 @@ export function DataTableColumnHeader<TData, TValue>({
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return (
-      <div className={cn("w-full font-bold", className)}>
+      <div className={cn("w-full font-medium", className)}>
         {title}
         {tooltip && <Tooltip text={tooltip} className="ml-1" />}
       </div>
@@ -29,8 +29,6 @@ export function DataTableColumnHeader<TData, TValue>({
 
   return (
     <div className={cn("flex w-full items-center space-x-2", className)}>
-      {/* <DropdownMenu>
-        <DropdownMenuTrigger asChild> */}
       <Button
         variant="ghost"
         size="sm"
@@ -57,38 +55,6 @@ export function DataTableColumnHeader<TData, TValue>({
           <Icons.arrowDownUp className="ml-2 h-4 w-4" />
         )}
       </Button>
-      {/* </DropdownMenuTrigger>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3 h-8 text-sm hover:bg-hover data-[state=open]:bg-hover"
-          >
-            <span className="flex items-center gap-1 font-bold">
-              {title}
-              {tooltip && <Tooltip text={tooltip} />}
-            </span>
-            {column.getIsSorted() === "desc" ? (
-              <Icons.sortDesc className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === "asc" ? (
-              <Icons.sortAsc className="ml-2 h-4 w-4" />
-            ) : (
-              <Icons.arrowDownUp className="ml-2 h-4 w-4" />
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <Icons.sortAsc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <Icons.sortDesc className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu> */}
     </div>
   );
 }
