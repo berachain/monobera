@@ -1,14 +1,11 @@
 import { gaugeListUrl } from "@bera/config";
-import useSWRImmutable from "swr/immutable";
-import { useLocalStorage } from "usehooks-ts";
 import POLLING from "~/enum/polling";
 import { Gauge } from "..";
+import useSWR from "swr";
 
 interface IUseGaugess {
   gaugeList: Gauge[] | undefined;
   gaugeDictionary: { [key: string]: Gauge } | undefined;
-  addNewGauge: (gauge: Gauge | undefined) => void;
-  removeGauge: (gauge: Gauge) => void;
 }
 
 function gaugeListToDict(list: Gauge[]): { [key: string]: Gauge } {
@@ -20,26 +17,20 @@ function gaugeListToDict(list: Gauge[]): { [key: string]: Gauge } {
 }
 
 const useGauges = (): IUseGaugess => {
-  const GAUGE_KEY = "gauges";
-
-  const [localStorageGaugeList, setLocalStorageGaugeList] = useLocalStorage<
-    Gauge[]
-  >(GAUGE_KEY, []);
-
-  const { data } = useSWRImmutable(
-    ["defaultGaugeList", localStorageGaugeList],
+  const { data } = useSWR(
+    ["defaultGaugeList"],
     async () => {
       try {
         const gaugeList = await fetch(gaugeListUrl);
         const temp = await gaugeList.json();
         if (!temp.gauges) {
-          return { list: localStorageGaugeList, dictionary: {} };
+          return { list: [], dictionary: {} };
         }
         const defaultList = temp.gauges.map((gauge: Gauge) => {
           return { ...gauge, default: true };
         });
 
-        const list = [...defaultList, ...localStorageGaugeList];
+        const list = [...defaultList];
         // Make it unique
         const uniqueList = list.filter(
           (item, index) =>
@@ -51,52 +42,17 @@ const useGauges = (): IUseGaugess => {
         };
       } catch (error) {
         console.error("Error fetching token list", error);
-        return { list: localStorageGaugeList, dictionary: {} };
+        return { list: [], dictionary: {} };
       }
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      refreshInterval: POLLING.SLOW,
     },
   );
-
-  const addNewGauge = (gauge: Gauge | undefined) => {
-    // Indicate that this gauge is now accepted into the default list of gauges
-    const acceptedGauge = {
-      ...gauge,
-      default: true,
-    };
-
-    // Check if the gauge already exists in gaugeList
-    if (
-      data?.list.some(
-        (t) =>
-          t.address.toLowerCase() === acceptedGauge?.address?.toLowerCase(),
-      )
-    ) {
-      return;
-    }
-
-    const updatedData = !gauge
-      ? [...localStorageGaugeList]
-      : [...localStorageGaugeList, acceptedGauge as Gauge];
-    setLocalStorageGaugeList(updatedData);
-    // Update config data and store it in localStorage
-  };
-
-  const removeGauge = (gauge: Gauge) => {
-    const filteredList = localStorageGaugeList.filter(
-      (t) => t.address !== gauge.address,
-    );
-
-    const updatedData = [...filteredList];
-    setLocalStorageGaugeList(updatedData);
-  };
 
   return {
     gaugeList: data?.list ?? [],
     gaugeDictionary: data?.dictionary ?? {},
-    addNewGauge,
-    removeGauge,
   };
 };
 
