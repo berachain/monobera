@@ -25,8 +25,6 @@ export async function getGlobalParams(): Promise<GlobalParams | undefined> {
       max_collateral_p: "10",
       max_pos_honey: "100000000000000000000000",
       current_epoch: "92",
-      max_pending_market_orders: "1000000",
-      market_orders_timeout: "0",
       max_trades_per_pair: "1000000",
       global_oi_long: "148188691811081237025922024",
       global_oi_short: "11481661227866370572270086",

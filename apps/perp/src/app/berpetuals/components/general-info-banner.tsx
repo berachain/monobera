@@ -24,7 +24,7 @@ interface IGeneralInfoBanner {
 }
 export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[market?.name ?? ""] ?? "0";
+  const price = marketPrices[market?.pair_index ?? ""] ?? "0";
   const [open, setOpen] = useState(false);
 
   const historicPrice = priceChange[Number(market.pair_index)];
