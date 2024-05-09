@@ -209,14 +209,15 @@ export function TokenInput({
                     </p>
                   </TooltipCustom>
                 )}
-                {safeNumberAmount !== 0 && (
-                  <FormattedNumber
-                    value={safeNumberAmount * price}
-                    symbol="USD"
-                    compact={false}
-                    showIsSmallerThanMin
-                  />
-                )}
+                {safeNumberAmount !== 0 &&
+                  !Number.isNaN(safeNumberAmount * price) && (
+                    <FormattedNumber
+                      value={safeNumberAmount * price}
+                      symbol="USD"
+                      compact={false}
+                      showIsSmallerThanMin
+                    />
+                  )}
               </div>
             )}
           </div>
