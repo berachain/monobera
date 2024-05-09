@@ -107,13 +107,13 @@ export default function GlobalGaugeWeightChart({
         return;
       }
       // already visible
-      if (tooltipRef.current === `${tooltip.x},${tooltip.y}`) {
+      if (tooltipRef.current === `${tooltip.caretX},${tooltip.caretX}`) {
         return;
       }
       // set tooltip visible
-      tooltipRef.current = `${tooltip.x},${tooltip.y}`;
+      tooltipRef.current = `${tooltip.caretX},${tooltip.caretX}`;
       setSelectedGauge(tooltip.title[0]);
-      setTooltipPosition({ x: tooltip.x, y: tooltip.y });
+      setTooltipPosition({ x: tooltip.caretX, y: tooltip.caretY });
     },
     [gaugeWeights],
   );
@@ -159,12 +159,12 @@ export default function GlobalGaugeWeightChart({
         </div>
 
         <div
-          className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block "
+          className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block transform -translate-y-1/2"
           style={{
             top: `${tooltipPosition.y}px`,
             ...(tooltipPosition.x < 230 / 2
               ? { left: tooltipPosition.x }
-              : { right: 230 - tooltipPosition.x - 60 }),
+              : { right: 230 - tooltipPosition.x }),
           }}
         >
           {selectedGauge && <ChartTooltip gauge={gauge} />}
