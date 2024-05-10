@@ -5,10 +5,10 @@ import { GaugueLPChange } from "./gauge-lp-change";
 
 export const MyGaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 lg:flex-row flex-col">
       <GaugueLPChange />
 
-      <div className="flex w-full max-w-[440px] flex-col gap-4">
+      <div className="flex w-full lg:max-w-[440px] flex-col gap-4">
         <div className="flex flex-col gap-8 rounded-md border border-border p-4">
           <div className="text-lg font-semibold leading-7">
             My Vault Deposits

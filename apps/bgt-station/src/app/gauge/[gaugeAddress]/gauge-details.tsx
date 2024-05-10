@@ -3,10 +3,18 @@
 import { notFound } from "next/navigation";
 import { truncateHash } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { PoolHeader, TokenIconList } from "@bera/shared-ui";
+import {
+  DataTable,
+  PoolHeader,
+  SearchInput,
+  TokenIconList,
+} from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { isAddress } from "viem";
 
+import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
+import { gauge_validator_columns } from "~/columns/gauge-validator-columns";
 import { MyGaugeDetails } from "./my-gauge-details";
 
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
@@ -47,6 +55,42 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
         className="border-b border-border pb-8"
       />
       <MyGaugeDetails gaugeAddress={gaugeAddress} />
+
+      <Tabs defaultValue="validators" className="flex flex-col gap-4">
+        <div className="flex flex-col justify-between gap-4 md:flex-row">
+          <TabsList className="w-full md:w-fit">
+            <TabsTrigger value="validators" className="w-full md:w-fit">
+              Validators
+            </TabsTrigger>
+            <TabsTrigger value="incentives" className="w-full md:w-fit">
+              Incentives
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="w-full md:w-[300px]">
+            <SearchInput
+              placeholder="Search..."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {}}
+            />
+          </div>
+        </div>
+
+        <TabsContent value="validators">
+          <DataTable
+            columns={gauge_validator_columns as any}
+            data={[]}
+            className="max-h-[300px] min-w-[1000px] shadow"
+            enablePagination
+          />
+        </TabsContent>
+        <TabsContent value="incentives">
+          <DataTable
+            columns={gauge_incentives_columns as any}
+            data={[]}
+            className="max-h-[300px] min-w-[1000px] shadow"
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
