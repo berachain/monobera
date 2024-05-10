@@ -8,7 +8,6 @@ import { POLLING } from "~/utils/constants";
 import type { IMarket } from "~/types/market";
 import type { IOpenTrade } from "~/types/order-history";
 import type { TableStateProps } from "~/types/table";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import { getPnl } from "./useCalculatePnl";
 import BigNumber from "bignumber.js";
 
@@ -50,13 +49,12 @@ export const usePollOpenPositions = (props: TableStateProps) => {
     });
   };
 
-  const calculateUnrealizedPnl = () => {
+  const calculateUnrealizedPnl = (marketPrices: Record<string, string>) => {
     const openPositions = data?.result;
     const totalPositions = data?.pagination?.total_items ?? 0;
     if (totalPositions > 10) {
       return undefined;
     }
-    const { marketPrices } = usePollPrices();
 
     if (!Array.isArray(openPositions) || openPositions.length === 0) {
       return "0";

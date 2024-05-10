@@ -11,6 +11,7 @@ import { usePollOpenPositionsSummary } from "~/hooks/usePollOpenPositionsSummary
 import type { IMarket } from "~/types/market";
 import type { TableTabTypes } from "~/types/table";
 import { TotalRelativePnLHoverState } from "./total-relative-pnl-hover-state";
+import { usePollPrices } from "~/hooks/usePollPrices";
 
 export function TotalAmount({
   className,
@@ -27,16 +28,15 @@ export function TotalAmount({
     usePollOpenPositionsSummary();
   const { tableState } = useContext(TableContext);
   const { calculateUnrealizedPnl } = usePollOpenPositions(tableState);
-  let unrealizedPnl = calculateUnrealizedPnl();
+  const { marketPrices } = usePollPrices();
+  let unrealizedPnl = calculateUnrealizedPnl(marketPrices);
   unrealizedPnl = unrealizedPnl
     ? BigNumber(unrealizedPnl)
     : formatFromBaseUnit(totalUnrealizedPnl, 18);
   const { useAccountTradingSummary } = usePollAccountTradingSummary();
   const { data } = useAccountTradingSummary();
   const realizedPnl = data?.pnl ?? "0";
-  const totalPnlBN = useMemo(() => {
-    return unrealizedPnl.plus(realizedPnl);
-  }, [unrealizedPnl, realizedPnl]);
+  const totalPnlBN = unrealizedPnl.plus(realizedPnl);
 
   const totalRelativePnL = () => {
     return (
