@@ -205,9 +205,13 @@ export function DataTable<TData, TValue>({
     meta: {
       ...additionalTableProps?.meta,
     },
-    onSortingChange: (value: any) => {
-      onCustomSortingChange?.(value());
-    },
+    ...(onCustomSortingChange
+      ? {
+          onSortingChange: (value: any) => {
+            onCustomSortingChange?.(value());
+          },
+        }
+      : {}),
   });
 
   return (

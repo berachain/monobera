@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { useBeraJs } from "@/../../packages/berajs/dist";
 import { ConnectWalletBear } from "@bera/shared-ui";
 
+import { TableContext } from "~/context/table-context";
 import { usePollAccountTradingSummary } from "~/hooks/usePollAccountTradingSummary";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { useTradingSummaryChart } from "~/hooks/useTradingSummaryChart";
@@ -13,7 +14,8 @@ import { PortfolioHome } from "./portfolio";
 
 export default function Home({ markets }: { markets: IMarket[] }) {
   const { account } = useBeraJs();
-  const { isLoading: isPositionSizeLoading } = usePollOpenPositions();
+  const { tableState } = useContext(TableContext);
+  const { isLoading: isPositionSizeLoading } = usePollOpenPositions(tableState);
   const { isLoading: isAccountSummaryLoading } = usePollAccountTradingSummary();
   const { isLoading: isChartLoading } = useTradingSummaryChart({
     interval: "90d" as any,

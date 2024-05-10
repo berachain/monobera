@@ -1,20 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { DataTable } from "@bera/shared-ui";
 
 import { ClosePositionModal } from "~/app/components/close-position-modal";
 import { generatePositionColumns } from "~/app/components/table-columns/positions";
 import { UpdatePositionModal } from "~/app/components/update-position-modal";
+import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import type { IMarket } from "~/types/market";
-import type { ICards, IMarketOrder, IRow } from "~/types/order-history";
+import type { ICards, IOpenTrade, IRow } from "~/types/order-history";
 
 export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
-  const { useMarketOpenPositions } = usePollOpenPositions();
+  const { tableState } = useContext(TableContext);
+  const { useMarketOpenPositions } = usePollOpenPositions(tableState);
   const openPositions = useMarketOpenPositions(markets);
-  const [updateOpen, setUpdateOpen] = useState<boolean | IMarketOrder>(false);
-  const [deleteOpen, setDeleteOpen] = useState<boolean | IMarketOrder>(false);
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
 
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
@@ -28,12 +30,12 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
         </div>
       </div>
       <UpdatePositionModal
-        openPosition={updateOpen as IMarketOrder}
+        openPosition={updateOpen as IOpenTrade}
         controlledOpen={!!updateOpen}
         onOpenChange={setUpdateOpen}
       />
       <ClosePositionModal
-        openPosition={deleteOpen as IMarketOrder}
+        openPosition={deleteOpen as IOpenTrade}
         controlledOpen={!!deleteOpen}
         onOpenChange={setDeleteOpen}
       />

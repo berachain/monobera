@@ -2,21 +2,24 @@ import { useMemo, useState } from "react";
 import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
-import type { IMarketOrder } from "~/types/order-history";
+import type { IOpenTrade, IMarketOrder } from "~/types/order-history";
 
 interface ICalculatePnl {
   currentPrice: string | undefined;
-  openPosition: IMarketOrder;
+  openPosition: IOpenTrade | IMarketOrder;
+  positionSize: string;
 }
 
 interface IPnl {
-  openPosition: IMarketOrder;
+  openPosition: IOpenTrade | IMarketOrder;
   currentPrice: string | undefined;
+  positionSize: string;
 }
 
 export const useCalculatePnl = ({
   openPosition,
   currentPrice,
+  positionSize,
 }: IPnl): string | undefined => {
   const [pnl, setPnl] = useState<BigNumber | undefined>(undefined);
 
@@ -26,6 +29,7 @@ export const useCalculatePnl = ({
         getPnl({
           currentPrice,
           openPosition,
+          positionSize,
         }),
       );
     } catch (e) {
@@ -36,18 +40,19 @@ export const useCalculatePnl = ({
   return pnl ? pnl.toString(10) : undefined;
 };
 
-export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
+export const getPnl = ({
+  currentPrice,
+  openPosition,
+  positionSize,
+}: ICalculatePnl) => {
   if (currentPrice && openPosition) {
-    const collateral = BigNumber(openPosition.position_size);
-    const formattedCollateral = formatFromBaseUnit(
-      openPosition.position_size,
-      18,
-    );
-    const openPrice = BigNumber(openPosition.open_price);
-    const fees = BigNumber(openPosition.borrowing_fee)
-      .plus(BigNumber(openPosition.rollover_fee))
-      .plus(BigNumber(openPosition.funding_rate))
-      .plus(BigNumber(openPosition.closing_fee));
+    const collateral = BigNumber(positionSize);
+    const formattedCollateral = formatFromBaseUnit(positionSize, 18);
+    const openPrice = BigNumber(openPosition.open_price || "0");
+    const fees = BigNumber(openPosition.borrowing_fee || "0")
+      .plus(BigNumber(openPosition.rollover_fee || "0"))
+      .plus(BigNumber(openPosition.funding_fee || "0"))
+      .plus(BigNumber(openPosition.closing_fee || "0"));
     const leverage = BigNumber(openPosition.leverage);
 
     const pnl = openPrice
@@ -57,7 +62,6 @@ export const getPnl = ({ currentPrice, openPosition }: ICalculatePnl) => {
       .div(openPrice)
       .minus(fees);
     const formattedPnl = formatFromBaseUnit(pnl, 18);
-
     if (formattedPnl.lte(formattedCollateral.negated())) {
       return formattedCollateral.negated();
     }

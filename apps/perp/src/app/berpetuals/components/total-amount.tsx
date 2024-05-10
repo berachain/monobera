@@ -1,13 +1,15 @@
-import { useMemo } from "react";
-import { formatUsd } from "@bera/berajs";
+import { useContext, useMemo } from "react";
 import { FormattedNumber, Tooltip, usePrevious } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import BigNumber from "bignumber.js";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { TableContext } from "~/context/table-context";
+import { usePollAccountTradingSummary } from "~/hooks/usePollAccountTradingSummary";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
+import { usePollOpenPositionsSummary } from "~/hooks/usePollOpenPositionsSummary";
 import type { IMarket } from "~/types/market";
-import type { TableTabTypes } from "~/types/table-tab-types";
+import type { TableTabTypes } from "~/types/table";
 import { TotalRelativePnLHoverState } from "./total-relative-pnl-hover-state";
 
 export function TotalAmount({
@@ -21,17 +23,20 @@ export function TotalAmount({
   tabType: TableTabTypes;
   spacer?: boolean;
 }) {
-  const { useTotalUnrealizedPnl, useTotalPositionSize } =
-    usePollOpenPositions();
-  const totalUnrealizedPnl = useTotalUnrealizedPnl(markets);
-
-  const { useRealizedPnl } = usePollTradingHistory();
-  const realizedPnl = useRealizedPnl();
-
-  const totalPositionSize = useTotalPositionSize();
+  const { totalUnrealizedPnl, openPositionSize } =
+    usePollOpenPositionsSummary();
+  const { tableState } = useContext(TableContext);
+  const { calculateUnrealizedPnl } = usePollOpenPositions(tableState);
+  let unrealizedPnl = calculateUnrealizedPnl();
+  unrealizedPnl = unrealizedPnl
+    ? BigNumber(unrealizedPnl)
+    : formatFromBaseUnit(totalUnrealizedPnl, 18);
+  const { useAccountTradingSummary } = usePollAccountTradingSummary();
+  const { data } = useAccountTradingSummary();
+  const realizedPnl = data?.pnl ?? "0";
   const totalPnlBN = useMemo(() => {
-    return BigNumber(totalUnrealizedPnl).plus(realizedPnl);
-  }, [totalUnrealizedPnl, realizedPnl]);
+    return unrealizedPnl.plus(realizedPnl);
+  }, [unrealizedPnl, realizedPnl]);
 
   const totalRelativePnL = () => {
     return (
@@ -62,7 +67,9 @@ export function TotalAmount({
             children={
               <div className="p-2">
                 <TotalRelativePnLHoverState
-                  totalUnrealizedPnl={totalUnrealizedPnl ?? "0"}
+                  totalUnrealizedPnl={
+                    unrealizedPnl.isNaN() ? "0" : unrealizedPnl.toString(10)
+                  }
                   realizedPnl={realizedPnl ?? "0"}
                   totalPnl={totalPnlBN.isNaN() ? "0" : totalPnlBN.toString(10)}
                 />
@@ -85,11 +92,11 @@ export function TotalAmount({
             <FormattedNumber
               className={cn(
                 "",
-                Number(totalUnrealizedPnl) > 0
+                Number(unrealizedPnl) > 0
                   ? "text-success-foreground"
                   : "text-destructive-foreground",
               )}
-              value={totalUnrealizedPnl ?? 0}
+              value={unrealizedPnl ?? 0}
               compact={false}
               compactThreshold={9_999}
               symbol="USD"
@@ -147,7 +154,7 @@ export function TotalAmount({
             {
               <FormattedNumber
                 className="text-sm font-medium text-foreground"
-                value={totalPositionSize ?? "0"}
+                value={openPositionSize}
                 compact={false}
                 compactThreshold={9_999}
                 symbol="USD"

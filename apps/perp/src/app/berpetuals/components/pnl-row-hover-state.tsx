@@ -14,6 +14,7 @@ export function PnLRowHoverState({
   closeFee: string;
   openFee: string;
 }) {
+  console.log("checking", pnlAfterFees, borrowFee, closeFee, openFee);
   const pnl =
     Number(pnlAfterFees) +
     Number(borrowFee) +

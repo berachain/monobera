@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
 import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
@@ -9,11 +9,17 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
+import { TableContext } from "~/context/table-context";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import type { IMarketOrder } from "~/types/order-history";
-import { ActivePositionPNL } from "./table-columns/positions";
+import type { IOpenTrade } from "~/types/order-history";
+import { MarketTradePNL } from "./market-trade-pnl";
+import {
+  usePriceData,
+  usePythUpdateFeeFormatted,
+} from "~/context/price-context";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
 
 export function ClosePositionModal({
   trigger,
@@ -25,14 +31,16 @@ export function ClosePositionModal({
 }: {
   trigger?: any;
   disabled?: boolean;
-  openPosition: IMarketOrder;
+  openPosition: IOpenTrade;
   className?: string;
   controlledOpen?: boolean;
   onOpenChange?: (state: boolean) => void;
 }) {
+  const prices = usePriceData();
+  const pythUpdateFee = usePythUpdateFeeFormatted();
   const [open, setOpen] = useState<boolean>(false);
-  const { refetch } = usePollOpenPositions();
-  const [loading, setLoading] = useState(false);
+  const { tableState } = useContext(TableContext);
+  const { refresh } = usePollOpenPositions(tableState);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -46,7 +54,7 @@ export function ClosePositionModal({
   };
 
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[openPosition?.market?.name ?? ""] ?? "0";
+  const price = marketPrices[openPosition?.market?.pair_index ?? ""] ?? "0";
 
   const positionSize = formatFromBaseUnit(
     openPosition.position_size ?? "0",
@@ -63,10 +71,24 @@ export function ClosePositionModal({
     } position`,
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
-      refetch();
+      refresh();
       handleOpenChange(false);
     },
   });
+
+  const handleClosePosition = useCallback(() => {
+    write({
+      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      abi: tradingAbi,
+      functionName: "closeTradeMarket",
+      params: [
+        openPosition?.market?.pair_index,
+        openPosition?.index,
+        generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
+      ],
+      value: pythUpdateFee,
+    });
+  }, [prices, openPosition, write, pythUpdateFee]);
 
   return (
     <div className={className}>
@@ -144,7 +166,10 @@ export function ClosePositionModal({
               <div className="text-xs text-muted-foreground">
                 UnRealized PnL
               </div>
-              <ActivePositionPNL position={openPosition} />
+              <MarketTradePNL
+                position={openPosition}
+                positionSize={openPosition.position_size}
+              />
             </div>
             <div className="flex h-full flex-col justify-between">
               <div className="text-right text-xs text-muted-foreground ">
@@ -158,18 +183,7 @@ export function ClosePositionModal({
           <ActionButton>
             <Button
               disabled={isLoading || isSubmitting}
-              onClick={() => {
-                write({
-                  address: process.env
-                    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                  abi: tradingAbi,
-                  functionName: "closeTradeMarket",
-                  params: [
-                    openPosition?.market?.pair_index,
-                    openPosition?.index,
-                  ],
-                });
-              }}
+              onClick={handleClosePosition}
               className="w-full bg-destructive text-destructive-foreground"
             >
               Close Position
