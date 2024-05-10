@@ -47,9 +47,10 @@ export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
 export { MainNav } from "./main-nav";
 export { MobileDropdown } from "./mobile-nav";
-export * from "./terms-of-use";
-export * from "./access-deny";
+export { TermsOfUse, PrivacyPolicy, TermOfUseModal } from "./terms-of-use";
+export { AccessDenyModal, AccessDeny } from "./access-deny";
 export { FormattedNumber } from "./formatted-number";
+export { PoolHeader } from "./pool-header";
 
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
