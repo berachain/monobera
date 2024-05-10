@@ -52,7 +52,7 @@ export const PoolHeader = ({
               {subtitle.title}:
               <span
                 className={cn(
-                  "text-sm",
+                  "flex items-center gap-1 text-sm",
                   subtitle.color
                     ? `text-${subtitle.color}-foreground`
                     : "text-foreground",
@@ -64,7 +64,7 @@ export const PoolHeader = ({
               >
                 {subtitle.content}
                 {subtitle.externalLink && (
-                  <Icons.externalLink className="-mt-1 ml-1 inline-block h-4 w-4 text-muted-foreground" />
+                  <Icons.externalLink className="inline-block h-4 w-4 text-muted-foreground" />
                 )}
               </span>
             </div>
