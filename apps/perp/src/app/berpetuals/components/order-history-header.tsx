@@ -1,15 +1,15 @@
+import { useCallback } from "react";
 import { tradingAbi, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { Switch } from "@bera/ui/switch";
 import { RowSelectionState } from "@tanstack/react-table";
-import { mutate } from "swr";
 import { encodeFunctionData, type Address } from "viem";
 
-import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import type { CloseOrderPayload } from "~/types/order-history";
-import type { TableTabTypes } from "~/types/table-tab-types";
+import type { TableTabTypes } from "~/types/table";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
+import { usePriceData } from "~/context/price-context";
 
 export function OrderHistoryHeader({
   headers,
@@ -18,6 +18,8 @@ export function OrderHistoryHeader({
   closePositionsPayload,
   closeOrdersPayload,
   selection,
+  refetchPositions,
+  refetchOrders,
 }: {
   headers: {
     title: string;
@@ -29,15 +31,16 @@ export function OrderHistoryHeader({
   closePositionsPayload: CloseOrderPayload[];
   closeOrdersPayload: CloseOrderPayload[];
   selection: RowSelectionState;
+  refetchPositions: () => void;
+  refetchOrders: () => void;
 }) {
-  const { QUERY_KEY } = usePollOpenPositions();
-
+  const prices = usePriceData();
   const { isLoading: isClosePositionsLoading, write: writePositionsClose } =
     useOctTxn({
       message: "Closing All Open Positions",
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
-        void mutate(QUERY_KEY);
+        refetchPositions();
       },
     });
   const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
@@ -45,11 +48,32 @@ export function OrderHistoryHeader({
       message: "Closing All Open Orders",
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
-        void mutate(QUERY_KEY);
+        refetchOrders();
       },
     });
 
   const selectionSize = Object.keys(selection).length;
+
+  const handleCloseAllPositions = useCallback(() => {
+    // TODO: update this to use the new multicall function when contracts are updated
+    const encodedData = closePositionsPayload.map((pos) => {
+      return encodeFunctionData({
+        abi: tradingAbi,
+        functionName: "closeTradeMarket",
+        args: [
+          pos.pairIndex,
+          pos.index,
+          generateEncodedPythPrices(prices, pos.pairIndex.toString()),
+        ],
+      });
+    });
+    writePositionsClose({
+      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      abi: tradingAbi,
+      functionName: "multicall",
+      params: [true, encodedData],
+    });
+  }, [closePositionsPayload, prices, writePositionsClose]);
 
   return (
     <div>
@@ -94,22 +118,7 @@ export function OrderHistoryHeader({
               disabled={
                 isClosePositionsLoading || closePositionsPayload?.length === 0
               }
-              onClick={() => {
-                const encodedData = closePositionsPayload.map((pos) => {
-                  return encodeFunctionData({
-                    abi: tradingAbi,
-                    functionName: "closeTradeMarket",
-                    args: [pos.pairIndex, pos.index],
-                  });
-                });
-                writePositionsClose({
-                  address: process.env
-                    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                  abi: tradingAbi,
-                  functionName: "tryAggregate",
-                  params: [true, encodedData],
-                });
-              }}
+              onClick={handleCloseAllPositions}
             >
               {`🌋 Close ${selectionSize ? selectionSize : "All"} Position${
                 selectionSize && selectionSize === 1 ? "" : "s"
@@ -137,7 +146,7 @@ export function OrderHistoryHeader({
                   address: process.env
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                   abi: tradingAbi,
-                  functionName: "tryAggregate",
+                  functionName: "multicall",
                   params: [true, encodedData],
                 });
               }}
