@@ -1,5 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
-import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
+import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  TransactionActionType,
+  formatUsd,
+  tradingAbi,
+  usePythUpdateFee,
+} from "@bera/berajs";
 import { usePrevious } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -10,14 +15,19 @@ import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { parseUnits as ethersParseUnits } from "ethers";
-import { mutate } from "swr";
 import { parseUnits, type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { TableContext } from "~/context/table-context";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
-import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import type { ILimitOrder } from "~/types/order-history";
 import { TPSL } from "../berpetuals/components/tpsl";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
+import {
+  usePriceData,
+  usePythUpdateFeeFormatted,
+} from "~/context/price-context";
 
 export function UpdateLimitOrderModal({
   trigger,
@@ -30,6 +40,8 @@ export function UpdateLimitOrderModal({
   openOrder: ILimitOrder;
   className?: string;
 }) {
+  const prices = usePriceData();
+  const pythUpdateFee = usePythUpdateFeeFormatted();
   const [open, setOpen] = useState<boolean>(false);
   const prevOpen = usePrevious(open);
   const [tp, setTp] = useState<string>(
@@ -38,10 +50,11 @@ export function UpdateLimitOrderModal({
   const [sl, setSl] = useState<string>(
     formatFromBaseUnit(openOrder?.sl, 10).toString(10),
   );
-  const { QUERY_KEY } = usePollOpenPositions();
+  const { tableState } = useContext(TableContext);
+  const { refresh } = usePollOpenLimitOrders(tableState);
 
   const formattedPrice = formatFromBaseUnit(
-    openOrder.price ?? "0",
+    openOrder.min_price ?? "0",
     10,
   ).toString(10);
 
@@ -58,7 +71,7 @@ export function UpdateLimitOrderModal({
     openOrder.position_size ?? "0",
     18,
   ).times(openOrder.leverage ?? "1");
-  const openPrice = formatFromBaseUnit(openOrder?.price ?? "0", 10);
+  const openPrice = formatFromBaseUnit(openOrder?.min_price ?? "0", 10);
   const size = positionSize.div(openPrice).dp(4).toString(10);
 
   const ticker = openOrder?.market?.name?.split("-")[0];
@@ -68,7 +81,7 @@ export function UpdateLimitOrderModal({
     message: "Updating Open Limit Order",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      void mutate(QUERY_KEY);
+      refresh();
       setOpen(false);
     },
   });
@@ -104,23 +117,47 @@ export function UpdateLimitOrderModal({
     bfLong: formattedBfLong,
     bfShort: formattedBfShort,
     orderType: openOrder?.buy === true ? "long" : "short",
-    price: openOrder?.price ?? "0",
+    price: formatFromBaseUnit(openOrder?.min_price ?? "0", 10).toString(10),
     leverage: openOrder?.leverage,
   });
 
-  const payload = [
-    openOrder?.market.pair_index,
-    openOrder?.index,
-    parseUnits(`${executionPrice}`, 10),
-    ethersParseUnits(
-      tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
-      10,
-    ),
-    ethersParseUnits(
-      sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
-      10,
-    ),
-  ];
+  // const payload = [
+  //   openOrder?.market.pair_index,
+  //   openOrder?.index,
+  //   parseUnits(`${executionPrice}`, 10),
+  //   ethersParseUnits(
+  //     tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
+  //     10,
+  //   ),
+  //   ethersParseUnits(
+  //     sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
+  //     10,
+  //   ),
+  // ];
+
+  const handleUpdateLimitOrder = useCallback(async () => {
+    if (openOrder === undefined) return;
+    await write({
+      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      abi: tradingAbi,
+      functionName: "updateOpenLimitOrder",
+      params: [
+        openOrder?.market.pair_index,
+        openOrder?.index,
+        parseUnits(`${executionPrice}`, 10),
+        ethersParseUnits(
+          tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
+          10,
+        ),
+        ethersParseUnits(
+          sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
+          10,
+        ),
+        generateEncodedPythPrices(prices, openOrder?.market.pair_index),
+      ],
+      value: pythUpdateFee,
+    });
+  }, [openOrder, write, tp, sl, executionPrice, prices]);
 
   return (
     <div className={className}>
@@ -219,18 +256,7 @@ export function UpdateLimitOrderModal({
             long={openOrder?.buy === true}
             tpslOnChange={handleTPSLChange}
           />
-          <Button
-            disabled={isLoading}
-            onClick={() => {
-              write({
-                address: process.env
-                  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: tradingAbi,
-                functionName: "updateOpenLimitOrder",
-                params: payload,
-              });
-            }}
-          >
+          <Button disabled={isLoading} onClick={handleUpdateLimitOrder}>
             Update Limit Order
           </Button>
         </DialogContent>

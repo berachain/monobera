@@ -86,7 +86,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   const rawHoneyBalanceBN = BigNumber(
     rawHoneyBalance ? rawHoneyBalance.toString() : "0",
   ); // BigNumber
-  const price = marketPrices[market?.name ?? ""] ?? "0"; // string
+  const price = marketPrices[market?.pair_index ?? ""] ?? "0"; // string
 
   const maxLeverage = params.max_leverage ?? "0";
   const formattedMaxCollateralBN = formatFromBaseUnit(

@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table";
 
 import type { IMarket } from "~/types/market";
-import type { TableTabTypes } from "~/types/table-tab-types";
+import type { TableTabTypes } from "~/types/table";
 import { OrderChart } from "../components/order-chart";
 import { OrderHistory } from "../components/order-history";
 import { CreatePosition } from "./create-position";
