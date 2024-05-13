@@ -10,15 +10,12 @@ import { type Address } from "viem";
 
 export const ValidatorIcon = ({
   address,
-  description,
   className,
 }: {
   address: Address;
-  description?: string;
   className?: string;
 }) => {
   const { data: validatorImg } = useValidatorIcon({
-    identity: description,
     address,
   });
 

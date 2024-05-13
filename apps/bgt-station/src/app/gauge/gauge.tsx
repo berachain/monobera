@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useBeraJs } from "@bera/berajs";
+import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -79,6 +79,99 @@ const mockChartData = [
   },
 ];
 
+const cuttingboard: CuttingBoardWeight[] = [
+  {
+    percentage: 25,
+    amount: 375000,
+    receiver: {
+      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+      name: "Honey Vault",
+      imageUri:
+        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+      website: "https://www.honeyvault.com",
+      activeIncentives: [
+        {
+          token: {
+            name: "Honey Token",
+            symbol: "HNY",
+            address: "0xdeadbeefdeadbeef",
+            decimals: 18,
+          },
+          incentiveRate: "0.05",
+          amountLeft: "50000",
+        },
+      ],
+      market: {
+        name: "Honey Market",
+        imageUri:
+          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+        website: "https://www.honeymarket.com",
+      },
+    },
+  },
+  {
+    percentage: 25,
+    amount: 75000,
+    receiver: {
+      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+      name: "Honey Vault",
+      imageUri:
+        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+      website: "https://www.honeyvault.com",
+      activeIncentives: [
+        {
+          token: {
+            name: "Honey Token",
+            symbol: "HNY",
+            address: "0xdeadbeefdeadbeef",
+            decimals: 18,
+          },
+          incentiveRate: "0.05",
+          amountLeft: "50000",
+        },
+      ],
+      market: {
+        name: "Honey Market",
+        imageUri:
+          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+        website: "https://www.honeymarket.com",
+      },
+    },
+  },
+  {
+    percentage: 25,
+    amount: 375000,
+    receiver: {
+      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+      name: "Honey Vault",
+      imageUri:
+        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+      website: "https://www.honeyvault.com",
+      activeIncentives: [
+        {
+          token: {
+            name: "Honey Token",
+            symbol: "HNY",
+            address: "0xdeadbeefdeadbeef",
+            decimals: 18,
+          },
+          incentiveRate: "0.05",
+          amountLeft: "50000",
+        },
+      ],
+      market: {
+        name: "Honey Market",
+        imageUri:
+          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+        website: "https://www.honeymarket.com",
+      },
+    },
+  },
+];
+
 export default function Gauge() {
   const { isConnected } = useBeraJs();
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
@@ -86,7 +179,11 @@ export default function Gauge() {
     <div className="flex flex-col gap-12">
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
-        <GlobalGaugeWeightChart gaugeWeights={mockChartData} />
+        <GlobalGaugeWeightChart
+          gaugeWeights={cuttingboard}
+          totalAmountStaked={"100000"}
+          globalAmountStaked={"100000000"}
+        />
       </div>
 
       <Tabs defaultValue="all-gauges" className="flex flex-col gap-4">

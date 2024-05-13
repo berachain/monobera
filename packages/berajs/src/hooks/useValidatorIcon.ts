@@ -5,7 +5,6 @@ import { Address } from "viem";
 import { getValidatorIcon } from "~/actions/bgt";
 
 interface IUseValidatorIconRequest {
-  identity: string | undefined;
   address: Address | undefined;
 }
 
@@ -16,7 +15,6 @@ interface IUseValidatorIconResponse {
 }
 
 export const useValidatorIcon = ({
-  identity,
   address,
 }: IUseValidatorIconRequest): IUseValidatorIconResponse => {
   const [validatorIcon, setValidatorIcon] = useLocalStorage<string | undefined>(
@@ -27,11 +25,14 @@ export const useValidatorIcon = ({
   const keybase = async (identity: string | undefined) => {
     if (!identity) return Promise.resolve({ status: "error" });
     return (
-      await fetch(
-        `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${identity}&fields=pictures`,
-        { referrerPolicy: "origin-when-cross-origin" },
-      )
-    ).json();
+      // TODO: point to default list
+      (
+        await fetch(
+          `https://keybase.io/_/api/1.0/user/lookup.json?key_suffix=${address}&fields=pictures`,
+          { referrerPolicy: "origin-when-cross-origin" },
+        )
+      ).json()
+    );
   };
 
   const fetchValidatorIcon = async (identity: string) => {
@@ -47,7 +48,7 @@ export const useValidatorIcon = ({
     isLoading,
     isValidating,
     data = undefined,
-  } = useSWRImmutable(identity, fetchValidatorIcon);
+  } = useSWRImmutable(address, fetchValidatorIcon);
 
   return {
     isLoading,
