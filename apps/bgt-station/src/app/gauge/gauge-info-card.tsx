@@ -54,7 +54,7 @@ export default function GaugeInfoCard() {
           {fakeValidators.map((validator, index) => (
             <div
               className="flex h-7 w-fit flex-nowrap items-center gap-2 rounded-full border border-border bg-background px-2"
-              key={index}
+              key={`${index}-${validator.name}`}
             >
               {validator.icon}
               <span className="text-nowrap text-xs font-medium">

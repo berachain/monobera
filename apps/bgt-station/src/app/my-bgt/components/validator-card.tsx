@@ -19,11 +19,7 @@ import { Icons } from "@bera/ui/icons";
 import { useSWRConfig } from "swr";
 import { formatEther, type Address } from "viem";
 
-export default function ValidatorCard({
-  validator,
-}: {
-  validator: any;
-}) {
+export default function ValidatorCard({ validator }: { validator: any }) {
   const router = useRouter();
   const { account } = useBeraJs();
   const userDelegated = undefined;
@@ -147,7 +143,7 @@ export default function ValidatorCard({
           {valiInfo.map((item, index) => (
             <div
               className="flex w-full items-center justify-between gap-1 py-1 md:w-fit md:flex-col md:justify-center md:px-4 md:py-2"
-              key={index}
+              key={`${index}-${item.title}`}
             >
               <div className="w-full text-xs font-medium leading-tight text-muted-foreground">
                 {item.title}
