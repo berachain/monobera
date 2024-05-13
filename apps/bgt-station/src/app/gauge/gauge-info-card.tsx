@@ -26,8 +26,8 @@ const fakeValidators = [
 export default function GaugeInfoCard() {
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
-      <div className="grid grid-col-1 sm:grid-cols-3 bg-muted">
-        <div className="flex flex-col justify-center p-4 border-b border-border">
+      <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
+        <div className="flex flex-col justify-center border-b border-border p-4">
           <div className="text-xs leading-5 text-muted-foreground">
             Active Gauges Vaults
           </div>
@@ -47,24 +47,26 @@ export default function GaugeInfoCard() {
             </span>
           </div>
         </div>
-        <div className="flex flex-col justify-center gap-1 p-4 border-b border-border border-x">
+        <div className="flex flex-col justify-center gap-1 border-x border-b border-border p-4">
           <div className="text-xs leading-5 text-muted-foreground">
             Top 3 Validators
           </div>
           {fakeValidators.map((validator, index) => (
             <div
-              className="flex h-7 w-fit items-center gap-2 rounded-full border border-border bg-background px-2"
+              className="flex h-7 w-fit flex-nowrap items-center gap-2 rounded-full border border-border bg-background px-2"
               key={index}
             >
               {validator.icon}
-              <span className="text-xs font-medium">{validator.name}</span>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-nowrap text-xs font-medium">
+                {validator.name}
+              </span>
+              <span className="text-nowrap text-[10px] text-muted-foreground">
                 BGT/Year: {validator.bgtAmount}
               </span>
             </div>
           ))}
         </div>
-        <div className="flex flex-col justify-center p-4 border-b border-border">
+        <div className="flex flex-col justify-center border-b border-border p-4">
           <div className="text-xs leading-5 text-muted-foreground">
             Est. Yearly BGT Distribution
           </div>
@@ -73,7 +75,7 @@ export default function GaugeInfoCard() {
             <b>69.42K Yearly</b>
           </div>
         </div>
-        <div className="flex flex-col justify-center p-5 border-b border-border">
+        <div className="flex flex-col justify-center border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
             Active Bribes
           </div>
@@ -90,7 +92,7 @@ export default function GaugeInfoCard() {
             </span>
           </div>
         </div>
-        <div className="flex flex-col justify-center p-5 border-b border-border border-x gap-2">
+        <div className="flex flex-col justify-center gap-2 border-x border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
             Total No. of Validators
           </div>
@@ -98,7 +100,7 @@ export default function GaugeInfoCard() {
             69 Active
           </div>
         </div>
-        <div className="flex flex-col justify-center p-5 border-b border-border gap-2">
+        <div className="flex flex-col justify-center gap-2 border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
             Total Circulating BGT
           </div>
