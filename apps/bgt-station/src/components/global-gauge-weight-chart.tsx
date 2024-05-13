@@ -1,32 +1,23 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { ADDRESS_ZERO, truncateHash, useGauges } from "@bera/berajs";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { ADDRESS_ZERO, type CuttingBoardWeight } from "@bera/berajs";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { type Chart, type TooltipModel } from "chart.js";
 import uniqolor from "uniqolor";
 
 import { ChartTooltip } from "./chart-tooltip";
-
-interface chartData {
-  label: string;
-  address: string;
-  percentage: number;
-  amount: number;
-}
+import { FormattedNumber } from "@bera/shared-ui";
 
 export const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
 
 export default function GlobalGaugeWeightChart({
   gaugeWeights = [],
+  totalAmountStaked,
+  globalAmountStaked,
 }: {
-  gaugeWeights: chartData[] | undefined;
+  gaugeWeights: CuttingBoardWeight[] | undefined;
+  totalAmountStaked: string;
+  globalAmountStaked: string;
 }) {
-  const { gaugeDictionary } = useGauges();
   const tooltipRef = useRef<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [selectedGauge, setSelectedGauge] = useState<any>();
@@ -42,6 +33,13 @@ export default function GlobalGaugeWeightChart({
           return {
             amount: prev.amount + curr.amount,
             percentage: prev.percentage + curr.percentage,
+            receiver: {
+              name: OTHERS_GAUGES,
+              address: ADDRESS_ZERO,
+              market: {
+                name: OTHERS_GAUGES,
+              },
+            } as any,
           };
         }
         return prev;
@@ -54,8 +52,13 @@ export default function GlobalGaugeWeightChart({
     // Only add the "Others" gauge if it has a significant amount
     if (others.amount > 0) {
       combined.push({
-        address: ADDRESS_ZERO,
-        label: OTHERS_GAUGES,
+        receiver: {
+          name: OTHERS_GAUGES,
+          address: ADDRESS_ZERO,
+          market: {
+            name: OTHERS_GAUGES,
+          },
+        } as any,
         amount: others.amount,
         percentage: others.percentage,
       });
@@ -68,22 +71,22 @@ export default function GlobalGaugeWeightChart({
   const dataP = useMemo(() => {
     const backgroundColor = [];
     const hoverBorderColor = [];
-    gauges.forEach((gauge, index) => {
-      if (gauge.label !== OTHERS_GAUGES) {
-        const bgColor = uniqolor(gauge.address).color;
+    gauges.forEach((gauge) => {
+      if (gauge.receiver.name !== OTHERS_GAUGES) {
+        const bgColor = uniqolor(gauge.receiver.address).color;
         backgroundColor.push(bgColor);
         hoverBorderColor.push(`${bgColor}52`);
       }
     });
     if (othersIndex > -1 && gauges.length > 1) {
-      if (gauges.some((gauge) => gauge.label === OTHERS_GAUGES)) {
+      if (gauges.some((gauge) => gauge.receiver.name === OTHERS_GAUGES)) {
         const bgColor = uniqolor(ADDRESS_ZERO).color;
         backgroundColor.push(bgColor);
         hoverBorderColor.push(`${bgColor}52`);
       }
     }
     return {
-      labels: gauges?.map((d) => d.address),
+      labels: gauges?.map((d) => d.receiver.address),
       datasets: [
         {
           hoverBorderWidth: 10,
@@ -119,9 +122,8 @@ export default function GlobalGaugeWeightChart({
   );
 
   const gauge = {
-    ...gauges.find((gauge) => gauge.address === selectedGauge),
-    ...(gaugeDictionary?.[selectedGauge] ?? {}),
-  };
+    ...gauges.find((gauge) => gauge.receiver.address === selectedGauge),
+  } as CuttingBoardWeight;
 
   return (
     <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[340px]">
@@ -152,9 +154,12 @@ export default function GlobalGaugeWeightChart({
           <div className="text-xs leading-3 text-muted-foreground">
             Total Staked BGT
           </div>
-          <div className="text-lg font-bold leading-7">69.42M</div>
+          <div className="text-lg font-bold leading-7">
+            <FormattedNumber value={totalAmountStaked} compact />
+          </div>
           <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
-            79.69M BGT Circulating
+            <FormattedNumber value={globalAmountStaked} compact /> BGT
+            Circulating
           </div>
         </div>
 

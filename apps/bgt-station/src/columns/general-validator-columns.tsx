@@ -11,8 +11,9 @@ import { type Address } from "viem";
 import { formatCommission } from "~/utils/formatCommission";
 import { VP } from "~/components/validator-selector";
 import { ValidatorGauge } from "~/app/validators/validators-table";
+import { type Validator } from "@bera/berajs";
 
-export const general_validator_columns: ColumnDef<any>[] = [
+export const general_validator_columns: ColumnDef<Validator>[] = [
   // {
   //   header: ({ column }) => (
   //     <DataTableColumnHeader column={column} title="Rank" />
@@ -31,13 +32,12 @@ export const general_validator_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Validator" />
     ),
     cell: ({ row }) => {
-      const moniker = row.original.description.moniker;
+      const moniker = row.original.name;
 
       return (
         <div className="flex items-center gap-2">
           <ValidatorIcon
-            address={row.original.operatorAddr as Address}
-            description={row.original.description?.identity ?? undefined}
+            address={row.original.coinbase as Address}
             className="h-8 w-8"
           />
           {moniker}{" "}
@@ -53,42 +53,23 @@ export const general_validator_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <VP
-        operatorAddr={row.original.operatorAddr}
-        tokens={row.original.tokens}
+        coinbase={row.original.coinbase}
+        amountStaked={row.original.amountStaked}
       />
     ),
-    accessorKey: "tokens",
-    enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.tokens ?? 0;
-      const b = rowB.original.tokens ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    accessorKey: "amountStaked",
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Commission" />
     ),
     cell: ({ row }) => {
-      const commission = row.original.commission.commissionRates.rate;
+      const commission = row.original.commission;
       return (
-        <div className="flex h-full w-[91px] items-center">
-          {" "}
-          {formatCommission(commission)}%
-        </div>
+        <div className="flex h-full w-[91px] items-center"> {commission}%</div>
       );
     },
     accessorKey: "commission",
-    enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.commission.commissionRates.rate ?? 0;
-      const b = rowB.original.commission.commissionRates.rate ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
   },
   {
     header: ({ column }) => (
@@ -101,7 +82,7 @@ export const general_validator_columns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <div className="flex h-full w-[91px] items-center">
         {" "}
-        {Number(row.original.vApy ?? 0).toFixed(2)}%
+        {Number(row.original.apy ?? 0).toFixed(2)}%
       </div>
     ),
     accessorKey: "vApy",
@@ -111,7 +92,7 @@ export const general_validator_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
     ),
-    cell: ({ row }) => <ValidatorGauge address={row.original.operatorAddr} />,
+    cell: ({ row }) => <ValidatorGauge address={row.original.coinbase} />,
     accessorKey: "mostWeightedGauge",
     enableSorting: false,
   },
@@ -120,7 +101,7 @@ export const general_validator_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Bribes" />
     ),
     cell: ({ row }) => {
-      const tokens = row.original.bribeTokenList;
+      const tokens = [];
       return tokens.length !== 0 ? (
         <TokenIconList tokenList={[]} size="lg" showCount={3} />
       ) : (
