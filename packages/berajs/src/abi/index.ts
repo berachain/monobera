@@ -17,3 +17,4 @@ export * from "./bexAbi";
 export * from "./bexQueryAbi";
 export * from "./multiswapAbi";
 export * from "./referralsAbi";
+export * from "./pythAbi";

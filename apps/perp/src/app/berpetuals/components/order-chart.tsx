@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useContext } from "react";
 import dynamic from "next/dynamic";
 import {
   type PaginationState,
@@ -6,12 +6,13 @@ import {
 } from "@tanstack/react-table";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { TableContext } from "~/context/table-context";
 import { CloseOrderModal } from "~/app/components/close-order-modal";
-import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type IMarket } from "~/types/market";
-import { ILimitOrder, IMarketOrder } from "~/types/order-history";
-import { type TableTabTypes } from "~/types/table-tab-types";
+import { ILimitOrder, IOpenTrade } from "~/types/order-history";
+import { type TableTabTypes } from "~/types/table";
 import {
   type ChartingLibraryWidgetOptions,
   type ResolutionString,
@@ -19,7 +20,6 @@ import {
 import { ClosePositionModal } from "../../components/close-position-modal";
 import type { ChartProps } from "./TVChartContainer";
 import { LoadingContainer } from "./loading-container";
-import { PYTH_IDS } from "~/utils/constants";
 
 export type OrderLine = {
   type: string;
@@ -56,11 +56,12 @@ export function OrderChart({
   setSelection: (selection: RowSelectionState) => void;
   tabType: TableTabTypes;
 }) {
-  const { useMarketOpenPositions } = usePollOpenPositions();
-  const { useMarketOpenOrders } = usePollOpenOrders();
+  const { tableState } = useContext(TableContext);
+  const { useMarketOpenPositions } = usePollOpenPositions(tableState);
+  const { useMarketOpenLimitOrders } = usePollOpenLimitOrders(tableState);
 
   const openPositions = useMarketOpenPositions(markets);
-  const openOrders = useMarketOpenOrders(markets);
+  const openOrders = useMarketOpenLimitOrders(markets);
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -69,7 +70,7 @@ export function OrderChart({
 
   const [positionOpenState, setPositionOpenState] = useState(false);
   const [orderOpenState, setOrderOpenState] = useState(false);
-  const [position, setPosition] = useState<IMarketOrder>();
+  const [position, setPosition] = useState<IOpenTrade>();
   const [order, setOrder] = useState<ILimitOrder>();
   const [chartReady, setChartReady] = useState(false);
 
@@ -142,7 +143,7 @@ export function OrderChart({
               order.position_size,
               18,
             ).times(order.leverage ?? "1");
-            const openPrice = formatFromBaseUnit(order.price, 10);
+            const openPrice = formatFromBaseUnit(order.min_price, 10);
             const size = positionSize.div(openPrice).dp(4).toString(10);
 
             const limit = {

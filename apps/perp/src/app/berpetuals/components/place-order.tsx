@@ -1,8 +1,8 @@
-import { useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import {
-  tradingAbi,
   TransactionActionType,
   formatUsd,
+  tradingAbi,
   useBeraJs,
   usePollAllowance,
 } from "@bera/berajs";
@@ -24,6 +24,13 @@ import BigNumber from "bignumber.js";
 import { parseUnits, type Address } from "viem";
 
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
+import {
+  useIsPythConnected,
+  usePriceData,
+  usePythUpdateFeeFormatted,
+} from "~/context/price-context";
+import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "~/types/order-type";
 
@@ -44,7 +51,11 @@ export function PlaceOrder({
   bfShort: string;
   pairIndex: string;
 }) {
-  const { refetch } = usePollOpenPositions();
+  const prices = usePriceData();
+  const isPythConnected = useIsPythConnected();
+  const pythUpdateFee = usePythUpdateFeeFormatted();
+  const { tableState } = useContext(TableContext);
+  const { refresh } = usePollOpenPositions(tableState);
 
   const slippage = useSlippage();
   const { setSlippageMode, setSlippage } = useSetSlippage();
@@ -80,7 +91,7 @@ export function PlaceOrder({
           ? `Placing Limit Long Order ${form.assets}`
           : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
-      refetch();
+      refresh();
     },
   });
 
@@ -101,25 +112,52 @@ export function PlaceOrder({
   }, [form.amount, form.leverage]);
   const parsedPositionSize = parseUnits(safeAmount, 18);
 
-  const payload = [
-    {
-      trader: account,
-      pairIndex: Number(pairIndex),
-      index: 0,
-      initialPosToken: 0,
-      positionSizeHoney: parsedPositionSize, // position size
-      openPrice:
-        form.optionType === "market"
-          ? parseUnits(`${price ?? 0}`, 10)
-          : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
-      buy: form.orderType === "long" ? true : false,
-      leverage: Number(form.leverage),
-      tp: form.tp === "" ? 0n : parseUnits(form?.tp ?? "0", 10),
-      sl: form.sl === "" ? 0n : parseUnits(form?.sl ?? "0", 10),
-    },
-    form.optionType === "market" ? 0 : 1,
-    parseUnits(`${slippage ?? 0}`, 10),
-  ];
+  const handlePlaceOrder = useCallback(async () => {
+    const payload = [
+      {
+        trader: account,
+        pairIndex: Number(pairIndex),
+        index: 0,
+        initialPosToken: 0,
+        positionSizeHoney: parsedPositionSize, // position size
+        openPrice:
+          form.optionType === "market"
+            ? parseUnits(`${price ?? 0}`, 10)
+            : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
+        buy: form.orderType === "long" ? true : false,
+        leverage: Number(form.leverage),
+        tp: form.tp === "" ? 0n : parseUnits(form?.tp ?? "0", 10),
+        sl: form.sl === "" ? 0n : parseUnits(form?.sl ?? "0", 10),
+      },
+      form.optionType === "market" ? 0 : 1,
+      parseUnits(`${slippage ?? 0}`, 10),
+      generateEncodedPythPrices(prices, pairIndex),
+    ];
+
+    write({
+      address: tradingContract,
+      abi: tradingAbi,
+      functionName: "openTrade",
+      params: payload,
+      value: pythUpdateFee,
+    });
+  }, [
+    tradingContract,
+    tradingAbi,
+    account,
+    pythUpdateFee,
+    pairIndex,
+    form.optionType,
+    form.orderType,
+    form.leverage,
+    form.tp,
+    form.sl,
+    form.optionType,
+    slippage,
+    form.limitPrice,
+    write,
+    prices,
+  ]);
 
   const honey = {
     symbol: "HONEY",
@@ -266,16 +304,10 @@ export function PlaceOrder({
               form.amount === "" ||
               safeAmount === "0" ||
               form.amount === undefined ||
-              form.tp === ""
+              form.tp === "" ||
+              !isPythConnected
             }
-            onClick={() =>
-              write({
-                address: tradingContract,
-                abi: tradingAbi,
-                functionName: "openTrade",
-                params: payload,
-              })
-            }
+            onClick={handlePlaceOrder}
           >
             Place {form.optionType} {form.orderType} order
           </Button>

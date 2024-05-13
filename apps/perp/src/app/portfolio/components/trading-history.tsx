@@ -1,15 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { DataTable } from "@bera/shared-ui";
+import { TableContext } from "~/context/table-context";
 
 import { historyColumns } from "~/app/components/table-columns/history";
-import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import type { IMarket } from "~/types/market";
 
 export default function TradingHistory({ markets }: { markets: IMarket[] }) {
-  const { useMarketClosedPositions } = usePollTradingHistory();
-  const closedPositions = useMarketClosedPositions(markets);
+  const { tableState } = useContext(TableContext);
+  const { useMarketOrders } = usePollMarketOrders(tableState);
+  const marketOrders = useMarketOrders(markets);
   return (
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
       <div className="flex w-full flex-col items-start justify-between gap-2 pl-2 md:flex-row">
@@ -24,7 +26,7 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
       <DataTable
         enablePagination
         columns={historyColumns}
-        data={closedPositions ?? []}
+        data={marketOrders ?? []}
         className="min-w-[1136px]"
       />
     </div>
