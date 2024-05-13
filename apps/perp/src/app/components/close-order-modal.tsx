@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { TransactionActionType, formatUsd, tradingAbi } from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -7,12 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
-import { mutate } from "swr";
 import { type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { TableContext } from "~/context/table-context";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
-import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import type { ILimitOrder } from "~/types/order-history";
 
 export function CloseOrderModal({
@@ -31,7 +31,8 @@ export function CloseOrderModal({
   onOpenChange?: (state: boolean) => void;
 }) {
   const [open, setOpen] = useState<boolean>(false);
-  const { QUERY_KEY } = usePollOpenPositions();
+  const { tableState } = useContext(TableContext);
+  const { refresh } = usePollOpenLimitOrders(tableState);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -48,7 +49,7 @@ export function CloseOrderModal({
     openOrder.position_size ?? "0",
     18,
   ).times(openOrder.leverage ?? "1");
-  const openPrice = formatFromBaseUnit(openOrder.price ?? "0", 10);
+  const openPrice = formatFromBaseUnit(openOrder.min_price ?? "0", 10);
   const size = positionSize.div(openPrice).dp(4).toString(10);
 
   const ticker = openOrder?.market?.name?.split("-")[0];
@@ -59,7 +60,7 @@ export function CloseOrderModal({
     } Limit Order`,
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
-      void mutate(QUERY_KEY);
+      refresh();
       handleOpenChange(false);
     },
   });
@@ -67,7 +68,7 @@ export function CloseOrderModal({
   const formattedTp = formatFromBaseUnit(openOrder.tp ?? "0", 10).toString(10);
   const formattedSl = formatFromBaseUnit(openOrder.sl ?? "0", 10).toString(10);
   const formattedPrice = formatFromBaseUnit(
-    openOrder.price ?? "0",
+    openOrder.min_price ?? "0",
     10,
   ).toString(10);
 
@@ -84,9 +85,18 @@ export function CloseOrderModal({
     bfLong: formattedBfLong,
     bfShort: formattedBfShort,
     orderType: openOrder?.buy === true ? "long" : "short",
-    price: openOrder.price,
+    price: openPrice.toString(10),
     leverage: openOrder?.leverage,
   });
+
+  const handleCancelLimitOrder = useCallback(async () => {
+    write({
+      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      abi: tradingAbi,
+      functionName: "cancelOpenLimitOrder",
+      params: [openOrder?.market?.pair_index, openOrder?.index],
+    });
+  }, [openOrder, write]);
 
   return (
     <div className={className}>
@@ -172,15 +182,7 @@ export function CloseOrderModal({
             <Button
               className="w-full"
               disabled={isLoading || isSubmitting}
-              onClick={() => {
-                write({
-                  address: process.env
-                    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                  abi: tradingAbi,
-                  functionName: "cancelOpenLimitOrder",
-                  params: [openOrder?.market?.pair_index, openOrder?.index],
-                });
-              }}
+              onClick={handleCancelLimitOrder}
             >
               Cancel Limit Order
             </Button>

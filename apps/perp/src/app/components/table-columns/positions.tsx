@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
 import { DataTableColumnHeader, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -10,15 +9,14 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { EST_PNL_TOOLTIP_TEXT, TPSL_TOOLTIP_TEXT } from "~/utils/tooltip-text";
 import { PositionTitle } from "~/app/components/position-title";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
-import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
-import type { IMarketOrder } from "~/types/order-history";
-import { PnLRowHoverState } from "../../berpetuals/components/pnl-row-hover-state";
+import type { IOpenTrade } from "~/types/order-history";
+import { MarketTradePNL } from "../market-trade-pnl";
 
-const MarkPrice = ({ position }: { position: IMarketOrder }) => {
+const MarkPrice = ({ position }: { position: IOpenTrade }) => {
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[position?.market?.name ?? ""] ?? "0";
+  const price = marketPrices[position?.market?.pair_index ?? ""] ?? "0";
 
   return (
     <div>
@@ -36,7 +34,7 @@ export const PositionLiquidationPrice = ({
   className,
   markets,
 }: {
-  position: IMarketOrder;
+  position: IOpenTrade;
   className?: string;
   markets: IMarket[];
 }) => {
@@ -78,87 +76,12 @@ export const PositionLiquidationPrice = ({
   );
 };
 
-export const ActivePositionPNL = ({
-  position,
-  className,
-  wrapped,
-}: {
-  position: IMarketOrder;
-  className?: string;
-  wrapped?: boolean;
-}) => {
-  const { marketPrices } = usePollPrices();
-  const price = marketPrices[position?.market?.name ?? ""] ?? "0";
-
-  const pnl = useCalculatePnl({
-    currentPrice: price,
-    openPosition: position,
-  });
-
-  const percentage = useMemo(() => {
-    if (!pnl || !position) return "0";
-    const positionSizeBN = formatFromBaseUnit(position.position_size, 18);
-    const currentSize = positionSizeBN.plus(pnl);
-    const percentage = currentSize
-      .minus(positionSizeBN)
-      .div(positionSizeBN)
-      .times(100);
-    return percentage.isFinite() ? percentage.dp(2).toString(10) : "-";
-  }, [pnl, position]);
-
-  const initialCollateral = formatFromBaseUnit(position.position_size, 18)
-    .plus(formatFromBaseUnit(position.open_fee, 18))
-    .toString(10);
-  const borrowFee = formatFromBaseUnit(position.borrowing_fee, 18).toString(10);
-  const closeFee = formatFromBaseUnit(position.closing_fee, 18).toString(10);
-  const openFee = formatFromBaseUnit(position.open_fee, 18).toString(10);
-
-  return (
-    <div className={cn("", className)}>
-      {pnl !== undefined ? (
-        <div>
-          <div
-            className={cn(
-              " flex flex-col items-start",
-              Number(pnl) > 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-              wrapped && "flex-row gap-1",
-            )}
-          >
-            <Tooltip
-              toolTipTrigger={
-                <div className="cursor-help underline decoration-dashed">
-                  {formatUsd(pnl)}
-                </div>
-              }
-              children={
-                <PnLRowHoverState
-                  initialCollateral={initialCollateral}
-                  pnlAfterFees={pnl}
-                  borrowFee={borrowFee}
-                  closeFee={closeFee}
-                  openFee={openFee}
-                />
-              }
-            />
-            {wrapped && <div className="text-xs"> | </div>}
-            <div className="text-xs">({percentage}%)</div>
-          </div>
-        </div>
-      ) : (
-        <Skeleton className={cn("h-[28px] w-[80px]", className)} />
-      )}
-    </div>
-  );
-};
-
 export const generatePositionColumns = (
   markets: IMarket[],
-  setUpdateOpen: (state: boolean | IMarketOrder) => void,
-  setDeleteOpen: (state: boolean | IMarketOrder) => void,
+  setUpdateOpen: (state: boolean | IOpenTrade) => void,
+  setDeleteOpen: (state: boolean | IOpenTrade) => void,
 ) => {
-  const positionsColumns: ColumnDef<IMarketOrder>[] = [
+  const positionsColumns: ColumnDef<IOpenTrade>[] = [
     {
       header: ({ column }) => (
         <DataTableColumnHeader
@@ -191,11 +114,12 @@ export const generatePositionColumns = (
           18,
         ).times(row.original.leverage ?? "1");
         const openPrice = formatFromBaseUnit(row.original.open_price, 10);
-        const size = positionSize.div(openPrice).dp(4).toString(10);
+        const size = positionSize.div(openPrice).dp(4);
+
         return (
           <div className="w-[88px]">
             <div className="text-sm font-semibold leading-tight text-foreground ">
-              {size}
+              {size.isFinite() ? size.toString(10) : "-"}
             </div>
             <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
               {formatUsd(positionSize.toString(10))}
@@ -296,7 +220,12 @@ export const generatePositionColumns = (
           tooltip={EST_PNL_TOOLTIP_TEXT}
         />
       ),
-      cell: ({ row }) => <ActivePositionPNL position={row.original} />,
+      cell: ({ row }) => (
+        <MarketTradePNL
+          position={row.original}
+          positionSize={row.original.position_size}
+        />
+      ),
       accessorKey: "est_pnl",
       enableSorting: false,
     },

@@ -12,9 +12,9 @@ import { calculatePercentDifference } from "~/utils/percentDifference";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
 
-const MarketPrice = ({ name }: { name: string }) => {
+const MarketPrice = ({ pairIndex }: { pairIndex: string }) => {
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[name ?? ""] ?? "0";
+  const price = marketPrices[pairIndex ?? ""] ?? "0";
 
   return (
     <div className="w-[88px]">
@@ -29,14 +29,14 @@ const MarketPrice = ({ name }: { name: string }) => {
 };
 
 const Change = ({
-  name,
+  pairIndex,
   dailyHistoricPrice,
 }: {
-  name: string;
+  pairIndex: string;
   dailyHistoricPrice: number;
 }) => {
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[name ?? ""] ?? "0";
+  const price = marketPrices[pairIndex ?? ""] ?? "0";
 
   const difference = useMemo(() => {
     return calculatePercentDifference(
@@ -113,7 +113,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Index Price" />
     ),
-    cell: ({ row }) => <MarketPrice name={row.original.name} />,
+    cell: ({ row }) => <MarketPrice pairIndex={row.original.pair_index} />,
     accessorKey: "index_price",
     enableSorting: false,
   },
@@ -124,7 +124,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     cell: ({ row }) => {
       return (
         <Change
-          name={row.original.name}
+          pairIndex={row.original.pair_index}
           dailyHistoricPrice={Number(row.original.dailyHistoricPrice)}
         />
       );

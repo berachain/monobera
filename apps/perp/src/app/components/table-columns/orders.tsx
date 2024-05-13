@@ -67,7 +67,7 @@ export const ordersColumns: ColumnDef<ILimitOrder>[] = [
         row.original.position_size,
         18,
       ).times(row.original.leverage ?? "1");
-      const openPrice = formatFromBaseUnit(row.original.price ?? "0", 10);
+      const openPrice = formatFromBaseUnit(row.original.min_price ?? "0", 10);
       const size = positionSize.div(openPrice).dp(4).toString(10);
       return (
         <>
@@ -107,10 +107,12 @@ export const ordersColumns: ColumnDef<ILimitOrder>[] = [
       />
     ),
     cell: ({ row }) => {
-      const openPrice = formatFromBaseUnit(row.original.price, 10).toString(10);
+      const openPrice = formatFromBaseUnit(row.original.min_price, 10).toString(
+        10,
+      );
       return <div>{formatUsd(openPrice)}</div>;
     },
-    accessorKey: "price",
+    accessorKey: "min_price",
     enableSorting: true,
   },
   {
@@ -147,7 +149,7 @@ export const ordersColumns: ColumnDef<ILimitOrder>[] = [
       <DataTableColumnHeader column={column} title={"Manage"} />
     ),
     cell: ({ row }) => (
-      <div className="flex items-center justify-end gap-1">
+      <div className="flex items-center justify-start gap-1">
         <UpdateLimitOrderModal
           type={"limit"}
           openOrder={row.original}

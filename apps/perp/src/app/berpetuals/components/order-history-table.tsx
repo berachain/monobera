@@ -17,10 +17,10 @@ import { type IMarket } from "~/types/market";
 import type {
   IClosedTrade,
   ILimitOrder,
+  IOpenTrade,
   IMarketOrder,
-  IPosition,
 } from "~/types/order-history";
-import type { TableTabTypes } from "~/types/table-tab-types";
+import type { TableTabTypes } from "~/types/table";
 import { getAssetCardList } from "./asset-cards/getAssetCards";
 import { TotalAmount } from "./total-amount";
 
@@ -31,19 +31,19 @@ export function OrderHistoryTable({
   history,
   markets,
   size,
-  allPositions,
+  marketOrders,
   selection,
   setSelection,
   pagination,
   setPagination,
 }: {
   tab: TableTabTypes;
-  openPositions: IMarketOrder[];
+  openPositions: IOpenTrade[];
   openOrders: ILimitOrder[];
   history: IClosedTrade[];
   markets: IMarket[];
   size: "sm" | "md" | "lg";
-  allPositions: IPosition[];
+  marketOrders: IMarketOrder[];
   selection: RowSelectionState;
   setSelection: (selection: RowSelectionState) => void;
   pagination: PaginationState;
@@ -51,15 +51,15 @@ export function OrderHistoryTable({
 }) {
   const prevPositionLength = usePrevious(openPositions?.length ?? 0);
   const prevOrderLength = usePrevious(openOrders?.length ?? 0);
-  const [updateOpen, setUpdateOpen] = useState<boolean | IMarketOrder>(false);
-  const [deleteOpen, setDeleteOpen] = useState<boolean | IMarketOrder>(false);
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
 
   const assetCardItems = useMemo(() => {
     return getAssetCardList({
       marketOrderItems: openPositions,
       limitOrderItems: openOrders,
       historyItems: history,
-      allPositions: allPositions,
+      marketOrders: marketOrders,
       markets,
     });
   }, [openPositions, openOrders, history]);
@@ -96,7 +96,10 @@ export function OrderHistoryTable({
   };
 
   const positionsColumns = useMemo(
-    () => generatePositionColumns(markets, setUpdateOpen, setDeleteOpen),
+    () =>
+      markets
+        ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
+        : [],
     [markets, setUpdateOpen, setDeleteOpen],
   );
 
@@ -105,12 +108,12 @@ export function OrderHistoryTable({
       {tab === "positions" && (
         <>
           <UpdatePositionModal
-            openPosition={updateOpen as IMarketOrder}
+            openPosition={updateOpen as IOpenTrade}
             controlledOpen={!!updateOpen}
             onOpenChange={setUpdateOpen}
           />
           <ClosePositionModal
-            openPosition={deleteOpen as IMarketOrder}
+            openPosition={deleteOpen as IOpenTrade}
             controlledOpen={!!deleteOpen}
             onOpenChange={setDeleteOpen}
           />
@@ -184,7 +187,7 @@ export function OrderHistoryTable({
       {tab === "history" && (
         <DataTable
           columns={historyColumns}
-          data={allPositions ?? []}
+          data={marketOrders ?? []}
           className="hidden h-full w-full overflow-auto sm:block"
           embedded
           stickyHeaders
@@ -199,7 +202,7 @@ export function OrderHistoryTable({
           ]}
           additionalTableProps={{
             initialState: {
-              sorting: [{ id: "open_time", desc: true }],
+              sorting: [{ id: "timestamp_open", desc: true }],
             },
             autoResetPageIndex: false,
           }}

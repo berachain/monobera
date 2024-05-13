@@ -12,7 +12,8 @@ import type {
 } from "public/static/charting_library/charting_library";
 import { perpsPricesBenchmark } from "@bera/config";
 import { PricesListener } from "~/types/prices";
-import { formatPythPrice } from "./formatPythPrice";
+import { formatPythPrice } from "./formatPyth";
+import { PYTH_IDS } from "./constants";
 
 export type ChartBar = {
   high: number;
@@ -85,7 +86,10 @@ export const subscribeOffChainPrices = (
 ) => {
   const listener: PricesListener = ({ prices }) => {
     const symbolName = formatFromPythSymbol(symbol.ticker ?? "");
-    const currentPrice = prices[symbolName];
+    const pairIndex = PYTH_IDS.find(
+      (price) => symbolName === price.name,
+    )?.pairIndex;
+    const currentPrice = prices[pairIndex ?? ""]?.getPriceUnchecked();
     if (currentPrice) {
       if (latestChartBar.current?.symbol !== symbol.ticker) return;
       const priceNum = Number(formatPythPrice(currentPrice));
