@@ -5,13 +5,14 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export const PoolHeader = ({
-  back: { backURL, backTitle },
+  back,
   title,
   subtitles,
   actions,
+  center,
   className,
 }: {
-  back: {
+  back?: {
     backURL: string;
     backTitle: string;
   };
@@ -23,6 +24,7 @@ export const PoolHeader = ({
     externalLink?: string;
   }[];
   actions?: ReactNode;
+  center?: boolean;
   className?: string;
 }) => {
   return (
@@ -32,21 +34,38 @@ export const PoolHeader = ({
         className,
       )}
     >
-      <div className="flex w-full flex-col items-center gap-4 md:items-start">
-        <Link href={backURL} target="_self">
-          <Button
-            variant={"ghost"}
-            size="sm"
-            className="flex items-center gap-1"
-          >
-            <Icons.arrowLeft className="h-4 w-4" />
-            <div className="text-sm font-medium"> {backTitle}</div>
-          </Button>
-        </Link>
-        <span className="flex w-full justify-center gap-4 text-center text-2xl font-semibold md:justify-start md:text-left">
+      <div
+        className={cn(
+          "flex w-full flex-col items-center gap-4",
+          !center && "md:items-start",
+        )}
+      >
+        {back && (
+          <Link href={back.backURL} target="_self">
+            <Button
+              variant={"ghost"}
+              size="sm"
+              className="flex items-center gap-1"
+            >
+              <Icons.arrowLeft className="h-4 w-4" />
+              <div className="text-sm font-medium"> {back.backTitle}</div>
+            </Button>
+          </Link>
+        )}
+        <span
+          className={cn(
+            "flex w-full justify-center gap-4 text-center text-2xl font-semibold md:text-left",
+            !center && " md:justify-start",
+          )}
+        >
           {title}
         </span>
-        <div className="flex w-full flex-row flex-wrap items-center justify-center gap-x-4 leading-7 text-muted-foreground md:justify-start">
+        <div
+          className={cn(
+            "flex w-full flex-row flex-wrap items-center justify-center gap-x-4 leading-7 text-muted-foreground",
+            !center && "md:justify-start",
+          )}
+        >
           {subtitles.map((subtitle, index) => (
             <div className="flex w-fit items-center gap-1" key={index}>
               {subtitle.title}:
@@ -72,7 +91,9 @@ export const PoolHeader = ({
         </div>
       </div>
 
-      <div className="mt-4 flex gap-2 md:mt-4 lg:mt-0">{actions}</div>
+      {actions && (
+        <div className="mt-4 flex gap-2 md:mt-4 lg:mt-0">{actions}</div>
+      )}
     </div>
   );
 };
