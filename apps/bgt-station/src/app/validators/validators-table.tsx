@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { truncateHash, useGauges } from "@bera/berajs";
+import { truncateHash, useGauges, type CuttingBoardWeight } from "@bera/berajs";
 import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
 import { DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -16,10 +16,10 @@ import { OTHERS_GAUGES } from "~/components/global-gauge-weight-chart";
 import { general_validator_columns } from "~/columns/general-validator-columns";
 
 export const GaugeIcon = ({
-  address,
+  gauge,
   className,
 }: {
-  address: string;
+  gauge: CuttingBoardWeight;
   className?: string;
 }) => {
   const { gaugeDictionary } = useGauges();
@@ -28,8 +28,8 @@ export const GaugeIcon = ({
     <Avatar className={cn("h-5 w-5", className)}>
       <AvatarImage
         src={
-          address !== OTHERS_GAUGES && gaugeDictionary
-            ? gaugeDictionary[getAddress(address)]?.logoURI
+          gauge.receiver.name !== OTHERS_GAUGES && gaugeDictionary
+            ? gauge.receiver.imageUri
             : ""
         }
         className="rounded-full"
@@ -154,23 +154,23 @@ export default function ValidatorsTable() {
           placeholder="Search by name or address"
           onChange={(e) => setKeyword(e.target.value)}
         />
-      </div>
-      {isLoading ? (
+      </div> */}
+      {/* {false ? (
         <div className="flex flex-col gap-2">
           <Skeleton className="h-8 w-full" />
           <Skeleton className="h-8 w-full" />
           <Skeleton className="h-8 w-full" />
         </div>
-      ) : (
-        <DataTable
-          columns={general_validator_columns}
-          data={filteredValidators ?? []}
-          className="min-w-[900px]"
-          onRowClick={(row: any) =>
-            router.push(`/validators/${row.original.operatorAddr}`)
-          }
-        />
-      )} */}
+      ) : ( */}
+      <DataTable
+        columns={general_validator_columns}
+        data={[]}
+        className="min-w-[900px]"
+        onRowClick={(row: any) =>
+          router.push(`/validators/${row.original.operatorAddr}`)
+        }
+      />
+      {/* )} */}
     </div>
   );
 }

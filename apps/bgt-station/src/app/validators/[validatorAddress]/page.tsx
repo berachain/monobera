@@ -3,6 +3,8 @@ import { type Metadata } from "next";
 import { getMetaTitle } from "@bera/shared-ui";
 import Validator from "./validator";
 import { bgtName } from "@bera/config";
+import { notFound } from "next/navigation";
+import { isAddress } from "viem";
 
 type Props = {
   params: { validatorAddress: string };
@@ -23,5 +25,8 @@ export default function Page({
 }) {
   const { validatorAddress } = params;
 
+  if (!validatorAddress || !isAddress(validatorAddress)) {
+    notFound();
+  }
   return <Validator {...{ validatorAddress }} />;
 }

@@ -182,15 +182,15 @@ const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
 };
 
 export const VP = ({
-  operatorAddr,
-  tokens,
+  coinbase,
+  amountStaked,
 }: {
-  operatorAddr: string;
-  tokens: bigint;
+  coinbase: string;
+  amountStaked: string;
 }) => {
   return (
     <div className="flex h-full w-full flex-shrink-0 items-center">
-      {formatter.format(Number(formatUnits(tokens, 18)))} (
+      {amountStaked}
     </div>
   );
 };
