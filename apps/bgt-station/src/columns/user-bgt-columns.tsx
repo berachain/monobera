@@ -14,7 +14,7 @@ export interface GlobalGaugeColumns {
 export const user_bgt_columns: ColumnDef<GlobalGaugeColumns>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Bribes Breakdown" />
+      <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
       <div className="w-[250px] truncate whitespace-nowrap text-left">
@@ -26,7 +26,7 @@ export const user_bgt_columns: ColumnDef<GlobalGaugeColumns>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Bribe Value" />
+      <DataTableColumnHeader column={column} title="Total Incentive Value" />
     ),
     cell: ({ row }) => {
       const incentiveAmount = row.original.incentiveAmount;
@@ -46,14 +46,42 @@ export const user_bgt_columns: ColumnDef<GlobalGaugeColumns>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Incentives"
+        title="Incentives / BGT Staked"
         className="w-full items-center text-center"
       />
     ),
     cell: ({ row }) => (
       <div className="flex w-full justify-center">{row.original.hide}</div>
     ),
-    accessorKey: "hide",
+    accessorKey: "bgt-staked",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="BGT Inflation Capture"
+        className="w-full items-center text-center"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex w-full justify-center">{row.original.hide}</div>
+    ),
+    accessorKey: "inflation",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Validators Pointing Emissions"
+        className="w-full items-center text-center"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex w-full justify-center">{row.original.hide}</div>
+    ),
+    accessorKey: "emissions",
     enableSorting: true,
   },
 ];
