@@ -9,13 +9,8 @@ import { FormattedNumber, Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
-
-import BribesAndEmissions from "./bribes-and-emissions";
-import ValidatorActivitiesTable from "./validator-activities-table";
-import ValidatorDetails from "./validator-details";
-import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
-import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
+import { type Address } from "viem";
+import { blockExplorerUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { cn } from "@bera/ui";
@@ -48,6 +43,7 @@ export const GaugeOverview = ({
   totalGauges: number;
   featuredGauges: string[];
 }) => {
+  const nonFeaturedGaugeLength = totalGauges - featuredGauges.length;
   return (
     <div>
       <div className="inline-flex h-7 items-end gap-1">
@@ -63,10 +59,12 @@ export const GaugeOverview = ({
             objectFit="contain"
           />
         ))}
-        <span className="text-sm leading-5 text-muted-foreground">
-          {" "}
-          +{totalGauges - featuredGauges.length}
-        </span>
+        {nonFeaturedGaugeLength !== 0 && (
+          <span className="text-sm leading-5 text-muted-foreground">
+            {" "}
+            +{nonFeaturedGaugeLength}
+          </span>
+        )}
       </div>
     </div>
   );

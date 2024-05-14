@@ -3,14 +3,13 @@ import { DataTable } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@bera/ui/tabs";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import { validatorIncentivesColumns } from "./validator-incentives-columns";
+import { useAggregatedBribes } from "../../../hooks/useAggregatedBribes";
 export const ValidatorPolData = ({
   validator,
 }: {
   validator: Validator;
 }) => {
-  const allActiveIncentives = validator.cuttingboard.flatMap(
-    (cb) => cb.receiver.activeIncentives,
-  );
+  const aggregatedBribes = useAggregatedBribes(validator);
   return (
     <div className="w-full flex flex-col lg:flex-row mt-6 gap-6">
       <div className="w-full">
@@ -26,7 +25,7 @@ export const ValidatorPolData = ({
           <TabsContent value={"incentives"} className="mt-6">
             <DataTable
               columns={validatorIncentivesColumns}
-              data={allActiveIncentives}
+              data={aggregatedBribes}
             />
           </TabsContent>
         </Tabs>

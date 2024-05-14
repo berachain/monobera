@@ -11,11 +11,16 @@ export type Validator = {
   amountStaked: string;
   cuttingboard: CuttingBoardWeight[];
   apy: string;
+  rewardRate: string;
   allTimeStats: {
     totalBgtDirected: string;
     totalHoneyValueBgtDirected: string;
     totalHoneyValueTokenRewards: string;
   };
+};
+
+export type UserValidators = Validator & {
+  userStaked: string;
 };
 
 export type CuttingBoardWeight = {
