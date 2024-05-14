@@ -1,26 +1,13 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import { formatter } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import ValidatorsTable from "./validators-table";
 
-export default function Validators({
-  activeGauges,
-  bgtSupply,
-}: {
-  activeGauges: number;
-  bgtSupply: number;
-}) {
-  const totalValidators: number = 0;
-  const prices = undefined;
-  const totalBribeValue = 0;
-
-  const isLoading = true;
+export default function Validators() {
+  const isLoading = false;
   const generalInfo = [
     {
       amount: "69",

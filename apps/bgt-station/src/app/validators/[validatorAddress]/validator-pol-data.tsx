@@ -3,8 +3,32 @@ import { DataTable } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@bera/ui/tabs";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import { validatorIncentivesColumns } from "./validator-incentives-columns";
-import { useAggregatedBribes } from "../../../hooks/useAggregatedBribes";
+import { AggregatedBribe, useAggregatedBribes } from "../../../hooks/useAggregatedBribes";
 import { Skeleton } from "@bera/ui/skeleton";
+import { useState } from "react";
+import { Dialog, DialogDescription, DialogHeader } from "@bera/ui/dialog";
+
+export const AggregatedBribeDialog = ({
+  aggregatedBribe,
+  onOpenChange
+}: {
+  aggregatedBribe: AggregatedBribe | undefined; 
+  onOpenChange: () => void
+}) => {
+  return (
+    <Dialog>
+      <DialogHeader>
+
+      </DialogHeader>
+      <DialogDescription>
+        
+      </DialogDescription>
+    </Dialog>
+  )
+}
+
+
+
 export const ValidatorPolData = ({
   validator,
   isLoading,
@@ -13,6 +37,8 @@ export const ValidatorPolData = ({
   isLoading: boolean;
 }) => {
   const aggregatedBribes = useAggregatedBribes(validator);
+
+  const [selectedBribe, setSelectedBribe] = useState<AggregatedBribe | undefined>(undefined);
   return (
     <div className="w-full flex flex-col lg:flex-row mt-6 gap-6">
       <div className="w-full">
@@ -47,6 +73,7 @@ export const ValidatorPolData = ({
               <DataTable
                 columns={validatorIncentivesColumns}
                 data={aggregatedBribes ?? []}
+                onRowClick={(row) => {}}
               />
             )}
           </TabsContent>

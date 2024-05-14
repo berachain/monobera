@@ -128,7 +128,6 @@ export const CuttingBoardDisplay = ({
 
 export default function ValidatorsTable() {
   const router = useRouter();
-  const prices = undefined;
 
   const isLoading = false;
 
