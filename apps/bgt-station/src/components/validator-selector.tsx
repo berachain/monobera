@@ -12,9 +12,6 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, getAddress, type Address } from "viem";
 
-import { ValidatorGauge } from "~/app/validators/validators-table";
-import { validator_table_columns } from "~/columns/validator-table-columns";
-
 export default function ValidatorSelector({
   validatorAddress,
   onSelectValidator,

@@ -20,7 +20,7 @@ export default function Validators({
   const prices = undefined;
   const totalBribeValue = 0;
 
-  const isDataLoading = true;
+  const isLoading = true;
   const generalInfo = [
     {
       amount: "69",
@@ -51,9 +51,13 @@ export default function Validators({
             <div className="text-xs font-medium leading-[14px] text-muted-foreground">
               {info.text}
             </div>
-            <div className="text-2xl font-semibold leading-loose text-foreground mt-4">
-              {info.amount}
-            </div>
+            {isLoading ? (
+              <Skeleton className="h-[45px] w-[120px] mt-4" />
+            ) : (
+              <div className="text-2xl font-semibold leading-loose text-foreground mt-4">
+                {info.amount}
+              </div>
+            )}
           </Card>
         ))}
       </div>

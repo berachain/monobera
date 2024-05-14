@@ -6,10 +6,13 @@ export type AggregatedBribe = {
   amountPerProposal: string;
   token: Token;
   sourceVaults: Vault[];
-  sourceVaultMapping?: Record<string, {
-    amount: string;
-    incentiveRate: string;
-  }>;
+  sourceVaultMapping?: Record<
+    string,
+    {
+      amount: string;
+      incentiveRate: string;
+    }
+  >;
 };
 
 export const useAggregatedBribes = (validator: Validator | undefined) => {

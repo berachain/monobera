@@ -12,7 +12,7 @@ import {
   type UserValidator,
 } from "@bera/berajs";
 import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
-import { DataTable, SearchInput } from "@bera/shared-ui";
+import { ConnectWalletBear, DataTable, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { getAddress } from "viem";
@@ -24,6 +24,8 @@ import {
 } from "~/columns/general-validator-columns";
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@bera/ui/tabs";
+import { Skeleton } from "@bera/ui/skeleton";
+import { useBeraJs } from '@bera/berajs';
 
 export const GaugeIcon = ({
   gauge,
@@ -127,6 +129,8 @@ export const CuttingBoardDisplay = ({
 export default function ValidatorsTable() {
   const router = useRouter();
   const prices = undefined;
+
+  const isLoading = false;
 
   const mockMarkets: Market[] = [
     {
@@ -291,6 +295,8 @@ export default function ValidatorsTable() {
     setSearch("");
   };
 
+  const {isReady} = useBeraJs()
+
   return (
     <div className="mt-16">
       <Tabs defaultValue="allValidators">
@@ -313,6 +319,7 @@ export default function ValidatorsTable() {
           </TabsList>
           <div className="flex flex-row w-full items-start justify-start items-center gap-2">
             <SearchInput
+              disabled={isLoading}
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
@@ -359,24 +366,46 @@ export default function ValidatorsTable() {
         </div>
 
         <TabsContent value="allValidators">
-          <DataTable
-            columns={general_validator_columns}
-            data={mockValidators}
-            className="min-w-[900px]"
-            onRowClick={(row: any) =>
-              router.push(`/validators/${row.original.coinbase}`)
-            }
-          />
+          {isLoading ? (
+            <div className="w-full flex flex-col gap-2">
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+          ) : (
+            <DataTable
+              columns={general_validator_columns}
+              data={mockValidators}
+              className="min-w-[900px]"
+              onRowClick={(row: any) =>
+                router.push(`/validators/${row.original.coinbase}`)
+              }
+            />
+          )}
         </TabsContent>
         <TabsContent value="myValidators">
-          <DataTable
-            columns={user_general_validator_columns}
-            data={mockValidators}
-            className="min-w-[900px]"
-            onRowClick={(row: any) =>
-              router.push(`/validators/${row.original.coinbase}`)
-            }
-          />
+          {isLoading ? (
+            <div className="w-full flex flex-col gap-2">
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full" />
+            </div>
+          ) : (
+            !isReady ? <ConnectWalletBear
+              message="You need to connect your wallet to see your validators"
+            /> : <DataTable
+              columns={user_general_validator_columns}
+              data={mockValidators}
+              className="min-w-[900px]"
+              onRowClick={(row: any) =>
+                router.push(`/validators/${row.original.coinbase}`)
+              }
+            />
+          )}
         </TabsContent>
       </Tabs>
     </div>
