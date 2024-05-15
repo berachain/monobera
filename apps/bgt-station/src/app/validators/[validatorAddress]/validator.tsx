@@ -9,18 +9,14 @@ import { FormattedNumber, Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
-
-import BribesAndEmissions from "./bribes-and-emissions";
-import ValidatorActivitiesTable from "./validator-activities-table";
-import ValidatorDetails from "./validator-details";
-import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
-import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
+import { type Address } from "viem";
+import { blockExplorerUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { cn } from "@bera/ui";
 import Image from "next/image";
 import { ValidatorPolData } from "./validator-pol-data";
+import { useRouter } from "next/navigation";
 
 export const ValidatorDataCard = ({
   title,
@@ -44,30 +40,45 @@ export const ValidatorDataCard = ({
 export const GaugeOverview = ({
   totalGauges,
   featuredGauges,
+  isLoading,
 }: {
   totalGauges: number;
   featuredGauges: string[];
+  isLoading: boolean;
 }) => {
+  const nonFeaturedGaugeLength = totalGauges - featuredGauges.length;
   return (
     <div>
-      <div className="inline-flex h-7 items-end gap-1">
-        <span className="text-2xl font-semibold leading-6">{totalGauges}</span>
-      </div>
-      <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-        {featuredGauges.map((gauge, index) => (
-          <Image
-            src={gauge}
-            alt={`featuredGauge-${index}`}
-            height={16}
-            width={16}
-            objectFit="contain"
-          />
-        ))}
-        <span className="text-sm leading-5 text-muted-foreground">
-          {" "}
-          +{totalGauges - featuredGauges.length}
-        </span>
-      </div>
+      {isLoading ? (
+        <Skeleton className="h-[35px] w-[75px]" />
+      ) : (
+        <div className="inline-flex h-7 items-end gap-1">
+          <span className="text-2xl font-semibold leading-6">
+            {totalGauges}
+          </span>
+        </div>
+      )}
+      {isLoading ? (
+        <Skeleton className="h-[25px] w-[100px] mt-1" />
+      ) : (
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
+          {featuredGauges.map((gauge, index) => (
+            <Image
+              src={gauge}
+              alt={`featuredGauge-${index}`}
+              height={16}
+              width={16}
+              objectFit="contain"
+            />
+          ))}
+          {nonFeaturedGaugeLength !== 0 && (
+            <span className="text-sm leading-5 text-muted-foreground">
+              {" "}
+              +{nonFeaturedGaugeLength}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };
@@ -76,36 +87,46 @@ export const IncentivesOverview = ({
   totalActiveIncentiveValue,
   totalActiveIncentives,
   featuredIncentiveTokenImages,
+  isLoading,
 }: {
   totalActiveIncentiveValue: number;
   totalActiveIncentives: number;
   featuredIncentiveTokenImages: string[];
+  isLoading: boolean;
 }) => {
   return (
     <div>
-      <div className="inline-flex h-7 items-end gap-1">
-        <span className="text-2xl font-semibold leading-6">
-          <FormattedNumber value={totalActiveIncentiveValue} compact />{" "}
-          <span className="text-sm text-muted-foreground">
-            ({totalActiveIncentives} Tokens)
+      {isLoading ? (
+        <Skeleton className="h-[35px] w-[75px]" />
+      ) : (
+        <div className="inline-flex h-7 items-end gap-1">
+          <span className="text-2xl font-semibold leading-6">
+            <FormattedNumber value={totalActiveIncentiveValue} compact />{" "}
+            <span className="text-sm text-muted-foreground">
+              ({totalActiveIncentives} Tokens)
+            </span>
           </span>
-        </span>
-      </div>
-      <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-        {featuredIncentiveTokenImages.map((gauge, index) => (
-          <Image
-            src={gauge}
-            alt={`featuredGauge-${index}`}
-            height={16}
-            width={16}
-            objectFit="contain"
-          />
-        ))}
-        <span className="text-sm leading-5 text-muted-foreground">
-          {" "}
-          +{totalActiveIncentives - featuredIncentiveTokenImages.length}
-        </span>
-      </div>
+        </div>
+      )}
+      {isLoading ? (
+        <Skeleton className="h-[25px] w-[100px] mt-1" />
+      ) : (
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
+          {featuredIncentiveTokenImages.map((gauge, index) => (
+            <Image
+              src={gauge}
+              alt={`featuredGauge-${index}`}
+              height={16}
+              width={16}
+              objectFit="contain"
+            />
+          ))}
+          <span className="text-sm leading-5 text-muted-foreground">
+            {" "}
+            +{totalActiveIncentives - featuredIncentiveTokenImages.length}
+          </span>
+        </div>
+      )}
     </div>
   );
 };
@@ -224,6 +245,7 @@ export default function Validator({
       totalHoneyValueBgtDirected: "3000000",
       totalHoneyValueTokenRewards: "500000",
     },
+    rewardRate: "",
   };
 
   const validatorDataItems: {
@@ -264,6 +286,9 @@ export default function Validator({
     },
   ];
 
+  const isLoading = false;
+
+  const router = useRouter();
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -276,27 +301,37 @@ export default function Validator({
         </Link>
         <div className="w-full flex lg:flex-row flex-col justify-between mt-2 gap-6  pb-6 border-b border-border ">
           <div className="flex-col items-left w-full gap-4 justify-evenly">
-            <div className="flex w-full items-start justify-start gap-2 text-xl font-bold leading-[48px]">
+            <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
               <ValidatorIcon
                 address={validator.coinbase}
                 className="h-12 w-12"
               />
-              {validator?.name ?? (
-                <Skeleton className="inline-block h-12 w-[100px]" />
+              {isLoading ? (
+                <Skeleton className="h-[38px] w-[250px]" />
+              ) : (
+                validator.name
               )}
             </div>
             <div className="my-4 text-muted-foreground w-full flex flex-row gap-1">
               Hex Address:
-              <span className="hover:underline text-foreground">
-                <Link href={`${blockExplorerUrl}/${validator.coinbase}`}>
-                  {truncateHash(validator.coinbase)}
-                </Link>
-              </span>
-              <Icons.externalLink className="h-4 w-4 self-center" />
+              {isLoading ? (
+                <Skeleton className="h-[25px] w-[150px]" />
+              ) : (
+                <span className="hover:underline text-foreground flex flex-row gap-1">
+                  <Link href={`${blockExplorerUrl}/${validator.coinbase}`}>
+                    {truncateHash(validator.coinbase)}
+                  </Link>
+                  <Icons.externalLink className="h-4 w-4 self-center" />
+                </span>
+              )}
             </div>
-            <div className="text-foreground w-full lg:max-w-[450px]">
-              {validator?.description}
-            </div>
+            {isLoading ? (
+              <Skeleton className="h-[100px] w-[350px]" />
+            ) : (
+              <div className="text-foreground w-full text-ellipsis overflow-hidden">
+                {validator.description}
+              </div>
+            )}
           </div>
           <div className="flex-col items-left w-full gap-4 justify-between">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -305,41 +340,56 @@ export default function Validator({
                   <div className="text-muted-foreground items-center flex flex-row gap-1">
                     {item.title} <Tooltip text={item.tooltipText} />
                   </div>
-                  <div className="text-foreground mt-1 w-full text-ellipsis overflow-hidden">
-                    {item.value}
-                  </div>
+                  {isLoading ? (
+                    <Skeleton className="h-[30px] w-[150px]" />
+                  ) : (
+                    <div className="text-foreground mt-1 w-full text-ellipsis overflow-hidden">
+                      {item.value}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
             <div className="flex flex-col justify-between gap-4 mt-6 sm:flex-row">
-              <Link
-                href={`/delegate?action=delegate&validator=${validator.coinbase}`}
-                className="flex-1"
+              <Button
+                className="w-full"
+                disabled={isLoading}
+                onClick={() =>
+                  router.push(
+                    `/delegate?action=delegate&validator=${validator.coinbase}`,
+                  )
+                }
               >
-                <Button className="w-full">
-                  Delegate <Icons.add className="relative ml-1 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link
-                href={`/delegate?action=redelegate&validator=${validator.coinbase}`}
-                className="flex-1"
+                Delegate <Icons.add className="relative ml-1 h-4 w-4" />
+              </Button>
+              <Button
+                className="w-full"
+                variant="outline"
+                disabled={isLoading}
+                onClick={() =>
+                  router.push(
+                    `/delegate?action=redelegate&validator=${validator.coinbase}`,
+                  )
+                }
               >
-                <Button className="w-full" variant="outline">
-                  {" "}
-                  Redelegate
-                  <Icons.redo className="relative ml-1 h-4 w-4" />
-                </Button>
-              </Link>
-              <Link
-                href={`/delegate?action=unbond&validator=${validator.coinbase}`}
-                className="flex-1"
+                {" "}
+                Redelegate
+                <Icons.redo className="relative ml-1 h-4 w-4" />
+              </Button>
+              <Button
+                className="w-full"
+                variant="outline"
+                disabled={isLoading}
+                onClick={() =>
+                  router.push(
+                    `/delegate?action=unbond&validator=${validator.coinbase}`,
+                  )
+                }
               >
-                <Button className="w-full" variant="outline">
-                  {" "}
-                  Unbond
-                  <Icons.minus className="relative ml-1 h-4 w-4" />
-                </Button>
-              </Link>
+                {" "}
+                Unbond
+                <Icons.minus className="relative ml-1 h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
@@ -351,6 +401,7 @@ export default function Validator({
           title="Active Gauges"
           value={
             <GaugeOverview
+              isLoading={isLoading}
               totalGauges={validator.cuttingboard.length}
               featuredGauges={validator.cuttingboard.map(
                 (cb: any) => cb.receiver.imageUri,
@@ -363,6 +414,7 @@ export default function Validator({
           title="Active Incentives"
           value={
             <IncentivesOverview
+              isLoading={isLoading}
               totalActiveIncentiveValue={6420000}
               totalActiveIncentives={30}
               featuredIncentiveTokenImages={[
@@ -377,48 +429,64 @@ export default function Validator({
           className="md:row-start-2 row-start-3 h-[100px]"
           title="Reward Rate"
           value={
-            <div className="flex flex-row gap-1">
-              <span className="text-2xl font-semibold">100</span>
-              <Icons.bgt className="h-6 w-6 self-center" />
-            </div>
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[100px]" />
+            ) : (
+              <div className="flex flex-row gap-1">
+                <span className="text-2xl font-semibold">100</span>
+                <Icons.bgt className="h-6 w-6 self-center" />
+              </div>
+            )
           }
         />
         <ValidatorDataCard
           className="md:row-start-2 row-start-4 h-[100px]"
           title="Return per BGT"
           value={
-            <div className="flex flex-row gap-1">
-              <span className="text-2xl font-semibold">100</span>
-              <Icons.honey className="h-6 w-6 self-center" />
-            </div>
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[100px]" />
+            ) : (
+              <div className="flex flex-row gap-1">
+                <span className="text-2xl font-semibold">100</span>
+                <Icons.honey className="h-6 w-6 self-center" />
+              </div>
+            )
           }
         />
         <ValidatorDataCard
           className="md:row-start-2 row-start-5 h-[100px]"
           title="Lifetime Incentives Received"
           value={
-            <div className="flex flex-row gap-1 items-center">
-              <span className="text-2xl font-semibold">
-                <FormattedNumber value={6420000} compact />
-              </span>
-              <span className="text-muted-foreground text-sm text-ellipsis overflow-hidden whitespace-nowrap">
-                (32 Tokens)
-              </span>
-            </div>
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[150px]" />
+            ) : (
+              <div className="flex flex-row gap-1 items-center">
+                <span className="text-2xl font-semibold">
+                  <FormattedNumber value={6420000} compact />
+                </span>
+                <span className="text-muted-foreground text-sm text-ellipsis overflow-hidden whitespace-nowrap">
+                  (32 Tokens)
+                </span>
+              </div>
+            )
           }
         />
         <ValidatorDataCard
           className="md:row-start-2 row-start-6 h-[100px]"
           title="Lifetime BGT Directed"
           value={
-            <div className="flex flex-row gap-1">
-              <span className="text-2xl font-semibold">100</span>
-              <Icons.bgt className="h-6 w-6 self-center" />
-            </div>
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[100px]" />
+            ) : (
+              <div className="flex flex-row gap-1">
+                <span className="text-2xl font-semibold">100</span>
+                <Icons.bgt className="h-6 w-6 self-center" />
+              </div>
+            )
           }
         />
       </div>
-      <ValidatorPolData validator={validator} />
+      <ValidatorPolData validator={validator} isLoading={isLoading} />
     </div>
   );
 }
