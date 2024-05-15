@@ -6,6 +6,7 @@ import uniqolor from "uniqolor";
 
 import { ChartTooltip } from "./chart-tooltip";
 import { FormattedNumber } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
 
 export const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
 
@@ -13,10 +14,12 @@ export default function GlobalGaugeWeightChart({
   gaugeWeights = [],
   totalAmountStaked,
   globalAmountStaked,
+  isLoading,
 }: {
   gaugeWeights: CuttingBoardWeight[] | undefined;
   totalAmountStaked: string;
   globalAmountStaked: string;
+  isLoading: boolean;
 }) {
   const tooltipRef = useRef<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -131,53 +134,57 @@ export default function GlobalGaugeWeightChart({
         Gauge Weight
       </div>
 
-      <div className="relative mx-auto h-[245px] w-[245px]">
-        <BeraChart
-          data={dataP}
-          options={{
-            responsive: true,
-            cutout: "70%",
-            radius: "95%",
-            plugins: {
-              legend: {
-                display: false,
+      {isLoading ? (
+        <Skeleton className="relative mx-auto h-[230px] w-[230px] rounded-full" />
+      ) : (
+        <div className="relative mx-auto h-[230px] w-[230px]">
+          <BeraChart
+            data={dataP}
+            options={{
+              responsive: true,
+              cutout: "70%",
+              radius: "95%",
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  enabled: false, // @ts-ignore
+                  external: externalTooltipHandler,
+                },
               },
-              tooltip: {
-                enabled: false, // @ts-ignore
-                external: externalTooltipHandler,
-              },
-            },
-          }}
-          type="doughnut"
-        />
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
-          <div className="text-xs leading-3 text-muted-foreground">
-            Total Staked BGT
+            }}
+            type="doughnut"
+          />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
+            <div className="text-xs leading-3 text-muted-foreground">
+              Total Staked BGT
+            </div>
+            <div className="text-lg font-bold leading-7">
+              <FormattedNumber value={totalAmountStaked} compact />
+            </div>
+            <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
+              <FormattedNumber value={globalAmountStaked} compact /> BGT
+              Circulating
+            </div>
           </div>
-          <div className="text-lg font-bold leading-7">
-            <FormattedNumber value={totalAmountStaked} compact />
-          </div>
-          <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
-            <FormattedNumber value={globalAmountStaked} compact /> BGT
-            Circulating
-          </div>
-        </div>
 
-        <div
-          className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block transform -translate-y-1/2"
-          style={{
-            top: `${tooltipPosition.y}px`,
-            ...(tooltipPosition.x < 230 / 2
-              ? { left: tooltipPosition.x }
-              : { right: 230 - tooltipPosition.x }),
-          }}
-        >
-          {selectedGauge && <ChartTooltip gauge={gauge} />}
+          <div
+            className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block transform -translate-y-1/2"
+            style={{
+              top: `${tooltipPosition.y}px`,
+              ...(tooltipPosition.x < 230 / 2
+                ? { left: tooltipPosition.x }
+                : { right: 230 - tooltipPosition.x }),
+            }}
+          >
+            {selectedGauge && <ChartTooltip gauge={gauge} />}
+          </div>
+          <div className="z-1 pointer-events-none absolute left-[50%] top-[50%] block -translate-x-1/2 -translate-y-1/2 transform transition-all duration-200 ease-in-out sm:hidden">
+            {selectedGauge && <ChartTooltip gauge={gauge} />}
+          </div>
         </div>
-        <div className="z-1 pointer-events-none absolute left-[50%] top-[50%] block -translate-x-1/2 -translate-y-1/2 transform transition-all duration-200 ease-in-out sm:hidden">
-          {selectedGauge && <ChartTooltip gauge={gauge} />}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

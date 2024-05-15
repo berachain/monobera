@@ -198,6 +198,7 @@ export default function Gauge() {
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
+          isLoading={false}
           gaugeWeights={cuttingboard}
           totalAmountStaked={"100000"}
           globalAmountStaked={"100000000"}

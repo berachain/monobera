@@ -1,26 +1,13 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import { formatter } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import ValidatorsTable from "./validators-table";
 
-export default function Validators({
-  activeGauges,
-  bgtSupply,
-}: {
-  activeGauges: number;
-  bgtSupply: number;
-}) {
-  const totalValidators: number = 0;
-  const prices = undefined;
-  const totalBribeValue = 0;
-
-  const isDataLoading = true;
+export default function Validators() {
+  const isLoading = false;
   const generalInfo = [
     {
       amount: "69",
@@ -51,9 +38,13 @@ export default function Validators({
             <div className="text-xs font-medium leading-[14px] text-muted-foreground">
               {info.text}
             </div>
-            <div className="text-2xl font-semibold leading-loose text-foreground mt-4">
-              {info.amount}
-            </div>
+            {isLoading ? (
+              <Skeleton className="h-[45px] w-[120px] mt-4" />
+            ) : (
+              <div className="text-2xl font-semibold leading-loose text-foreground mt-4">
+                {info.amount}
+              </div>
+            )}
           </Card>
         ))}
       </div>

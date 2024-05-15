@@ -37,9 +37,6 @@ export default function Page({
           redelegateValidator={searchParams.redelegateValidator}
         />
       </div>
-      <div className="border-t-2 border-muted xl:border-r-2 xl:border-t-0" />
-
-      <DemandBasedQueue action={action} />
     </div>
   );
 }

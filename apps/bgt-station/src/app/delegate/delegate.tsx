@@ -254,10 +254,6 @@ export default function Delegate({
           </Button>
         </ActionButton>
       </Card>
-      {action === DelegateEnum.UNBOND && <UnstakeInfoBanner />}
-      {action === DelegateEnum.UNBOND && (
-        <UnstakeDialog setActiveAction={setActiveAction} />
-      )}
     </div>
   );
 }
