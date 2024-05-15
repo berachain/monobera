@@ -1,5 +1,9 @@
-import { perpsEndpoint } from "@bera/config";
+import { perpsEndpoint, perpsPricesBenchmark } from "@bera/config";
 import { type GlobalParams, type Market } from "@bera/proto/src";
+import { Price, PriceFeed } from "@pythnetwork/pyth-evm-js";
+
+import { PYTH_IDS, USDC_USD_INDEX } from "~/utils/constants";
+import { formatUsdcPythPrice } from "~/utils/formatPyth";
 
 export async function getMarkets(): Promise<Market[] | undefined> {
   try {
@@ -34,11 +38,49 @@ export async function getGlobalParams(): Promise<GlobalParams | undefined> {
 
 export async function getDailyPriceChange(): Promise<any | undefined> {
   try {
-    const res = await fetch(`${perpsEndpoint}/historical-prices/24h`);
+    const oneDayAgoUnix =
+      Math.floor(new Date().getTime() / 1000) - 24 * 60 * 60;
+    const url = `${perpsPricesBenchmark}/v1/updates/price/${oneDayAgoUnix}?${PYTH_IDS.map(
+      (item) => `ids=${item.id}`,
+    ).join("&")}`;
+    const res = await fetch(url);
     const jsonRes = await res.json();
-    return jsonRes.prices ?? [];
+
+    if (jsonRes?.parsed) {
+      const formattedPrices = PYTH_IDS.reduce(
+        (acc: Record<string, Price>, pythMapItem) => {
+          const priceFeed = jsonRes.parsed.find(
+            (item: PriceFeed) => `0x${item.id}` === pythMapItem.id,
+          );
+          acc[pythMapItem.pairIndex] = priceFeed.price as Price;
+          return acc;
+        },
+        {},
+      );
+
+      return (
+        (formattedPrices &&
+          Object.keys(formattedPrices).reduce(
+            (acc: Record<string, string>, key) => {
+              if (
+                key === USDC_USD_INDEX ||
+                formattedPrices[USDC_USD_INDEX] === undefined
+              )
+                return acc;
+              acc[key] = formatUsdcPythPrice(
+                formattedPrices[key as "string"] as Price,
+                formattedPrices[USDC_USD_INDEX] as Price,
+              );
+              return acc;
+            },
+            {},
+          )) ??
+        {}
+      );
+    }
+    return {};
   } catch (e) {
-    return [];
+    return {};
   }
 }
 
@@ -64,7 +106,9 @@ export async function getTradingSummary(): Promise<any | undefined> {
 
 export async function getHistoricalSummary(): Promise<any | undefined> {
   try {
-    const res = await fetch(`${perpsEndpoint}/historical-summary/24h`);
+    const res = await fetch(
+      `${perpsEndpoint}/trading-summary/markets?countBack=24&resolution="1h"`,
+    );
     const jsonRes = await res.json();
     const historicalSummary = jsonRes.result;
     return historicalSummary ?? [];
