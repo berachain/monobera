@@ -47,6 +47,7 @@ interface DataTableProps<TData, TValue> {
   fetchData?: (state: TableState) => Promise<void> | void;
   stateChangeFetchInclusions?: Array<keyof TableState>;
   loading?: boolean;
+  validating?: boolean;
   additionalTableProps?: Partial<TableOptions<TData>>;
   customEmptyDataState?: React.ReactElement;
   stickyHeaders?: boolean;
@@ -132,6 +133,7 @@ export function DataTable<TData, TValue>({
   fetchData,
   stateChangeFetchInclusions = defaultStateChangeFetchInclusions,
   loading = false,
+  validating = false,
   additionalTableProps,
   customEmptyDataState,
   onCustomSortingChange,
@@ -283,7 +285,14 @@ export function DataTable<TData, TValue>({
                     colSpan={columns.length + (enableSelection ? 1 : 0)}
                     className="h-24 text-center"
                   >
-                    {customEmptyDataState ?? "No results."}
+                    {" "}
+                    {loading ? (
+                      <p className="flex justify-center px-4">
+                        <Spinner size={16} color="white" />
+                      </p>
+                    ) : (
+                      customEmptyDataState ?? "No results."
+                    )}
                   </TableCell>
                 </TableRow>
               )}
@@ -301,7 +310,7 @@ export function DataTable<TData, TValue>({
             ))}
           </div>
           <div className="flex-shink-0 ml-auto flex">
-            {loading && (
+            {validating && (
               <p className="self-center px-4">
                 <Spinner size={16} color="white" />
               </p>

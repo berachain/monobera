@@ -19,7 +19,7 @@ import {
   type UserValidator,
   Token,
 } from "@bera/berajs";
-import { CuttingBoardDisplay } from "~/app/validators/validators-table";
+import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 import {
   AggregatedBribe,
   useAggregatedBribes,
@@ -254,7 +254,7 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<UserValidator> = {
     const mostWeightedCuttingBoard = cuttingBoards.sort(
       (a, b) => a.percentage - b.percentage,
     )[0];
-    console.log(mostWeightedCuttingBoard);
+    // console.log(mostWeightedCuttingBoard);
     return <CuttingBoardDisplay cuttingBoard={mostWeightedCuttingBoard} />;
   },
   accessorKey: "mostWeightedGauge",

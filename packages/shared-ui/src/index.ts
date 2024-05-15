@@ -51,7 +51,7 @@ export { TermsOfUse, PrivacyPolicy, TermOfUseModal } from "./terms-of-use";
 export { AccessDenyModal, AccessDeny } from "./access-deny";
 export { FormattedNumber } from "./formatted-number";
 export { PoolHeader } from "./pool-header";
-
+export { GaugeIcon } from "./gauge-icon";
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
 export * from "./hooks";

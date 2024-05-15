@@ -4,7 +4,7 @@ import React from "react";
 import { Card } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import ValidatorsTable from "./validators-table";
+import ValidatorsTable from "./components/validators-table";
 
 export default function Validators() {
   const isLoading = false;
