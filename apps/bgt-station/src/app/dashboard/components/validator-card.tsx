@@ -81,7 +81,7 @@ export default function ValidatorCard({
           </div>
         </div>
         {info.slice(1).map((data, index) => (
-          <div key={index} className=" flex justify-between">
+          <div key={`${index}-${data.text}`} className=" flex justify-between">
             <div className="text-sm font-medium text-muted-foreground">
               {data.text}
             </div>

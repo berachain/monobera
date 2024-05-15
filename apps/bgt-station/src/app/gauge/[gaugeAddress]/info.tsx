@@ -7,7 +7,10 @@ export const Info = () => {
   return (
     <div className="border-boder flex flex-col gap-2 rounded-md border bg-muted px-4 py-3">
       {data.map((d, index) => (
-        <div className="flex items-center justify-between" key={index}>
+        <div
+          className="flex items-center justify-between"
+          key={d.title + index}
+        >
           <div className="text-xs leading-5 text-muted-foreground">
             {d.title}
           </div>

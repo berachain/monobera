@@ -26,89 +26,63 @@ const fakeValidators = [
 export default function GaugeInfoCard() {
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
-      <div className="relative flex flex-col border-b border-border bg-muted sm:flex-row">
-        <div className="w-full border-b sm:border-none">
-          <div className="border-b border-border px-4 py-5 sm:border-r">
-            <div className="text-xs leading-5 text-muted-foreground">
-              Active Gauges Vaults
-            </div>
-            <div className="inline-flex h-7 items-end gap-1">
-              <span className="text-2xl font-semibold leading-6">142</span>
-              <span className="font-medium leading-5 text-muted-foreground">
-                (690.42M)
-              </span>
-            </div>
-            <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-              <Icons.bexFav className="h-4 w-4" />
-              <Icons.bendFav className="h-4 w-4" />
-              <Icons.berpsFav className="h-4 w-4" />
-              <span className="text-sm leading-5 text-muted-foreground">
-                {" "}
-                +69
-              </span>
-            </div>
+      <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
+        <div className="flex flex-col justify-center border-b border-border p-4">
+          <div className="text-xs leading-5 text-muted-foreground">
+            Active Gauges Vaults
           </div>
-          <div className="flex flex-col gap-1 border-border px-4 py-3 sm:border-r">
-            <div className="text-xs leading-5 text-muted-foreground">
-              Top 3 Validators
-            </div>
-            {fakeValidators.map((validator, index) => (
-              <div
-                className="flex h-7 w-fit items-center gap-2 rounded-full border border-border bg-background px-2"
-                key={index}
-              >
-                {validator.icon}
-                <span className="text-xs font-medium">{validator.name}</span>
-                <span className="text-[10px] text-muted-foreground">
-                  BGT/Year: {validator.bgtAmount}
-                </span>
-              </div>
-            ))}
+          <div className="inline-flex h-7 items-end gap-1">
+            <span className="text-2xl font-semibold leading-6">142</span>
+            <span className="font-medium leading-5 text-muted-foreground">
+              (690.42M)
+            </span>
+          </div>
+          <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
+            <Icons.bexFav className="h-4 w-4" />
+            <Icons.bendFav className="h-4 w-4" />
+            <Icons.berpsFav className="h-4 w-4" />
+            <span className="text-sm leading-5 text-muted-foreground">
+              {" "}
+              +69
+            </span>
           </div>
         </div>
-        <div className="max-w-100 flex w-full flex-col justify-between gap-4 px-4 py-5">
-          <div>
-            <div className="text-xs leading-5 text-muted-foreground">
-              Est. Yearly BGT Distribution
-            </div>
-            <div className="mt-2 flex h-8 w-fit items-center gap-2 rounded-full bg-success-foreground bg-opacity-10 px-2 text-success-foreground">
-              <Icons.bgt className="h-6 w-6" />
-              <b>69.42K Yearly</b>
-            </div>
+        <div className="flex flex-col justify-center gap-1 border-x border-b border-border p-4">
+          <div className="text-xs leading-5 text-muted-foreground">
+            Top 3 Validators
           </div>
-          <div>
-            <div className="text-xs leading-5 text-muted-foreground">
-              My Claimable BGT
-            </div>
-            <Link
-              className="cursor-pointer text-warning-foreground underline"
-              href="/rewards"
+          {fakeValidators.map((validator, index) => (
+            <div
+              className="flex h-7 w-fit flex-nowrap items-center gap-2 rounded-full border border-border bg-background px-2"
+              key={`${index}-${validator.name}`}
             >
-              420.69 BGT
-            </Link>
+              {validator.icon}
+              <span className="text-nowrap text-xs font-medium">
+                {validator.name}
+              </span>
+              <span className="text-nowrap text-[10px] text-muted-foreground">
+                BGT/Year: {validator.bgtAmount}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col justify-center border-b border-border p-4">
+          <div className="text-xs leading-5 text-muted-foreground">
+            Est. Yearly BGT Distribution
+          </div>
+          <div className="mt-2 flex h-8 w-fit items-center gap-2 rounded-full bg-success-foreground bg-opacity-10 px-2 text-success-foreground">
+            <Icons.bgt className="h-6 w-6" />
+            <b>69.42K Yearly</b>
           </div>
         </div>
-        <Image //please make this the right bear, ty mista coin :3
-          src={`${cloudinaryUrl}/bears/m7abj0nxzpkh5mcuz5g2`}
-          className="absolute bottom-0 right-0 hidden scale-x-[-1] md:block"
-          alt="proposal-bear"
-          width={200}
-          height={300}
-        />
-      </div>
-
-      <div className="flex md:flex-row flex-col border-b border-border bg-muted">
-        <div className="flex-1 px-5 py-3">
+        <div className="flex flex-col justify-center border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
             Active Bribes
           </div>
-          <div className="flex items-center gap-2 text-sm font-bold leading-5">
+          <div className="flex items-center gap-2 text-xl font-bold leading-5">
             690.42K
-            <span className="whitespace-nowrap font-medium text-muted-foreground">
-              (420 Active Gauges)
-            </span>
           </div>
-          <div className="mt-2 flex w-fit items-center gap-1 rounded-full border border-border bg-background px-2 py-1">
+          <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background px-2 py-1">
             <Icons.bgt className="h-4 w-4" />
             <Icons.honey className="h-4 w-4" />
             <Icons.bera className="h-4 w-4" />
@@ -118,21 +92,21 @@ export default function GaugeInfoCard() {
             </span>
           </div>
         </div>
-        <div className="flex-1 border-y md:border-x border-border px-5 py-3 flex justify-center flex-col gap-2">
+        <div className="flex flex-col justify-center gap-2 border-x border-b border-border p-5">
+          <div className="text-xs leading-5 text-muted-foreground">
+            Total No. of Validators
+          </div>
+          <div className="w-fit rounded-full bg-success-foreground bg-opacity-10 px-2 py-1 text-sm font-medium leading-[18px] text-success-foreground">
+            69 Active
+          </div>
+        </div>
+        <div className="flex flex-col justify-center gap-2 border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
             Total Circulating BGT
           </div>
           <div className="flex items-center gap-1 text-sm font-bold leading-5">
             150.69 Million
             <Icons.bgt className="h-4 w-4" />
-          </div>
-        </div>
-        <div className="flex flex-1 flex-col gap-2 px-5 py-3 justify-center ">
-          <div className="text-xs leading-5 text-muted-foreground">
-            Total No. of Validators
-          </div>
-          <div className="w-fit rounded-full bg-success-foreground bg-opacity-10 px-2 py-1 text-sm font-medium leading-[18px] text-success-foreground">
-            69 Active
           </div>
         </div>
       </div>
