@@ -68,7 +68,7 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
     cell: ({ row }) => (
       <div className="flex w-full justify-center">{row.original.hide}</div>
     ),
-    accessorKey: "hide",
+    accessorKey: "hide1",
     enableSorting: true,
   },
   {
@@ -82,7 +82,7 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
     cell: ({ row }) => (
       <div className="flex w-full justify-center">{row.original.hide}</div>
     ),
-    accessorKey: "hide",
+    accessorKey: "hide2",
     enableSorting: true,
   },
 ];
