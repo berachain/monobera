@@ -90,7 +90,7 @@ const BribeCard = ({
         <div className="flex flex-col gap-2">
           {info.map((item, index) => (
             <div
-              key={index}
+              key={`${index}-${item.title}`}
               className="flex justify-between text-sm font-medium leading-5 text-muted-foreground"
             >
               <div>{item.title}</div>
@@ -159,7 +159,7 @@ export default function BribeList({ bribes }: { bribes: any[][] }) {
         <AccordionContent>
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
             {bribesList?.map((item: any, index) => (
-              <BribeCard key={index} {...item} />
+              <BribeCard key={`${index}-${item.address}`} {...item} />
             ))}
           </div>
         </AccordionContent>

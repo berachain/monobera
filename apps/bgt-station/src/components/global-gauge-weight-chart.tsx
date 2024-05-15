@@ -129,7 +129,7 @@ export default function GlobalGaugeWeightChart({
   } as CuttingBoardWeight;
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[340px]">
+    <div className="flex w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] shrink-0 lg:items-stretch">
       <div className="text-sm leading-5 text-muted-foreground">
         Gauge Weight
       </div>

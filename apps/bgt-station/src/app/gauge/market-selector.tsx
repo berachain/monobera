@@ -8,16 +8,15 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
-import { useLocalStorage } from "usehooks-ts";
 
-import { DEFAULT_MARKETS } from "~/utils/markets";
-
-export default function MarketSelector() {
+export default function MarketSelector({
+  markets,
+  setMarkets,
+}: {
+  markets: any;
+  setMarkets: any;
+}) {
   const [open, setOpen] = useState(false);
-  const [markets, setMarkets] = useLocalStorage(
-    "BERA_GAUGE_MARKET",
-    DEFAULT_MARKETS,
-  );
 
   return (
     <DropdownMenu open={open}>
@@ -40,9 +39,10 @@ export default function MarketSelector() {
           className="rounded-none border-none"
         />
         <DropdownMenuSeparator className="my-0" />
-        <div className="p-1 max-h-[200px] overflow-auto">
-          {Object.keys(markets).map((market: string) => (
+        <div className="max-h-[200px] overflow-auto p-1">
+          {Object.keys(markets).map((market: string, index: number) => (
             <DropdownMenuCheckboxItem
+              key={`selector-${index}-${market}`}
               className="hover:bg-muted hover:text-foreground"
               checked={markets[market as keyof typeof markets].checked}
               onCheckedChange={(checked: boolean) => {
