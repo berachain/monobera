@@ -51,7 +51,7 @@ export default async function Home({
 
   const markets: IMarket[] = data.markets.map((m: Market) => {
     const historicalInfo = data.historicalSummary.find(
-      (h: any) => h.pair_index === m.pair_index,
+      (h: any) => h.pair_index.toString() === m.pair_index,
     );
     return {
       ...m,

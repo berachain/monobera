@@ -137,11 +137,13 @@ const DatafeedFactory = (
 ): IDatafeedChartApi & IExternalDatafeed => {
   return {
     onReady: (callback: OnReadyCallback) => {
-      fetch(`${perpsPricesBenchmark}/config`).then((response) => {
-        response.json().then((configurationData) => {
-          setTimeout(() => callback(configurationData));
-        });
-      });
+      fetch(`${perpsPricesBenchmark}/v1/shims/tradingview/config`).then(
+        (response) => {
+          response.json().then((configurationData) => {
+            setTimeout(() => callback(configurationData));
+          });
+        },
+      );
     },
     searchSymbols: (
       userInput: string,
@@ -149,13 +151,13 @@ const DatafeedFactory = (
       symbolType: string,
       onResultReadyCallback: SearchSymbolsCallback,
     ) => {
-      fetch(`${perpsPricesBenchmark}/search?query=${userInput}`).then(
-        (response) => {
-          response.json().then((data) => {
-            onResultReadyCallback(data);
-          });
-        },
-      );
+      fetch(
+        `${perpsPricesBenchmark}/v1/shims/tradingview/search?query=${userInput}`,
+      ).then((response) => {
+        response.json().then((data) => {
+          onResultReadyCallback(data);
+        });
+      });
     },
     resolveSymbol: (
       symbolName: string,
@@ -166,19 +168,19 @@ const DatafeedFactory = (
       const pythSymbol = symbolName.startsWith("Crypto")
         ? symbolName
         : formatToPythSymbol(base ?? "", quote);
-      fetch(`${perpsPricesBenchmark}/symbols?symbol=${pythSymbol}`).then(
-        (response) => {
-          response
-            .json()
-            .then((symbolInfo) => {
-              onSymbolResolvedCallback(symbolInfo);
-            })
-            .catch((error) => {
-              onResolveErrorCallback("Cannot resolve symbol");
-              return;
-            });
-        },
-      );
+      fetch(
+        `${perpsPricesBenchmark}/v1/shims/tradingview/symbols?symbol=${pythSymbol}`,
+      ).then((response) => {
+        response
+          .json()
+          .then((symbolInfo) => {
+            onSymbolResolvedCallback(symbolInfo);
+          })
+          .catch((error) => {
+            onResolveErrorCallback("Cannot resolve symbol");
+            return;
+          });
+      });
     },
     getBars: (
       symbolInfo: LibrarySymbolInfo,
@@ -189,7 +191,7 @@ const DatafeedFactory = (
     ) => {
       const { firstDataRequest } = periodParams;
       fetch(
-        `${perpsPricesBenchmark}/history?symbol=${symbolInfo.ticker}&from=${periodParams.from}&to=${periodParams.to}&resolution=${resolution}`,
+        `${perpsPricesBenchmark}/v1/shims/tradingview/history?symbol=${symbolInfo.ticker}&from=${periodParams.from}&to=${periodParams.to}&resolution=${resolution}`,
       ).then((response) => {
         response
           .json()
