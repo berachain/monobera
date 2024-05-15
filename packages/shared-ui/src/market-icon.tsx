@@ -5,8 +5,9 @@ import Image from "next/image";
 import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
+import { type Address } from "viem";
 
-export const VaultIcon = ({
+export const MarketIcon = ({
   imageUri,
   className,
 }: {

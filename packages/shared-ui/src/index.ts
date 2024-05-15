@@ -57,3 +57,4 @@ export * from "./apyTooltip";
 export * from "./hooks";
 export * from "./utils";
 export { VaultIcon } from "./vault-icon";
+export { MarketIcon } from "./market-icon";

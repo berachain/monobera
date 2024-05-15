@@ -25,7 +25,7 @@ import {
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@bera/ui/tabs";
 import { Skeleton } from "@bera/ui/skeleton";
-import { useBeraJs } from '@bera/berajs';
+import { useBeraJs } from "@bera/berajs";
 
 export const GaugeIcon = ({
   gauge,
@@ -294,7 +294,7 @@ export default function ValidatorsTable() {
     setSearch("");
   };
 
-  const {isReady} = useBeraJs()
+  const { isReady } = useBeraJs();
 
   return (
     <div className="mt-16">
@@ -393,10 +393,10 @@ export default function ValidatorsTable() {
               <Skeleton className="h-8 w-full" />
               <Skeleton className="h-8 w-full" />
             </div>
+          ) : !isReady ? (
+            <ConnectWalletBear message="You need to connect your wallet to see your validators" />
           ) : (
-            !isReady ? <ConnectWalletBear
-              message="You need to connect your wallet to see your validators"
-            /> : <DataTable
+            <DataTable
               columns={user_general_validator_columns}
               data={mockValidators}
               className="min-w-[900px]"
