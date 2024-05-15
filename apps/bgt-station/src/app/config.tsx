@@ -22,6 +22,10 @@ export const navItems = [
     title: "My BGT",
   },
   {
+    href: "/gauge",
+    title: "Gauge",
+  },
+  {
     href: "/validators",
     title: "Validators",
   },
@@ -30,24 +34,17 @@ export const navItems = [
     title: "Delegate",
   },
   {
-    href: "/governance",
-    title: "Governance",
+    href: "/redeem",
+    title: "Redeem",
   },
   {
-    href: "/gauge",
-    title: "Gauge",
+    href: "/rewards",
+    title: "Rewards",
   },
   {
     href: "#",
     title: "Explore",
     children: [
-      // {
-      //   href: bgtUrl,
-      //   type: "external",
-      //   title: bgtName,
-      //   blurb: "The hub for BGT governance",
-      //   icon: <Icons.bgtFav className="h-8 w-8" />,
-      // },
       {
         href: dexUrl,
         type: "external",
