@@ -10,8 +10,8 @@ import { MarketTokenNames } from "~/utils/marketTokenNames";
 import {
   getDailyPriceChange,
   getGlobalParams,
-  getHistoricalSummary,
   getMarkets,
+  getHistoricalSummary,
 } from "~/endpoints";
 import { type IMarket } from "~/types/market";
 import { GeneralInfoBanner } from "../components/general-info-banner";
@@ -50,7 +50,7 @@ export default async function Home({ params, searchParams: { ref } }: Props) {
 
     const markets: IMarket[] = data.markets.map((m: Market) => {
       const historicalInfo = data.historicalSummary.find(
-        (h: any) => h.pair_index === m.pair_index,
+        (h: any) => h.pair_index.toString() === m.pair_index,
       );
       return {
         ...m,
