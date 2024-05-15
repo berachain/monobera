@@ -251,6 +251,7 @@ export default function ValidatorsTable() {
       website: "http://example.com/validator1",
       imageUri: "http://example.com/validator1.png",
       cuttingboard: mockCuttingBoardWeights,
+      userStaked: "100000",
       apy: "10",
       rewardRate: "1000",
       allTimeStats: {
@@ -262,6 +263,7 @@ export default function ValidatorsTable() {
     {
       coinbase: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
       name: "Validator Two",
+      userStaked: "100000",
       commission: "0.03",
       description: "A highly secure validator with a focus on stability.",
       website: "http://example.com/validator2",

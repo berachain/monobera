@@ -179,7 +179,7 @@ export const ValidatorBribesPopover = ({
   );
 };
 
-const VALIDATOR_COLUMN: ColumnDef<Validator> = {
+const VALIDATOR_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Validator" />
   ),
@@ -200,7 +200,7 @@ const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   enableSorting: true,
 };
 
-const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
+const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Voting Power" />
   ),
@@ -213,7 +213,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
   accessorKey: "amountStaked",
 };
 
-const COMMISSION_COLUMN: ColumnDef<Validator> = {
+const COMMISSION_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Commission" />
   ),
@@ -226,7 +226,7 @@ const COMMISSION_COLUMN: ColumnDef<Validator> = {
   accessorKey: "commission",
 };
 
-const APY_COLUMN: ColumnDef<Validator> = {
+const APY_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
@@ -244,7 +244,7 @@ const APY_COLUMN: ColumnDef<Validator> = {
   enableSorting: true,
 };
 
-const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
+const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
   ),
@@ -261,7 +261,7 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
   enableSorting: false,
 };
 
-const BRIBES_COLUMN: ColumnDef<Validator> = {
+const BRIBES_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Bribes" />
   ),
@@ -272,7 +272,7 @@ const BRIBES_COLUMN: ColumnDef<Validator> = {
   enableSorting: false,
 };
 
-const USER_STAKED_COLUMN: ColumnDef<Validator> = {
+const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="User Staked" />
   ),
@@ -286,7 +286,7 @@ const USER_STAKED_COLUMN: ColumnDef<Validator> = {
   enableSorting: true,
 };
 
-export const general_validator_columns: ColumnDef<Validator>[] = [
+export const general_validator_columns: ColumnDef<UserValidator>[] = [
   VALIDATOR_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN,
   COMMISSION_COLUMN,

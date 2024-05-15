@@ -50,12 +50,9 @@ export const AggregatedBribeDialog = ({
         }) as VaultBribeValue[];
       });
 
-      console.log(vaultBribeValues)
+  if (!aggregatedBribe) return false;
   return (
-    <Dialog
-      open={aggregatedBribe != undefined}
-      onOpenChange={(open) => onOpenChange(open)}
-    >
+    <Dialog open={!aggregatedBribe} onOpenChange={(open) => onOpenChange(open)}>
       <DialogContent>
         {" "}
         <DialogHeader>
@@ -135,17 +132,19 @@ export const AggregatedBribeDialog = ({
                         {vaultBribeValue.vault.name}
                       </span>
                       <span className="font-medium flex flex-row gap-text-xs items-center">
-                      <VaultIcon
+                        <VaultIcon
                           imageUri={vaultBribeValue.vault.imageUri}
                           className="w-4 h-4"
                         />
-                         {vaultBribeValue.vault.name}
+                        {vaultBribeValue.vault.name}
                       </span>
                     </div>
                   </div>
                   <div className="flex flex-col items-start font-medium  gap-1 w-[80px] overflow-hidden text-ellipsis">
-                  <div className="text-foreground text-md">
-                      <FormattedNumber value={parseFloat(vaultBribeValue.amountLeft)} />
+                    <div className="text-foreground text-md">
+                      <FormattedNumber
+                        value={parseFloat(vaultBribeValue.amountLeft)}
+                      />
                     </div>
                     <div className="text-muted-foreground text-xs">
                       <FormattedNumber
@@ -158,7 +157,9 @@ export const AggregatedBribeDialog = ({
                   </div>
                   <div className="flex flex-col items-start font-medium  gap-1 w-[80px] overflow-hidden text-ellipsis">
                     <div className="text-foreground text-md">
-                      <FormattedNumber value={parseFloat(vaultBribeValue.perProposal)} />
+                      <FormattedNumber
+                        value={parseFloat(vaultBribeValue.perProposal)}
+                      />
                     </div>
                     <div className="text-muted-foreground text-xs">
                       <FormattedNumber

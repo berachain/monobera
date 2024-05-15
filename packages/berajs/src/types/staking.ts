@@ -19,7 +19,7 @@ export type Validator = {
   };
 };
 
-export type UserValidators = Validator & {
+export type UserValidator = Validator & {
   userStaked: string;
 };
 
