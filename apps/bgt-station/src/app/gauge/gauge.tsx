@@ -11,9 +11,9 @@ import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import GaugeInfoCard from "./gauge-info-card";
-import GlobalGaugeWeightChart from "./global-gauge-weight-chart";
-import GlobalGaugeWeightTable from "./global-gauge-weight-table";
 import MarketSelector from "./market-selector";
+import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
+import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 
 const mockChartData = [
   {

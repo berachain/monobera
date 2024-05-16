@@ -1,8 +1,4 @@
 import { cloudinaryUrl, docsUrl } from "@bera/config";
-import { Skeleton } from "@bera/ui/skeleton";
-
-import GlobalGaugeWeightChart from "./global-gauge-weight-chart";
-import GlobalGaugeWeightTable from "./global-gauge-weight-table";
 import { Banner } from "../my-bgt/components/banner";
 
 export default function AverageGaugeWeight() {

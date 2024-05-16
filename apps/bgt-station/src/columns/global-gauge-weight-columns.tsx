@@ -4,13 +4,17 @@ import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
-export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
+interface GaugeT extends Gauge {
+  tokenList: any[];
+}
+
+export const global_gauge_weight_columns: ColumnDef<any>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <div className="flex w-[150px] flex-col gap-2 whitespace-nowrap text-left">
+      <div className="flex-c,ol flex w-[150px] gap-2 whitespace-nowrap text-left">
         <div className="flex items-center gap-1 text-lg font-medium leading-6">
           <Icons.bexFav className="h-6 w-6" />
           BEX
@@ -76,9 +80,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
-    ),
+    cell: ({ row }) => <div className="flex w-full justify-center">ha</div>,
     accessorKey: "validators-emissions",
     enableSorting: true,
   },
