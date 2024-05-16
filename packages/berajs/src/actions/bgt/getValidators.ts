@@ -9,11 +9,13 @@ import {
 
 const mockMarkets: Market[] = [
   {
+    id: "native",
     name: "Market One",
     imageUri: "http://example.com/market1.png",
     website: "http://example.com/market1",
   },
   {
+    id: "native",
     name: "Market Two",
     imageUri: "http://example.com/market2.png",
     website: "http://example.com/market2",
