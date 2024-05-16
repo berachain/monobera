@@ -35,7 +35,6 @@ export { Footer } from "./footer";
 export { ErrorPage } from "./error";
 export { Gradient } from "./gradient";
 export { BearBG } from "./bear-bg";
-export { ValidatorIcon } from "./validator-icon";
 export { NotFoundBear } from "./not-found-bear";
 export { TokenIconList } from "./token-icon-list";
 export { ActionButton } from "./action-btn-wrapper";
@@ -51,10 +50,13 @@ export { TermsOfUse, PrivacyPolicy, TermOfUseModal } from "./terms-of-use";
 export { AccessDenyModal, AccessDeny } from "./access-deny";
 export { FormattedNumber } from "./formatted-number";
 export { PoolHeader } from "./pool-header";
+
+export { ValidatorIcon } from "./validator-icon";
+export { VaultIcon } from "./vault-icon";
 export { GaugeIcon } from "./gauge-icon";
+export { MarketIcon } from "./market-icon";
+
 export { useTxn } from "./hooks";
 export * from "./apyTooltip";
 export * from "./hooks";
 export * from "./utils";
-export { VaultIcon } from "./vault-icon";
-export { MarketIcon } from "./market-icon";

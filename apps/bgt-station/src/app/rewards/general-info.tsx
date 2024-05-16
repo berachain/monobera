@@ -53,7 +53,8 @@ export const GeneralInfo = () => {
               className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
               key={`gauge-${index}-${gauge}`}
             >
-              <TokenIconList size="md" tokenList={[]} />
+              {/* <TokenIconList size="md" tokenList={[]} /> */}
+              <Icons.honey className="h-4 w-4" />
               <span className="text-xs">{gauge.title} </span>
               <span className="text-[10px] text-muted-foreground">
                 BGT Earning: {gauge.bgt}
@@ -87,7 +88,8 @@ export const GeneralInfo = () => {
               className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
               key={`incentive-${index}-${incentive}`}
             >
-              <TokenIconList size="md" tokenList={[]} />
+              {/* <TokenIconList size="md" tokenList={[]} /> */}
+              <Icons.bgt className="h-4 w-4" />
               <span className="text-xs">{incentive.title} </span>
               <span className="text-[10px] text-muted-foreground">
                 {incentive.amount}

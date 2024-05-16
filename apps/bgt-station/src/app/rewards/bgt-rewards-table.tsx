@@ -30,7 +30,7 @@ export const BGTRewardsTable = () => {
       <DataTable
         columns={user_bgt_columns as any}
         data={fakedata}
-        className="min-w-[1000px] shadow"
+        className="min-w-[700px] shadow"
         enablePagination
       />
     </div>

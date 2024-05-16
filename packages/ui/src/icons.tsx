@@ -650,7 +650,7 @@ export const Icons = {
       />
     </svg>
   ),
-  validator: (props: LucideProps) => (
+  gauge: (props: LucideProps) => (
     <svg
       width="144"
       height="144"
@@ -691,6 +691,52 @@ export const Icons = {
         d="M18 42H30C42 42 60 36 72 30C84 36 102 42 114 42H126"
         stroke="currentColor"
         stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  validator: (props: LucideProps) => (
+    <svg
+      width="171"
+      height="171"
+      viewBox="0 0 171 171"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M106.875 14.25H64.125V57H106.875V14.25Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M156.75 114H114V156.75H156.75V114Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M57 114H14.25V156.75H57V114Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M35.625 114V85.5H135.375V114"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M85.5 85.5V57"
+        stroke="currentColor"
+        stroke-width="14.25"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
