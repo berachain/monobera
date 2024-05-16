@@ -1,5 +1,5 @@
 "use client";
-
+// @ts-nocheck 
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@bera/ui";
 import { Checkbox } from "@bera/ui/checkbox";

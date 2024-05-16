@@ -10,79 +10,10 @@ import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import GaugeInfoCard from "./gauge-info-card";
-import MarketSelector from "./market-selector";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
-
-const mockChartData = [
-  {
-    label: "Gauge 1",
-    address: "0x101f52c804C1C02c0A1D33442ecA30ecb6fB2434",
-    percentage: 0.2,
-    amount: 100,
-  },
-  {
-    label: "Gauge 2",
-    address: "0x605fD73B339b82413B862966428eD8Ac52eC4227",
-    percentage: 0.3,
-    amount: 100,
-  },
-  {
-    label: "Gauge 3",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 4",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 5",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 6",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 7",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 8",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-  {
-    label: "Gauge 9",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-  {
-    label: "Gauge 10",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-  {
-    label: "Gauge 11",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-];
+import GaugeInfoCard from "./gauge-info-card";
+import MarketSelector from "./market-selector";
 
 const cuttingboard: CuttingBoardWeight[] = [
   {
@@ -182,7 +113,7 @@ const cuttingboard: CuttingBoardWeight[] = [
 
 export default function Gauge() {
   const { isConnected } = useBeraJs();
-  const { data: allMarkets, marketDict, setMarketDict } = usePollMarkets();
+  const { marketDict, setMarketDict } = usePollMarkets();
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
   const [filteredMarkets, setFilteredMarkets] = useState<string[]>([]);

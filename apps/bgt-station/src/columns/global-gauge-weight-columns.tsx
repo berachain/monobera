@@ -14,7 +14,7 @@ export const global_gauge_weight_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <div className="flex-c,ol flex w-[150px] gap-2 whitespace-nowrap text-left">
+      <div className="flex-col flex w-[150px] gap-2 whitespace-nowrap text-left">
         <div className="flex items-center gap-1 text-lg font-medium leading-6">
           <Icons.bexFav className="h-6 w-6" />
           BEX
