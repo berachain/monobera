@@ -55,82 +55,6 @@ importers:
         specifier: ^17.7.2
         version: 17.7.2
 
-  apps/ambassador:
-    dependencies:
-      '@bera/config':
-        specifier: 0.1.0
-        version: link:../../packages/config/env
-      '@bera/shared-ui':
-        specifier: 0.1.0
-        version: link:../../packages/shared-ui
-      '@bera/tailwind-config':
-        specifier: 0.1.0
-        version: link:../../packages/config/tailwind
-      '@bera/ui':
-        specifier: 0.1.0
-        version: link:../../packages/ui
-      '@sentry/nextjs':
-        specifier: ^7.103.0
-        version: 7.111.0(next@14.2.2)(react@18.2.0)
-      '@t3-oss/env-nextjs':
-        specifier: ^0.2.2
-        version: 0.2.2(zod@3.22.5)
-      '@vercel/analytics':
-        specifier: ^1.0.1
-        version: 1.2.2(next@14.2.2)(react@18.2.0)
-      next:
-        specifier: ^14.1.3
-        version: 14.2.2(react-dom@18.2.0)(react@18.2.0)
-      next-themes:
-        specifier: ^0.2.1
-        version: 0.2.1(next@14.2.2)(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-day-picker:
-        specifier: ^8.7.1
-        version: 8.10.1(date-fns@2.30.0)(react@18.2.0)
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      swr-devtools:
-        specifier: ^1.3.2
-        version: 1.3.2(react@18.2.0)(swr@2.2.5)
-      tailwindcss-animate:
-        specifier: ^1.0.5
-        version: 1.0.7(tailwindcss@3.4.3)
-      usehooks-ts:
-        specifier: ^2.14.0
-        version: 2.16.0(react@18.2.0)
-      zod:
-        specifier: ^3.21.4
-        version: 3.22.5
-    devDependencies:
-      '@types/node':
-        specifier: ^18.16.6
-        version: 18.19.31
-      '@types/react':
-        specifier: ^18.2.0
-        version: 18.2.79
-      '@types/react-dom':
-        specifier: ^18.2.1
-        version: 18.2.25
-      autoprefixer:
-        specifier: ^10.4.14
-        version: 10.4.19(postcss@8.4.38)
-      dotenv-cli:
-        specifier: ^7.2.1
-        version: 7.4.1
-      postcss:
-        specifier: ^8.4.23
-        version: 8.4.38
-      tailwindcss:
-        specifier: ^3.3.2
-        version: 3.4.3
-      typescript:
-        specifier: ^5.0.4
-        version: 5.4.5
-
   apps/berajs-docs:
     dependencies:
       '@bera/berajs':
@@ -223,6 +147,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.5
         version: 1.0.7(tailwindcss@3.4.3)
+      uniqolor:
+        specifier: ^1.1.0
+        version: 1.1.1
       usehooks-ts:
         specifier: ^2.14.0
         version: 2.16.0(react@18.2.0)
@@ -356,89 +283,7 @@ importers:
         version: 18.2.25
       autoprefixer:
         specifier: ^10.4.14
-        version: 10.4.19(postcss@apps+ecosystem+@bera+tailwind-config+postcss)
-      tailwindcss:
-        specifier: ^3.3.2
-        version: 3.4.3
-      typescript:
-        specifier: ^5.0.4
-        version: 5.4.5
-
-  apps/ecosystem:
-    dependencies:
-      '@bera/config':
-        specifier: 0.1.0
-        version: link:../../packages/config/env
-      '@bera/shared-ui':
-        specifier: 0.1.0
-        version: link:../../packages/shared-ui
-      '@bera/tailwind-config':
-        specifier: 0.1.0
-        version: link:../../packages/config/tailwind
-      '@bera/ui':
-        specifier: 0.1.0
-        version: link:../../packages/ui
-      '@sentry/nextjs':
-        specifier: ^7.103.0
-        version: 7.111.0(next@14.2.2)(react@18.2.0)
-      '@t3-oss/env-nextjs':
-        specifier: ^0.2.2
-        version: 0.2.2(zod@3.22.5)
-      '@types/papaparse':
-        specifier: ^5.3.14
-        version: 5.3.14
-      '@vercel/analytics':
-        specifier: ^1.0.1
-        version: 1.2.2(next@14.2.2)(react@18.2.0)
-      next:
-        specifier: ^14.1.3
-        version: 14.2.2(react-dom@18.2.0)(react@18.2.0)
-      next-themes:
-        specifier: ^0.2.1
-        version: 0.2.1(next@14.2.2)(react-dom@18.2.0)(react@18.2.0)
-      papaparse:
-        specifier: ^5.4.1
-        version: 5.4.1
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-day-picker:
-        specifier: ^8.7.1
-        version: 8.10.1(date-fns@2.30.0)(react@18.2.0)
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      swr-devtools:
-        specifier: ^1.3.2
-        version: 1.3.2(react@18.2.0)(swr@2.2.5)
-      tailwindcss-animate:
-        specifier: ^1.0.5
-        version: 1.0.7(tailwindcss@3.4.3)
-      usehooks-ts:
-        specifier: ^2.14.0
-        version: 2.16.0(react@18.2.0)
-      zod:
-        specifier: ^3.21.4
-        version: 3.22.5
-    devDependencies:
-      '@types/node':
-        specifier: ^18.16.6
-        version: 18.19.31
-      '@types/react':
-        specifier: ^18.2.0
-        version: 18.2.79
-      '@types/react-dom':
-        specifier: ^18.2.1
-        version: 18.2.25
-      autoprefixer:
-        specifier: ^10.4.14
-        version: 10.4.19(postcss@apps+ecosystem+@bera+tailwind-config+postcss)
-      dotenv-cli:
-        specifier: ^7.2.1
-        version: 7.4.1
-      postcss:
-        specifier: link:@bera/tailwind-config/postcss
-        version: link:@bera/tailwind-config/postcss
+        version: 10.4.19(postcss@8.4.38)
       tailwindcss:
         specifier: ^3.3.2
         version: 3.4.3
@@ -10110,12 +9955,6 @@ packages:
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
     dev: true
 
-  /@types/papaparse@5.3.14:
-    resolution: {integrity: sha512-LxJ4iEFcpqc6METwp9f6BV6VVc43m6MfH0VqFosHvrUgfXiFe6ww7R3itkOQ+TCK6Y+Iv/+RnnvtRZnkc5Kc9g==}
-    dependencies:
-      '@types/node': 18.19.31
-    dev: false
-
   /@types/parse-json@4.0.2:
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
     dev: false
@@ -11676,22 +11515,6 @@ packages:
       picocolors: 1.0.0
       postcss: 8.4.38
       postcss-value-parser: 4.2.0
-
-  /autoprefixer@10.4.19(postcss@apps+ecosystem+@bera+tailwind-config+postcss):
-    resolution: {integrity: sha512-BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==}
-    engines: {node: ^10 || ^12 || >=14}
-    hasBin: true
-    peerDependencies:
-      postcss: ^8.1.0
-    dependencies:
-      browserslist: 4.23.0
-      caniuse-lite: 1.0.30001611
-      fraction.js: 4.3.7
-      normalize-range: 0.1.2
-      picocolors: 1.0.0
-      postcss: link:apps/ecosystem/@bera/tailwind-config/postcss
-      postcss-value-parser: 4.2.0
-    dev: true
 
   /available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -17923,10 +17746,6 @@ packages:
     resolution: {integrity: sha512-NUcwaKxUxWrZLpDG+z/xZaCgQITkA/Dv4V/T6bw7VON6l1Xz/VnrBqrYjZQ12TamKHzITTfOEIYUj48y2KXImA==}
     dev: true
 
-  /papaparse@5.4.1:
-    resolution: {integrity: sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==}
-    dev: false
-
   /parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -21135,6 +20954,10 @@ packages:
       is-plain-obj: 4.1.0
       trough: 2.2.0
       vfile: 6.0.1
+    dev: false
+
+  /uniqolor@1.1.1:
+    resolution: {integrity: sha512-HUwezlXCwm5bzsEXW7AP7ybezH13uWENRgYT+3dOdhJPvpYucSqvIGckMiLn+Uy2j0NVf3fPp43uZ4aun3t4Ww==}
     dev: false
 
   /unique-string@2.0.0:

@@ -5,6 +5,10 @@ export const tradingAbi = [
     stateMutability: "nonpayable",
   },
   {
+    type: "receive",
+    stateMutability: "payable",
+  },
+  {
     type: "function",
     name: "UPGRADE_INTERFACE_VERSION",
     inputs: [],
@@ -75,9 +79,14 @@ export const tradingAbi = [
         type: "uint256",
         internalType: "uint256",
       },
+      {
+        name: "priceUpdateData",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -101,7 +110,7 @@ export const tradingAbi = [
         internalType: "bytes",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -153,16 +162,26 @@ export const tradingAbi = [
         type: "uint256",
         internalType: "uint256",
       },
+      {
+        name: "priceUpdateData",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
     name: "initialize",
     inputs: [
       {
-        name: "_storageT",
+        name: "pythContract",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_tradingStorage",
         type: "address",
         internalType: "contract ITradingStorage",
       },
@@ -177,14 +196,31 @@ export const tradingAbi = [
         internalType: "contract IBorrowingFees",
       },
       {
+        name: "_pythCfg",
+        type: "tuple",
+        internalType: "struct ITrading.PythConfig",
+        components: [
+          {
+            name: "confThresholdP",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "staleTolerance",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "useEma",
+            type: "bool",
+            internalType: "bool",
+          },
+        ],
+      },
+      {
         name: "_maxPosHoney",
         type: "uint256",
         internalType: "uint256",
-      },
-      {
-        name: "_staleFeedTimeout",
-        type: "int256",
-        internalType: "int256",
       },
     ],
     outputs: [],
@@ -228,6 +264,30 @@ export const tradingAbi = [
       },
     ],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "multicall",
+    inputs: [
+      {
+        name: "requireSuccess",
+        type: "bool",
+        internalType: "bool",
+      },
+      {
+        name: "data",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
+    ],
+    outputs: [
+      {
+        name: "",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
+    ],
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -300,9 +360,14 @@ export const tradingAbi = [
         type: "uint256",
         internalType: "uint256",
       },
+      {
+        name: "priceUpdateData",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -333,6 +398,49 @@ export const tradingAbi = [
         name: "",
         type: "bytes32",
         internalType: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "pyth",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IPyth",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "pythConfig",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "tuple",
+        internalType: "struct ITrading.PythConfig",
+        components: [
+          {
+            name: "confThresholdP",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "staleTolerance",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "useEma",
+            type: "bool",
+            internalType: "bool",
+          },
+        ],
       },
     ],
     stateMutability: "view",
@@ -372,12 +480,29 @@ export const tradingAbi = [
   },
   {
     type: "function",
-    name: "setStaleFeedTimeout",
+    name: "setPythConfig",
     inputs: [
       {
-        name: "value",
-        type: "int256",
-        internalType: "int256",
+        name: "_pythCfg",
+        type: "tuple",
+        internalType: "struct ITrading.PythConfig",
+        components: [
+          {
+            name: "confThresholdP",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "staleTolerance",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "useEma",
+            type: "bool",
+            internalType: "bool",
+          },
+        ],
       },
     ],
     outputs: [],
@@ -385,20 +510,7 @@ export const tradingAbi = [
   },
   {
     type: "function",
-    name: "staleFeedTimeout",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "int256",
-        internalType: "int256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "storageT",
+    name: "tradingStorage",
     inputs: [],
     outputs: [
       {
@@ -408,30 +520,6 @@ export const tradingAbi = [
       },
     ],
     stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "tryAggregate",
-    inputs: [
-      {
-        name: "requireSuccess",
-        type: "bool",
-        internalType: "bool",
-      },
-      {
-        name: "data",
-        type: "bytes[]",
-        internalType: "bytes[]",
-      },
-    ],
-    outputs: [
-      {
-        name: "results",
-        type: "bytes[]",
-        internalType: "bytes[]",
-      },
-    ],
-    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -462,9 +550,14 @@ export const tradingAbi = [
         type: "uint256",
         internalType: "uint256",
       },
+      {
+        name: "priceUpdateData",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -485,9 +578,14 @@ export const tradingAbi = [
         type: "uint256",
         internalType: "uint256",
       },
+      {
+        name: "priceUpdateData",
+        type: "bytes[]",
+        internalType: "bytes[]",
+      },
     ],
     outputs: [],
-    stateMutability: "nonpayable",
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -558,16 +656,10 @@ export const tradingAbi = [
   },
   {
     type: "event",
-    name: "NumberUpdated",
+    name: "MaxPosHoneyUpdated",
     inputs: [
       {
-        name: "name",
-        type: "string",
-        indexed: false,
-        internalType: "string",
-      },
-      {
-        name: "value",
+        name: "newValue",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
@@ -651,11 +743,6 @@ export const tradingAbi = [
           },
           {
             name: "positionSize",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "spreadReductionP",
             type: "uint256",
             internalType: "uint256",
           },
@@ -766,11 +853,6 @@ export const tradingAbi = [
             internalType: "uint256",
           },
           {
-            name: "spreadReductionP",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
             name: "buy",
             type: "bool",
             internalType: "bool",
@@ -819,6 +901,36 @@ export const tradingAbi = [
         type: "bool",
         indexed: false,
         internalType: "bool",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "PythConfigUpdated",
+    inputs: [
+      {
+        name: "config",
+        type: "tuple",
+        indexed: false,
+        internalType: "struct ITrading.PythConfig",
+        components: [
+          {
+            name: "confThresholdP",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "staleTolerance",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "useEma",
+            type: "bool",
+            internalType: "bool",
+          },
+        ],
       },
     ],
     anonymous: false,
@@ -912,6 +1024,16 @@ export const tradingAbi = [
   },
   {
     type: "error",
+    name: "AboveMaxGroupCollateral",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "AboveMaxPos",
+    inputs: [],
+  },
+  {
+    type: "error",
     name: "AddressEmptyCode",
     inputs: [
       {
@@ -920,6 +1042,21 @@ export const tradingAbi = [
         internalType: "address",
       },
     ],
+  },
+  {
+    type: "error",
+    name: "AmountOverflow",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "BelowMinPos",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "Done",
+    inputs: [],
   },
   {
     type: "error",
@@ -939,8 +1076,45 @@ export const tradingAbi = [
   },
   {
     type: "error",
+    name: "EthTransferFailed",
+    inputs: [],
+  },
+  {
+    type: "error",
     name: "FailedInnerCall",
     inputs: [],
+  },
+  {
+    type: "error",
+    name: "HasSl",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InTimeout",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidConfidence",
+    inputs: [
+      {
+        name: "invalidConfP",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "InvalidExpo",
+    inputs: [
+      {
+        name: "pythExpo",
+        type: "int32",
+        internalType: "int32",
+      },
+    ],
   },
   {
     type: "error",
@@ -949,7 +1123,62 @@ export const tradingAbi = [
   },
   {
     type: "error",
+    name: "LeverageIncorrect",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "MarketClosed",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "MaxTradesPerPair",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoLimit",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoSl",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoTp",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NoTrade",
+    inputs: [],
+  },
+  {
+    type: "error",
     name: "NotInitializing",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "PairNotListed",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "Paused",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "PriceImpactTooHigh",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "SlTooBig",
     inputs: [],
   },
   {
@@ -967,5 +1196,30 @@ export const tradingAbi = [
         internalType: "bytes32",
       },
     ],
+  },
+  {
+    type: "error",
+    name: "Unauthorized",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "WrongLimitPrice",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "WrongParams",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "WrongSl",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "WrongTp",
+    inputs: [],
   },
 ];

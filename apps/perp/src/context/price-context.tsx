@@ -9,6 +9,8 @@ import throttle from "lodash/throttle";
 
 import { PYTH_IDS } from "~/utils/constants";
 import { type PricesMap } from "~/types/prices";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
+import { usePythUpdateFee } from "@bera/berajs";
 
 type PriceContextType = {
   prices: { current: PricesMap };
@@ -16,6 +18,7 @@ type PriceContextType = {
   createConnection: () => void;
   closeConnection: () => void;
   events: { current: EventEmitter | null };
+  updateFee: bigint;
 };
 
 const PriceContext = React.createContext({
@@ -24,17 +27,23 @@ const PriceContext = React.createContext({
   createConnection: () => {},
   closeConnection: () => {},
   events: { current: null },
+  updateFee: 0n,
 } as PriceContextType);
 
 const normalizePythId = (id: string) => (id?.startsWith("0x") ? id : `0x${id}`);
 
 const PriceContextProvider = ({ children }: any) => {
   const events = useRef(new EventEmitter());
-  const socketRef = useRef<EvmPriceServiceConnection>();
+  const socketRef = useRef<EvmPriceServiceConnection | null>(null);
   const lastConnectionTime = useRef<number>();
   const pythOffChainPrices = useRef<PricesMap>({});
   const connectionId = useRef<ReturnType<typeof setTimeout>>();
   const [wsConnected, setWsConnected] = useState(false);
+  let encodedPrices: string[] = [];
+  if (pythOffChainPrices.current !== undefined && wsConnected) {
+    encodedPrices = generateEncodedPythPrices(pythOffChainPrices, "1");
+  }
+  const { updateFee } = usePythUpdateFee(wsConnected, encodedPrices);
 
   const monitorConnection = useCallback(() => {
     if (connectionId.current) clearTimeout(connectionId.current);
@@ -57,13 +66,12 @@ const PriceContextProvider = ({ children }: any) => {
       PYTH_IDS.map((pythPrice) => pythPrice.id),
     );
     return pythPrices?.reduce((acc, priceFeed) => {
-      const price = priceFeed.getPriceUnchecked();
       const id = normalizePythId(priceFeed.id);
-      const priceName = PYTH_IDS.find((price) => id === price.id)?.name;
-      if (priceName) {
+      const pairIndex = PYTH_IDS.find((price) => id === price.id)?.pairIndex;
+      if (pairIndex) {
         return {
           ...acc,
-          [priceName]: price,
+          [pairIndex]: priceFeed,
         };
       }
       return acc;
@@ -75,6 +83,9 @@ const PriceContextProvider = ({ children }: any) => {
       socketRef.current.closeWebSocket();
     }
     socketRef.current = new EvmPriceServiceConnection(perpsPricesEndpoint, {
+      priceFeedRequestConfig: {
+        binary: true,
+      },
       logger: {
         error: console.error,
         warn: console.warn,
@@ -109,21 +120,21 @@ const PriceContextProvider = ({ children }: any) => {
         source: "fetch",
       });
       pythOffChainPrices.current = { ...offChainPrices };
+      const encodedPrices = generateEncodedPythPrices(pythOffChainPrices, "1");
     } catch (error) {
       console.error(error);
     }
     socketRef.current.subscribePriceFeedUpdates(
       PYTH_IDS.map((pythPrice) => pythPrice.id),
       (priceFeed: PriceFeed) => {
-        const price = priceFeed.getPriceUnchecked();
         const id = normalizePythId(priceFeed.id);
-        const priceName = PYTH_IDS.find((price) => id === price.id)?.name;
-        if (priceName) {
+        const pairIndex = PYTH_IDS.find((price) => id === price.id)?.pairIndex;
+        if (pairIndex) {
           handleConnection(true);
           lastConnectionTime.current = Date.now();
           pythOffChainPrices.current = {
             ...pythOffChainPrices.current,
-            [priceName]: price,
+            [pairIndex]: priceFeed,
           };
           throttleOffChainPricesUpdate(pythOffChainPrices.current);
         }
@@ -133,7 +144,7 @@ const PriceContextProvider = ({ children }: any) => {
 
   const closeConnection = useCallback(() => {
     socketRef.current?.closeWebSocket();
-    socketRef.current = undefined;
+    socketRef.current = null;
   }, []);
 
   useEffect(() => {
@@ -153,6 +164,7 @@ const PriceContextProvider = ({ children }: any) => {
         createConnection,
         closeConnection,
         events,
+        updateFee: updateFee ?? 0n,
       }}
     >
       {children}
@@ -195,11 +207,22 @@ const usePriceEvents = () => {
   return context.events;
 };
 
+const usePythUpdateFeeFormatted = () => {
+  const context = React.useContext(PriceContext);
+  if (context === undefined) {
+    throw new Error(
+      "usePythUpdateFeeFormatted must be used within a PriceProvider",
+    );
+  }
+  return context.updateFee;
+};
+
 export {
   PriceContextProvider,
   usePriceData,
   useIsPythConnected,
   restartPythConnection,
   usePriceEvents,
+  usePythUpdateFeeFormatted,
   PriceContext,
 };

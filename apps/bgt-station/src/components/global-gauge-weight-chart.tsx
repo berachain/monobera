@@ -1,68 +1,32 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { truncateHash, useGauges } from "@bera/berajs";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { ADDRESS_ZERO, type CuttingBoardWeight } from "@bera/berajs";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { type Chart, type TooltipModel } from "chart.js";
+import uniqolor from "uniqolor";
 
 import { ChartTooltip } from "./chart-tooltip";
+import { FormattedNumber } from "@bera/shared-ui";
+import { Skeleton } from "@bera/ui/skeleton";
 
-interface Props {
-  gaugeWeights: any[] | undefined;
-}
-
-interface ColorPalettes {
-  backgroundColor: string[];
-  hoverBorderColor: string[];
-}
-
-const othersColor = {
-  backgroundColor: "#919191",
-  hoverBorderColor: "#91919152",
-};
-
-const colorPalette: ColorPalettes = {
-  backgroundColor: [
-    "#F35E79",
-    "#27B9C4",
-    "#8051D6",
-    "#129E7D",
-    "#FCC631",
-    "#2882CC",
-    "#3DDBB5",
-  ],
-  hoverBorderColor: [
-    "#F35E7952",
-    "#27B9C452",
-    "#8051D652",
-    "#129E7D52",
-    "#FCC63152",
-    "#2882CC52",
-    "#3DDBB552",
-  ],
-};
-
-const chartOptions = {
-  hoverBorderWidth: 10,
-  borderRadius: 8,
-  spacing: 20,
-  borderWidth: 0,
-};
 export const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
 
-export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
-  const [cuttingBoardData, setCuttingBoardData] = React.useState<any[]>([]);
+export default function GlobalGaugeWeightChart({
+  gaugeWeights = [],
+  totalAmountStaked,
+  globalAmountStaked,
+  isLoading,
+}: {
+  gaugeWeights: CuttingBoardWeight[] | undefined;
+  totalAmountStaked: string;
+  globalAmountStaked: string;
+  isLoading: boolean;
+}) {
   const tooltipRef = useRef<string | null>(null);
-  const { gaugeDictionary } = useGauges();
-  const [tooltipVisible, setTooltipVisible] = React.useState<boolean>(false);
-  const [selectedGauge, setSelectedGauge] = React.useState<any>();
-  const [color, setColor] = React.useState<string>("");
-  const [numOthers, setNumOthers] = React.useState<number>(-1);
-  const [othersIndex, setOthersIndex] = React.useState<number>(-1);
-  const [tooltipPosition, setTooltipPosition] = React.useState({
-    left: 0,
-    top: 0,
-  });
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [selectedGauge, setSelectedGauge] = useState<any>();
+  const [othersIndex, setOthersIndex] = useState<number>(-1);
 
-  const { combinedGauges } = useMemo(() => {
+  const gauges = useMemo(() => {
     const threshold = 0.04; // 4%
     const filtered =
       gaugeWeights?.filter((gauge) => gauge.percentage >= threshold) || [];
@@ -72,6 +36,13 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
           return {
             amount: prev.amount + curr.amount,
             percentage: prev.percentage + curr.percentage,
+            receiver: {
+              name: OTHERS_GAUGES,
+              address: ADDRESS_ZERO,
+              market: {
+                name: OTHERS_GAUGES,
+              },
+            } as any,
           };
         }
         return prev;
@@ -84,180 +55,136 @@ export default function GlobalGaugeWeightChart({ gaugeWeights = [] }: Props) {
     // Only add the "Others" gauge if it has a significant amount
     if (others.amount > 0) {
       combined.push({
-        address: OTHERS_GAUGES,
-        label: OTHERS_GAUGES,
+        receiver: {
+          name: OTHERS_GAUGES,
+          address: ADDRESS_ZERO,
+          market: {
+            name: OTHERS_GAUGES,
+          },
+        } as any,
         amount: others.amount,
         percentage: others.percentage,
       });
     }
     setOthersIndex(combined.length - 1);
-    setNumOthers(gaugeWeights?.length - combined.length + 1);
 
-    return {
-      combinedGauges: combined,
-    };
+    return combined;
   }, [gaugeWeights]);
-
-  useEffect(() => {
-    const temp = combinedGauges?.map((data: any) => {
-      return {
-        label:
-          data.label === OTHERS_GAUGES
-            ? OTHERS_GAUGES
-            : truncateHash(data.label),
-        percentage: data.percentage,
-        amount: data.amount,
-      };
-    });
-    setCuttingBoardData(temp);
-  }, [gaugeWeights]);
-
-  const pieData = React.useMemo(() => {
-    return cuttingBoardData?.map((data) => ({
-      label:
-        data.label === OTHERS_GAUGES ? OTHERS_GAUGES : truncateHash(data.label),
-      originalLabel: data.label,
-      amount: data.amount,
-    }));
-  }, [cuttingBoardData]);
 
   const dataP = useMemo(() => {
-    // set others color
-    console.log(othersIndex, pieData.length);
-    const numberOfColors = colorPalette.backgroundColor.length;
-    const gaugeColors: ColorPalettes = {
-      backgroundColor: [],
-      hoverBorderColor: [],
-    };
-
-    pieData.forEach((gauge, index) => {
-      // For all gauges except "Others"
-      if (gauge.label !== OTHERS_GAUGES) {
-        const colorIndex: number = index % numberOfColors;
-        const backgroundColor = colorPalette.backgroundColor[colorIndex];
-        const hoverBorderColor = colorPalette.hoverBorderColor[colorIndex];
-        if (backgroundColor) {
-          gaugeColors.backgroundColor.push(backgroundColor);
-        }
-        if (hoverBorderColor) {
-          gaugeColors.hoverBorderColor.push(hoverBorderColor);
-        }
+    const backgroundColor = [];
+    const hoverBorderColor = [];
+    gauges.forEach((gauge) => {
+      if (gauge.receiver.name !== OTHERS_GAUGES) {
+        const bgColor = uniqolor(gauge.receiver.address).color;
+        backgroundColor.push(bgColor);
+        hoverBorderColor.push(`${bgColor}52`);
       }
     });
-    if (othersIndex > -1 && pieData.length > 1) {
-      // If "Others" gauge is present, add its colors at the end or the desired position
-      if (pieData.some((gauge) => gauge.label === OTHERS_GAUGES)) {
-        gaugeColors.backgroundColor.push(othersColor.backgroundColor);
-        gaugeColors.hoverBorderColor.push(othersColor.hoverBorderColor);
+    if (othersIndex > -1 && gauges.length > 1) {
+      if (gauges.some((gauge) => gauge.receiver.name === OTHERS_GAUGES)) {
+        const bgColor = uniqolor(ADDRESS_ZERO).color;
+        backgroundColor.push(bgColor);
+        hoverBorderColor.push(`${bgColor}52`);
       }
     }
     return {
-      labels: pieData?.map((d) =>
-        gaugeDictionary
-          ? gaugeDictionary[d.originalLabel]?.name ?? d.label
-          : OTHERS_GAUGES,
-      ),
+      labels: gauges?.map((d) => d.receiver.address),
       datasets: [
         {
-          ...{
-            ...chartOptions,
-            backgroundColor: gaugeColors.backgroundColor,
-            hoverBorderColor: gaugeColors.hoverBorderColor,
-          },
-          data: pieData?.map((d) => d.amount),
+          hoverBorderWidth: 10,
+          borderRadius: 8,
+          spacing: 5,
+          borderWidth: 0,
+          backgroundColor,
+          hoverBorderColor,
+          data: gauges?.map((d) => d.amount),
         },
       ],
     };
-  }, [pieData]);
+  }, [gauges]);
 
   const externalTooltipHandler = useCallback(
-    ({
-      tooltip,
-      chart,
-    }: {
-      tooltip: TooltipModel<"doughnut">;
-      chart: Chart;
-    }) => {
+    ({ tooltip }: { tooltip: TooltipModel<"doughnut">; chart: Chart }) => {
       // hide tooltip
       if (tooltip.opacity === 0) {
-        setTooltipVisible(false);
         setSelectedGauge(undefined);
         tooltipRef.current = null;
         return;
       }
       // already visible
-      if (tooltipRef.current === `${tooltip.x},${tooltip.y}`) {
+      if (tooltipRef.current === `${tooltip.caretX},${tooltip.caretX}`) {
         return;
       }
       // set tooltip visible
-      tooltipRef.current = `${tooltip.x},${tooltip.y}`;
-      if (tooltip.labelColors[0]) {
-        setColor(tooltip.labelColors[0].backgroundColor as string);
-      }
-      setSelectedGauge(
-        combinedGauges?.find(
-          (gauge) =>
-            gauge.label === OTHERS_GAUGES ||
-            truncateHash(gauge.address) === tooltip.title[0],
-        ),
-      );
-      const canvasPosition = chart.canvas.getBoundingClientRect();
-      setTooltipVisible(true);
-      setTooltipPosition({
-        left: tooltip.x + canvasPosition.left,
-        top: tooltip.y + canvasPosition.top,
-      });
+      tooltipRef.current = `${tooltip.caretX},${tooltip.caretX}`;
+      setSelectedGauge(tooltip.title[0]);
+      setTooltipPosition({ x: tooltip.caretX, y: tooltip.caretY });
     },
     [gaugeWeights],
   );
 
-  const tooltipComp = selectedGauge ? (
-    <ChartTooltip
-      color={color}
-      visible={tooltipVisible}
-      gauge={selectedGauge}
-      numOthers={numOthers}
-    />
-  ) : undefined;
+  const gauge = {
+    ...gauges.find((gauge) => gauge.receiver.address === selectedGauge),
+  } as CuttingBoardWeight;
 
   return (
-    <div className="flex h-full flex-col items-center justify-center">
-      <div className="p-4 text-2xl font-bold">Gauge Weights</div>
-      <div className="flex items-center justify-center">
-        <div className="absolute flex flex-col items-center justify-center">
-          Total Staked BGT
-          <div className="text-2xl font-bold">69.42M</div>
-          79.69M BGT Circulating
-        </div>
-        <div
-          className="z-1 pointer-events-none absolute transition-all duration-200 ease-in-out"
-          style={{
-            left: `${tooltipPosition.left}px`,
-            top: `${tooltipPosition.top}px`,
-          }}
-        >
-          {tooltipComp}
-        </div>
-        <BeraChart
-          data={dataP}
-          options={{
-            responsive: true,
-            cutout: "70%",
-            radius: "100%",
-            plugins: {
-              legend: {
-                display: false,
-              },
-              tooltip: {
-                enabled: false,
-                // @ts-ignore
-                external: externalTooltipHandler,
-              },
-            },
-          }}
-          type="doughnut"
-        />
+    <div className="flex w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] shrink-0 lg:items-stretch">
+      <div className="text-sm leading-5 text-muted-foreground">
+        Gauge Weight
       </div>
+
+      {isLoading ? (
+        <Skeleton className="relative mx-auto h-[230px] w-[230px] rounded-full" />
+      ) : (
+        <div className="relative mx-auto h-[230px] w-[230px]">
+          <BeraChart
+            data={dataP}
+            options={{
+              responsive: true,
+              cutout: "70%",
+              radius: "95%",
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                tooltip: {
+                  enabled: false, // @ts-ignore
+                  external: externalTooltipHandler,
+                },
+              },
+            }}
+            type="doughnut"
+          />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
+            <div className="text-xs leading-3 text-muted-foreground">
+              Total Staked BGT
+            </div>
+            <div className="text-lg font-bold leading-7">
+              <FormattedNumber value={totalAmountStaked} compact />
+            </div>
+            <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
+              <FormattedNumber value={globalAmountStaked} compact /> BGT
+              Circulating
+            </div>
+          </div>
+
+          <div
+            className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block transform -translate-y-1/2"
+            style={{
+              top: `${tooltipPosition.y}px`,
+              ...(tooltipPosition.x < 230 / 2
+                ? { left: tooltipPosition.x }
+                : { right: 230 - tooltipPosition.x }),
+            }}
+          >
+            {selectedGauge && <ChartTooltip gauge={gauge} />}
+          </div>
+          <div className="z-1 pointer-events-none absolute left-[50%] top-[50%] block -translate-x-1/2 -translate-y-1/2 transform transition-all duration-200 ease-in-out sm:hidden">
+            {selectedGauge && <ChartTooltip gauge={gauge} />}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

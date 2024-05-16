@@ -238,9 +238,21 @@ export const PoolChart = ({
 
       const formattedPoolData = {
         date: poolData.day,
-        volumeUsd: `${formatHoney(poolData?.volume24HInHoney)}`,
-        tvlUsd: `${formatHoney(poolData?.tvlInHoney)}`,
-        feesUsd: `${formatHoney(poolData?.fees24HInHoney)}`,
+        volumeUsd: `${
+          formatHoney(poolData?.volume24HInHoney) < 0.01
+            ? "<0.01"
+            : formatHoney(poolData?.volume24HInHoney)
+        }`,
+        tvlUsd: `${
+          formatHoney(poolData?.tvlInHoney) < 0.01
+            ? "<0.01"
+            : formatHoney(poolData?.tvlInHoney)
+        }`,
+        feesUsd: `${
+          formatHoney(poolData?.fees24HInHoney) < 0.01
+            ? "<0.01"
+            : formatHoney(poolData?.fees24HInHoney)
+        }`,
       };
 
       latestTvlSeen = formattedPoolData?.tvlUsd

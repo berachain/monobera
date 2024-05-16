@@ -131,6 +131,8 @@ export const tradingContractAddress = process.env
   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
 export const bhoneyVaultContractAddress = process.env
   .NEXT_PUBLIC_BHONEY_VAULT_CONTRACT_ADDRESS as Address;
+export const pythContractAddress = process.env
+  .NEXT_PUBLIC_PYTH_CONTRACT_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env
@@ -158,6 +160,8 @@ export const perpsPricesEndpoint = process.env
   .NEXT_PUBLIC_PERPS_PRICES_ENDPOINT_URL as string;
 export const perpsPricesBenchmark = process.env
   .NEXT_PUBLIC_PERPS_PRICES_BENCHMARK_URL as string;
+export const perpsPythPricesMocked = process.env
+  .NEXT_PUBLIC_PERPS_PYTH_PRICES_MOCKED as string;
 
 // Validator clue
 export const validatorClueEndpoint = process.env

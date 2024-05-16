@@ -3,16 +3,133 @@
 import React from "react";
 import Link from "next/link";
 import { truncateHash } from "@bera/berajs";
-import { Tooltip, ValidatorIcon } from "@bera/shared-ui";
+import { type Validator } from "@bera/berajs";
+
+import { FormattedNumber, Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
+import { type Address } from "viem";
+import { blockExplorerUrl } from "@bera/config";
+import { Button } from "@bera/ui/button";
+import { Card } from "@bera/ui/card";
+import { cn } from "@bera/ui";
+import Image from "next/image";
+import { ValidatorPolData } from "./validator-pol-data";
+import { useRouter } from "next/navigation";
 
-import BribesAndEmissions from "./bribes-and-emissions";
-import ValidatorActivitiesTable from "./validator-activities-table";
-import ValidatorDetails from "./validator-details";
-import ValidatorGaugeWeightInfo from "./validator-gauge-weight";
+export const ValidatorDataCard = ({
+  title,
+  value,
+  className,
+}: {
+  title: string;
+  value: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <Card className={cn(className, "p-5 bg-muted")}>
+      <div className="text-muted-foreground text-sm w-full text-ellipsis overflow-hidden whitespace-nowrap	">
+        {title}
+      </div>
+      <div className="text-foreground mt-1 ">{value}</div>
+    </Card>
+  );
+};
+
+export const GaugeOverview = ({
+  totalGauges,
+  featuredGauges,
+  isLoading,
+}: {
+  totalGauges: number;
+  featuredGauges: string[];
+  isLoading: boolean;
+}) => {
+  const nonFeaturedGaugeLength = totalGauges - featuredGauges.length;
+  return (
+    <div>
+      {isLoading ? (
+        <Skeleton className="h-[35px] w-[75px]" />
+      ) : (
+        <div className="inline-flex h-7 items-end gap-1">
+          <span className="text-2xl font-semibold leading-6">
+            {totalGauges}
+          </span>
+        </div>
+      )}
+      {isLoading ? (
+        <Skeleton className="h-[25px] w-[100px] mt-1" />
+      ) : (
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
+          {featuredGauges.map((gauge, index) => (
+            <Image
+              src={gauge}
+              alt={`featuredGauge-${index}`}
+              height={16}
+              width={16}
+              objectFit="contain"
+            />
+          ))}
+          {nonFeaturedGaugeLength !== 0 && (
+            <span className="text-sm leading-5 text-muted-foreground">
+              {" "}
+              +{nonFeaturedGaugeLength}
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export const IncentivesOverview = ({
+  totalActiveIncentiveValue,
+  totalActiveIncentives,
+  featuredIncentiveTokenImages,
+  isLoading,
+}: {
+  totalActiveIncentiveValue: number;
+  totalActiveIncentives: number;
+  featuredIncentiveTokenImages: string[];
+  isLoading: boolean;
+}) => {
+  return (
+    <div>
+      {isLoading ? (
+        <Skeleton className="h-[35px] w-[75px]" />
+      ) : (
+        <div className="inline-flex h-7 items-end gap-1">
+          <span className="text-2xl font-semibold leading-6">
+            <FormattedNumber value={totalActiveIncentiveValue} compact />{" "}
+            <span className="text-sm text-muted-foreground">
+              ({totalActiveIncentives} Tokens)
+            </span>
+          </span>
+        </div>
+      )}
+      {isLoading ? (
+        <Skeleton className="h-[25px] w-[100px] mt-1" />
+      ) : (
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
+          {featuredIncentiveTokenImages.map((gauge, index) => (
+            <Image
+              src={gauge}
+              alt={`featuredGauge-${index}`}
+              height={16}
+              width={16}
+              objectFit="contain"
+            />
+          ))}
+          <span className="text-sm leading-5 text-muted-foreground">
+            {" "}
+            +{totalActiveIncentives - featuredIncentiveTokenImages.length}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function Validator({
   validatorAddress,
@@ -20,107 +137,356 @@ export default function Validator({
   validatorAddress: Address;
 }) {
   const prices = undefined;
-  const validator = undefined;
   const percentageDelegated = undefined;
+  const validator: Validator = {
+    coinbase: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+    name: "Honey Validator",
+    commission: "0.02",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.",
+    website: "https://www.honeyvalidator.com",
+    imageUri: "https://www.honeyvalidator.com/logo.png",
+    amountStaked: "1500000",
+    cuttingboard: [
+      {
+        percentage: 25,
+        amount: 375000,
+        receiver: {
+          address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+          stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+          name: "Honey Vault",
+          imageUri:
+            "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+          website: "https://www.honeyvault.com",
+          activeIncentives: [
+            {
+              token: {
+                name: "Honey Token",
+                symbol: "HNY",
+                address: "0xdeadbeefdeadbeef",
+                decimals: 18,
+              },
+              incentiveRate: "0.05",
+              amountLeft: "50000",
+            },
+          ],
+          market: {
+            name: "Honey Market",
+            imageUri:
+              "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+            website: "https://www.honeymarket.com",
+          },
+        },
+      },
+      {
+        percentage: 25,
+        amount: 75000,
+        receiver: {
+          address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+          stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+          name: "Honey Vault",
+          imageUri:
+            "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+          website: "https://www.honeyvault.com",
+          activeIncentives: [
+            {
+              token: {
+                name: "Honey Token",
+                symbol: "HNY",
+                address: "0xdeadbeefdeadbeef",
+                decimals: 18,
+              },
+              incentiveRate: "0.05",
+              amountLeft: "50000",
+            },
+          ],
+          market: {
+            name: "Honey Market",
+            imageUri:
+              "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+            website: "https://www.honeymarket.com",
+          },
+        },
+      },
+      {
+        percentage: 25,
+        amount: 375000,
+        receiver: {
+          address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+          stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+          name: "Honey Vault",
+          imageUri:
+            "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+          website: "https://www.honeyvault.com",
+          activeIncentives: [
+            {
+              token: {
+                name: "Honey Token",
+                symbol: "HNY",
+                address: "0xdeadbeefdeadbeef",
+                decimals: 18,
+              },
+              incentiveRate: "0.05",
+              amountLeft: "50000",
+            },
+          ],
+          market: {
+            name: "Honey Market",
+            imageUri:
+              "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+            website: "https://www.honeymarket.com",
+          },
+        },
+      },
+    ],
+    apy: "0.12",
+    allTimeStats: {
+      totalBgtDirected: "2000000",
+      totalHoneyValueBgtDirected: "3000000",
+      totalHoneyValueTokenRewards: "500000",
+    },
+    rewardRate: "",
+  };
 
+  const validatorDataItems: {
+    title: string;
+    value: React.ReactNode;
+    tooltipText: string;
+  }[] = [
+    {
+      title: "APY",
+      value: <span className="text-xl font-semibold">{validator.apy}%</span>,
+      tooltipText: "Total BGT directed to this validator",
+    },
+    {
+      title: "Voting Power",
+      value: (
+        <span className="text-xl font-semibold">
+          {validator.amountStaked}{" "}
+          <span className="text-sm text-muted-foreground">(0.0069%)</span>
+        </span>
+      ),
+      tooltipText: "Total BGT directed to this validator",
+    },
+    {
+      title: "Commission",
+      value: (
+        <span className="text-xl font-semibold">{validator.commission}%</span>
+      ),
+      tooltipText: "Honey",
+    },
+    {
+      title: "Website",
+      value: (
+        <span className="text-xl font-semibold hover:underline text-ellipsis">
+          <Link href={validator.website}>{validator.website}</Link>
+        </span>
+      ),
+      tooltipText: "Honey",
+    },
+  ];
+
+  const isLoading = false;
+
+  const router = useRouter();
   return (
-    <div className="relative flex flex-col gap-16">
-      <div>
-        <div className="flex flex-col gap-3">
-          <Link
-            className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground hover:cursor-pointer"
-            href="/validators"
-          >
-            <Icons.arrowLeft className="relative h-4 w-4" />
-            Validators
-          </Link>
-          <div className="text-center">
-            {/* {validator?.status === "BOND_STATUS_BONDED" ? (
-              <Badge
-                variant="success"
-                className="border-none bg-success px-2 py-1 text-xs"
-              >
-                Active
-              </Badge>
+    <div className="relative flex flex-col">
+      <div className="flex flex-col gap-3">
+        <Link
+          className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground hover:cursor-pointer"
+          href="/validators"
+        >
+          <Icons.arrowLeft className="relative h-4 w-4" />
+          Validators
+        </Link>
+        <div className="w-full flex lg:flex-row flex-col justify-between mt-2 gap-6  pb-6 border-b border-border ">
+          <div className="flex-col items-left w-full gap-4 justify-evenly">
+            <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
+              <ValidatorIcon
+                address={validator.coinbase}
+                className="h-12 w-12"
+              />
+              {isLoading ? (
+                <Skeleton className="h-[38px] w-[250px]" />
+              ) : (
+                validator.name
+              )}
+            </div>
+            <div className="my-4 text-muted-foreground w-full flex flex-row gap-1">
+              Hex Address:
+              {isLoading ? (
+                <Skeleton className="h-[25px] w-[150px]" />
+              ) : (
+                <span className="hover:underline text-foreground flex flex-row gap-1">
+                  <Link href={`${blockExplorerUrl}/${validator.coinbase}`}>
+                    {truncateHash(validator.coinbase)}
+                  </Link>
+                  <Icons.externalLink className="h-4 w-4 self-center" />
+                </span>
+              )}
+            </div>
+            {isLoading ? (
+              <Skeleton className="h-[100px] w-[350px]" />
             ) : (
-              <Badge
-                variant="secondary"
-                className="border-none bg-muted px-2 py-1 text-xs"
+              <div className="text-foreground w-full text-ellipsis overflow-hidden">
+                {validator.description}
+              </div>
+            )}
+          </div>
+          <div className="flex-col items-left w-full gap-4 justify-between">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {validatorDataItems.map((item, index) => (
+                <div className="relative flex flex-col justify-start items-start">
+                  <div className="text-muted-foreground items-center flex flex-row gap-1">
+                    {item.title} <Tooltip text={item.tooltipText} />
+                  </div>
+                  {isLoading ? (
+                    <Skeleton className="h-[30px] w-[150px]" />
+                  ) : (
+                    <div className="text-foreground mt-1 w-full text-ellipsis overflow-hidden">
+                      {item.value}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col justify-between gap-4 mt-6 sm:flex-row">
+              <Button
+                className="w-full"
+                disabled={isLoading}
+                onClick={() =>
+                  router.push(
+                    `/delegate?action=delegate&validator=${validator.coinbase}`,
+                  )
+                }
               >
-                Inactive
-              </Badge>
-            )} */}
+                Delegate <Icons.add className="relative ml-1 h-4 w-4" />
+              </Button>
+              <Button
+                className="w-full"
+                variant="outline"
+                disabled={isLoading}
+                onClick={() =>
+                  router.push(
+                    `/delegate?action=redelegate&validator=${validator.coinbase}`,
+                  )
+                }
+              >
+                {" "}
+                Redelegate
+                <Icons.redo className="relative ml-1 h-4 w-4" />
+              </Button>
+              <Button
+                className="w-full"
+                variant="outline"
+                disabled={isLoading}
+                onClick={() =>
+                  router.push(
+                    `/delegate?action=unbond&validator=${validator.coinbase}`,
+                  )
+                }
+              >
+                {" "}
+                Unbond
+                <Icons.minus className="relative ml-1 h-4 w-4" />
+              </Button>
+            </div>
           </div>
-          <div className="flex w-full items-center justify-center gap-2 text-3xl font-bold leading-[48px] md:text-5xl ">
-            {/* <ValidatorIcon
-              address={validatorAddress}
-              description={validator?.description?.identity ?? undefined}
-              className="h-12 w-12"
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4   w-full mt-6 gap-y-4 gap-x-0 md:gap-x-4">
+        <ValidatorDataCard
+          className="col-span-2 row-start-1  h-[135px]"
+          title="Active Gauges"
+          value={
+            <GaugeOverview
+              isLoading={isLoading}
+              totalGauges={validator.cuttingboard.length}
+              featuredGauges={validator.cuttingboard.map(
+                (cb: any) => cb.receiver.imageUri,
+              )}
             />
-            {validator?.description.moniker ?? (
-              <Skeleton className="inline-block h-12 w-[100px]" />
-            )} */}
-          </div>
-
-          {/* <div className="flex flex-col items-center justify-center gap-2">
-            <div className="text-sm font-medium leading-none text-muted-foreground">
-              Operator address:{" "}
-              {validator ? (
-                truncateHash(validator?.operatorAddr, 6)
-              ) : (
-                <Skeleton className="inline-block h-[14px] w-[100px]" />
-              )}
-            </div>
-            <div className="text-sm font-medium leading-none text-muted-foreground">
-              Consensus address:{" "}
-              {validator ? (
-                truncateHash(validator?.consAddr, 6)
-              ) : (
-                <Skeleton className="inline-block h-[14px] w-[100px]" />
-              )}
-            </div>
-          </div> */}
-        </div>
-        <div className="mt-8 flex flex-col items-center gap-16 lg:flex-row lg:gap-4">
-          {/* <ValidatorDetails
-            address={validatorAddress}
-            decription={
-              validator ? validator?.description.details ?? "" : undefined
-            }
-            commissions={`${(
-              Number(
-                formatUnits(
-                  validator?.commission.commissionRates.rate ?? 0n,
-                  18,
-                ),
-              ) * 100
-            ).toString()}%`}
-            votingPower={`${percentageDelegated?.toFixed(2) ?? 0}%`}
-            website={validator?.description.website ?? ""}
-            vApy={validator?.vApy ? validator.vApy.toFixed(2) : "0"}
-          /> */}
-          {/* <Uptime address={validatorAddress} /> */}
-        </div>
+          }
+        />
+        <ValidatorDataCard
+          className="col-span-2 md:row-start-1 row-start-2 h-[135px]"
+          title="Active Incentives"
+          value={
+            <IncentivesOverview
+              isLoading={isLoading}
+              totalActiveIncentiveValue={6420000}
+              totalActiveIncentives={30}
+              featuredIncentiveTokenImages={[
+                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
+              ]}
+            />
+          }
+        />
+        <ValidatorDataCard
+          className="md:row-start-2 row-start-3 h-[100px]"
+          title="Reward Rate"
+          value={
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[100px]" />
+            ) : (
+              <div className="flex flex-row gap-1">
+                <span className="text-2xl font-semibold">100</span>
+                <Icons.bgt className="h-6 w-6 self-center" />
+              </div>
+            )
+          }
+        />
+        <ValidatorDataCard
+          className="md:row-start-2 row-start-4 h-[100px]"
+          title="Return per BGT"
+          value={
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[100px]" />
+            ) : (
+              <div className="flex flex-row gap-1">
+                <span className="text-2xl font-semibold">100</span>
+                <Icons.honey className="h-6 w-6 self-center" />
+              </div>
+            )
+          }
+        />
+        <ValidatorDataCard
+          className="md:row-start-2 row-start-5 h-[100px]"
+          title="Lifetime Incentives Received"
+          value={
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[150px]" />
+            ) : (
+              <div className="flex flex-row gap-1 items-center">
+                <span className="text-2xl font-semibold">
+                  <FormattedNumber value={6420000} compact />
+                </span>
+                <span className="text-muted-foreground text-sm text-ellipsis overflow-hidden whitespace-nowrap">
+                  (32 Tokens)
+                </span>
+              </div>
+            )
+          }
+        />
+        <ValidatorDataCard
+          className="md:row-start-2 row-start-6 h-[100px]"
+          title="Lifetime BGT Directed"
+          value={
+            isLoading ? (
+              <Skeleton className="h-[30px] w-[100px]" />
+            ) : (
+              <div className="flex flex-row gap-1">
+                <span className="text-2xl font-semibold">100</span>
+                <Icons.bgt className="h-6 w-6 self-center" />
+              </div>
+            )
+          }
+        />
       </div>
-      {/* 
-      <BribesAndEmissions
-        // historicalBribes={
-        //   (data as any)?.historicalBribes as FormattedHistoricalBribes[]
-        // }
-        // cumulativeBribeValue={(data as any)?.cumulativeBribeTotal}
-        currentBribeValue={validator?.totalActiveBribeUsdAmount}
-        validatorAddress={validatorAddress}
-      /> */}
-
-      <div className="">
-        <div className="mb-4 flex items-center gap-1 text-lg font-semibold leading-7">
-          Reward Distribution{" "}
-          <Tooltip text="Validator block reward allocation towards pools & addresses" />
-        </div>
-        <ValidatorGaugeWeightInfo validatorAddress={validatorAddress} />
-      </div>
-
-      <ValidatorActivitiesTable validatorAddress={validatorAddress} />
+      <ValidatorPolData validator={validator} isLoading={isLoading} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
 import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -7,15 +7,20 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
-import { mutate } from "swr";
 import { type Address } from "viem";
 
+import { TableContext } from "~/context/table-context";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import type { IMarketOrder } from "~/types/order-history";
+import type { IOpenTrade } from "~/types/order-history";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import { TPSL } from "../berpetuals/components/tpsl";
-import { ActivePositionPNL } from "./table-columns/positions";
+import { MarketTradePNL } from "./market-trade-pnl";
+import {
+  usePriceData,
+  usePythUpdateFeeFormatted,
+} from "~/context/price-context";
 
 export function UpdatePositionModal({
   trigger,
@@ -26,11 +31,13 @@ export function UpdatePositionModal({
 }: {
   trigger?: any;
   disabled?: boolean;
-  openPosition: IMarketOrder;
+  openPosition: IOpenTrade;
   className?: string;
   controlledOpen?: boolean;
   onOpenChange?: (state: boolean) => void;
 }) {
+  const prices = usePriceData();
+  const pythUpdateFee = usePythUpdateFeeFormatted();
   const [open, setOpen] = useState<boolean>(false);
   const [tp, setTp] = useState<string>(
     formatFromBaseUnit(openPosition?.tp, 10).toString(10),
@@ -39,7 +46,8 @@ export function UpdatePositionModal({
   const [sl, setSl] = useState<string>(
     formatFromBaseUnit(openPosition?.sl, 10).toString(10),
   );
-  const { QUERY_KEY } = usePollOpenPositions();
+  const { tableState } = useContext(TableContext);
+  const { refresh } = usePollOpenPositions(tableState);
 
   useEffect(() => {
     setTp(formatFromBaseUnit(openPosition?.tp, 10).toString(10));
@@ -62,7 +70,7 @@ export function UpdatePositionModal({
   };
 
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[openPosition?.market?.name ?? ""] ?? "0";
+  const price = marketPrices[openPosition?.market?.pair_index ?? ""] ?? "0";
 
   const positionSize = formatFromBaseUnit(
     openPosition.position_size ?? "0",
@@ -77,7 +85,7 @@ export function UpdatePositionModal({
     message: "Updating Take Profit Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      void mutate(QUERY_KEY);
+      refresh();
     },
   });
 
@@ -85,7 +93,7 @@ export function UpdatePositionModal({
     message: "Updating Stop Loss Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      void mutate(QUERY_KEY);
+      refresh();
     },
   });
 
@@ -95,28 +103,54 @@ export function UpdatePositionModal({
     [setTp, setSl],
   );
 
-  const updateTpParams = [
-    openPosition?.market?.pair_index,
-    openPosition?.index,
-    parseUnits(
-      tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
-      10,
-    ),
-  ];
-
-  const updateSlParams = [
-    openPosition?.market?.pair_index,
-    openPosition?.index,
-    parseUnits(
-      sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
-      10,
-    ),
-  ];
-
   const liqPrice = formatFromBaseUnit(
-    openPosition?.liq_price ?? "0",
+    openPosition?.liq_price || "0",
     10,
   ).toString(10);
+
+  const handleSlUpdate = useCallback(() => {
+    if (openPosition?.market?.pair_index && openPosition?.index) {
+      updateSlWrite({
+        address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+        abi: tradingAbi,
+        functionName: "updateSl",
+        params: [
+          openPosition.market.pair_index,
+          openPosition.index,
+          parseUnits(
+            sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
+            10,
+          ),
+          generateEncodedPythPrices(prices, openPosition.market.pair_index),
+        ],
+        value: pythUpdateFee,
+      });
+    }
+  }, [
+    prices,
+    openPosition?.market?.pair_index,
+    openPosition?.index,
+    sl,
+    pythUpdateFee,
+  ]);
+
+  const handleTpUpdate = useCallback(() => {
+    if (openPosition?.market?.pair_index && openPosition?.index) {
+      updateTpWrite({
+        address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+        abi: tradingAbi,
+        functionName: "updateTp",
+        params: [
+          openPosition.market.pair_index,
+          openPosition.index,
+          parseUnits(
+            tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
+            10,
+          ),
+        ],
+      });
+    }
+  }, [openPosition?.market?.pair_index, openPosition?.index, tp]);
 
   return (
     <div className={className}>
@@ -195,7 +229,10 @@ export function UpdatePositionModal({
               <div className="text-[10px] text-muted-foreground">
                 UnRealized PnL
               </div>
-              <ActivePositionPNL position={openPosition} />
+              <MarketTradePNL
+                position={openPosition}
+                positionSize={openPosition.position_size}
+              />
             </div>
             <div className="flex h-full flex-col justify-between">
               <div className="text-[10px] text-muted-foreground">Leverage</div>
@@ -214,24 +251,8 @@ export function UpdatePositionModal({
             long={openPosition?.buy}
             isSlSubmitLoading={isUpdateSLLoading}
             isTpSubmitLoading={isUpdateTPLoading}
-            onTpChangeSubmit={() => {
-              updateTpWrite({
-                address: process.env
-                  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: tradingAbi,
-                functionName: "updateTp",
-                params: updateTpParams,
-              });
-            }}
-            onSlChangeSubmit={() => {
-              updateSlWrite({
-                address: process.env
-                  .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                abi: tradingAbi,
-                functionName: "updateSl",
-                params: updateSlParams,
-              });
-            }}
+            onTpChangeSubmit={handleTpUpdate}
+            onSlChangeSubmit={handleSlUpdate}
             tpslOnChange={handleTPSLChange}
           />
         </DialogContent>

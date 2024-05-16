@@ -205,9 +205,13 @@ export function DataTable<TData, TValue>({
     meta: {
       ...additionalTableProps?.meta,
     },
-    onSortingChange: (value: any) => {
-      onCustomSortingChange?.(value());
-    },
+    ...(onCustomSortingChange
+      ? {
+          onSortingChange: (value: any) => {
+            onCustomSortingChange?.(value());
+          },
+        }
+      : {}),
   });
 
   return (
@@ -302,7 +306,7 @@ export function DataTable<TData, TValue>({
                 <Spinner size={16} color="white" />
               </p>
             )}
-            <div className="inline-flex h-9 items-center justify-start rounded-lg border py-3">
+            <div className="inline-flex h-9 items-center justify-start rounded-md border py-3">
               <div className="flex items-center justify-center gap-2.5 border-r px-2 py-2">
                 <button
                   type="button"

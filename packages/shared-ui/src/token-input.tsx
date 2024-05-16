@@ -154,7 +154,7 @@ export function TokenInput({
   };
 
   return (
-    <li className={"flex flex-col flex-wrap px-3"}>
+    <li className={"flex flex-col flex-wrap px-3 py-4"}>
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center gap-1">
           <SelectToken
@@ -220,8 +220,8 @@ export function TokenInput({
           />
         </div>
       </div>
-      <div className="mb-4 h-fit w-full cursor-default">
-        <div className="mt-[-10px] flex w-full flex-row-reverse items-center justify-between gap-1">
+      <div className="h-fit w-full cursor-default">
+        <div className="flex w-full flex-row-reverse items-center justify-between gap-1">
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
@@ -248,13 +248,15 @@ export function TokenInput({
                     </p>
                   </TooltipCustom>
                 )}
-                {safeNumberAmount !== 0 && (
-                  <FormattedNumber
-                    value={safeNumberAmount * price}
-                    symbol="USD"
-                    compact={false}
-                  />
-                )}
+                {safeNumberAmount !== 0 &&
+                  !Number.isNaN(safeNumberAmount * price) && (
+                    <FormattedNumber
+                      value={safeNumberAmount * price}
+                      symbol="USD"
+                      compact={false}
+                      showIsSmallerThanMin
+                    />
+                  )}
               </div>
             )}
           </div>
@@ -264,6 +266,7 @@ export function TokenInput({
               <FormattedNumber
                 value={tokenBalance ? tokenBalance : "0"}
                 className="text-xs text-muted-foreground"
+                showIsSmallerThanMin
               />
               {!hideMax && (
                 <span
