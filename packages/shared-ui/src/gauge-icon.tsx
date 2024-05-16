@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useGauges } from "@bera/berajs";
+import { usePollGauges } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
@@ -40,10 +40,8 @@ export const GaugeIcon = ({
   size,
   ...props
 }: IconProps) => {
-  const { gaugeDictionary } = useGauges();
-
+  const { gaugeDictionary } = usePollGauges();
   const img = useMemo(() => gaugeDictionary?.[address]?.logoURI, [address]);
-
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={img} className="rounded-full" alt={address} />

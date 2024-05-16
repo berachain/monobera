@@ -1,25 +1,24 @@
 import React from "react";
-import { formatter } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { type Gauge } from "@bera/berajs";
+import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
+import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
-import { formatUnits } from "viem";
 
-export interface GlobalGaugeColumns {
-  gauge: React.ReactNode;
-  incentiveAmount: number;
-  incentivePercentage: number;
-  tvl: number;
-  hide: React.ReactNode;
-}
-
-export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
+export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Market" />
+      <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <div className="w-[250px] truncate whitespace-nowrap text-left">
-        {row.original.gauge}
+      <div className="flex w-[150px] flex-col gap-2 whitespace-nowrap text-left">
+        <div className="flex items-center gap-1 text-lg font-medium leading-6">
+          <Icons.bexFav className="h-6 w-6" />
+          BEX
+        </div>
+        <div className="flex items-center gap-1 text-xs leading-5">
+          <TokenIconList tokenList={row.original.tokenList} size="md" />
+          {row.original.name}
+        </div>
       </div>
     ),
     accessorKey: "gauge",
@@ -27,20 +26,20 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Incentive Value" />
+      <DataTableColumnHeader
+        column={column}
+        title="Total Incentive Value"
+        className="whitespace-nowrap"
+      />
     ),
     cell: ({ row }) => {
-      const incentiveAmount = row.original.incentiveAmount;
-      const incentivePercentage = row.original.incentivePercentage;
       return (
         <div className="flex w-[120px] flex-row items-center">
-          {" "}
-          {formatter.format(incentiveAmount)} (
-          {(incentivePercentage * 100).toFixed(2)}%)
+          $690,490.6994
         </div>
       );
     },
-    accessorKey: "incentiveAmount",
+    accessorKey: "incentive-value",
     enableSorting: true,
   },
   {
@@ -48,13 +47,11 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       <DataTableColumnHeader
         column={column}
         title="Incentives / BGT Staked"
-        className="w-full items-center text-center"
+        className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
-    ),
-    accessorKey: "hide",
+    cell: ({ row }) => <div className="flex w-full justify-center">$69.42</div>,
+    accessorKey: "bgt-staked",
     enableSorting: true,
   },
   {
@@ -62,13 +59,13 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       <DataTableColumnHeader
         column={column}
         title="BGT Inflation Capture"
-        className="w-full items-center text-center"
+        className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
+      <div className="flex w-full justify-center">42,690.69 BGT</div>
     ),
-    accessorKey: "hide1",
+    accessorKey: "bgt-inflation",
     enableSorting: true,
   },
   {
@@ -76,13 +73,13 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       <DataTableColumnHeader
         column={column}
         title="Validtors Pointing Emissions"
-        className="w-full items-center text-center"
+        className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
       <div className="flex w-full justify-center">{row.original.hide}</div>
     ),
-    accessorKey: "hide2",
+    accessorKey: "validators-emissions",
     enableSorting: true,
   },
 ];

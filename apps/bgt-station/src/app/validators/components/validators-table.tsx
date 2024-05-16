@@ -3,7 +3,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useBeraJs, useGauges, type CuttingBoardWeight } from "@bera/berajs";
+import {
+  useBeraJs,
+  usePollGauges,
+  type CuttingBoardWeight,
+} from "@bera/berajs";
 import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -21,7 +25,7 @@ export const GaugeCategoryIcon = ({
   address: string;
   className?: string;
 }) => {
-  const { gaugeDictionary } = useGauges();
+  const { gaugeDictionary } = usePollGauges();
 
   return (
     <Avatar className={cn("h-5 w-5", className)}>

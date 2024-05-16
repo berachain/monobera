@@ -1,7 +1,8 @@
 import { gaugeListUrl } from "@bera/config";
-import POLLING from "~/enum/polling";
-import { Gauge } from "..";
 import useSWR from "swr";
+
+import POLLING from "~/enum/polling";
+import { Gauge } from "../../..";
 
 interface IUseGaugess {
   gaugeList: Gauge[] | undefined;
@@ -16,8 +17,8 @@ function gaugeListToDict(list: Gauge[]): { [key: string]: Gauge } {
   }, {});
 }
 
-const useGauges = (): IUseGaugess => {
-  const { data } = useSWR(
+export const usePollGauges = (): IUseGaugess => {
+  const swrResponse = useSWR(
     ["defaultGaugeList"],
     async () => {
       try {
@@ -51,9 +52,8 @@ const useGauges = (): IUseGaugess => {
   );
 
   return {
-    gaugeList: data?.list ?? [],
-    gaugeDictionary: data?.dictionary ?? {},
+    ...swrResponse,
+    gaugeList: swrResponse.data?.list ?? [],
+    gaugeDictionary: swrResponse.data?.dictionary ?? {},
   };
 };
-
-export default useGauges;
