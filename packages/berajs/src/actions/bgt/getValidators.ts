@@ -139,7 +139,7 @@ const mockValidators: UserValidator[] = [
     },
   },
   {
-    coinbase: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+    coinbase: "0xb10a6CE3423Bf521EcB144b416F42D55A12eb0aD",
     name: "Validator Two",
     userStaked: "100000",
     commission: "0.03",

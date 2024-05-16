@@ -1,29 +1,17 @@
 import React from "react";
 import { type Gauge } from "@bera/berajs";
-import { DataTableColumnHeader, TokenIconList } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { DataTableColumnHeader } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
-interface GaugeT extends Gauge {
-  tokenList: any[];
-}
+import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
-export const global_gauge_weight_columns: ColumnDef<any>[] = [
+export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <div className="flex-col flex w-[150px] gap-2 whitespace-nowrap text-left">
-        <div className="flex items-center gap-1 text-lg font-medium leading-6">
-          <Icons.bexFav className="h-6 w-6" />
-          BEX
-        </div>
-        <div className="flex items-center gap-1 text-xs leading-5">
-          <TokenIconList tokenList={row.original.tokenList} size="md" />
-          {row.original.name}
-        </div>
-      </div>
+      <GaugeHeaderWidget gauge={row.original.address} className="w-[150px]" />
     ),
     accessorKey: "gauge",
     enableSorting: false,

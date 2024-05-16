@@ -14,7 +14,7 @@ export interface GlobalGaugeColumns {
 export const user_incentives_columns: ColumnDef<GlobalGaugeColumns>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Gauge Vaults" />
+      <DataTableColumnHeader column={column} title="Validators" />
     ),
     cell: ({ row }) => (
       <div className="w-[250px] truncate whitespace-nowrap text-left">
@@ -26,7 +26,7 @@ export const user_incentives_columns: ColumnDef<GlobalGaugeColumns>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Incentive Value" />
+      <DataTableColumnHeader column={column} title="My Staked BGT" />
     ),
     cell: ({ row }) => {
       const incentiveAmount = row.original.incentiveAmount;
@@ -46,7 +46,7 @@ export const user_incentives_columns: ColumnDef<GlobalGaugeColumns>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Incentives / BGT Staked"
+        title="vAPY"
         className="w-full items-center text-center"
       />
     ),
@@ -60,7 +60,7 @@ export const user_incentives_columns: ColumnDef<GlobalGaugeColumns>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Inflation Capture"
+        title="Most Weighted Gauges"
         className="w-full items-center text-center"
       />
     ),
@@ -74,7 +74,7 @@ export const user_incentives_columns: ColumnDef<GlobalGaugeColumns>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Validators Pointing Emissions"
+        title="Bribes"
         className="w-full items-center text-center"
       />
     ),

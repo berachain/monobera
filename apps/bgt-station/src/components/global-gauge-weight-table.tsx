@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import dynamic from "next/dynamic";
-import { usePollGauges, useTokens } from "@bera/berajs";
+import { usePollGauges } from "@bera/berajs";
 import type { TableState } from "@tanstack/react-table";
 
 import { TableLoading } from "~/app/validators/components/table-loading";
@@ -20,8 +20,6 @@ export default function GlobalGaugeWeightTable({
   keywords?: string;
 }) {
   const { gaugeList, isLoading, isValidating } = usePollGauges();
-  const { data } = useTokens();
-  const tokenList = data?.tokenList ?? [];
   const [page, setPage] = useState(0);
   const fetchData = useCallback(
     (state: TableState) => setPage(state?.pagination?.pageIndex),
@@ -35,10 +33,7 @@ export default function GlobalGaugeWeightTable({
         loading={isLoading}
         validating={isValidating}
         columns={global_gauge_weight_columns as any}
-        data={(gaugeList ?? []).map((gauge) => ({
-          ...gauge,
-          tokenList: [tokenList[0], tokenList[1]],
-        }))}
+        data={gaugeList ?? []}
         className="min-w-[1100px] shadow"
         additionalTableProps={{
           pageCount: 1,
@@ -46,6 +41,9 @@ export default function GlobalGaugeWeightTable({
           manualSorting: true,
           manualPagination: true,
         }}
+        onRowClick={(row: any) =>
+          window.open(`/gauge/${row.original.address}`, "_self")
+        }
       />
     </div>
   );

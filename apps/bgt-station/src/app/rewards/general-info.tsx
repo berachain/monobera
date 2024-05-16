@@ -35,7 +35,7 @@ export const GeneralInfo = () => {
 
   return (
     <div className="flex gap-6 md:flex-row flex-col">
-      <div className="relative w-full rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
+      <div className="overflow-hidden relative w-full rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
         <div className="text-xs leading-[14px] text-muted-foreground">
           Claimable BGT
         </div>
@@ -62,15 +62,15 @@ export const GeneralInfo = () => {
           ))}
         </div>
         <Image
-          src={`${cloudinaryUrl}/shared/ocaxgutrs2voe8umwxxc`}
-          width={100}
-          height={100}
+          src={`${cloudinaryUrl}/BGT/jv9zzejriofscplizebh`}
+          width={200}
+          height={200}
           className="absolute bottom-0 right-0 lg:block hidden"
           alt={"gauge-icon"}
         />
       </div>
 
-      <div className="relative w-full rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
+      <div className="overflow-hidden relative w-full rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
         <div className="text-xs leading-[14px] text-muted-foreground">
           Claimable Incentives
         </div>
@@ -96,9 +96,9 @@ export const GeneralInfo = () => {
           ))}
         </div>
         <Image
-          src={`${cloudinaryUrl}/shared/ocaxgutrs2voe8umwxxc`}
-          width={100}
-          height={100}
+          src={`${cloudinaryUrl}/BGT/ajb0q68nv5gcv7e5woaw`}
+          width={200}
+          height={200}
           className="absolute bottom-0 right-0 lg:block hidden"
           alt={"gauge-icon"}
         />
