@@ -19,7 +19,7 @@ export default function DashBoard() {
       <hr />
       <POL />
       <div className="container flex w-full flex-col gap-16 bg-background pb-16 sm:gap-24 pt-16 md:pt-0">
-        <INTRO/>
+        <INTRO />
         <Documentation />
       </div>
     </div>

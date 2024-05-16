@@ -4,7 +4,9 @@ import Image from "next/image";
 export const Hero = () => {
   return (
     <div className="w-full text-center container max-w-1280">
-      <div className="text-4xl lg:text-6xl xl:text-8xl font-bold">Proof Of Liquidity</div>
+      <div className="text-4xl lg:text-6xl xl:text-8xl font-bold">
+        Proof Of Liquidity
+      </div>
       <div className="mx-auto mt-2 mb-9 sm:mb-24 w-full max-w-[600px] text-sm font-semibold leading-5 sm:mt-5 sm:text-lg sm:leading-7">
         Stake Your LP/Receipt Tokens from platforms and dAPPs to Earn BGT and,
         Stake BGT to Earn further Incentives from the entire berachain
