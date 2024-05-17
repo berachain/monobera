@@ -34,7 +34,7 @@ interface IconProps
   address?: Address;
 }
 
-export const ValidatorIcon = ({
+export const GaugeIcon = ({
   address = "0x",
   className,
   size,
@@ -46,7 +46,7 @@ export const ValidatorIcon = ({
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={img} className="rounded-full" alt={address} />
       <AvatarFallback>
-        <Icons.validator className="p-[6px]" />
+        <Icons.gauge className="p-1" />
       </AvatarFallback>
     </Avatar>
   );

@@ -1,46 +1,37 @@
 import React from "react";
-import { formatter } from "@bera/berajs";
+import { type Gauge } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
-import { formatUnits } from "viem";
 
-export interface GlobalGaugeColumns {
-  gauge: React.ReactNode;
-  incentiveAmount: number;
-  incentivePercentage: number;
-  tvl: number;
-  hide: React.ReactNode;
-}
+import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
-export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
+export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Market" />
+      <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <div className="w-[250px] truncate whitespace-nowrap text-left">
-        {row.original.gauge}
-      </div>
+      <GaugeHeaderWidget gauge={row.original.address} className="w-[150px]" />
     ),
     accessorKey: "gauge",
     enableSorting: false,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Incentive Value" />
+      <DataTableColumnHeader
+        column={column}
+        title="Total Incentive Value"
+        className="whitespace-nowrap"
+      />
     ),
     cell: ({ row }) => {
-      const incentiveAmount = row.original.incentiveAmount;
-      const incentivePercentage = row.original.incentivePercentage;
       return (
         <div className="flex w-[120px] flex-row items-center">
-          {" "}
-          {formatter.format(incentiveAmount)} (
-          {(incentivePercentage * 100).toFixed(2)}%)
+          $690,490.6994
         </div>
       );
     },
-    accessorKey: "incentiveAmount",
+    accessorKey: "incentive-value",
     enableSorting: true,
   },
   {
@@ -48,13 +39,11 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       <DataTableColumnHeader
         column={column}
         title="Incentives / BGT Staked"
-        className="w-full items-center text-center"
+        className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
-    ),
-    accessorKey: "hide",
+    cell: ({ row }) => <div className="flex w-full justify-center">$69.42</div>,
+    accessorKey: "bgt-staked",
     enableSorting: true,
   },
   {
@@ -62,13 +51,13 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       <DataTableColumnHeader
         column={column}
         title="BGT Inflation Capture"
-        className="w-full items-center text-center"
+        className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
+      <div className="flex w-full justify-center">42,690.69 BGT</div>
     ),
-    accessorKey: "hide1",
+    accessorKey: "bgt-inflation",
     enableSorting: true,
   },
   {
@@ -76,13 +65,11 @@ export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
       <DataTableColumnHeader
         column={column}
         title="Validtors Pointing Emissions"
-        className="w-full items-center text-center"
+        className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
-    ),
-    accessorKey: "hide2",
+    cell: ({ row }) => <div className="flex w-full justify-center">ha</div>,
+    accessorKey: "validators-emissions",
     enableSorting: true,
   },
 ];

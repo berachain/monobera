@@ -1,6 +1,8 @@
+import { Address } from "viem";
+
 export type Gauge = {
   logoURI?: string;
-  address: string;
+  address: Address;
   url?: string;
   categoryName?: string;
   categoryIcon?: string;

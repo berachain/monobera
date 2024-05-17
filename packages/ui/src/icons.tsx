@@ -21,7 +21,6 @@ import {
   ChevronsRight,
   ChevronsUp,
   Circle,
-  XCircle,
   ClipboardCheck,
   Clock,
   Clock8,
@@ -91,6 +90,7 @@ import {
   UserX,
   Wallet,
   X,
+  XCircle,
   XOctagon,
   type LucideIcon,
   type LucideProps,
@@ -647,6 +647,98 @@ export const Icons = {
       <path
         d="M40.634 9.03283C37.5747 7.62906 34.294 6.59483 30.8638 6.00248C30.8013 5.99105 30.7389 6.01962 30.7067 6.07676C30.2848 6.82719 29.8175 7.80619 29.4902 8.57568C25.8008 8.02334 22.1304 8.02334 18.5166 8.57568C18.1893 7.78909 17.705 6.82719 17.2811 6.07676C17.249 6.02153 17.1866 5.99296 17.1241 6.00248C13.6958 6.59294 10.4151 7.62717 7.35387 9.03283C7.32737 9.04425 7.30465 9.06332 7.28958 9.08806C1.06678 18.3848 -0.637901 27.453 0.19836 36.4088C0.202144 36.4526 0.22674 36.4945 0.260796 36.5211C4.36642 39.5362 8.34341 41.3666 12.2466 42.5799C12.309 42.599 12.3752 42.5761 12.415 42.5247C13.3383 41.2638 14.1613 39.9344 14.867 38.5363C14.9086 38.4544 14.8688 38.3572 14.7837 38.3249C13.4783 37.8297 12.2352 37.2259 11.0395 36.5402C10.9449 36.485 10.9373 36.3497 11.0243 36.2849C11.2759 36.0964 11.5276 35.9002 11.7679 35.7021C11.8114 35.6659 11.872 35.6583 11.9231 35.6811C19.7786 39.2677 28.2831 39.2677 36.0459 35.6811C36.097 35.6564 36.1576 35.664 36.203 35.7002C36.4433 35.8983 36.6949 36.0964 36.9484 36.2849C37.0354 36.3497 37.0298 36.485 36.9352 36.5402C35.7394 37.2392 34.4964 37.8297 33.189 38.323C33.1039 38.3554 33.0661 38.4544 33.1077 38.5363C33.8285 39.9324 34.6515 41.2619 35.5578 42.5228C35.5957 42.5761 35.6637 42.599 35.7262 42.5799C39.6483 41.3666 43.6252 39.5362 47.7309 36.5211C47.7668 36.4945 47.7895 36.4545 47.7933 36.4107C48.7942 26.0568 46.117 17.063 40.6964 9.08995C40.6832 9.06332 40.6605 9.04425 40.634 9.03283ZM16.04 30.9556C13.675 30.9556 11.7263 28.7844 11.7263 26.1178C11.7263 23.4512 13.6372 21.2799 16.04 21.2799C18.4617 21.2799 20.3916 23.4703 20.3538 26.1178C20.3538 28.7844 18.4428 30.9556 16.04 30.9556ZM31.9895 30.9556C29.6245 30.9556 27.6758 28.7844 27.6758 26.1178C27.6758 23.4512 29.5867 21.2799 31.9895 21.2799C34.4113 21.2799 36.3411 23.4703 36.3033 26.1178C36.3033 28.7844 34.4113 30.9556 31.9895 30.9556Z"
         fill="#5865F2"
+      />
+    </svg>
+  ),
+  gauge: (props: LucideProps) => (
+    <svg
+      width="144"
+      height="144"
+      viewBox="0 0 144 144"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M96 96L114 48L132 96C126.78 99.9 120.48 102 114 102C107.52 102 101.22 99.9 96 96Z"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12 96L30 48L48 96C42.78 99.9 36.48 102 30 102C23.52 102 17.22 99.9 12 96Z"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M42 126H102"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M72 18V126"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M18 42H30C42 42 60 36 72 30C84 36 102 42 114 42H126"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  validator: (props: LucideProps) => (
+    <svg
+      width="171"
+      height="171"
+      viewBox="0 0 171 171"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M106.875 14.25H64.125V57H106.875V14.25Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M156.75 114H114V156.75H156.75V114Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M57 114H14.25V156.75H57V114Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M35.625 114V85.5H135.375V114"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M85.5 85.5V57"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </svg>
   ),

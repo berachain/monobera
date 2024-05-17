@@ -1,22 +1,21 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { truncateHash } from "@bera/berajs";
-import { type Validator } from "@bera/berajs";
-
+import { useRouter } from "next/navigation";
+import { truncateHash, type Validator } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { FormattedNumber, Tooltip, ValidatorIcon } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
+import { Button } from "@bera/ui/button";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
-import { blockExplorerUrl } from "@bera/config";
-import { Button } from "@bera/ui/button";
-import { Card } from "@bera/ui/card";
-import { cn } from "@bera/ui";
-import Image from "next/image";
+
 import { ValidatorPolData } from "./validator-pol-data";
-import { useRouter } from "next/navigation";
 
 export const ValidatorDataCard = ({
   title,
@@ -28,11 +27,11 @@ export const ValidatorDataCard = ({
   className?: string;
 }) => {
   return (
-    <Card className={cn(className, "p-5 bg-muted")}>
-      <div className="text-muted-foreground text-sm w-full text-ellipsis overflow-hidden whitespace-nowrap	">
+    <Card className={cn(className, "bg-muted p-5")}>
+      <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground	">
         {title}
       </div>
-      <div className="text-foreground mt-1 ">{value}</div>
+      <div className="mt-1 text-foreground ">{value}</div>
     </Card>
   );
 };
@@ -54,29 +53,24 @@ export const GaugeOverview = ({
       ) : (
         <div className="inline-flex h-7 items-end gap-1">
           <span className="text-2xl font-semibold leading-6">
-            {totalGauges}
+            {totalGauges} (690.42M)
           </span>
         </div>
       )}
       {isLoading ? (
-        <Skeleton className="h-[25px] w-[100px] mt-1" />
+        <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
         <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-          {featuredGauges.map((gauge, index) => (
-            <Image
-              src={gauge}
-              alt={`featuredGauge-${index}`}
-              height={16}
-              width={16}
-              objectFit="contain"
-            />
-          ))}
-          {nonFeaturedGaugeLength !== 0 && (
+          <Icons.bexFav className="h-6 w-6" />
+          <Icons.bendFav className="h-6 w-6" />
+          <Icons.berpsFav className="h-6 w-6" />
+          <span className="text-sm leading-5 text-muted-foreground"> +4</span>
+          {/* {nonFeaturedGaugeLength !== 0 && (
             <span className="text-sm leading-5 text-muted-foreground">
               {" "}
               +{nonFeaturedGaugeLength}
             </span>
-          )}
+          )} */}
         </div>
       )}
     </div>
@@ -109,10 +103,14 @@ export const IncentivesOverview = ({
         </div>
       )}
       {isLoading ? (
-        <Skeleton className="h-[25px] w-[100px] mt-1" />
+        <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
-        <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-          {featuredIncentiveTokenImages.map((gauge, index) => (
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background p-1 pr-2">
+          <Icons.honey className="h-6 w-6" />
+          <Icons.bgt className="h-6 w-6" />
+          <Icons.beraIcon className="h-6 w-6" />
+          <span className="text-sm leading-5 text-muted-foreground"> +27</span>
+          {/* {featuredIncentiveTokenImages.map((gauge, index) => (
             <Image
               src={gauge}
               alt={`featuredGauge-${index}`}
@@ -124,7 +122,7 @@ export const IncentivesOverview = ({
           <span className="text-sm leading-5 text-muted-foreground">
             {" "}
             +{totalActiveIncentives - featuredIncentiveTokenImages.length}
-          </span>
+          </span> */}
         </div>
       )}
     </div>
@@ -171,6 +169,7 @@ export default function Validator({
             },
           ],
           market: {
+            id: "markey",
             name: "Honey Market",
             imageUri:
               "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
@@ -201,6 +200,7 @@ export default function Validator({
             },
           ],
           market: {
+            id: "honey",
             name: "Honey Market",
             imageUri:
               "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
@@ -231,6 +231,7 @@ export default function Validator({
             },
           ],
           market: {
+            id: "honey",
             name: "Honey Market",
             imageUri:
               "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
@@ -278,7 +279,7 @@ export default function Validator({
     {
       title: "Website",
       value: (
-        <span className="text-xl font-semibold hover:underline text-ellipsis">
+        <span className="text-ellipsis text-xl font-semibold hover:underline">
           <Link href={validator.website}>{validator.website}</Link>
         </span>
       ),
@@ -299,8 +300,8 @@ export default function Validator({
           <Icons.arrowLeft className="relative h-4 w-4" />
           Validators
         </Link>
-        <div className="w-full flex lg:flex-row flex-col justify-between mt-2 gap-6  pb-6 border-b border-border ">
-          <div className="flex-col items-left w-full gap-4 justify-evenly">
+        <div className="mt-2 flex w-full flex-col justify-between gap-6 border-b  border-border pb-6 lg:flex-row ">
+          <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
               <ValidatorIcon
                 address={validator.coinbase}
@@ -312,12 +313,12 @@ export default function Validator({
                 validator.name
               )}
             </div>
-            <div className="my-4 text-muted-foreground w-full flex flex-row gap-1">
+            <div className="my-4 flex w-full flex-row gap-1 text-muted-foreground">
               Hex Address:
               {isLoading ? (
                 <Skeleton className="h-[25px] w-[150px]" />
               ) : (
-                <span className="hover:underline text-foreground flex flex-row gap-1">
+                <span className="flex flex-row gap-1 text-foreground hover:underline">
                   <Link href={`${blockExplorerUrl}/${validator.coinbase}`}>
                     {truncateHash(validator.coinbase)}
                   </Link>
@@ -328,29 +329,29 @@ export default function Validator({
             {isLoading ? (
               <Skeleton className="h-[100px] w-[350px]" />
             ) : (
-              <div className="text-foreground w-full text-ellipsis overflow-hidden">
+              <div className="w-full overflow-hidden text-ellipsis text-foreground">
                 {validator.description}
               </div>
             )}
           </div>
-          <div className="flex-col items-left w-full gap-4 justify-between">
+          <div className="items-left w-full flex-col justify-between gap-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {validatorDataItems.map((item, index) => (
-                <div className="relative flex flex-col justify-start items-start">
-                  <div className="text-muted-foreground items-center flex flex-row gap-1">
+                <div className="relative flex flex-col items-start justify-start">
+                  <div className="flex flex-row items-center gap-1 text-muted-foreground">
                     {item.title} <Tooltip text={item.tooltipText} />
                   </div>
                   {isLoading ? (
                     <Skeleton className="h-[30px] w-[150px]" />
                   ) : (
-                    <div className="text-foreground mt-1 w-full text-ellipsis overflow-hidden">
+                    <div className="mt-1 w-full overflow-hidden text-ellipsis text-foreground">
                       {item.value}
                     </div>
                   )}
                 </div>
               ))}
             </div>
-            <div className="flex flex-col justify-between gap-4 mt-6 sm:flex-row">
+            <div className="mt-6 flex flex-col justify-between gap-4 sm:flex-row">
               <Button
                 className="w-full"
                 disabled={isLoading}
@@ -395,10 +396,10 @@ export default function Validator({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4   w-full mt-6 gap-y-4 gap-x-0 md:gap-x-4">
+      <div className="mt-6 grid w-full   grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-4 md:gap-x-4">
         <ValidatorDataCard
           className="col-span-2 row-start-1  h-[135px]"
-          title="Active Gauges"
+          title="Active Gauges Vaults"
           value={
             <GaugeOverview
               isLoading={isLoading}
@@ -410,7 +411,7 @@ export default function Validator({
           }
         />
         <ValidatorDataCard
-          className="col-span-2 md:row-start-1 row-start-2 h-[135px]"
+          className="col-span-2 row-start-2 h-[135px] md:row-start-1"
           title="Active Incentives"
           value={
             <IncentivesOverview
@@ -426,7 +427,7 @@ export default function Validator({
           }
         />
         <ValidatorDataCard
-          className="md:row-start-2 row-start-3 h-[100px]"
+          className="row-start-3 h-[100px] md:row-start-2"
           title="Reward Rate"
           value={
             isLoading ? (
@@ -440,7 +441,7 @@ export default function Validator({
           }
         />
         <ValidatorDataCard
-          className="md:row-start-2 row-start-4 h-[100px]"
+          className="row-start-4 h-[100px] md:row-start-2"
           title="Return per BGT"
           value={
             isLoading ? (
@@ -454,17 +455,17 @@ export default function Validator({
           }
         />
         <ValidatorDataCard
-          className="md:row-start-2 row-start-5 h-[100px]"
+          className="row-start-5 h-[100px] md:row-start-2"
           title="Lifetime Incentives Received"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[150px]" />
             ) : (
-              <div className="flex flex-row gap-1 items-center">
+              <div className="flex flex-row items-center gap-1">
                 <span className="text-2xl font-semibold">
                   <FormattedNumber value={6420000} compact />
                 </span>
-                <span className="text-muted-foreground text-sm text-ellipsis overflow-hidden whitespace-nowrap">
+                <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
                   (32 Tokens)
                 </span>
               </div>
@@ -472,7 +473,7 @@ export default function Validator({
           }
         />
         <ValidatorDataCard
-          className="md:row-start-2 row-start-6 h-[100px]"
+          className="row-start-6 h-[100px] md:row-start-2"
           title="Lifetime BGT Directed"
           value={
             isLoading ? (

@@ -1,6 +1,6 @@
 import { Skeleton } from "@bera/ui/skeleton";
 
-import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
+import GlobalGaugeWeightTable from "./global-gauge-weight-table";
 import GlobalGaugeWeightChart from "./global-gauge-weight-chart";
 
 export default function GlobalGaugeWeightInfo() {
