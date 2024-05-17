@@ -1,7 +1,6 @@
-import uniqolor from "uniqolor";
-import { GaugeIcon } from "~/app/validators/validators-table";
 import { type CuttingBoardWeight } from "@bera/berajs";
-import { FormattedNumber } from "@bera/shared-ui";
+import { FormattedNumber, GaugeIcon } from "@bera/shared-ui";
+import uniqolor from "uniqolor";
 
 export function ChartTooltip({ gauge }: { gauge: CuttingBoardWeight }) {
   if (!gauge) return null;
@@ -19,17 +18,14 @@ export function ChartTooltip({ gauge }: { gauge: CuttingBoardWeight }) {
               <FormattedNumber value={gauge.amount} compact /> BGT
             </div>
           </div>
-          {/* <div className="flex h-[18px] items-center rounded-xs bg-muted-foreground bg-opacity-10 p-1 text-[10px]">
-            #01
-          </div> */}
         </div>
         <div className="flex flex-col items-start justify-center gap-1">
           <div className="text-forgeound flex flex-row items-center gap-2 whitespace-nowrap font-bold leading-5">
-            <GaugeIcon gauge={gauge} />
+            <GaugeIcon address={gauge.receiver.address} />
             {gauge.receiver.name}
           </div>
           <div className="flex items-center gap-1 whitespace-nowrap text-xs leading-4 text-muted-foreground">
-            <GaugeIcon gauge={gauge} className="h-4 w-4" />{" "}
+            <GaugeIcon address={gauge.receiver.address} className="h-4 w-4" />{" "}
             {gauge.receiver.market.name}
           </div>
         </div>
