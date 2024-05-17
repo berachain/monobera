@@ -5,6 +5,7 @@ import {
   Tooltip,
   ValidatorIcon,
   bribeApyTooltipText,
+  FormattedNumber,
 } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
@@ -116,10 +117,7 @@ const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
     <DataTableColumnHeader column={column} title="User Staked" />
   ),
   cell: ({ row }) => {
-    <div className="flex h-full w-[91px] items-center">
-      {" "}
-      {row.original.userStaked}
-    </div>;
+    return <FormattedNumber value={Math.random() * 1000000} symbol="BGT" />;
   },
   accessorKey: "userStaked",
   enableSorting: true,

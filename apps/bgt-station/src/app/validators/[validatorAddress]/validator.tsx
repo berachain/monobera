@@ -53,7 +53,7 @@ export const GaugeOverview = ({
       ) : (
         <div className="inline-flex h-7 items-end gap-1">
           <span className="text-2xl font-semibold leading-6">
-            {totalGauges}
+            {totalGauges} (690.42M)
           </span>
         </div>
       )}
@@ -61,21 +61,16 @@ export const GaugeOverview = ({
         <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
         <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-          {featuredGauges.map((gauge, index) => (
-            <Image
-              src={gauge}
-              alt={`featuredGauge-${index}`}
-              height={16}
-              width={16}
-              objectFit="contain"
-            />
-          ))}
-          {nonFeaturedGaugeLength !== 0 && (
+          <Icons.bexFav className="h-6 w-6" />
+          <Icons.bendFav className="h-6 w-6" />
+          <Icons.berpsFav className="h-6 w-6" />
+          <span className="text-sm leading-5 text-muted-foreground"> +4</span>
+          {/* {nonFeaturedGaugeLength !== 0 && (
             <span className="text-sm leading-5 text-muted-foreground">
               {" "}
               +{nonFeaturedGaugeLength}
             </span>
-          )}
+          )} */}
         </div>
       )}
     </div>
@@ -110,8 +105,12 @@ export const IncentivesOverview = ({
       {isLoading ? (
         <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
-        <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-          {featuredIncentiveTokenImages.map((gauge, index) => (
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background p-1 pr-2">
+          <Icons.honey className="h-6 w-6" />
+          <Icons.bgt className="h-6 w-6" />
+          <Icons.beraIcon className="h-6 w-6" />
+          <span className="text-sm leading-5 text-muted-foreground"> +27</span>
+          {/* {featuredIncentiveTokenImages.map((gauge, index) => (
             <Image
               src={gauge}
               alt={`featuredGauge-${index}`}
@@ -123,7 +122,7 @@ export const IncentivesOverview = ({
           <span className="text-sm leading-5 text-muted-foreground">
             {" "}
             +{totalActiveIncentives - featuredIncentiveTokenImages.length}
-          </span>
+          </span> */}
         </div>
       )}
     </div>
@@ -400,7 +399,7 @@ export default function Validator({
       <div className="mt-6 grid w-full   grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-4 md:gap-x-4">
         <ValidatorDataCard
           className="col-span-2 row-start-1  h-[135px]"
-          title="Active Gauges"
+          title="Active Gauges Vaults"
           value={
             <GaugeOverview
               isLoading={isLoading}

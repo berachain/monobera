@@ -46,7 +46,7 @@ export const GaugeIcon = ({
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={img} className="rounded-full" alt={address} />
       <AvatarFallback>
-        <Icons.validator className="p-1" />
+        <Icons.gauge className="p-1" />
       </AvatarFallback>
     </Avatar>
   );
