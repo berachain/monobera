@@ -1,7 +1,7 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { truncateHash } from "@bera/berajs";
+import { truncateHash, usePollValidators } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import {
   DataTable,
@@ -14,10 +14,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { isAddress } from "viem";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
-import { gauge_validator_columns } from "~/columns/gauge-validator-columns";
+import { general_validator_columns } from "~/columns/general-validator-columns";
 import { MyGaugeDetails } from "./my-gauge-details";
 
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
+  const { data: validators, isLoading, isValidating } = usePollValidators();
   // const gaugeAddress = "0x1234567890123456789012345678901234567890";
   if (!isAddress(gaugeAddress)) notFound();
   const isMyGauge = false;
@@ -30,7 +31,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
         }}
         title={
           <>
-            <TokenIconList tokenList={[]} size="xl" />
+            {/* <TokenIconList tokenList={[]} size="xl" /> */}
+            <div className="flex">
+              <Icons.beraIcon className="h-8 w-8" />
+              <Icons.honey className="-ml-2 h-8 w-8" />
+            </div>
             BERA / HONEY
           </>
         }
@@ -56,14 +61,14 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
       />
       <MyGaugeDetails gaugeAddress={gaugeAddress} />
 
-      <Tabs defaultValue="validators" className="flex flex-col gap-4">
+      <Tabs defaultValue="incentives" className="flex flex-col gap-4">
         <div className="flex flex-col justify-between gap-4 md:flex-row">
           <TabsList className="w-full md:w-fit">
-            <TabsTrigger value="validators" className="w-full md:w-fit">
-              Validators
-            </TabsTrigger>
             <TabsTrigger value="incentives" className="w-full md:w-fit">
               Incentives
+            </TabsTrigger>
+            <TabsTrigger value="validators" className="w-full md:w-fit">
+              Validators
             </TabsTrigger>
           </TabsList>
 
@@ -75,19 +80,22 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
           </div>
         </div>
 
-        <TabsContent value="validators">
+        <TabsContent value="incentives">
           <DataTable
-            columns={gauge_validator_columns as any}
-            data={[]}
+            columns={gauge_incentives_columns as any}
+            data={[1, 2, 3]}
             className="max-h-[300px] min-w-[1000px] shadow"
             enablePagination
           />
         </TabsContent>
-        <TabsContent value="incentives">
+        <TabsContent value="validators">
           <DataTable
-            columns={gauge_incentives_columns as any}
-            data={[]}
-            className="max-h-[300px] min-w-[1000px] shadow"
+            columns={general_validator_columns as any}
+            loading={isLoading}
+            validating={isValidating}
+            data={validators ?? []}
+            className="min-w-[800px] shadow"
+            enablePagination
           />
         </TabsContent>
       </Tabs>

@@ -1,35 +1,49 @@
-import React, { useEffect, useMemo } from "react";
-import Link from "next/link";
-import { truncateHash, useGauges } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
-import { DataTable } from "@bera/shared-ui";
-import { Checkbox } from "@bera/ui/checkbox";
-import { getAddress } from "viem";
-import {
-  GaugeCategoryIcon,
-  GaugeIcon,
-} from "~/app/validators/validators-table";
-import {
-  global_gauge_weight_columns,
-  type GlobalGaugeColumns,
-} from "~/columns/global-gauge-weight-columns";
+import React, { useCallback, useState } from "react";
+import dynamic from "next/dynamic";
+import { usePollGauges } from "@bera/berajs";
+import type { TableState } from "@tanstack/react-table";
+
+import { TableLoading } from "~/app/validators/components/table-loading";
+import { global_gauge_weight_columns } from "~/columns/global-gauge-weight-columns";
+
+const DataTable = dynamic(
+  () => import("@bera/shared-ui").then((mod) => mod.DataTable),
+  {
+    ssr: false,
+    loading: () => <TableLoading />,
+  },
+);
 
 export default function GlobalGaugeWeightTable({
-  gaugeWeights = [],
   keywords = "",
 }: {
-  gaugeWeights: any[] | undefined;
   keywords?: string;
 }) {
-  const { gaugeDictionary } = useGauges();
-
+  const { gaugeList, isLoading, isValidating } = usePollGauges();
+  const [page, setPage] = useState(0);
+  const fetchData = useCallback(
+    (state: TableState) => setPage(state?.pagination?.pageIndex),
+    [setPage],
+  );
   return (
     <div className="w-full ">
       <DataTable
-        columns={global_gauge_weight_columns as any}
-        data={[]}
-        className="max-h-[300px] min-w-[1000px] shadow"
+        fetchData={fetchData}
         enablePagination
+        loading={isLoading}
+        validating={isValidating}
+        columns={global_gauge_weight_columns as any}
+        data={gaugeList ?? []}
+        className="min-w-[1100px] shadow"
+        additionalTableProps={{
+          pageCount: 1,
+          manualFiltering: true,
+          manualSorting: true,
+          manualPagination: true,
+        }}
+        onRowClick={(row: any) =>
+          window.open(`/gauge/${row.original.address}`, "_self")
+        }
       />
     </div>
   );

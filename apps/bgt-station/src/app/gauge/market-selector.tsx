@@ -50,7 +50,7 @@ export default function MarketSelector({
                 setMarkets(markets);
               }}
             >
-              {markets[market as keyof typeof markets].market}
+              {markets[market as keyof typeof markets].market.name}
             </DropdownMenuCheckboxItem>
           ))}
         </div>

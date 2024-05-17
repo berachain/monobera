@@ -1,44 +1,26 @@
 import React from "react";
-import { formatter } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DataTableColumnHeader, FormattedNumber } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
+import { Icons } from "@bera/ui/icons";
+import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
-export interface GlobalGaugeColumns {
-  gauge: React.ReactNode;
-  incentiveAmount: number;
-  incentivePercentage: number;
-  tvl: number;
-  hide: React.ReactNode;
-}
-
-export const user_bgt_columns: ColumnDef<GlobalGaugeColumns>[] = [
+export const user_bgt_columns: ColumnDef<any>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Gauge Vaults" />
+      <DataTableColumnHeader column={column} title="Validators" />
     ),
     cell: ({ row }) => (
-      <div className="w-[250px] truncate whitespace-nowrap text-left">
-        {row.original.gauge}
-      </div>
+      <GaugeHeaderWidget gauge={row.original.address} className="w-[200px]" />
     ),
     accessorKey: "gauge",
     enableSorting: false,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Incentive Value" />
+      <DataTableColumnHeader column={column} title="vAPY" />
     ),
-    cell: ({ row }) => {
-      const incentiveAmount = row.original.incentiveAmount;
-      const incentivePercentage = row.original.incentivePercentage;
-      return (
-        <div className="flex w-[120px] flex-row items-center">
-          {" "}
-          {formatter.format(incentiveAmount)} (
-          {(incentivePercentage * 100).toFixed(2)}%)
-        </div>
-      );
-    },
+    cell: ({ row }) => <div>{(Math.random() * 100).toFixed(2)}%</div>,
     accessorKey: "incentiveAmount",
     enableSorting: true,
   },
@@ -46,12 +28,15 @@ export const user_bgt_columns: ColumnDef<GlobalGaugeColumns>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Incentives / BGT Staked"
-        className="w-full items-center text-center"
+        title="BGT Rewards"
+        className="items-center text-center"
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
+      <div className="py-1 px-2 flex gap-1 rounded-full text-success-foreground bg-success-foreground bg-opacity-10 w-fit text-sm font-medium items-center">
+        <Icons.bgt className="h-6 w-6" />
+        <FormattedNumber value={Math.random() * 100000} />
+      </div>
     ),
     accessorKey: "bgt-staked",
     enableSorting: true,
@@ -60,28 +45,16 @@ export const user_bgt_columns: ColumnDef<GlobalGaugeColumns>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Inflation Capture"
-        className="w-full items-center text-center"
+        title="Bribes"
+        className="w-20 items-center text-center"
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
+      <Button size="sm" className="leading-5">
+        Claim BGT
+      </Button>
     ),
     accessorKey: "inflation",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Validators Pointing Emissions"
-        className="w-full items-center text-center"
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
-    ),
-    accessorKey: "emissions",
     enableSorting: true,
   },
 ];

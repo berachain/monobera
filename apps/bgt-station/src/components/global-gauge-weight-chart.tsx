@@ -4,9 +4,9 @@ import { BeraChart } from "@bera/ui/bera-chart";
 import { type Chart, type TooltipModel } from "chart.js";
 import uniqolor from "uniqolor";
 
-import { ChartTooltip } from "./chart-tooltip";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
+import { ChartTooltip } from "~/components/chart-tooltip";
 
 export const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
 
