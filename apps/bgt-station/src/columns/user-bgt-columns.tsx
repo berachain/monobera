@@ -45,7 +45,7 @@ export const user_bgt_columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Bribes"
+        title="Incentives"
         className="w-20 items-center text-center"
       />
     ),

@@ -32,7 +32,7 @@ export default function BribesAndEmissions({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-1 text-lg font-semibold leading-7">
-        Bribes
+        Incentives
         <Tooltip text="Overview of bribe information on this validator" />
       </div>
       {/* {true ? (

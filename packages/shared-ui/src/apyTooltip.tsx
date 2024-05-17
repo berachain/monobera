@@ -23,8 +23,7 @@ export const BribeApyTooltip = ({ className }: { className?: string }) => {
 export const bribeApyTooltipText = () => {
   return (
     <>
-      APY (Annual Percentage Yield) is calculated based on the value of bribes{" "}
-      <br />
+      APY (Annual Percentage Yield) is calculated based on the value of <br />
       emitted from a validator over the last 24 hours. The APY displayed is{" "}
       <br />
       algorithmic and subject to change. See additional disclaimers in the notes
