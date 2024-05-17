@@ -54,7 +54,7 @@ export default function ValidatorCard({
         </div>
         {!validator.bribeTokenList || validator.bribeTokenList.length === 0 ? (
           <div className="h-8 font-medium text-muted-foreground">
-            ~ No bribes ~
+            ~ No incentives ~
           </div>
         ) : (
           <TokenIconList tokenList={[]} size="xl" />

@@ -97,7 +97,7 @@ export const validator_table_columns: ColumnDef<any>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Bribes" />
+      <DataTableColumnHeader column={column} title="Incentives" />
     ),
     cell: ({ row }) => {
       return (

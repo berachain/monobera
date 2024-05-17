@@ -83,9 +83,24 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
         <TabsContent value="incentives">
           <DataTable
             columns={gauge_incentives_columns as any}
-            data={[1, 2, 3]}
+            data={[
+              <>
+                <Icons.beraIcon className="h-6 w-6" />
+                BERA
+              </>,
+              <>
+                <Icons.honey className="h-6 w-6" />
+                HONEY
+              </>,
+              <>
+                <Icons.beraIcon className="h-6 w-6" />
+                wBERA
+              </>,
+            ]}
             className="max-h-[300px] min-w-[1000px] shadow"
-            enablePagination
+            onRowClick={(row) => {
+              window.open("/incentivize?pool=0x1234", "_self");
+            }}
           />
         </TabsContent>
         <TabsContent value="validators">

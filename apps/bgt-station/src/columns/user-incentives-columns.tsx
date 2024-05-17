@@ -73,7 +73,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Bribes"
+        title="Incentives"
         className="w-full items-center text-center"
       />
     ),
