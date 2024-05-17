@@ -77,7 +77,7 @@ export default function GaugeInfoCard() {
         </div>
         <div className="flex flex-col justify-center border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
-            Active Bribes
+            Active Incentives
           </div>
           <div className="flex items-center gap-2 text-xl font-bold leading-5">
             690.42K
@@ -116,7 +116,7 @@ export default function GaugeInfoCard() {
           Estimates are updated weekly.
           <br />
           Checkout each validator for <br />
-          their bribes distribution breakdown
+          their incentives distribution breakdown
         </div>
         <div className="flex w-full flex-col items-start gap-2 rounded-sm border border-warning-foreground bg-warning px-3 py-2 md:w-[200px] md:items-end">
           <div className="w-fit text-[10px] text-warning-foreground">
