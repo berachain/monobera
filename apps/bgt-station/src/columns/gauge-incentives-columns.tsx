@@ -11,10 +11,7 @@ export const gauge_incentives_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex flex-row items-center gap-1">
-          <Icons.beraIcon className="h-6 w-6" />
-          BERA
-        </div>
+        <div className="flex flex-row items-center gap-1">{row.original}</div>
       );
     },
     accessorKey: "token",
