@@ -166,7 +166,9 @@ const mockValidators: UserValidator[] = [
   },
 ];
 
-export const getValidators = async (filter?: ValidatorFilter): Promise<Validator[]> => {
+export const getValidators = async (
+  filter?: ValidatorFilter,
+): Promise<Validator[]> => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     if (filter?.page === 0) return mockValidators;
