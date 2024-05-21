@@ -7,7 +7,6 @@ import {
   DataTable,
   PoolHeader,
   SearchInput,
-  TokenIconList,
 } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";

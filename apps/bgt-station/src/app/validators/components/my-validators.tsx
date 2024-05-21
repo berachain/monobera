@@ -17,7 +17,7 @@ const DataTable = dynamic(
 
 export const MyValidator = ({ keyword }: { keyword: any }) => {
   const [page, setPage] = useState(0);
-  const { data, isLoading, isValidating } = usePollValidators(page);
+  const { data, isLoading, isValidating } = usePollValidators({page});
   const router = useRouter();
 
   const fetchData = useCallback(
