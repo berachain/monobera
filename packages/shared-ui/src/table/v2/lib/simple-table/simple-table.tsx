@@ -1,0 +1,129 @@
+"use client";
+
+import React from "react";
+import { cn } from "@bera/ui";
+
+import { ReactTable } from "../components/core/table";
+import { TableBody, TableBodyProps } from "../components/core/table-body";
+import { TableCaption } from "../components/core/table-caption";
+import { TableCell } from "../components/core/table-cell";
+import { TableFooter } from "../components/core/table-footer";
+import { TableHead } from "../components/core/table-head";
+import { TableHeader } from "../components/core/table-header";
+import { TableHeaderGroup } from "../components/core/table-header-group";
+import { TableRow } from "../components/core/table-row";
+
+export type SimpleTableProps<TData> = TableBodyProps<TData> & {
+  title?: string;
+  flexTable?: boolean;
+  dynamicFlex?: boolean;
+  onRowClick?: (row: any) => void;
+  wrapperClassName?: string;
+  toolbarContent?: React.ReactNode;
+  showToolbar?: boolean;
+  showSelection?: boolean;
+};
+
+export function SimpleTable<TData>({
+  table,
+  className,
+  wrapperClassName,
+  title,
+  flexTable,
+  dynamicFlex = true,
+  toolbarContent,
+  showToolbar = true,
+  showSelection = true,
+  onRowClick,
+}: SimpleTableProps<TData>) {
+  const minWidth = flexTable ? table.getTotalSize() : "auto";
+  const tableBodyRef = React.useRef<HTMLTableSectionElement>(null);
+  const rows = table.getRowModel().rows;
+  const loading = table.options.meta?.loading || table.options.meta?.validating;
+
+  return (
+    <div
+      className={cn(
+        "flex h-full w-full flex-col overflow-auto rounded-md border border-border",
+        wrapperClassName,
+      )}
+    >
+      <ReactTable flexTable={flexTable} className={className}>
+        {/* <caption> components */}
+        {title ? (
+          <TableCaption
+            flexTable={flexTable}
+            title={title}
+            style={{ minWidth }}
+          />
+        ) : null}
+        {/* <thead> components */}
+        <TableHead
+          style={{ minWidth }}
+          flexTable={flexTable}
+          tableBodyRef={tableBodyRef}
+        >
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableHeaderGroup key={headerGroup.id} flexTable={flexTable}>
+              {headerGroup.headers.map((header) => (
+                <TableHeader
+                  flexTable={flexTable}
+                  key={header.id}
+                  header={header}
+                  dynamicFlex={dynamicFlex}
+                />
+              ))}
+            </TableHeaderGroup>
+          ))}
+        </TableHead>
+        {/* <tbody> components */}
+        <TableBody
+          table={table}
+          style={{ minWidth }}
+          flexTable={flexTable}
+          tableBodyRef={tableBodyRef}
+        >
+          {rows.length > 0 ? (
+            rows.map((row) => {
+              return (
+                <TableRow
+                  row={row}
+                  key={row.id}
+                  flexTable={flexTable}
+                  onRowClick={onRowClick}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      flexTable={flexTable}
+                      cell={cell}
+                      key={cell.id}
+                      dynamicFlex={dynamicFlex}
+                    />
+                  ))}
+                </TableRow>
+              );
+            })
+          ) : loading ? (
+            <td className="flex h-24 items-center justify-center">
+              {table.options.meta?.loadingText ?? "Loading Table Data..."}
+            </td>
+          ) : (
+            <td className="flex h-24 items-center justify-center">
+              {table.options.meta?.emptyDataText ?? "No Results"}
+            </td>
+          )}
+        </TableBody>
+        {/* <tfoot> components */}
+      </ReactTable>
+      {showToolbar && (
+        <TableFooter
+          table={table}
+          flexTable={flexTable}
+          showSelection={showSelection}
+        >
+          {toolbarContent}
+        </TableFooter>
+      )}
+    </div>
+  );
+}
