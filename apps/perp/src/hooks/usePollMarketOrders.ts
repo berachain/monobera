@@ -2,16 +2,16 @@ import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoint } from "@bera/config";
 import useSWR, { mutate } from "swr";
 
-import { POLLING } from "~/utils/constants";
-import type { IMarket } from "~/types/market";
-import type { IMarketOrder } from "~/types/order-history";
+import { POLLING, API_FILTERS } from "~/utils/constants";
 import { TableStateProps } from "~/types/table";
 
 export const usePollMarketOrders = (props: TableStateProps) => {
   const { account } = useBeraJs();
   const queryString =
-    Object.entries(props ?? {})
-      .filter(([_, value]) => value !== undefined)
+    Object.entries(props.history ?? {})
+      .filter(
+        ([key, value]) => API_FILTERS.includes(key) && value !== undefined,
+      )
       .map(([key, value]) => `${key}=${value}`)
       .join("&") ?? "";
   const QUERY_KEY = ["tradingHistory", account, queryString];
@@ -30,26 +30,17 @@ export const usePollMarketOrders = (props: TableStateProps) => {
       return {};
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      keepPreviousData: true,
+      revalidateOnFocus: false,
+      refreshInterval: POLLING.SLOW,
     },
   );
-
-  const useMarketOrders = (markets: IMarket[]): IMarketOrder[] => {
-    return data?.result?.map((position: IMarketOrder) => {
-      return {
-        ...position,
-        market: markets.find(
-          (market) => market.pair_index === position.pair_index,
-        ),
-      };
-    });
-  };
 
   return {
     isLoading,
     isValidating,
-    marketOrdersPagination: data?.pagination ?? {},
-    refetch: () => void mutate(QUERY_KEY),
-    useMarketOrders,
+    refresh: () => void mutate(QUERY_KEY),
+    data,
+    pagination: data?.pagination ?? {},
   };
 };

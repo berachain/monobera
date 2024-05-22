@@ -1,29 +1,32 @@
 "use client";
 
-import React, { useContext, useCallback, useMemo } from "react";
-import { useAsyncTable, SimpleTable } from "@bera/shared-ui";
+import React, { useCallback, useContext, useMemo, useState } from "react";
+import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import {
   TableState,
   type PaginationState,
   type Updater,
 } from "@tanstack/react-table";
+
+import { POSITIONS_SORTING_MAP } from "~/utils/constants";
+import { generateMarketOrders } from "~/utils/generateMarketOrders";
+import { ClosePositionModal } from "~/app/components/close-position-modal";
+import { generatePositionColumns } from "~/app/components/table-columns/positions";
+import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { TableContext } from "~/context/table-context";
-import type { FilterableTableState } from "~/types/table";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import type { IMarket } from "~/types/market";
+import type { IOpenTrade } from "~/types/order-history";
+import { FilterableTableState } from "~/types/table";
 import { TotalAmount } from "../../components/total-amount";
 
-import { HISTORY_SORTING_MAP } from "~/utils/constants";
-
-import { generateHistoryColumns } from "~/app/components/table-columns/history";
-import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
-import type { IMarket } from "~/types/market";
-import { generateMarketOrders } from "~/utils/generateMarketOrders";
-import type { IMarketOrder } from "~/types/order-history";
-
-export default function TradingHistory({ markets }: { markets: IMarket[] }) {
+export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
   const { tableState, setTableState } = useContext(TableContext);
   const { data, pagination, isLoading, isValidating } =
-    usePollMarketOrders(tableState);
-  const marketOrders = generateMarketOrders(data, markets);
+    usePollOpenPositions(tableState);
+  const openPositions = generateMarketOrders(data, markets);
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
 
   const handlePaginationChange = (updater: Updater<PaginationState>) => {
     setTableState((prev) => {
@@ -56,25 +59,27 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
       // Filters
       if (state.columnFilters.length > 0) {
         const pairIndex = state.columnFilters.find(
-          (filter) => filter.id === "market",
+          (filter) => filter.id === "assets",
         );
         if (pairIndex) {
-          filters.filters = `pair_index=${pairIndex.value}`;
+          filters.pairIndex = Number(pairIndex.value);
         }
       }
       // Sorting
       if (state.sorting.length > 0) {
         const sort = state.sorting[0];
-        if (tableState.tabType === "history") {
+        if (tableState.tabType === "positions") {
           filters.sortBy =
-            HISTORY_SORTING_MAP[sort.id as keyof typeof HISTORY_SORTING_MAP];
+            POSITIONS_SORTING_MAP[
+              sort.id as keyof typeof POSITIONS_SORTING_MAP
+            ];
         }
         filters.sortDir = sort.desc ? "desc" : "asc";
       }
       setTableState((prev) => ({
         ...prev,
-        history: {
-          ...prev.history,
+        positions: {
+          ...prev.positions,
           ...filters,
         },
       }));
@@ -83,16 +88,18 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
   );
 
   const table = useAsyncTable({
-    data: (marketOrders as IMarketOrder[]) ?? [],
-    columns: markets ? generateHistoryColumns(markets) : [],
+    data: (openPositions as IOpenTrade[]) ?? [],
+    columns: markets
+      ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
+      : [],
     fetchData: fetchData,
     enablePagination: true,
     enableRowSelection: false,
     additionalTableProps: {
       state: {
         pagination: {
-          pageIndex: (tableState.history?.page ?? 1) - 1,
-          pageSize: tableState.history?.perPage ?? 10,
+          pageIndex: (tableState.positions?.page ?? 1) - 1,
+          pageSize: tableState.positions?.perPage ?? 10,
         },
       },
       manualPagination: true,
@@ -113,7 +120,7 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
       <TotalAmount
         className="hidden flex-shrink-0 p-0 sm:flex"
         markets={markets}
-        tabType="history"
+        tabType="positions"
         spacer
       />
     ),
@@ -124,13 +131,23 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
       <div className="flex w-full flex-col items-start justify-between gap-2 pl-2 md:flex-row">
         <div className="flex-shrink-0 text-2xl font-semibold leading-loose">
-          Trading History
+          Open Positions
           <div className="text-xs font-medium leading-tight text-muted-foreground">
             {" "}
-            Breakdown of your trading History
+            Breakdown of your Open Positions
           </div>
         </div>
       </div>
+      <UpdatePositionModal
+        openPosition={updateOpen as IOpenTrade}
+        controlledOpen={!!updateOpen}
+        onOpenChange={setUpdateOpen}
+      />
+      <ClosePositionModal
+        openPosition={deleteOpen as IOpenTrade}
+        controlledOpen={!!deleteOpen}
+        onOpenChange={setDeleteOpen}
+      />
       <SimpleTable
         table={table}
         wrapperClassName="flex rounded-md"

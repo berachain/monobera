@@ -1,18 +1,17 @@
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoint } from "@bera/config";
-import { type ClosedTrade } from "@bera/proto/src";
 import useSWR from "swr";
 
-import { POLLING } from "~/utils/constants";
-import type { IMarket } from "~/types/market";
-import type { IClosedTrade } from "~/types/order-history";
+import { POLLING, API_FILTERS } from "~/utils/constants";
 import { TableStateProps } from "~/types/table";
 
 export const usePollClosedTrades = (props: TableStateProps) => {
   const { account } = useBeraJs();
   const queryString =
-    Object.entries(props ?? {})
-      .filter(([_, value]) => value !== undefined)
+    Object.entries(props.pnl ?? {})
+      .filter(
+        ([key, value]) => API_FILTERS.includes(key) && value !== undefined,
+      )
       .map(([key, value]) => `${key}=${value}`)
       .join("&") ?? "";
   const QUERY_KEY = ["closedTrades", account, queryString];
@@ -20,33 +19,28 @@ export const usePollClosedTrades = (props: TableStateProps) => {
     QUERY_KEY,
     async () => {
       if (account && queryString) {
-        const res = await fetch(`${perpsEndpoint}/closedtrades/${account}`);
+        const res = await fetch(
+          `${perpsEndpoint}/closedtrades/${account}${
+            queryString ? `?${queryString}` : ""
+          }`,
+        );
         const data = await res.json();
         return data ?? {};
       }
       return {};
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      keepPreviousData: true,
+      revalidateOnFocus: false,
+      refreshInterval: POLLING.SLOW,
     },
   );
-
-  const useMarketClosedPositions = (markets: IMarket[]): IClosedTrade[] => {
-    return data?.result?.map((position: ClosedTrade) => {
-      return {
-        ...position,
-        market: markets.find(
-          (market) => market.pair_index === position.pair_index,
-        ),
-      };
-    });
-  };
 
   return {
     isLoading,
     isValidating,
-    closedPositionsPagination: data?.pagination ?? {},
-    refetch: () => void mutate(QUERY_KEY),
-    useMarketClosedPositions,
+    refresh: () => void mutate(QUERY_KEY),
+    data,
+    pagination: data?.pagination ?? {},
   };
 };
