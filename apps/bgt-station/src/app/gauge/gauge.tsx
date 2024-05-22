@@ -1,11 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import {
-  useBeraJs,
-  usePollMarkets,
-  type CuttingBoardWeight,
-} from "@bera/berajs";
+import React, { useState } from "react";
+import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -113,19 +109,9 @@ const cuttingboard: CuttingBoardWeight[] = [
 
 export default function Gauge() {
   const { isConnected } = useBeraJs();
-  const { marketDict, setMarketDict } = usePollMarkets();
+  const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
-  const [filteredMarkets, setFilteredMarkets] = useState<string[]>([]);
-
-  useEffect(() => {
-    setFilteredMarkets(
-      Object.keys(marketDict).filter(
-        (market: string) =>
-          marketDict[market as keyof typeof marketDict].checked,
-      ),
-    );
-  }, [marketDict]);
 
   return (
     <div className="flex flex-col gap-12">
@@ -169,15 +155,13 @@ export default function Gauge() {
               }}
               className="w-full md:w-[300px]"
             />
-            <MarketSelector
-              {...{ markets: marketDict, setMarkets: setMarketDict }}
-            />
+            <MarketSelector {...{ markets, setMarkets }} />
           </div>
         </div>
-        {(filteredMarkets.length !== 0 || keywordList.length !== 0) && (
+        {(markets.length !== 0 || keywordList.length !== 0) && (
           <div className="flex flex-wrap gap-2">
             <div className="text-sm leading-6">Projects filtered by:</div>
-            {filteredMarkets.map((filter, index) => (
+            {markets.map((filter, index) => (
               <div
                 className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
                 key={`${index}-${filter}`}
@@ -185,11 +169,9 @@ export default function Gauge() {
                 {filter}
                 <Icons.xCircle
                   className="h-3 w-3 cursor-pointer hover:opacity-80"
-                  onClick={() => {
-                    marketDict[filter as keyof typeof marketDict].checked =
-                      false;
-                    setMarketDict(marketDict);
-                  }}
+                  onClick={() =>
+                    setMarkets(markets.filter((m) => m !== filter))
+                  }
                 />
               </div>
             ))}
