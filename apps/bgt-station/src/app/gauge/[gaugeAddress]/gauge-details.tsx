@@ -3,12 +3,7 @@
 import { notFound } from "next/navigation";
 import { truncateHash, usePollValidators } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import {
-  DataTable,
-  PoolHeader,
-  SearchInput,
-  TokenIconList,
-} from "@bera/shared-ui";
+import { DataTable, PoolHeader, SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { isAddress } from "viem";

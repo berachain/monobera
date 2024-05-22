@@ -6,6 +6,14 @@ import {
   Validator,
   Vault,
 } from "~/types";
+import { Address } from "viem";
+
+export interface ValidatorFilter {
+  page?: number;
+  limit?: number;
+  gaugeAddress?: Address;
+  sort?: string;
+}
 
 const mockMarkets: Market[] = [
   {
@@ -158,10 +166,12 @@ const mockValidators: UserValidator[] = [
   },
 ];
 
-export const getValidators = async (page: number): Promise<Validator[]> => {
+export const getValidators = async (
+  filter?: ValidatorFilter,
+): Promise<Validator[]> => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    if (page === 0) return mockValidators;
+    if (filter?.page === 0) return mockValidators;
     return [mockValidators[1]];
   } catch (error) {
     console.error(error);
