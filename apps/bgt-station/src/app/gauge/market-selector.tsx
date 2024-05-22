@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePollMarkets, type Market } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import {
   DropdownMenu,
@@ -13,9 +14,10 @@ export default function MarketSelector({
   markets,
   setMarkets,
 }: {
-  markets: any;
-  setMarkets: any;
+  markets: string[];
+  setMarkets: (markets: string[]) => void;
 }) {
+  const { data = [] } = usePollMarkets();
   const [open, setOpen] = useState(false);
 
   return (
@@ -40,17 +42,20 @@ export default function MarketSelector({
         />
         <DropdownMenuSeparator className="my-0" />
         <div className="max-h-[200px] overflow-auto p-1">
-          {Object.keys(markets).map((market: string, index: number) => (
+          {data.map((market: Market, index: number) => (
             <DropdownMenuCheckboxItem
               key={`selector-${index}-${market}`}
               className="hover:bg-muted hover:text-foreground"
-              checked={markets[market as keyof typeof markets].checked}
+              checked={markets.find((m) => m === market.id) !== undefined}
               onCheckedChange={(checked: boolean) => {
-                markets[market as keyof typeof markets].checked = checked;
-                setMarkets(markets);
+                if (checked) {
+                  setMarkets([...markets, market.id]);
+                } else {
+                  setMarkets(markets.filter((m) => m !== market.id));
+                }
               }}
             >
-              {markets[market as keyof typeof markets].market.name}
+              {market.name}
             </DropdownMenuCheckboxItem>
           ))}
         </div>

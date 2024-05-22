@@ -1,19 +1,22 @@
 import useSWR, { mutate } from "swr";
 
-import { getValidators } from "~/actions/bgt/getValidators";
+import { ValidatorFilter, getValidators } from "~/actions/bgt/getValidators";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType, Validator } from "~/types";
 
+export interface UsePollValidatorsResponse
+  extends DefaultHookReturnType<Validator[]> {}
+
 export const usePollValidators = (
-  page?: number,
+  filter?: ValidatorFilter,
   options?: DefaultHookOptions,
-): DefaultHookReturnType<Validator[]> => {
+): UsePollValidatorsResponse => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePoolRecentProvisions", page ?? 0];
+  const QUERY_KEY = ["usePoolRecentProvisions", filter];
   const swrResponse = useSWR<Validator[], any, typeof QUERY_KEY>(
     QUERY_KEY,
-    async () => await getValidators(page ?? 0),
+    async () => await getValidators(filter),
     {
       ...options?.opts,
     },
