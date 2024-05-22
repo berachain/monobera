@@ -34,6 +34,7 @@ import {
   File,
   FileEdit,
   FileText,
+  Filter,
   Frame,
   Fuel,
   Globe,
@@ -102,6 +103,7 @@ import { WalletTxnIcons } from "./wallet-txn-icons";
 export type Icon = LucideIcon;
 
 export const Icons = {
+  filter: Filter,
   fileEdit: FileEdit,
   lineChart: LineChart,
   pieChart: PieChart,
