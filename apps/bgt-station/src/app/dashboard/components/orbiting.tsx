@@ -2,9 +2,11 @@ import { ReactNode } from "react";
 import { cn } from "@bera/ui";
 
 export const OrbitingLeftToRight = ({
+  delay = 0,
   classname,
   children,
 }: {
+  delay?: number;
   classname?: string;
   children?: ReactNode;
 }) => {
@@ -32,7 +34,7 @@ export const OrbitingLeftToRight = ({
               "--end": 180 + 50,
               "--duration": 5,
               "--radius": 295,
-              "--delay": 0,
+              "--delay": delay,
             } as React.CSSProperties
           }
           className="animate-orbit absolute bottom-0 flex transform-gpu items-center justify-center rounded-full [animation-delay:calc(var(--delay)*1000ms)]"
@@ -45,9 +47,11 @@ export const OrbitingLeftToRight = ({
 };
 
 export const OrbitingRightToLeft = ({
+  delay = 0,
   classname,
   children,
 }: {
+  delay?: number;
   classname?: string;
   children?: ReactNode;
 }) => {
@@ -76,7 +80,7 @@ export const OrbitingRightToLeft = ({
               "--end": 360 + 50,
               "--duration": 5,
               "--radius": 295,
-              "--delay": 0,
+              "--delay": delay,
             } as React.CSSProperties
           }
           className={

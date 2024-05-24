@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ArrowUpDown,
   ArrowUpRight,
+  Biohazard,
   CalendarClock,
   CandlestickChart,
   Check,
@@ -199,6 +200,7 @@ export const Icons = {
   globe: Globe,
   moveRight: MoveRight,
   refreshccw: RefreshCcw,
+  biohazard: Biohazard,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path

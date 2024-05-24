@@ -1,10 +1,10 @@
+import Image from "next/image";
+import { cloudinaryUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
 import { OrbitingLeftToRight, OrbitingRightToLeft } from "./orbiting";
-import { cloudinaryUrl } from "@bera/config";
-import Image from "next/image";
 
-export const HowToEarn: React.FC = () => {
+export const HowToEarnBGT: React.FC = () => {
   return (
     <div>
       <div className="flex flex-col items-center justify-between gap-12 text-center lg:flex-row lg:text-left">
@@ -22,29 +22,33 @@ export const HowToEarn: React.FC = () => {
             Gauge Vaults
           </div>
         </div>
-        <div className="relative w-fit hidden lg:block">
-          <div className="absolute left-0 top-1/2 z-10 h-20 w-20 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-amber-400 text-background text-center">
-            bear
-          </div>
+        <div className="relative hidden w-fit lg:block">
+          <Image
+            src="/user.png"
+            alt="user"
+            width={80}
+            height={80}
+            className="absolute left-0 top-1/2 z-10 h-20 w-20 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-amber-400 text-center text-black"
+          />
 
-          <div className="absolute right-0 top-1/2 z-10 flex w-fit translate-x-1/2 -translate-y-1/2 transform items-center gap-2 rounded-md border-2 border-orange-600 bg-rose-200 p-2 text-sm font-medium text-background">
+          <div className="absolute right-0 top-1/2 z-10 flex w-fit -translate-y-1/2 translate-x-1/2 transform items-center gap-2 rounded-md border-2 border-orange-600 bg-rose-200 p-2 text-sm font-medium text-background">
             <Icons.refreshccw className="h-8 w-8 rounded-sm bg-orange-600 p-1 text-amber-100" />
             Gauge Vaults
           </div>
-          <OrbitingLeftToRight classname="relative z-2">
+          <OrbitingLeftToRight classname="relative z-2" delay={1}>
             <div className="flex h-8 items-center rounded-full border border-border bg-background p-1 font-medium">
               <Icons.honey className="h-5 w-5" />
               <Icons.beraIcon className="-ml-1 mr-1 h-5 w-5" />
               50-50
             </div>
           </OrbitingLeftToRight>
-          <OrbitingRightToLeft classname="relative z-2">
+          <OrbitingRightToLeft classname="relative z-2" delay={4}>
             <div className="flex h-[50px] w-[50px] items-center justify-center">
               <Icons.bgt className="h-8 w-8" />
             </div>
           </OrbitingRightToLeft>
         </div>
-        <div className="aspect-auto w-full max-w-[570px] lg:hidden block">
+        <div className="block aspect-auto w-full max-w-[570px] lg:hidden">
           <Image
             src={`${cloudinaryUrl}/BGT/k3s2ocj0wygtix2pjqrg`}
             alt="bg-dark"
