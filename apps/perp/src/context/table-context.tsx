@@ -1,31 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, type ReactNode, type Dispatch } from "react";
 import type { TableStateProps } from "~/types/table";
 
 interface TableContextType {
   tableState: TableStateProps;
-  setTableState: (state: TableStateProps) => void;
+  setTableState: Dispatch<React.SetStateAction<TableStateProps>>;
 }
 
-const TableContext = React.createContext({
-  tableState: {
+const defaultTableState: TableStateProps = {
+  positions: {
     page: 1,
-    // TODO: Change perPage to 10 after pagination is implemented
-    perPage: 420,
-    sortBy: undefined,
-    sortDir: undefined,
-    pairIndex: undefined,
-  },
-  setTableState: () => {},
-} as TableContextType);
-
-const TableContextProvider = ({ children }: any) => {
-  const [tableState, setTableState] = useState<TableStateProps>({
-    page: 1,
-    perPage: 420,
+    perPage: 10,
     sortBy: undefined,
     sortDir: "desc",
     pairIndex: undefined,
-  });
+  },
+  orders: {
+    page: 1,
+    perPage: 10,
+    sortBy: undefined,
+    sortDir: "desc",
+    pairIndex: undefined,
+  },
+  history: {
+    page: 1,
+    perPage: 10,
+    sortBy: undefined,
+    sortDir: "desc",
+    filters: undefined,
+  },
+  pnl: {
+    page: 1,
+    perPage: 10,
+    sortBy: undefined,
+    sortDir: "desc",
+    filters: undefined,
+  },
+  tabType: "positions",
+  selection: {},
+};
+
+const TableContext = React.createContext({
+  tableState: defaultTableState,
+  setTableState: () => {},
+} as TableContextType);
+
+const TableContextProvider = ({ children }: { children: ReactNode }) => {
+  const [tableState, setTableState] =
+    useState<TableStateProps>(defaultTableState);
 
   return (
     <TableContext.Provider value={{ tableState, setTableState }}>
@@ -34,4 +55,4 @@ const TableContextProvider = ({ children }: any) => {
   );
 };
 
-export { TableContext, TableContextProvider };
+export { TableContext, TableContextProvider, defaultTableState };

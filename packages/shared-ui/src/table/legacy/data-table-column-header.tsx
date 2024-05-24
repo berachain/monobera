@@ -3,7 +3,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type Column } from "@tanstack/react-table";
 
-import { Tooltip } from "./tooltip";
+import { Tooltip } from "../../tooltip";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {

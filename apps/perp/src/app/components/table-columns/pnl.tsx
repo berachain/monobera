@@ -1,6 +1,6 @@
 import React from "react";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DropdownFilter } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import BigNumber from "bignumber.js";
 
@@ -8,16 +8,13 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { PositionTitle } from "~/app/components/position-title";
 import type { IClosedTrade } from "~/types/order-history";
 import { PnlWithPercentage } from "../pnl-with-percentage";
+import { IMarket } from "~/types/market";
 
-export const pnlColumns: ColumnDef<IClosedTrade>[] = [
+export const generatePnlColumns = (
+  markets: IMarket[],
+): ColumnDef<IClosedTrade>[] => [
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open time"
-        className="min-w-[96px]"
-      />
-    ),
+    header: "Open time",
     cell: ({ row }) => {
       const date = new Date(Number(row.original.open_time) * 1000);
 
@@ -32,22 +29,11 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
     },
     accessorKey: "open_time",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = new Date(Number(rowA.original.open_time) * 1000);
-      const b = new Date(Number(rowB.original.open_time) * 1000);
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    minSize: 130,
+    size: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close time"
-        className="min-w-[98px]"
-      />
-    ),
+    header: "Close time",
     cell: ({ row }) => {
       const date = new Date(Number(row.original.close_time) * 1000);
 
@@ -62,18 +48,11 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
     },
     accessorKey: "close_time",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = new Date(Number(rowA.original.close_time) * 1000);
-      const b = new Date(Number(rowB.original.close_time) * 1000);
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    minSize: 130,
+    size: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Position" />
-    ),
+    header: "Market / Action",
     cell: ({ row }) => (
       <PositionTitle
         market={row.original.market}
@@ -83,15 +62,27 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
     ),
     accessorKey: "assets",
     enableSorting: false,
+    enableColumnFilter: true,
+    meta: {
+      filter: (props: any) => {
+        return (
+          <DropdownFilter
+            {...props}
+            items={[
+              { label: "All", value: "" },
+              ...markets.map((market) => ({
+                label: market.name,
+                value: market.pair_index,
+              })),
+            ]}
+          />
+        );
+      },
+    },
+    minSize: 160,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Type"
-        className="min-w-[32px]"
-      />
-    ),
+    header: "Type",
     cell: ({ row }) => {
       return (
         <div className=" text-sm font-medium uppercase text-muted-foreground">
@@ -101,15 +92,11 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
     },
     accessorKey: "type",
     enableSorting: false,
+    minSize: 120,
+    size: 120,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open Price"
-        className="min-w-[72px]"
-      />
-    ),
+    header: "Open Price",
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
         {formatUsd(
@@ -117,18 +104,11 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
         )}
       </div>
     ),
-
     accessorKey: "amount",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close Price"
-        className="min-w-[74px]"
-      />
-    ),
+    header: "Close Price",
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
         {formatUsd(
@@ -137,12 +117,10 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
       </div>
     ),
     accessorKey: "total",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Size" />
-    ),
+    header: "Size",
     cell: ({ row }) => {
       const volume = BigNumber(row.original?.volume);
 
@@ -156,12 +134,10 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
       );
     },
     accessorKey: "entry_price",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="PnL" />
-    ),
+    header: "PnL",
     cell: ({ row }) => {
       const positionSize = BigNumber(row.original.volume).div(
         row.original.leverage ?? "1",
@@ -171,16 +147,5 @@ export const pnlColumns: ColumnDef<IClosedTrade>[] = [
     },
     accessorKey: "pnl",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = Number(rowA.original.pnl);
-      const b = Number(rowB.original.pnl);
-      if (a < 0 && b < 0) {
-        if (Math.abs(a) < Math.abs(b)) return 1;
-        if (Math.abs(a) > Math.abs(b)) return -1;
-      }
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
   },
 ];

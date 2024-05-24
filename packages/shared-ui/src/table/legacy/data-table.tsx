@@ -5,7 +5,8 @@ import { cn } from "@bera/ui";
 import { Checkbox } from "@bera/ui/checkbox";
 import _ from "lodash";
 
-import "./types/data-table.d.ts";
+import "../../types/data-table.d.ts";
+
 import {
   Table,
   TableBody,
@@ -31,8 +32,8 @@ import {
   type TableState,
 } from "@tanstack/react-table";
 
-import { usePrevious } from "./hooks";
-import { Spinner } from "./spinner";
+import { usePrevious } from "../../hooks";
+import { Spinner } from "../../spinner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

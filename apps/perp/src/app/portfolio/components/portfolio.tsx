@@ -3,7 +3,7 @@
 import type { IMarket } from "~/types/market";
 import Stats from "./stats";
 import TradingHistory from "./trading-history";
-import UserOpenPositions from "./userAssets";
+import UserOpenPositions from "./user-assets";
 
 export const PortfolioHome = ({ markets }: { markets: IMarket[] }) => {
   return (
