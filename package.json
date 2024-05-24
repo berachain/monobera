@@ -26,6 +26,7 @@
     "dev:faucet": "turbo dev --filter=faucet --filter='./packages/*' --concurrency=20",
     "dev:docs": "turbo dev --filter=berajs-docs --filter='./packages/*' --concurrency=20",
     "dev:clue": "turbo dev --filter=validator-clue --filter='./packages/*' --concurrency=20",
+    "start:bgt": "next start ./apps/bgt-station",
     "check-types": "turbo check-types",
     "lint": "biome lint . ",
     "format:check": "biome format .",
