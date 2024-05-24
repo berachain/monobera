@@ -70,6 +70,7 @@ import {
   PlusCircle,
   PlusSquare,
   Redo,
+  RefreshCcw,
   Repeat,
   Repeat2,
   Reply,
@@ -197,6 +198,7 @@ export const Icons = {
   fuel: Fuel,
   globe: Globe,
   moveRight: MoveRight,
+  refreshccw: RefreshCcw,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
@@ -742,6 +744,7 @@ export const Icons = {
       />
     </svg>
   ),
+
   ...WalletTxnIcons,
   ...FavIcons,
 };
