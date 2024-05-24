@@ -6,8 +6,6 @@ export { Tooltip } from "./tooltip";
 export { SelectToken } from "./select-token";
 export { TokenInput } from "./token-input";
 export { ThemeToggle } from "./theme-toggle";
-export { DataTable } from "./data-table";
-export { DataTableColumnHeader } from "./data-table-column-header";
 export { SearchInput } from "./search-input";
 export { Spinner } from "./spinner";
 export { SSRSpinner } from "./ssr-spinner";
@@ -57,6 +55,7 @@ export { GaugeIcon } from "./gauge-icon";
 export { MarketIcon } from "./market-icon";
 
 export { useTxn } from "./hooks";
+export * from "./table";
 export * from "./apyTooltip";
 export * from "./hooks";
 export * from "./utils";

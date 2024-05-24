@@ -10,8 +10,9 @@ import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollOpenPositionsSummary } from "~/hooks/usePollOpenPositionsSummary";
 import type { IMarket } from "~/types/market";
 import type { TableTabTypes } from "~/types/table";
-import { TotalRelativePnLHoverState } from "./total-relative-pnl-hover-state";
+import { TotalRelativePnLHoverState } from "../berpetuals/components/total-relative-pnl-hover-state";
 import { usePollPrices } from "~/hooks/usePollPrices";
+import { calculateUnrealizedPnl } from "~/utils/calculateUnrealizedPnl";
 
 export function TotalAmount({
   className,
@@ -27,12 +28,12 @@ export function TotalAmount({
   const { totalUnrealizedPnl, openPositionSize } =
     usePollOpenPositionsSummary();
   const { tableState } = useContext(TableContext);
-  const { calculateUnrealizedPnl } = usePollOpenPositions(tableState);
+  const { data: openPositions } = usePollOpenPositions(tableState);
   const { marketPrices } = usePollPrices();
-  let unrealizedPnl = calculateUnrealizedPnl(marketPrices);
-  unrealizedPnl = unrealizedPnl
-    ? BigNumber(unrealizedPnl)
-    : formatFromBaseUnit(totalUnrealizedPnl, 18);
+  const unrealizedPnl = useMemo(() => {
+    const pnl = calculateUnrealizedPnl(openPositions, marketPrices);
+    return pnl ? BigNumber(pnl) : formatFromBaseUnit(totalUnrealizedPnl, 18);
+  }, [openPositions, marketPrices, totalUnrealizedPnl]);
   const { useAccountTradingSummary } = usePollAccountTradingSummary();
   const { data } = useAccountTradingSummary();
   const realizedPnl = data?.pnl ?? "0";
