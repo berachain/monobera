@@ -1,18 +1,15 @@
-import { useEffect, useMemo, useState, useContext } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import {
-  type PaginationState,
-  type RowSelectionState,
-} from "@tanstack/react-table";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { TableContext } from "~/context/table-context";
+import { generateMarketOrders } from "~/utils/generateMarketOrders";
 import { CloseOrderModal } from "~/app/components/close-order-modal";
+import { TableContext } from "~/context/table-context";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type IMarket } from "~/types/market";
 import { ILimitOrder, IOpenTrade } from "~/types/order-history";
-import { type TableTabTypes } from "~/types/table";
+import { type TableStateProps } from "~/types/table";
 import {
   type ChartingLibraryWidgetOptions,
   type ResolutionString,
@@ -44,24 +41,20 @@ const TVChartContainer = dynamic(
 export function OrderChart({
   markets,
   marketName,
-  selection,
-  setSelection,
-  pagination,
-  tabType,
 }: {
   markets: IMarket[];
   marketName: string;
-  selection: RowSelectionState;
-  pagination: PaginationState;
-  setSelection: (selection: RowSelectionState) => void;
-  tabType: TableTabTypes;
 }) {
-  const { tableState } = useContext(TableContext);
-  const { useMarketOpenPositions } = usePollOpenPositions(tableState);
-  const { useMarketOpenLimitOrders } = usePollOpenLimitOrders(tableState);
+  const { tableState, setTableState } = useContext(TableContext);
+  const { data: openPositionData } = usePollOpenPositions(tableState);
+  const { data: openLimitOrdersData } = usePollOpenLimitOrders(tableState);
 
-  const openPositions = useMarketOpenPositions(markets);
-  const openOrders = useMarketOpenLimitOrders(markets);
+  const openPositions = useMemo(() => {
+    return generateMarketOrders(openPositionData, markets) as IOpenTrade[];
+  }, [openPositionData, markets]);
+  const openOrders = useMemo(() => {
+    return generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[];
+  }, [openLimitOrdersData, markets]);
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -88,13 +81,12 @@ export function OrderChart({
   };
 
   const humanizedPositions = useMemo(() => {
-    return openPositions
+    return openPositions && tableState.tabType === "positions"
       ? openPositions.reduce<OrderLine[]>((acc, position, index) => {
           if (
-            selection &&
-            (Object.keys(selection).length === 0 || selection[index]) &&
-            index >= pagination.pageIndex * pagination.pageSize &&
-            index < (pagination.pageIndex + 1) * pagination.pageSize &&
+            tableState.selection &&
+            (Object.keys(tableState.selection).length === 0 ||
+              tableState.selection[index]) &&
             position?.market?.name === marketName
           ) {
             const positionSize = formatFromBaseUnit(
@@ -108,13 +100,17 @@ export function OrderChart({
               price: Number(openPrice.toString(10)),
               type: position.buy ? "Long Position" : "Short Position",
               positionSize: size,
-              onHighlight: () => setSelection({ [index]: true }),
+              onHighlight: () =>
+                setTableState((tableState: TableStateProps) => ({
+                  ...tableState,
+                  selection: { ...tableState.selection, [index]: true },
+                })),
               onClose: () => {
                 setPosition(position);
                 setPositionOpenState(true);
               },
             } as OrderLine;
-            if (selection[index]) {
+            if (tableState.selection[index]) {
               pos.tp = Number(
                 formatFromBaseUnit(position.tp ?? "0", 10).toString(10),
               );
@@ -127,16 +123,15 @@ export function OrderChart({
           return acc;
         }, [])
       : [];
-  }, [openPositions, tabType, selection]);
+  }, [openPositions, tableState]);
 
   const humanizedOrders = useMemo(() => {
-    return openOrders && tabType === "orders"
+    return openOrders && tableState.tabType === "orders"
       ? openOrders.reduce<OrderLine[]>((acc, order, index) => {
           if (
-            selection &&
-            (Object.keys(selection).length === 0 || selection[index]) &&
-            index >= pagination.pageIndex * pagination.pageSize &&
-            index < (pagination.pageIndex + 1) * pagination.pageSize &&
+            tableState.selection &&
+            (Object.keys(tableState.selection).length === 0 ||
+              tableState.selection[index]) &&
             order?.market?.name === marketName
           ) {
             const positionSize = formatFromBaseUnit(
@@ -150,13 +145,17 @@ export function OrderChart({
               price: Number(openPrice),
               type: order.buy ? "Long Limit" : "Short Limit",
               positionSize: size,
-              onHighlight: () => setSelection({ [index]: true }),
+              onHighlight: () =>
+                setTableState((tableState: TableStateProps) => ({
+                  ...tableState,
+                  selection: { ...tableState.selection, [index]: true },
+                })),
               onClose: () => {
                 setOrder(order);
                 setOrderOpenState(true);
               },
             } as OrderLine;
-            if (selection[index]) {
+            if (tableState.selection[index]) {
               limit.tp = Number(
                 formatFromBaseUnit(order.tp ?? "0", 10).toString(10),
               );
@@ -169,17 +168,17 @@ export function OrderChart({
           return acc;
         }, [])
       : [];
-  }, [openOrders, tabType, selection, marketName]);
+  }, [openOrders, tableState, marketName]);
 
   const orderLines = useMemo(() => {
-    if (tabType === "positions") {
+    if (tableState.tabType === "positions") {
       return humanizedPositions;
     }
-    if (tabType === "orders") {
+    if (tableState.tabType === "orders") {
       return humanizedOrders;
     }
     return [];
-  }, [tabType, humanizedOrders, humanizedPositions]);
+  }, [tableState.tabType, humanizedOrders, humanizedPositions]);
 
   return (
     <div className="grid h-full w-full">

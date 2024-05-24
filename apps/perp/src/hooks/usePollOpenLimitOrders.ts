@@ -1,18 +1,17 @@
 import { useBeraJs } from "@bera/berajs";
 import { perpsEndpoint } from "@bera/config";
-import type { OpenLimitOrder } from "@bera/proto/src";
 import useSWR, { mutate } from "swr";
 
-import { POLLING } from "~/utils/constants";
-import type { IMarket } from "~/types/market";
-import type { ILimitOrder } from "~/types/order-history";
+import { POLLING, API_FILTERS, DEFAULT_QUERY } from "~/utils/constants";
 import type { TableStateProps } from "~/types/table";
 
 export const usePollOpenLimitOrders = (props: TableStateProps) => {
   const { account } = useBeraJs();
   const queryString =
-    Object.entries(props ?? {})
-      .filter(([_, value]) => value !== undefined)
+    Object.entries(props.orders ?? {})
+      .filter(
+        ([key, value]) => API_FILTERS.includes(key) && value !== undefined,
+      )
       .map(([key, value]) => `${key}=${value}`)
       .join("&") ?? "";
   const QUERY_KEY = ["openLimitOrders", account, queryString];
@@ -26,31 +25,27 @@ export const usePollOpenLimitOrders = (props: TableStateProps) => {
           }`,
         );
         const data = await res.json();
-        return data ?? {};
+        // TODO: ask backend to provide a total items in the response
+        const totalRes = await fetch(
+          `${perpsEndpoint}/openlimitorders/${account}?${DEFAULT_QUERY}`,
+        );
+        const total = await totalRes.json();
+        return { ...data, total: total.pagination.total_items } ?? {};
       }
     },
     {
-      refreshInterval: POLLING.NORMAL,
+      keepPreviousData: true,
+      revalidateOnFocus: false,
+      refreshInterval: POLLING.SLOW,
     },
   );
-
-  const useMarketOpenLimitOrders = (markets: IMarket[]): ILimitOrder[] => {
-    return data?.result?.map((limitOrder: OpenLimitOrder) => {
-      return {
-        ...limitOrder,
-        market: markets.find(
-          (market) => market.pair_index === limitOrder.pair_index,
-        ),
-      };
-    });
-  };
 
   return {
     isLoading,
     isValidating,
     refresh: () => void mutate(QUERY_KEY),
     data,
-    openLimitOrdersPagination: data?.pagination ?? {},
-    useMarketOpenLimitOrders,
+    pagination: data?.pagination ?? {},
+    total: data?.total ?? 0,
   };
 };

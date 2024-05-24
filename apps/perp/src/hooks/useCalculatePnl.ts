@@ -3,15 +3,16 @@ import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import type { IOpenTrade, IMarketOrder } from "~/types/order-history";
+import { type OpenTrade } from "@bera/proto/src";
 
 interface ICalculatePnl {
   currentPrice: string | undefined;
-  openPosition: IOpenTrade | IMarketOrder;
+  openPosition: IOpenTrade | IMarketOrder | OpenTrade;
   positionSize: string;
 }
 
 interface IPnl {
-  openPosition: IOpenTrade | IMarketOrder;
+  openPosition: IOpenTrade | IMarketOrder | OpenTrade;
   currentPrice: string | undefined;
   positionSize: string;
 }

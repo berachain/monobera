@@ -12,17 +12,17 @@ import { getPnlListItems } from "./pnl";
 import { getMarketListItems } from "./positions";
 
 export const getAssetCardList = ({
-  marketOrderItems,
-  limitOrderItems,
-  historyItems,
+  openPositionsItems,
+  openOrderItems,
+  marketOrdersItems,
   markets,
-  marketOrders,
+  closedTradesItems,
 }: {
-  marketOrderItems: IOpenTrade[];
-  limitOrderItems: ILimitOrder[];
-  historyItems: IClosedTrade[];
+  openPositionsItems: IOpenTrade[];
+  openOrderItems: ILimitOrder[];
+  closedTradesItems: IClosedTrade[];
   markets: IMarket[];
-  marketOrders: IMarketOrder[];
+  marketOrdersItems: IMarketOrder[];
 }): {
   marketList: ICards[];
   limitList: ICards[];
@@ -30,9 +30,9 @@ export const getAssetCardList = ({
   pnlList: ICards[];
 } => {
   return {
-    marketList: getMarketListItems(marketOrderItems ?? [], markets),
-    limitList: getLimitListItems(limitOrderItems ?? []),
-    historyList: getHistoryListItems(marketOrders ?? []),
-    pnlList: getPnlListItems(historyItems ?? []),
+    marketList: getMarketListItems(openPositionsItems ?? [], markets),
+    limitList: getLimitListItems(openOrderItems ?? []),
+    historyList: getHistoryListItems(marketOrdersItems ?? []),
+    pnlList: getPnlListItems(closedTradesItems ?? []),
   };
 };

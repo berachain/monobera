@@ -12,6 +12,48 @@ export const QUARTERLY = "90d";
 export const MAX_GAIN = "900";
 export const MAX_STOP_LOSS = "-75";
 
+export const POSITIONS_SORTING_MAP = {
+  position_size: "SORT_BY_SIZE",
+  open_price: "SORT_BY_PRICE",
+  borrow_fee: "SORT_BY_FEE",
+};
+
+export const OPEN_ORDERS_SORTING_MAP = {
+  position_size: "SORT_BY_SIZE",
+  min_price: "SORT_BY_MIN_PRICE",
+  timestamp_placed: "SORT_BY_TIME",
+};
+
+export const HISTORY_SORTING_MAP = {
+  position_size: "SORT_BY_SIZE",
+  timestamp_open: "SORT_BY_OPEN_TIME",
+  timestamp_close: "SORT_BY_CLOSE_TIME",
+  open_price: "SORT_BY_OPEN_PRICE",
+  price: "SORT_BY_CLOSE_PRICE",
+  fees: "SORT_BY_FEE",
+  pnl: "SORT_BY_PNL",
+};
+
+export const CLOSED_TRADES_SORTING_MAP = {
+  open_time: "SORT_BY_OPEN_TIME",
+  close_time: "SORT_BY_CLOSE_TIME",
+  entry_price: "SORT_BY_SIZE",
+  amount: "SORT_BY_OPEN_PRICE",
+  total: "SORT_BY_CLOSE_PRICE",
+  pnl: "SORT_BY_PNL",
+};
+
+export const DEFAULT_QUERY = "page=1&perPage=10";
+
+export const API_FILTERS = [
+  "page",
+  "perPage",
+  "sortBy",
+  "sortDir",
+  "pairIndex",
+  "filters",
+];
+
 export const PYTH_ABI = [
   {
     name: "id",
