@@ -2,16 +2,19 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  TXN_GAS_USED_ESTIMATES,
   formatInputTokenValue,
   useBeraJs,
+  useGasData,
   usePollWalletBalances,
+  useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { getAddress } from "viem";
+import { formatEther, formatGwei, getAddress } from "viem";
 
 import {
   BREAKPOINTS,
@@ -43,6 +46,7 @@ type Props = {
   isActionLoading?: boolean | undefined;
   difference?: number | null;
   filteredTokenTags?: string[];
+  beraSafetyMargin?: number;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -67,6 +71,7 @@ export function TokenInput({
   isActionLoading = undefined,
   difference,
   filteredTokenTags = [],
+  beraSafetyMargin,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
@@ -113,6 +118,40 @@ export function TokenInput({
   );
 
   const breakpoint = useBreakpoint();
+
+  // Logic to show warning by the max button if a safety margin for Bera swaps is provided and user's native bera balance is less than the safety margin
+  let hasMaxGasWarning = false;
+  if (
+    selected?.address === nativeTokenAddress &&
+    beraSafetyMargin &&
+    parseFloat(tokenBalance) - beraSafetyMargin < 0
+  ) {
+    hasMaxGasWarning = true;
+  } else {
+    hasMaxGasWarning = false;
+  }
+  const gasMaxTooltipHiddenStyles = hasMaxGasWarning ? {} : { hidden: true };
+
+  const handleMaxClick = () => {
+    if (
+      !setAmount ||
+      !tokenBalance ||
+      tokenBalance === "" ||
+      tokenBalance === "0" ||
+      Number.isNaN(Number(tokenBalance))
+    ) {
+      return;
+    }
+
+    // ensure that we leave at a padded margin with the estimated gas price when attempting to trade MAX amount if we're trading in native bera token
+    // for all other tokens we set the amount to the total balance of that token in the connected wallet
+    const newAmount =
+      selected?.address === nativeTokenAddress && beraSafetyMargin
+        ? Math.max(parseFloat(tokenBalance) - beraSafetyMargin, 0).toString() ??
+          ""
+        : tokenBalance.toString() ?? "";
+    setAmount(newAmount);
+  };
 
   return (
     <li className={"flex flex-col flex-wrap px-3 py-4"}>
@@ -221,33 +260,51 @@ export function TokenInput({
               </div>
             )}
           </div>
-          {isConnected &&
-            selected &&
-            Number(tokenBalance) !== 0 &&
-            !hideBalance && (
-              <div className="flex flex-row items-center justify-start gap-1 px-1 mt-2">
-                <Icons.wallet className="h-3 w-3 text-muted-foreground" />
-                <FormattedNumber
-                  value={tokenBalance ? tokenBalance : "0"}
-                  className="text-xs text-muted-foreground"
-                  showIsSmallerThanMin
-                />
-                {!hideMax && (
-                  <p
-                    className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
-                    onClick={() => {
-                      setAmount &&
-                        tokenBalance !== "" &&
-                        tokenBalance !== "0" &&
-                        !Number.isNaN(Number(tokenBalance)) &&
-                        setAmount(tokenBalance?.toString() ?? "");
-                    }}
+          {isConnected && selected && Number(tokenBalance) !== 0 && (
+            <div className="flex flex-row items-center justify-start gap-1 px-1">
+              <Icons.wallet className="h-3 w-3 text-muted-foreground" />
+              <FormattedNumber
+                value={tokenBalance ? tokenBalance : "0"}
+                className="text-xs text-muted-foreground"
+                showIsSmallerThanMin
+              />
+              {!hideMax && (
+                <span
+                  className={`${
+                    hasMaxGasWarning ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
+                >
+                  <TooltipCustom
+                    tooltipContent={
+                      <div className="w-[150px]">
+                        <p className="text-xs">
+                          Your Bera balance is below the estimated gas prices,
+                          this transaction would likely fail.
+                        </p>
+                      </div>
+                    }
+                    {...gasMaxTooltipHiddenStyles}
                   >
-                    MAX
-                  </p>
-                )}
-              </div>
-            )}
+                    <span
+                      className={`flex select-none flex-row items-center gap-1 text-xs text-muted-foreground underline ${
+                        hasMaxGasWarning
+                          ? "text-warning-foreground"
+                          : "hover:text-foreground"
+                      }`}
+                      onClick={hasMaxGasWarning ? undefined : handleMaxClick}
+                    >
+                      MAX
+                      {hasMaxGasWarning && (
+                        <span>
+                          <Icons.alertCircle size={12} />
+                        </span>
+                      )}
+                    </span>
+                  </TooltipCustom>
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </li>
