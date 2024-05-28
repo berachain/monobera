@@ -19,7 +19,6 @@ import { cn } from "@bera/ui";
 import { BeraWagmi } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { SWRDevTools } from "swr-devtools";
 import { useLocalStorage } from "usehooks-ts";
 
 import { mobileNavItems, navItems } from "./config";
@@ -59,38 +58,36 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
         }}
       />
-      <SWRDevTools>
-        <body
-          className={cn(
-            "font-sans antialiased",
-            fontSans.variable,
-            fontHoney.variable,
-          )}
-        >
-          {" "}
-          <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-          <ApolloProvider client={honeyClient}>
-            <BeraWagmi>
-              <Header
-                isHoney
-                navItems={navItems}
-                mobileNavItems={mobileNavItems}
-                appName={honeyName}
-              />
-              <main
-                className="w-full pt-start"
-                style={{ paddingTop: `${48 * activeBanners + 72}px` }}
-              >
-                {props.children}
-              </main>
-              <Toaster position="bottom-right" />
-              <Footer />
-              <TailwindIndicator />
-              <Analytics />
-            </BeraWagmi>
-          </ApolloProvider>
-        </body>
-      </SWRDevTools>
+      <body
+        className={cn(
+          "font-sans antialiased",
+          fontSans.variable,
+          fontHoney.variable,
+        )}
+      >
+        {" "}
+        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+        <ApolloProvider client={honeyClient}>
+          <BeraWagmi>
+            <Header
+              isHoney
+              navItems={navItems}
+              mobileNavItems={mobileNavItems}
+              appName={honeyName}
+            />
+            <main
+              className="w-full pt-start"
+              style={{ paddingTop: `${48 * activeBanners + 72}px` }}
+            >
+              {props.children}
+            </main>
+            <Toaster position="bottom-right" />
+            <Footer />
+            <TailwindIndicator />
+            <Analytics />
+          </BeraWagmi>
+        </ApolloProvider>
+      </body>
     </html>
   );
 }
