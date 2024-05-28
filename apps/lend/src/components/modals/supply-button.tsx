@@ -15,7 +15,6 @@ import { honeyTokenAddress, lendPoolImplementationAddress } from "@bera/config";
 import {
   ApproveButton,
   FormattedNumber,
-  POLLING,
   TokenInput,
   Tooltip,
   useAnalytics,
@@ -52,6 +51,7 @@ export default function SupplyBtn({
     } ${reserve?.symbol}`,
     onSuccess: () => {
       track(`supply_${reserve?.symbol.toLowerCase()}`);
+      walletBalanceRefetch();
       userAccountRefetch();
       reservesDataRefetch();
     },
@@ -67,6 +67,7 @@ export default function SupplyBtn({
 
   const { refresh: userAccountRefetch } = usePollUserAccountData();
   const { refresh: reservesDataRefetch } = usePollReservesDataList();
+  const { refresh: walletBalanceRefetch } = usePollWalletBalances();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
