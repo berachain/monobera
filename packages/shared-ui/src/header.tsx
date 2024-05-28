@@ -20,7 +20,6 @@ const ThemeToggleMobile = dynamic(
   },
 );
 
-
 export function Header({
   navItems,
   mobileNavItems = [],
