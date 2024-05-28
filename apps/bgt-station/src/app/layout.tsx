@@ -8,7 +8,6 @@ import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { SWRDevTools } from "swr-devtools";
 import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
@@ -44,34 +43,29 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');`,
         }}
       />
-      <SWRDevTools>
-        <body
-          className={cn(
-            "min-h-screen font-sans antialiased",
-            fontSans.variable,
-          )}
-        >
-          <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
-          <Providers>
-            <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
-              <div className="z-[100]">
-                <Toaster position="bottom-right" />
-              </div>
-              <div className="z-10 flex-1">
-                <Header navItems={navItems} />
-                <main
-                  className="w-full pt-start"
-                  style={{ paddingTop: `${150 + 50 * activeBanners}px` }}
-                >
-                  {props.children}
-                </main>
-              </div>
+      <body
+        className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
+      >
+        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+        <Providers>
+          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+            <div className="z-[100]">
+              <Toaster position="bottom-right" />
             </div>
-            <TailwindIndicator />
-            <Analytics />
-          </Providers>
-        </body>
-      </SWRDevTools>
+            <div className="z-10 flex-1">
+              <Header navItems={navItems} />
+              <main
+                className="w-full pt-start"
+                style={{ paddingTop: `${150 + 50 * activeBanners}px` }}
+              >
+                {props.children}
+              </main>
+            </div>
+          </div>
+          <TailwindIndicator />
+          <Analytics />
+        </Providers>
+      </body>
     </html>
   );
 }
