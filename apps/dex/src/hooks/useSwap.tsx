@@ -275,7 +275,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     setSelectedTo(tempFrom);
 
     setFromAmount(toAmount);
-    setToAmount("");
     setSwapAmount(toAmount ?? "");
 
     if (isWrap) {
@@ -284,6 +283,9 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
       } else {
         setWrapType(WRAP_TYPE.WRAP);
       }
+      setToAmount(toAmount);
+    } else {
+      setToAmount("");
     }
   };
 
