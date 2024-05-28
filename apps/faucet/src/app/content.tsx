@@ -96,16 +96,10 @@ export default function Content() {
       {showAlet && alert === "success" && (
         <Alert variant={"success"}>
           <AlertTitle>
-            <Icons.checkCircle className="inline-block h-4 w-4 -mt-0.5" />{" "}
+            <Icons.checkCircle className="-mt-0.5 inline-block h-4 w-4" />{" "}
             Request Submitted
           </AlertTitle>
           <AlertDescription>
-            {queueSize !== null && (
-              <>
-                You are now in the queue: {queueSize}
-                <br />
-              </>
-            )}
             You’ll receive the testnet tokens in your wallet thoon. Use your
             BERA to acquire a basket of other tokens from our{" "}
             <Link
@@ -116,6 +110,12 @@ export default function Content() {
               DEX
             </Link>
             .
+            {queueSize !== null && (
+              <b>
+                <br />
+                Your position in the queue: {queueSize}
+              </b>
+            )}
           </AlertDescription>
         </Alert>
       )}
