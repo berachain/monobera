@@ -47,6 +47,7 @@ export default function WithdrawBtn({
     } ${reserve?.symbol}`,
     onSuccess: () => {
       track(`withdraw_${reserve?.symbol.toLowerCase()}`);
+      walletBalanceRefetch();
       userAccountRefetch();
       reservesDataRefetch();
     },
@@ -68,6 +69,7 @@ export default function WithdrawBtn({
 
   const { refresh: userAccountRefetch } = usePollUserAccountData();
   const { refresh: reservesDataRefetch } = usePollReservesDataList();
+  const { refresh: walletBalanceRefetch } = usePollWalletBalances();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
