@@ -48,6 +48,7 @@ export default function BorrowBtn({
     } ${reserve?.symbol}`,
     onSuccess: () => {
       track(`borrow_${reserve?.symbol.toLowerCase()}`);
+      walletBalanceRefetch();
       userAccountRefetch();
       reservesDataRefetch();
     },
@@ -60,6 +61,7 @@ export default function BorrowBtn({
 
   const { refresh: userAccountRefetch } = usePollUserAccountData();
   const { refresh: reservesDataRefetch } = usePollReservesDataList();
+  const { refresh: walletBalanceRefetch } = usePollWalletBalances();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
