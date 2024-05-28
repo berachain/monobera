@@ -40,7 +40,6 @@ export function DripToken({
             }
           }
         });
-
         observer.observe(inputElement, {
           attributes: true,
           attributeFilter: ["value"],
