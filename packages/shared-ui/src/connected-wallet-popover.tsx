@@ -7,16 +7,14 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { useReadLocalStorage } from "usehooks-ts";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 import { BGTStatusDetails, TotalBGT } from "./bgt-status";
 import { History } from "./history";
 import Identicon from "./identicon";
 import { Setting } from "./settings";
 import { TokenList } from "./token-list";
-import { formatConnectorName } from "./utils";
 import { WalletBalanceInUs } from "./wallet-balance-in-us";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 export default function ConnectedWalletPopover({
   isHoney = false,
@@ -30,8 +28,7 @@ export default function ConnectedWalletPopover({
   const [tab, setTab] = React.useState("tokens");
 
   const { account } = useBeraJs();
-  const connectorName = useReadLocalStorage<string>("wagmi.wallet");
-  const { handleLogOut } = useDynamicContext();
+  const { handleLogOut, walletConnector } = useDynamicContext();
 
   const Content = (
     <>
@@ -70,7 +67,7 @@ export default function ConnectedWalletPopover({
                   </Button>
                 </p>
                 <p className="text-xs font-medium leading-5 text-muted-foreground">
-                  {formatConnectorName(connectorName as string)}
+                  {walletConnector?.name}
                 </p>
               </div>
             </div>
