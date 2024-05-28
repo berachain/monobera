@@ -1,6 +1,5 @@
 export * from "./useTokenInformation";
 export * from "./useTokens";
-export { default as useGauges } from "./useGauges";
 export * from "./useValidatorIcon";
 export * from "./useChainId";
 export * from "./usePollAllowances";

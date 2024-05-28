@@ -135,7 +135,7 @@ export function InstrumentDropdown({
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className={`mx-2 my-1 flex w-[calc(100vw-24px)] flex-col rounded-md border border-border bg-background p-0 lg:w-[400px] ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
+        className={`mx-2 my-1 flex w-[calc(100vw-16px)] flex-col rounded-md border border-border bg-background p-0 lg:w-[400px] ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
       >
         <div className="w-full bg-muted px-4 py-2 ">
           <SearchInput

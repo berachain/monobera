@@ -16,6 +16,18 @@ const Table = React.forwardRef<
 ));
 Table.displayName = "Table";
 
+const PlainTable = React.forwardRef<
+  HTMLTableElement,
+  React.HTMLAttributes<HTMLTableElement>
+>(({ className, ...props }, ref) => (
+    <table
+      ref={ref}
+      className={cn("w-full caption-top text-sm", className)}
+      {...props}
+    />
+));
+PlainTable.displayName = "PlainTable";
+
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
@@ -109,6 +121,7 @@ const TableCaption = React.forwardRef<
 TableCaption.displayName = "TableCaption";
 
 export {
+  PlainTable,
   Table,
   TableHeader,
   TableBody,

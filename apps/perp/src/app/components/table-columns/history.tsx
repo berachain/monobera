@@ -1,24 +1,20 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DropdownFilter } from "@bera/shared-ui";
 import type { ColumnDef } from "@tanstack/react-table";
-import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { PositionTitle } from "~/app/components/position-title";
 import type { IMarketOrder, IOpenTrade } from "~/types/order-history";
 import { MarketTradePNL } from "../market-trade-pnl";
 import { PnlWithPercentage } from "../pnl-with-percentage";
+import { IMarket } from "~/types/market";
 
-export const historyColumns: ColumnDef<IMarketOrder>[] = [
+export const generateHistoryColumns = (
+  markets: IMarket[],
+): ColumnDef<IMarketOrder>[] => [
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open time"
-        className="min-w-[96px]"
-      />
-    ),
+    header: "Open time",
     cell: ({ row }) => {
       const date = new Date(Number(row.original.timestamp_open) * 1000);
 
@@ -33,15 +29,11 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
     },
     accessorKey: "timestamp_open",
     enableSorting: true,
+    minSize: 130,
+    size: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close time"
-        className="min-w-[98px]"
-      />
-    ),
+    header: "Close time",
     cell: ({ row }) => {
       const date = new Date(Number(row.original.timestamp_close) * 1000);
       return (
@@ -57,15 +49,11 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
     },
     accessorKey: "timestamp_close",
     enableSorting: true,
+    minSize: 130,
+    size: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Market / Side"
-        className="min-w-[90px]"
-      />
-    ),
+    header: "Market / Action",
     cell: ({ row }) => (
       <PositionTitle
         market={row.original.market}
@@ -75,15 +63,27 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
     ),
     accessorKey: "market",
     enableSorting: false,
+    enableColumnFilter: true,
+    meta: {
+      filter: (props: any) => {
+        return (
+          <DropdownFilter
+            {...props}
+            items={[
+              { label: "All", value: "" },
+              ...markets.map((market) => ({
+                label: market.name,
+                value: market.pair_index,
+              })),
+            ]}
+          />
+        );
+      },
+    },
+    minSize: 160,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Type"
-        className="min-w-[32px]"
-      />
-    ),
+    header: "Type",
     cell: ({ row }) => {
       return (
         <div className=" text-sm font-medium uppercase text-muted-foreground">
@@ -93,15 +93,11 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
     },
     accessorKey: "type",
     enableSorting: false,
+    minSize: 110,
+    size: 110,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open Price"
-        className="min-w-[100px]"
-      />
-    ),
+    header: "Open Price",
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
         {formatUsd(
@@ -109,26 +105,13 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
         )}
       </div>
     ),
-
     accessorKey: "open_price",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = Number(rowA.original.open_price);
-      const b = Number(rowB.original.open_price);
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    minSize: 130,
   },
 
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close Price"
-        className="min-w-[102px]"
-      />
-    ),
+    header: "Close Price",
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
         {row.original.price === "" || row.original.trade_open
@@ -140,18 +123,10 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
     ),
     accessorKey: "price",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = Number(rowA.original.price);
-      const b = Number(rowB.original.price);
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    minSize: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
-    ),
+    header: "Amount",
     cell: ({ row }) => {
       const volume = formatFromBaseUnit(
         row.original?.initial_pos_token ?? "0",
@@ -170,13 +145,7 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
     enableSorting: false,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Position Size"
-        className="min-w-[86px]"
-      />
-    ),
+    header: "Position Size",
     cell: ({ row }) => {
       return (
         <div>
@@ -189,12 +158,10 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
       );
     },
     accessorKey: "position_size",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Fees" />
-    ),
+    header: "Fees",
     cell: ({ row }) => {
       const fees = formatFromBaseUnit(
         row.original?.rollover_fee ?? "0",
@@ -210,13 +177,13 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
       );
       return <div>{formatUsd(fees.toString(10))}</div>;
     },
+    minSize: 130,
+    size: 130,
     accessorKey: "fees",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="PnL" />
-    ),
+    header: "PnL",
     cell: ({ row }) => {
       if (row.original.pnl) {
         const positionSize = formatFromBaseUnit(
@@ -236,6 +203,6 @@ export const historyColumns: ColumnDef<IMarketOrder>[] = [
       );
     },
     accessorKey: "pnl",
-    enableSorting: false,
+    enableSorting: true,
   },
 ];

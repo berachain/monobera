@@ -19,7 +19,6 @@ import {
 import {
   ApproveButton,
   FormattedNumber,
-  POLLING,
   TokenInput,
   useAnalytics,
   useTxn,
@@ -30,7 +29,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import BigNumber from "bignumber.js";
-import { formatEther, formatUnits, parseUnits } from "viem";
+import { formatEther, formatUnits } from "viem";
 
 import { getLTVColor } from "~/utils/get-ltv-color";
 
@@ -54,6 +53,7 @@ export default function RepayBtn({
     } ${reserve?.symbol}`,
     onSuccess: () => {
       track(`repay_${reserve?.symbol.toLowerCase()}`);
+      walletBalanceRefetch();
       userAccountRefetch();
       reservesDataRefetch();
     },
@@ -70,6 +70,7 @@ export default function RepayBtn({
 
   const { refresh: userAccountRefetch } = usePollUserAccountData();
   const { refresh: reservesDataRefetch } = usePollReservesDataList();
+  const { refresh: walletBalanceRefetch } = usePollWalletBalances();
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);

@@ -1,86 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { useLocalStorage } from "usehooks-ts";
 
-import { DEFAULT_MARKETS } from "~/utils/markets";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
 import MarketSelector from "./market-selector";
-
-const mockChartData = [
-  {
-    label: "Gauge 1",
-    address: "0x101f52c804C1C02c0A1D33442ecA30ecb6fB2434",
-    percentage: 0.2,
-    amount: 100,
-  },
-  {
-    label: "Gauge 2",
-    address: "0x605fD73B339b82413B862966428eD8Ac52eC4227",
-    percentage: 0.3,
-    amount: 100,
-  },
-  {
-    label: "Gauge 3",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 4",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 5",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 6",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 7",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.5,
-    amount: 100,
-  },
-  {
-    label: "Gauge 8",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-  {
-    label: "Gauge 9",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-  {
-    label: "Gauge 10",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-  {
-    label: "Gauge 11",
-    address: "0x751524E7bAdd31d018A4CAF4e4924a21b0c13CD0",
-    percentage: 0.039,
-    amount: 10,
-  },
-];
 
 const cuttingboard: CuttingBoardWeight[] = [
   {
@@ -106,6 +35,7 @@ const cuttingboard: CuttingBoardWeight[] = [
         },
       ],
       market: {
+        id: "honey",
         name: "Honey Market",
         imageUri:
           "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
@@ -136,6 +66,7 @@ const cuttingboard: CuttingBoardWeight[] = [
         },
       ],
       market: {
+        id: "honey",
         name: "Honey Market",
         imageUri:
           "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
@@ -166,6 +97,7 @@ const cuttingboard: CuttingBoardWeight[] = [
         },
       ],
       market: {
+        id: "honey",
         name: "Honey Market",
         imageUri:
           "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
@@ -177,21 +109,9 @@ const cuttingboard: CuttingBoardWeight[] = [
 
 export default function Gauge() {
   const { isConnected } = useBeraJs();
-
+  const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
-  const [markets, setMarkets] = useLocalStorage(
-    "BERA_GAUGE_MARKET",
-    DEFAULT_MARKETS,
-  );
-  const [filteredMarkets, setFilteredMarkets] = useState<string[]>([]);
-  useEffect(() => {
-    setFilteredMarkets(
-      Object.keys(markets).filter(
-        (market: string) => markets[market as keyof typeof markets].checked,
-      ),
-    );
-  }, [markets]);
 
   return (
     <div className="flex flex-col gap-12">
@@ -238,51 +158,46 @@ export default function Gauge() {
             <MarketSelector {...{ markets, setMarkets }} />
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <div className="text-sm leading-6">3 Projects filtered by:</div>
-          {filteredMarkets.map((filter, index) => (
-            <div
-              className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
-              key={`${index}-${filter}`}
-            >
-              {filter}
-              <Icons.xCircle
-                className="h-3 w-3 cursor-pointer hover:opacity-80"
-                onClick={() => {
-                  markets[filter as keyof typeof markets].checked = false;
-                  setMarkets(markets);
-                }}
-              />
-            </div>
-          ))}
-          {keywordList.map((keyW, index) => (
-            <div
-              className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
-              key={`${index}-${keyW}`}
-            >
-              {keyW}
-              <Icons.xCircle
-                className="h-3 w-3 cursor-pointer hover:opacity-80"
-                onClick={() => {
-                  setKeywordList(
-                    keywordList.filter((kw: string) => kw !== keyW),
-                  );
-                }}
-              />
-            </div>
-          ))}
-        </div>
+        {(markets.length !== 0 || keywordList.length !== 0) && (
+          <div className="flex flex-wrap gap-2">
+            <div className="text-sm leading-6">Projects filtered by:</div>
+            {markets.map((filter, index) => (
+              <div
+                className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
+                key={`${index}-${filter}`}
+              >
+                {filter}
+                <Icons.xCircle
+                  className="h-3 w-3 cursor-pointer hover:opacity-80"
+                  onClick={() =>
+                    setMarkets(markets.filter((m) => m !== filter))
+                  }
+                />
+              </div>
+            ))}
+            {keywordList.map((keyW, index) => (
+              <div
+                className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
+                key={`${index}-${keyW}`}
+              >
+                {keyW}
+                <Icons.xCircle
+                  className="h-3 w-3 cursor-pointer hover:opacity-80"
+                  onClick={() => {
+                    setKeywordList(
+                      keywordList.filter((kw: string) => kw !== keyW),
+                    );
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
         <TabsContent value="all-gauges">
-          <GlobalGaugeWeightTable
-            gaugeWeights={mockChartData}
-            keywords={keywords}
-          />
+          <GlobalGaugeWeightTable keywords={keywords} />
         </TabsContent>
         <TabsContent value="my-gauges">
-          <GlobalGaugeWeightTable
-            gaugeWeights={mockChartData}
-            keywords={keywords}
-          />
+          <GlobalGaugeWeightTable keywords={keywords} />
         </TabsContent>
       </Tabs>
     </div>

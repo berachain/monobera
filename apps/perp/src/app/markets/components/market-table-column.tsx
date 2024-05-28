@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import { formatUsd, formatter } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Skeleton } from "@bera/ui/skeleton";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -82,12 +81,10 @@ const Change = ({
 
 export const marketTableColumn: ColumnDef<IMarket>[] = [
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Market" />
-    ),
+    header: "Market",
     cell: ({ row }) => (
-      <div className="min-w-[120px]">
-        <div className={cn("flex min-w-[120px] items-center gap-2", "")}>
+      <div>
+        <div className="flex items-center gap-2">
           <Image
             src={row.original?.imageUri ?? ""}
             alt={"selectedMarket"}
@@ -110,17 +107,15 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     enableSorting: false,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Index Price" />
-    ),
+    header: "Index Price",
     cell: ({ row }) => <MarketPrice pairIndex={row.original.pair_index} />,
     accessorKey: "index_price",
     enableSorting: false,
+    size: 130,
+    minSize: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="24H Change" />
-    ),
+    header: "24h Change",
     cell: ({ row }) => {
       return (
         <Change
@@ -131,11 +126,11 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     },
     accessorKey: "dailyHistoricPrice",
     enableSorting: false,
+    size: 130,
+    minSize: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Borrow Fee" />
-    ),
+    header: "Borrow Fee",
     cell: ({ row }) => {
       const formattedBorrowingL = formatFromBaseUnit(
         row.original?.pair_borrowing_fee?.bf_long,
@@ -150,7 +145,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
         .dp(4)
         .toString(10);
       return (
-        <div className="min-w-[90px]">
+        <div>
           <div className="text-xs font-medium text-success-foreground">
             {formattedBorrowingL}% (L)
           </div>
@@ -162,11 +157,11 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     },
     accessorKey: "borrow_fee",
     enableSorting: false,
+    size: 130,
+    minSize: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Open Interest" />
-    ),
+    header: "Open Interest",
     cell: ({ row }) => {
       const formattedOIL = formatFromBaseUnit(
         row.original?.open_interest?.oi_long ?? "0",
@@ -179,7 +174,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
       ).toString(10);
 
       return (
-        <div className="min-w-[95px]">
+        <div>
           <div className="text-xs font-medium text-success-foreground">
             {formatter.format(Number(formattedOIL))} (L)
           </div>
@@ -191,32 +186,29 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     },
     accessorKey: "open_interest",
     enableSorting: false,
+    size: 130,
+    minSize: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="24h Volume" />
-    ),
+    header: "24h Volume",
     cell: ({ row }) => (
-      <div className="min-w-[110px] text-xs font-medium text-muted-foreground">
+      <div className="text-xs font-medium text-muted-foreground">
         {formatUsd(row.original.dailyVolume ?? 0)}
       </div>
     ),
     accessorKey: "dailyVolume",
     enableSorting: true,
+    minSize: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="24h Trades" />
-    ),
+    header: "24h Trades",
     cell: ({ row }) => (
-      <div className="min-w-[105px] text-xs font-medium text-muted-foreground">
+      <div className="text-xs font-medium text-muted-foreground">
         {row.original.dailyNumOfTrades ?? 0}
       </div>
     ),
     accessorKey: "dailyNumOfTrades",
     enableSorting: true,
-    sortingFn: (a, b) =>
-      Number(a.original.dailyNumOfTrades ?? "0") -
-      Number(b.original.dailyNumOfTrades ?? "0"),
+    minSize: 130,
   },
 ];

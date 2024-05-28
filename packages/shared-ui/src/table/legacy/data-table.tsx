@@ -1,11 +1,12 @@
 "use client";
-
+// @ts-nocheck
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@bera/ui";
 import { Checkbox } from "@bera/ui/checkbox";
 import _ from "lodash";
 
-import "./types/data-table.d.ts";
+import "../../types/data-table.d.ts";
+
 import {
   Table,
   TableBody,
@@ -31,8 +32,8 @@ import {
   type TableState,
 } from "@tanstack/react-table";
 
-import { usePrevious } from "./hooks";
-import { Spinner } from "./spinner";
+import { usePrevious } from "../../hooks";
+import { Spinner } from "../../spinner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,6 +48,7 @@ interface DataTableProps<TData, TValue> {
   fetchData?: (state: TableState) => Promise<void> | void;
   stateChangeFetchInclusions?: Array<keyof TableState>;
   loading?: boolean;
+  validating?: boolean;
   additionalTableProps?: Partial<TableOptions<TData>>;
   customEmptyDataState?: React.ReactElement;
   stickyHeaders?: boolean;
@@ -132,6 +134,7 @@ export function DataTable<TData, TValue>({
   fetchData,
   stateChangeFetchInclusions = defaultStateChangeFetchInclusions,
   loading = false,
+  validating = false,
   additionalTableProps,
   customEmptyDataState,
   onCustomSortingChange,
@@ -283,7 +286,14 @@ export function DataTable<TData, TValue>({
                     colSpan={columns.length + (enableSelection ? 1 : 0)}
                     className="h-24 text-center"
                   >
-                    {customEmptyDataState ?? "No results."}
+                    {" "}
+                    {loading ? (
+                      <p className="flex justify-center px-4">
+                        <Spinner size={16} color="white" />
+                      </p>
+                    ) : (
+                      customEmptyDataState ?? "No results."
+                    )}
                   </TableCell>
                 </TableRow>
               )}
@@ -301,7 +311,7 @@ export function DataTable<TData, TValue>({
             ))}
           </div>
           <div className="flex-shink-0 ml-auto flex">
-            {loading && (
+            {validating && (
               <p className="self-center px-4">
                 <Spinner size={16} color="white" />
               </p>

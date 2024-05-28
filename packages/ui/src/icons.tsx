@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ArrowUpDown,
   ArrowUpRight,
+  Biohazard,
   CalendarClock,
   CandlestickChart,
   Check,
@@ -21,7 +22,6 @@ import {
   ChevronsRight,
   ChevronsUp,
   Circle,
-  XCircle,
   ClipboardCheck,
   Clock,
   Clock8,
@@ -35,6 +35,7 @@ import {
   File,
   FileEdit,
   FileText,
+  Filter,
   Frame,
   Fuel,
   Globe,
@@ -71,6 +72,7 @@ import {
   PlusCircle,
   PlusSquare,
   Redo,
+  RefreshCcw,
   Repeat,
   Repeat2,
   Reply,
@@ -91,6 +93,7 @@ import {
   UserX,
   Wallet,
   X,
+  XCircle,
   XOctagon,
   type LucideIcon,
   type LucideProps,
@@ -102,6 +105,7 @@ import { WalletTxnIcons } from "./wallet-txn-icons";
 export type Icon = LucideIcon;
 
 export const Icons = {
+  filter: Filter,
   fileEdit: FileEdit,
   lineChart: LineChart,
   pieChart: PieChart,
@@ -197,6 +201,8 @@ export const Icons = {
   fuel: Fuel,
   globe: Globe,
   moveRight: MoveRight,
+  refreshccw: RefreshCcw,
+  biohazard: Biohazard,
   system: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
@@ -650,6 +656,99 @@ export const Icons = {
       />
     </svg>
   ),
+  gauge: (props: LucideProps) => (
+    <svg
+      width="144"
+      height="144"
+      viewBox="0 0 144 144"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M96 96L114 48L132 96C126.78 99.9 120.48 102 114 102C107.52 102 101.22 99.9 96 96Z"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12 96L30 48L48 96C42.78 99.9 36.48 102 30 102C23.52 102 17.22 99.9 12 96Z"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M42 126H102"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M72 18V126"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M18 42H30C42 42 60 36 72 30C84 36 102 42 114 42H126"
+        stroke="currentColor"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  validator: (props: LucideProps) => (
+    <svg
+      width="171"
+      height="171"
+      viewBox="0 0 171 171"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M106.875 14.25H64.125V57H106.875V14.25Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M156.75 114H114V156.75H156.75V114Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M57 114H14.25V156.75H57V114Z"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M35.625 114V85.5H135.375V114"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M85.5 85.5V57"
+        stroke="currentColor"
+        stroke-width="14.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+
   ...WalletTxnIcons,
   ...FavIcons,
 };

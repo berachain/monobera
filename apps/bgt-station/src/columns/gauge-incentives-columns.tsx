@@ -1,57 +1,43 @@
 import React from "react";
-import { formatter } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DataTableColumnHeader, FormattedNumber } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
-export interface GlobalGaugeColumns {
-  gauge: React.ReactNode;
-  incentiveAmount: number;
-  incentivePercentage: number;
-  tvl: number;
-  hide: React.ReactNode;
-}
-
-export const gauge_incentives_columns: ColumnDef<GlobalGaugeColumns>[] = [
+export const gauge_incentives_columns: ColumnDef<any>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Bribes Breakdown" />
+      <DataTableColumnHeader column={column} title="Bribe Breakdown" />
     ),
-    cell: ({ row }) => (
-      <div className="w-[250px] truncate whitespace-nowrap text-left">
-        {row.original.gauge}
-      </div>
-    ),
-    accessorKey: "gauge",
-    enableSorting: false,
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-row items-center gap-1">{row.original}</div>
+      );
+    },
+    accessorKey: "token",
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Bribe Value" />
+      <DataTableColumnHeader column={column} title="Amount Left" />
     ),
-    cell: ({ row }) => {
-      const incentiveAmount = row.original.incentiveAmount;
-      const incentivePercentage = row.original.incentivePercentage;
-      return (
-        <div className="flex w-[120px] flex-row items-center">
-          {" "}
-          {formatter.format(incentiveAmount)} (
-          {(incentivePercentage * 100).toFixed(2)}%)
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <FormattedNumber
+        value={Math.random() * 1000000}
+        compact={false}
+        symbol="BERA"
+      />
+    ),
     accessorKey: "incentiveAmount",
     enableSorting: true,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Incentives"
-        className="w-full items-center text-center"
-      />
+      <DataTableColumnHeader column={column} title="Incentives" />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
+      <Button size="sm" className="w-24">
+        Add
+      </Button>
     ),
     accessorKey: "hide",
     enableSorting: true,

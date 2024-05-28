@@ -46,6 +46,7 @@ export type ActiveIncentive = {
 };
 
 export type Market = {
+  id: string;
   name: string;
   imageUri: string;
   website: string;

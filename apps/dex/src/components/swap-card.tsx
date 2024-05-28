@@ -62,15 +62,6 @@ const Connect = dynamic(
   },
 );
 
-function extractReason(inputString: string) {
-  const regex = /reason: ([\w\s]+)/;
-  const match = inputString.match(regex);
-  if (match && match.length > 1) {
-    return match[1];
-  }
-  return null; // Return null if no match found
-}
-
 interface ISwapCard {
   inputCurrency?: Address | undefined;
   outputCurrency?: Address | undefined;
@@ -462,7 +453,7 @@ export function SwapCard({
                     selected={selectedTo}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
-                    amount={toAmount}
+                    amount={toAmount ?? "0"}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
                     disabled={true}
@@ -526,11 +517,11 @@ export function SwapCard({
                   <Alert variant="destructive">
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription className="text-xs">
-                      {extractReason(error) ?? "An error has occured."}
+                      An error has occured.
                     </AlertDescription>
                   </Alert>
                 )}
-                {hasRouteNotFoundError ? (
+                {hasRouteNotFoundError && (
                   <Alert variant="destructive">
                     <AlertTitle>
                       {" "}
@@ -541,8 +532,6 @@ export function SwapCard({
                       No route found for this swap. Please try a different pair.
                     </AlertDescription>
                   </Alert>
-                ) : (
-                  false
                 )}
                 {shouldShowGasBalanceWarning && !hasInsufficientBalanceError ? (
                   <Alert variant="warning">
