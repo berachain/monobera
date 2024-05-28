@@ -172,7 +172,9 @@ export default function HoneyTransactionsTable({
             />
           </TabsContent>
         </div>
-        <div className="mt-4 flex justify-center mb-16">{getLoadMoreButton()}</div>
+        <div className="mt-4 flex justify-center mb-16">
+          {getLoadMoreButton()}
+        </div>
       </Tabs>
     </section>
   );
