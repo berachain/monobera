@@ -5,9 +5,11 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import {
+  TXN_GAS_USED_ESTIMATES,
   TransactionActionType,
   multiswapAbi,
   useBeraJs,
+  useGasData,
   usePollWalletBalances,
   wberaAbi,
 } from "@bera/berajs";
@@ -15,6 +17,7 @@ import {
   beraTokenAddress,
   cloudinaryUrl,
   crocMultiSwapAddress,
+  nativeTokenAddress,
 } from "@bera/config";
 import {
   ActionButton,
@@ -96,6 +99,7 @@ export function SwapCard({
     payload,
     payloadValue,
     exchangeRate,
+    gasEstimateInBera,
     gasPrice,
     tokenInPrice,
     tokenOutPrice,
@@ -111,7 +115,11 @@ export function SwapCard({
 
   const { captureException, track } = useAnalytics();
 
-  const { refresh, isLoading: isBalancesLoading } = usePollWalletBalances();
+  const {
+    refresh,
+    isLoading: isBalancesLoading,
+    useSelectedWalletBalance,
+  } = usePollWalletBalances();
   const safeFromAmount =
     Number(fromAmount) > Number.MAX_SAFE_INTEGER
       ? Number.MAX_SAFE_INTEGER
@@ -126,6 +134,33 @@ export function SwapCard({
   const [exceedingBalance, setExceedingBalance] = useState(false);
 
   const [openPreview, setOpenPreview] = useState(false);
+
+  const { estimatedBeraFee } = useGasData({
+    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
+  });
+
+  // fetch user's native BERA balance
+  const nativeTokenBalanceData = useSelectedWalletBalance(nativeTokenAddress);
+  const nativeTokenBalance = nativeTokenBalanceData?.formattedBalance
+    ? parseFloat(nativeTokenBalanceData.formattedBalance)
+    : undefined;
+  // show native gas warning if user is swapping more BERA than their balance minus the padded gas estimate, which is likely to fail or leave them unable to perform additional swaps
+  const shouldShowNativeGasWarning =
+    isConnected &&
+    selectedFrom?.address === nativeTokenAddress &&
+    fromAmount &&
+    nativeTokenBalance &&
+    estimatedBeraFee &&
+    nativeTokenBalance - estimatedBeraFee > 0 &&
+    parseFloat(fromAmount) < nativeTokenBalance &&
+    parseFloat(fromAmount) > nativeTokenBalance - estimatedBeraFee;
+
+  const shouldShowGasBalanceWarning =
+    isConnected &&
+    nativeTokenBalance &&
+    estimatedBeraFee &&
+    nativeTokenBalance > 0 &&
+    nativeTokenBalance - estimatedBeraFee < 0;
 
   const { write, isLoading, ModalPortal } = useTxn({
     actionType: TransactionActionType.SWAP,
@@ -395,6 +430,7 @@ export function SwapCard({
                       setFromAmount(amount);
                     }}
                     filteredTokenTags={["supply", "debt"]}
+                    beraSafetyMargin={estimatedBeraFee}
                   />
                   <div className="relative">
                     <div
@@ -429,7 +465,8 @@ export function SwapCard({
                     difference={isWrap ? undefined : differenceUSD}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
-                    // filteredTokenTags={["supply", "debt"]}
+                    beraSafetyMargin={estimatedBeraFee}
+                    filteredTokenTags={["supply", "debt"]}
                   />
                 </ul>
                 {!!priceImpact && priceImpact < -10 && !isWrap && (
@@ -495,6 +532,40 @@ export function SwapCard({
                       No route found for this swap. Please try a different pair.
                     </AlertDescription>
                   </Alert>
+                )}
+                {shouldShowGasBalanceWarning && !hasInsufficientBalanceError ? (
+                  <Alert variant="warning">
+                    <AlertTitle>
+                      {" "}
+                      <Icons.tooltip className="mt-[-4px] inline h-4 w-4" /> Gas
+                      Warning
+                    </AlertTitle>
+                    <AlertDescription className="text-xs">
+                      Your BERA balance is running low.
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  false
+                )}
+                {shouldShowNativeGasWarning ? (
+                  <Alert variant="warning">
+                    <AlertTitle className="mb-1">
+                      {" "}
+                      <Icons.tooltip className="mr-1 mt-[-4px] inline h-4 w-4" />
+                      {"  "}
+                      BERA Swap Amount Exceeds Gas Estimates
+                    </AlertTitle>
+                    <AlertDescription className="text-xs">
+                      {`This swap is either likely to fail due to insufficient
+                      BERA left for gas, or you may be left with an insufficient
+                      amount of BERA to perform additional transactions.
+                      Consider reducing your swap amount below ${
+                        parseFloat(fromAmount) - estimatedBeraFee
+                      }.`}
+                    </AlertDescription>
+                  </Alert>
+                ) : (
+                  false
                 )}
 
                 <div className="flex flex-col gap-2">
