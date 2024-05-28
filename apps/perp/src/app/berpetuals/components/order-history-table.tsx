@@ -1,265 +1,246 @@
-import { useEffect, useMemo, useState } from "react";
-import { DataTable, usePrevious } from "@bera/shared-ui";
-import type {
-  PaginationState,
-  RowSelectionState,
-  Updater,
+"use client";
+
+import { useCallback, useContext, useEffect, useMemo } from "react";
+import {
+  SimpleTable,
+  TableFooter,
+  useAsyncTable,
+  usePrevious,
+} from "@bera/shared-ui";
+import {
+  TableState,
+  type PaginationState,
+  type RowSelectionState,
+  type Updater,
 } from "@tanstack/react-table";
 
-import { ClosePositionModal } from "~/app/components/close-position-modal";
-import { historyColumns } from "~/app/components/table-columns/history";
-import { ordersColumns } from "~/app/components/table-columns/orders";
-import { pnlColumns } from "~/app/components/table-columns/pnl";
-import { generatePositionColumns } from "~/app/components/table-columns/positions";
-import { UpdatePositionModal } from "~/app/components/update-position-modal";
-import { AsesetCardMobile } from "~/app/portfolio/components/userAssets";
+import {
+  CLOSED_TRADES_SORTING_MAP,
+  HISTORY_SORTING_MAP,
+  OPEN_ORDERS_SORTING_MAP,
+  POSITIONS_SORTING_MAP,
+} from "~/utils/constants";
+import { TableContext } from "~/context/table-context";
 import { type IMarket } from "~/types/market";
-import type {
-  IClosedTrade,
-  ILimitOrder,
-  IMarketOrder,
-  IPosition,
-} from "~/types/order-history";
-import type { TableTabTypes } from "~/types/table-tab-types";
-import { getAssetCardList } from "./asset-cards/getAssetCards";
-import { TotalAmount } from "./total-amount";
+import type { ICards } from "~/types/order-history";
+import type { FilterableTableState } from "~/types/table";
+import { AsesetCardMobile } from "../../components/asset-card-mobile";
+import { TotalAmount } from "../../components/total-amount";
 
 export function OrderHistoryTable({
-  tab,
-  openPositions,
-  openOrders,
-  history,
   markets,
   size,
-  allPositions,
-  selection,
-  setSelection,
-  pagination,
-  setPagination,
+  columns,
+  data,
+  totalPages,
+  isLoading,
+  isValidating,
+  assetCardItems,
 }: {
-  tab: TableTabTypes;
-  openPositions: IMarketOrder[];
-  openOrders: ILimitOrder[];
-  history: IClosedTrade[];
+  data: any[];
   markets: IMarket[];
+  columns: any[];
   size: "sm" | "md" | "lg";
-  allPositions: IPosition[];
-  selection: RowSelectionState;
-  setSelection: (selection: RowSelectionState) => void;
-  pagination: PaginationState;
-  setPagination: (pagination: PaginationState) => void;
+  totalPages: number;
+  isLoading: boolean;
+  isValidating: boolean;
+  assetCardItems: {
+    marketList: ICards[];
+    limitList: ICards[];
+    historyList: ICards[];
+    pnlList: ICards[];
+  };
 }) {
-  const prevPositionLength = usePrevious(openPositions?.length ?? 0);
-  const prevOrderLength = usePrevious(openOrders?.length ?? 0);
-  const [updateOpen, setUpdateOpen] = useState<boolean | IMarketOrder>(false);
-  const [deleteOpen, setDeleteOpen] = useState<boolean | IMarketOrder>(false);
-
-  const assetCardItems = useMemo(() => {
-    return getAssetCardList({
-      marketOrderItems: openPositions,
-      limitOrderItems: openOrders,
-      historyItems: history,
-      allPositions: allPositions,
-      markets,
-    });
-  }, [openPositions, openOrders, history]);
-
-  // edge case for selection when new orders are opened or closed
-  useEffect(() => {
-    if (
-      tab === "positions" &&
-      (openPositions?.length ?? 0) !== prevPositionLength
-    ) {
-      setSelection({});
-    }
-  }, [tab, openPositions]);
-
-  useEffect(() => {
-    if (tab === "orders" && (openOrders?.length ?? 0) !== prevOrderLength) {
-      setSelection({});
-    }
-  }, [tab, openOrders]);
+  const { setTableState, tableState } = useContext(TableContext);
+  const prevTableState = usePrevious(tableState);
 
   const handleRowSelectionChange = (updater: Updater<RowSelectionState>) => {
-    const newSelection = updater as RowSelectionState;
-    setSelection(newSelection);
+    setTableState((prev) => {
+      const newSelection =
+        typeof updater === "function" ? updater(prev.selection ?? {}) : updater;
+      return { ...prev, selection: { ...newSelection } };
+    });
   };
 
   const handlePaginationChange = (updater: Updater<PaginationState>) => {
-    const newPagination = updater as PaginationState;
-    setPagination(newPagination);
+    setTableState((prev) => {
+      const newPaginationState =
+        typeof updater === "function"
+          ? updater({
+              pageIndex: (prev[prev.tabType].page ?? 1) - 1,
+              pageSize: prev[prev.tabType].perPage ?? 10,
+            })
+          : updater;
+      return {
+        ...prev,
+        [prev.tabType]: {
+          ...prev[prev.tabType],
+          page: newPaginationState.pageIndex + 1,
+          perPage: newPaginationState.pageSize,
+        },
+      };
+    });
   };
 
-  // clear selection on sorting and pagination until we implement server side pagination and sorting
-  const fetchData = () => {
-    setSelection({});
-  };
+  const fetchData = useCallback(
+    async (state: TableState) => {
+      const filters: FilterableTableState = {
+        filters: undefined,
+        pairIndex: undefined,
+        sortBy: undefined,
+        sortDir: "asc",
+      };
+      // Filters
+      if (state.columnFilters.length > 0) {
+        if (
+          tableState.tabType === "positions" ||
+          tableState.tabType === "orders"
+        ) {
+          const pairIndex = state.columnFilters.find(
+            (filter) => filter.id === "assets",
+          );
+          if (pairIndex) {
+            filters.pairIndex = Number(pairIndex.value);
+          }
+        } else {
+          const pairIndex = state.columnFilters.find(
+            (filter) => filter.id === "market" || filter.id === "assets",
+          );
+          if (pairIndex) {
+            filters.filters = `pair_index=${pairIndex.value}`;
+          }
+        }
+      }
+      // Sorting
+      if (state.sorting.length > 0) {
+        const sort = state.sorting[0];
+        if (tableState.tabType === "history") {
+          filters.sortBy =
+            HISTORY_SORTING_MAP[sort.id as keyof typeof HISTORY_SORTING_MAP];
+        } else if (tableState.tabType === "positions") {
+          filters.sortBy =
+            POSITIONS_SORTING_MAP[
+              sort.id as keyof typeof POSITIONS_SORTING_MAP
+            ];
+        } else if (tableState.tabType === "orders") {
+          filters.sortBy =
+            OPEN_ORDERS_SORTING_MAP[
+              sort.id as keyof typeof OPEN_ORDERS_SORTING_MAP
+            ];
+        } else if (tableState.tabType === "pnl") {
+          filters.sortBy =
+            CLOSED_TRADES_SORTING_MAP[
+              sort.id as keyof typeof CLOSED_TRADES_SORTING_MAP
+            ];
+        }
+        filters.sortDir = sort.desc ? "desc" : "asc";
+      }
+      setTableState((prev) => ({
+        ...prev,
+        [prev.tabType]: {
+          ...prev[prev.tabType],
+          ...filters,
+        },
+      }));
+    },
+    [setTableState, tableState],
+  );
 
-  const positionsColumns = useMemo(
-    () => generatePositionColumns(markets, setUpdateOpen, setDeleteOpen),
-    [markets, setUpdateOpen, setDeleteOpen],
+  const table = useAsyncTable({
+    data: data ?? [],
+    columns: columns,
+    fetchData: fetchData,
+    enablePagination: true,
+    enableRowSelection: true,
+    additionalTableProps: {
+      state: {
+        rowSelection: tableState.selection,
+        pagination: {
+          pageIndex: (tableState[tableState.tabType]?.page ?? 1) - 1,
+          pageSize: tableState[tableState.tabType]?.perPage ?? 10,
+        },
+      },
+      manualPagination: true,
+      autoResetPageIndex: false,
+      pageCount: totalPages,
+      onPaginationChange: handlePaginationChange,
+      onRowSelectionChange: handleRowSelectionChange,
+      meta: {
+        loading: isLoading,
+        loadingText: "Loading...",
+        validating: isValidating,
+        selectVisibleRows: true,
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (prevTableState?.tabType !== tableState.tabType) {
+      table.resetSorting();
+      table.resetColumnFilters();
+    }
+  }, [prevTableState, tableState.tabType, table]);
+
+  const totalAmount = useMemo(
+    () => (
+      <TotalAmount
+        className="hidden flex-shrink-0 p-0 sm:flex"
+        markets={markets}
+        tabType={tableState.tabType ?? "positions"}
+        spacer
+      />
+    ),
+    [markets, tableState.tabType],
   );
 
   return (
     <div className="relative h-full w-full overflow-auto sm:border-t sm:border-border">
-      {tab === "positions" && (
-        <>
-          <UpdatePositionModal
-            openPosition={updateOpen as IMarketOrder}
-            controlledOpen={!!updateOpen}
-            onOpenChange={setUpdateOpen}
-          />
-          <ClosePositionModal
-            openPosition={deleteOpen as IMarketOrder}
-            controlledOpen={!!deleteOpen}
-            onOpenChange={setDeleteOpen}
-          />
-          <DataTable
-            columns={positionsColumns}
-            data={openPositions ?? []}
-            className="hidden h-full w-full overflow-auto sm:block"
-            embedded
-            enablePagination={size !== "sm"}
-            enableSelection
-            fetchData={fetchData}
-            stickyHeaders
-            additionalActions={[
-              <TotalAmount
-                className="hidden flex-shrink-0 p-0 sm:flex"
-                markets={markets}
-                tabType={tab}
-                spacer
-              />,
-            ]}
-            additionalTableProps={{
-              state: {
-                rowSelection: selection,
-                pagination: pagination,
-              },
-              manualPagination: false,
-              pageCount: Math.ceil((openPositions ?? []).length / 10),
-              onPaginationChange: handlePaginationChange,
-              onRowSelectionChange: handleRowSelectionChange,
-              autoResetPageIndex: false,
-              meta: {
-                selectVisibleRows: true,
-              },
-            }}
-          />
-        </>
-      )}
-      {tab === "orders" && (
-        <DataTable
-          columns={ordersColumns}
-          data={openOrders ?? []}
-          className="hidden h-full w-full overflow-auto sm:block"
-          embedded
-          enablePagination={size !== "sm"}
-          enableSelection
-          stickyHeaders
-          additionalActions={[
-            <TotalAmount
-              className="hidden flex-shrink-0 p-0 sm:flex"
-              markets={markets}
-              tabType={tab}
-              spacer
-            />,
-          ]}
-          additionalTableProps={{
-            state: {
-              rowSelection: selection,
-              pagination: pagination,
-            },
-            manualPagination: false,
-            pageCount: Math.ceil((openOrders ?? []).length / 10),
-            onPaginationChange: handlePaginationChange,
-            onRowSelectionChange: handleRowSelectionChange,
-            autoResetPageIndex: false,
-            meta: {
-              selectVisibleRows: true,
-            },
-          }}
-        />
-      )}
-      {tab === "history" && (
-        <DataTable
-          columns={historyColumns}
-          data={allPositions ?? []}
-          className="hidden h-full w-full overflow-auto sm:block"
-          embedded
-          stickyHeaders
-          enablePagination={size !== "sm"}
-          additionalActions={[
-            <TotalAmount
-              className="hidden flex-shrink-0 p-0 sm:flex"
-              markets={markets}
-              tabType={tab}
-              spacer
-            />,
-          ]}
-          additionalTableProps={{
-            initialState: {
-              sorting: [{ id: "open_time", desc: true }],
-            },
-            autoResetPageIndex: false,
-          }}
-        />
-      )}
-      {tab === "pnl" && (
-        <DataTable
-          columns={pnlColumns}
-          data={history ?? []}
-          className="hidden h-full w-full overflow-auto sm:block"
-          embedded
-          stickyHeaders
-          additionalActions={[
-            <TotalAmount
-              className="hidden flex-shrink-0 p-0 sm:flex"
-              markets={markets}
-              tabType={tab}
-              spacer
-            />,
-          ]}
-          enablePagination={size !== "sm"}
-          additionalTableProps={{
-            autoResetPageIndex: false,
-          }}
-        />
-      )}
+      <SimpleTable
+        table={table}
+        wrapperClassName="hidden sm:flex rounded-none"
+        flexTable
+        toolbarContent={totalAmount}
+        showSelection={false}
+      />
       {size === "sm" && (
         <div className="mx-2 flex h-[calc(100%+32px)] w-[calc(100%-16px)] flex-col gap-4">
-          {tab === "positions" && assetCardItems.marketList.length > 0 && (
-            <>
-              {assetCardItems.marketList.map((item, index) => (
-                <AsesetCardMobile card={item} key={index} />
-              ))}
-              <div />
-            </>
-          )}
-          {tab === "orders" && assetCardItems.limitList.length > 0 && (
-            <>
-              {assetCardItems.limitList.map((item, index) => (
-                <AsesetCardMobile card={item} key={index} />
-              ))}
-              <div />
-            </>
-          )}
-          {tab === "history" && assetCardItems.historyList.length > 0 && (
-            <>
-              {assetCardItems.historyList.map((item, index) => (
-                <AsesetCardMobile card={item} key={index} />
-              ))}
-              <div />
-            </>
-          )}
-          {tab === "pnl" && assetCardItems.pnlList.length > 0 && (
-            <>
-              {assetCardItems.pnlList.map((item, index) => (
-                <AsesetCardMobile card={item} key={index} />
-              ))}
-              <div />
-            </>
-          )}
+          {tableState.tabType === "positions" &&
+            assetCardItems.marketList.length > 0 && (
+              <>
+                {assetCardItems.marketList.map((item, index) => (
+                  <AsesetCardMobile card={item} key={index} />
+                ))}
+                <div />
+              </>
+            )}
+          {tableState.tabType === "orders" &&
+            assetCardItems.limitList.length > 0 && (
+              <>
+                {assetCardItems.limitList.map((item, index) => (
+                  <AsesetCardMobile card={item} key={index} />
+                ))}
+                <div />
+              </>
+            )}
+          {tableState.tabType === "history" &&
+            assetCardItems.historyList.length > 0 && (
+              <>
+                {assetCardItems.historyList.map((item, index) => (
+                  <AsesetCardMobile card={item} key={index} />
+                ))}
+                <div />
+              </>
+            )}
+          {tableState.tabType === "pnl" &&
+            assetCardItems.pnlList.length > 0 && (
+              <>
+                {assetCardItems.pnlList.map((item, index) => (
+                  <AsesetCardMobile card={item} key={index} />
+                ))}
+                <div />
+              </>
+            )}
+          <TableFooter table={table} showSelection={false} />
         </div>
       )}
     </div>

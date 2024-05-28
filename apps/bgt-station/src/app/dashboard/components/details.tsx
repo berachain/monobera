@@ -39,7 +39,10 @@ export function Details() {
         </div>
         <div className="flex w-full flex-col gap-2 sm:flex-row">
           {generalInfo.map((info, index) => (
-            <Card key={index} className="h-full flex-1 p-8 text-center">
+            <Card
+              key={`${index}-${info.text}`}
+              className="h-full flex-1 p-8 text-center"
+            >
               <div className="flex h-8 items-center justify-center whitespace-nowrap text-2xl font-semibold leading-loose text-foreground">
                 {info.amount}
               </div>

@@ -40,7 +40,7 @@ function Position({
   }, []);
 
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[name ?? ""] ?? "0";
+  const price = marketPrices[pair_index ?? ""] ?? "0";
 
   return (
     <figure

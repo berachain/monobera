@@ -18,8 +18,8 @@ import { Icons } from "@bera/ui/icons";
 
 export const navItems = [
   {
-    href: "/my-bgt",
-    title: "My BGT",
+    href: "/gauge",
+    title: "Market",
   },
   {
     href: "/validators",
@@ -30,24 +30,17 @@ export const navItems = [
     title: "Delegate",
   },
   {
-    href: "/governance",
-    title: "Governance",
+    href: "/redeem",
+    title: "Redeem",
   },
   {
-    href: "/gauge",
-    title: "Gauge",
+    href: "/rewards",
+    title: "Rewards",
   },
   {
     href: "#",
     title: "Explore",
     children: [
-      // {
-      //   href: bgtUrl,
-      //   type: "external",
-      //   title: bgtName,
-      //   blurb: "The hub for BGT governance",
-      //   icon: <Icons.bgtFav className="h-8 w-8" />,
-      // },
       {
         href: dexUrl,
         type: "external",

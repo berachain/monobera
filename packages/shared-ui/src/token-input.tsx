@@ -88,7 +88,7 @@ export function TokenInput({
       : Number(amount) ?? 0;
 
   useEffect(() => {
-    if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
+    if (safeNumberAmount > Number.MAX_SAFE_INTEGER) return;
     if (safeNumberAmount <= Number(tokenBalance)) {
       setExceeding(false);
       return;
@@ -115,7 +115,7 @@ export function TokenInput({
   const breakpoint = useBreakpoint();
 
   return (
-    <li className={"flex flex-col flex-wrap px-3"}>
+    <li className={"flex flex-col flex-wrap px-3 py-4"}>
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center gap-1">
           <SelectToken
@@ -181,8 +181,8 @@ export function TokenInput({
           />
         </div>
       </div>
-      <div className="mb-4 h-fit w-full cursor-default">
-        <div className="mt-[-10px] flex w-full flex-row-reverse items-center justify-between gap-1">
+      <div className="h-fit w-full cursor-default">
+        <div className="flex w-full flex-row-reverse items-center justify-between gap-1">
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
@@ -209,39 +209,45 @@ export function TokenInput({
                     </p>
                   </TooltipCustom>
                 )}
-                {safeNumberAmount !== 0 && (
-                  <FormattedNumber
-                    value={safeNumberAmount * price}
-                    symbol="USD"
-                    compact={false}
-                  />
-                )}
+                {safeNumberAmount !== 0 &&
+                  !Number.isNaN(safeNumberAmount * price) && (
+                    <FormattedNumber
+                      value={safeNumberAmount * price}
+                      symbol="USD"
+                      compact={false}
+                      showIsSmallerThanMin
+                    />
+                  )}
               </div>
             )}
           </div>
-          {isConnected && selected && Number(tokenBalance) !== 0 && (
-            <div className="flex flex-row items-center justify-start gap-1 px-1">
-              <Icons.wallet className="h-3 w-3 text-muted-foreground" />
-              <FormattedNumber
-                value={tokenBalance ? tokenBalance : "0"}
-                className="text-xs text-muted-foreground"
-              />
-              {!hideMax && (
-                <p
-                  className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
-                  onClick={() => {
-                    setAmount &&
-                      tokenBalance !== "" &&
-                      tokenBalance !== "0" &&
-                      !Number.isNaN(Number(tokenBalance)) &&
-                      setAmount(tokenBalance?.toString() ?? "");
-                  }}
-                >
-                  MAX
-                </p>
-              )}
-            </div>
-          )}
+          {isConnected &&
+            selected &&
+            Number(tokenBalance) !== 0 &&
+            !hideBalance && (
+              <div className="flex flex-row items-center justify-start gap-1 px-1 mt-2">
+                <Icons.wallet className="h-3 w-3 text-muted-foreground" />
+                <FormattedNumber
+                  value={tokenBalance ? tokenBalance : "0"}
+                  className="text-xs text-muted-foreground"
+                  showIsSmallerThanMin
+                />
+                {!hideMax && (
+                  <p
+                    className="cursor-pointer select-none text-xs text-muted-foreground underline hover:text-foreground"
+                    onClick={() => {
+                      setAmount &&
+                        tokenBalance !== "" &&
+                        tokenBalance !== "0" &&
+                        !Number.isNaN(Number(tokenBalance)) &&
+                        setAmount(tokenBalance?.toString() ?? "");
+                    }}
+                  >
+                    MAX
+                  </p>
+                )}
+              </div>
+            )}
         </div>
       </div>
     </li>

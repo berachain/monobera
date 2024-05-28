@@ -1,43 +1,109 @@
+import { useCallback, useContext, useMemo } from "react";
 import { tradingAbi, TransactionActionType } from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { Switch } from "@bera/ui/switch";
 import { RowSelectionState } from "@tanstack/react-table";
-import { mutate } from "swr";
 import { encodeFunctionData, type Address } from "viem";
+import type { IMarket } from "~/types/market";
 
-import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { generateMarketOrders } from "~/utils/generateMarketOrders";
 import type { CloseOrderPayload } from "~/types/order-history";
-import type { TableTabTypes } from "~/types/table-tab-types";
+import type { TableTabTypes } from "~/types/table";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
+import { usePriceData } from "~/context/price-context";
+import { TableContext, defaultTableState } from "~/context/table-context";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import type { IOpenTrade, ILimitOrder } from "~/types/order-history";
 
 export function OrderHistoryHeader({
-  headers,
-  tabType,
-  setTabType,
-  closePositionsPayload,
-  closeOrdersPayload,
-  selection,
+  markets,
 }: {
-  headers: {
-    title: string;
-    counts?: number;
-    type: string;
-  }[];
-  tabType: TableTabTypes;
-  setTabType: (type: TableTabTypes) => void;
-  closePositionsPayload: CloseOrderPayload[];
-  closeOrdersPayload: CloseOrderPayload[];
-  selection: RowSelectionState;
+  markets: IMarket[];
 }) {
-  const { QUERY_KEY } = usePollOpenPositions();
+  const { tableState, setTableState } = useContext(TableContext);
+
+  const {
+    data: openPositionsData,
+    refresh: refetchPositions,
+    total: totalPositions,
+  } = usePollOpenPositions(tableState);
+
+  const openPositions = useMemo(
+    () => generateMarketOrders(openPositionsData, markets) as IOpenTrade[],
+    [openPositionsData, markets],
+  );
+
+  const {
+    data: openLimitOrdersData,
+    refresh: refetchOrders,
+    total: totalOpenOrders,
+  } = usePollOpenLimitOrders(tableState);
+  const openOrders = useMemo(
+    () => generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[],
+    [openLimitOrdersData, markets],
+  );
+
+  const prices = usePriceData();
+
+  const headers = [
+    {
+      title: "Positions",
+      counts: totalPositions ?? 0,
+      type: "positions",
+    },
+    {
+      title: "Open Orders",
+      counts: totalOpenOrders ?? 0,
+      type: "orders",
+    },
+    {
+      title: "History",
+      type: "history",
+    },
+    {
+      title: "Realized PnL",
+      type: "pnl",
+    },
+  ];
+
+  const createCloseOrderPayload = (
+    positions: IOpenTrade[] | ILimitOrder[],
+    tableStateSelection: RowSelectionState,
+  ): CloseOrderPayload[] => {
+    return (
+      positions?.reduce<CloseOrderPayload[]>((acc, position, index) => {
+        const shouldInclude =
+          tableStateSelection && Object.keys(tableStateSelection).length !== 0
+            ? tableStateSelection[index] === true
+            : true;
+
+        if (shouldInclude) {
+          acc.push({
+            pairIndex: BigInt(position.market?.pair_index ?? 0),
+            index: BigInt(position?.index ?? 0),
+          });
+        }
+        return acc;
+      }, []) || []
+    );
+  };
+
+  const closePositionsPayload = useMemo<CloseOrderPayload[]>(() => {
+    return createCloseOrderPayload(openPositions, tableState.selection || {});
+  }, [openPositions, tableState.selection]);
+
+  const closeOrdersPayload = useMemo<CloseOrderPayload[]>(() => {
+    return createCloseOrderPayload(openOrders, tableState.selection || {});
+  }, [openOrders, tableState.selection]);
 
   const { isLoading: isClosePositionsLoading, write: writePositionsClose } =
     useOctTxn({
       message: "Closing All Open Positions",
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
-        void mutate(QUERY_KEY);
+        refetchPositions();
       },
     });
   const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
@@ -45,11 +111,32 @@ export function OrderHistoryHeader({
       message: "Closing All Open Orders",
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
-        void mutate(QUERY_KEY);
+        refetchOrders();
       },
     });
 
-  const selectionSize = Object.keys(selection).length;
+  const selectionSize = Object.keys(tableState.selection ?? {}).length;
+
+  const handleCloseAllPositions = useCallback(() => {
+    // TODO: update this to use the new multicall function when contracts are updated
+    const encodedData = closePositionsPayload.map((pos) => {
+      return encodeFunctionData({
+        abi: tradingAbi,
+        functionName: "closeTradeMarket",
+        args: [
+          pos.pairIndex,
+          pos.index,
+          generateEncodedPythPrices(prices, pos.pairIndex.toString()),
+        ],
+      });
+    });
+    writePositionsClose({
+      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      abi: tradingAbi,
+      functionName: "multicall",
+      params: [true, encodedData],
+    });
+  }, [closePositionsPayload, prices, writePositionsClose]);
 
   return (
     <div>
@@ -57,11 +144,16 @@ export function OrderHistoryHeader({
         <div className="mr-2 flex flex-1 gap-3 text-foreground sm:gap-6">
           {headers.map((header, index) => (
             <div
-              onClick={() => setTabType(header.type as TableTabTypes)}
+              onClick={() =>
+                setTableState((prev) => ({
+                  ...defaultTableState,
+                  tabType: header.type as TableTabTypes,
+                }))
+              }
               key={index}
               className={cn(
                 "flex cursor-pointer items-center gap-2",
-                tabType === header.type
+                tableState.tabType === header.type
                   ? "text-sm font-semibold"
                   : "text-xs font-medium text-muted-foreground",
               )}
@@ -69,7 +161,7 @@ export function OrderHistoryHeader({
               <div
                 className={cn(
                   "text-xs hover:underline",
-                  tabType === header.type
+                  tableState.tabType === header.type
                     ? "font-semibold"
                     : "font-medium text-muted-foreground",
                 )}
@@ -84,32 +176,18 @@ export function OrderHistoryHeader({
             </div>
           ))}
         </div>
-        {(tabType === "positions" || tabType === "orders") && (
+        {(tableState.tabType === "positions" ||
+          tableState.tabType === "orders") && (
           <div className="mt-4 block w-full border-t border-border pt-4 sm:hidden" />
         )}
-        {tabType === "positions" && (
+        {tableState.tabType === "positions" && (
           <div className="flex flex-grow-0">
             <Button
               className="h-full w-fit min-w-0 cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80"
               disabled={
                 isClosePositionsLoading || closePositionsPayload?.length === 0
               }
-              onClick={() => {
-                const encodedData = closePositionsPayload.map((pos) => {
-                  return encodeFunctionData({
-                    abi: tradingAbi,
-                    functionName: "closeTradeMarket",
-                    args: [pos.pairIndex, pos.index],
-                  });
-                });
-                writePositionsClose({
-                  address: process.env
-                    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
-                  abi: tradingAbi,
-                  functionName: "tryAggregate",
-                  params: [true, encodedData],
-                });
-              }}
+              onClick={handleCloseAllPositions}
             >
               {`🌋 Close ${selectionSize ? selectionSize : "All"} Position${
                 selectionSize && selectionSize === 1 ? "" : "s"
@@ -118,7 +196,7 @@ export function OrderHistoryHeader({
           </div>
         )}
 
-        {tabType === "orders" && (
+        {tableState.tabType === "orders" && (
           <div className="flex flex-grow-0">
             <Button
               className="h-full w-full min-w-44 cursor-pointer rounded-sm bg-destructive px-2 py-1 text-center text-sm font-semibold text-destructive-foreground hover:opacity-80 md:w-fit md:min-w-0"
@@ -137,7 +215,7 @@ export function OrderHistoryHeader({
                   address: process.env
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                   abi: tradingAbi,
-                  functionName: "tryAggregate",
+                  functionName: "multicall",
                   params: [true, encodedData],
                 });
               }}

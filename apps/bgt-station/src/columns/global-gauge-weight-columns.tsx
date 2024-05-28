@@ -1,175 +1,75 @@
 import React from "react";
-import { formatter } from "@bera/berajs";
+import { type Gauge } from "@bera/berajs";
 import { DataTableColumnHeader } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
-import { formatUnits } from "viem";
 
-export interface GlobalGaugeColumnsV2 {
-  gauge: React.ReactNode;
-  incentiveAmount: number;
-  incentivePercentage: number;
-}
+import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
-export interface GlobalGaugeColumns {
-  gauge: React.ReactNode;
-  incentiveAmount: number;
-  incentivePercentage: number;
-  tvl: number;
-  hide: React.ReactNode;
-}
-export interface UnbondingQueueColumns {
-  validator: React.ReactNode;
-  unbondingAmount: bigint;
-  timeRemaining: string;
-  hide: React.ReactNode;
-}
-
-export const global_gauge_weight_columns_v2: ColumnDef<GlobalGaugeColumnsV2>[] =
-  [
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Pool or Address" />
-      ),
-      cell: ({ row }) => (
-        <div className="truncate whitespace-nowrap text-center">
-          {row.original.gauge}
-        </div>
-      ),
-      accessorKey: "gauge",
-      enableSorting: false,
-    },
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Estimated BGT/yr"
-          className="w-full items-center justify-end text-center"
-        />
-      ),
-      cell: ({ row }) => {
-        const incentiveAmount = row.original.incentiveAmount;
-        const incentivePercentage = row.original.incentivePercentage;
-        return (
-          <div className="flex w-full flex-row items-center justify-end">
-            {" "}
-            {formatter.format(incentiveAmount)} (
-            {(incentivePercentage * 100).toFixed(2)}%)
-          </div>
-        );
-      },
-      accessorKey: "incentiveAmount",
-      enableSorting: true,
-    },
-  ];
-
-export const global_gauge_weight_columns: ColumnDef<GlobalGaugeColumns>[] = [
+export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Pool or Address" />
+      <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <div className="w-[250px] truncate whitespace-nowrap text-left">
-        {row.original.gauge}
-      </div>
+      <GaugeHeaderWidget gauge={row.original.address} className="w-[150px]" />
     ),
     accessorKey: "gauge",
     enableSorting: false,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="BGT Incentive" />
+      <DataTableColumnHeader
+        column={column}
+        title="Total Incentive Value"
+        className="whitespace-nowrap"
+      />
     ),
     cell: ({ row }) => {
-      const incentiveAmount = row.original.incentiveAmount;
-      const incentivePercentage = row.original.incentivePercentage;
       return (
         <div className="flex w-[120px] flex-row items-center">
-          {" "}
-          {formatter.format(incentiveAmount)} (
-          {(incentivePercentage * 100).toFixed(2)}%)
+          $690,490.6994
         </div>
       );
     },
-    accessorKey: "incentiveAmount",
+    accessorKey: "incentive-value",
     enableSorting: true,
   },
-  // {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="TVL" />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className="flex w-[53px] gap-1">
-  //       ${formatter.format(row.original.tvl)}
-  //     </div>
-  //   ),
-  //   accessorKey: "tvl",
-  //   enableSorting: true,
-  // },
   {
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Hide"
-        className="w-full items-center text-center"
+        title="Incentives / BGT Staked"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => <div className="flex w-full justify-center">$69.42</div>,
+    accessorKey: "bgt-staked",
+    enableSorting: true,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="BGT Inflation Capture"
+        className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">{row.original.hide}</div>
+      <div className="flex w-full justify-center">42,690.69 BGT</div>
     ),
-    accessorKey: "hide",
-    enableSorting: false,
-  },
-];
-
-// deprecated
-export const unbonding_queue_columns: ColumnDef<UnbondingQueueColumns>[] = [
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Validator" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="w-[150px] text-left">{row.original.validator}</div>
-      );
-    },
-    accessorKey: "validator",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="BGT Unbonding" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="w-[100px]">
-          {formatter.format(
-            Number(formatUnits(row.original.unbondingAmount, 18)),
-          )}{" "}
-          BGT
-        </div>
-      );
-    },
-    accessorKey: "unbondingAmount",
+    accessorKey: "bgt-inflation",
     enableSorting: true,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Time Remaining" />
+      <DataTableColumnHeader
+        column={column}
+        title="Validtors Pointing Emissions"
+        className="whitespace-nowrap"
+      />
     ),
-    cell: ({ row }) => {
-      return <div className="w-[120px]">{row.original.timeRemaining}</div>;
-    },
-    accessorKey: "timeRemaining",
+    cell: ({ row }) => <div className="flex w-full justify-center">ha</div>,
+    accessorKey: "validators-emissions",
     enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Cancel" />
-    ),
-    cell: ({ row }) => {
-      return row.original.hide;
-    },
-    accessorKey: "hide",
-    enableSorting: false,
   },
 ];

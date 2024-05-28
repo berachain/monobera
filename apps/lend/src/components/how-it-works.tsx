@@ -53,7 +53,7 @@ export default function HowItWorks() {
             <Link href={bgtUrl} target="_blank" className="underline">
               Stake your BGT at BGT Station
             </Link>{" "}
-            to earn additional bribes.
+            to earn additional incentives.
           </p>
         </div>
       </div>

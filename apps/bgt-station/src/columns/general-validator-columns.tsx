@@ -2,132 +2,141 @@ import React from "react";
 import {
   DataTableColumnHeader,
   TokenIconList,
+  Tooltip,
   ValidatorIcon,
   bribeApyTooltipText,
+  FormattedNumber,
 } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
-import { formatCommission } from "~/utils/formatCommission";
 import { VP } from "~/components/validator-selector";
-import { ValidatorGauge } from "~/app/validators/validators-table";
+import {
+  type CuttingBoardWeight,
+  type Validator,
+  type UserValidator,
+} from "@bera/berajs";
+import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
+import { ValidatorBribesPopover } from "~/components/bribes-tooltip";
 
-export const general_validator_columns: ColumnDef<any>[] = [
-  // {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Rank" />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const rank = row.original.rank;
-  //     return (
-  //       <div className="flex h-full items-center justify-center">{rank}</div>
-  //     );
-  //   },
-  //   accessorKey: "delegate",
-  //   enableSorting: false,
-  // },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Validator" />
-    ),
-    cell: ({ row }) => {
-      const moniker = row.original.description.moniker;
+const VALIDATOR_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Validator" />
+  ),
+  cell: ({ row }) => {
+    const moniker = row.original.name;
 
-      return (
-        <div className="flex items-center gap-2">
-          <ValidatorIcon
-            address={row.original.operatorAddr as Address}
-            description={row.original.description?.identity ?? undefined}
-            className="h-8 w-8"
-          />
-          {moniker}{" "}
-        </div>
-      );
-    },
-    accessorKey: "description",
-    enableSorting: true,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Voting Power" />
-    ),
-    cell: ({ row }) => (
-      <VP
-        operatorAddr={row.original.operatorAddr}
-        tokens={row.original.tokens}
-      />
-    ),
-    accessorKey: "tokens",
-    enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.tokens ?? 0;
-      const b = rowB.original.tokens ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Commission" />
-    ),
-    cell: ({ row }) => {
-      const commission = row.original.commission.commissionRates.rate;
-      return (
-        <div className="flex h-full w-[91px] items-center">
-          {" "}
-          {formatCommission(commission)}%
-        </div>
-      );
-    },
-    accessorKey: "commission",
-    enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.commission.commissionRates.rate ?? 0;
-      const b = rowB.original.commission.commissionRates.rate ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="vApy"
-        tooltip={bribeApyTooltipText()}
-      />
-    ),
-    cell: ({ row }) => (
-      <div className="flex h-full w-[91px] items-center">
-        {" "}
-        {Number(row.original.vApy ?? 0).toFixed(2)}%
+    return (
+      <div className="flex items-center gap-2">
+        <ValidatorIcon
+          address={row.original.coinbase as Address}
+          className="h-8 w-8"
+        />
+        {moniker}{" "}
       </div>
-    ),
-    accessorKey: "vApy",
-    enableSorting: true,
+    );
   },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
-    ),
-    cell: ({ row }) => <ValidatorGauge address={row.original.operatorAddr} />,
-    accessorKey: "mostWeightedGauge",
-    enableSorting: false,
+  accessorKey: "description",
+  enableSorting: true,
+};
+
+const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Voting Power" />
+  ),
+  cell: ({ row }) => (
+    <VP
+      coinbase={row.original.coinbase}
+      amountStaked={row.original.amountStaked}
+    />
+  ),
+  accessorKey: "amountStaked",
+};
+
+const COMMISSION_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Commission" />
+  ),
+  cell: ({ row }) => {
+    const commission = row.original.commission;
+    return (
+      <div className="flex h-full w-[91px] items-center"> {commission}%</div>
+    );
   },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Bribes" />
-    ),
-    cell: ({ row }) => {
-      const tokens = row.original.bribeTokenList;
-      return tokens.length !== 0 ? (
-        <TokenIconList tokenList={[]} size="lg" showCount={3} />
-      ) : (
-        <p>no bribes</p>
-      );
-    },
-    accessorKey: "bribes",
-    enableSorting: false,
+  accessorKey: "commission",
+};
+
+const APY_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader
+      column={column}
+      title="vApy"
+      tooltip={bribeApyTooltipText()}
+    />
+  ),
+  cell: ({ row }) => (
+    <div className="flex h-full w-[91px] items-center">
+      {" "}
+      {Number(row.original.apy ?? 0).toFixed(2)}%
+    </div>
+  ),
+  accessorKey: "vApy",
+  enableSorting: true,
+};
+
+const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
+  ),
+  cell: ({ row }) => {
+    const cuttingBoards: CuttingBoardWeight[] = row.original.cuttingboard;
+
+    const mostWeightedCuttingBoard = cuttingBoards.sort(
+      (a, b) => a.percentage - b.percentage,
+    )[0];
+    // console.log(mostWeightedCuttingBoard);
+    return <CuttingBoardDisplay cuttingBoard={mostWeightedCuttingBoard} />;
   },
+  accessorKey: "mostWeightedGauge",
+  enableSorting: false,
+};
+
+const BRIBES_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Incentives" />
+  ),
+  cell: ({ row }) => {
+    return <ValidatorBribesPopover validator={row.original} />;
+  },
+  accessorKey: "bribes",
+  enableSorting: false,
+};
+
+const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="User Staked" />
+  ),
+  cell: ({ row }) => {
+    return <FormattedNumber value={Math.random() * 1000000} symbol="BGT" />;
+  },
+  accessorKey: "userStaked",
+  enableSorting: true,
+};
+
+export const general_validator_columns: ColumnDef<UserValidator>[] = [
+  VALIDATOR_COLUMN,
+  GLOBAL_VOTING_POWER_COLUMN,
+  COMMISSION_COLUMN,
+  APY_COLUMN,
+  MOST_WEIGHTED_GAUGE_COLUMN,
+  BRIBES_COLUMN,
+];
+
+export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
+  VALIDATOR_COLUMN,
+  USER_STAKED_COLUMN,
+  GLOBAL_VOTING_POWER_COLUMN,
+  COMMISSION_COLUMN,
+  APY_COLUMN,
+  BRIBES_COLUMN,
 ];

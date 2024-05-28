@@ -1,182 +1,226 @@
-import { useEffect, useMemo, useState } from "react";
-import type { PaginationState, RowSelectionState } from "@tanstack/react-table";
+"use client";
 
-import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { getPnl } from "~/hooks/useCalculatePnl";
-import { usePollOpenOrders } from "~/hooks/usePollOpenOrders";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { useBeraJs } from "@bera/berajs";
+import { usePrevious } from "@bera/shared-ui";
+import { ColumnDef } from "@tanstack/react-table";
+
+import { generateMarketOrders } from "~/utils/generateMarketOrders";
+import { ClosePositionModal } from "~/app/components/close-position-modal";
+import { generateHistoryColumns } from "~/app/components/table-columns/history";
+import { generateOrdersColumns } from "~/app/components/table-columns/orders";
+import { generatePnlColumns } from "~/app/components/table-columns/pnl";
+import { generatePositionColumns } from "~/app/components/table-columns/positions";
+import { UpdatePositionModal } from "~/app/components/update-position-modal";
+import { TableContext } from "~/context/table-context";
+import { usePollClosedTrades } from "~/hooks/usePollClosedTrades";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { usePollTradingHistory } from "~/hooks/usePollTradingHistory";
-import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
-import type { CloseOrderPayload } from "~/types/order-history";
-import type { TableTabTypes } from "~/types/table-tab-types";
+import type {
+  IClosedTrade,
+  ILimitOrder,
+  IMarketOrder,
+  IOpenTrade,
+} from "~/types/order-history";
+import { getAssetCardList } from "./asset-cards/getAssetCards";
 import { OrderHistoryHeader } from "./order-history-header";
 import { OrderHistoryTable } from "./order-history-table";
-import { TotalAmount } from "./total-amount";
+import { TotalAmount } from "../../components/total-amount";
 
 export function OrderHistory({
   markets,
-  tabType,
-  setTabType,
-  selection,
-  setSelection,
-  pagination,
-  setPagination,
   size,
 }: {
   markets: IMarket[];
-  tabType: TableTabTypes;
-  setTabType: (tab: TableTabTypes) => void;
-  selection: RowSelectionState;
-  setSelection: (selection: RowSelectionState) => void;
-  pagination: PaginationState;
-  setPagination: (pagination: PaginationState) => void;
   size: "sm" | "md" | "lg";
 }) {
-  const { useMarketOpenPositions } = usePollOpenPositions();
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
 
-  const { useMarketClosedPositions } = usePollTradingHistory();
+  const { tableState, setTableState } = useContext(TableContext);
+  const { isConnected } = useBeraJs();
 
-  const { useMarketOpenOrders } = usePollOpenOrders();
+  // data fetching
+  const {
+    data: openPositionData,
+    pagination: openPositionsPagination,
+    isLoading: isPositionsLoading,
+    isValidating: isPositionsValidating,
+  } = usePollOpenPositions(tableState);
+  const {
+    data: openOrdersData,
+    pagination: openOrdersPagination,
+    isLoading: isOpenOrdersLoading,
+    isValidating: isOpenOrdersValidation,
+  } = usePollOpenLimitOrders(tableState);
+  const {
+    data: marketOrdersData,
+    pagination: marketOrdersPagination,
+    isLoading: isMarketOrdersLoading,
+    isValidating: isMarketOrdersValidation,
+  } = usePollMarketOrders(tableState);
+  const {
+    data: closedTradesData,
+    pagination: closedTradesPagination,
+    isLoading: isClosedTradesLoading,
+    isValidating: isClosedTradesValidation,
+  } = usePollClosedTrades(tableState);
 
-  const { marketPrices } = usePollPrices();
+  const openMarketPositions = useMemo(
+    () => generateMarketOrders(openPositionData, markets) ?? [],
+    [markets, openPositionData],
+  );
+  const openMarketOrders = useMemo(
+    () => generateMarketOrders(openOrdersData, markets) ?? [],
+    [markets, openOrdersData],
+  );
+  const marketOrders = useMemo(
+    () => generateMarketOrders(marketOrdersData, markets) ?? [],
+    [markets, marketOrdersData],
+  );
+  const closedMarketTrades = useMemo(
+    () => generateMarketOrders(closedTradesData, markets) ?? [],
+    [markets, closedTradesData],
+  );
 
-  const openPositions = useMarketOpenPositions(markets);
-
-  const closedPositions = useMarketClosedPositions(markets);
-
-  const openOrders = useMarketOpenOrders(markets);
-
-  const headers = [
-    {
-      title: "Positions",
-      counts: openPositions?.length ?? 0,
-      type: "positions",
-    },
-    {
-      title: "Open Orders",
-      counts: openOrders?.length ?? 0,
-      type: "orders",
-    },
-    {
-      title: "History",
-      type: "history",
-    },
-    {
-      title: "Realized PnL",
-      type: "pnl",
-    },
-  ];
-
-  const closePositionsPayload = useMemo(() => {
-    return openPositions?.reduce<CloseOrderPayload[]>(
-      (acc, position, index) => {
-        if (selection && Object.keys(selection).length !== 0) {
-          if (selection[index] === true) {
-            acc.push({
-              pairIndex: BigInt(position.market.pair_index),
-              index: BigInt(position.index),
-            });
-          }
-        } else {
-          acc.push({
-            pairIndex: BigInt(position.market.pair_index),
-            index: BigInt(position.index),
-          });
-        }
-        return acc;
-      },
-      [],
-    );
-  }, [openPositions, selection]);
-
-  const closeOrdersPayload = useMemo(() => {
-    return openOrders?.reduce<CloseOrderPayload[]>((acc, position, index) => {
-      if (selection && Object.keys(selection).length !== 0) {
-        if (selection[index] === true) {
-          acc.push({
-            pairIndex: BigInt(position.market.pair_index),
-            index: BigInt(position.index),
-          });
-        }
-      } else {
-        acc.push({
-          pairIndex: BigInt(position.market.pair_index),
-          index: BigInt(position.index),
-        });
-      }
-      return acc;
-    }, []);
-  }, [openOrders, selection]);
-
-  const allPositions = useMemo(() => {
-    // performance errors can occur if too many positions
-    if (openPositions === undefined || closedPositions === undefined) {
-      return [];
+  // edge case for selection when new orders are opened or closed
+  const prevPositionLength = usePrevious(openPositionData?.length ?? 0);
+  useEffect(() => {
+    if (
+      tableState.tabType === "positions" &&
+      (openPositionData?.length ?? 0) !== prevPositionLength
+    ) {
+      setTableState((prev) => ({ ...prev, selection: {} }));
     }
-    const positions = openPositions?.map((position) => {
-      const price = marketPrices[position?.market?.name ?? ""] ?? "0";
-      const estPnl = getPnl({
-        currentPrice: price,
-        openPosition: position,
-      });
+  }, [tableState.tabType, openPositionData, setTableState]);
+  const prevOrderLength = usePrevious(openOrdersData?.length ?? 0);
+  useEffect(() => {
+    if (
+      tableState.tabType === "orders" &&
+      (openOrdersData?.length ?? 0) !== prevOrderLength
+    ) {
+      setTableState((prev) => ({ ...prev, selection: {} }));
+    }
+  }, [tableState.tabType, openOrdersData]);
 
-      return {
-        ...position,
-        open_time: position?.timestamp_open,
-        close_time: "",
-        close_price: "",
-        close_type: "",
-        borrowing_fee: formatFromBaseUnit(
-          position.borrowing_fee ?? "0",
-          18,
-        ).toString(10),
-        closing_fee: formatFromBaseUnit(
-          position.closing_fee ?? "0",
-          18,
-        ).toString(10),
-        funding_rate: formatFromBaseUnit(
-          position.funding_rate ?? "0",
-          18,
-        ).toString(10),
-        open_fee: formatFromBaseUnit(position.open_fee ?? "0", 18).toString(10),
-        volume: formatFromBaseUnit(position.position_size ?? "0", 18)
-          .times(position.leverage ?? "1")
-          .toString(10),
-        pnl: estPnl && !estPnl.isNaN() ? estPnl.toString(10) : "0",
-      };
+  // props generation
+  const tableProps = useMemo(() => {
+    let data: (IOpenTrade | ILimitOrder | IMarketOrder | IClosedTrade)[] = [];
+    let columns:
+      | ColumnDef<IOpenTrade>[]
+      | ColumnDef<ILimitOrder>[]
+      | ColumnDef<IMarketOrder>[]
+      | ColumnDef<IClosedTrade>[] = [];
+    let totalPages = 1;
+    let isLoading = false;
+    let isValidating = false;
+
+    switch (tableState.tabType) {
+      case "positions":
+        data = openMarketPositions;
+        columns = markets
+          ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
+          : [];
+        totalPages = openPositionsPagination?.total_pages ?? 1;
+        isLoading = isPositionsLoading || !isConnected;
+        isValidating = isPositionsValidating;
+        break;
+      case "orders":
+        data = openMarketOrders;
+        columns = markets ? generateOrdersColumns(markets) : [];
+        totalPages = openOrdersPagination?.total_pages ?? 1;
+        isLoading = isOpenOrdersLoading || !isConnected;
+        isValidating = isOpenOrdersValidation;
+        break;
+      case "history":
+        data = marketOrders;
+        columns = markets ? generateHistoryColumns(markets) : [];
+        totalPages = marketOrdersPagination?.total_pages ?? 1;
+        isLoading = isMarketOrdersLoading || !isConnected;
+        isValidating = isMarketOrdersValidation;
+        break;
+      case "pnl":
+        data = closedMarketTrades;
+        columns = markets ? generatePnlColumns(markets) : [];
+        totalPages = closedTradesPagination?.total_pages ?? 1;
+        isLoading = isClosedTradesLoading || !isConnected;
+        isValidating = isClosedTradesValidation;
+        break;
+      default:
+        data = [];
+        columns = [];
+        totalPages = 1;
+        isLoading = false;
+        isValidating = false;
+    }
+
+    return {
+      data,
+      columns,
+      totalPages,
+      isLoading,
+      isValidating,
+    };
+  }, [
+    tableState.tabType,
+    openMarketPositions,
+    openPositionsPagination,
+    isPositionsLoading,
+    isPositionsValidating,
+    openMarketOrders,
+    openOrdersPagination,
+    isOpenOrdersLoading,
+    isOpenOrdersValidation,
+    marketOrders,
+    marketOrdersPagination,
+    isMarketOrdersLoading,
+    isMarketOrdersValidation,
+    closedMarketTrades,
+    closedTradesPagination,
+    isClosedTradesLoading,
+    isClosedTradesValidation,
+    isConnected,
+  ]);
+
+  const assetCardItems = useMemo(() => {
+    return getAssetCardList({
+      openPositionsItems: openMarketPositions as IOpenTrade[],
+      openOrderItems: openMarketOrders as ILimitOrder[],
+      marketOrdersItems: marketOrders as IMarketOrder[],
+      closedTradesItems: closedMarketTrades as IClosedTrade[],
+      markets,
     });
-    const orders = [...positions, ...closedPositions];
-    // sort the orders by open time on mobile cards
-    if (size === "sm" && tabType === "history") {
-      orders.sort((a, b) => Number(b.open_time) - Number(a.open_time));
-    }
-    return orders;
-  }, [openPositions, marketPrices, closedPositions, size, tabType]);
+  }, [
+    openMarketPositions,
+    openMarketOrders,
+    marketOrders,
+    closedMarketTrades,
+    markets,
+  ]);
 
   return (
     <div className="mx-2 mb-10 flex h-full w-[calc(100%-16px)] flex-col overflow-auto rounded-md border border-border lg:mb-2 lg:ml-0 lg:w-[calc(100%-8px)]">
-      <OrderHistoryHeader
-        closePositionsPayload={closePositionsPayload}
-        closeOrdersPayload={closeOrdersPayload}
-        selection={selection}
-        {...{ headers, tabType, setTabType }}
-      />
+      <OrderHistoryHeader markets={markets} />
       <TotalAmount
         className="flex sm:hidden"
         markets={markets}
-        tabType={tabType}
+        tabType={tableState.tabType ?? "positions"}
+      />
+      <UpdatePositionModal
+        openPosition={updateOpen as IOpenTrade}
+        controlledOpen={!!updateOpen}
+        onOpenChange={setUpdateOpen}
+      />
+      <ClosePositionModal
+        openPosition={deleteOpen as IOpenTrade}
+        controlledOpen={!!deleteOpen}
+        onOpenChange={setDeleteOpen}
       />
       <OrderHistoryTable
-        tab={tabType}
-        selection={selection}
-        setSelection={setSelection}
-        pagination={pagination}
-        setPagination={setPagination}
-        openPositions={openPositions}
-        openOrders={openOrders}
-        allPositions={allPositions}
-        history={closedPositions}
+        {...tableProps}
+        assetCardItems={assetCardItems}
         markets={markets}
         size={size}
       />

@@ -3,7 +3,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useBeraJs } from "@bera/berajs";
 import { faucetUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
@@ -15,14 +14,6 @@ import { MobileDropdown } from "./mobile-nav";
 
 const ThemeToggleMobile = dynamic(
   () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
-  {
-    ssr: false,
-    loading: () => <> </>,
-  },
-);
-
-const BGTStatusBtn = dynamic(
-  () => import("./bgt-status").then((mod) => mod.BGTStatusBtn),
   {
     ssr: false,
     loading: () => <> </>,
@@ -44,7 +35,6 @@ export function Header({
   hideTheme?: boolean;
   appName?: string;
 }) {
-  const { isReady } = useBeraJs();
   return (
     <nav
       className={cn(
@@ -63,7 +53,6 @@ export function Header({
 
         <div className="flex h-full items-center gap-2 xl:gap-2">
           {!hideTheme && <ThemeToggleMobile />}
-          {/* {isReady && <BGTStatusBtn />} */}
           <Link
             className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-md sm:flex"
             href={faucetUrl ?? ""}

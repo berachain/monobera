@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   truncateHash,
   useBeraJs,
@@ -13,7 +15,13 @@ import {
   type PoolV2,
 } from "@bera/berajs";
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
-import { ApyTooltip, FormattedNumber, TokenIcon } from "@bera/shared-ui";
+import {
+  ApyTooltip,
+  FormattedNumber,
+  PoolHeader,
+  TokenIcon,
+  TokenIconList,
+} from "@bera/shared-ui";
 import { truncateFloat } from "@bera/shared-ui/src/utils";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -31,7 +39,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
-import PoolHeader from "~/app/components/pool-header";
+import {
+  getPoolAddLiquidityUrl,
+  getPoolWithdrawUrl,
+} from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 
@@ -336,8 +347,6 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     }
   };
 
-  // const { isSmall, numericValue: formattedBGTRewards } =
-  //   formatAmountSmall(bgtRewards);
   const { isReady, isConnected, isWrongNetwork } = useBeraJs();
 
   const { data: userPositionBreakdown, isLoading: isPositionBreakdownLoading } =
@@ -355,9 +364,61 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     ? new Date(parseInt(poolHistoryData?.info.timeCreate))
     : null;
 
+  const params = useSearchParams();
+  const isMyPool = params.get("back") && params.get("back") === "my-pools";
+
   return (
     <div className="flex flex-col gap-8">
-      <PoolHeader pool={pool} />
+      <PoolHeader
+        back={{
+          backURL: isMyPool ? "/pools?pool=userPools" : "/pools",
+          backTitle: isMyPool ? "My Pools" : "All Pools",
+        }}
+        title={
+          <>
+            <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
+            {pool?.poolName}
+          </>
+        }
+        subtitles={[
+          {
+            title: "APY",
+            content: <>{pool?.totalApy?.toFixed(2)}%</>,
+            color: "success",
+          },
+          {
+            title: "BGT Rewards",
+            content: <>{pool?.bgtApy?.toFixed(2)}%</>,
+            color: "warning",
+          },
+          {
+            title: "Fee",
+            content: <>{pool.feeRate.toFixed(2)}%</>,
+            color: "success",
+          },
+          {
+            title: "Pool Contract",
+            content: <>{truncateHash(pool?.shareAddress ?? "")}</>,
+            externalLink: `${blockExplorerUrl}/address/${pool?.shareAddress}`,
+          },
+        ]}
+        actions={
+          <>
+            <Link href={getPoolAddLiquidityUrl(pool)} target="_self">
+              <Button variant="outline">
+                <Icons.add />
+                <span className="ml-1">Add</span>
+              </Button>
+            </Link>
+            <Link href={getPoolWithdrawUrl(pool)} target="_self">
+              <Button variant="outline">
+                <Icons.subtract />
+                <span className="ml-1">Withdraw</span>
+              </Button>
+            </Link>
+          </>
+        }
+      />
 
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">

@@ -45,7 +45,6 @@ export default function ValidatorCard({
       <div className="flex flex-col items-center justify-center gap-1 p-6 pb-4">
         <ValidatorIcon
           address={validator.operatorAddr as Address}
-          description={validator?.description?.identity ?? undefined}
           className="h-12 w-12"
         />
         <div className="flex h-12 w-full items-center justify-center font-medium text-muted-foreground">
@@ -55,7 +54,7 @@ export default function ValidatorCard({
         </div>
         {!validator.bribeTokenList || validator.bribeTokenList.length === 0 ? (
           <div className="h-8 font-medium text-muted-foreground">
-            ~ No bribes ~
+            ~ No incentives ~
           </div>
         ) : (
           <TokenIconList tokenList={[]} size="xl" />
@@ -82,7 +81,7 @@ export default function ValidatorCard({
           </div>
         </div>
         {info.slice(1).map((data, index) => (
-          <div key={index} className=" flex justify-between">
+          <div key={`${index}-${data.text}`} className=" flex justify-between">
             <div className="text-sm font-medium text-muted-foreground">
               {data.text}
             </div>

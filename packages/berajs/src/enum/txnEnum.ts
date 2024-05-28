@@ -17,8 +17,8 @@ export enum TransactionActionType {
   CANCEL_PROPOSAL = "Cancel Proposal",
   VOTE = "Vote",
 
-  CREATE_BRIBE = "Create Bribe",
-  CLAIMING_BRIBES = "Claiming Bribes", // claiming others
+  CREATE_BRIBE = "Create Incentive",
+  CLAIMING_BRIBES = "Claiming Incentives", // claiming others
   CLAIMING_REWARDS = "Claiming BGT",
 
   REDEEM_BERA = "Redeem BERA",

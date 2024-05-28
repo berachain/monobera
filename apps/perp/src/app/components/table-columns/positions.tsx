@@ -1,6 +1,5 @@
-import React, { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader, Tooltip } from "@bera/shared-ui";
+import { DropdownFilter } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -10,15 +9,14 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { EST_PNL_TOOLTIP_TEXT, TPSL_TOOLTIP_TEXT } from "~/utils/tooltip-text";
 import { PositionTitle } from "~/app/components/position-title";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
-import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
-import type { IMarketOrder } from "~/types/order-history";
-import { PnLRowHoverState } from "../../berpetuals/components/pnl-row-hover-state";
+import type { IOpenTrade } from "~/types/order-history";
+import { MarketTradePNL } from "../market-trade-pnl";
 
-const MarkPrice = ({ position }: { position: IMarketOrder }) => {
+const MarkPrice = ({ position }: { position: IOpenTrade }) => {
   const { marketPrices } = usePollPrices();
-  const price = marketPrices[position?.market?.name ?? ""] ?? "0";
+  const price = marketPrices[position?.market?.pair_index ?? ""] ?? "0";
 
   return (
     <div>
@@ -36,7 +34,7 @@ export const PositionLiquidationPrice = ({
   className,
   markets,
 }: {
-  position: IMarketOrder;
+  position: IOpenTrade;
   className?: string;
   markets: IMarket[];
 }) => {
@@ -78,95 +76,14 @@ export const PositionLiquidationPrice = ({
   );
 };
 
-export const ActivePositionPNL = ({
-  position,
-  className,
-  wrapped,
-}: {
-  position: IMarketOrder;
-  className?: string;
-  wrapped?: boolean;
-}) => {
-  const { marketPrices } = usePollPrices();
-  const price = marketPrices[position?.market?.name ?? ""] ?? "0";
-
-  const pnl = useCalculatePnl({
-    currentPrice: price,
-    openPosition: position,
-  });
-
-  const percentage = useMemo(() => {
-    if (!pnl || !position) return "0";
-    const positionSizeBN = formatFromBaseUnit(position.position_size, 18);
-    const currentSize = positionSizeBN.plus(pnl);
-    const percentage = currentSize
-      .minus(positionSizeBN)
-      .div(positionSizeBN)
-      .times(100);
-    return percentage.isFinite() ? percentage.dp(2).toString(10) : "-";
-  }, [pnl, position]);
-
-  const initialCollateral = formatFromBaseUnit(position.position_size, 18)
-    .plus(formatFromBaseUnit(position.open_fee, 18))
-    .toString(10);
-  const borrowFee = formatFromBaseUnit(position.borrowing_fee, 18).toString(10);
-  const closeFee = formatFromBaseUnit(position.closing_fee, 18).toString(10);
-  const openFee = formatFromBaseUnit(position.open_fee, 18).toString(10);
-
-  return (
-    <div className={cn("", className)}>
-      {pnl !== undefined ? (
-        <div>
-          <div
-            className={cn(
-              " flex flex-col items-start",
-              Number(pnl) > 0
-                ? "text-success-foreground"
-                : "text-destructive-foreground",
-              wrapped && "flex-row gap-1",
-            )}
-          >
-            <Tooltip
-              toolTipTrigger={
-                <div className="cursor-help underline decoration-dashed">
-                  {formatUsd(pnl)}
-                </div>
-              }
-              children={
-                <PnLRowHoverState
-                  initialCollateral={initialCollateral}
-                  pnlAfterFees={pnl}
-                  borrowFee={borrowFee}
-                  closeFee={closeFee}
-                  openFee={openFee}
-                />
-              }
-            />
-            {wrapped && <div className="text-xs"> | </div>}
-            <div className="text-xs">({percentage}%)</div>
-          </div>
-        </div>
-      ) : (
-        <Skeleton className={cn("h-[28px] w-[80px]", className)} />
-      )}
-    </div>
-  );
-};
-
 export const generatePositionColumns = (
   markets: IMarket[],
-  setUpdateOpen: (state: boolean | IMarketOrder) => void,
-  setDeleteOpen: (state: boolean | IMarketOrder) => void,
+  setUpdateOpen: (state: boolean | IOpenTrade) => void,
+  setDeleteOpen: (state: boolean | IOpenTrade) => void,
 ) => {
-  const positionsColumns: ColumnDef<IMarketOrder>[] = [
+  const positionsColumns: ColumnDef<IOpenTrade>[] = [
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Market / Slide"
-          className="min-w-[94px]"
-        />
-      ),
+      header: "Market / Action",
       cell: ({ row }) => (
         <PositionTitle
           market={row.original.market}
@@ -176,26 +93,39 @@ export const generatePositionColumns = (
       ),
       accessorKey: "assets",
       enableSorting: false,
+      enableColumnFilter: true,
+      meta: {
+        filter: (props: any) => {
+          return (
+            <DropdownFilter
+              {...props}
+              items={[
+                { label: "All", value: "" },
+                ...markets.map((market) => ({
+                  label: market.name,
+                  value: market.pair_index,
+                })),
+              ]}
+            />
+          );
+        },
+      },
+      minSize: 160,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Position Size"
-          className="min-w-[86px]"
-        />
-      ),
+      header: "Position Size",
       cell: ({ row }) => {
         const positionSize = formatFromBaseUnit(
           row.original.position_size,
           18,
         ).times(row.original.leverage ?? "1");
         const openPrice = formatFromBaseUnit(row.original.open_price, 10);
-        const size = positionSize.div(openPrice).dp(4).toString(10);
+        const size = positionSize.div(openPrice).dp(4);
+
         return (
-          <div className="w-[88px]">
+          <div className="">
             <div className="text-sm font-semibold leading-tight text-foreground ">
-              {size}
+              {size.isFinite() ? size.toString(10) : "-"}
             </div>
             <div className="mt-1 text-xs font-medium leading-tight text-muted-foreground">
               {formatUsd(positionSize.toString(10))}
@@ -204,16 +134,12 @@ export const generatePositionColumns = (
         );
       },
       accessorKey: "position_size",
-      enableSorting: false,
+      minSize: 145,
+      size: 145,
+      enableSorting: true,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Entry Price"
-          className="min-w-[100px]"
-        />
-      ),
+      header: "Entry Price",
       cell: ({ row }) => (
         <div>
           {formatUsd(
@@ -223,57 +149,43 @@ export const generatePositionColumns = (
       ),
       accessorKey: "open_price",
       enableSorting: true,
+      minSize: 140,
+      size: 140,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Mark Price"
-          className="min-w-[72px]"
-        />
-      ),
+      header: "Mark Price",
       cell: ({ row }) => <MarkPrice position={row.original} />,
       accessorKey: "current_price",
       enableSorting: false,
+      minSize: 140,
+      size: 140,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Est. Liq. Price"
-          className="min-w-[90px]"
-        />
-      ),
+      header: "Est. Liq. Price",
       cell: ({ row }) => (
         <PositionLiquidationPrice position={row.original} markets={markets} />
       ),
       accessorKey: "liq_price",
       enableSorting: false,
+      minSize: 140,
+      size: 140,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="TP / SL"
-          className="min-w-[76px]"
-          tooltip={TPSL_TOOLTIP_TEXT}
-        />
-      ),
+      header: "TP / SL",
       cell: ({ row }) => (
-        <div className="flex flex-col">
-          <div className="flex flex-nowrap">
-            <span>
-              {row.original.tp === "0"
-                ? "∞"
-                : row.original.tp
-                  ? formatUsd(
-                      formatFromBaseUnit(row.original.tp, 10).toString(10),
-                    )
-                  : "-"}
-            </span>
-            <span className="ml-1">/</span>
-          </div>
+        <div className="relative w-full text-wrap">
           <span>
+            {row.original.tp === "0"
+              ? "∞"
+              : row.original.tp
+                ? formatUsd(
+                    formatFromBaseUnit(row.original.tp, 10).toString(10),
+                  )
+                : "-"}{" "}
+          </span>
+          /
+          <span>
+            {" "}
             {row.original.sl === "0"
               ? "∞"
               : row.original.sl
@@ -286,28 +198,27 @@ export const generatePositionColumns = (
       ),
       accessorKey: "tp_sl",
       enableSorting: false,
+      minSize: 160,
+      meta: {
+        tooltip: TPSL_TOOLTIP_TEXT,
+      },
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Est. PnL"
-          className="min-w-[78px]"
-          tooltip={EST_PNL_TOOLTIP_TEXT}
+      header: "Est. PnL",
+      cell: ({ row }) => (
+        <MarketTradePNL
+          position={row.original}
+          positionSize={row.original.position_size}
         />
       ),
-      cell: ({ row }) => <ActivePositionPNL position={row.original} />,
       accessorKey: "est_pnl",
       enableSorting: false,
+      meta: {
+        tooltip: EST_PNL_TOOLTIP_TEXT,
+      },
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Borrow Fee"
-          className="min-w-[76px]"
-        />
-      ),
+      header: "Borrow Fee",
       cell: ({ row }) => {
         return (
           <div>
@@ -318,16 +229,12 @@ export const generatePositionColumns = (
         );
       },
       accessorKey: "borrow_fee",
-      enableSorting: false,
+      enableSorting: true,
+      minSize: 140,
+      size: 140,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Manage"
-          className="min-w-[56px]"
-        />
-      ),
+      header: "Manage",
       cell: ({ row }) => (
         <div className="align-center flex">
           <Icons.fileEdit
@@ -342,6 +249,8 @@ export const generatePositionColumns = (
       ),
       accessorKey: "manage",
       enableSorting: false,
+      minSize: 100,
+      size: 100,
     },
   ];
   return positionsColumns;

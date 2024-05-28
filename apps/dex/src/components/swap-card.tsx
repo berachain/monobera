@@ -417,7 +417,7 @@ export function SwapCard({
                     selected={selectedTo}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
-                    amount={toAmount}
+                    amount={toAmount ?? "0"}
                     price={Number(tokenOutPrice)}
                     hideMax={true}
                     disabled={true}
@@ -426,12 +426,13 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setToAmount(amount);
                     }}
-                    difference={differenceUSD}
+                    difference={isWrap ? undefined : differenceUSD}
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
+                    // filteredTokenTags={["supply", "debt"]}
                   />
                 </ul>
-                {!!priceImpact && priceImpact < -10 && (
+                {!!priceImpact && priceImpact < -10 && !isWrap && (
                   <TooltipCustom
                     anchor={
                       breakpoint !== undefined && breakpoint! > BREAKPOINTS.md
@@ -479,11 +480,11 @@ export function SwapCard({
                   <Alert variant="destructive">
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription className="text-xs">
-                      {error.message}
+                      An error has occured.
                     </AlertDescription>
                   </Alert>
                 )}
-                {hasRouteNotFoundError ? (
+                {hasRouteNotFoundError && (
                   <Alert variant="destructive">
                     <AlertTitle>
                       {" "}
@@ -494,8 +495,6 @@ export function SwapCard({
                       No route found for this swap. Please try a different pair.
                     </AlertDescription>
                   </Alert>
-                ) : (
-                  false
                 )}
 
                 <div className="flex flex-col gap-2">

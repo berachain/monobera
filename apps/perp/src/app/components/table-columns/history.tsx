@@ -1,25 +1,22 @@
 import React from "react";
 import { formatUsd } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DropdownFilter } from "@bera/shared-ui";
 import type { ColumnDef } from "@tanstack/react-table";
-import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { PositionTitle } from "~/app/components/position-title";
-import type { IPosition } from "~/types/order-history";
+import type { IMarketOrder, IOpenTrade } from "~/types/order-history";
+import { MarketTradePNL } from "../market-trade-pnl";
 import { PnlWithPercentage } from "../pnl-with-percentage";
+import { IMarket } from "~/types/market";
 
-export const historyColumns: ColumnDef<IPosition>[] = [
+export const generateHistoryColumns = (
+  markets: IMarket[],
+): ColumnDef<IMarketOrder>[] => [
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open time"
-        className="min-w-[96px]"
-      />
-    ),
+    header: "Open time",
     cell: ({ row }) => {
-      const date = new Date(Number(row.original.open_time) * 1000);
+      const date = new Date(Number(row.original.timestamp_open) * 1000);
 
       return (
         <div>
@@ -30,41 +27,33 @@ export const historyColumns: ColumnDef<IPosition>[] = [
         </div>
       );
     },
-    accessorKey: "open_time",
+    accessorKey: "timestamp_open",
     enableSorting: true,
+    minSize: 130,
+    size: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close time"
-        className="min-w-[98px]"
-      />
-    ),
+    header: "Close time",
     cell: ({ row }) => {
-      const date = new Date(Number(row.original.close_time) * 1000);
+      const date = new Date(Number(row.original.timestamp_close) * 1000);
       return (
         <div>
           <div className="text-sm">
-            {row.original.close_time ? date.toLocaleDateString() : "-"}
+            {row.original.trade_open ? "-" : date.toLocaleDateString()}
           </div>
           <div className="text-xs text-muted-foreground">
-            {row.original.close_time ? date.toLocaleTimeString() : ""}
+            {row.original.trade_open ? "" : date.toLocaleTimeString()}
           </div>
         </div>
       );
     },
-    accessorKey: "close_time",
+    accessorKey: "timestamp_close",
     enableSorting: true,
+    minSize: 130,
+    size: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Market / Side"
-        className="min-w-[90px]"
-      />
-    ),
+    header: "Market / Action",
     cell: ({ row }) => (
       <PositionTitle
         market={row.original.market}
@@ -74,15 +63,27 @@ export const historyColumns: ColumnDef<IPosition>[] = [
     ),
     accessorKey: "market",
     enableSorting: false,
+    enableColumnFilter: true,
+    meta: {
+      filter: (props: any) => {
+        return (
+          <DropdownFilter
+            {...props}
+            items={[
+              { label: "All", value: "" },
+              ...markets.map((market) => ({
+                label: market.name,
+                value: market.pair_index,
+              })),
+            ]}
+          />
+        );
+      },
+    },
+    minSize: 160,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Type"
-        className="min-w-[32px]"
-      />
-    ),
+    header: "Type",
     cell: ({ row }) => {
       return (
         <div className=" text-sm font-medium uppercase text-muted-foreground">
@@ -92,15 +93,11 @@ export const historyColumns: ColumnDef<IPosition>[] = [
     },
     accessorKey: "type",
     enableSorting: false,
+    minSize: 110,
+    size: 110,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Open Price"
-        className="min-w-[100px]"
-      />
-    ),
+    header: "Open Price",
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
         {formatUsd(
@@ -108,53 +105,33 @@ export const historyColumns: ColumnDef<IPosition>[] = [
         )}
       </div>
     ),
-
     accessorKey: "open_price",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = Number(rowA.original.open_price);
-      const b = Number(rowB.original.open_price);
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    minSize: 130,
   },
 
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Close Price"
-        className="min-w-[102px]"
-      />
-    ),
+    header: "Close Price",
     cell: ({ row }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
-        {row.original.close_price === ""
+        {row.original.price === "" || row.original.trade_open
           ? "-"
           : formatUsd(
-              formatFromBaseUnit(row.original.close_price ?? "0", 10).toString(
-                10,
-              ),
+              formatFromBaseUnit(row.original.price ?? "0", 10).toString(10),
             )}
       </div>
     ),
-    accessorKey: "close_price",
+    accessorKey: "price",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = Number(rowA.original.close_price);
-      const b = Number(rowB.original.close_price);
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
+    minSize: 130,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
-    ),
+    header: "Amount",
     cell: ({ row }) => {
-      const volume = BigNumber(row.original?.volume);
+      const volume = formatFromBaseUnit(
+        row.original?.initial_pos_token ?? "0",
+        18,
+      ).times(row.original?.leverage ?? "0");
 
       const openPrice = formatFromBaseUnit(row.original?.open_price ?? "0", 10);
       const size = volume.div(openPrice).dp(4).toString(10);
@@ -168,58 +145,64 @@ export const historyColumns: ColumnDef<IPosition>[] = [
     enableSorting: false,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Position Size"
-        className="min-w-[86px]"
-      />
-    ),
+    header: "Position Size",
     cell: ({ row }) => {
-      return <div>{formatUsd(row.original?.volume ?? "0")}</div>;
+      return (
+        <div>
+          {formatUsd(
+            formatFromBaseUnit(row.original?.position_size_honey ?? "0", 18)
+              .times(row.original?.leverage ?? "0")
+              .toString(10),
+          )}
+        </div>
+      );
     },
     accessorKey: "position_size",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Fees" />
-    ),
+    header: "Fees",
     cell: ({ row }) => {
-      const fees =
-        Number(row.original.rollover_fee ?? 0) +
-        Number(row.original.funding_rate ?? 0) +
-        Number(row.original.closing_fee ?? 0) +
-        Number(row.original.borrowing_fee ?? 0) +
-        Number(row.original.open_fee ?? 0);
-      return <div>{formatUsd(fees)}</div>;
-    },
-    accessorKey: "fees",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="PnL" />
-    ),
-    cell: ({ row }) => {
-      const positionSize = BigNumber(row.original.volume).div(
-        row.original.leverage ?? "1",
+      const fees = formatFromBaseUnit(
+        row.original?.rollover_fee ?? "0",
+        18,
+      ).plus(
+        formatFromBaseUnit(row.original?.funding_fee ?? "0", 18).plus(
+          formatFromBaseUnit(row.original?.closing_fee ?? "0", 18).plus(
+            formatFromBaseUnit(row.original?.borrowing_fee ?? "0", 18).plus(
+              formatFromBaseUnit(row.original?.open_fee ?? "0", 18),
+            ),
+          ),
+        ),
       );
-      const pnl = BigNumber(row.original.pnl).minus(row.original.open_fee);
-      return <PnlWithPercentage positionSize={positionSize} pnl={pnl} />;
+      return <div>{formatUsd(fees.toString(10))}</div>;
+    },
+    minSize: 130,
+    size: 130,
+    accessorKey: "fees",
+    enableSorting: true,
+  },
+  {
+    header: "PnL",
+    cell: ({ row }) => {
+      if (row.original.pnl) {
+        const positionSize = formatFromBaseUnit(
+          row.original?.position_size_honey ?? "0",
+          18,
+        ).times(row.original?.leverage ?? "0");
+        const pnl = formatFromBaseUnit(row.original.pnl, 18);
+        return <PnlWithPercentage positionSize={positionSize} pnl={pnl} />;
+      }
+      return (
+        <MarketTradePNL
+          position={row.original}
+          positionSize={row.original.initial_pos_token}
+          closePrice={row.original.trade_open ? undefined : row.original.price}
+          hoverState={false}
+        />
+      );
     },
     accessorKey: "pnl",
     enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = Number(rowA.original.pnl);
-      const b = Number(rowB.original.pnl);
-      if (a < 0 && b < 0) {
-        if (Math.abs(a) < Math.abs(b)) return 1;
-        if (Math.abs(a) > Math.abs(b)) return -1;
-      }
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
   },
 ];

@@ -3,7 +3,6 @@
   "compilerOptions": {
     "incremental": false,
     "declaration": true,
-    "sourceMap": true,
     "paths": {
       "~/*": ["./src/*"]
     },
