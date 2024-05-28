@@ -88,7 +88,7 @@ export function TokenInput({
       : Number(amount) ?? 0;
 
   useEffect(() => {
-    if (Number(amount) > Number.MAX_SAFE_INTEGER) return;
+    if (safeNumberAmount > Number.MAX_SAFE_INTEGER) return;
     if (safeNumberAmount <= Number(tokenBalance)) {
       setExceeding(false);
       return;
