@@ -111,7 +111,7 @@ export const GeneralInfo = () => {
           Claimable HONEY
         </div>
         <div className="mt-2 flex items-center gap-1 text-3xl font-semibold leading-9">
-          420.69K <Icons.honey className="w-6 h-6"/>
+          420.69K <Icons.honey className="w-6 h-6" />
         </div>
         <div className="leading-4 text-muted-foreground">$420.96</div>
         <div className="mt-6 flex flex-col gap-1 relative z-10">
