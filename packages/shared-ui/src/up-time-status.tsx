@@ -34,7 +34,7 @@ import { Icons } from "@bera/ui/icons";
 
 export function UpTimeStatus() {
   // const status = ServerStatusEnuem.INTERRUPTION;
-  const gasData = useGasData();
+  const { estimatedBeraFee } = useGasData();
   // const [gasSpeed, setGasSpeed] = React.useState<GasSpeedEnum>(
   //   GasSpeedEnum.FAST,
   // );
@@ -48,9 +48,7 @@ export function UpTimeStatus() {
         </div> */}
       </div>
       <div className="flex cursor-pointer items-center gap-2 text-xs font-medium leading-3 text-muted-foreground">
-        <div className=" text-success-foreground">
-          {gasData?.formatted?.gasPrice}
-        </div>
+        <div className=" text-success-foreground">{`${estimatedBeraFee}`}</div>
         <Icons.fuel className="h-4 w-4" />
         Bwei
       </div>

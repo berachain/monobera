@@ -2,8 +2,8 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
-import { usePathname } from "next/navigation";
 import { IBM_Plex_Sans } from "next/font/google";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { dexName } from "@bera/config";
 import {
@@ -53,6 +53,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
+        <span className="warning-foreground hidden text-amber-300 text-green-300 text-green-400 text-green-500 text-neutral-400 text-red-400 text-red-500" />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
