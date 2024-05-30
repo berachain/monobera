@@ -18,11 +18,11 @@ export default function Delegate({
   action: DelegateEnum;
   validator: Address;
 }) {
-  const { isConnected } = useBeraJs();
+  const { isReady } = useBeraJs();
   const router = useRouter();
 
   return (
-    <div className="mx-auto w-full max-w-[600px] sm:container sm:px-0 md:px-8 lg:w-[600px]">
+    <div className="mx-auto flex w-full max-w-[600px] flex-col gap-6 sm:container sm:px-0 md:px-8 lg:w-[600px]">
       <Tabs defaultValue={action}>
         <TabsList className="w-full">
           <TabsTrigger
@@ -42,7 +42,7 @@ export default function Delegate({
           <TabsTrigger
             value={DelegateEnum.UNBOND}
             key={DelegateEnum.UNBOND}
-            disabled={!isConnected}
+            disabled={!isReady}
             className="flex-1 capitalize"
             onClick={() =>
               router.push(
@@ -63,7 +63,13 @@ export default function Delegate({
           <UnDelegateContent validator={validator} />
         </TabsContent>
       </Tabs>
-      <BoostQueue />
+
+      {isReady && (
+        <>
+          <hr />
+          <BoostQueue />
+        </>
+      )}
     </div>
   );
 }

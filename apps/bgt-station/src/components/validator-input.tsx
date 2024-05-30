@@ -14,8 +14,6 @@ export default function ValidatorInput({
   amount,
   onAmountChange,
   validatorAddress,
-  redelegate,
-  redelegateValidatorAddress,
   disabled = false,
   showDelegated, //when this is true, the validator list will only show the validators user delegated
   filter,
@@ -25,8 +23,6 @@ export default function ValidatorInput({
   amount: string | undefined;
   onAmountChange: (amount: string | undefined) => void;
   validatorAddress: Address | undefined;
-  redelegate?: boolean;
-  redelegateValidatorAddress?: string;
   disabled?: boolean;
   showDelegated?: boolean;
   filter?: Address[];
@@ -43,15 +39,9 @@ export default function ValidatorInput({
         xs:justify-between flex min-h-[73px] flex-row items-center rounded-lg border border-solid bg-input py-3"
       >
         <ValidatorSelector
-          validatorAddress={
-            redelegate ? redelegateValidatorAddress : validatorAddress
-          }
+          validatorAddress={validatorAddress}
           onSelectValidator={(address) =>
-            router.push(
-              `/delegate?action=${action}&validator=${
-                redelegate ? validatorAddress : address
-              }${redelegate ? `&redelegateValidator=${address}` : ""}`,
-            )
+            router.push(`/delegate?action=${action}&validator=${address}`)
           }
           showDelegated={showDelegated}
           filter={filter}
@@ -80,7 +70,6 @@ export default function ValidatorInput({
       )}
 
       {action !== DelegateEnum.DELEGATE &&
-        !redelegate &&
         validatorAddress &&
         Boolean(bgtDelegated) && (
           <div className="absolute bottom-3 right-4 h-3 text-[10px] text-muted-foreground">
