@@ -129,7 +129,7 @@ const mockCuttingBoardWeights: CuttingBoardWeight[] = [
 
 const mockValidators: UserValidator[] = [
   {
-    coinbase: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+    id: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
     name: "Validator One",
     amountStaked: "100000",
     commission: "0.02",
@@ -147,7 +147,7 @@ const mockValidators: UserValidator[] = [
     },
   },
   {
-    coinbase: "0xb10a6CE3423Bf521EcB144b416F42D55A12eb0aD",
+    id: "0xb10a6CE3423Bf521EcB144b416F42D55A12eb0aD",
     name: "Validator Two",
     userStaked: "100000",
     commission: "0.03",
@@ -172,7 +172,7 @@ export const getValidators = async (
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     if (filter?.page === 0) return mockValidators;
-    return [mockValidators[1]];
+    return mockValidators;
   } catch (error) {
     console.error(error);
     return [];

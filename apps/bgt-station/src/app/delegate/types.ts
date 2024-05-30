@@ -2,7 +2,6 @@ import { cloudinaryUrl } from "@bera/config";
 
 export enum DelegateEnum {
   DELEGATE = "delegate",
-  REDELEGATE = "redelegate",
   UNBOND = "unbond",
 }
 

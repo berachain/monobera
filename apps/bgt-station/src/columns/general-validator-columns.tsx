@@ -29,7 +29,7 @@ const VALIDATOR_COLUMN: ColumnDef<UserValidator> = {
     return (
       <div className="flex items-center gap-2">
         <ValidatorIcon
-          address={row.original.coinbase as Address}
+          address={row.original.id as Address}
           className="h-8 w-8"
         />
         {moniker}{" "}
@@ -46,7 +46,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<UserValidator> = {
   ),
   cell: ({ row }) => (
     <VP
-      coinbase={row.original.coinbase}
+      coinbase={row.original.id}
       amountStaked={row.original.amountStaked}
     />
   ),

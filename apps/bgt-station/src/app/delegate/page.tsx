@@ -18,7 +18,6 @@ export default function Page({
   searchParams: {
     action: DelegateEnum;
     validator: string;
-    redelegateValidator: string;
   };
 }) {
   let action;
@@ -34,7 +33,6 @@ export default function Page({
         <Delegate
           action={action}
           validator={searchParams.validator as Address}
-          redelegateValidator={searchParams.redelegateValidator}
         />
       </div>
     </div>

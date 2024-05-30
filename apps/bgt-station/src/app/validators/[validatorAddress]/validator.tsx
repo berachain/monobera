@@ -137,7 +137,7 @@ export default function Validator({
   const prices = undefined;
   const percentageDelegated = undefined;
   const validator: Validator = {
-    coinbase: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
+    id: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
     name: "Honey Validator",
     commission: "0.02",
     description:
@@ -304,7 +304,7 @@ export default function Validator({
           <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
               <ValidatorIcon
-                address={validator.coinbase}
+                address={validator.id}
                 className="h-12 w-12"
               />
               {isLoading ? (
@@ -319,8 +319,8 @@ export default function Validator({
                 <Skeleton className="h-[25px] w-[150px]" />
               ) : (
                 <span className="flex flex-row gap-1 text-foreground hover:underline">
-                  <Link href={`${blockExplorerUrl}/${validator.coinbase}`}>
-                    {truncateHash(validator.coinbase)}
+                  <Link href={`${blockExplorerUrl}/${validator.id}`}>
+                    {truncateHash(validator.id)}
                   </Link>
                   <Icons.externalLink className="h-4 w-4 self-center" />
                 </span>
@@ -357,7 +357,7 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=delegate&validator=${validator.coinbase}`,
+                    `/delegate?action=delegate&validator=${validator.id}`,
                   )
                 }
               >
@@ -369,7 +369,7 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=redelegate&validator=${validator.coinbase}`,
+                    `/delegate?action=redelegate&validator=${validator.id}`,
                   )
                 }
               >
@@ -383,7 +383,7 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=unbond&validator=${validator.coinbase}`,
+                    `/delegate?action=unbond&validator=${validator.id}`,
                   )
                 }
               >

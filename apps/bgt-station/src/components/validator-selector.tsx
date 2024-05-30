@@ -1,6 +1,6 @@
 import { get } from "http";
 import React, { useMemo } from "react";
-import { formatter } from "@bera/berajs";
+import { formatter, usePollValidators, type Validator } from "@bera/berajs";
 import {
   DataTable,
   SearchInput,
@@ -28,7 +28,11 @@ export default function ValidatorSelector({
   const [open, setOpen] = React.useState(false);
 
   const prices = undefined;
-
+  const { data } = usePollValidators();
+  const validValidator = data?.find(
+    (vali) => vali.id === validatorAddress,
+  );
+  console.log(data);
   return (
     <div>
       <Button
@@ -36,14 +40,14 @@ export default function ValidatorSelector({
         className="ml-3 min-w-[148px] whitespace-nowrap border-border bg-background shadow"
         onClick={() => setOpen(true)}
       >
-        {/* {validValidator ? (
+        {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
-              address={validValidator.operatorAddr as Address}
-              description={validValidator?.description?.identity ?? undefined}
+              address={validValidator.id as Address}
+              // description={validValidator.description}
               className="h-8 w-8"
             />
-            {validValidator.description.moniker}
+            {validValidator.name}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         ) : (
@@ -51,19 +55,19 @@ export default function ValidatorSelector({
             Select Validator
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
-        )} */}
+        )}
       </Button>
-      {/* <ValidatorModal
+      <ValidatorModal
         open={open}
         validators={
-          filteredValidators?.filter(
-            (vali: Validator) => !filter?.find((f) => f === vali.operatorAddr),
+          data?.filter(
+            (vali: Validator) => !filter?.find((f) => f === vali.id),
           ) ?? []
         }
         onSelect={(address) => onSelectValidator?.(address)}
         onClose={() => setOpen(false)}
         // emptyMessage={emptyMessage}
-      /> */}
+      />
     </div>
   );
 }
