@@ -303,10 +303,7 @@ export default function Validator({
         <div className="mt-2 flex w-full flex-col justify-between gap-6 border-b  border-border pb-6 lg:flex-row ">
           <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
-              <ValidatorIcon
-                address={validator.id}
-                className="h-12 w-12"
-              />
+              <ValidatorIcon address={validator.id} className="h-12 w-12" />
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (

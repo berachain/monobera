@@ -45,10 +45,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<UserValidator> = {
     <DataTableColumnHeader column={column} title="Voting Power" />
   ),
   cell: ({ row }) => (
-    <VP
-      coinbase={row.original.id}
-      amountStaked={row.original.amountStaked}
-    />
+    <VP coinbase={row.original.id} amountStaked={row.original.amountStaked} />
   ),
   accessorKey: "amountStaked",
 };

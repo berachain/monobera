@@ -29,9 +29,7 @@ export default function ValidatorSelector({
 
   const prices = undefined;
   const { data } = usePollValidators();
-  const validValidator = data?.find(
-    (vali) => vali.id === validatorAddress,
-  );
+  const validValidator = data?.find((vali) => vali.id === validatorAddress);
   console.log(data);
   return (
     <div>
