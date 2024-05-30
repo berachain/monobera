@@ -30,16 +30,16 @@ export const MyValidator = ({ keyword }: { keyword: any }) => {
       columns={user_general_validator_columns as ColumnDef<unknown, unknown>[]}
       data={data ?? []}
       className="min-w-[900px]"
-      fetchData={fetchData}
-      enablePagination
+      // fetchData={fetchData}
+      // enablePagination
       loading={isLoading}
       validating={isValidating}
-      additionalTableProps={{
-        pageCount: 2,
-        manualFiltering: true,
-        manualSorting: true,
-        manualPagination: true,
-      }}
+      // additionalTableProps={{
+      //   pageCount: 2,
+      //   manualFiltering: true,
+      //   manualSorting: true,
+      //   manualPagination: true,
+      // }}
       onRowClick={(row: any) =>
         router.push(`/validators/${row.original.coinbase}`)
       }

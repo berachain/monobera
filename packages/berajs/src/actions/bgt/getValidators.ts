@@ -1,12 +1,13 @@
+import { Address } from "viem";
+
 import {
   ActiveIncentive,
+  BeraConfig,
   CuttingBoardWeight,
   Market,
-  UserValidator,
-  Validator,
+  ValidatorData,
   Vault,
 } from "~/types";
-import { Address } from "viem";
 
 export interface ValidatorFilter {
   page?: number;
@@ -127,17 +128,12 @@ const mockCuttingBoardWeights: CuttingBoardWeight[] = [
   },
 ];
 
-const mockValidators: UserValidator[] = [
+const mockValidators: ValidatorData[] = [
   {
-    id: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-    name: "Validator One",
+    id: "0x6B7C3B5c0928cf8D0B516b358a1e3aecf5E9AFBe",
     amountStaked: "100000",
     commission: "0.02",
-    description: "A reliable and efficient validator.",
-    website: "http://example.com/validator1",
-    imageUri: "http://example.com/validator1.png",
     cuttingboard: mockCuttingBoardWeights,
-    userStaked: "100000",
     apy: "10",
     rewardRate: "1000",
     allTimeStats: {
@@ -147,13 +143,21 @@ const mockValidators: UserValidator[] = [
     },
   },
   {
-    id: "0xb10a6CE3423Bf521EcB144b416F42D55A12eb0aD",
-    name: "Validator Two",
-    userStaked: "100000",
+    id: "0x82Cf147a9aC43A84D30f71f8a627492D08e485Ef",
     commission: "0.03",
-    description: "A highly secure validator with a focus on stability.",
-    website: "http://example.com/validator2",
-    imageUri: "http://example.com/validator2.png",
+    amountStaked: "2000000",
+    cuttingboard: mockCuttingBoardWeights,
+    apy: "12",
+    rewardRate: "1000",
+    allTimeStats: {
+      totalBgtDirected: "600000",
+      totalHoneyValueBgtDirected: "250000",
+      totalHoneyValueTokenRewards: "15000",
+    },
+  },
+  {
+    id: "0xE7E474C22Ea47EbD5212B310F2E7Ae8c7ce70b4b",
+    commission: "0.03",
     amountStaked: "2000000",
     cuttingboard: mockCuttingBoardWeights,
     apy: "12",
@@ -166,15 +170,36 @@ const mockValidators: UserValidator[] = [
   },
 ];
 
+export interface GetValidatorData {
+  validatorList: ValidatorData[];
+  validatorDictionary: { [key: Address]: ValidatorData };
+}
+
 export const getValidators = async (
+  config: BeraConfig,
   filter?: ValidatorFilter,
-): Promise<Validator[]> => {
+): Promise<GetValidatorData> => {
+  if (!config.endpoints?.validatorInfo) {
+    throw new Error("Missing validator info endpoint in config");
+  }
   try {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    if (filter?.page === 0) return mockValidators;
-    return mockValidators;
+    // const validatorList = await fetch(config.endpoints.validatorInfo);
+    // const temp = await validatorList.json();
+    return {
+      validatorList: mockValidators,
+      validatorDictionary: mockValidators.reduce(
+        (acc: { [key: Address]: ValidatorData }, item: ValidatorData) => {
+          acc[item.id] = item;
+          return acc;
+        },
+        {},
+      ),
+    };
   } catch (error) {
     console.error(error);
-    return [];
+    return {
+      validatorList: [],
+      validatorDictionary: {},
+    };
   }
 };

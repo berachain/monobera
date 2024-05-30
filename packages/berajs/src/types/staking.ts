@@ -10,7 +10,8 @@ export interface ValidatorInfo {
   imageUri: string;
 }
 
-export type Validator = ValidatorInfo & {
+export type ValidatorData = {
+  id: Address;
   commission: string;
   amountStaked: string;
   cuttingboard: CuttingBoardWeight[];
@@ -22,6 +23,8 @@ export type Validator = ValidatorInfo & {
     totalHoneyValueTokenRewards: string;
   };
 };
+
+export type Validator = ValidatorInfo & ValidatorData;
 
 export type UserValidator = Validator & {
   userStaked: string;

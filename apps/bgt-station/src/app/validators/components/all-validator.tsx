@@ -1,7 +1,13 @@
 import { useCallback, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { usePollValidators } from "@bera/berajs";
+import {
+  Validator,
+  ValidatorData,
+  ValidatorInfo,
+  usePollValidatorInfo,
+  usePollValidators,
+} from "@bera/berajs";
 import type { ColumnDef, TableState } from "@tanstack/react-table";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
@@ -16,30 +22,42 @@ const DataTable = dynamic(
 );
 
 export const AllValidator = ({ keyword }: { keyword: any }) => {
-  const [page, setPage] = useState(0);
-  const { data, isLoading, isValidating } = usePollValidators({ page });
+  // const [page, setPage] = useState(0);
   const router = useRouter();
+  const { validatorList, isLoading, isValidating } = usePollValidators();
+  const {
+    validatorInfoDictionary,
+    isLoading: isValidatorInfoLoading,
+    isValidating: isValidatorInfoValidating,
+  } = usePollValidatorInfo();
 
-  const fetchData = useCallback(
-    (state: TableState) => setPage(state?.pagination?.pageIndex),
-    [setPage],
+  // const fetchData = useCallback(
+  //   (state: TableState) => setPage(state?.pagination?.pageIndex),
+  //   [setPage],
+  // );
+
+  const validators: Validator = validatorList?.map(
+    (validator: ValidatorData) => ({
+      ...validator,
+      ...(validatorInfoDictionary[validator.id] as ValidatorInfo),
+    }),
   );
 
   return (
     <DataTable
       columns={general_validator_columns as ColumnDef<unknown, unknown>[]}
-      data={data ?? []}
+      data={validators}
       className="min-w-[900px]"
-      fetchData={fetchData}
-      enablePagination
-      loading={isLoading}
-      validating={isValidating}
-      additionalTableProps={{
-        pageCount: 2,
-        manualFiltering: true,
-        manualSorting: true,
-        manualPagination: true,
-      }}
+      // fetchData={fetchData}
+      // enablePagination
+      loading={isLoading || isValidatorInfoLoading}
+      validating={isValidating || isValidatorInfoValidating}
+      // additionalTableProps={{
+      //   pageCount: 2,
+      //   manualFiltering: true,
+      //   manualSorting: true,
+      //   manualPagination: true,
+      // }}
       onRowClick={(row: any) =>
         router.push(`/validators/${row.original.coinbase}`)
       }

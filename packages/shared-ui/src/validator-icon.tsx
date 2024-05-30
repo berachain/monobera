@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { usePollGauges } from "@bera/berajs";
+import { usePollValidatorInfo } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
@@ -40,8 +40,13 @@ export const ValidatorIcon = ({
   size,
   ...props
 }: IconProps) => {
-  const { gaugeDictionary } = usePollGauges();
-  const img = useMemo(() => gaugeDictionary?.[address]?.logoURI, [address]);
+  const { validatorInfoDictionary = {} } = usePollValidatorInfo();
+  const img = useMemo(
+    () =>
+      //@ts-ignore
+      validatorInfoDictionary[address]?.imageUri,
+    [address],
+  );
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={img} className="rounded-full" alt={address} />

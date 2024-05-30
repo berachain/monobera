@@ -19,7 +19,7 @@ export default function ValidatorSelector({
   filter,
 }: // emptyMessage,
 {
-  validatorAddress?: string;
+  validatorAddress?: Address;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
   filter?: Address[];
@@ -28,9 +28,9 @@ export default function ValidatorSelector({
   const [open, setOpen] = React.useState(false);
 
   const prices = undefined;
-  const { data } = usePollValidators();
-  const validValidator = data?.find((vali) => vali.id === validatorAddress);
-  console.log(data);
+  const { validatorDictionary = {} } = usePollValidators();
+  // const validValidator =  validatorAddress && validatorDictionary?.[validatorAddress];
+  const validValidator = undefined;
   return (
     <div>
       <Button
@@ -38,7 +38,7 @@ export default function ValidatorSelector({
         className="ml-3 min-w-[148px] whitespace-nowrap border-border bg-background shadow"
         onClick={() => setOpen(true)}
       >
-        {validValidator ? (
+        {/* {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
               address={validValidator.id as Address}
@@ -48,20 +48,16 @@ export default function ValidatorSelector({
             {validValidator.name}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
-        ) : (
-          <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
-            Select Validator
-            <Icons.chevronDown className="relative h-3 w-3" />
-          </div>
-        )}
+        ) : ( */}
+        <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
+          Select Validator
+          <Icons.chevronDown className="relative h-3 w-3" />
+        </div>
+        {/* )} */}
       </Button>
       <ValidatorModal
         open={open}
-        validators={
-          data?.filter(
-            (vali: Validator) => !filter?.find((f) => f === vali.id),
-          ) ?? []
-        }
+        validators={[]}
         onSelect={(address) => onSelectValidator?.(address)}
         onClose={() => setOpen(false)}
         // emptyMessage={emptyMessage}
