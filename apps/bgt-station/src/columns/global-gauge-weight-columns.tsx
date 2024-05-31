@@ -1,6 +1,8 @@
 import React from "react";
 import { type Gauge } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
+import { DataTableColumnHeader, FormattedNumber } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
@@ -11,7 +13,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <GaugeHeaderWidget gauge={row.original.address} className="w-[150px]" />
+      <GaugeHeaderWidget address={row.original.address} className="w-[150px]" />
     ),
     accessorKey: "gauge",
     enableSorting: false,
@@ -24,27 +26,37 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex w-[120px] flex-row items-center">
-          $690,490.6994
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <FormattedNumber
+        className="w-full justify-center"
+        symbol="USD"
+        compact={false}
+        compactThreshold={999_999_999}
+        value={690_490.6994}
+      />
+    ),
     accessorKey: "incentive-value",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Incentives / BGT Staked"
+        title="BGT Staked"
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => <div className="flex w-full justify-center">$69.42</div>,
+    cell: ({ row }) => (
+      <FormattedNumber
+        className="w-full justify-start"
+        symbol="BGT"
+        compact={false}
+        compactThreshold={999_999_999}
+        value={69.42}
+      />
+    ),
     accessorKey: "bgt-staked",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
@@ -55,10 +67,16 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">42,690.69 BGT</div>
+      <FormattedNumber
+        className="w-full justify-center"
+        symbol="BGT"
+        compact={false}
+        compactThreshold={999_999_999}
+        value={42069.42}
+      />
     ),
     accessorKey: "bgt-inflation",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
@@ -70,6 +88,33 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     ),
     cell: ({ row }) => <div className="flex w-full justify-center">ha</div>,
     accessorKey: "validators-emissions",
-    enableSorting: true,
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Incentives"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: ({ row }) => (
+      <div className="flex w-full items-center justify-center">
+        <Icons.beraIcon className="h-4 w-4" />
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.open(`/incentivize?pool=${row.original.address}`, "_self");
+          }}
+        >
+          Add
+        </Button>
+      </div>
+    ),
+    accessorKey: "validators-emissions",
+    enableSorting: false,
   },
 ];
