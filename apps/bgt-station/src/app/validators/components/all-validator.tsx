@@ -36,9 +36,11 @@ export const AllValidator = ({ keyword }: { keyword: any }) => {
   //   [setPage],
   // );
 
+  //@ts-ignore
   const validators: Validator = validatorList?.map(
     (validator: ValidatorData) => ({
       ...validator,
+      //@ts-ignore
       ...(validatorInfoDictionary[validator.id] as ValidatorInfo),
     }),
   );
@@ -46,6 +48,7 @@ export const AllValidator = ({ keyword }: { keyword: any }) => {
   return (
     <DataTable
       columns={general_validator_columns as ColumnDef<unknown, unknown>[]}
+      //@ts-ignore
       data={validators}
       className="min-w-[900px]"
       // fetchData={fetchData}

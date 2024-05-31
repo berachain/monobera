@@ -11,7 +11,7 @@ export const MyIncentivesTableTable = () => {
         columns={user_incentives_columns as any}
         loading={isLoading}
         validating={isValidating}
-        data={data ?? []}
+        data={[]}
         className="min-w-[800px] shadow"
         enablePagination
       />

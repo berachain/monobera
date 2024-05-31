@@ -25,12 +25,10 @@ const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => (
     <div className="flex items-center gap-2">
-      {
-        <ValidatorIcon
-          address={row.original.id as Address}
-          className="h-8 w-8"
-        />
-      }
+      <ValidatorIcon
+        address={row.original.id as Address}
+        className="h-8 w-8"
+      />
       {row.original.name}{" "}
     </div>
   ),
@@ -71,7 +69,6 @@ const APY_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => (
     <div className="flex h-full w-[91px] items-center">
-      {" "}
       {Number(row.original.apy ?? 0).toFixed(2)}%
     </div>
   ),
@@ -85,11 +82,9 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => {
     const cuttingBoards: CuttingBoardWeight[] = row.original.cuttingboard;
-
     const mostWeightedCuttingBoard = cuttingBoards.sort(
       (a, b) => a.percentage - b.percentage,
     )[0];
-    // console.log(mostWeightedCuttingBoard);
     return <CuttingBoardDisplay cuttingBoard={mostWeightedCuttingBoard} />;
   },
   accessorKey: "mostWeightedGauge",
@@ -128,10 +123,10 @@ export const general_validator_columns: ColumnDef<Validator>[] = [
 ];
 
 export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
-  VALIDATOR_COLUMN,
+  VALIDATOR_COLUMN as ColumnDef<UserValidator>,
   USER_STAKED_COLUMN,
-  GLOBAL_VOTING_POWER_COLUMN,
-  COMMISSION_COLUMN,
-  APY_COLUMN,
-  BRIBES_COLUMN,
+  GLOBAL_VOTING_POWER_COLUMN as ColumnDef<UserValidator>,
+  COMMISSION_COLUMN as ColumnDef<UserValidator>,
+  APY_COLUMN as ColumnDef<UserValidator>,
+  BRIBES_COLUMN as ColumnDef<UserValidator>,
 ];
