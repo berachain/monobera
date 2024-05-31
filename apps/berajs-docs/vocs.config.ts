@@ -187,6 +187,14 @@ export default defineConfig({
           text: "IUserPool",
           link: "/types/IUserPool/",
         },
+        {
+          text: "SwapInfoV3",
+          link: "/types/SwapInfoV3/",
+        },
+        {
+          text: "ICrocSwapStep",
+          link: "/types/ICrocSwapStep/",
+        },
       ],
     },
     {
