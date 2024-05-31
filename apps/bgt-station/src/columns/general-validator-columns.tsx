@@ -1,59 +1,49 @@
 import React from "react";
 import {
+  type CuttingBoardWeight,
+  type UserValidator,
+  type Validator,
+} from "@bera/berajs";
+import {
   DataTableColumnHeader,
+  FormattedNumber,
   TokenIconList,
   Tooltip,
   ValidatorIcon,
   bribeApyTooltipText,
-  FormattedNumber,
 } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
-import { VP } from "~/components/validator-selector";
-import {
-  type CuttingBoardWeight,
-  type Validator,
-  type UserValidator,
-} from "@bera/berajs";
-import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 import { ValidatorBribesPopover } from "~/components/bribes-tooltip";
+import { VP } from "~/components/validator-selector";
+import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 
-const VALIDATOR_COLUMN: ColumnDef<UserValidator> = {
+const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Validator" />
   ),
-  cell: ({ row }) => {
-    const moniker = row.original.name;
-
-    return (
-      <div className="flex items-center gap-2">
-        <ValidatorIcon
-          address={row.original.coinbase as Address}
-          className="h-8 w-8"
-        />
-        {moniker}{" "}
-      </div>
-    );
-  },
+  cell: ({ row }) => (
+    <div className="flex items-center gap-2">
+      <ValidatorIcon address={row.original.id as Address} className="h-8 w-8" />
+      {row.original.name}{" "}
+    </div>
+  ),
   accessorKey: "description",
   enableSorting: true,
 };
 
-const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<UserValidator> = {
+const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Voting Power" />
   ),
   cell: ({ row }) => (
-    <VP
-      coinbase={row.original.coinbase}
-      amountStaked={row.original.amountStaked}
-    />
+    <VP coinbase={row.original.id} amountStaked={row.original.amountStaked} />
   ),
   accessorKey: "amountStaked",
 };
 
-const COMMISSION_COLUMN: ColumnDef<UserValidator> = {
+const COMMISSION_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Commission" />
   ),
@@ -66,7 +56,7 @@ const COMMISSION_COLUMN: ColumnDef<UserValidator> = {
   accessorKey: "commission",
 };
 
-const APY_COLUMN: ColumnDef<UserValidator> = {
+const APY_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
@@ -76,7 +66,6 @@ const APY_COLUMN: ColumnDef<UserValidator> = {
   ),
   cell: ({ row }) => (
     <div className="flex h-full w-[91px] items-center">
-      {" "}
       {Number(row.original.apy ?? 0).toFixed(2)}%
     </div>
   ),
@@ -84,24 +73,22 @@ const APY_COLUMN: ColumnDef<UserValidator> = {
   enableSorting: true,
 };
 
-const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<UserValidator> = {
+const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
   ),
   cell: ({ row }) => {
     const cuttingBoards: CuttingBoardWeight[] = row.original.cuttingboard;
-
     const mostWeightedCuttingBoard = cuttingBoards.sort(
       (a, b) => a.percentage - b.percentage,
     )[0];
-    // console.log(mostWeightedCuttingBoard);
     return <CuttingBoardDisplay cuttingBoard={mostWeightedCuttingBoard} />;
   },
   accessorKey: "mostWeightedGauge",
   enableSorting: false,
 };
 
-const BRIBES_COLUMN: ColumnDef<UserValidator> = {
+const BRIBES_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
@@ -123,7 +110,7 @@ const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
   enableSorting: true,
 };
 
-export const general_validator_columns: ColumnDef<UserValidator>[] = [
+export const general_validator_columns: ColumnDef<Validator>[] = [
   VALIDATOR_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN,
   COMMISSION_COLUMN,
@@ -133,10 +120,10 @@ export const general_validator_columns: ColumnDef<UserValidator>[] = [
 ];
 
 export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
-  VALIDATOR_COLUMN,
+  VALIDATOR_COLUMN as ColumnDef<UserValidator>,
   USER_STAKED_COLUMN,
-  GLOBAL_VOTING_POWER_COLUMN,
-  COMMISSION_COLUMN,
-  APY_COLUMN,
-  BRIBES_COLUMN,
+  GLOBAL_VOTING_POWER_COLUMN as ColumnDef<UserValidator>,
+  COMMISSION_COLUMN as ColumnDef<UserValidator>,
+  APY_COLUMN as ColumnDef<UserValidator>,
+  BRIBES_COLUMN as ColumnDef<UserValidator>,
 ];
