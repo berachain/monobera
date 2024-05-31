@@ -1,20 +1,15 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import {
-  Token,
-  truncateHash,
-  usePollGauges,
-  usePollValidators,
-  usePollWalletBalances,
-} from "@bera/berajs";
+import { truncateHash, usePollGauges, usePollValidators } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { DataTable, GaugeIcon, PoolHeader, SearchInput } from "@bera/shared-ui";
+import { DataTable, GaugeIcon, PoolHeader } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { general_validator_columns } from "~/columns/general-validator-columns";
+import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
 
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
@@ -30,6 +25,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   } = usePollGauges();
   const gauge = gaugeDictionary?.[gaugeAddress];
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
+  const isTableLoading = isGaugeLoading || isGaugeValidating;
   return (
     <>
       {gauge ? (
@@ -85,6 +81,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
 
             <TabsContent value="incentives">
               <DataTable
+                loading={isTableLoading}
                 columns={gauge_incentives_columns as any}
                 data={[
                   <>
@@ -112,7 +109,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
             <TabsContent value="validators">
               <DataTable
                 columns={general_validator_columns as any}
-                loading={isValidatorLoading}
+                loading={isTableLoading}
                 validating={isValidatorValidating}
                 data={[]} //validators ??
                 className="min-w-[800px] shadow"
@@ -122,7 +119,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
           </Tabs>
         </div>
       ) : (
-        <>Loading</>
+        <Loading />
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import { Gauge } from "@bera/berajs";
+import { type Gauge } from "@bera/berajs";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
