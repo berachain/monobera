@@ -20,7 +20,7 @@ import { usePoolHistoricalData } from "@bera/berajs";
 const pool: PoolV2 = ...
 
 function App() {
-    const { data: recentSwaps, isLoading } = usePoolHistoricalData({ shareAddress: pool.shareAddress });
+    const { data: recentHistory, isLoading } = usePoolHistoricalData({ shareAddress: pool.shareAddress });
 
     ...
 };
