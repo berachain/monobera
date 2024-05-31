@@ -25,10 +25,7 @@ const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => (
     <div className="flex items-center gap-2">
-      <ValidatorIcon
-        address={row.original.id as Address}
-        className="h-8 w-8"
-      />
+      <ValidatorIcon address={row.original.id as Address} className="h-8 w-8" />
       {row.original.name}{" "}
     </div>
   ),

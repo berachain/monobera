@@ -26,7 +26,7 @@ export const MyValidator = ({ keyword }: { keyword: any }) => {
 
   return (
     <DataTable
-    //@ts-ignore
+      //@ts-ignore
       columns={user_general_validator_columns as ColumnDef<UserValidator>[]}
       data={[]}
       className="min-w-[900px]"

@@ -103,7 +103,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
             columns={general_validator_columns as any}
             loading={isLoading}
             validating={isValidating}
-            data={[]}//validators ??
+            data={[]} //validators ??
             className="min-w-[800px] shadow"
             enablePagination
           />
