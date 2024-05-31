@@ -290,7 +290,7 @@ export default defineConfig({
         {
           text: "BGT",
           collapsed: true,
-          items: [{ text: "Getting Started", link: "/react/getting-started/" }],
+          items: [],
         },
         {
           text: "Utils",
