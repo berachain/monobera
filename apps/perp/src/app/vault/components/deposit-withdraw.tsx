@@ -142,6 +142,7 @@ export default function DepositWithdraw() {
                 parseUnits(depositAmount === "" ? "0" : depositAmount, 18) ? (
                 <ApproveButton
                   token={honey}
+                  disabled={depositAmount === "" || depositAmount === "0"}
                   spender={bhoneyVaultContractAddress}
                   amount={parseUnits(
                     depositAmount === "" ? "0" : depositAmount,

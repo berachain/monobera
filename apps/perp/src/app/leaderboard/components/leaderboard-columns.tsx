@@ -30,9 +30,7 @@ export const getColumns = (type: string) => {
     value: any;
   }>[] = [
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Rank" />
-      ),
+      header: "Rank",
       cell: ({ row }) => {
         return (
           <div className="text-xs">
@@ -44,15 +42,11 @@ export const getColumns = (type: string) => {
       },
       accessorKey: "rank",
       enableSorting: false,
+      minSize: 80,
+      size: 80,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title="Trader"
-          className="w-full"
-        />
-      ),
+      header: "Trader",
       cell: ({ row }) => (
         <div className="flex w-full flex-row items-center gap-1 text-xs">
           <Identicon account={row.original.trader} />
@@ -68,7 +62,7 @@ export const getColumns = (type: string) => {
         <DataTableColumnHeader
           column={column}
           title={tableTitle[type ?? ""] as string}
-          className="w-full text-right"
+          className="text-right"
         />
       ),
       cell: ({ row }) => {
@@ -76,7 +70,7 @@ export const getColumns = (type: string) => {
           return (
             <p
               className={cn(
-                "w-full text-right",
+                "text-right",
                 Number(row.original.value) > 0
                   ? "text-success-foreground"
                   : "text-destructive-foreground",
@@ -92,6 +86,8 @@ export const getColumns = (type: string) => {
       },
       accessorKey: "value",
       enableSorting: false,
+      minSize: 190,
+      size: 190,
     },
   ];
 

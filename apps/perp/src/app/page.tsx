@@ -12,6 +12,7 @@ import { MarketImages } from "~/utils/marketImages";
 import { MarketTokenNames } from "~/utils/marketTokenNames";
 import {
   getDailyPriceChange,
+  getGlobalParams,
   getMarkets,
   getTradingSummary,
 } from "~/endpoints";
@@ -32,12 +33,14 @@ export const revalidate = 30;
 
 export default async function Home() {
   const m = getMarkets();
+  const p = getGlobalParams();
   const pc = getDailyPriceChange();
   const ts = getTradingSummary();
 
-  const data: any = await Promise.all([m, pc, ts]).then(
-    ([markets, priceChange, tradingSummary]) => ({
+  const data: any = await Promise.all([m, p, pc, ts]).then(
+    ([markets, params, priceChange, tradingSummary]) => ({
       markets,
+      params,
       priceChange,
       tradingSummary,
     }),
@@ -81,7 +84,7 @@ export default async function Home() {
         <Hero />
         <GeneralInfo tradingSummary={tradingSummary} />
         <Markets showBtn markets={markets} />
-        <Tutorial />
+        <Tutorial params={data.params} />
         <Documentation
           docLink={perpsDocsUrl}
           className="mx-auto w-full max-w-[1280px] px-8"
