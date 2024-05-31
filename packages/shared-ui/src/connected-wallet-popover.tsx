@@ -84,11 +84,7 @@ export default function ConnectedWalletPopover({
               <Button
                 variant="ghost"
                 size="xs"
-                onClick={() => {
-                  handleLogOut();
-                  setOpenModal(false);
-                  setOpenPopover(false);
-                }}
+                onClick={() => handleLogOut()}
               >
                 <Icons.disconnect className="h-4 w-4 text-destructive-foreground" />
               </Button>
