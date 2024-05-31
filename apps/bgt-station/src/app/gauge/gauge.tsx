@@ -197,7 +197,7 @@ export default function Gauge() {
           <GlobalGaugeWeightTable keywords={keywords} />
         </TabsContent>
         <TabsContent value="my-gauges">
-          <GlobalGaugeWeightTable keywords={keywords} />
+          <GlobalGaugeWeightTable keywords={keywords} myGauge />
         </TabsContent>
       </Tabs>
     </div>

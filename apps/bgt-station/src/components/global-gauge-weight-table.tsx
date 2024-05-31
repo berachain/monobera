@@ -15,8 +15,10 @@ const DataTable = dynamic(
 );
 
 export default function GlobalGaugeWeightTable({
+  myGauge = false,
   keywords = "",
 }: {
+  myGauge?: boolean;
   keywords?: string;
 }) {
   const { gaugeList, isLoading, isValidating } = usePollGauges();
@@ -42,7 +44,10 @@ export default function GlobalGaugeWeightTable({
         //   manualPagination: true,
         // }}
         onRowClick={(row: any) =>
-          window.open(`/gauge/${row.original.address}`, "_self")
+          window.open(
+            `/gauge/${row.original.address}${myGauge ? "?my-gauge" : ""}`,
+            "_self",
+          )
         }
       />
     </div>

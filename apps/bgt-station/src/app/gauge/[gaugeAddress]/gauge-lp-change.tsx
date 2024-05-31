@@ -1,9 +1,22 @@
+import {
+  Gauge,
+  Token,
+  usePollWalletBalances,
+  useTokenInformation,
+} from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { DepositLP } from "./deposit-lp";
 import { WithdrawLP } from "./withdraw-lp";
 
-export const GaugueLPChange = () => {
+export const GaugueLPChange = ({ gauge }: { gauge: Gauge }) => {
+  const { data: lpToken } = useTokenInformation({
+    address: gauge.address,
+  });
+  const { data: lpReceiptToken } = useTokenInformation({
+    address: gauge.address,
+  });
+
   return (
     <div className="w-full">
       <Tabs defaultValue="deposit" className="flex w-full flex-col gap-4">
@@ -12,10 +25,10 @@ export const GaugueLPChange = () => {
           <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
         </TabsList>
         <TabsContent value="deposit">
-          <DepositLP />
+          {lpToken && <DepositLP lpToken={lpToken} />}
         </TabsContent>
         <TabsContent value="withdraw">
-          <WithdrawLP />
+          {lpReceiptToken && <WithdrawLP lpReceiptToken={lpReceiptToken} />}
         </TabsContent>
       </Tabs>
     </div>

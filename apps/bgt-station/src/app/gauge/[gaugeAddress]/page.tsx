@@ -4,7 +4,7 @@ import { GaugeDetails } from "./gauge-details";
 
 export function generateMetadata(): Metadata {
   return {
-    title: "Gaugue | BGT | Berachain",
+    title: "Gauge | BGT | Berachain",
   };
 }
 
