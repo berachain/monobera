@@ -2,20 +2,49 @@
 
 Action for fetching the optimal swap route between two tokens and then providing additional processed fields relevant to the swap being performed.
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
 import { getSwap } from "@bera/berajs/actions";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+// required configs for getSwap
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...",
+  },
+};
+```
+
 ## Usage
 
-:::code-group
-
-```ts twoslash [example.ts]
+```ts
+import { type BeraConfig } from "@bera/berajs";
 import { getSwap } from "@bera/berajs/actions";
 
-import { beraConfig } from "./config";
+// required configs for getSwap
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...",
+  },
+};
 
 const swap = await getSwap({
   args: {
@@ -29,22 +58,6 @@ const swap = await getSwap({
   publicClient,
 });
 ```
-
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getSwap
-export const beraConfig: BeraConfig = {
-  endpoints: {
-    dexRouter: "https://...",
-  },
-  contracts: {
-    crocMultiSwapAddress: "0x...",
-  },
-};
-```
-
-:::
 
 ## Parameters
 

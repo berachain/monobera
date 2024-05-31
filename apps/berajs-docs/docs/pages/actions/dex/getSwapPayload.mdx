@@ -2,21 +2,53 @@
 
 Action that returns the appropriate payload / arguments for the swap smart contract function.
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
 import { getSwapPayload } from "@bera/berajs/actions";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+// required configs for getSwapPayload
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...", // required for getSwap
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...", // required for getSwap and getSwapPayload
+  },
+};
+```
+
 ## Usage
 
-:::code-group
-
-```ts twoslash [example.ts]
-import { multiswapAbi, useBeraContractWrite } from "@bera/berajs";
+```ts
+import {
+  multiswapAbi,
+  useBeraContractWrite,
+  type BeraConfig,
+} from "@bera/berajs";
 import { getSwap, getSwapPayload } from "@bera/berajs/actions";
 
-import { beraConfig } from "./config";
+// required configs for getSwapPayload
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...", // required for getSwap
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...", // required for getSwap and getSwapPayload
+  },
+};
 
 // get swapInfo using the getSwap function
 const swapInfo = await getSwap({
@@ -50,22 +82,6 @@ write({
   value: swapPayload?.value,
 });
 ```
-
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getSwapPayload
-export const beraConfig: BeraConfig = {
-  endpoints: {
-    dexRouter: "https://...", // required for getSwap
-  },
-  contracts: {
-    crocMultiSwapAddress: "0x...", // required for getSwap and getSwapPayload
-  },
-};
-```
-
-:::
 
 ## Parameters
 
