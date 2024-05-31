@@ -56,6 +56,7 @@ export function PlaceOrder({
   const pythUpdateFee = usePythUpdateFeeFormatted();
   const { tableState } = useContext(TableContext);
   const { refresh } = usePollOpenPositions(tableState);
+  let warning = undefined;
 
   const slippage = useSlippage();
   const { setSlippageMode, setSlippage } = useSetSlippage();
@@ -70,6 +71,12 @@ export function PlaceOrder({
     setSlippageMode(SLIPPAGE_MODE.CUSTOM);
     setSlippage(newSlippage);
   };
+
+  if ((slippage ?? 0) < 0.3) {
+    warning = "Slippage is set very low, your order may not be filled.";
+  } else {
+    warning = undefined;
+  }
 
   const safeAmount = form.amount === "" ? "0" : form.amount;
 
@@ -289,6 +296,12 @@ export function PlaceOrder({
             token={honey}
             spender={storageContract}
             amount={parseUnits(safeAmount, 18)}
+            disabled={
+              isLoading ||
+              form.amount === "0" ||
+              form.amount === "" ||
+              error !== undefined
+            }
           />
         ) : (
           <Button
@@ -313,6 +326,11 @@ export function PlaceOrder({
           </Button>
         )}
       </ActionButton>
+      {warning !== undefined && (
+        <Alert variant="warning" className="mt-2">
+          {warning}
+        </Alert>
+      )}
       {error !== undefined && (
         <Alert variant="destructive" className="mt-2">
           {error}
