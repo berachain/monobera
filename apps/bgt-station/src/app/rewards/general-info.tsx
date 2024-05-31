@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { cloudinaryUrl } from "@bera/config";
 import { TokenIconList } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export const GeneralInfo = () => {
@@ -34,8 +35,8 @@ export const GeneralInfo = () => {
   ];
 
   return (
-    <div className="flex gap-6 md:flex-row flex-col">
-      <div className="overflow-hidden relative w-full rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
+    <div className="flex flex-col gap-6 lg:flex-row">
+      <div className="relative w-full overflow-hidden rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
         <div className="text-xs leading-[14px] text-muted-foreground">
           Claimable BGT
         </div>
@@ -44,7 +45,7 @@ export const GeneralInfo = () => {
           <Icons.bgt className="h-8 w-8" />
         </div>
         <div className="leading-4 text-muted-foreground">$26,997.49</div>
-        <div className="mt-6 flex flex-col gap-1">
+        <div className="relative z-10 mt-6 flex flex-col gap-1">
           <div className="text-xs leading-5 text-muted-foreground">
             Gauges Earning you BGT:
           </div>
@@ -66,12 +67,16 @@ export const GeneralInfo = () => {
           src={`${cloudinaryUrl}/BGT/jv9zzejriofscplizebh`}
           width={200}
           height={200}
-          className="absolute bottom-0 right-0 lg:block hidden"
+          className="absolute bottom-0 right-0 z-0"
           alt={"gauge-icon"}
         />
+        <Button className="relative z-10 mt-4 flex w-full gap-1 border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400">
+          <Icons.bgt className="h-6 w-6" />
+          Claim <span className="underline">42.69K</span> BGT
+        </Button>
       </div>
 
-      <div className="overflow-hidden relative w-full rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
+      <div className="relative w-full overflow-hidden rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
         <div className="text-xs leading-[14px] text-muted-foreground">
           Claimable Incentives
         </div>
@@ -79,7 +84,7 @@ export const GeneralInfo = () => {
           $420.69K <TokenIconList size="xl" tokenList={[]} />
         </div>
         <div className="leading-4 text-muted-foreground">12 Tokens</div>
-        <div className="mt-6 flex flex-col gap-1">
+        <div className="relative z-10 mt-6 flex flex-col gap-1">
           <div className="text-xs leading-5 text-muted-foreground">
             Incentives You’ve Earned:
           </div>
@@ -101,9 +106,37 @@ export const GeneralInfo = () => {
           src={`${cloudinaryUrl}/BGT/ajb0q68nv5gcv7e5woaw`}
           width={200}
           height={200}
-          className="absolute bottom-0 right-0 lg:block hidden"
+          className="absolute bottom-0 right-0 z-0"
           alt={"gauge-icon"}
         />
+        <Button className="relative z-10 mt-4 flex w-full gap-1 border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400">
+          <Icons.bgt className="h-6 w-6" />
+          Claim <span className="underline">42.69K</span> Incentives
+        </Button>
+      </div>
+
+      <div className="relative flex w-full gap-4 flex-col justify-between overflow-hidden rounded-md border border-yellow-400 bg-yellow-100 bg-opacity-5 px-4 py-3">
+        <div>
+          <div className="text-xs leading-[14px] text-muted-foreground">
+            Claimable Fees
+          </div>
+          <div className="mt-2 flex items-center gap-1 text-3xl font-semibold leading-9">
+            420.69K HONEY <Icons.honey className="h-6 w-6" />
+          </div>
+          <div className="leading-4 text-muted-foreground">$420.96</div>
+
+          <Image
+            src={`${cloudinaryUrl}/BGT/ajb0q68nv5gcv7e5woaw`}
+            width={200}
+            height={200}
+            className="absolute bottom-0 right-0 z-0"
+            alt={"gauge-icon"}
+          />
+        </div>
+        <Button className="relative z-10 flex w-full gap-1 border border-yellow-400 bg-gradient-to-br from-orange-200 to-yellow-400">
+          <Icons.honey className="h-6 w-6" />
+          Claim <span className="underline">42.69K</span> Fees
+        </Button>
       </div>
     </div>
   );

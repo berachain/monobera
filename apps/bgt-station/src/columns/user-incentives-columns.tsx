@@ -20,7 +20,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-2">
         <ValidatorIcon
-          address={row.original.coinbase as Address}
+          address={row.original.id as Address}
           className="h-8 w-8"
         />
         {row.original.name}{" "}

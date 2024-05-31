@@ -14,8 +14,8 @@ export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {
     switch (action) {
       case DelegateEnum.DELEGATE:
         return "staking";
-      case DelegateEnum.REDELEGATE:
-        return "restaking";
+      // case DelegateEnum.REDELEGATE:
+      //   return "restaking";
       case DelegateEnum.UNBOND:
         return "redeem";
     }
