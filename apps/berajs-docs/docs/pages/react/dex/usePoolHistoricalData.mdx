@@ -43,6 +43,14 @@ function usePoolHistoricalData(
 | -------------- | :------- | :-------------------------------------------------------------------------------------------- | :------: |
 | `shareAddress` | `string` | The blockchain address of a pool used to fetch pool information from the indexer ex ("0x...") |  `true`  |
 
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
 ## Returns
 
 #### Return type: `DefaultHookReturnType<PoolHistoryResponse | undefined>`
@@ -56,37 +64,6 @@ function usePoolHistoricalData(
 | `isValidating` | `boolean`                                 | boolean flag representing whether the hook is currently validating data    | `false`  |
 | `isLoading`    | `boolean`                                 | boolean flag representing whether the hook is currently loading data       | `false`  |
 
-### `PoolHistoryResponse`
-
-- #### `info`: `PoolHistoryResponse_Info`
-
-| Name           | type                 | Description                                               | Optional |
-| -------------- | :------------------- | :-------------------------------------------------------- | :------: |
-| `id`           | `string`             | Id of pool                                                |  `true`  |
-| `poolIdx`      | `string`             | Pool idx                                                  |  `true`  |
-| `base`         | `string`             | The pool's base token's name                              |  `true`  |
-| `quote`        | `string`             | The pool's quote token's name                             |  `true`  |
-| `timeCreate`   | `string`             | UNIX timestamp of the time the pool was created           |  `true`  |
-| `baseInfo`     | `string`             | Base token details                                        |  `true`  |
-| `quoteInfo`    | `string`             | Quote token details                                       |  `true`  |
-| `template`     | `{feeRate?: number}` | Pool's fee rate structure                                 |  `true`  |
-| `shareAddress` | `{address?: string}` | The pool's id to fetch/retrieve pool details from indexer |  `true`  |
-
-- #### `history`: `PoolDayDataV2[]`
-
-:::info
-Type `PoolDayDataV2` is from `@bera/graphql`
-:::
-
-```ts
-import { type PoolDayDataV2 } from "@bera/graphql";
-```
-
-| Name               | type     | Description                                                                                 | Optional |
-| ------------------ | :------- | :------------------------------------------------------------------------------------------ | :------: |
-| `day`              | `number` | UNIX timestamp of day for this 24 hour data snapshot                                        | `false`  |
-| `volume24HInHoney` | `number` | Estimated USD value of the trade volume in the pool over the past 24 hours                  | `false`  |
-| `tvlInHoney`       | `number` | Estimated USD value of the total value locked in the pool at the end of this 24 hour period | `false`  |
-| `fees24HInHoney`   | `number` | Estimated USD value of the fees paid in pool transactions over the past 24 hours            | `false`  |
+See type [`PoolHistoryResponse`](/actions/dex/getPoolHistoricalData#returns-poolhistoryresponse)
 
 See type [`DefaultHookReturnType<T>`](/types/DefaultHookReturnType/)

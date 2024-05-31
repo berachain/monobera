@@ -1,0 +1,13 @@
+## `PoolHistoryResponse_Info`
+
+| Name           | type                 | Description                                               | Optional |
+| -------------- | :------------------- | :-------------------------------------------------------- | :------: |
+| `id`           | `string`             | Id of pool                                                |  `true`  |
+| `poolIdx`      | `string`             | Pool idx                                                  |  `true`  |
+| `base`         | `string`             | The pool's base token's name                              |  `true`  |
+| `quote`        | `string`             | The pool's quote token's name                             |  `true`  |
+| `timeCreate`   | `string`             | UNIX timestamp of the time the pool was created           |  `true`  |
+| `baseInfo`     | `string`             | Base token details                                        |  `true`  |
+| `quoteInfo`    | `string`             | Quote token details                                       |  `true`  |
+| `template`     | `{feeRate?: number}` | Pool's fee rate structure                                 |  `true`  |
+| `shareAddress` | `{address?: string}` | The pool's id to fetch/retrieve pool details from indexer |  `true`  |

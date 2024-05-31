@@ -176,6 +176,14 @@ export default defineConfig({
           link: "/types/PoolV2/",
         },
         {
+          text: "PoolDayDataV2",
+          link: "/types/PoolDayDataV2/",
+        },
+        {
+          text: "PoolHistoryResponse_Info",
+          link: "/types/PoolHistoryResponse_Info/",
+        },
+        {
           text: "IUserPool",
           link: "/types/IUserPool/",
         },
