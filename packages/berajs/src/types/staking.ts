@@ -1,13 +1,18 @@
 import { Address } from "viem";
+
 import { Token } from "./dex";
 
-export type Validator = {
-  coinbase: Address;
+export interface ValidatorInfo {
+  id: Address;
   name: string;
-  commission: string;
   description: string;
   website: string;
   imageUri: string;
+}
+
+export type ValidatorData = {
+  id: Address;
+  commission: string;
   amountStaked: string;
   cuttingboard: CuttingBoardWeight[];
   apy: string;
@@ -18,6 +23,8 @@ export type Validator = {
     totalHoneyValueTokenRewards: string;
   };
 };
+
+export type Validator = ValidatorInfo & ValidatorData;
 
 export type UserValidator = Validator & {
   userStaked: string;

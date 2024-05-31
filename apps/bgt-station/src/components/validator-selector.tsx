@@ -1,6 +1,6 @@
 import { get } from "http";
 import React, { useMemo } from "react";
-import { formatter } from "@bera/berajs";
+import { formatter, usePollValidators, type Validator } from "@bera/berajs";
 import {
   DataTable,
   SearchInput,
@@ -19,7 +19,7 @@ export default function ValidatorSelector({
   filter,
 }: // emptyMessage,
 {
-  validatorAddress?: string;
+  validatorAddress?: Address;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
   filter?: Address[];
@@ -28,7 +28,9 @@ export default function ValidatorSelector({
   const [open, setOpen] = React.useState(false);
 
   const prices = undefined;
-
+  const { validatorDictionary = {} } = usePollValidators();
+  // const validValidator =  validatorAddress && validatorDictionary?.[validatorAddress];
+  const validValidator = undefined;
   return (
     <div>
       <Button
@@ -39,31 +41,27 @@ export default function ValidatorSelector({
         {/* {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
-              address={validValidator.operatorAddr as Address}
-              description={validValidator?.description?.identity ?? undefined}
+              address={validValidator.id as Address}
+              // description={validValidator.description}
               className="h-8 w-8"
             />
-            {validValidator.description.moniker}
+            {validValidator.name}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
-        ) : (
-          <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
-            Select Validator
-            <Icons.chevronDown className="relative h-3 w-3" />
-          </div>
-        )} */}
+        ) : ( */}
+        <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
+          Select Validator
+          <Icons.chevronDown className="relative h-3 w-3" />
+        </div>
+        {/* )} */}
       </Button>
-      {/* <ValidatorModal
+      <ValidatorModal
         open={open}
-        validators={
-          filteredValidators?.filter(
-            (vali: Validator) => !filter?.find((f) => f === vali.operatorAddr),
-          ) ?? []
-        }
+        validators={[]}
         onSelect={(address) => onSelectValidator?.(address)}
         onClose={() => setOpen(false)}
         // emptyMessage={emptyMessage}
-      /> */}
+      />
     </div>
   );
 }
