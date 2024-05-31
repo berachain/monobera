@@ -1,6 +1,6 @@
 # useCollateralsRates
 
-SWR hook for fetching the mint rates and redeem rates for all collaterals.
+React SWR hook for fetching the mint rates and redeem rates for all collaterals.
 
 ## Initialization
 
@@ -20,19 +20,23 @@ import { getAddress, type Address } from "viem";
 
 const collateralList: Address[] = ["0x...", "0x..."];
 
-// Poll rates for all collaterals
-const { data: collateralRatesDictionary, getCollateralRate } =
-  useCollateralsRates(collateralList);
+function App() {
+  // Poll rates for all collaterals
+  const { data: collateralRatesDictionary, getCollateralRate } =
+    useCollateralsRates(collateralList);
 
 
-// There are two ways to access the rate of a single collateral in the polled data
+  // There are two ways to access the rate of a single collateral in the polled data
 
-// Option 1: use the getter
-const collateralRate: CollateralRates = getCollateralRate(address);
+  // Option 1: use the getter
+  const collateralRate: CollateralRates = getCollateralRate(address);
 
-// Option 2: access data directly
-const address: Address = "0x...";
-const collateralRate: CollateralRates = collateralRatesDictionary[getAddress(address)];
+  // Option 2: access data directly
+  const address: Address = "0x...";
+  const collateralRate: CollateralRates = collateralRatesDictionary[getAddress(address)];
+
+  ...
+}
 ```
 
 ## Parameters
