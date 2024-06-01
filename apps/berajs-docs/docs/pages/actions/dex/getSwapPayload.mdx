@@ -85,16 +85,17 @@ write({
 
 ## Parameters
 
-```ts twoslash
-import { type getSwapPayload } from "@bera/berajs/actions";
-```
+| Name                    | type                              | Description                                                   | Required |
+| ----------------------- | :-------------------------------- | :------------------------------------------------------------ | :------: |
+| `args.tokenIn`          | `string`                          | The address of the token to be given in the swap              |  `true`  |
+| `args.tokenOut`         | `string`                          | The address of the token to be received in the swap           |  `true`  |
+| `args.tokenInDecimals`  | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.tokenOutDecimals` | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.amount`           | `string`                          | The amount of the tokenIn to be given in the swap             |  `true`  |
+| `config`                | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources |  `true`  |
 
-## Returns
+## Returns `Promise<PayloadReturnType<[ICrocSwapStep[], bigint, bigint]>>`
 
-```ts twoslash
-import { type PayloadReturnType } from "@bera/berajs/actions";
+See type [`ICrocSwapStep`](/types/ICrocSwapStep/)
 
-type getSwapPayloadResult =
-  | PayloadReturnType<[ICrocSwapStep[], bigint, bigint]>
-  | undefined;
-```
+See type [`PayloadReturnType`](/types/PayloadReturnType/)

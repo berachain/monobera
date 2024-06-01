@@ -37,14 +37,17 @@ const withdrawLiqPayload = await getWithdrawLiquidityPayload({
 
 ## Parameters
 
-```ts
-import { getWithdrawLiquidityPayload } from "@bera/berajs/actions";
-```
+| Name                  | type                        | Description                                                 | Required |
+| --------------------- | :-------------------------- | :---------------------------------------------------------- | :------: |
+| `args.slippage`       | `number`                    | Slippage tolerance in percentage between 0.1 to 100         |  `true`  |
+| `args.poolPrice`      | `number`                    | Pool price                                                  |  `true`  |
+| `args.baseToken`      | [`Token`](<(/types/Token)>) | Token object representing the pool's base token             |  `true`  |
+| `args.quoteToken`     | [`Token`](<(/types/Token)>) | Token object representing the pool's quote token            |  `true`  |
+| `args.poolIdx`        | `number`                    | Pool on-chain id                                            |  `true`  |
+| `args.percentRemoval` | `number`                    | Percent of user's stake to be withdrawn from pool           |  `true`  |
+| `args.seeds`          | `string`                    | Seeds                                                       |  `true`  |
+| `publicClient`        | `PublicClient`              | The viem public client used to interact with the blockchain | `false`  |
 
-## Returns
+## Returns [`Promise<PayloadReturnType<any> | undefined>`](/types/PayloadReturnType/)
 
-```ts
-import { type PayloadReturnType } from "@bera/berajs";
-
-type result = Promise<PayloadReturnType | undefined>;
-```
+See type [`PayloadReturnType`](/types/PayloadReturnType/)

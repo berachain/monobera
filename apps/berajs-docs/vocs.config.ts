@@ -150,54 +150,6 @@ export default defineConfig({
       ],
     },
     {
-      text: "Types",
-      collapsed: true,
-      items: [
-        { text: "IUserPosition", link: "/types/IUserPosition/" },
-        { text: "BeraConfig", link: "/types/BeraConfig/" },
-        { text: "DefaultHookOptions", link: "/types/DefaultHookOptions/" },
-        {
-          text: "DefaultHookReturnType",
-          link: "/types/DefaultHookReturnType/",
-        },
-        { text: "HoneyPreviewMethod", link: "/types/HoneyPreviewMethod/" },
-        { text: "ReserveData", link: "/types/ReserveData/" },
-        { text: "BaseCurrencyData", link: "/types/BaseCurrencyData/" },
-        { text: "CollateralRates", link: "/types/CollateralRates/" },
-        { text: "UserAccountData", link: "/types/UserAccountData/" },
-        { text: "Token", link: "/types/Token/" },
-        { text: "AllowanceToken", link: "/types/AllowanceToken/" },
-        {
-          text: "BalanceToken",
-          link: "/types/BalanceToken/",
-        },
-        {
-          text: "PoolV2",
-          link: "/types/PoolV2/",
-        },
-        {
-          text: "PoolDayDataV2",
-          link: "/types/PoolDayDataV2/",
-        },
-        {
-          text: "PoolHistoryResponse_Info",
-          link: "/types/PoolHistoryResponse_Info/",
-        },
-        {
-          text: "IUserPool",
-          link: "/types/IUserPool/",
-        },
-        {
-          text: "SwapInfoV3",
-          link: "/types/SwapInfoV3/",
-        },
-        {
-          text: "ICrocSwapStep",
-          link: "/types/ICrocSwapStep/",
-        },
-      ],
-    },
-    {
       text: "Actions",
       collapsed: true,
       items: [
@@ -338,6 +290,59 @@ export default defineConfig({
               link: "/actions/utils/fetchPoolByAddress/",
             },
           ],
+        },
+      ],
+    },
+
+    {
+      text: "Types",
+      collapsed: true,
+      items: [
+        { text: "IUserPosition", link: "/types/IUserPosition/" },
+        { text: "BeraConfig", link: "/types/BeraConfig/" },
+        { text: "DefaultHookOptions", link: "/types/DefaultHookOptions/" },
+        {
+          text: "DefaultHookReturnType",
+          link: "/types/DefaultHookReturnType/",
+        },
+        { text: "HoneyPreviewMethod", link: "/types/HoneyPreviewMethod/" },
+        { text: "ReserveData", link: "/types/ReserveData/" },
+        { text: "BaseCurrencyData", link: "/types/BaseCurrencyData/" },
+        { text: "CollateralRates", link: "/types/CollateralRates/" },
+        { text: "UserAccountData", link: "/types/UserAccountData/" },
+        { text: "Token", link: "/types/Token/" },
+        { text: "AllowanceToken", link: "/types/AllowanceToken/" },
+        {
+          text: "BalanceToken",
+          link: "/types/BalanceToken/",
+        },
+        {
+          text: "PoolV2",
+          link: "/types/PoolV2/",
+        },
+        {
+          text: "PoolDayDataV2",
+          link: "/types/PoolDayDataV2/",
+        },
+        {
+          text: "PoolHistoryResponse_Info",
+          link: "/types/PoolHistoryResponse_Info/",
+        },
+        {
+          text: "IUserPool",
+          link: "/types/IUserPool/",
+        },
+        {
+          text: "SwapInfoV3",
+          link: "/types/SwapInfoV3/",
+        },
+        {
+          text: "ICrocSwapStep",
+          link: "/types/ICrocSwapStep/",
+        },
+        {
+          text: "PayloadReturnType",
+          link: "/types/PayloadReturnType/",
         },
       ],
     },

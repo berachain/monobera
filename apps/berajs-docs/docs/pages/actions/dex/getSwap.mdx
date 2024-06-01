@@ -61,12 +61,15 @@ const swap = await getSwap({
 
 ## Parameters
 
-```ts
-import { getSwap } from "@bera/berajs/actions";
-```
+| Name                    | type                              | Description                                                   | Required |
+| ----------------------- | :-------------------------------- | :------------------------------------------------------------ | :------: |
+| `args.tokenIn`          | `string`                          | The address of the token to be given in the swap              |  `true`  |
+| `args.tokenOut`         | `string`                          | The address of the token to be received in the swap           |  `true`  |
+| `args.tokenInDecimals`  | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.tokenOutDecimals` | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.amount`           | `string`                          | The amount of the tokenIn to be given in the swap             |  `true`  |
+| `config`                | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources |  `true`  |
 
-## Returns
+## Returns [`Promise<SwapInfoV3 | undefined>`](/types/SwapInfoV3/)
 
-```ts
-import { type SwapInfoV3 } from "@bera/berajs";
-```
+See type [`SwapInfoV3`](/types/SwapInfoV3/)
