@@ -62,7 +62,7 @@ export const getWithdrawLiquidityPayload = async ({
     );
     calldata = response?.calldata ?? "";
 
-    const payload = [2, calldata];
+    const payload = [128, calldata];
 
     return {
       payload,
