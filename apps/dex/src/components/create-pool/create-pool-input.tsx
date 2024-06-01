@@ -20,7 +20,7 @@ export default function CreatePoolInput({
     onTokenSelection(token);
   };
   return (
-    <li className={"flex flex-row items-center justify-between gap-1 px-4"}>
+    <li className={"flex flex-row items-center justify-between gap-1 p-4"}>
       <SelectToken
         token={token}
         onTokenSelection={handleTokenSelection}
