@@ -130,7 +130,6 @@ export function CreatePoolPreview({
         ? calculateBaseTokenAmount(INITIAL_AMOUNT, encodedPriceNumber)
         : calculateQuoteTokenAmount(INITIAL_AMOUNT, encodedPriceNumber);
 
-      console.log(initialLiquidityAmount);
       const priceLimits = {
         min: getSafeNumber(initialPrice),
         max: getSafeNumber(initialPrice),
@@ -170,7 +169,7 @@ export function CreatePoolPreview({
         Number(poolId),
       );
 
-      const multiPathArgs = [2, 3, initPoolInfo.calldata, 2, mintCalldata];
+      const multiPathArgs = [2, 3, initPoolInfo.calldata, 128, mintCalldata];
 
       const multiCmd = encodeAbiParameters(
         parseAbiParameters("uint8, uint8, bytes, uint8, bytes"),

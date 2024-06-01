@@ -37,10 +37,7 @@ export const getPoolUserPosition = async ({
     });
 
     const lpBalanceCall = publicClient.readContract({
-      address: getBeraLpAddress({
-        base: pool.base,
-        quote: pool.quote,
-      }) as any,
+      address: getBeraLpAddress(pool.base, pool.quote) as any,
       abi: erc20Abi,
       functionName: "balanceOf",
       args: [account],
