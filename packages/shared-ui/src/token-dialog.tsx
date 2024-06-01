@@ -8,6 +8,7 @@ import {
   useTokens,
   type Token,
 } from "@bera/berajs";
+import { nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Badge } from "@bera/ui/badge";
@@ -225,7 +226,7 @@ export function TokenDialog({
                     ?.filter((token) => !filter.includes(token?.address ?? ""))
                     .map((token, i) => (
                       <TokenDialogRow
-                        key={i}
+                        key={`${token?.symbol}-${token?.name}-${token?.address}-${i}`}
                         token={token}
                         isTokenSelected={isTokenSelected(token)}
                         focusedToken={focusedToken}
@@ -284,10 +285,17 @@ export function TokenDialog({
                 return (
                   <div
                     className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"
-                    key={token.address}
+                    key={`${token.name}-${token.address}`}
                   >
                     <div className="flex flex-row items-center gap-2">
-                      <TokenIcon address={token.address} />
+                      <TokenIcon
+                        address={token.address}
+                        imgOverride={
+                          token.address === nativeTokenAddress
+                            ? token.logoURI
+                            : undefined
+                        }
+                      />
                       <p className="text-sm font-medium text-muted-foreground">
                         {token.symbol}
                       </p>
@@ -344,7 +352,12 @@ const TokenDialogRow = ({
         }}
       >
         <div className="relative">
-          <TokenIcon address={token?.address ?? ""} />
+          <TokenIcon
+            address={token?.address ?? ""}
+            imgOverride={
+              token?.address === nativeTokenAddress ? token.logoURI : undefined
+            }
+          />
           {focusedToken?.address === token?.address && (
             <div className="absolute bottom-0 right-0 mr-[-4px] mt-[10px] flex h-4 w-4 items-center justify-center rounded-full bg-primary text-white">
               <Icons.check className="h-3 w-3 " />

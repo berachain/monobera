@@ -32,6 +32,7 @@ interface IconProps
     VariantProps<typeof IconVariants> {
   address: string | undefined;
   symbol?: string;
+  imgOverride?: string;
 }
 
 export const TokenIcon = ({
@@ -39,6 +40,7 @@ export const TokenIcon = ({
   className,
   size,
   symbol,
+  imgOverride,
   ...props
 }: IconProps) => {
   const { data: tokenData } = useTokens();
@@ -52,7 +54,11 @@ export const TokenIcon = ({
 
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
-      <AvatarImage src={img} className="rounded-full" alt={address} />
+      <AvatarImage
+        src={imgOverride ?? img}
+        className="rounded-full"
+        alt={address}
+      />
       <AvatarFallback className="h-full w-full border border-foreground bg-background text-inherit">
         {symbol ? symbol.slice(0, 3) : "TKN"}
       </AvatarFallback>
