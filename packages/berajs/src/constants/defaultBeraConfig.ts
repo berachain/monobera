@@ -17,6 +17,7 @@ import {
   tokenListUrl,
   tradingContractAddress,
   validatorListUrl,
+  bgtEndpointUrl,
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -27,6 +28,7 @@ export const defaultBeraConfig: BeraConfig = {
     dexIndexer: crocIndexerEndpoint,
     tokenList: tokenListUrl,
     validatorInfo: validatorListUrl,
+    bgtEndpoint: bgtEndpointUrl,
   },
   subgraphs: {
     honeySubgraph: honeySubgraphUrl,

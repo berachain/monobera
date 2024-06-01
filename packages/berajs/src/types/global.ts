@@ -9,6 +9,7 @@ export interface BeraConfig {
     dexIndexer?: string;
     tokenList?: string;
     validatorInfo?: string;
+    bgtEndpoint?: string;
   };
   subgraphs?: {
     honeySubgraph?: string;

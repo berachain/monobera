@@ -108,7 +108,7 @@ const cuttingboard: CuttingBoardWeight[] = [
 ];
 
 export default function Gauge() {
-  const { isConnected } = useBeraJs();
+  const { isReady } = useBeraJs();
   const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
@@ -134,7 +134,7 @@ export default function Gauge() {
             <TabsTrigger
               value="my-gauges"
               className="w-full md:w-fit"
-              disabled={!isConnected}
+              disabled={!isReady}
             >
               My Gauges
             </TabsTrigger>

@@ -12,6 +12,7 @@ export const blockExplorerUrl = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER as string;
 export const blockExplorerName = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER_NAME as string;
+export const bgtEndpointUrl = process.env.NEXT_PUBLIC_BGT_ENDPOINT as string;
 export const lendEndpointUrl = process.env.NEXT_PUBLIC_LEND_ENDPOINT as string;
 export const faucetEndpointUrl = process.env
   .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
