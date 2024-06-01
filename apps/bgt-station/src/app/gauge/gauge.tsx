@@ -34,13 +34,7 @@ const cuttingboard: CuttingBoardWeight[] = [
           amountLeft: "50000",
         },
       ],
-      market: {
-        id: "honey",
-        name: "Honey Market",
-        imageUri:
-          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-        website: "https://www.honeymarket.com",
-      },
+      market: "HONEY",
     },
   },
   {
@@ -65,13 +59,7 @@ const cuttingboard: CuttingBoardWeight[] = [
           amountLeft: "50000",
         },
       ],
-      market: {
-        id: "honey",
-        name: "Honey Market",
-        imageUri:
-          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-        website: "https://www.honeymarket.com",
-      },
+      market: "HONEY",
     },
   },
   {
@@ -96,13 +84,7 @@ const cuttingboard: CuttingBoardWeight[] = [
           amountLeft: "50000",
         },
       ],
-      market: {
-        id: "honey",
-        name: "Honey Market",
-        imageUri:
-          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-        website: "https://www.honeymarket.com",
-      },
+      market: "HONEY",
     },
   },
 ];

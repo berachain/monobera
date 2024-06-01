@@ -4,7 +4,6 @@ import {
   ActiveIncentive,
   BeraConfig,
   CuttingBoardWeight,
-  Market,
   ValidatorData,
   Vault,
 } from "~/types";
@@ -15,21 +14,6 @@ export interface ValidatorFilter {
   gaugeAddress?: Address;
   sort?: string;
 }
-
-const mockMarkets: Market[] = [
-  {
-    id: "native",
-    name: "Market One",
-    imageUri: "http://example.com/market1.png",
-    website: "http://example.com/market1",
-  },
-  {
-    id: "native",
-    name: "Market Two",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-];
 
 const mockActiveIncentives: ActiveIncentive[] = [
   {
@@ -97,7 +81,7 @@ const mockActiveIncentives: ActiveIncentive[] = [
 const mockVaults: Vault[] = [
   {
     address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-    market: mockMarkets[0],
+    market: "BEX",
     stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
     name: "Vault One",
     imageUri: "http://example.com/vault1.png",
@@ -106,7 +90,7 @@ const mockVaults: Vault[] = [
   },
   {
     address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-    market: mockMarkets[1],
+    market: "BEX",
     stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
     name: "Vault Two",
     imageUri: "http://example.com/vault2.png",

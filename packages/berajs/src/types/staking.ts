@@ -38,7 +38,7 @@ export type CuttingBoardWeight = {
 
 export type Vault = {
   address: Address;
-  market: Market;
+  market: string | undefined;
   stakingToken: Address;
   name: string;
   imageUri: string;
@@ -53,8 +53,8 @@ export type ActiveIncentive = {
 };
 
 export type Market = {
-  id: string;
   name: string;
-  imageUri: string;
-  website: string;
+  logoURI: string;
+  url: string;
+  description: string;
 };

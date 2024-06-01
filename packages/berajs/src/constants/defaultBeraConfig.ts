@@ -19,6 +19,7 @@ import {
   validatorListUrl,
   bgtEndpointUrl,
   bgtTokenAddress,
+  marketListUrl,
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -28,6 +29,7 @@ export const defaultBeraConfig: BeraConfig = {
     dexRouter: crocRouterEndpoint,
     dexIndexer: crocIndexerEndpoint,
     tokenList: tokenListUrl,
+    marketList: marketListUrl,
     validatorInfo: validatorListUrl,
     bgtEndpoint: bgtEndpointUrl,
   },

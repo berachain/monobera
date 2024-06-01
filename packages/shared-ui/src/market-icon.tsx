@@ -2,18 +2,21 @@
 
 import React from "react";
 import Image from "next/image";
+import { usePollMarkets } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { type Address } from "viem";
 
 export const MarketIcon = ({
-  imageUri,
+  market,
   className,
 }: {
-  imageUri: string | undefined;
+  market: string | undefined;
   className?: string;
 }) => {
+  const { data } = usePollMarkets();
+  const imageUri = data?.find((m) => m.name === market)?.logoURI;
   return (
     <Avatar className={cn("", className)}>
       {imageUri && <AvatarImage src={imageUri} />}

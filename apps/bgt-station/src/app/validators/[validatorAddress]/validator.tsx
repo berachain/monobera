@@ -168,13 +168,7 @@ export default function Validator({
               amountLeft: "50000",
             },
           ],
-          market: {
-            id: "markey",
-            name: "Honey Market",
-            imageUri:
-              "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-            website: "https://www.honeymarket.com",
-          },
+          market: "HONEY",
         },
       },
       {
@@ -199,13 +193,7 @@ export default function Validator({
               amountLeft: "50000",
             },
           ],
-          market: {
-            id: "honey",
-            name: "Honey Market",
-            imageUri:
-              "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-            website: "https://www.honeymarket.com",
-          },
+          market: "HONEY",
         },
       },
       {
@@ -230,13 +218,7 @@ export default function Validator({
               amountLeft: "50000",
             },
           ],
-          market: {
-            id: "honey",
-            name: "Honey Market",
-            imageUri:
-              "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-            website: "https://www.honeymarket.com",
-          },
+          market: "HONEY",
         },
       },
     ],

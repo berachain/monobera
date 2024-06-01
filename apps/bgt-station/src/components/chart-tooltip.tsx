@@ -1,5 +1,5 @@
 import { type CuttingBoardWeight } from "@bera/berajs";
-import { FormattedNumber, GaugeIcon } from "@bera/shared-ui";
+import { FormattedNumber, GaugeIcon, MarketIcon } from "@bera/shared-ui";
 import uniqolor from "uniqolor";
 
 export function ChartTooltip({ gauge }: { gauge: CuttingBoardWeight }) {
@@ -25,8 +25,8 @@ export function ChartTooltip({ gauge }: { gauge: CuttingBoardWeight }) {
             {gauge.receiver.name}
           </div>
           <div className="flex items-center gap-1 whitespace-nowrap text-xs leading-4 text-muted-foreground">
-            <GaugeIcon address={gauge.receiver.address} className="h-4 w-4" />{" "}
-            {gauge.receiver.market.name}
+            <MarketIcon market={gauge.receiver.market} className="h-4 w-4" />{" "}
+            {gauge.receiver.market??""}
           </div>
         </div>
       </div>
