@@ -18,7 +18,7 @@ import {
   tradingContractAddress,
   validatorListUrl,
   bgtEndpointUrl,
-  bgtTokenAddress
+  bgtTokenAddress,
 } from "@bera/config";
 
 import { BeraConfig } from "..";

@@ -22,7 +22,7 @@ export default function Redeem() {
   const { isReady, account } = useBeraJs();
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
-  const bgtFormattedBalance = bgtBalance?.formattedBalance??"0";
+  const bgtFormattedBalance = bgtBalance?.formattedBalance ?? "0";
   const [redeemAmount, setRedeemAmount] = useState<string>("");
   const { write, ModalPortal } = useTxn({
     message: `Redeem ${redeemAmount} BERA`,
