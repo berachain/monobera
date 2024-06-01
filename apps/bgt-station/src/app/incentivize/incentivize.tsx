@@ -68,8 +68,10 @@ export const Incentivize = ({
             },
             {
               title: "Pool Contract",
-              content: <>{truncateHash(gaugeInfo?.address??"")}</>,
-              externalLink: `${blockExplorerUrl}/address/${gaugeInfo?.address??""}`,
+              content: <>{truncateHash(gaugeInfo?.address ?? "")}</>,
+              externalLink: `${blockExplorerUrl}/address/${
+                gaugeInfo?.address ?? ""
+              }`,
             },
           ]}
           center
