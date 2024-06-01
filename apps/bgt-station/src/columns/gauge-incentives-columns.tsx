@@ -1,20 +1,31 @@
 import React from "react";
-import { DataTableColumnHeader, FormattedNumber } from "@bera/shared-ui";
+import { Token } from "@bera/berajs";
+import {
+  DataTableColumnHeader,
+  FormattedNumber,
+  TokenIcon,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
-export const gauge_incentives_columns: ColumnDef<any>[] = [
+type IncentiveList = Token & { amountLeft: string };
+
+export const gauge_incentives_columns: ColumnDef<IncentiveList>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Bribe Breakdown" />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex flex-row items-center gap-1">{row.original}</div>
+        <div className="flex flex-row items-center gap-1">
+          <TokenIcon address={row.original.address} size="sm" />
+          <div>{row.original.symbol}</div>
+        </div>
       );
     },
     accessorKey: "token",
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
@@ -22,17 +33,17 @@ export const gauge_incentives_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <FormattedNumber
-        value={Math.random() * 1000000}
+        value={row.original.amountLeft}
         compact={false}
-        symbol="BERA"
+        symbol={row.original.symbol}
       />
     ),
     accessorKey: "incentiveAmount",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Incentives" />
+      <DataTableColumnHeader column={column} title="Add Incentives" />
     ),
     cell: ({ row }) => (
       <Button size="sm" className="w-24">
@@ -40,6 +51,6 @@ export const gauge_incentives_columns: ColumnDef<any>[] = [
       </Button>
     ),
     accessorKey: "hide",
-    enableSorting: true,
+    enableSorting: false,
   },
 ];

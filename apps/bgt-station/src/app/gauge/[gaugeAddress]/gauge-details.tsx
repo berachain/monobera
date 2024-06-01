@@ -1,7 +1,12 @@
 "use client";
 
 import { notFound } from "next/navigation";
-import { truncateHash, usePollGauges, usePollValidators } from "@bera/berajs";
+import {
+  truncateHash,
+  usePollGauges,
+  usePollValidators,
+  usePollWalletBalances,
+} from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, PoolHeader } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
@@ -26,6 +31,8 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   const gauge = gaugeDictionary?.[gaugeAddress];
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
   const isTableLoading = isGaugeLoading || isGaugeValidating;
+  const { data: TokeList = [] } = usePollWalletBalances();
+
   return (
     <>
       {gauge ? (
@@ -82,25 +89,15 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
             <TabsContent value="incentives">
               <DataTable
                 loading={isTableLoading}
-                columns={gauge_incentives_columns as any}
-                data={[
-                  <>
-                    <Icons.beraIcon className="h-6 w-6" />
-                    BERA
-                  </>,
-                  <>
-                    <Icons.honey className="h-6 w-6" />
-                    HONEY
-                  </>,
-                  <>
-                    <Icons.beraIcon className="h-6 w-6" />
-                    wBERA
-                  </>,
-                ]}
+                columns={gauge_incentives_columns}
+                data={TokeList.map((token) => ({
+                  ...token,
+                  amountLeft: "50000",
+                }))}
                 className="max-h-[300px] min-w-[1000px] shadow"
                 onRowClick={(row: any) => {
                   window.open(
-                    `/incentivize?pool=${row.original.address}`,
+                    `/incentivize?gauge=${gaugeAddress}&&token=${row.original.address}`,
                     "_self",
                   );
                 }}
