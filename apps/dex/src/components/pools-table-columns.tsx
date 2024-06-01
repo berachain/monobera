@@ -70,7 +70,7 @@ export const columns: ColumnDef<PoolV2>[] = [
         column={column}
         tooltip="Total amount of assets currently locked, in the Pool"
         title="TVL"
-        className="min-w-[80px]"
+        className="min-w-[95px]"
       />
     ),
     cell: ({ row }) => (
