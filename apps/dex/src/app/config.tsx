@@ -25,10 +25,6 @@ export const navItems = [
     href: "/pools",
     title: "Pool",
   },
-  {
-    href: "/rewards",
-    title: "Rewards",
-  },
   // {
   //   href: faucetUrl,
   //   title: "Faucet",
