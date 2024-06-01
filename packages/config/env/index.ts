@@ -100,8 +100,6 @@ export const governanceAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_ADDRESS as Address;
 export const bankAddress = process.env.NEXT_PUBLIC_BANK_ADDRESS as Address;
 export const epochsAddress = process.env.NEXT_PUBLIC_EPOCHS_ADDRESS as Address;
-export const erc20BgtAddress = process.env
-  .NEXT_PUBLIC_ERC20_BGT_ADDRESS as Address;
 export const berachefAddress = process.env
   .NEXT_PUBLIC_BERACHEF_ADDRESS as Address;
 export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;

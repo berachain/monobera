@@ -21,6 +21,7 @@ export interface BeraConfig {
     crocMultiSwapAddress?: Address;
     wrappedTokenAddress?: Address;
     dexAddress?: Address;
+    bgtAddress?: Address;
     lendAddressProviderAddress?: Address;
     lendOracleAddress?: Address;
     lendPoolProxyAddress?: Address;

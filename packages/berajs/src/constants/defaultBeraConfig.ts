@@ -18,6 +18,7 @@ import {
   tradingContractAddress,
   validatorListUrl,
   bgtEndpointUrl,
+  bgtTokenAddress
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -40,6 +41,7 @@ export const defaultBeraConfig: BeraConfig = {
     crocMultiSwapAddress: crocMultiSwapAddress,
     wrappedTokenAddress: beraTokenAddress,
     dexAddress: crocDexAddress,
+    bgtAddress: bgtTokenAddress,
     lendAddressProviderAddress: lendPoolAddressProviderAddress,
     lendOracleAddress: lendOracleAddress,
     lendPoolProxyAddress: lendPoolImplementationAddress,
