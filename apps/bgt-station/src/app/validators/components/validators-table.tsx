@@ -2,10 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  useBeraJs,
-  type CuttingBoardWeight,
-} from "@bera/berajs";
+import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -13,7 +10,6 @@ import { getAddress } from "viem";
 
 import { AllValidator } from "./all-validator";
 import { MyValidator } from "./my-validators";
-
 
 export const CuttingBoardDisplay = ({
   cuttingBoard,

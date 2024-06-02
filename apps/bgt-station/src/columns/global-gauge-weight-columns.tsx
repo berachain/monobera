@@ -13,7 +13,10 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => (
-      <GaugeHeaderWidget address={row.original.vaultAddress} className="w-[150px]" />
+      <GaugeHeaderWidget
+        address={row.original.vaultAddress}
+        className="w-[150px]"
+      />
     ),
     accessorKey: "gauge",
     enableSorting: false,
@@ -107,7 +110,10 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
             e.stopPropagation();
-            window.open(`/incentivize?pool=${row.original.vaultAddress}`, "_self");
+            window.open(
+              `/incentivize?pool=${row.original.vaultAddress}`,
+              "_self",
+            );
           }}
         >
           Add
