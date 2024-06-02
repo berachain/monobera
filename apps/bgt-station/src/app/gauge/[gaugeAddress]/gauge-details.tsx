@@ -49,7 +49,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
                   <Icons.beraIcon className="h-8 w-8" />
                   <Icons.honey className="-ml-2 h-8 w-8" />
                 </div>
-                {gauge?.name}
+                {gauge?.metadata.name}
               </>
             }
             subtitles={[
@@ -58,16 +58,16 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
                 content: (
                   <>
                     {" "}
-                    <GaugeIcon address={gauge?.address} />
-                    {gauge?.categoryName}
+                    <GaugeIcon address={gauge?.vaultAddress} />
+                    {gauge?.metadata.product}
                   </>
                 ),
                 externalLink: "https://berachain.com",
               },
               {
                 title: "Pool Contract",
-                content: <>{truncateHash(gauge?.address ?? "")}</>,
-                externalLink: `${blockExplorerUrl}/address/${gauge?.address}`,
+                content: <>{truncateHash(gauge?.vaultAddress ?? "")}</>,
+                externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
               },
             ]}
             className="border-b border-border pb-8"

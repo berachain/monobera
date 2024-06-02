@@ -15,7 +15,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
             My Vault Deposits
           </div>
           <div className="flex justify-between font-medium leading-6">
-            <div>{gauge.name}</div>
+            <div>{gauge.metadata.name}</div>
             <div className="flex items-center gap-1">
               2.694206
               <div className="text-sm text-muted-foreground">(0.01%)</div>

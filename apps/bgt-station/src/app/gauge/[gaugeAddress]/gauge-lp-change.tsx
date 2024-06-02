@@ -11,10 +11,10 @@ import { WithdrawLP } from "./withdraw-lp";
 
 export const GaugueLPChange = ({ gauge }: { gauge: Gauge }) => {
   const { data: lpToken } = useTokenInformation({
-    address: gauge.address,
+    address: gauge.vaultAddress,
   });
   const { data: lpReceiptToken } = useTokenInformation({
-    address: gauge.address,
+    address: gauge.vaultAddress,
   });
 
   return (

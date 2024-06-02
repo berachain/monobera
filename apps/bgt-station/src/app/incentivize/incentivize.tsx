@@ -51,7 +51,7 @@ export const Incentivize = ({
           title={
             <>
               <TokenIconList tokenList={[]} size="xl" />
-              {gaugeInfo?.name}
+              {gaugeInfo?.metadata.name}
             </>
           }
           subtitles={[
@@ -68,9 +68,9 @@ export const Incentivize = ({
             },
             {
               title: "Pool Contract",
-              content: <>{truncateHash(gaugeInfo?.address ?? "")}</>,
+              content: <>{truncateHash(gaugeInfo?.vaultAddress ?? "")}</>,
               externalLink: `${blockExplorerUrl}/address/${
-                gaugeInfo?.address ?? ""
+                gaugeInfo?.vaultAddress ?? ""
               }`,
             },
           ]}

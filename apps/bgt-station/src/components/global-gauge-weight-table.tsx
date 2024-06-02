@@ -27,6 +27,7 @@ export default function GlobalGaugeWeightTable({
   //   (state: TableState) => setPage(state?.pagination?.pageIndex),
   //   [setPage],
   // );
+  console.log("gaugeList", gaugeList);
   return (
     <div className="w-full ">
       <DataTable
