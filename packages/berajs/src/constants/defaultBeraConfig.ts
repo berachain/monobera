@@ -16,7 +16,10 @@ import {
   multicallAddress,
   tokenListUrl,
   tradingContractAddress,
-  // validatorListUrl,
+  validatorListUrl,
+  bgtEndpointUrl,
+  bgtTokenAddress,
+  marketListUrl,
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -26,7 +29,9 @@ export const defaultBeraConfig: BeraConfig = {
     dexRouter: crocRouterEndpoint,
     dexIndexer: crocIndexerEndpoint,
     tokenList: tokenListUrl,
-    // validatorInfo: validatorListUrl,
+    marketList: marketListUrl,
+    validatorInfo: validatorListUrl,
+    bgtEndpoint: bgtEndpointUrl,
   },
   subgraphs: {
     honeySubgraph: honeySubgraphUrl,
@@ -38,6 +43,7 @@ export const defaultBeraConfig: BeraConfig = {
     crocMultiSwapAddress: crocMultiSwapAddress,
     wrappedTokenAddress: beraTokenAddress,
     dexAddress: crocDexAddress,
+    bgtAddress: bgtTokenAddress,
     lendAddressProviderAddress: lendPoolAddressProviderAddress,
     lendOracleAddress: lendOracleAddress,
     lendPoolProxyAddress: lendPoolImplementationAddress,

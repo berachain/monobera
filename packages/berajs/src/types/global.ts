@@ -8,7 +8,9 @@ export interface BeraConfig {
     dexRouter?: string;
     dexIndexer?: string;
     tokenList?: string;
+    marketList?: string;
     validatorInfo?: string;
+    bgtEndpoint?: string;
   };
   subgraphs?: {
     honeySubgraph?: string;
@@ -21,6 +23,7 @@ export interface BeraConfig {
     crocMultiSwapAddress?: Address;
     wrappedTokenAddress?: Address;
     dexAddress?: Address;
+    bgtAddress?: Address;
     lendAddressProviderAddress?: Address;
     lendOracleAddress?: Address;
     lendPoolProxyAddress?: Address;

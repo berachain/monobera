@@ -34,13 +34,7 @@ const cuttingboard: CuttingBoardWeight[] = [
           amountLeft: "50000",
         },
       ],
-      market: {
-        id: "honey",
-        name: "Honey Market",
-        imageUri:
-          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-        website: "https://www.honeymarket.com",
-      },
+      market: "HONEY",
     },
   },
   {
@@ -65,13 +59,7 @@ const cuttingboard: CuttingBoardWeight[] = [
           amountLeft: "50000",
         },
       ],
-      market: {
-        id: "honey",
-        name: "Honey Market",
-        imageUri:
-          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-        website: "https://www.honeymarket.com",
-      },
+      market: "HONEY",
     },
   },
   {
@@ -96,19 +84,13 @@ const cuttingboard: CuttingBoardWeight[] = [
           amountLeft: "50000",
         },
       ],
-      market: {
-        id: "honey",
-        name: "Honey Market",
-        imageUri:
-          "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-        website: "https://www.honeymarket.com",
-      },
+      market: "HONEY",
     },
   },
 ];
 
 export default function Gauge() {
-  const { isConnected } = useBeraJs();
+  const { isReady } = useBeraJs();
   const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
@@ -134,7 +116,7 @@ export default function Gauge() {
             <TabsTrigger
               value="my-gauges"
               className="w-full md:w-fit"
-              disabled={!isConnected}
+              disabled={!isReady}
             >
               My Gauges
             </TabsTrigger>
@@ -197,7 +179,7 @@ export default function Gauge() {
           <GlobalGaugeWeightTable keywords={keywords} />
         </TabsContent>
         <TabsContent value="my-gauges">
-          <GlobalGaugeWeightTable keywords={keywords} />
+          <GlobalGaugeWeightTable keywords={keywords} myGauge />
         </TabsContent>
       </Tabs>
     </div>

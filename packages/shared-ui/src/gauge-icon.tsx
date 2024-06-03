@@ -41,7 +41,10 @@ export const GaugeIcon = ({
   ...props
 }: IconProps) => {
   const { gaugeDictionary } = usePollGauges();
-  const img = useMemo(() => gaugeDictionary?.[address]?.logoURI, [address]);
+  const img = useMemo(
+    () => gaugeDictionary?.[address]?.metadata.logoURI,
+    [address],
+  );
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={img} className="rounded-full" alt={address} />
