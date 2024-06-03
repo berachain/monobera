@@ -16,19 +16,20 @@ export const CuttingBoardDisplay = ({
 }: {
   cuttingBoard: CuttingBoardWeight;
 }) => {
-  return (
-    <Link
-      className="flex  h-full w-[160px] items-center justify-start gap-2"
-      href={`${blockExplorerUrl}/address/${getAddress(
-        cuttingBoard.receiver.address,
-      )}`}
-      target="_blank"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <GaugeIcon address={cuttingBoard.receiver.address} />
-      <span className=" hover:underline">{cuttingBoard.receiver.name}</span>
-    </Link>
-  );
+  return <></>
+  // return (
+  //   <Link
+  //     className="flex  h-full w-[160px] items-center justify-start gap-2"
+  //     href={`${blockExplorerUrl}/address/${getAddress(
+  //       cuttingBoard.receiver.address,
+  //     )}`}
+  //     target="_blank"
+  //     onClick={(e) => e.stopPropagation()}
+  //   >
+  //     <GaugeIcon address={cuttingBoard.receiver.address} />
+  //     <span className=" hover:underline">{cuttingBoard.receiver.name}</span>
+  //   </Link>
+  // );
 };
 
 export default function ValidatorsTable() {
