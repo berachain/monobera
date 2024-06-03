@@ -146,11 +146,9 @@ const TokenView = ({
                 <div className="font-medium">
                   <FormattedNumber value={token.value} />
                 </div>
-                {token.valueUSD && (
-                  <div className="text-sm text-muted-foreground">
-                    <FormattedNumber value={token.valueUSD} symbol="USD" />
-                  </div>
-                )}
+                <div className="text-sm text-muted-foreground">
+                  <FormattedNumber value={token.valueUSD ?? 0} symbol="USD" />
+                </div>
               </div>
             </div>
           );
@@ -381,15 +379,16 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
           </>
         }
         subtitles={[
+          // {
+          //   title: "APY",
+          //   content: <>{pool?.totalApy?.toFixed(2)}%</>,
+          //   color: "success",
+          // },
           {
-            title: "APY",
-            content: <>{pool?.totalApy?.toFixed(2)}%</>,
-            color: "success",
-          },
-          {
-            title: "BGT Rewards",
+            title: "BGT APY",
             content: <>{pool?.bgtApy?.toFixed(2)}%</>,
             color: "warning",
+            tooltip: <ApyTooltip />,
           },
           {
             title: "Fee",
@@ -468,10 +467,10 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-1 overflow-hidden truncate whitespace-nowrap text-sm ">
-                  APY <ApyTooltip />
+                  BGT APY <ApyTooltip />
                 </div>
               </div>
-              <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
+              <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold text-warning-foreground">
                 {/* {(pool?.totalApy ?? 0) > 100000
                   ? formatter.format(pool?.totalApy ?? 0)
                   : (pool?.totalApy ?? 0).toFixed(2)} */}

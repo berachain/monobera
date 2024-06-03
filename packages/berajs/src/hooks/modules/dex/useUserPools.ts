@@ -24,11 +24,10 @@ export const useUserPools = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType<IUserPool[] | undefined> => {
   const { account, keyword = "" } = args || {};
-  const { address: currentAccount } = useAccount();
-  const { config: beraConfig } = useBeraJs();
+  const { config: beraConfig, account: currentAccount } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const publicClient = usePublicClient();
-  const QUERY_KEY = ["UseUserPools", account, keyword];
+  const QUERY_KEY = ["UseUserPools", account, currentAccount, keyword];
   const swrResponse = useSWR<IUserPool[] | undefined, any, any>(
     QUERY_KEY,
     async () => {
