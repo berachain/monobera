@@ -72,6 +72,7 @@ export interface PoolV2 {
   totalApy: number;
   bgtApy: number;
   shareAddress: string;
+  isDeposited?: boolean;
 }
 
 export interface IUserPosition {
