@@ -14,6 +14,7 @@ export interface BeraConfig {
     honeySubgraph?: string;
     dexSubgraph?: string;
     lendSubgraph?: string;
+    bgtSubgraph?: string;
   };
   contracts?: {
     multicallAddress?: Address;
