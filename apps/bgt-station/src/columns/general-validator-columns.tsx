@@ -92,7 +92,7 @@ const BRIBES_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
-    return <ValidatorBribesPopover validator={row.original} />;
+    return <ValidatorBribesPopover validatorAddress={row.original.id} />;
   },
   accessorKey: "bribes",
   enableSorting: false,

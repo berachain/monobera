@@ -10,7 +10,7 @@ import {
 import { Dialog, DialogContent, DialogHeader } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-
+import { Address } from "viem";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import {
   AggregatedBribe,
@@ -188,7 +188,7 @@ export const ValidatorPolData = ({
   validator: Validator;
   isLoading: boolean;
 }) => {
-  const aggregatedBribes = useAggregatedBribes(validator);
+  const aggregatedBribes = useAggregatedBribes(validator.id as Address);
 
   const [selectedBribe, setSelectedBribe] = useState<
     AggregatedBribe | undefined

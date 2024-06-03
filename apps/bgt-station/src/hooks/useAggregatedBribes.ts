@@ -1,5 +1,11 @@
-import { CuttingBoardWeight, Token, Vault, type Validator } from "@bera/berajs";
+import { Address } from "cluster";
 import { useMemo } from "react";
+import {
+  CuttingBoardWeight,
+  Token,
+  Vault,
+  usePollValidators,
+} from "@bera/berajs";
 
 export type AggregatedBribe = {
   bribeTotalAmountLeft: string;
@@ -15,7 +21,10 @@ export type AggregatedBribe = {
   >;
 };
 
-export const useAggregatedBribes = (validator: Validator | undefined) => {
+export const useAggregatedBribes = (validatorAddress: Address) => {
+  const { validatorDictionary } = usePollValidators();
+  //@ts-ignore
+  const validator = validatorDictionary?.[validatorAddress];
   return useMemo<AggregatedBribe[] | undefined>(() => {
     if (!validator) return undefined;
 
@@ -32,7 +41,7 @@ function aggregateIncentivesByToken(
   // Loop through each CuttingBoardWeight
   cuttingBoards.forEach((cuttingBoard) => {
     // Loop through each ActiveIncentive in the Vault's activeIncentives array
-    cuttingBoard.receiver.activeIncentives.forEach((incentive) => {
+    cuttingBoard.receiver.activeIncentives.forEach((incentive: any) => {
       const tokenAddress = incentive.token.address;
 
       // If the token address is not already a key in the map, initialize it

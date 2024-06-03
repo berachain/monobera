@@ -1,4 +1,3 @@
-import { useCallback, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import {
@@ -8,7 +7,7 @@ import {
   usePollValidatorInfo,
   usePollValidators,
 } from "@bera/berajs";
-import type { ColumnDef, TableState } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
 import { TableLoading } from "./table-loading";
@@ -47,7 +46,7 @@ export const AllValidator = ({ keyword }: { keyword: any }) => {
 
   return (
     <DataTable
-      columns={general_validator_columns as ColumnDef<unknown, unknown>[]}
+      columns={general_validator_columns as ColumnDef<Validator>[]}
       //@ts-ignore
       data={validators}
       className="min-w-[900px]"

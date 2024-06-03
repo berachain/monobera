@@ -149,12 +149,12 @@ export const BribesTooltip = ({
 };
 
 export const ValidatorBribesPopover = ({
-  validator,
+  validatorAddress,
 }: {
-  validator: Validator;
+  validatorAddress: Address;
 }) => {
   const availableBribes: AggregatedBribe[] | undefined =
-    useAggregatedBribes(validator);
+    useAggregatedBribes(validatorAddress);
 
   return (
     <Tooltip
