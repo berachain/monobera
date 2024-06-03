@@ -57,6 +57,7 @@ export default function ValidatorInput({
           onChange={(e: any) => onAmountChange(e.target.value)}
         />
       </div>
+
       {action === DelegateEnum.DELEGATE && isReady && (
         <div className=" mt-2 flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
@@ -68,7 +69,7 @@ export default function ValidatorInput({
           <span
             className="underline hover:cursor-pointer"
             onClick={() => {
-              onAmountChange("0");
+              onAmountChange(bgtBalance?.formattedBalance ?? "0");
             }}
           >
             MAX

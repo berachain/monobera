@@ -7,8 +7,6 @@ import {
 import {
   DataTableColumnHeader,
   FormattedNumber,
-  TokenIconList,
-  Tooltip,
   ValidatorIcon,
   bribeApyTooltipText,
 } from "@bera/shared-ui";
@@ -16,7 +14,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
 import { ValidatorBribesPopover } from "~/components/bribes-tooltip";
-import { VP } from "~/components/validator-selector";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
@@ -38,7 +35,9 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Voting Power" />
   ),
   cell: ({ row }) => (
-    <VP coinbase={row.original.id} amountStaked={row.original.amountStaked} />
+    <div className="flex h-full w-full flex-shrink-0 items-center">
+      {row.original.amountStaked}
+    </div>
   ),
   accessorKey: "amountStaked",
 };

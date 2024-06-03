@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import {
-  BGT_TOKEN_ABI,
+  BGT_ABI,
   TransactionActionType,
   useBeraJs,
   usePollWalletBalances,
@@ -105,7 +105,7 @@ export default function Redeem() {
             onClick={() =>
               write({
                 address: bgtTokenAddress,
-                abi: BGT_TOKEN_ABI,
+                abi: BGT_ABI,
                 functionName: "redeem",
                 params: [
                   account,

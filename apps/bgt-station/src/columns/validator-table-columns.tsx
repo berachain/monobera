@@ -1,33 +1,42 @@
 import React from "react";
-import { DataTableColumnHeader, bribeApyTooltipText } from "@bera/shared-ui";
+import { truncateHash, type Validator } from "@bera/berajs";
+import {
+  DataTableColumnHeader,
+  GaugeIcon,
+  ValidatorIcon,
+  bribeApyTooltipText,
+} from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { formatCommission } from "~/utils/formatCommission";
-
-export const validator_table_columns: ColumnDef<any>[] = [
+export const validator_table_columns: ColumnDef<Validator>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Validator" />
     ),
-    cell: ({ row }) => row.original.validator,
+    cell: ({ row }) => (
+      <div className="flex w-[100px] items-center gap-1">
+        <ValidatorIcon address={row.original.id} className="h-8 w-8" />
+        {row.original.name}
+      </div>
+    ),
     accessorKey: "validator",
     enableSorting: false,
   },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="My Delegation" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex w-[106px] items-center gap-1">
-          {row.original.bgt_delegated}
-        </div>
-      );
-    },
-    // TODO: find a way to sort for my delegation
-    accessorKey: "bgt_delegated",
-    enableSorting: false,
-  },
+  // {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="My Delegation" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="flex w-[106px] items-center gap-1">
+  //         {row.original.bgt_delegated}
+  //       </div>
+  //     );
+  //   },
+  //   // TODO: find a way to sort for my delegation
+  //   accessorKey: "bgt_delegated",
+  //   enableSorting: false,
+  // },
   {
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -38,18 +47,18 @@ export const validator_table_columns: ColumnDef<any>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex w-24 flex-shrink-0 items-center whitespace-nowrap">
-        {row.original.vp}
+        idk yet
       </div>
     ),
     accessorKey: "vp",
-    enableSorting: true,
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.voting_power ?? 0;
-      const b = rowB.original.voting_power ?? 0;
-      if (a > b) return -1;
-      if (a < b) return 1;
-      return 0;
-    },
+    // enableSorting: true,
+    // sortingFn: (rowA, rowB) => {
+    //   const a = rowA.original.voting_power ?? 0;
+    //   const b = rowB.original.voting_power ?? 0;
+    //   if (a > b) return -1;
+    //   if (a < b) return 1;
+    //   return 0;
+    // },
   },
   {
     header: ({ column }) => (
@@ -58,7 +67,7 @@ export const validator_table_columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[91px] items-center gap-1">
-          {formatCommission(row.original.commission)}%
+          {row.original.commission}%
         </div>
       );
     },
@@ -76,7 +85,7 @@ export const validator_table_columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[67px] items-center gap-1">
-          {row.original.vapy}%
+          {row.original.apy}%
         </div>
       );
     },
@@ -88,8 +97,24 @@ export const validator_table_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Most weighted gauge" />
     ),
     cell: ({ row }) => {
+      const gaugeList = row.original.cuttingboard;
+      const mwGauge =
+        gaugeList.length > 0
+          ? gaugeList.reduce((prev: any, current: any) =>
+              prev.percentage > current.percentage ? prev : current,
+            )
+          : null;
       return (
-        <div className="flex w-[141px] items-center">{row.original.mwg}</div>
+        <>
+          {mwGauge ? (
+            <div className="flex w-[141px] items-center">
+              <GaugeIcon address={mwGauge.receiver.address} />
+              {truncateHash(mwGauge.receiver.address)}
+            </div>
+          ) : (
+            <></>
+          )}
+        </>
       );
     },
     accessorKey: "mwg",
@@ -102,7 +127,7 @@ export const validator_table_columns: ColumnDef<any>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[136px] items-center justify-center gap-1">
-          {row.original.bribes}
+          later
         </div>
       );
     },

@@ -1,9 +1,12 @@
+import { usePollUserQueuedBoost } from "@bera/berajs";
 import { timeDifferenceFromNow } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 export const BoostQueue = () => {
+  const { data } = usePollUserQueuedBoost();
+  console.log(data);
   return (
     <div className="flex flex-col gap-3">
       <div className="text-lg font-semibold leading-7">Delegation Queue</div>

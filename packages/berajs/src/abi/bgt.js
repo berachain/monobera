@@ -1,7 +1,4 @@
-/**
- * @deprecated
- */
-export const BGT_TOKEN_ABI = [
+export const BGT_ABI = [
   {
     type: "function",
     name: "CLOCK_MODE",

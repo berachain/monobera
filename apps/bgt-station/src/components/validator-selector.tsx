@@ -1,5 +1,5 @@
 import { get } from "http";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { formatter, usePollValidators, type Validator } from "@bera/berajs";
 import {
   DataTable,
@@ -12,25 +12,24 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { formatUnits, getAddress, type Address } from "viem";
 
+import { validator_table_columns } from "~/columns/validator-table-columns";
+
 export default function ValidatorSelector({
-  validatorAddress,
+  validatorAddress = "0x",
   onSelectValidator,
   showDelegated = false,
   filter,
-}: // emptyMessage,
-{
+}: {
   validatorAddress?: Address;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
   filter?: Address[];
-  // emptyMessage?: string;
 }) {
   const [open, setOpen] = React.useState(false);
+  const { validatorDictionary = {}, validatorList } = usePollValidators();
+  //@ts-ignore
+  const validValidator = validatorDictionary?.[validatorAddress];
 
-  const prices = undefined;
-  const { validatorDictionary = {} } = usePollValidators();
-  // const validValidator =  validatorAddress && validatorDictionary?.[validatorAddress];
-  const validValidator = undefined;
   return (
     <div>
       <Button
@@ -38,26 +37,25 @@ export default function ValidatorSelector({
         className="ml-3 min-w-[148px] whitespace-nowrap border-border bg-background shadow"
         onClick={() => setOpen(true)}
       >
-        {/* {validValidator ? (
+        {validValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
               address={validValidator.id as Address}
-              // description={validValidator.description}
               className="h-8 w-8"
             />
             {validValidator.name}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
-        ) : ( */}
-        <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
-          Select Validator
-          <Icons.chevronDown className="relative h-3 w-3" />
-        </div>
-        {/* )} */}
+        ) : (
+          <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
+            Select Validator
+            <Icons.chevronDown className="relative h-3 w-3" />
+          </div>
+        )}
       </Button>
       <ValidatorModal
         open={open}
-        validators={[]}
+        validators={validatorList}
         onSelect={(address) => onSelectValidator?.(address)}
         onClose={() => setOpen(false)}
         // emptyMessage={emptyMessage}
@@ -71,60 +69,13 @@ const ValidatorModal = ({
   open,
   validators,
   onSelect,
-}: // emptyMessage,
-{
+}: {
   onClose: () => void;
   open: boolean;
   validators: any[];
   onSelect: (address: string) => void;
-  // emptyMessage?: string;
 }) => {
   const [search, setSearch] = React.useState("");
-
-  // TODO: REFACTOR TO A REAL TABLE
-  // const tableV = React.useMemo(
-  //   () =>
-  //     validators
-  //       .filter(
-  //         (validator) =>
-  //           validator.description.moniker
-  //             .toLowerCase()
-  //             .includes(search.toLowerCase()) ||
-  //           validator.operatorAddr.toLowerCase().includes(search.toLowerCase()),
-  //       )
-  //       .map((validator: PoLValidator) => ({
-  //         address: validator.operatorAddr,
-  //         validator: (
-  //           <div className="flex w-[100px] items-center gap-1">
-  //             <ValidatorIcon
-  //               address={validator.operatorAddr as Address}
-  //               description={validator?.description?.identity ?? undefined}
-  //               className="h-8 w-8"
-  //             />
-  //             {validator.description.moniker}
-  //           </div>
-  //         ),
-  //         bgt_delegated: <BGTDelegated operatorAddr={validator.operatorAddr} />,
-  //         voting_power: validator.tokens,
-  //         vp: (
-  //           <VP
-  //             operatorAddr={validator.operatorAddr}
-  //             tokens={validator.tokens}
-  //           />
-  //         ),
-  //         commission: validator.commission.commissionRates.rate,
-  //         vapy: validator.vApy.toFixed(2),
-  //         mwg: <ValidatorGauge address={validator.operatorAddr} />,
-  //         bribes:
-  //           validator.bribeTokenList.length !== 0 ? (
-  //             <TokenIconList showCount={3} tokenList={[]} />
-  //           ) : (
-  //             <p>No bribes</p>
-  //           ),
-  //       })),
-  //   [validators, search],
-  // );
-
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="w-full justify-center sm:max-w-fit">
@@ -137,55 +88,20 @@ const ValidatorModal = ({
               placeholder="Search by name, address, or token"
               className="w-full md:w-[400px]"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e: any) => setSearch(e.target.value)}
             />
-            {/* <div className="hidden gap-2 md:flex ">
-              <Button size="sm" variant="secondary">
-                Filter by bribe
-              </Button>
-              <Button size="sm" variant="secondary">
-                Filter by pool
-              </Button>
-            </div> */}
           </div>
-          {/* <DataTable
+          <DataTable
             columns={validator_table_columns}
-            data={tableV}
+            data={validators}
             onRowClick={(value: any) => {
-              onSelect(value.original.address);
+              onSelect(value.original.id);
               onClose();
             }}
             className="max-h-[500px] min-w-[1000px] overflow-y-scroll"
-            // emptyMessage={emptyMessage}
-          /> */}
+          />
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
-
-const BGTDelegated = ({ operatorAddr }: { operatorAddr: string }) => {
-  return (
-    <div className="flex h-full w-24 items-center justify-center">
-      {/* {isLoading
-        ? "Loading"
-        : bgtDelegated && Number(bgtDelegated) === 0
-          ? "0 BGT"
-          : `${Number(bgtDelegated ?? 0).toFixed(2)} BGT`} */}
-    </div>
-  );
-};
-
-export const VP = ({
-  coinbase,
-  amountStaked,
-}: {
-  coinbase: string;
-  amountStaked: string;
-}) => {
-  return (
-    <div className="flex h-full w-full flex-shrink-0 items-center">
-      {amountStaked}
-    </div>
   );
 };
