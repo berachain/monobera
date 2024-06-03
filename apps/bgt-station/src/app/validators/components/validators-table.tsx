@@ -1,69 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  useBeraJs,
-  usePollGauges,
-  type CuttingBoardWeight,
-} from "@bera/berajs";
-import { blockExplorerUrl, cloudinaryUrl } from "@bera/config";
+import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
+import { blockExplorerUrl } from "@bera/config";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
-import { cn } from "@bera/ui";
-import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getAddress } from "viem";
 
 import { AllValidator } from "./all-validator";
 import { MyValidator } from "./my-validators";
 
-export const GaugeCategoryIcon = ({
-  address,
-  className,
-}: {
-  address: string;
-  className?: string;
-}) => {
-  const { gaugeDictionary } = usePollGauges();
-
-  return (
-    <Avatar className={cn("h-5 w-5", className)}>
-      <AvatarImage
-        src={
-          gaugeDictionary
-            ? gaugeDictionary[getAddress(address)]?.categoryIcon
-            : ""
-        }
-        className="rounded-lg"
-      />
-      <AvatarFallback>
-        {/* DARK MODE */}
-        <Image
-          src={`${cloudinaryUrl}/shared/s8kfq1dupk8buydgjxdf`}
-          width={100}
-          height={100}
-          className="hidden h-full w-full rounded-md dark:block"
-          alt={"gauge-icon"}
-        />
-        {/* LIGHT MODE  */}
-        <Image
-          src={`${cloudinaryUrl}/shared/ocaxgutrs2voe8umwxxc`}
-          width={100}
-          height={100}
-          className="block h-full w-full rounded-md dark:hidden"
-          alt={"gauge-icon"}
-        />
-      </AvatarFallback>
-    </Avatar>
-  );
-};
-
 export const CuttingBoardDisplay = ({
   cuttingBoard,
 }: {
-  cuttingBoard: CuttingBoardWeight;
+  cuttingBoard: CuttingBoardWeight | undefined;
 }) => {
+  if (!cuttingBoard) return <div>No Gauge Found</div>;
   return (
     <Link
       className="flex  h-full w-[160px] items-center justify-start gap-2"
@@ -74,7 +27,7 @@ export const CuttingBoardDisplay = ({
       onClick={(e) => e.stopPropagation()}
     >
       <GaugeIcon address={cuttingBoard.receiver.address} />
-      <span className=" hover:underline">{cuttingBoard.receiver.name}</span>
+      <span className="hover:underline">{cuttingBoard.receiver.name}</span>
     </Link>
   );
 };

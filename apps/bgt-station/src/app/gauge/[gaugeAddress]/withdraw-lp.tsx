@@ -1,13 +1,21 @@
 import { useState } from "react";
+import { Token, usePollWalletBalances } from "@bera/berajs";
 import { TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Slider } from "@bera/ui/slider";
-
+import BigNumber from "bignumber.js";
 import { Info } from "./info";
 
-export const WithdrawLP = () => {
+export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
   const [withdrawAmount, setWithdrawAmount] = useState<`${number}`>("0");
   const [withdrawPercent, setWithdrawPercent] = useState<number>(0);
+  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
+    externalTokenList: [lpReceiptToken],
+  });
+  const balance = useSelectedWalletBalance(lpReceiptToken.address);
+  const validAmount =
+    BigNumber(withdrawAmount).gt(0) &&
+    BigNumber(withdrawAmount).lte(balance?.formattedBalance ?? "0");
   return (
     <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
@@ -20,9 +28,9 @@ export const WithdrawLP = () => {
         </div>
         <div className="mt-4 rounded-md border border-border bg-muted">
           <TokenInput
-            selected={undefined}
+            selected={lpReceiptToken}
             amount={withdrawAmount}
-            balance={"420.69"}
+            balance={balance?.formattedBalance}
             hidePrice
             showExceeding={true}
             selectable={false}
@@ -62,7 +70,7 @@ export const WithdrawLP = () => {
         />
       </div>
       <Info />
-      <Button>Withdraw</Button>
+      <Button disabled={!validAmount}>Withdraw</Button>
     </div>
   );
 };

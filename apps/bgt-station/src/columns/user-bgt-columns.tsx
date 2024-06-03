@@ -11,7 +11,7 @@ export const user_bgt_columns: ColumnDef<any>[] = [
       <DataTableColumnHeader column={column} title="Validators" />
     ),
     cell: ({ row }) => (
-      <GaugeHeaderWidget gauge={row.original.address} className="w-[200px]" />
+      <GaugeHeaderWidget address={row.original.address} className="w-[200px]" />
     ),
     accessorKey: "gauge",
     enableSorting: false,

@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
+import Image from "next/image";
 
 export default function MarketSelector({
   markets,
@@ -19,7 +20,6 @@ export default function MarketSelector({
 }) {
   const { data = [] } = usePollMarkets();
   const [open, setOpen] = useState(false);
-
   return (
     <DropdownMenu open={open}>
       <DropdownMenuTrigger asChild onClick={() => setOpen(true)}>
@@ -44,17 +44,24 @@ export default function MarketSelector({
         <div className="max-h-[200px] overflow-auto p-1">
           {data.map((market: Market, index: number) => (
             <DropdownMenuCheckboxItem
-              key={`selector-${index}-${market}`}
-              className="hover:bg-muted hover:text-foreground"
-              checked={markets.find((m) => m === market.id) !== undefined}
+              key={`selector-${index}-${market.name}`}
+              className="hover:bg-muted hover:text-foreground flex gap-1 items-center"
+              checked={markets.find((m) => m === market.name) !== undefined}
               onCheckedChange={(checked: boolean) => {
                 if (checked) {
-                  setMarkets([...markets, market.id]);
+                  setMarkets([...markets, market.name]);
                 } else {
-                  setMarkets(markets.filter((m) => m !== market.id));
+                  setMarkets(markets.filter((m) => m !== market.name));
                 }
               }}
             >
+              <Image
+                src={market.logoURI}
+                alt={market.name}
+                className="w-4 h-4"
+                width={16}
+                height={16}
+              />
               {market.name}
             </DropdownMenuCheckboxItem>
           ))}

@@ -1,61 +1,15 @@
-import { Market } from "~/types";
+import { BeraConfig, Market } from "~/types";
 
-const mockMarkets: Market[] = [
-  {
-    id: "native",
-    name: "Native",
-    imageUri: "http://example.com/market1.png",
-    website: "http://example.com/market1",
-  },
-  {
-    id: "defi",
-    name: "DeFi",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-  {
-    id: "rwa",
-    name: "RWA",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-  {
-    id: "bridge",
-    name: "Bridge",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-  {
-    id: "oracle",
-    name: "Oracle",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-  {
-    id: "custody",
-    name: "Custody",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-  {
-    id: "account",
-    name: "Account Abstraction",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-  {
-    id: "security",
-    name: "Security",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-];
-
-export const getMarkets = async (): Promise<Market[]> => {
+export const getMarkets = async (config: BeraConfig): Promise<Market[]> => {
+  if (!config.endpoints?.marketList) {
+    throw new Error("Missing market list endpoint in config");
+  }
   try {
-    return mockMarkets;
+    const markets = await fetch(config.endpoints.marketList);
+    const temp = await markets.json();
+    return temp.products;
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching validator information", error);
     return [];
   }
 };

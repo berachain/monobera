@@ -9,7 +9,8 @@ import { Skeleton } from "@bera/ui/skeleton";
 import ValidatorsTable from "./components/validators-table";
 
 export default function Validators() {
-  const { validatorCounts, isLoading } = usePollValidatorInfo();
+  const { validatorCounts, validatorInfoList, isLoading } =
+    usePollValidatorInfo();
   const generalInfo = [
     {
       amount: validatorCounts,
@@ -48,6 +49,7 @@ export default function Validators() {
       ),
     },
   ];
+  console.log(validatorInfoList);
   return (
     <div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

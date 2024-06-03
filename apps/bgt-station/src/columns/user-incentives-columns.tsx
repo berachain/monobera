@@ -23,7 +23,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
           address={row.original.id as Address}
           className="h-8 w-8"
         />
-        {row.original.name}{" "}
+        {row.original.metadata.name}{" "}
       </div>
     ),
     accessorKey: "gauge",
@@ -80,7 +80,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-1">
-          <ValidatorBribesPopover validator={row.original} />
+          <ValidatorBribesPopover validatorAddress={row.original.id} />
           <Button size="sm" className="leading-5">
             Claim
           </Button>

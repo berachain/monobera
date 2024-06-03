@@ -1,11 +1,20 @@
 import { useState } from "react";
+import { Token, usePollWalletBalances } from "@bera/berajs";
 import { TokenInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import BigNumber from "bignumber.js";
 
 import { Info } from "./info";
 
-export const DepositLP = () => {
+export const DepositLP = ({ lpToken }: { lpToken: Token }) => {
+  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
+    externalTokenList: [lpToken],
+  });
+  const balance = useSelectedWalletBalance(lpToken.address);
   const [depositAmount, setDepositAmount] = useState<`${number}`>("0");
+  const validAmount =
+    BigNumber(depositAmount).gt(0) &&
+    BigNumber(depositAmount).lte(balance?.formattedBalance ?? "0");
   return (
     <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
@@ -17,18 +26,20 @@ export const DepositLP = () => {
         </div>
         <div className="mt-4 rounded-md border border-border bg-muted">
           <TokenInput
-            selected={undefined}
+            selected={lpToken}
             amount={depositAmount}
-            balance={"420.69"}
+            balance={balance?.formattedBalance}
             hidePrice
             showExceeding={true}
             selectable={false}
-            setAmount={(amount) => setDepositAmount(amount as `${number}`)}
+            setAmount={(amount: string) =>
+              setDepositAmount(amount as `${number}`)
+            }
           />
         </div>
       </div>
       <Info />
-      <Button>Deposit</Button>
+      <Button disabled={!validAmount}>Deposit</Button>
     </div>
   );
 };
