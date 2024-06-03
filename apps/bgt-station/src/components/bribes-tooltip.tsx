@@ -154,6 +154,7 @@ export const ValidatorBribesPopover = ({
   validatorAddress: Address;
 }) => {
   const availableBribes: AggregatedBribe[] | undefined =
+    //@ts-ignore
     useAggregatedBribes(validatorAddress);
 
   return (

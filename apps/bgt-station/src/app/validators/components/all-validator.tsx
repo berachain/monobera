@@ -46,6 +46,7 @@ export const AllValidator = ({ keyword }: { keyword: any }) => {
 
   return (
     <DataTable
+      //@ts-ignore
       columns={general_validator_columns as ColumnDef<Validator>[]}
       //@ts-ignore
       data={validators}

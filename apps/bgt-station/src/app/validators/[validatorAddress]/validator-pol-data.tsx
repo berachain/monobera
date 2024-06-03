@@ -188,6 +188,7 @@ export const ValidatorPolData = ({
   validator: Validator;
   isLoading: boolean;
 }) => {
+  //@ts-ignore
   const aggregatedBribes = useAggregatedBribes(validator.id as Address);
 
   const [selectedBribe, setSelectedBribe] = useState<
