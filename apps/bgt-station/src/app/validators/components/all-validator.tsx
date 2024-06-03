@@ -1,12 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import {
-  Validator,
-  ValidatorData,
-  ValidatorInfo,
-  usePollValidatorInfo,
-  usePollValidators,
-} from "@bera/berajs";
+import { Validator, ValidatorInfo, usePollValidatorInfo } from "@bera/berajs";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
@@ -23,7 +17,6 @@ const DataTable = dynamic(
 export const AllValidator = ({ keyword }: { keyword: any }) => {
   // const [page, setPage] = useState(0);
   const router = useRouter();
-  const { validatorList, isLoading, isValidating } = usePollValidators();
   const {
     validatorInfoDictionary,
     isLoading: isValidatorInfoLoading,
@@ -36,13 +29,11 @@ export const AllValidator = ({ keyword }: { keyword: any }) => {
   // );
 
   //@ts-ignore
-  const validators: Validator = validatorList?.map(
-    (validator: ValidatorData) => ({
-      ...validator,
-      //@ts-ignore
-      ...(validatorInfoDictionary[validator.id] as ValidatorInfo),
-    }),
-  );
+  const validators: Validator = validatorList?.map((validator: Validator) => ({
+    ...validator,
+    //@ts-ignore
+    ...(validatorInfoDictionary[validator.id] as ValidatorInfo),
+  }));
 
   return (
     <DataTable
@@ -53,8 +44,8 @@ export const AllValidator = ({ keyword }: { keyword: any }) => {
       className="min-w-[900px]"
       // fetchData={fetchData}
       // enablePagination
-      loading={isLoading || isValidatorInfoLoading}
-      validating={isValidating || isValidatorInfoValidating}
+      loading={isValidatorInfoLoading}
+      validating={isValidatorInfoValidating}
       // additionalTableProps={{
       //   pageCount: 2,
       //   manualFiltering: true,

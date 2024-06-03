@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import {
   truncateHash,
   usePollGauges,
-  usePollValidators,
+  usePollValidatorInfo,
   usePollWalletBalances,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
@@ -22,7 +22,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
     data: validators,
     isLoading: isValidatorLoading,
     isValidating: isValidatorValidating,
-  } = usePollValidators();
+  } = usePollValidatorInfo();
   const {
     gaugeDictionary,
     isLoading: isGaugeLoading,

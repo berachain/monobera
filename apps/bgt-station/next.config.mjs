@@ -35,6 +35,16 @@ const config = {
       "s3.amazonaws.com",
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/berachain/:path*",
+        destination: "http://localhost:8080/berachain/:path*",
+      },
+    ];
+  },
+  // This is required to support PostHog trailing slash API requests
+  skipTrailingSlashRedirect: true,
 };
 
 export default withSentryConfig(

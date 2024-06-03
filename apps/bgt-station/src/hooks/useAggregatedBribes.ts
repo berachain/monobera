@@ -4,7 +4,7 @@ import {
   CuttingBoardWeight,
   Token,
   Vault,
-  usePollValidators,
+  usePollValidatorInfo,
 } from "@bera/berajs";
 
 export type AggregatedBribe = {
@@ -22,9 +22,9 @@ export type AggregatedBribe = {
 };
 
 export const useAggregatedBribes = (validatorAddress: Address) => {
-  const { validatorDictionary } = usePollValidators();
+  const { validatorInfoDictionary } = usePollValidatorInfo();
   //@ts-ignore
-  const validator = validatorDictionary?.[validatorAddress];
+  const validator = validatorInfoDictionary?.[validatorAddress];
   return useMemo<AggregatedBribe[] | undefined>(() => {
     if (!validator) return undefined;
 

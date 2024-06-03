@@ -136,7 +136,7 @@ export default function Validator({
 }) {
   const prices = undefined;
   const percentageDelegated = undefined;
-  const validator: Validator = {
+  const validator = {
     id: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
     name: "Honey Validator",
     commission: "0.02",
@@ -285,7 +285,10 @@ export default function Validator({
         <div className="mt-2 flex w-full flex-col justify-between gap-6 border-b  border-border pb-6 lg:flex-row ">
           <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
-              <ValidatorIcon address={validator.id} className="h-12 w-12" />
+              <ValidatorIcon
+                address={validator.id as Address}
+                className="h-12 w-12"
+              />
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (
@@ -466,7 +469,7 @@ export default function Validator({
           }
         />
       </div>
-      <ValidatorPolData validator={validator} isLoading={isLoading} />
+      {/* <ValidatorPolData validator={validator} isLoading={isLoading} /> */}
     </div>
   );
 }

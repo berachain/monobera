@@ -1,6 +1,6 @@
 import { get } from "http";
 import React, { useEffect, useMemo } from "react";
-import { formatter, usePollValidators, type Validator } from "@bera/berajs";
+import { formatter, usePollValidatorInfo, type Validator } from "@bera/berajs";
 import {
   DataTable,
   SearchInput,
@@ -26,9 +26,9 @@ export default function ValidatorSelector({
   filter?: Address[];
 }) {
   const [open, setOpen] = React.useState(false);
-  const { validatorDictionary = {}, validatorList } = usePollValidators();
+  const { validatorInfoList, validatorInfoDictionary } = usePollValidatorInfo();
   //@ts-ignore
-  const validValidator = validatorDictionary?.[validatorAddress];
+  const validValidator = validatorInfoDictionary?.[validatorAddress];
 
   return (
     <div>
@@ -55,7 +55,7 @@ export default function ValidatorSelector({
       </Button>
       <ValidatorModal
         open={open}
-        validators={validatorList}
+        validators={validatorInfoList}
         onSelect={(address) => onSelectValidator?.(address)}
         onClose={() => setOpen(false)}
         // emptyMessage={emptyMessage}

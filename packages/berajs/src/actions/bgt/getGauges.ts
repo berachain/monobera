@@ -15,7 +15,8 @@ export const getGauges = async (
     throw new Error("Missing backend endpoint in config");
   }
   try {
-    const res = await fetch(`${config.endpoints.bgtEndpoint}/vaults`);
+    // const res = await fetch(`${config.endpoints.bgtEndpoint}/vaults`);
+    const res = await fetch("berachain/v1alpha1/beacon/vaults");
     const gauges = await res.json();
     return {
       gaugeList: gauges.vaults,

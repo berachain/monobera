@@ -6,7 +6,7 @@ import { Icons } from "@bera/ui/icons";
 
 export const BoostQueue = () => {
   const { data } = usePollUserQueuedBoost();
-  console.log(data);
+  // console.log(data);
   return (
     <div className="flex flex-col gap-3">
       <div className="text-lg font-semibold leading-7">Delegation Queue</div>

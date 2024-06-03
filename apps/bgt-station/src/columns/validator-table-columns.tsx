@@ -16,7 +16,7 @@ export const validator_table_columns: ColumnDef<Validator>[] = [
     cell: ({ row }) => (
       <div className="flex w-[100px] items-center gap-1">
         <ValidatorIcon address={row.original.id} className="h-8 w-8" />
-        {row.original.name}
+        {row.original.metadata.name}
       </div>
     ),
     accessorKey: "validator",
@@ -83,11 +83,7 @@ export const validator_table_columns: ColumnDef<Validator>[] = [
       />
     ),
     cell: ({ row }) => {
-      return (
-        <div className="flex w-[67px] items-center gap-1">
-          {row.original.apy}%
-        </div>
-      );
+      return <div className="flex w-[67px] items-center gap-1">{0}%</div>;
     },
     accessorKey: "vapy",
     enableSorting: true,
@@ -97,7 +93,7 @@ export const validator_table_columns: ColumnDef<Validator>[] = [
       <DataTableColumnHeader column={column} title="Most weighted gauge" />
     ),
     cell: ({ row }) => {
-      const gaugeList = row.original.cuttingboard;
+      const gaugeList = row.original.cuttingboard ?? [];
       const mwGauge =
         gaugeList.length > 0
           ? gaugeList.reduce((prev: any, current: any) =>
