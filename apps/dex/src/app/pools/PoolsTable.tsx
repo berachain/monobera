@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PoolV2, usePoolTable } from "@bera/berajs";
+import { usePoolTable } from "@bera/berajs";
 import { DataTable, NotFoundBear, SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -12,8 +12,6 @@ import { columns } from "~/components/pools-table-columns";
 import MyPool from "./components/pools/my-pool";
 import TableViewLoading from "./components/pools/table-view-loading";
 import { getPoolUrl } from "./fetchPools";
-import { useUserDepositedPools } from "~/hooks/useUserDepositedPools";
-import { Address } from "viem";
 
 export const PoolSearch = ({
   poolType,
@@ -70,8 +68,6 @@ export const PoolSearch = ({
 
   const router = useRouter();
 
-  useUserDepositedPools((data?.map((pool: PoolV2) => pool.shareAddress) ?? [] )as Address[]);
-  
   return (
     <div
       className="w-full flex-col items-center justify-center"
