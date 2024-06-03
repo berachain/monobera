@@ -1,4 +1,4 @@
-import { Address } from "cluster";
+import { Address } from "viem";
 import { useMemo } from "react";
 import {
   CuttingBoardWeight,

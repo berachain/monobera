@@ -1,5 +1,5 @@
 import React from "react";
-import { Token, useTokenHoneyPrices, type Validator } from "@bera/berajs";
+import { Token, useTokenHoneyPrices } from "@bera/berajs";
 import {
   FormattedNumber,
   TokenIcon,
@@ -50,6 +50,7 @@ export const BribeTooltipRow = ({
     </div>
   );
 };
+
 export const BribesTooltip = ({
   aggregatedBribes,
 }: {
@@ -154,22 +155,29 @@ export const ValidatorBribesPopover = ({
   validatorAddress: Address;
 }) => {
   const availableBribes: AggregatedBribe[] | undefined =
-    //@ts-ignore
     useAggregatedBribes(validatorAddress);
 
   return (
-    <Tooltip
-      toolTipTrigger={
-        <div className="w-fit rounded-lg border p-1 hover:bg-muted">
-          <TokenIconList
-            tokenList={availableBribes?.map((ab) => ab.token) ?? []}
-            showCount={3}
-            size={"lg"}
-            className="w-fit"
-          />
+    <>
+      {!availableBribes || availableBribes?.length === 0 ? (
+        <div className="w-fit rounded-lg border px-2 py-1 text-xs hover:bg-muted">
+          No Incentives
         </div>
-      }
-      children={<BribesTooltip aggregatedBribes={availableBribes ?? []} />}
-    />
+      ) : (
+        <Tooltip
+          toolTipTrigger={
+            <div className="w-fit rounded-lg border px-2 py-1 hover:bg-muted">
+              <TokenIconList
+                tokenList={availableBribes?.map((ab) => ab.token) ?? []}
+                showCount={3}
+                size={"lg"}
+                className="w-fit"
+              />
+            </div>
+          }
+          children={<BribesTooltip aggregatedBribes={availableBribes ?? []} />}
+        />
+      )}
+    </>
   );
 };
