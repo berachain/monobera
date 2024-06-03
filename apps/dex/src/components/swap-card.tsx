@@ -177,6 +177,9 @@ export function SwapCard({
       void refreshAllowance();
       refresh();
     },
+    onSubmission: () => {
+      setOpenPreview(false);
+    },
     onError: (e: Error | undefined) => {
       track("swap_token_failed", {
         tokenFrom: selectedFrom?.symbol,
@@ -211,6 +214,9 @@ export function SwapCard({
 
         { swapAmount },
       );
+    },
+    onSubmission: () => {
+      setOpenPreview(false);
     },
     onError: (e: Error | undefined) => {
       track(

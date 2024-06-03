@@ -68,7 +68,7 @@ export default function SwapSettings() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        {slippageToleranceType !== SELECTION.DEGEN && (
+        {
           <Input
             type="number"
             step="any"
@@ -107,7 +107,7 @@ export default function SwapSettings() {
               setSlippageToleranceValue(Number(e.target.value));
             }}
           />
-        )}
+        }
       </div>
       {slippageToleranceType === "degen" && (
         <Alert variant={"destructive"} className="flex gap-2">

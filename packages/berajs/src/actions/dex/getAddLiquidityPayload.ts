@@ -113,7 +113,7 @@ export const getAddLiquidityPayload = async ({
     );
 
     return {
-      payload: [2, mintCalldata],
+      payload: [128, mintCalldata],
       value: totalValue,
     };
   } catch (e) {

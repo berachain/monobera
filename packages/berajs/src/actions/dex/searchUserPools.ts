@@ -15,7 +15,7 @@ import { bexQueryAbi } from "~/abi";
 import { BeraConfig, IUserPool, IUserPosition, PoolV2 } from "~/types";
 import { formatSubgraphPoolData, getBeraLpAddress } from "~/utils";
 
-interface AmbientPosition {
+export interface AmbientPosition {
   ambientLiq: string;
   aprContributedLiq: string;
   aprDuration: number;
@@ -134,10 +134,7 @@ export const searchUserPools = async ({
     const balanceCalls: Call[] = positions.data.map((pool: AmbientPosition) => {
       return {
         abi: erc20Abi,
-        address: getBeraLpAddress({
-          base: pool.base as Address,
-          quote: pool.quote as Address,
-        }),
+        address: getBeraLpAddress(pool.base as Address, pool.quote as Address),
         functionName: "balanceOf",
         args: [account],
       };

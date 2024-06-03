@@ -19,11 +19,6 @@ import {
 } from "~/app/pools/fetchPools";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
-  const { data: userPosition } = usePoolUserPosition({ pool });
-  const isDeposited =
-    userPosition?.formattedBaseAmount !== "0" &&
-    userPosition?.formattedQuoteAmount !== "0";
-
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
@@ -35,7 +30,7 @@ const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
         >
           {Number(pool?.feeRate).toFixed(2)}%
         </Badge>
-        {isDeposited && (
+        {pool.isDeposited && (
           <Badge
             variant="success"
             className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
@@ -68,9 +63,9 @@ export const columns: ColumnDef<PoolV2>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        tooltip="Total amount of assets currently locked, in the Pool"
+        tooltip="Total amount of assets currently locked in the Pool, valued in HONEY"
         title="TVL"
-        className="min-w-[80px]"
+        className="min-w-[95px]"
       />
     ),
     cell: ({ row }) => (
@@ -90,7 +85,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       <DataTableColumnHeader
         column={column}
         title="Fees (24H)"
-        tooltip="Total transaction fees this pool has generated in the last 24 hours"
+        tooltip="Total trading fees this pool has generated in the last 24 hours, valued in HONEY"
         className="whitespace-nowrap"
       />
     ),
@@ -132,8 +127,8 @@ export const columns: ColumnDef<PoolV2>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Rewards"
-        tooltip="Incentives distributed to users for providing liquidity to the pool."
+        title="BGT APY"
+        tooltip={apyTooltipText()}
         className="whitespace-nowrap"
       />
     ),
@@ -151,33 +146,33 @@ export const columns: ColumnDef<PoolV2>[] = [
     },
     filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
-  {
-    accessorKey: "totalApy",
-    enableSorting: false,
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="APY"
-        tooltip={apyTooltipText()}
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center justify-center text-sm">
-          <FormattedNumber value={row.original.totalApy ?? 0} percent colored />
-        </div>
-      );
-    },
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.totalApy ?? 0;
-      const b = rowB.original.totalApy ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
-    },
-    filterFn: (row, id, value) => value.includes(row.getValue(id)),
-  },
+  // {
+  //   accessorKey: "totalApy",
+  //   enableSorting: false,
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="APY"
+  //       tooltip={apyTooltipText()}
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="flex items-center justify-center text-sm">
+  //         <FormattedNumber value={row.original.totalApy ?? 0} percent colored />
+  //       </div>
+  //     );
+  //   },
+  //   sortingFn: (rowA, rowB) => {
+  //     const a = rowA.original.totalApy ?? 0;
+  //     const b = rowB.original.totalApy ?? 0;
+  //     if (a < b) return -1;
+  //     if (a > b) return 1;
+  //     return 0;
+  //   },
+  //   filterFn: (row, id, value) => value.includes(row.getValue(id)),
+  // },
   {
     accessorKey: "btns",
     header: ({ column }) => (
@@ -252,8 +247,8 @@ export const my_columns: ColumnDef<IUserPool>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Rewards"
-        tooltip="Incentives distributed to users for providing liquidity to the pool."
+        title="BGT APY"
+        tooltip={apyTooltipText()}
         className="whitespace-nowrap"
       />
     ),

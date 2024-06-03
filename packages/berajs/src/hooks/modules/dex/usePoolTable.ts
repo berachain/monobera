@@ -1,15 +1,25 @@
 import { useState } from "react";
-import { chainId, crocIndexerEndpoint } from "@bera/config";
+import { chainId, crocIndexerEndpoint, multicallAddress } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { PoolV2 } from "~/types";
-import { formatPoolData } from "~/utils";
+import { formatPoolData, getBeraLpAddress } from "~/utils";
+import { usePublicClient } from "wagmi";
+import { useBeraJs } from "~/contexts";
+import { erc20Abi } from "viem";
 
 const DEFAULT_SIZE = 8;
-
+interface Call {
+  abi: typeof erc20Abi;
+  address: `0x${string}`;
+  functionName: string;
+  args: any[];
+}
 export const usePoolTable = (sorting: any) => {
   const [search, setSearch] = useState("");
   const [keyword, setKeyword] = useState("");
+  const { account } = useBeraJs();
+  const publicClient = usePublicClient();
 
   const sortOption =
     sorting[0] !== undefined && sorting[0].id !== undefined
@@ -24,7 +34,14 @@ export const usePoolTable = (sorting: any) => {
 
   const { data, fetchNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery<any, any, { pages: any[] }>({
-      queryKey: ["projects", sortOption, sortOrder, keyword],
+      queryKey: [
+        "projects",
+        sortOption,
+        sortOrder,
+        keyword,
+        publicClient,
+        account,
+      ],
       queryFn: async ({ pageParam = 1, queryKey }: any) => {
         try {
           const res = await fetch(
@@ -36,10 +53,41 @@ export const usePoolTable = (sorting: any) => {
           );
 
           const response = await res.json();
+          let data = response.data.pools.map((r: any) =>
+            formatPoolData(r),
+          ) as PoolV2[];
+
+          if (account && publicClient && data) {
+            const call: Call[] = data.map((item: PoolV2) => ({
+              address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
+              abi: erc20Abi,
+              functionName: "balanceOf",
+              args: [account],
+            }));
+
+            const result = await publicClient.multicall({
+              contracts: call,
+              multicallAddress: multicallAddress,
+            });
+
+            data = data.map((item: PoolV2, index: number) => {
+              return {
+                ...item,
+                isDeposited:
+                  result[index].result &&
+                  result[index].status === "success" &&
+                  result[index].result !== 0n,
+              };
+            }) as PoolV2[];
+
+            return {
+              data,
+              totalCount: response.data.totalCount,
+            };
+          }
+
           return {
-            data: response.data.pools.map((r: any) =>
-              formatPoolData(r),
-            ) as any[],
+            data,
             totalCount: response.data.totalCount,
           };
         } catch (e) {

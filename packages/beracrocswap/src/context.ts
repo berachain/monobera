@@ -1,5 +1,5 @@
 import { Provider, JsonRpcProvider } from "@ethersproject/providers";
-import { Contract, ethers, Signer } from "ethers";
+import { Contract, Signer } from "ethers";
 import { ChainSpec, BERA_CHAIN } from "./constants";
 import { CROC_ABI, QUERY_ABI, ERC20_ABI } from "./abis";
 import { AddressZero } from "@ethersproject/constants";
@@ -24,8 +24,8 @@ export async function connectCroc(
   providerOrChainId: ConnectArg,
   signer?: Signer
 ): Promise<CrocContext> {
-  const [provider, maybeSigner] = await buildProvider(providerOrChainId, signer);
-  return setupProvider(provider, maybeSigner);
+  const [provider, _] = await buildProvider(providerOrChainId, signer);
+  return setupProvider(provider);
 }
 
 async function buildProvider(
@@ -45,9 +45,8 @@ async function buildProvider(
 
 async function setupProvider(
   provider: Provider,
-  signer?: Signer
 ): Promise<CrocContext> {
-  const actor = determineActor(provider, signer);
+  const actor = determineActor(provider);
   const cntx = inflateContracts(provider, actor);
   return await attachSenderAddr(cntx, actor)
 }
@@ -66,24 +65,9 @@ async function attachSenderAddr (cntx: CrocContext,
 
 function determineActor(
   provider: Provider,
-  signer?: Signer
 ): Signer | Provider {
-  if (signer) {
-    try {
-      return signer.connect(provider)
-    } catch {
-      return signer
-    }
-  } else if ("getSigner" in provider) {
-    try {
-      const signer = (provider as ethers.providers.Web3Provider).getSigner();
-      return signer
-    } catch { 
-      return provider 
-    }
-  } else {
+    // fk ur actor
     return provider;
-  }
 }
 
 function inflateContracts(
