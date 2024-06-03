@@ -2,19 +2,16 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  TXN_GAS_USED_ESTIMATES,
   formatInputTokenValue,
   useBeraJs,
-  useGasData,
   usePollWalletBalances,
-  useTokenHoneyPrice,
   type Token,
 } from "@bera/berajs";
 import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { formatEther, formatGwei, getAddress } from "viem";
+import { getAddress } from "viem";
 
 import {
   BREAKPOINTS,
@@ -225,7 +222,7 @@ export function TokenInput({
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
-                {!!difference && (
+                {!!difference && Number.isFinite(difference) && (
                   <TooltipCustom
                     anchor="left"
                     position="right"

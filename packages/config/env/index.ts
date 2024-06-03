@@ -25,6 +25,7 @@ export const honeySubgraphUrl = process.env
   .NEXT_PUBLIC_HONEY_SUBGRAPH_URL as string;
 export const lendSubgraphUrl = process.env
   .NEXT_PUBLIC_BEND_SUBGRAPH_URL as string;
+export const bgtSubgraphUrl = process.env.NEXT_PUBLIC_BGT_SUBGRAPH as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;

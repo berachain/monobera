@@ -6,6 +6,7 @@ import { beraTokenAddress } from "@bera/config";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { useBgtRewards } from "~/hooks/useBgtRewards";
 
 function DataCard({
   icon,
@@ -34,12 +35,16 @@ function DataCard({
 }
 
 export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  const { data: beraPrice } = useTokenHoneyPrice({
-    tokenAddress: beraTokenAddress,
-  });
+  const { data: beraPrice, isLoading: isHoneyPriceLoading } =
+    useTokenHoneyPrice({
+      tokenAddress: beraTokenAddress,
+    });
+
+  const { data: totalBgtRewards, isLoading: isBgtRewardsLoading } =
+    useBgtRewards();
 
   const isDataReady = useMemo(() => {
-    return beraPrice;
+    return !(isHoneyPriceLoading && isBgtRewardsLoading);
   }, [beraPrice]);
 
   return (
@@ -76,7 +81,7 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
           isLoading={!isDataReady}
           value={
             <FormattedNumber
-              value={Number(100) * 0.1}
+              value={totalBgtRewards}
               compact={false}
               compactThreshold={999_999_999}
               symbol="BGT"
