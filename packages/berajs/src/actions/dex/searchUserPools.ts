@@ -15,7 +15,7 @@ import { bexQueryAbi } from "~/abi";
 import { BeraConfig, IUserPool, IUserPosition, PoolV2 } from "~/types";
 import { formatSubgraphPoolData, getBeraLpAddress } from "~/utils";
 
-interface AmbientPosition {
+export interface AmbientPosition {
   ambientLiq: string;
   aprContributedLiq: string;
   aprDuration: number;

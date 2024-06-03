@@ -19,11 +19,6 @@ import {
 } from "~/app/pools/fetchPools";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
-  const { data: userPosition } = usePoolUserPosition({ pool });
-  const isDeposited =
-    userPosition?.formattedBaseAmount !== "0" &&
-    userPosition?.formattedQuoteAmount !== "0";
-
   return (
     <div className="flex flex-col items-start gap-2">
       <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
@@ -35,7 +30,7 @@ const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
         >
           {Number(pool?.feeRate).toFixed(2)}%
         </Badge>
-        {isDeposited && (
+        {pool.isDeposited && (
           <Badge
             variant="success"
             className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
