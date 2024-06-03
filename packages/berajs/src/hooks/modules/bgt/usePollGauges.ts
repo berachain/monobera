@@ -1,60 +1,37 @@
-import { gaugeListUrl } from "@bera/config";
 import useSWR from "swr";
 
-import POLLING from "~/enum/polling";
-import { DefaultHookReturnType, Gauge } from "../../..";
+import { GetGaugeData, getGauges } from "~/actions/bgt/getGauges";
+import {
+  DefaultHookOptions,
+  DefaultHookReturnType,
+  Gauge,
+  useBeraJs,
+} from "../../..";
 
-export interface IUseGaugessResponse extends DefaultHookReturnType<any> {
-  gaugeList: Gauge[] | undefined;
-  gaugeDictionary: { [key: string]: Gauge } | undefined;
+export interface IUseGaugessResponse
+  extends DefaultHookReturnType<GetGaugeData> {
+  gaugeList: Gauge[];
+  gaugeDictionary: { [key: string]: Gauge };
 }
 
-function gaugeListToDict(list: Gauge[]): { [key: string]: Gauge } {
-  return list.reduce((acc, item) => {
-    // @ts-ignore
-    acc[item.address] = item;
-    return acc;
-  }, {});
-}
-
-export const usePollGauges = (): IUseGaugessResponse => {
-  const swrResponse = useSWR(
-    ["defaultGaugeList"],
-    async () => {
-      try {
-        const gaugeList = await fetch(gaugeListUrl);
-        const temp = await gaugeList.json();
-        if (!temp.gauges) {
-          return { list: [], dictionary: {} };
-        }
-        const defaultList = temp.gauges.map((gauge: Gauge) => {
-          return { ...gauge, default: true };
-        });
-
-        const list = [...defaultList];
-        // Make it unique
-        const uniqueList = list.filter(
-          (item, index) =>
-            list.findIndex((i) => i.address === item.address) === index,
-        );
-        return {
-          list: uniqueList,
-          dictionary: gaugeListToDict(list),
-        };
-      } catch (error) {
-        console.error("Error fetching token list", error);
-        return { list: [], dictionary: {} };
-      }
-    },
+export const usePollGauges = (
+  options?: DefaultHookOptions,
+): IUseGaugessResponse => {
+  const { config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
+  const QUERY_KEY = "defaultGaugeList";
+  const swrResponse = useSWR<GetGaugeData, any, typeof QUERY_KEY>(
+    QUERY_KEY,
+    async () => await getGauges(config),
     {
-      refreshInterval: POLLING.SLOW,
+      ...options?.opts,
     },
   );
 
   return {
     ...swrResponse,
-    gaugeList: swrResponse.data?.list ?? [],
-    gaugeDictionary: swrResponse.data?.dictionary ?? {},
+    gaugeList: swrResponse.data?.gaugeList ?? [],
+    gaugeDictionary: swrResponse.data?.gaugeDictionary ?? {},
     refresh: swrResponse.mutate,
   };
 };

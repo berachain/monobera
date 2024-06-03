@@ -1,24 +1,34 @@
 import React from "react";
 import Image from "next/image";
-import { TransactionActionType, useBeraJs } from "@bera/berajs";
-import { stakingAddress } from "@bera/config";
-import { ActionButton, useTxn } from "@bera/shared-ui";
+import {
+  TransactionActionType,
+  useBeraJs,
+  usePollWalletBalances,
+  BGT_ABI,
+} from "@bera/berajs";
+import { bgtTokenAddress } from "@bera/config";
+import { ActionButton, FormattedNumber, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
-import { useTheme } from "next-themes";
+import BigNumber from "bignumber.js";
 import { Address, parseUnits } from "viem";
 
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";
 
 export const DelegateContent = ({ validator }: { validator?: Address }) => {
-  const { isConnected } = useBeraJs();
-  const { theme, systemTheme } = useTheme();
-  const t = theme === "system" ? systemTheme : theme;
+  const { isReady } = useBeraJs();
+
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
-  const getExceeding = () => Number(amount) > Number(0);
-  const getDisabled = () => Number(amount) > 0 || !amount || amount === "";
+
+  const { useSelectedWalletBalance } = usePollWalletBalances();
+  const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
+
+  const exceeding = BigNumber(amount ?? "0").gt(
+    bgtBalance?.formattedBalance ?? "0",
+  );
+  const disabled = exceeding || !amount || amount === "" || amount === "0";
 
   const {
     write,
@@ -28,7 +38,6 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     message: `Delegating ${Number(amount).toFixed(2)} BGT to Validator`,
     actionType: TransactionActionType.DELEGATE,
   });
-
   return (
     <div>
       {ModalPortal}
@@ -62,31 +71,30 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
           showDelegated={false}
         />
 
-        {getExceeding() && isConnected && (
+        {isReady && exceeding && (
           <Alert variant="destructive">
-            This amount exceeds your total balance of 0 BGT
+            This amount exceeds your total balance of{" "}
+            <FormattedNumber
+              value={bgtBalance?.formattedBalance ?? "0"}
+              symbol="BGT"
+            />
           </Alert>
         )}
 
         <ActionButton>
           <Button
             className="w-full"
-            disabled={
-              !validator ||
-              isDelegatingLoading ||
-              getDisabled() ||
-              amount === "0"
-            }
+            disabled={!validator || isDelegatingLoading || disabled}
             onClick={() =>
               write({
-                address: stakingAddress,
-                abi: [] as any,
-                functionName: "delegate",
+                address: bgtTokenAddress,
+                abi: BGT_ABI,
+                functionName: "queueBoost",
                 params: [validator, parseUnits(amount ?? "0", 18)],
               })
             }
           >
-            Confirm
+            Queue Boost
           </Button>
         </ActionButton>
       </Card>

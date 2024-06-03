@@ -7,8 +7,6 @@ import {
 import {
   DataTableColumnHeader,
   FormattedNumber,
-  TokenIconList,
-  Tooltip,
   ValidatorIcon,
   bribeApyTooltipText,
 } from "@bera/shared-ui";
@@ -16,7 +14,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
 import { ValidatorBribesPopover } from "~/components/bribes-tooltip";
-import { VP } from "~/components/validator-selector";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
@@ -24,13 +21,13 @@ const VALIDATOR_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Validator" />
   ),
   cell: ({ row }) => (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <ValidatorIcon address={row.original.id as Address} className="h-8 w-8" />
-      {row.original.name}{" "}
+      {row.original.metadata.name}{" "}
     </div>
   ),
-  accessorKey: "description",
-  enableSorting: true,
+  accessorKey: "name",
+  enableSorting: false,
 };
 
 const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
@@ -38,9 +35,16 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Voting Power" />
   ),
   cell: ({ row }) => (
-    <VP coinbase={row.original.id} amountStaked={row.original.amountStaked} />
+    <div className="w-full text-center">
+      <FormattedNumber
+        value={row.original.amountStaked}
+        compact={false}
+        symbol="BGT"
+      />
+    </div>
   ),
   accessorKey: "amountStaked",
+  enableSorting: false,
 };
 
 const COMMISSION_COLUMN: ColumnDef<Validator> = {
@@ -48,12 +52,10 @@ const COMMISSION_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Commission" />
   ),
   cell: ({ row }) => {
-    const commission = row.original.commission;
-    return (
-      <div className="flex h-full w-[91px] items-center"> {commission}%</div>
-    );
+    return <div className="text-center"> {row.original.commission ?? 0}%</div>;
   },
   accessorKey: "commission",
+  enableSorting: false,
 };
 
 const APY_COLUMN: ColumnDef<Validator> = {
@@ -66,11 +68,11 @@ const APY_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => (
     <div className="flex h-full w-[91px] items-center">
-      {Number(row.original.apy ?? 0).toFixed(2)}%
+      {Number(0).toFixed(2)}%
     </div>
   ),
   accessorKey: "vApy",
-  enableSorting: true,
+  enableSorting: false,
 };
 
 const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
@@ -78,7 +80,7 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
   ),
   cell: ({ row }) => {
-    const cuttingBoards: CuttingBoardWeight[] = row.original.cuttingboard;
+    const cuttingBoards: CuttingBoardWeight[] = row.original.cuttingboard ?? [];
     const mostWeightedCuttingBoard = cuttingBoards.sort(
       (a, b) => a.percentage - b.percentage,
     )[0];
@@ -93,7 +95,7 @@ const BRIBES_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
-    return <ValidatorBribesPopover validator={row.original} />;
+    return <ValidatorBribesPopover validatorAddress={row.original.id} />;
   },
   accessorKey: "bribes",
   enableSorting: false,
@@ -107,14 +109,14 @@ const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
     return <FormattedNumber value={Math.random() * 1000000} symbol="BGT" />;
   },
   accessorKey: "userStaked",
-  enableSorting: true,
+  enableSorting: false,
 };
 
 export const general_validator_columns: ColumnDef<Validator>[] = [
   VALIDATOR_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN,
   COMMISSION_COLUMN,
-  APY_COLUMN,
+  // APY_COLUMN,
   MOST_WEIGHTED_GAUGE_COLUMN,
   BRIBES_COLUMN,
 ];
@@ -124,6 +126,6 @@ export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
   USER_STAKED_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN as ColumnDef<UserValidator>,
   COMMISSION_COLUMN as ColumnDef<UserValidator>,
-  APY_COLUMN as ColumnDef<UserValidator>,
+  // APY_COLUMN as ColumnDef<UserValidator>,
   BRIBES_COLUMN as ColumnDef<UserValidator>,
 ];

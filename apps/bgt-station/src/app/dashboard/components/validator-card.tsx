@@ -7,9 +7,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatUnits, type Address } from "viem";
-
-import { formatCommission } from "~/utils/formatCommission";
+import { type Address } from "viem";
 
 export default function ValidatorCard({
   validator,
@@ -36,7 +34,7 @@ export default function ValidatorCard({
       text: "Voting power",
     },
     {
-      amount: `${formatCommission(validator.commission.commissionRates.rate)}%`,
+      amount: `${validator.commission.commissionRates.rate}%`,
       text: "Commission",
     },
   ];

@@ -1,4 +1,4 @@
-import { Token } from "@bera/berajs";
+import { type Token } from "@bera/berajs";
 import { nativeTokenAddress } from "@bera/config";
 
 export const wBeraToken: Token = {
