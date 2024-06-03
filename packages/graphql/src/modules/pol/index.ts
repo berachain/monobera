@@ -8,3 +8,13 @@ export const GetTotalBgtDistributed = gql`
     }
 }
 `;
+
+export const GetBgtInflation = gql`
+  query {
+    globalInfo(id:"global") {
+        id
+        rewardRate
+        baseRewardRate
+    }
+}
+`;
