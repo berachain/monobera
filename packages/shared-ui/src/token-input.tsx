@@ -257,51 +257,54 @@ export function TokenInput({
               </div>
             )}
           </div>
-          {isConnected && selected && Number(tokenBalance) !== 0 && (
-            <div className="flex flex-row items-center justify-start gap-1 px-1">
-              <Icons.wallet className="h-3 w-3 text-muted-foreground" />
-              <FormattedNumber
-                value={tokenBalance ? tokenBalance : "0"}
-                className="text-xs text-muted-foreground"
-                showIsSmallerThanMin
-              />
-              {!hideMax && (
-                <span
-                  className={`${
-                    hasMaxGasWarning ? "cursor-not-allowed" : "cursor-pointer"
-                  }`}
-                >
-                  <TooltipCustom
-                    tooltipContent={
-                      <div className="w-[150px]">
-                        <p className="text-xs">
-                          Your Bera balance is below the estimated gas prices,
-                          this transaction would likely fail.
-                        </p>
-                      </div>
-                    }
-                    {...gasMaxTooltipHiddenStyles}
+          {isConnected &&
+            selected &&
+            Number(tokenBalance) !== 0 &&
+            !hideBalance && (
+              <div className="flex flex-row items-center justify-start gap-1 px-1 mt-1">
+                <Icons.wallet className="h-3 w-3 text-muted-foreground" />
+                <FormattedNumber
+                  value={tokenBalance ? tokenBalance : "0"}
+                  className="text-xs text-muted-foreground"
+                  showIsSmallerThanMin
+                />
+                {!hideMax && (
+                  <span
+                    className={`${
+                      hasMaxGasWarning ? "cursor-not-allowed" : "cursor-pointer"
+                    }`}
                   >
-                    <span
-                      className={`flex select-none flex-row items-center gap-1 text-xs text-muted-foreground underline ${
-                        hasMaxGasWarning
-                          ? "text-warning-foreground"
-                          : "hover:text-foreground"
-                      }`}
-                      onClick={hasMaxGasWarning ? undefined : handleMaxClick}
+                    <TooltipCustom
+                      tooltipContent={
+                        <div className="w-[150px]">
+                          <p className="text-xs">
+                            Your Bera balance is below the estimated gas prices,
+                            this transaction would likely fail.
+                          </p>
+                        </div>
+                      }
+                      {...gasMaxTooltipHiddenStyles}
                     >
-                      MAX
-                      {hasMaxGasWarning && (
-                        <span>
-                          <Icons.alertCircle size={12} />
-                        </span>
-                      )}
-                    </span>
-                  </TooltipCustom>
-                </span>
-              )}
-            </div>
-          )}
+                      <span
+                        className={`flex select-none flex-row items-center gap-1 text-xs text-muted-foreground underline ${
+                          hasMaxGasWarning
+                            ? "text-warning-foreground"
+                            : "hover:text-foreground"
+                        }`}
+                        onClick={hasMaxGasWarning ? undefined : handleMaxClick}
+                      >
+                        MAX
+                        {hasMaxGasWarning && (
+                          <span>
+                            <Icons.alertCircle size={12} />
+                          </span>
+                        )}
+                      </span>
+                    </TooltipCustom>
+                  </span>
+                )}
+              </div>
+            )}
         </div>
       </div>
     </li>

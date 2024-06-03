@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Token, Vault, useTokenHoneyPrice, type Validator } from "@bera/berajs";
 import {
   DataTable,
@@ -6,16 +7,16 @@ import {
   TokenIcon,
   VaultIcon,
 } from "@bera/shared-ui";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@bera/ui/tabs";
+import { Dialog, DialogContent, DialogHeader } from "@bera/ui/dialog";
+import { Skeleton } from "@bera/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { Address } from "viem";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
-import { validatorIncentivesColumns } from "./validator-incentives-columns";
 import {
   AggregatedBribe,
   useAggregatedBribes,
 } from "../../../hooks/useAggregatedBribes";
-import { Skeleton } from "@bera/ui/skeleton";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader } from "@bera/ui/dialog";
+import { validatorIncentivesColumns } from "./validator-incentives-columns";
 
 interface VaultBribeValue {
   vault: Vault;
@@ -56,16 +57,16 @@ export const AggregatedBribeDialog = ({
       <DialogContent>
         {" "}
         <DialogHeader>
-          <div className="flex flex-row gap-1 items-center">
+          <div className="flex flex-row items-center gap-1">
             <TokenIcon address={aggregatedBribe?.token.address} size={"xl"} />
-            <span className="font-semibold text-xl">
+            <span className="text-xl font-semibold">
               {aggregatedBribe?.token.symbol}
             </span>
           </div>
         </DialogHeader>
         <div className="flex flex-col gap-0">
-          <div className="flex flex-row gap-2 justify-between">
-            <span className="font-medium text-sm text-muted-foreground">
+          <div className="flex flex-row justify-between gap-2">
+            <span className="text-sm font-medium text-muted-foreground">
               Total Amount Left:
             </span>
             <div>
@@ -76,7 +77,7 @@ export const AggregatedBribeDialog = ({
                   )}
                 />
               </span>
-              <span className="text-md font-medium text-muted-foreground ml-1">
+              <span className="text-md ml-1 font-medium text-muted-foreground">
                 (
                 <FormattedNumber
                   value={
@@ -89,7 +90,7 @@ export const AggregatedBribeDialog = ({
             </div>
           </div>
           <div className="flex flex-row justify-between">
-            <span className="font-medium text-sm text-muted-foreground">
+            <span className="text-sm font-medium text-muted-foreground">
               Amount Per Proposal:
             </span>
             <span>
@@ -98,7 +99,7 @@ export const AggregatedBribeDialog = ({
                   value={parseFloat(aggregatedBribe?.amountPerProposal ?? "0")}
                 />
               </span>
-              <span className="text-md font-medium text-muted-foreground ml-1">
+              <span className="text-md ml-1 font-medium text-muted-foreground">
                 (
                 <FormattedNumber
                   value={
@@ -111,42 +112,42 @@ export const AggregatedBribeDialog = ({
             </span>
           </div>
         </div>
-        <div className="w-full bg-muted rounded-md p-2">
-          <div className="w-full justify-between flex flex-row text-sm border-b">
+        <div className="w-full rounded-md bg-muted p-2">
+          <div className="flex w-full flex-row justify-between border-b text-sm">
             <div className="w-[150px]">Market</div>
             <div className="w-[80px]">Amount Left</div>
             <div className="w-[80px]">Per Proposal</div>
           </div>
-          <div className="mt-2 flex flex-col gap-4 max-h-[250px] overflow-scroll">
+          <div className="mt-2 flex max-h-[250px] flex-col gap-4 overflow-scroll">
             {vaultBribeValues.map((vaultBribeValue) => {
               return (
-                <div className="w-full justify-between flex flex-row text-sm ">
-                  <div className="flex flex-col gap-1 w-[150px] overflow-hidden text-ellipsis">
+                <div className="flex w-full flex-row justify-between text-sm ">
+                  <div className="flex w-[150px] flex-col gap-1 overflow-hidden text-ellipsis">
                     <div>
-                      <span className="font-medium flex flex-row gap-1 text-md items-center">
+                      <span className="text-md flex flex-row items-center gap-1 font-medium">
                         {" "}
                         <MarketIcon
-                          imageUri={vaultBribeValue.vault.market.imageUri}
-                          className="w-6 h-6"
+                          market={vaultBribeValue.vault.market}
+                          className="h-6 w-6"
                         />
                         {vaultBribeValue.vault.name}
                       </span>
-                      <span className="font-medium flex flex-row gap-text-xs items-center">
+                      <span className="gap-text-xs flex flex-row items-center font-medium">
                         <VaultIcon
                           imageUri={vaultBribeValue.vault.imageUri}
-                          className="w-4 h-4"
+                          className="h-4 w-4"
                         />
                         {vaultBribeValue.vault.name}
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col items-start font-medium  gap-1 w-[80px] overflow-hidden text-ellipsis">
-                    <div className="text-foreground text-md">
+                  <div className="flex w-[80px] flex-col items-start  gap-1 overflow-hidden text-ellipsis font-medium">
+                    <div className="text-md text-foreground">
                       <FormattedNumber
                         value={parseFloat(vaultBribeValue.amountLeft)}
                       />
                     </div>
-                    <div className="text-muted-foreground text-xs">
+                    <div className="text-xs text-muted-foreground">
                       <FormattedNumber
                         value={
                           parseFloat(vaultBribeValue.amountLeft) *
@@ -155,13 +156,13 @@ export const AggregatedBribeDialog = ({
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col items-start font-medium  gap-1 w-[80px] overflow-hidden text-ellipsis">
-                    <div className="text-foreground text-md">
+                  <div className="flex w-[80px] flex-col items-start  gap-1 overflow-hidden text-ellipsis font-medium">
+                    <div className="text-md text-foreground">
                       <FormattedNumber
                         value={parseFloat(vaultBribeValue.perProposal)}
                       />
                     </div>
-                    <div className="text-muted-foreground text-xs">
+                    <div className="text-xs text-muted-foreground">
                       <FormattedNumber
                         value={
                           parseFloat(vaultBribeValue.perProposal) *
@@ -187,13 +188,14 @@ export const ValidatorPolData = ({
   validator: Validator;
   isLoading: boolean;
 }) => {
-  const aggregatedBribes = useAggregatedBribes(validator);
+  //@ts-ignore
+  const aggregatedBribes = useAggregatedBribes(validator.id as Address);
 
   const [selectedBribe, setSelectedBribe] = useState<
     AggregatedBribe | undefined
   >(undefined);
   return (
-    <div className="w-full flex flex-col lg:flex-row mt-6 gap-6">
+    <div className="mt-6 flex w-full flex-col gap-6 lg:flex-row">
       <AggregatedBribeDialog
         aggregatedBribe={selectedBribe}
         onOpenChange={(open) => !open && setSelectedBribe(undefined)}
@@ -206,7 +208,7 @@ export const ValidatorPolData = ({
           </TabsList>
           <TabsContent value={"gauges"} className="mt-6">
             {isLoading ? (
-              <div className="w-full flex flex-col gap-2">
+              <div className="flex w-full flex-col gap-2">
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
@@ -221,7 +223,7 @@ export const ValidatorPolData = ({
 
           <TabsContent value={"incentives"} className="mt-6">
             {isLoading ? (
-              <div className="w-full flex flex-col gap-2">
+              <div className="flex w-full flex-col gap-2">
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
                 <Skeleton className="h-8 w-full" />
@@ -240,7 +242,7 @@ export const ValidatorPolData = ({
         </Tabs>
       </div>
       <GlobalGaugeWeightChart
-        gaugeWeights={validator.cuttingboard}
+        gaugeWeights={validator.cuttingboard ?? []}
         totalAmountStaked={validator.amountStaked}
         globalAmountStaked={"10000000"}
         isLoading={isLoading}

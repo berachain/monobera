@@ -1,5 +1,4 @@
 import { Address } from "viem";
-
 import { Token } from "./dex";
 
 export interface ValidatorInfo {
@@ -7,24 +6,26 @@ export interface ValidatorInfo {
   name: string;
   description: string;
   website: string;
-  imageUri: string;
+  logoURI: string;
+  twitter?: string;
 }
 
-export type ValidatorData = {
+export type Validator = {
   id: Address;
+  coinbase: Address;
   commission: string;
   amountStaked: string;
-  cuttingboard: CuttingBoardWeight[];
-  apy: string;
+  amountQueued: string;
+  cuttingboard: CuttingBoardWeight[] | null;
   rewardRate: string;
   allTimeStats: {
     totalBgtDirected: string;
     totalHoneyValueBgtDirected: string;
     totalHoneyValueTokenRewards: string;
   };
+  active: boolean;
+  metadata: ValidatorInfo;
 };
-
-export type Validator = ValidatorInfo & ValidatorData;
 
 export type UserValidator = Validator & {
   userStaked: string;
@@ -38,7 +39,7 @@ export type CuttingBoardWeight = {
 
 export type Vault = {
   address: Address;
-  market: Market;
+  market: string | undefined;
   stakingToken: Address;
   name: string;
   imageUri: string;
@@ -53,8 +54,8 @@ export type ActiveIncentive = {
 };
 
 export type Market = {
-  id: string;
   name: string;
-  imageUri: string;
-  website: string;
+  logoURI: string;
+  url: string;
+  description: string;
 };

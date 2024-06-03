@@ -15,34 +15,40 @@ const DataTable = dynamic(
 );
 
 export default function GlobalGaugeWeightTable({
+  myGauge = false,
   keywords = "",
 }: {
+  myGauge?: boolean;
   keywords?: string;
 }) {
   const { gaugeList, isLoading, isValidating } = usePollGauges();
-  const [page, setPage] = useState(0);
-  const fetchData = useCallback(
-    (state: TableState) => setPage(state?.pagination?.pageIndex),
-    [setPage],
-  );
+  // const [page, setPage] = useState(0);
+  // const fetchData = useCallback(
+  //   (state: TableState) => setPage(state?.pagination?.pageIndex),
+  //   [setPage],
+  // );
+  console.log("gaugeList", gaugeList);
   return (
     <div className="w-full ">
       <DataTable
-        fetchData={fetchData}
-        enablePagination
+        // fetchData={fetchData}
+        // enablePagination
         loading={isLoading}
         validating={isValidating}
         columns={global_gauge_weight_columns as any}
         data={gaugeList ?? []}
         className="min-w-[1100px] shadow"
-        additionalTableProps={{
-          pageCount: 1,
-          manualFiltering: true,
-          manualSorting: true,
-          manualPagination: true,
-        }}
+        // additionalTableProps={{
+        //   pageCount: 1,
+        //   manualFiltering: true,
+        //   manualSorting: true,
+        //   manualPagination: true,
+        // }}
         onRowClick={(row: any) =>
-          window.open(`/gauge/${row.original.address}`, "_self")
+          window.open(
+            `/gauge/${row.original.address}${myGauge ? "?my-gauge" : ""}`,
+            "_self",
+          )
         }
       />
     </div>

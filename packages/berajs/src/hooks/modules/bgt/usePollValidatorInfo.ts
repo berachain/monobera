@@ -6,16 +6,12 @@ import {
   getValidatorsInfo,
 } from "~/actions/bgt/getValidatorsInfo";
 import { useBeraJs } from "~/contexts";
-import {
-  DefaultHookOptions,
-  DefaultHookReturnType,
-  ValidatorInfo,
-} from "~/types";
+import { DefaultHookOptions, DefaultHookReturnType, Validator } from "~/types";
 
 export interface UsePollValidatorInfoResponse
   extends DefaultHookReturnType<GetValidatorsInfo> {
-  validatorInfoList: ValidatorInfo[];
-  validatorInfoDictionary: { [key: Address]: ValidatorInfo };
+  validatorInfoList: Validator[];
+  validatorInfoDictionary: { [key: Address]: Validator };
   validatorCounts: number;
 }
 

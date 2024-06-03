@@ -2,6 +2,7 @@ import React from "react";
 import { type Metadata } from "next";
 import { bgtName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
+import { Address } from "viem";
 
 import { Incentivize } from "./incentivize";
 
@@ -13,8 +14,14 @@ export default function Page({
   searchParams,
 }: {
   searchParams: {
-    pool: string;
+    gauge: Address;
+    token: Address;
   };
 }) {
-  return <Incentivize pool={searchParams.pool} />;
+  return (
+    <Incentivize
+      gauge={searchParams.gauge}
+      selectedToken={searchParams.token}
+    />
+  );
 }

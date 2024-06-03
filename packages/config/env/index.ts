@@ -4,6 +4,7 @@ type Address = `0x${string}`;
 export const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string;
 export const tokenListUrl = process.env.NEXT_PUBLIC_TOKEN_LIST as string;
 export const gaugeListUrl = process.env.NEXT_PUBLIC_GAUGE_LIST as string;
+export const marketListUrl = process.env.NEXT_PUBLIC_MARKETS_LIST as string;
 export const validatorListUrl = process.env
   .NEXT_PUBLIC_VALIDATOR_LIST as string;
 export const publicAnalyticsUrl = process.env.NEXT_PUBLIC_ANALYTICS as string;
@@ -12,6 +13,7 @@ export const blockExplorerUrl = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER as string;
 export const blockExplorerName = process.env
   .NEXT_PUBLIC_BLOCK_EXPLORER_NAME as string;
+export const bgtEndpointUrl = process.env.NEXT_PUBLIC_BGT_ENDPOINT as string;
 export const lendEndpointUrl = process.env.NEXT_PUBLIC_LEND_ENDPOINT as string;
 export const faucetEndpointUrl = process.env
   .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
@@ -25,7 +27,8 @@ export const honeySubgraphUrl = process.env
   .NEXT_PUBLIC_HONEY_SUBGRAPH_URL as string;
 export const lendSubgraphUrl = process.env
   .NEXT_PUBLIC_BEND_SUBGRAPH_URL as string;
-export const bgtSubgraphUrl = process.env.NEXT_PUBLIC_BGT_SUBGRAPH as string;
+export const bgtSubgraphUrl = process.env
+  .NEXT_PUBLIC_BGT_SUBGRAPH_URL as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
@@ -100,8 +103,6 @@ export const governanceAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_ADDRESS as Address;
 export const bankAddress = process.env.NEXT_PUBLIC_BANK_ADDRESS as Address;
 export const epochsAddress = process.env.NEXT_PUBLIC_EPOCHS_ADDRESS as Address;
-export const erc20BgtAddress = process.env
-  .NEXT_PUBLIC_ERC20_BGT_ADDRESS as Address;
 export const berachefAddress = process.env
   .NEXT_PUBLIC_BERACHEF_ADDRESS as Address;
 export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;

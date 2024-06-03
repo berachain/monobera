@@ -1,10 +1,10 @@
-import { usePollValidators } from "@bera/berajs";
+import { usePollValidatorInfo } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
 
 import { user_incentives_columns } from "~/columns/user-incentives-columns";
 
 export const MyIncentivesTableTable = () => {
-  const { data, isLoading, isValidating } = usePollValidators();
+  const { data, isLoading, isValidating } = usePollValidatorInfo();
   return (
     <div>
       <DataTable

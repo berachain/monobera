@@ -4,8 +4,7 @@ import {
   ActiveIncentive,
   BeraConfig,
   CuttingBoardWeight,
-  Market,
-  ValidatorData,
+  Validator,
   Vault,
 } from "~/types";
 
@@ -15,21 +14,6 @@ export interface ValidatorFilter {
   gaugeAddress?: Address;
   sort?: string;
 }
-
-const mockMarkets: Market[] = [
-  {
-    id: "native",
-    name: "Market One",
-    imageUri: "http://example.com/market1.png",
-    website: "http://example.com/market1",
-  },
-  {
-    id: "native",
-    name: "Market Two",
-    imageUri: "http://example.com/market2.png",
-    website: "http://example.com/market2",
-  },
-];
 
 const mockActiveIncentives: ActiveIncentive[] = [
   {
@@ -97,7 +81,7 @@ const mockActiveIncentives: ActiveIncentive[] = [
 const mockVaults: Vault[] = [
   {
     address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-    market: mockMarkets[0],
+    market: "BEX",
     stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
     name: "Vault One",
     imageUri: "http://example.com/vault1.png",
@@ -106,7 +90,7 @@ const mockVaults: Vault[] = [
   },
   {
     address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-    market: mockMarkets[1],
+    market: "BEX",
     stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
     name: "Vault Two",
     imageUri: "http://example.com/vault2.png",
@@ -128,51 +112,35 @@ const mockCuttingBoardWeights: CuttingBoardWeight[] = [
   },
 ];
 
-const mockValidators: ValidatorData[] = [
+const mockValidators: Validator[] = [
   {
-    id: "0x6B7C3B5c0928cf8D0B516b358a1e3aecf5E9AFBe",
+    id: "0xB32C788C293e7779DB63bb3342F3dF59BdF7D6e5",
+    coinbase: "0xB32C788C293e7779DB63bb3342F3dF59BdF7D6e5",
+    metadata: {
+      id: "0xB32C788C293e7779DB63bb3342F3dF59BdF7D6e5",
+      name: "Validator One",
+      description: "Validator One Description",
+      website: "http://example.com/validator1",
+      logoURI: "http://example.com/validator1.png",
+      twitter: "https://twitter.com/validator1",
+    },
     amountStaked: "100000",
+    amountQueued: "100000",
     commission: "0.02",
     cuttingboard: mockCuttingBoardWeights,
-    apy: "10",
     rewardRate: "1000",
     allTimeStats: {
       totalBgtDirected: "500000",
       totalHoneyValueBgtDirected: "200000",
       totalHoneyValueTokenRewards: "10000",
     },
-  },
-  {
-    id: "0x82Cf147a9aC43A84D30f71f8a627492D08e485Ef",
-    commission: "0.03",
-    amountStaked: "2000000",
-    cuttingboard: mockCuttingBoardWeights,
-    apy: "12",
-    rewardRate: "1000",
-    allTimeStats: {
-      totalBgtDirected: "600000",
-      totalHoneyValueBgtDirected: "250000",
-      totalHoneyValueTokenRewards: "15000",
-    },
-  },
-  {
-    id: "0xE7E474C22Ea47EbD5212B310F2E7Ae8c7ce70b4b",
-    commission: "0.03",
-    amountStaked: "2000000",
-    cuttingboard: mockCuttingBoardWeights,
-    apy: "12",
-    rewardRate: "1000",
-    allTimeStats: {
-      totalBgtDirected: "600000",
-      totalHoneyValueBgtDirected: "250000",
-      totalHoneyValueTokenRewards: "15000",
-    },
+    active: true,
   },
 ];
 
 export interface GetValidatorData {
-  validatorList: ValidatorData[];
-  validatorDictionary: { [key: Address]: ValidatorData };
+  validatorList: Validator[];
+  validatorDictionary: { [key: Address]: Validator };
 }
 
 export const getValidators = async (
@@ -188,7 +156,7 @@ export const getValidators = async (
     return {
       validatorList: mockValidators,
       validatorDictionary: mockValidators.reduce(
-        (acc: { [key: Address]: ValidatorData }, item: ValidatorData) => {
+        (acc: { [key: Address]: Validator }, item: Validator) => {
           acc[item.id] = item;
           return acc;
         },

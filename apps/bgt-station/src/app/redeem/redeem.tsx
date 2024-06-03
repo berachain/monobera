@@ -1,27 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import {
-  BGT_PRECOMPILE_ABI,
+  BGT_ABI,
   TransactionActionType,
   useBeraJs,
+  usePollWalletBalances,
 } from "@bera/berajs";
-import { cloudinaryUrl, erc20BgtAddress } from "@bera/config";
-import { ActionButton, useTxn } from "@bera/shared-ui";
+import { bgtTokenAddress, cloudinaryUrl } from "@bera/config";
+import { ActionButton, FormattedNumber, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-
-import { useRedeem } from "../../hooks/useRedeem";
+import BigNumber from "bignumber.js";
+import { parseUnits } from "viem";
 
 export default function Redeem() {
-  const { isReady } = useBeraJs();
-  const { redeemAmount, payload, setRedeemAmount } = useRedeem();
+  const { isReady, account } = useBeraJs();
+  const { useSelectedWalletBalance } = usePollWalletBalances();
+  const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
+  const bgtFormattedBalance = bgtBalance?.formattedBalance ?? "0";
+  const [redeemAmount, setRedeemAmount] = useState<string>("");
   const { write, ModalPortal } = useTxn({
-    message: "Redeem BERA",
+    message: `Redeem ${redeemAmount} BERA`,
     actionType: TransactionActionType.REDEEM_BERA,
   });
 
@@ -39,9 +43,6 @@ export default function Redeem() {
         <div className="text-lg font-semibold leading-7 text-foreground">
           Redeem BGT for BERA
         </div>
-        {/* <div className="text-sm text-muted-foreground">
-          Exchange your BGT for BERA at a 1:1 ratio.
-        </div> */}
         <div className="relative flex flex-col gap-2">
           <div className="leading-tigh text-sm font-semibold">Amount</div>
           <Input
@@ -56,10 +57,15 @@ export default function Redeem() {
           {isReady && (
             <div className="flex w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
               <Icons.wallet className="relative inline-block h-3 w-3 " />
+              <FormattedNumber
+                value={bgtFormattedBalance}
+                symbol="BGT"
+                compact={false}
+              />
               <span
                 className="underline hover:cursor-pointer"
                 onClick={() => {
-                  setRedeemAmount("0");
+                  setRedeemAmount(bgtFormattedBalance);
                 }}
               >
                 MAX
@@ -91,18 +97,20 @@ export default function Redeem() {
         <ActionButton>
           <Button
             className="w-full"
-            // disabled={
-            //   Number(redeemAmount) <= 0 ||
-            //   Number(redeemAmount) > Number(userBalance) ||
-            //   !payload ||
-            //   isLoading
-            // }
+            disabled={
+              BigNumber(redeemAmount).lte(0) ||
+              BigNumber(redeemAmount).gt(bgtFormattedBalance) ||
+              !isReady
+            }
             onClick={() =>
               write({
-                address: erc20BgtAddress,
-                abi: BGT_PRECOMPILE_ABI,
+                address: bgtTokenAddress,
+                abi: BGT_ABI,
                 functionName: "redeem",
-                params: payload,
+                params: [
+                  account,
+                  parseUnits(redeemAmount === "" ? "0" : redeemAmount, 18),
+                ],
               })
             }
           >

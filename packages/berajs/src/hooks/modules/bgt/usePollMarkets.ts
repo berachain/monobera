@@ -1,6 +1,5 @@
-import { useState } from "react";
-import useSWR, { mutate } from "swr";
-
+import { mutate } from "swr";
+import useSWRImmutable from "swr/immutable";
 import { getMarkets } from "~/actions/bgt/getMarket";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType, Market } from "~/types";
@@ -14,9 +13,9 @@ export const usePollMarkets = (
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = ["usePollMarkets"];
-  const swrResponse = useSWR<Market[], any, typeof QUERY_KEY>(
+  const swrResponse = useSWRImmutable<Market[], any, typeof QUERY_KEY>(
     QUERY_KEY,
-    async () => await getMarkets(),
+    async () => await getMarkets(config),
     {
       ...options?.opts,
     },
