@@ -17,6 +17,7 @@ import {
 import { beraTokenAddress, blockExplorerUrl } from "@bera/config";
 import {
   ApyTooltip,
+  BgtStationBanner,
   FormattedNumber,
   PoolHeader,
   TokenIcon,
@@ -26,6 +27,7 @@ import { truncateFloat } from "@bera/shared-ui/src/utils";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
+import { Separator } from "@bera/ui/separator";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import {
@@ -45,6 +47,7 @@ import {
 } from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
+import { getAddress } from "viem";
 
 interface IPoolPageContent {
   pool: PoolV2;
@@ -418,7 +421,12 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
           </>
         }
       />
-
+      <Separator />
+      <BgtStationBanner
+        receiptTokenAddress={
+          pool?.shareAddress ? getAddress(pool?.shareAddress) : undefined
+        }
+      />
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
@@ -471,37 +479,12 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold text-warning-foreground">
-                {/* {(pool?.totalApy ?? 0) > 100000
-                  ? formatter.format(pool?.totalApy ?? 0)
-                  : (pool?.totalApy ?? 0).toFixed(2)} */}
                 <FormattedNumber value={0} percent colored />
               </div>
             </Card>
           </div>
         </div>
         <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
-          {
-            false && false
-            // <Card>
-            //   <CardContent className="flex items-center justify-between gap-4 p-4">
-            //     <div>
-            //       <h3 className="text-xs font-medium text-muted-foreground">
-            //         Rewards available
-            //       </h3>
-            //       <div className="flex items-center gap-1">
-            //         <p className="text-lg font-semibold text-foreground">
-            //           {isSmall
-            //             ? `< ${formattedBGTRewards} BGT`
-            //             : `${formattedBGTRewards.toFixed(2)} BGT`}
-            //         </p>
-            //         <Tooltip text="Please note: If your accrued BGT Rewards are less than 0.01, your balance will be displayed as '< 0.01'." />
-            //       </div>
-            //     </div>
-            //     {/* @ts-ignore */}
-            //     <RewardBtn poolAddress={pool?.pool} variant={"warning"} />
-            //   </CardContent>
-            // </Card>
-          }
           <Card className="p-4">
             <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
               Pool Liquidity
@@ -584,7 +567,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             )}
         </div>
       </div>
-
+      <Separator />
       <section>
         <Tabs
           defaultValue={Selection.AllTransactions}
