@@ -29,7 +29,7 @@ export const useAggregatedBribes = (validatorAddress: Address) => {
     if (!validator) return undefined;
 
     const cuttingBoards = validator.cuttingboard;
-    return Object.values(aggregateIncentivesByToken(cuttingBoards));
+    return Object.values(aggregateIncentivesByToken(cuttingBoards ?? []));
   }, [validator]);
 };
 

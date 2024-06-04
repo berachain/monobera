@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
@@ -37,7 +38,7 @@ export default function ValidatorsTable() {
   const [isTyping, setIsTyping] = useState(false);
   const [search, setSearch] = useState("");
   const [keyword, setKeyword] = useState("");
-
+  const router = useRouter();
   let typingTimer: NodeJS.Timeout;
 
   useEffect(() => {
@@ -119,10 +120,20 @@ export default function ValidatorsTable() {
         </div>
 
         <TabsContent value="all-validators">
-          <AllValidator keyword={keyword} />
+          <AllValidator
+            keyword={keyword}
+            onRowClick={(row: any) =>
+              router.push(`/validators/${row.original.coinbase}`)
+            }
+          />
         </TabsContent>
         <TabsContent value="my-validators">
-          <MyValidator keyword={keyword} />
+          <MyValidator
+            keyword={keyword}
+            onRowClick={(row: any) =>
+              router.push(`/validators/${row.original.coinbase}`)
+            }
+          />
         </TabsContent>
       </Tabs>
     </div>

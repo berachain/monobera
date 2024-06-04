@@ -1,10 +1,13 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { truncateHash, type Validator } from "@bera/berajs";
+import {
+  truncateHash,
+  usePollValidatorInfo,
+  type Validator,
+} from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { FormattedNumber, Tooltip, ValidatorIcon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -134,103 +137,16 @@ export default function Validator({
 }: {
   validatorAddress: Address;
 }) {
-  const prices = undefined;
-  const percentageDelegated = undefined;
-  const validator = {
-    id: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-    name: "Honey Validator",
-    commission: "0.02",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.",
-    website: "https://www.honeyvalidator.com",
-    imageUri: "https://www.honeyvalidator.com/logo.png",
-    amountStaked: "1500000",
-    cuttingboard: [
-      {
-        percentage: 25,
-        amount: 375000,
-        receiver: {
-          address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-          stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-          name: "Honey Vault",
-          imageUri:
-            "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-          website: "https://www.honeyvault.com",
-          activeIncentives: [
-            {
-              token: {
-                name: "Honey Token",
-                symbol: "HNY",
-                address: "0xdeadbeefdeadbeef",
-                decimals: 18,
-              },
-              incentiveRate: "0.05",
-              amountLeft: "50000",
-            },
-          ],
-          market: "HONEY",
-        },
-      },
-      {
-        percentage: 25,
-        amount: 75000,
-        receiver: {
-          address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-          stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-          name: "Honey Vault",
-          imageUri:
-            "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-          website: "https://www.honeyvault.com",
-          activeIncentives: [
-            {
-              token: {
-                name: "Honey Token",
-                symbol: "HNY",
-                address: "0xdeadbeefdeadbeef",
-                decimals: 18,
-              },
-              incentiveRate: "0.05",
-              amountLeft: "50000",
-            },
-          ],
-          market: "HONEY",
-        },
-      },
-      {
-        percentage: 25,
-        amount: 375000,
-        receiver: {
-          address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-          stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-          name: "Honey Vault",
-          imageUri:
-            "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-          website: "https://www.honeyvault.com",
-          activeIncentives: [
-            {
-              token: {
-                name: "Honey Token",
-                symbol: "HNY",
-                address: "0xdeadbeefdeadbeef",
-                decimals: 18,
-              },
-              incentiveRate: "0.05",
-              amountLeft: "50000",
-            },
-          ],
-          market: "HONEY",
-        },
-      },
-    ],
-    apy: "0.12",
-    allTimeStats: {
-      totalBgtDirected: "2000000",
-      totalHoneyValueBgtDirected: "3000000",
-      totalHoneyValueTokenRewards: "500000",
-    },
-    rewardRate: "",
-  };
-
+  const router = useRouter();
+  const {
+    validatorCounts,
+    validatorInfoDictionary,
+    validatorInfoList,
+    isLoading,
+  } = usePollValidatorInfo();
+  //@ts-ignore
+  const validator = validatorInfoDictionary?.[validatorAddress];
+  console.log("validator", validator);
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
@@ -238,14 +154,16 @@ export default function Validator({
   }[] = [
     {
       title: "APY",
-      value: <span className="text-xl font-semibold">{validator.apy}%</span>,
+      value: (
+        <span className="text-xl font-semibold">{validator?.apy ?? 0}%</span>
+      ),
       tooltipText: "Total BGT directed to this validator",
     },
     {
       title: "Voting Power",
       value: (
         <span className="text-xl font-semibold">
-          {validator.amountStaked}{" "}
+          {validator?.amountStaked}{" "}
           <span className="text-sm text-muted-foreground">(0.0069%)</span>
         </span>
       ),
@@ -254,7 +172,9 @@ export default function Validator({
     {
       title: "Commission",
       value: (
-        <span className="text-xl font-semibold">{validator.commission}%</span>
+        <span className="text-xl font-semibold">
+          {validator?.commission ?? 0}%
+        </span>
       ),
       tooltipText: "Honey",
     },
@@ -262,16 +182,15 @@ export default function Validator({
       title: "Website",
       value: (
         <span className="text-ellipsis text-xl font-semibold hover:underline">
-          <Link href={validator.website}>{validator.website}</Link>
+          <Link href={validator?.website ?? ""}>
+            {validator?.metadata.website ?? ""}
+          </Link>
         </span>
       ),
       tooltipText: "Honey",
     },
   ];
 
-  const isLoading = false;
-
-  const router = useRouter();
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -286,13 +205,13 @@ export default function Validator({
           <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
               <ValidatorIcon
-                address={validator.id as Address}
+                address={validator?.id ?? ""}
                 className="h-12 w-12"
               />
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (
-                validator.name
+                validator?.metadata.name
               )}
             </div>
             <div className="my-4 flex w-full flex-row gap-1 text-muted-foreground">
@@ -301,8 +220,8 @@ export default function Validator({
                 <Skeleton className="h-[25px] w-[150px]" />
               ) : (
                 <span className="flex flex-row gap-1 text-foreground hover:underline">
-                  <Link href={`${blockExplorerUrl}/${validator.id}`}>
-                    {truncateHash(validator.id)}
+                  <Link href={`${blockExplorerUrl}/${validator?.id}`}>
+                    {truncateHash(validator?.id)}
                   </Link>
                   <Icons.externalLink className="h-4 w-4 self-center" />
                 </span>
@@ -312,14 +231,17 @@ export default function Validator({
               <Skeleton className="h-[100px] w-[350px]" />
             ) : (
               <div className="w-full overflow-hidden text-ellipsis text-foreground">
-                {validator.description}
+                {validator?.metadata.Description}
               </div>
             )}
           </div>
           <div className="items-left w-full flex-col justify-between gap-4">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {validatorDataItems.map((item, index) => (
-                <div className="relative flex flex-col items-start justify-start">
+                <div
+                  className="relative flex flex-col items-start justify-start"
+                  key={index}
+                >
                   <div className="flex flex-row items-center gap-1 text-muted-foreground">
                     {item.title} <Tooltip text={item.tooltipText} />
                   </div>
@@ -351,20 +273,6 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=redelegate&validator=${validator.id}`,
-                  )
-                }
-              >
-                {" "}
-                Redelegate
-                <Icons.redo className="relative ml-1 h-4 w-4" />
-              </Button>
-              <Button
-                className="w-full"
-                variant="outline"
-                disabled={isLoading}
-                onClick={() =>
-                  router.push(
                     `/delegate?action=unbond&validator=${validator.id}`,
                   )
                 }
@@ -385,8 +293,8 @@ export default function Validator({
           value={
             <GaugeOverview
               isLoading={isLoading}
-              totalGauges={validator.cuttingboard.length}
-              featuredGauges={validator.cuttingboard.map(
+              totalGauges={(validator?.cuttingboard ?? []).length}
+              featuredGauges={(validator?.cuttingboard ?? []).map(
                 (cb: any) => cb.receiver.imageUri,
               )}
             />
