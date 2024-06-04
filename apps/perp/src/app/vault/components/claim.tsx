@@ -1,12 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import {
-  formatter,
-  usePollBgtRewardsForAddress,
-  usePollHoneyVaultBalance,
-} from "@bera/berajs";
-import { cloudinaryUrl, bhoneyVaultContractAddress } from "@bera/config";
+import { formatter, useBgtApy, usePollHoneyVaultBalance } from "@bera/berajs";
+import { bhoneyVaultContractAddress, cloudinaryUrl } from "@bera/config";
 import { ApyTooltip, Tooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
@@ -24,12 +20,10 @@ export default function Claim() {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
 
-  const { isLoading: isBgtRewardsLoading, useBgtApr } =
-    usePollBgtRewardsForAddress({
-      address: bhoneyVaultContractAddress,
-    });
-
-  const bgtApr = useBgtApr(honeyLocked);
+  const { isLoading: isBgtRewardsLoading, data: bgtApr } = useBgtApy({
+    recieptTokenAddress: bhoneyVaultContractAddress,
+    tvlInHoney: honeyLocked,
+  });
 
   return (
     <div className="relative w-full overflow-hidden rounded-md border border-border bg-[#FEFCE8] px-10 py-8 dark:bg-[#231D14]">
