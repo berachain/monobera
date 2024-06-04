@@ -15,8 +15,10 @@ import { getWalletBalances } from "@bera/berajs/actions";
 ## Required config
 
 For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
 ```ts twoslash
 import { type BeraConfig } from "@bera/berajs";
+
 export const beraConfig: BeraConfig = {
   endpoints: {
     tokenList: "https://..",
@@ -27,8 +29,8 @@ export const beraConfig: BeraConfig = {
 ## Usage
 
 ```ts
-import { type BeraConfig } from "@bera/berajs";
-import { getWalletBalances, type Token } from "@bera/berajs/actions";
+import { type BeraConfig, type Token } from "@bera/berajs";
+import { getWalletBalances } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 
@@ -55,17 +57,16 @@ const walletBalances = await getWalletBalances({
 
 ## Parameters
 
-| Name           | type                              | Description                                                               | Required |
-| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
-| account       | `string` \| `undefined`     | Blockchain account address                                      | true     |
-| tokenList     | `Token[]` \| `undefined`    | Array of `Token` objects representing the wallet's tokens       | true     |
-| config        | `BeraConfig`                | Configuration settings for retrieving wallet balances           | false    |
-| publicClient  | `PublicClient` \| `undefined` | Client interface for public blockchain interactions            | true     |
+| Name         | type                          | Description                                               | Required |
+| ------------ | :---------------------------- | :-------------------------------------------------------- | :------: |
+| account      | `string` \| `undefined`       | Blockchain account address                                |   true   |
+| tokenList    | `Token[]` \| `undefined`      | Array of `Token` objects representing the wallet's tokens |   true   |
+| config       | `BeraConfig`                  | Configuration settings for retrieving wallet balances     |  false   |
+| publicClient | `PublicClient` \| `undefined` | Client interface for public blockchain interactions       |   true   |
 
 ## Returns
 
 #### [`BalanceToken[] | undefined`](/types/BalanceToken/)
-
 
 See type [`BalanceToken`](/types/BalanceToken/)
 

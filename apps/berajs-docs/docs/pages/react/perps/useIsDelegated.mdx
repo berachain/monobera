@@ -1,6 +1,6 @@
 # useIsDelegated
 
-React hook for fetching the delegation status for accounts to allow them to one click trade on Berps.
+React SWR hook for fetching the delegation status for accounts to allow them to one click trade on Berps.
 
 ## Initialization
 
@@ -26,7 +26,7 @@ const { data: isDelegated, refresh } = useIsDelegated();
 
 | Name           | Type                                                            | Description                                                                                                                                                                                                   |
 | -------------- | :-------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `data`         | `boolean`                                                       | This property returns the delegation status for accounts to allow them to one click trade.                                                                                                                                              |
+| `data`         | `boolean`                                                       | This property returns the delegation status for accounts to allow them to one click trade.                                                                                                                    |
 | `error`        | `any \| undefined`                                              | This property contains any error that occurred during the data fetching process.                                                                                                                              |
 | `mutate`       | [`KeyedMutator<boolean>`](https://swr.vercel.app/docs/mutation) | This function allows programmatic revalidation of data. You can call mutate() to trigger a revalidation. Optionally, you can pass new data to directly update the local cache without a revalidation request. |
 | `refresh`      | `() => void`                                                    | This function is a simplified version of mutate(), specifically designed to easily trigger a revalidation of the data.                                                                                        |

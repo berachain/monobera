@@ -11,11 +11,14 @@ Ensure you have followed the steps from [Actions > Getting Started](/actions/get
 ```ts
 import { getCollateralRates } from "@bera/berajs/actions";
 ```
+
 ## Required config
 
 For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
 ```ts twoslash
 import { type BeraConfig } from "@bera/berajs";
+
 export const beraConfig: BeraConfig = {
   contracts: {
     multicallAddress: "0x...",
@@ -29,6 +32,7 @@ export const beraConfig: BeraConfig = {
 :::code
 
 ```ts [example.ts]
+import { type BeraConfig } from "@bera/berajs";
 import { getCollateralRates } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
