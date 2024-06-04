@@ -377,7 +377,7 @@ export default function Validator({
           }
         />
       </div>
-      {/* <ValidatorPolData validator={validator} isLoading={isLoading} /> */}
+      <ValidatorPolData validator={validator} isLoading={isLoading} />
     </div>
   );
 }

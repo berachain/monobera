@@ -32,7 +32,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
   const isTableLoading = isGaugeLoading || isGaugeValidating;
   const { data: TokeList = [] } = usePollWalletBalances();
-  console.log("gaugeDictionary", gaugeDictionary);
+  // console.log("gaugeDictionary", gaugeDictionary);
   return (
     <>
       {gauge ? (
@@ -58,7 +58,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
                     {gauge?.metadata.product}
                   </>
                 ),
-                externalLink: "https://berachain.com",
+                externalLink: gauge?.metadata.url,
               },
               {
                 title: "Pool Contract",

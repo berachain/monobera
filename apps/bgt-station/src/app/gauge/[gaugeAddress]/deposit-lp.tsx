@@ -1,12 +1,25 @@
 import { useState } from "react";
-import { Token, usePollWalletBalances } from "@bera/berajs";
-import { TokenInput } from "@bera/shared-ui";
+import {
+  BERA_VAULT_REWARDS_ABI,
+  type Gauge,
+  type Token,
+  TransactionActionType,
+  usePollWalletBalances,
+} from "@bera/berajs";
+import { TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import BigNumber from "bignumber.js";
+import { parseUnits } from "viem";
 
 import { Info } from "./info";
 
-export const DepositLP = ({ lpToken }: { lpToken: Token }) => {
+export const DepositLP = ({
+  lpToken,
+  gauge,
+}: {
+  lpToken: Token;
+  gauge: Gauge;
+}) => {
   const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
     externalTokenList: [lpToken],
   });
@@ -15,6 +28,13 @@ export const DepositLP = ({ lpToken }: { lpToken: Token }) => {
   const validAmount =
     BigNumber(depositAmount).gt(0) &&
     BigNumber(depositAmount).lte(balance?.formattedBalance ?? "0");
+
+  const { write, ModalPortal } = useTxn({
+    message: "Deposit LP Tokens",
+    actionType: TransactionActionType.ADD_LIQUIDITY,
+    onSuccess: () => {},
+  });
+
   return (
     <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
@@ -39,7 +59,20 @@ export const DepositLP = ({ lpToken }: { lpToken: Token }) => {
         </div>
       </div>
       <Info />
-      <Button disabled={!validAmount}>Deposit</Button>
+      <Button
+        disabled={!validAmount}
+        onClick={() =>
+          write({
+            address: gauge.vaultAddress,
+            abi: BERA_VAULT_REWARDS_ABI,
+            functionName: "stake",
+            params: [parseUnits(depositAmount, lpToken.decimals)],
+          })
+        }
+      >
+        Deposit
+      </Button>
+      {ModalPortal}
     </div>
   );
 };

@@ -1,21 +1,40 @@
 import { useState } from "react";
-import { Token, usePollWalletBalances } from "@bera/berajs";
-import { TokenInput } from "@bera/shared-ui";
+import {
+  BERA_VAULT_REWARDS_ABI,
+  Gauge,
+  Token,
+  TransactionActionType,
+  usePollVaultsInfo,
+} from "@bera/berajs";
+import { TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Slider } from "@bera/ui/slider";
 import BigNumber from "bignumber.js";
+import { parseUnits } from "viem";
+
 import { Info } from "./info";
 
-export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
+export const WithdrawLP = ({
+  lpToken,
+  gauge,
+}: {
+  lpToken: Token;
+  gauge: Gauge;
+}) => {
   const [withdrawAmount, setWithdrawAmount] = useState<`${number}`>("0");
   const [withdrawPercent, setWithdrawPercent] = useState<number>(0);
-  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
-    externalTokenList: [lpReceiptToken],
+  const { data, isLoading, refresh } = usePollVaultsInfo({
+    vaultAddress: gauge.vaultAddress,
   });
-  const balance = useSelectedWalletBalance(lpReceiptToken.address);
   const validAmount =
     BigNumber(withdrawAmount).gt(0) &&
-    BigNumber(withdrawAmount).lte(balance?.formattedBalance ?? "0");
+    BigNumber(withdrawAmount).lte(data?.balance ?? "0");
+
+  const { write, ModalPortal } = useTxn({
+    message: "Withdraw LP Tokens",
+    actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
+    onSuccess: () => {},
+  });
   return (
     <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
@@ -28,13 +47,15 @@ export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
         </div>
         <div className="mt-4 rounded-md border border-border bg-muted">
           <TokenInput
-            selected={lpReceiptToken}
+            selected={lpToken}
             amount={withdrawAmount}
-            balance={balance?.formattedBalance}
+            balance={data?.balance ?? "0"}
             hidePrice
             showExceeding={true}
             selectable={false}
-            setAmount={(amount) => setWithdrawAmount(amount as `${number}`)}
+            setAmount={(amount: string) =>
+              setWithdrawAmount(amount as `${number}`)
+            }
           />
         </div>
       </div>
@@ -70,7 +91,20 @@ export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
         />
       </div>
       <Info />
-      <Button disabled={!validAmount}>Withdraw</Button>
+      <Button
+        disabled={!validAmount}
+        onClick={() =>
+          write({
+            address: gauge.vaultAddress,
+            abi: BERA_VAULT_REWARDS_ABI,
+            functionName: "withdraw",
+            params: [parseUnits(withdrawAmount, lpToken.decimals)],
+          })
+        }
+      >
+        Withdraw
+      </Button>
+      {ModalPortal}
     </div>
   );
 };
