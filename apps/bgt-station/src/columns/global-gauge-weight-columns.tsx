@@ -5,6 +5,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
+import { BribesPopover } from "~/components/bribes-tooltip";
 import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
 export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
@@ -102,8 +103,8 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full items-center justify-center">
-        <Icons.beraIcon className="h-4 w-4" />
+      <div className="flex w-full items-center justify-center gap-1">
+        <BribesPopover bribes={row.original.vaultWhitelist.whitelistedTokens} />
         <Button
           size="sm"
           variant="ghost"
@@ -111,7 +112,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
             e.preventDefault();
             e.stopPropagation();
             window.open(
-              `/incentivize?pool=${row.original.vaultAddress}`,
+              `/incentivize?gauge=${row.original.vaultAddress}`,
               "_self",
             );
           }}

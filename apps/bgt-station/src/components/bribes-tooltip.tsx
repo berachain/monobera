@@ -149,17 +149,14 @@ export const BribesTooltip = ({
   );
 };
 
-export const ValidatorBribesPopover = ({
-  validatorAddress,
+export const BribesPopover = ({
+  bribes,
 }: {
-  validatorAddress: Address;
+  bribes: AggregatedBribe[] | undefined;
 }) => {
-  const availableBribes: AggregatedBribe[] | undefined =
-    useAggregatedBribes(validatorAddress);
-
   return (
     <>
-      {!availableBribes || availableBribes?.length === 0 ? (
+      {!bribes || bribes?.length === 0 ? (
         <div className="w-fit rounded-lg border px-2 py-1 text-xs hover:bg-muted">
           No Incentives
         </div>
@@ -168,14 +165,14 @@ export const ValidatorBribesPopover = ({
           toolTipTrigger={
             <div className="w-fit rounded-lg border px-2 py-1 hover:bg-muted">
               <TokenIconList
-                tokenList={availableBribes?.map((ab) => ab.token) ?? []}
+                tokenList={bribes?.map((ab) => ab.token) ?? []}
                 showCount={3}
                 size={"lg"}
                 className="w-fit"
               />
             </div>
           }
-          children={<BribesTooltip aggregatedBribes={availableBribes ?? []} />}
+          children={<BribesTooltip aggregatedBribes={bribes ?? []} />}
         />
       )}
     </>

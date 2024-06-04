@@ -8,7 +8,7 @@ import {
   usePollWalletBalances,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { DataTable, GaugeIcon, PoolHeader } from "@bera/shared-ui";
+import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -32,7 +32,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
   const isTableLoading = isGaugeLoading || isGaugeValidating;
   const { data: TokeList = [] } = usePollWalletBalances();
-
+  console.log("gaugeDictionary", gaugeDictionary);
   return (
     <>
       {gauge ? (
@@ -44,11 +44,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
             }}
             title={
               <>
-                {/* <TokenIconList tokenList={[]} size="xl" /> */}
-                <div className="flex">
-                  <Icons.beraIcon className="h-8 w-8" />
-                  <Icons.honey className="-ml-2 h-8 w-8" />
-                </div>
+                <GaugeIcon address={gauge?.vaultAddress} size="xl" />
                 {gauge?.metadata.name}
               </>
             }
@@ -58,7 +54,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
                 content: (
                   <>
                     {" "}
-                    <GaugeIcon address={gauge?.vaultAddress} />
+                    <MarketIcon market={gauge?.metadata.product} size={"md"} />
                     {gauge?.metadata.product}
                   </>
                 ),
