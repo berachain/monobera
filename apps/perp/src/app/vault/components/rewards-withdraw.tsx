@@ -86,7 +86,7 @@ export const RewardsWithdraw = () => {
     <div className="flex w-full flex-col gap-2">
       {ModalPortal}
       <BgtStationBanner receiptTokenAddress={bhoneyVaultContractAddress} />
-      <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-2">
+      <div className="flex w-full pt-2 flex-col gap-4 sm:flex-row sm:gap-2">
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
           <p className="text-sm font-medium text-muted-foreground">
             bHONEY Balance
@@ -163,7 +163,7 @@ export const RewardsWithdraw = () => {
           )}
         </div>
       </div>
-      <div className="pt-4">
+      <div className="">
         <p className="pl-2 text-lg font-semibold">Withdrawal Queue</p>
       </div>
       <DataTable
