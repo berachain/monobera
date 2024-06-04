@@ -13,8 +13,8 @@ import DataCard from "./data-card";
 
 export default function Data({ arcade }: { arcade: boolean }) {
   const { loading, data } = useQuery(GetGlobalData);
-  const dailyVolume = data?.honeyVolumeDayDatas[0].amount ?? "0";
-  const totalHoneySupply = data?.honeySupplyHourDatas[0].amount ?? "0";
+  const dailyVolume = data?.honeyVolumeDayDatas[0]?.amount ?? "0";
+  const totalHoneySupply = data?.honeySupplyHourDatas[0]?.amount ?? "0";
   return (
     <section className="py-4 lg:py-16" id="stats">
       {arcade ? (
