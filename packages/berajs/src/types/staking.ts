@@ -29,6 +29,10 @@ export type Validator = {
 
 export type UserValidator = Validator & {
   userStaked: string;
+  userQueued: string;
+  latestBlock: string;
+  latestBlockTime: string;
+  canActivate?: boolean;
 };
 
 export type CuttingBoardWeight = {

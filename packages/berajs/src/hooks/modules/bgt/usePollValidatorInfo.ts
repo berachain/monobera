@@ -18,12 +18,14 @@ export interface UsePollValidatorInfoResponse
 export const usePollValidatorInfo = (
   options?: DefaultHookOptions,
 ): UsePollValidatorInfoResponse => {
-  const { config: beraConfig } = useBeraJs();
+  const { config: beraConfig, account } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePollValidatorInfo"];
+  const QUERY_KEY = ["usePollValidatorInfo", config, account];
   const swrResponse = useSWR<GetValidatorsInfo, any, typeof QUERY_KEY>(
     QUERY_KEY,
-    async () => await getValidatorsInfo(config),
+    async () => {
+      return await getValidatorsInfo(config);
+    },
     {
       ...options?.opts,
     },

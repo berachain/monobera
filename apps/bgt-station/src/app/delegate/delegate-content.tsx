@@ -5,6 +5,7 @@ import {
   useBeraJs,
   usePollWalletBalances,
   BGT_ABI,
+  useUserValidators,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { ActionButton, FormattedNumber, useTxn } from "@bera/shared-ui";
@@ -21,6 +22,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
   const { isReady } = useBeraJs();
 
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
+  const { refresh } = useUserValidators();
 
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
@@ -37,6 +39,9 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
   } = useTxn({
     message: `Delegating ${Number(amount).toFixed(2)} BGT to Validator`,
     actionType: TransactionActionType.DELEGATE,
+    onSuccess: () => {
+      refresh();
+    },
   });
   return (
     <div>
@@ -68,6 +73,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
           amount={amount}
           onAmountChange={setAmount}
           validatorAddress={validator}
+          showSearch={true}
           showDelegated={false}
         />
 
