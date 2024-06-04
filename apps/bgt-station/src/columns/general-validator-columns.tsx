@@ -13,7 +13,7 @@ import {
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
-import { BribesPopover } from "~/components/bribes-tooltip";
+import { BribesPopover, ClaimBribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 import {
   AggregatedBribe,
@@ -108,6 +108,25 @@ const BRIBES_COLUMN: ColumnDef<Validator> = {
   enableSorting: false,
 };
 
+const CLAIMABLE_BRIBES_COLUMN: ColumnDef<Validator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Incentives" />
+  ),
+  cell: ({ row }) => {
+    const availableBribes: AggregatedBribe[] | undefined = useAggregatedBribes(
+      row.original.id,
+    );
+    return (
+      <ClaimBribesPopover
+        coinbase={row.original.coinbase}
+        bribes={availableBribes}
+      />
+    );
+  },
+  accessorKey: "bribes",
+  enableSorting: false,
+};
+
 const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
     <DataTableColumnHeader column={column} title="User Staked" />
@@ -153,4 +172,11 @@ export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
   COMMISSION_COLUMN as ColumnDef<UserValidator>,
   APY_COLUMN as ColumnDef<UserValidator>,
   BRIBES_COLUMN as ColumnDef<UserValidator>,
+];
+
+export const user_incentives_columns: ColumnDef<UserValidator>[] = [
+  VALIDATOR_COLUMN as ColumnDef<UserValidator>,
+  USER_STAKED_COLUMN as ColumnDef<UserValidator>,
+  APY_COLUMN as ColumnDef<UserValidator>,
+  CLAIMABLE_BRIBES_COLUMN as ColumnDef<UserValidator>,
 ];
