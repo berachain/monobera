@@ -1,5 +1,5 @@
 import { usePollGauges, useTokens } from "@bera/berajs";
-import { GaugeIcon, TokenIconList } from "@bera/shared-ui";
+import { GaugeIcon, MarketIcon, TokenIconList } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Address } from "viem";
 
@@ -30,13 +30,13 @@ export const GaugeHeaderWidget = ({
             className,
           )}
         >
-          <div className="flex items-center gap-1 text-md font-medium leading-6">
-            <GaugeIcon address={address} />
-            {gauge.metadata.product}
-          </div>
-          <div className="flex items-center gap-1 text-xs leading-5">
-            <TokenIconList tokenList={list} size="md" />
+          <div className="text-md flex items-center gap-1 font-medium leading-6">
+            <GaugeIcon address={gauge.id} />
             {gauge.metadata.name}
+          </div>
+          <div className="flex items-center gap-1 text-sm font-medium leading-5 ml-2">
+            <MarketIcon market={gauge.metadata.product} size="md" />
+            {gauge.metadata.product}
           </div>
         </div>
       )}
