@@ -15,7 +15,8 @@ import { getTokens } from "@bera/berajs/actions";
 ## Usage
 
 ```ts
-import { getTokens, type Token } from "@bera/berajs/actions";
+import { type Token } from "@bera/berajs";
+import { getTokens } from "@bera/berajs/actions";
 
 import { beraConfig } from "./config";
 
@@ -24,7 +25,7 @@ const customToken: Token = {
   decimals: 18,
   symbol: "TKN",
   name: "TKN",
-}
+};
 
 const tokens = await getTokens({
   externalList: [customToken], // optional list of Token Objects to combine with the token list in the config
@@ -34,10 +35,10 @@ const tokens = await getTokens({
 
 ## Parameters
 
-| Name           | type                              | Description                                                               | Required |
-| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
-| externalList | `Token[]`    | Optional array of `Token` objects from an external source    | true     |
-| config       | `BeraConfig` | Configuration settings specific to the token retrieval request | false    |
+| Name         | type         | Description                                                    | Required |
+| ------------ | :----------- | :------------------------------------------------------------- | :------: |
+| externalList | `Token[]`    | Optional array of `Token` objects from an external source      |   true   |
+| config       | `BeraConfig` | Configuration settings specific to the token retrieval request |  false   |
 
 ## Returns
 

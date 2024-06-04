@@ -32,6 +32,8 @@ export const beraConfig: BeraConfig = {
 :::code
 
 ```ts [example.ts]
+import { type BeraConfig } from "@bera/berajs";
+import { getReserveData } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 

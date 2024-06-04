@@ -1,0 +1,16 @@
+## `PoolDayDataV2`
+
+:::info
+Type `PoolDayDataV2` is from `@bera/graphql`
+:::
+
+```ts
+import { type PoolDayDataV2 } from "@bera/graphql";
+```
+
+| Name               | type     | Description                                                                                 | Optional |
+| ------------------ | :------- | :------------------------------------------------------------------------------------------ | :------: |
+| `day`              | `number` | UNIX timestamp of day for this 24 hour data snapshot                                        | `false`  |
+| `volume24HInHoney` | `number` | Estimated USD value of the trade volume in the pool over the past 24 hours                  | `false`  |
+| `tvlInHoney`       | `number` | Estimated USD value of the total value locked in the pool at the end of this 24 hour period | `false`  |
+| `fees24HInHoney`   | `number` | Estimated USD value of the fees paid in pool transactions over the past 24 hours            | `false`  |

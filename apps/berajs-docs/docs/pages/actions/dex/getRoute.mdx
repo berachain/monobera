@@ -2,21 +2,43 @@
 
 Action for fetching the optimal swap route between two tokens.
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
 import { getRoute } from "@bera/berajs/actions";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts
+import { type BeraConfig } from "@bera/berajs";
+
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+};
+```
+
 ## Usage
 
-:::code-group
-
-```ts twoslash [example.ts]
-import { SwapInfoV3 } from "@bera/berajs";
+```ts
+import { SwapInfoV3, type BeraConfig } from "@bera/berajs";
 import { getRoute } from "@bera/berajs/actions";
 
-import { beraConfig } from "./config";
+// required configs for getRoute
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...",
+  },
+};
 
 const route = await getRoute({
   args: {
@@ -30,27 +52,17 @@ const route = await getRoute({
 });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getRoute
-export const beraConfig: BeraConfig = {
-  endpoints: {
-    dexRouter: "https://...",
-  },
-};
-```
-
-:::
-
 ## Parameters
 
-```ts
-import { getRoute } from "@bera/berajs/actions";
-```
+| Name                    | type                              | Description                                                   | Required |
+| ----------------------- | :-------------------------------- | :------------------------------------------------------------ | :------: |
+| `args.tokenIn`          | `string`                          | The address of the token to be given in the swap              |  `true`  |
+| `args.tokenOut`         | `string`                          | The address of the token to be received in the swap           |  `true`  |
+| `args.tokenInDecimals`  | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.tokenOutDecimals` | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.amount`           | `string`                          | The amount of the tokenIn to be given in the swap             |  `true`  |
+| `config`                | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources |  `true`  |
 
-## Returns
+## Returns [`Promise<SwapInfoV3>`](/types/SwapInfoV3/)
 
-```ts
-import { type SwapInfoV3 } from "@bera/berajs";
-```
+See type [`SwapInfoV3`](/types/SwapInfoV3/)

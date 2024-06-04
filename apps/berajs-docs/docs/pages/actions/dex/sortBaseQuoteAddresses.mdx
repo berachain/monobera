@@ -1,4 +1,4 @@
-# getBaseQuoteAddresses
+# sortBaseQuoteAddresses
 
 Helper function to determine the base and quote tokens of a given two token addresses.
 
@@ -14,9 +14,9 @@ import { sortBaseQuoteAddresses } from "@bera/berajs/actions";
 
 ## Usage
 
-```ts [example.ts]
+```ts
+import { type BeraConfig } from "@bera/berajs";
 import { sortBaseQuoteAddresses } from "@bera/berajs/actions";
-import { BeraConfig } from "@bera/berajs";
 
 // required configs for sortBaseQuoteAddresses
 export const beraConfig: BeraConfig = {
@@ -34,6 +34,10 @@ const [base, quote] = sortBaseQuoteAddresses({
 
 ## Parameters
 
-```ts
-import { type SortBaseQuoteAddress } from "@bera/berajs/actions";
-```
+| Name          | type                              | Description                                                   | Required |
+| ------------- | :-------------------------------- | :------------------------------------------------------------ | :------: |
+| `args.tokenA` | `Address`                         | The onchain address of token A                                |  `true`  |
+| `args.tokenB` | `Address`                         | The onchain address of token B                                |  `true`  |
+| `config`      | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources |  `true`  |
+
+## Returns `[Address, Address]`

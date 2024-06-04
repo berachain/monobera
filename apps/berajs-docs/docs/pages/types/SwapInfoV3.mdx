@@ -1,0 +1,17 @@
+## `SwapInfoV3`
+
+| Name                        | Type                                     | Description                                                                          | Optional |
+| --------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------ | -------- |
+| batchSwapSteps              | [`ICrocSwapStep[]`](types/ICrocSwapStep) | List of swap steps involved in performing the swap                                   | false    |
+| formattedSwapAmount         | `string`                                 | string representation of amount to be swapped                                        | false    |
+| formattedReturnAmount       | `string`                                 | string representation of amount to be returned from swap                             | false    |
+| formattedAmountIn           | `string`                                 | string representation of amount tokenIn to be swapped                                | false    |
+| amountIn                    | `bigint`                                 | amount to be swapped of tokenIn                                                      | false    |
+| returnAmount                | `bigint`                                 | amount to be received of tokenOut from swap                                          | false    |
+| tokenIn                     | `string`                                 | address of token to be swapped in                                                    | false    |
+| tokenOut                    | `string`                                 | address of token to be received from swap                                            | false    |
+| value                       | `bigint`                                 | value to be sent with transaction                                                    | true     |
+| predictedAmountOut          | `bigint`                                 | a predicted amount of tokenOut to be received from the swap                          | false    |
+| formattedPredictedAmountOut | `string`                                 | string representation of a predicted amount of tokenOut to be received from the swap | false    |
+
+See type [`ICrocSwapStep`](/types/ICrocSwapStep/)

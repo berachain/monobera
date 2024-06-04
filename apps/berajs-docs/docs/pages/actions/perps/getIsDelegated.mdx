@@ -31,6 +31,7 @@ export const beraConfig: BeraConfig = {
 :::code
 
 ```ts [example.ts]
+import { type BeraConfig } from "@bera/berajs";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
 
@@ -68,6 +69,6 @@ const isDelegated = await getIsDelegated({
 
 ## Returns
 
-| Type               | Description                                                   |
-| :----------------- | :------------------------------------------------------------ |
+| Type      | Description                                                    |
+| :-------- | :------------------------------------------------------------- |
 | `boolean` | This represents the delegation status of the account provided. |

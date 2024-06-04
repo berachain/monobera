@@ -1,10 +1,10 @@
 # usePollHoneyPreview
 
-React hook to fetching the preview of the swap amount for various transaction methods involving the "honey" token.
+React SWR hook to fetching the preview of the swap amount for various transaction methods involving the "honey" token.
 
 ## Initialization
 
-Ensure you have followed the steps from [Actions > getHoneyPreview](/actions/honey/getHoneyPreview) before getting started.
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
 
 ## Import
 
@@ -25,6 +25,17 @@ const { data: honeyPreview } = usePollHoneyPreview({
 
 ## Parameters
 
+#### Call signature
+
+```ts
+function usePollHoneyPreview({
+  { collateral, amount, mint, given_in }: UsePollHoneyPreviewArgs,
+  options?: DefaultHookOptions,
+});
+```
+
+#### args: `UsePollHoneyPreviewArgs`
+
 | Name         | Type                     | Description                                                 | Required |
 | ------------ | :----------------------- | :---------------------------------------------------------- | :------: |
 | `collateral` | [`Token`](/types/Token/) | The token used as collateral in the transaction.            |  `true`  |
@@ -32,9 +43,21 @@ const { data: honeyPreview } = usePollHoneyPreview({
 | `mint`       | `boolean`                | Indicates whether the operation is minting.                 |  `true`  |
 | `given_in`   | `boolean`                | Specifies if the amount is given as input for calculations. |  `true`  |
 
+#### options?: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
+
 ## Returns
 
-| Name             | Type          | Description                                                                                              | Optional |
-| ---------------- | :------------ | :------------------------------------------------------------------------------------------------------- | :------: |
-| `amount`         | `string`      | The computed amount resulting from the operation, formatted as a string.                                 | `false`  |
-| `...swrResponse` | `SWRResponse` | An SWR response object that may include additional data and status information from the fetch operation. |  `true`  |
+| Name           | Type                         | Description                                                                | Optional |
+| -------------- | :--------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`         | `string`                     | The computed amount resulting from the operation, formatted as a string.   | `false`  |
+| `error`        | `any \| undefined`           | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: string) => void` | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                 | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                    | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                    | boolean flag representing whether the hook is currently loading data       | `false`  |

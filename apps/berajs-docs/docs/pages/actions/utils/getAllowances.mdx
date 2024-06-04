@@ -18,25 +18,12 @@ import { getAllowances } from "@bera/berajs/actions";
 import { getAllowances } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
-import { usePublicClient } from "wagmi";
 
 // first, intialize a public client with berachain
 const publicClient = createPublicClient({
   chain: berachain, // viem chains directory: https://github.com/wevm/viem/blob/main/src/chains/index.ts
   transport: http(),
 });
-
-interface AllowanceToken extends Token {
-  allowance: bigint;
-  formattedAllowance: string;
-}
-
-interface Call {
-  abi: typeof erc20Abi;
-  address: `0x${string}`;
-  functionName: string;
-  args: any[];
-}
 
 const { data } = await getAllowance({
   tokens,
@@ -47,15 +34,14 @@ const { data } = await getAllowance({
 });
 ```
 
-
 ## Parameters
 
-| Name           | type                              | Description                                                               | Required |
-| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
-| account      | `Address` \| `undefined`  | Blockchain address of the account holder         | true     |
-| token        | `Token` \| `undefined`    | Reference to a `Token` object or undefined       | true     |
-| spender      | `Address`                 | Blockchain address of the entity spending the token | false    |
-| publicClient | `PublicClient` \| `undefined` | Client interface for public blockchain interactions | true     |
+| Name         | type                          | Description                                         | Required |
+| ------------ | :---------------------------- | :-------------------------------------------------- | :------: |
+| account      | `Address` \| `undefined`      | Blockchain address of the account holder            |   true   |
+| token        | `Token` \| `undefined`        | Reference to a `Token` object or undefined          |   true   |
+| spender      | `Address`                     | Blockchain address of the entity spending the token |  false   |
+| publicClient | `PublicClient` \| `undefined` | Client interface for public blockchain interactions |   true   |
 
 ## Returns
 
