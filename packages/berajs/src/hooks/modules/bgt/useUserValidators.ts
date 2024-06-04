@@ -8,6 +8,7 @@ import { usePollValidatorInfo } from "./usePollValidatorInfo";
 import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { bgtSubgraphUrl } from "@bera/config";
+import { useBlock } from "wagmi";
 
 /**
  *
@@ -19,9 +20,7 @@ export const useUserValidators = (
 ): DefaultHookReturnType<UserValidator[] | undefined> => {
   const { account } = useBeraJs();
   const { validatorInfoList } = usePollValidatorInfo();
-
   const QUERY_KEY = ["useUserValidators", account, ...validatorInfoList];
-  console.log(QUERY_KEY);
   const swrResponse = useSWR<UserValidator[] | undefined>(
     QUERY_KEY,
     async () => {
@@ -33,6 +32,7 @@ export const useUserValidators = (
             userStaked: "0",
             userQueued: "0",
             latestBlock: "0",
+            latestBlockTime: "0",
           };
         });
       }
@@ -44,26 +44,29 @@ export const useUserValidators = (
 
       const userDeposited = await bgtClient.query({
         query: GetUserValidatorInformation,
-        variables: { account },
+        variables: { address: account.toLowerCase() },
       });
 
       const userDepositedData: {
         amountQueued: string;
         amountDeposited: string;
         latestBlock: string;
+        latestBlockTime: string;
         user: string;
         coinbase: string;
       }[] = userDeposited.data.userValidatorInformations;
 
       return validatorInfoList.map((validator: Validator) => {
         const userDeposited = userDepositedData.find(
-          (data) => data.coinbase === validator.coinbase,
+          (data) =>
+            data.coinbase.toLowerCase() === validator.coinbase.toLowerCase(),
         );
         return {
           ...validator,
           userStaked: userDeposited?.amountDeposited ?? "0",
           userQueued: userDeposited?.amountQueued ?? "0",
           latestBlock: userDeposited?.latestBlock ?? "0",
+          latestBlockTime: userDeposited?.latestBlockTime ?? "0",
         };
       });
     },
