@@ -302,7 +302,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     ? formatUnits(swapPayload?.payload[2] ?? 0, selectedTo?.decimals ?? 18)
     : "";
 
-  // Calculate gas for connected wallet user (more accurate)
+  
   const { estimatedBeraFee } = useGasData({
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
@@ -310,9 +310,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
   const beraInUsd = useTokenHoneyPrice({
     tokenAddress: nativeTokenAddress,
   });
-
-  // Calculate general gas for unconnected wallet user (less accurate)
-  // const { estimatedBeraFee: generalGasEstimateInBera } = useGasData();
 
   // Format and output final gas price
   const beraGasPriceToUSD = (priceInBera?: number) => {
