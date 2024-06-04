@@ -108,7 +108,12 @@ export default function ValidatorInput({
                 className="h-3 w-3"
               />
 
-              <FormattedNumber value={bgtDelegated} compact symbol="BGT" showIsSmallerThanMin/>
+              <FormattedNumber
+                value={bgtDelegated}
+                compact
+                symbol="BGT"
+                showIsSmallerThanMin
+              />
               <span
                 className="underline hover:cursor-pointer"
                 onClick={() => {
