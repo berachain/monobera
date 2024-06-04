@@ -1,4 +1,4 @@
-import { type Gauge, useTokenInformation } from "@bera/berajs";
+import { useTokenInformation, type Gauge } from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { DepositLP } from "./deposit-lp";
@@ -7,9 +7,6 @@ import { WithdrawLP } from "./withdraw-lp";
 export const GaugueLPChange = ({ gauge }: { gauge: Gauge }) => {
   const { data: lpToken } = useTokenInformation({
     address: gauge.stakingTokenAddress,
-  });
-  const { data: lpReceiptToken } = useTokenInformation({
-    address: gauge.vaultAddress,
   });
 
   return (
@@ -20,10 +17,10 @@ export const GaugueLPChange = ({ gauge }: { gauge: Gauge }) => {
           <TabsTrigger value="withdraw">Withdraw</TabsTrigger>
         </TabsList>
         <TabsContent value="deposit">
-          {lpToken && <DepositLP lpToken={lpToken} />}
+          {lpToken && <DepositLP lpToken={lpToken} gauge={gauge} />}
         </TabsContent>
         <TabsContent value="withdraw">
-          {lpReceiptToken && <WithdrawLP lpReceiptToken={lpReceiptToken} />}
+          {lpToken && <WithdrawLP lpToken={lpToken} gauge={gauge} />}
         </TabsContent>
       </Tabs>
     </div>
