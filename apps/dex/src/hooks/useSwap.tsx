@@ -302,7 +302,6 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     ? formatUnits(swapPayload?.payload[2] ?? 0, selectedTo?.decimals ?? 18)
     : "";
 
-  
   const { estimatedBeraFee } = useGasData({
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
