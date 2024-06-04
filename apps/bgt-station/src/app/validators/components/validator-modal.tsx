@@ -1,9 +1,13 @@
 import dynamic from "next/dynamic";
-import { UserValidator, useUserValidators } from "@bera/berajs";
+import {
+  usePollValidatorInfo,
+  useUserValidators,
+  type Validator,
+} from "@bera/berajs";
 import type { ColumnDef } from "@tanstack/react-table";
-
 import { user_general_validator_columns } from "~/columns/general-validator-columns";
 import { TableLoading } from "./table-loading";
+import React from "react";
 
 const DataTable = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.DataTable),
@@ -13,34 +17,33 @@ const DataTable = dynamic(
   },
 );
 
-export const MyValidator = ({
+export const AllValidatorModal = ({
   keyword,
   onRowClick,
 }: {
-  keyword: any;
-  onRowClick: any;
+  keyword?: any;
+  onRowClick?: any;
 }) => {
   // const [page, setPage] = useState(0);
-  // const fetchData = useCallback(
-  //   (state: TableState) => setPage(state?.pagination?.pageIndex),
-  //   [setPage],
-  // );
-  const { data } = useUserValidators();
+  const { data, isLoading } = useUserValidators();
 
-  const depositedValidators = data?.filter((validator: UserValidator) => {
-    return parseFloat(validator.userStaked) !== 0;
+  const filteredValidators = data?.filter((validator: Validator) => {
+    return (
+      validator.coinbase.toLowerCase().includes(keyword) ||
+      validator.metadata.name.toLowerCase().includes(keyword)
+    );
   });
 
   return (
     <DataTable
       //@ts-ignore
       columns={user_general_validator_columns as ColumnDef<UserValidator>[]}
-      data={depositedValidators ?? []}
+      //@ts-ignore
+      data={filteredValidators ?? []}
       className="min-w-[900px]"
       // fetchData={fetchData}
       // enablePagination
-      // loading={isLoading}
-      // validating={isValidating}
+      loading={isLoading}
       // additionalTableProps={{
       //   pageCount: 2,
       //   manualFiltering: true,

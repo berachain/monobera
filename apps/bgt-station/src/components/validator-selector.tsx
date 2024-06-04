@@ -1,6 +1,17 @@
-import React from "react";
-import { usePollValidatorInfo } from "@bera/berajs";
-import { SearchInput, TokenIconList, ValidatorIcon } from "@bera/shared-ui";
+import { get } from "http";
+import React, { useEffect, useMemo } from "react";
+import {
+  formatter,
+  usePollValidatorInfo,
+  type Validator,
+  useUserValidators,
+} from "@bera/berajs";
+import {
+  DataTable,
+  SearchInput,
+  TokenIconList,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -8,20 +19,24 @@ import { type Address } from "viem";
 
 import { AllValidator } from "~/app/validators/components/all-validator";
 import { MyValidator } from "~/app/validators/components/my-validators";
+import { AllValidatorModal } from "~/app/validators/components/validator-modal";
 
 export default function ValidatorSelector({
   validatorAddress = "0x",
   onSelectValidator,
   showDelegated = false,
   filter,
+  showSearch,
 }: {
   validatorAddress?: Address;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
   filter?: Address[];
+  showSearch?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
-  const { validatorInfoDictionary } = usePollValidatorInfo();
+  const { validatorInfoList, validatorInfoDictionary } = usePollValidatorInfo();
+  const { data } = useUserValidators();
   //@ts-ignore
   const validValidator = validatorInfoDictionary?.[validatorAddress];
 
@@ -53,6 +68,7 @@ export default function ValidatorSelector({
         unbond={showDelegated}
         onClose={() => setOpen(false)}
         onSelect={(address) => onSelectValidator?.(address)}
+        showSearch={showSearch}
       />
     </div>
   );
@@ -61,11 +77,13 @@ export default function ValidatorSelector({
 const ValidatorModal = ({
   open,
   unbond,
+  showSearch,
   onClose,
   onSelect,
 }: {
   open: boolean;
   unbond?: boolean;
+  showSearch?: boolean;
   onClose: () => void;
   onSelect: (address: string) => void;
 }) => {
@@ -77,14 +95,16 @@ const ValidatorModal = ({
           <div className="text-lg font-semibold leading-7">
             Validator select
           </div>
-          <div className="flex justify-between">
-            <SearchInput
-              placeholder="Search by name, address, or token"
-              className="w-full md:w-[400px]"
-              value={search}
-              onChange={(e: any) => setSearch(e.target.value)}
-            />
-          </div>
+          {showSearch === true && (
+            <div className="flex justify-between">
+              <SearchInput
+                placeholder="Search by name, address, or token"
+                className="w-full md:w-[400px]"
+                value={search}
+                onChange={(e: any) => setSearch(e.target.value)}
+              />
+            </div>
+          )}
           {unbond ? (
             <MyValidator
               keyword={search}
@@ -94,7 +114,7 @@ const ValidatorModal = ({
               }}
             />
           ) : (
-            <AllValidator
+            <AllValidatorModal
               keyword={search}
               onRowClick={(row: any) => {
                 onSelect(row.original.coinbase);

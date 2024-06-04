@@ -1,7 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import { TransactionActionType, useBeraJs } from "@bera/berajs";
-import { stakingAddress } from "@bera/config";
+import {
+  BGT_ABI,
+  TransactionActionType,
+  useBeraJs,
+  useUserValidators,
+} from "@bera/berajs";
+import { bgtTokenAddress, stakingAddress } from "@bera/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -20,6 +25,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
 
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
   const bgtDelegated = undefined;
+  const { refresh } = useUserValidators();
 
   const {
     write: unbondWrite,
@@ -28,6 +34,9 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
   } = useTxn({
     message: "Unbonding from Validator",
     actionType: TransactionActionType.UNBONDING,
+    onSuccess: () => {
+      refresh();
+    },
   });
 
   return (
@@ -61,6 +70,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
           onAmountChange={setAmount}
           validatorAddress={validator}
           showDelegated
+          showSearch={false}
         />
 
         {isConnected && Number(amount) > Number(bgtDelegated) && (
@@ -79,14 +89,14 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
             }
             onClick={() =>
               unbondWrite({
-                address: stakingAddress,
-                abi: [] as any,
-                functionName: "undelegate",
+                address: bgtTokenAddress,
+                abi: BGT_ABI,
+                functionName: "dropBoost",
                 params: [validator, parseUnits(amount ?? "0", 18)],
               })
             }
           >
-            Confirm
+            Unbond
           </Button>
         </ActionButton>
       </Card>
