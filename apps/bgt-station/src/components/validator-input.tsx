@@ -1,6 +1,11 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useBeraJs, usePollWalletBalances } from "@bera/berajs";
+import {
+  formatInputTokenValue,
+  useBeraJs,
+  usePollWalletBalances,
+  useUserValidators,
+} from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
@@ -18,6 +23,7 @@ export default function ValidatorInput({
   disabled = false,
   showDelegated, //when this is true, the validator list will only show the validators user delegated
   filter,
+  showSearch,
 }: // emptyMessage = "No validators available",
 {
   action: DelegateEnum;
@@ -27,13 +33,20 @@ export default function ValidatorInput({
   disabled?: boolean;
   showDelegated?: boolean;
   filter?: Address[];
+  showSearch?: boolean;
   // emptyMessage?: string;
 }) {
   const router = useRouter();
   const { isReady } = useBeraJs();
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
-  const bgtDelegated = 0;
+  const { data } = useUserValidators();
+
+  const selectedValidator = data?.find(
+    (validator) =>
+      validator.id.toLowerCase() === validatorAddress?.toLowerCase(),
+  );
+  const bgtDelegated = selectedValidator ? selectedValidator.userStaked : "0";
   return (
     <div className="relative">
       <div
@@ -47,14 +60,21 @@ export default function ValidatorInput({
           }
           showDelegated={showDelegated}
           filter={filter}
+          showSearch={showSearch}
         />
         <Input
-          type="number"
+          type="number-enhanced"
           className="max-w-100 border-0 bg-transparent text-right text-lg font-semibold leading-7 outline-none"
           value={amount}
           placeholder="0.0"
           disabled={disabled}
-          onChange={(e: any) => onAmountChange(e.target.value)}
+          onChange={(e: any) => {
+            const inputValue = e.target.value;
+            const filteredValue = formatInputTokenValue(inputValue);
+            const [_, decimalPart = ""] = filteredValue.split(".");
+            if (decimalPart.length > 18) return;
+            onAmountChange(e.target.value);
+          }}
         />
       </div>
 
@@ -88,11 +108,11 @@ export default function ValidatorInput({
                 className="h-3 w-3"
               />
 
-              {bgtDelegated?.toString()}
+              {bgtDelegated}
               <span
                 className="underline hover:cursor-pointer"
                 onClick={() => {
-                  if (bgtDelegated) onAmountChange("0");
+                  if (bgtDelegated) onAmountChange(bgtDelegated);
                 }}
               >
                 MAX

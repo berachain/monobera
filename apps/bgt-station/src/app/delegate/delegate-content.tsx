@@ -73,6 +73,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
           amount={amount}
           onAmountChange={setAmount}
           validatorAddress={validator}
+          showSearch={true}
           showDelegated={false}
         />
 

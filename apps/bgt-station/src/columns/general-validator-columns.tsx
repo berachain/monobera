@@ -106,9 +106,26 @@ const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
     <DataTableColumnHeader column={column} title="User Staked" />
   ),
   cell: ({ row }) => {
-    return <FormattedNumber value={Math.random() * 1000000} symbol="BGT" />;
+    return (
+      <FormattedNumber
+        showIsSmallerThanMin
+        value={row.original.userStaked}
+        symbol="BGT"
+      />
+    );
   },
   accessorKey: "userStaked",
+  enableSorting: false,
+};
+
+const USER_QUEUED_COLUMN: ColumnDef<UserValidator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="User Queued" />
+  ),
+  cell: ({ row }) => {
+    return <FormattedNumber value={row.original.userQueued} symbol="BGT" />;
+  },
+  accessorKey: "userQueued",
   enableSorting: false,
 };
 
@@ -124,6 +141,7 @@ export const general_validator_columns: ColumnDef<Validator>[] = [
 export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
   VALIDATOR_COLUMN as ColumnDef<UserValidator>,
   USER_STAKED_COLUMN,
+  USER_QUEUED_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN as ColumnDef<UserValidator>,
   COMMISSION_COLUMN as ColumnDef<UserValidator>,
   APY_COLUMN as ColumnDef<UserValidator>,

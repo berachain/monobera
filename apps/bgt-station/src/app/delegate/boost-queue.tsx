@@ -51,7 +51,7 @@ export const BoostQueue = () => {
     message: "Activating queued BGT to Validator",
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
-      refresh();
+      setTimeout(refresh, 1000);
     },
   });
 
@@ -63,7 +63,7 @@ export const BoostQueue = () => {
     message: "Cancelling queued BGT to Validator",
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
-      refresh();
+      setTimeout(refresh, 1000);
     },
   });
 
@@ -108,7 +108,8 @@ const ConfirmationCard = ({
 }) => {
   const width = userValidator.canActivate
     ? 100
-    : Math.round(Math.abs(1 - HISTORY_BUFFER / blocksLeft) * 100);
+    : Math.round(Math.abs(1 - blocksLeft / HISTORY_BUFFER) * 100);
+
   const time =
     parseInt(userValidator.latestBlockTime) + HISTORY_BUFFER * blockTime;
 
@@ -124,13 +125,18 @@ const ConfirmationCard = ({
             <div>{userValidator.metadata.name}</div>
           </div>
           <div className="ml-8 text-muted-foreground ">
-            <FormattedNumber value={userValidator.userQueued} compact /> BGT
+            <FormattedNumber
+              showIsSmallerThanMin
+              value={userValidator.userQueued}
+              compact
+            />{" "}
+            BGT
           </div>
         </div>
         <div>
           <Button
             variant="ghost"
-            disabled={isTxnLoading}
+            disabled={isTxnLoading || !userValidator.canActivate}
             onClick={() =>
               activateWrite({
                 address: bgtTokenAddress,

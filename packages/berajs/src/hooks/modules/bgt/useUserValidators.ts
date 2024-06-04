@@ -73,6 +73,7 @@ export const useUserValidators = (
     {
       ...options,
       refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW * 2,
+      keepPreviousData: true,
     },
   );
   return {
