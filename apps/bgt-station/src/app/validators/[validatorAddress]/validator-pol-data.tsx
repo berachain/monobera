@@ -127,7 +127,7 @@ export const AggregatedBribeDialog = ({
                       <span className="text-md flex flex-row items-center gap-1 font-medium">
                         {" "}
                         <MarketIcon
-                          market={vaultBribeValue.vault.market}
+                          market={vaultBribeValue.vault.market??''}
                           className="h-6 w-6"
                         />
                         {vaultBribeValue.vault.name}
