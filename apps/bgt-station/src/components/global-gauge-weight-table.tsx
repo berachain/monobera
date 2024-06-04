@@ -30,7 +30,7 @@ export default function GlobalGaugeWeightTable({
   console.log("gaugeList", gaugeList);
   return (
     <div className="w-full ">
-      <DataTable
+      {/* <DataTable
         // fetchData={fetchData}
         // enablePagination
         loading={isLoading}
@@ -50,7 +50,7 @@ export default function GlobalGaugeWeightTable({
             "_self",
           )
         }
-      />
+      /> */}
     </div>
   );
 }

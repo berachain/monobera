@@ -7,15 +7,6 @@ export interface GetValidatorsInfo {
   validatorInfoDictionary: { [key: Address]: Validator };
 }
 
-function validatorInfoListToDict(list: Validator[]): {
-  [key: string]: Validator;
-} {
-  return list.reduce((acc: { [key: Address]: Validator }, item: Validator) => {
-    acc[item.id] = item;
-    return acc;
-  }, {});
-}
-
 export const getValidatorsInfo = async (
   config: BeraConfig,
 ): Promise<GetValidatorsInfo> => {
@@ -24,12 +15,18 @@ export const getValidatorsInfo = async (
   }
   try {
     // const validatorList = await fetch(`${config.endpoints?.bgtEndpoint}/validators`);
-    const validatorList = await fetch("berachain/v1alpha1/beacon/validators");
+    const validatorList = await fetch(
+      "http://localhost:3001/berachain/v1alpha1/beacon/validators",
+    );
     const temp = await validatorList.json();
     return {
       validatorInfoList: temp.validators ?? [],
-      validatorInfoDictionary: validatorInfoListToDict(
-        temp.validavalidatorstors ?? [],
+      validatorInfoDictionary: (temp.validators ?? []).reduce(
+        (acc: { [key: Address]: Validator }, item: Validator) => {
+          acc[item.id] = item;
+          return acc;
+        },
+        {},
       ),
     };
   } catch (error) {
