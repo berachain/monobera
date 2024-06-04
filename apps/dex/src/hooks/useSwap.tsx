@@ -303,43 +303,16 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     : "";
 
   // Calculate gas for connected wallet user (more accurate)
-  const { account } = useBeraJs();
-
-  const gasParams = useMemo(() => {
-    if (isWrap) {
-      return {
-        address: beraTokenAddress,
-        abi: wberaAbi,
-        functionName: wrapType === WRAP_TYPE.WRAP ? "deposit" : "withdraw",
-        args:
-          wrapType === WRAP_TYPE.WRAP ? [] : [parseUnits(`${swapAmount}`, 18)],
-        value:
-          wrapType === WRAP_TYPE.WRAP ? parseUnits(`${swapAmount}`, 18) : 0n,
-        account,
-      };
-    }
-    if (swapPayload?.payload && swapPayload?.payload?.length > 1) {
-      return {
-        address: crocMultiSwapAddress,
-        abi: multiswapAbi,
-        functionName: "multiSwap",
-        args: swapPayload?.payload,
-        value: swapInfo?.value,
-        account,
-      };
-    }
-    return undefined;
-  }, [swapInfo, swapPayload]);
   const { estimatedBeraFee } = useGasData({
-    contractArgs: gasParams,
-    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP,
+    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
+
   const beraInUsd = useTokenHoneyPrice({
     tokenAddress: nativeTokenAddress,
   });
 
   // Calculate general gas for unconnected wallet user (less accurate)
-  const { estimatedBeraFee: generalGasEstimateInBera } = useGasData();
+  // const { estimatedBeraFee: generalGasEstimateInBera } = useGasData();
 
   // Format and output final gas price
   const beraGasPriceToUSD = (priceInBera?: number) => {
@@ -350,7 +323,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
 
   const formattedGasPrice = estimatedBeraFee
     ? beraGasPriceToUSD(estimatedBeraFee)
-    : beraGasPriceToUSD(generalGasEstimateInBera);
+    : 0;
 
   return {
     setSwapKind,
@@ -374,7 +347,7 @@ export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
     error: getSwapError,
     swapInfo,
     exchangeRate,
-    gasEstimateInBera: estimatedBeraFee ?? generalGasEstimateInBera,
+    gasEstimateInBera: estimatedBeraFee,
     gasPrice: formattedGasPrice,
     isRouteLoading: isSwapLoading || isTyping,
     isWrap,
