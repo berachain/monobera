@@ -1,7 +1,4 @@
-import {
-  Gauge,
-  useTokenInformation,
-} from "@bera/berajs";
+import { type Gauge, useTokenInformation } from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { DepositLP } from "./deposit-lp";
