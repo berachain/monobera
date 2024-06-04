@@ -21,7 +21,7 @@ import { type BeraConfig } from "@bera/berajs";
 
 export const beraConfig: BeraConfig = {
   contracts: {
-     lendPoolProxyAddress: "0x..."
+    lendPoolProxyAddress: "0x...",
   },
 };
 ```
@@ -32,8 +32,9 @@ export const beraConfig: BeraConfig = {
 
 ```ts [example.ts]
 import { getUserAccountData } from "@bera/berajs/actions";
-import { createPublicClient, http } from "viem";
+import { createPublicClient, http, type Address } from "viem";
 import { berachain } from "viem/chains";
+import { type BeraConfig } from "@bera/berajs";
 
 // Initialize a public client with berachain
 const publicClient = createPublicClient({
@@ -63,16 +64,14 @@ return await getUserAccountData({
 
 ## Parameters
 
-| Name     | Type         | Description                                            | Required |
-| -------- | :----------- | :----------------------------------------------------- | :------: |
-| `client` | `PublicClient` | The view public client used to interact with the blockchain |  `true`  |
-| `config` | `BeraConfig` | BeraConfig object containing addresses for relevant resources |  `true`  |
-| `account`| `Address`    | User account Address     |  `true`  |
+| Name      | Type           | Description                                                   | Required |
+| --------- | :------------- | :------------------------------------------------------------ | :------: |
+| `client`  | `PublicClient` | The view public client used to interact with the blockchain   |  `true`  |
+| `config`  | `BeraConfig`   | BeraConfig object containing addresses for relevant resources |  `true`  |
+| `account` | `Address`      | User account Address                                          |  `true`  |
 
 ## Returns
 
-| Name                | Type                                                         | Description                                | Optional |
-| ------------------- | :----------------------------------------------------------- | :----------------------------------------- | :------: |
-| `result`            | [`UserAccountData` ](/types/UserAccountData/)                     | Promise resolving to user account data or undefined if data cannot be fetched | `false`  |
-
-
+| Name     | Type                                          | Description                                                                   | Optional |
+| -------- | :-------------------------------------------- | :---------------------------------------------------------------------------- | :------: |
+| `result` | [`UserAccountData` ](/types/UserAccountData/) | Promise resolving to user account data or undefined if data cannot be fetched | `false`  |

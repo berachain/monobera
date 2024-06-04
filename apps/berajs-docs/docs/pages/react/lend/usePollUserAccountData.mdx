@@ -1,10 +1,10 @@
 # usePollUserAccountData
 
-React hook to fetching the user account.
+React SWR hook to fetching the user account.
 
 ## Initialization
 
-Ensure you have followed the steps from [Actions > getHoneyPreview](/actions/honey/getHoneyPreview) before getting started.
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
 
 ## Import
 
@@ -17,13 +17,18 @@ import { usePollUserAccountData } from "@bera/berajs";
 :::code
 
 ```ts [exmaple.ts]
-const { data: userData } = usePollUserAccountData()
+const { data: userData } = usePollUserAccountData();
 ```
+
 :::
 
 ## Returns
 
-| Name             | Type          | Description                                                          | Optional |
-| ---------------- | :------------ | :------------------------------------------------------------------- | :------: |
-| `userData`         | [`UserAccountData`](/types/UserAccountData)      | The computed amount resulting from the operation, formatted as a string. | `false`  |
-| `...swrResponse` | `SWRResponse` | An SWR response object that may include additional data and status information from the fetch operation. |  `true`  |
+| Name           | Type                                        | Description                                                                | Optional |
+| -------------- | :------------------------------------------ | :------------------------------------------------------------------------- | :------: |
+| `data`         | [`UserAccountData`](/types/UserAccountData) | The computed amount resulting from the operation, formatted as a string.   | `false`  |
+| `error`        | `any \| undefined`                          | any errors while fetching the data                                         |  `true`  |
+| `mutate`       | `(newData?: string) => void`                | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`      | `() => void`                                | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating` | `boolean`                                   | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`    | `boolean`                                   | boolean flag representing whether the hook is currently loading data       | `false`  |

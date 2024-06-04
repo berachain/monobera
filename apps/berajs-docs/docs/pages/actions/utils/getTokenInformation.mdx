@@ -17,6 +17,7 @@ import { getTokenInformation } from "@bera/berajs/actions";
 :::code
 
 ```ts [example.ts]
+import { type BeraConfig } from "@bera/berajs";
 import { getTokenInformation } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
@@ -40,15 +41,16 @@ await getTokenInformation({
   publicClient,
 });
 ```
+
 :::
 
 ## Parameters
 
-| Name           | type                              | Description                                                               | Required |
-| -------------- | :-------------------------------- | :------------------------------------------------------------------------ | :------: |
-| address      | `Address`    | Blockchain address of the token                      | false    |
-| config       | `BeraConfig` | Configuration settings specific to the token retrieval | false    |
-| publicClient | `any`        | Client interface for public blockchain interactions, type not specified | false    |
+| Name         | type         | Description                                                             | Required |
+| ------------ | :----------- | :---------------------------------------------------------------------- | :------: |
+| address      | `Address`    | Blockchain address of the token                                         |  false   |
+| config       | `BeraConfig` | Configuration settings specific to the token retrieval                  |  false   |
+| publicClient | `any`        | Client interface for public blockchain interactions, type not specified |  false   |
 
 ## Returns
 

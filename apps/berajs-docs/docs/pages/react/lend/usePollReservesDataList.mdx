@@ -1,10 +1,10 @@
 # usePollReservesDataList
 
-React hook for lend global reserved data.
+React SWR hook for lend global reserved data.
 
 ## Initialization
 
-Ensure you have followed the steps from [Actions > getReserveData](/actions/lend/getReserveData) before getting started.
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
 
 ## Import
 
@@ -12,12 +12,9 @@ Ensure you have followed the steps from [Actions > getReserveData](/actions/lend
 import { usePollReservesDataList } from "@bera/berajs";
 ```
 
-
 ## Usage
 
-:::code
-
-```ts [exmaple.ts]
+```ts
 // Poll global reserves data
 const {
   data: collateralRatesDictionary,
@@ -31,15 +28,25 @@ const {
 // get selected reserve info
 const collateralRate = getSelectedReserve(address);
 ```
-:::
 
+## Parameters
 
 ## Returns
 
-| Property              | Type                                                  | Description                                                          | Optional |
-| --------------------- | ----------------------------------------------------- | -------------------------------------------------------------------- | :------: |
-| `getSelectedReserve` | `(address: Address) => ReserveData \| undefined`      | Function to retrieve a specific `ReserveData` by its address.        |  `false` |
-| `formattedReserves`  | [`ReserveData[]`](/types/ReserveData/)                                       | Array of `ReserveData`, each formatted for easy display.             |  `false` |
-| `baseCurrencyData`   | [`BaseCurrencyData \| undefined`](/types/BaseCurrencyData/)                       | Data about the base currency used in the reserve calculations.       |  `false` |
-| `totalBorrowed`      | `number`                                              | Total amount borrowed from all reserves, typically summed in base currency. |  `false` |
-| `marketSize`         | `number`                                              | Total market size of all reserves, often represented in base currency. |  `false` |
+| Property             | Type                                                                      | Description                                                                 | Optional |
+| -------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------- | :------: |
+| `data`               | `{formattedReserves: ReserveData[]; baseCurrencyData: BaseCurrencyData;}` | Function to retrieve a specific `ReserveData` by its address.               | `false`  |
+| `getSelectedReserve` | `(address: Address) => ReserveData \| undefined`                          | Function to retrieve a specific `ReserveData` by its address.               | `false`  |
+| `formattedReserves`  | [`ReserveData[]`](/types/ReserveData/)                                    | Array of `ReserveData`, each formatted for easy display.                    | `false`  |
+| `baseCurrencyData`   | [`BaseCurrencyData \| undefined`](/types/BaseCurrencyData/)               | Data about the base currency used in the reserve calculations.              | `false`  |
+| `totalBorrowed`      | `number`                                                                  | Total amount borrowed from all reserves, typically summed in base currency. | `false`  |
+| `marketSize`         | `number`                                                                  | Total market size of all reserves, often represented in base currency.      | `false`  |
+| `error`              | `any \| undefined`                                                        | any errors while fetching the data                                          |  `true`  |
+| `mutate`             | `(newData?: string) => void`                                              | swr mutate to refetch or manually update the data in cache if arg provided  |  `true`  |
+| `refetch`            | `() => void`                                                              | swr mutate to refetch the data                                              |  `true`  |
+| `isValidating`       | `boolean`                                                                 | boolean flag representing whether the hook is currently validating data     | `false`  |
+| `isLoading`          | `boolean`                                                                 | boolean flag representing whether the hook is currently loading data        | `false`  |
+
+See Type [`ReserveData`](/types/ReserveData/)
+
+See Type [`BaseCurrencyData`](/types/BaseCurrencyData/)

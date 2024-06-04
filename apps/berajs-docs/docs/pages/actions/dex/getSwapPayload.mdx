@@ -2,21 +2,53 @@
 
 Action that returns the appropriate payload / arguments for the swap smart contract function.
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
 import { getSwapPayload } from "@bera/berajs/actions";
 ```
 
+## Required config
+
+For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
+```ts twoslash
+import { type BeraConfig } from "@bera/berajs";
+
+// required configs for getSwapPayload
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...", // required for getSwap
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...", // required for getSwap and getSwapPayload
+  },
+};
+```
+
 ## Usage
 
-:::code-group
-
-```ts twoslash [example.ts]
-import { multiswapAbi, useBeraContractWrite } from "@bera/berajs";
+```ts
+import {
+  multiswapAbi,
+  useBeraContractWrite,
+  type BeraConfig,
+} from "@bera/berajs";
 import { getSwap, getSwapPayload } from "@bera/berajs/actions";
 
-import { beraConfig } from "./config";
+// required configs for getSwapPayload
+export const beraConfig: BeraConfig = {
+  endpoints: {
+    dexRouter: "https://...", // required for getSwap
+  },
+  contracts: {
+    crocMultiSwapAddress: "0x...", // required for getSwap and getSwapPayload
+  },
+};
 
 // get swapInfo using the getSwap function
 const swapInfo = await getSwap({
@@ -51,34 +83,19 @@ write({
 });
 ```
 
-```ts twoslash [config.ts] filename="config.ts"
-import { BeraConfig } from "@bera/berajs";
-
-// required configs for getSwapPayload
-export const beraConfig: BeraConfig = {
-  endpoints: {
-    dexRouter: "https://...", // required for getSwap
-  },
-  contracts: {
-    crocMultiSwapAddress: "0x...", // required for getSwap and getSwapPayload
-  },
-};
-```
-
-:::
-
 ## Parameters
 
-```ts twoslash
-import { type getSwapPayload } from "@bera/berajs/actions";
-```
+| Name                    | type                              | Description                                                   | Required |
+| ----------------------- | :-------------------------------- | :------------------------------------------------------------ | :------: |
+| `args.tokenIn`          | `string`                          | The address of the token to be given in the swap              |  `true`  |
+| `args.tokenOut`         | `string`                          | The address of the token to be received in the swap           |  `true`  |
+| `args.tokenInDecimals`  | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.tokenOutDecimals` | `number`                          | The amount of decimals to divide the tokenOut amount          |  `true`  |
+| `args.amount`           | `string`                          | The amount of the tokenIn to be given in the swap             |  `true`  |
+| `config`                | [`BeraConfig`](/types/BeraConfig) | BeraConfig object containing addresses for relevant resources |  `true`  |
 
-## Returns
+## Returns `Promise<PayloadReturnType<[ICrocSwapStep[], bigint, bigint]>>`
 
-```ts twoslash
-import { type PayloadReturnType } from "@bera/berajs/actions";
+See type [`ICrocSwapStep`](/types/ICrocSwapStep/)
 
-type getSwapPayloadResult =
-  | PayloadReturnType<[ICrocSwapStep[], bigint, bigint]>
-  | undefined;
-```
+See type [`PayloadReturnType`](/types/PayloadReturnType/)

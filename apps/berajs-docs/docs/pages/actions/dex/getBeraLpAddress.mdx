@@ -25,6 +25,11 @@ const lpTokenAddress = getBeraLpAddress({
 
 ## Parameters
 
-```ts
-import { type GetBeraLpAddress } from "berajs/actions";
-```
+| Name         | type      | Description                                                                                  | Required |
+| ------------ | :-------- | :------------------------------------------------------------------------------------------- | :------: |
+| `args.base`  | `Address` | The onchain address of the base token of the liquidity pool whose address we are retrieving  |  `true`  |
+| `args.quote` | `Address` | The onchain address of the quote token of the liquidity pool whose address we are retrieving |  `true`  |
+
+## Returns `string`
+
+The result should be the address of the liquidity pool with the given base and quote token if any.

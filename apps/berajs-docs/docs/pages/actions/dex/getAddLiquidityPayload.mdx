@@ -2,6 +2,10 @@
 
 Action for creating the payload for performing an add liquidity operation on a pool.
 
+## Initialization
+
+Ensure you have followed the steps from [Actions > Getting Started](/actions/getting-started) before getting started
+
 ## Import
 
 ```ts
@@ -30,14 +34,17 @@ const addLiqPayload = await getAddLiquidityPayload({
 
 ## Parameters
 
-```ts
-import { getAddLiquidityPayload } from "@bera/berajs/actions";
-```
+| Name                           | type                        | Description                                         | Required |
+| ------------------------------ | :-------------------------- | :-------------------------------------------------- | :------: |
+| `args.slippage`                | `number`                    | Slippage tolerance in percentage between 0.1 to 100 |  `true`  |
+| `args.poolPrice`               | `number`                    | Pool price                                          |  `true`  |
+| `args.baseToken`               | [`Token`](<(/types/Token)>) | Token object representing the pool's base token     |  `true`  |
+| `args.quoteToken`              | [`Token`](<(/types/Token)>) | Token object representing the pool's quote token    |  `true`  |
+| `args.isAmountBaseDenominated` | `boolean`                   | isAmountBaseDenominated                             |  `true`  |
+| `args.baseAmount`              | `bigint`                    | Amount of base token to be added to pool            |  `true`  |
+| `args.quoteAmount`             | `bigint`                    | Amount of quote token to be added to pool           |  `true`  |
+| `args.poolIdx`                 | `number`                    | Pool on-chain id                                    |  `true`  |
 
-## Returns
+## Returns [`Promise<PayloadReturnType<any> | undefined>`](/types/PayloadReturnType/)
 
-```ts
-import { type PayloadReturnType } from "@bera/berajs/actions";
-
-type result = Promise<PayloadReturnType | undefined>;
-```
+See type [`PayloadReturnType`](/types/PayloadReturnType/)

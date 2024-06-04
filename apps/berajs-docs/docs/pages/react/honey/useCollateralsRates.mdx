@@ -1,10 +1,10 @@
 # useCollateralsRates
 
-React hook for fetching the mint rates and redeem rates for all collaterals.
+React SWR hook for fetching the mint rates and redeem rates for all collaterals.
 
 ## Initialization
 
-Ensure you have followed the steps from [Actions > getCollateralRates](/actions/honey/getCollateralRates) before getting started.
+Ensure you have followed the steps from [React > Getting Started](/react/getting-started) before getting started
 
 ## Import
 
@@ -15,28 +15,65 @@ import { useCollateralsRates } from "@bera/berajs";
 ## Usage
 
 ```ts
-// Poll rates for all collaterals
-const {
-  data: collateralRatesDictionary,
-  getCollateralRate,
-} = useCollateralsRates(collateralList);
+import { useCollateralsRates, CollateralRates, CollateralRatesMap } from "@bera/berajs";
+import { getAddress, type Address } from "viem";
 
-// Poll rate for a single collateral
-const collateralRate = getCollateralRate(address);
+const collateralList: Address[] = ["0x...", "0x..."];
+
+function App() {
+  // Poll rates for all collaterals
+  const { data: collateralRatesDictionary, getCollateralRate } =
+    useCollateralsRates(collateralList);
+
+
+  // There are two ways to access the rate of a single collateral in the polled data
+
+  // Option 1: use the getter
+  const collateralRate: CollateralRates = getCollateralRate(address);
+
+  // Option 2: access data directly
+  const address: Address = "0x...";
+  const collateralRate: CollateralRates = collateralRatesDictionary[getAddress(address)];
+
+  ...
+}
 ```
 
 ## Parameters
 
-| Name            | type        | Description                                         | Required |
-| --------------- | :---------- | :-------------------------------------------------- | :------: |
-| `collateralList`| `Address[]` | List of collateral addresses to fetch rates for     |  `true`  |
+#### Call signature
+
+```ts
+function useCollateralsRates(
+  { collateralList }: { collateralList: Address[] },
+  options?: DefaultHookOptions,
+);
+```
+
+#### args: `{collateralList: Address[]}`
+
+| Name             | type        | Description                                     | Required |
+| ---------------- | :---------- | :---------------------------------------------- | :------: |
+| `collateralList` | `Address[]` | List of collateral addresses to fetch rates for |  `true`  |
+
+#### options: `DefaultHookOptions`
+
+See type [`DefaultHookOptions`](/types/DefaultHookOptions/)
+
+| Name      | type                                               | Description                            | Required |
+| --------- | :------------------------------------------------- | :------------------------------------- | :------: |
+| `options` | [`DefaultHookOptions`](/types/DefaultHookOptions/) | options and configuration for the hook | `false`  |
 
 ## Returns
 
-| Name                        | type                                                               | Description                                                      | Optional |
-| --------------------------- | :----------------------------------------------------------------- | :--------------------------------------------------------------- | :------: |
-| `data`                      | `CollateralRatesMap`                                  | Dictionary of rates for all collaterals                          | `false`  |
-| `getCollateralRate`     | [`CollateralRates`](/types/CollateralRates/)            | Function to get rates for a specific collateral                  | `false`  |
-| `...swrResponse`            | `SWRResponse`                                                      | Additional fields and methods from the useSWR hook (e.g., isLoading, error) | `true`   |
+#### Return type: `DefaultHookReturnType<CollateralRatesMap | undefined>`
 
-```
+| Name                | type                                                              | Description                                                                | Optional |
+| ------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------------------- | :------: |
+| `data`              | `CollateralRatesMap`                                              | Dictionary of rates for all collaterals                                    | `false`  |
+| `getCollateralRate` | [`(address: string) => CollateralRates`](/types/CollateralRates/) | Function to get rates for a specific collateral                            | `false`  |
+| `error`             | `any \| undefined`                                                | any errors while fetching the data                                         |  `true`  |
+| `mutate`            | `(newData?: CollateralRatesMap) => void`                          | swr mutate to refetch or manually update the data in cache if arg provided |  `true`  |
+| `refetch`           | `() => void`                                                      | swr mutate to refetch the data                                             |  `true`  |
+| `isValidating`      | `boolean`                                                         | boolean flag representing whether the hook is currently validating data    | `false`  |
+| `isLoading`         | `boolean`                                                         | boolean flag representing whether the hook is currently loading data       | `false`  |

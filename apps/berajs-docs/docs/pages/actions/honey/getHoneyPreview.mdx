@@ -15,8 +15,10 @@ import { getHoneyPreview } from "@bera/berajs/actions";
 ## Required config
 
 For more information on BeraConfig, see [BeraConfig](/bera-config/)
+
 ```ts twoslash
 import { type BeraConfig } from "@bera/berajs";
+
 export const beraConfig: BeraConfig = {
   contracts: {
     honeyRouterAddress: "0x...",
@@ -27,8 +29,9 @@ export const beraConfig: BeraConfig = {
 ## Usage
 
 :::code
-```ts [example.ts]
 
+```ts [example.ts]
+import { type BeraConfig } from "@bera/berajs";
 import { getHoneyPreview, HoneyPreviewMethod } from "@bera/berajs/actions";
 import { createPublicClient, http } from "viem";
 import { berachain } from "viem/chains";
@@ -54,21 +57,21 @@ return await getHoneyPreview({
   method: HoneyPreviewMethod.Mint,
 })
 ```
+
 :::
 
 ## Parameters
 
-| Name         | Type                 | Description                                                        | Required |
-| ------------ | :------------------- | :----------------------------------------------------------------- | :------: |
-| `client`     | `PublicClient`       | The view public client used to interact with the blockchain        |  `true`  |
-| `config`     | `BeraConfig`         | BeraConfig object containing addresses for relevant resources      |  `true`  |
-| `collateral` | `Token`              | The token type of the collateral                                   |  `true`  |
-| `amount`     | `string`             | The amount for the transaction, as a string                        |  `true`  |
-| `method`     | [`HoneyPreviewMethod`](/types/HoneyPreviewMethod) | The method for the preview (e.g., mint, redeem)                    |  `true`  |
-
+| Name         | Type                                              | Description                                                   | Required |
+| ------------ | :------------------------------------------------ | :------------------------------------------------------------ | :------: |
+| `client`     | `PublicClient`                                    | The view public client used to interact with the blockchain   |  `true`  |
+| `config`     | `BeraConfig`                                      | BeraConfig object containing addresses for relevant resources |  `true`  |
+| `collateral` | `Token`                                           | The token type of the collateral                              |  `true`  |
+| `amount`     | `string`                                          | The amount for the transaction, as a string                   |  `true`  |
+| `method`     | [`HoneyPreviewMethod`](/types/HoneyPreviewMethod) | The method for the preview (e.g., mint, redeem)               |  `true`  |
 
 ## Returns
 
-| Name        | type                          | Description                                      | Optional |
-| ----------- | :---------------------------- | :----------------------------------------------- | :------: |
-| `amount`    | `string` | The resulting preview amount or undefined        | `false`  |
+| Name     | type     | Description                               | Optional |
+| -------- | :------- | :---------------------------------------- | :------: |
+| `amount` | `string` | The resulting preview amount or undefined | `false`  |
