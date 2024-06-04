@@ -16,7 +16,9 @@ export const getGauges = async (
   }
   try {
     // const res = await fetch(`${config.endpoints.bgtEndpoint}/vaults`);
-    const res = await fetch("berachain/v1alpha1/beacon/vaults");
+    const res = await fetch(
+      "http://localhost:3001/berachain/v1alpha1/beacon/vaults",
+    );
     const gauges = await res.json();
     return {
       gaugeList: gauges.vaults,

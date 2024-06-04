@@ -25,7 +25,10 @@ export function ChartTooltip({ gauge }: { gauge: CuttingBoardWeight }) {
             {gauge.receiver.name}
           </div>
           <div className="flex items-center gap-1 whitespace-nowrap text-xs leading-4 text-muted-foreground">
-            <MarketIcon market={gauge.receiver.market} className="h-4 w-4" />{" "}
+            <MarketIcon
+              market={gauge.receiver.market ?? ""}
+              className="h-4 w-4"
+            />{" "}
             {gauge.receiver.market ?? ""}
           </div>
         </div>

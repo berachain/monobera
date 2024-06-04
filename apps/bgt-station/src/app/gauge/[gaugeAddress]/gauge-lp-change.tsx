@@ -1,9 +1,4 @@
-import {
-  Gauge,
-  Token,
-  usePollWalletBalances,
-  useTokenInformation,
-} from "@bera/berajs";
+import { type Gauge, useTokenInformation } from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { DepositLP } from "./deposit-lp";
@@ -11,7 +6,7 @@ import { WithdrawLP } from "./withdraw-lp";
 
 export const GaugueLPChange = ({ gauge }: { gauge: Gauge }) => {
   const { data: lpToken } = useTokenInformation({
-    address: gauge.vaultAddress,
+    address: gauge.stakingTokenAddress,
   });
   const { data: lpReceiptToken } = useTokenInformation({
     address: gauge.vaultAddress,

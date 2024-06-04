@@ -13,8 +13,12 @@ import {
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
-import { ValidatorBribesPopover } from "~/components/bribes-tooltip";
+import { BribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
+import {
+  AggregatedBribe,
+  useAggregatedBribes,
+} from "~/hooks/useAggregatedBribes";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
@@ -95,7 +99,10 @@ const BRIBES_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
-    return <ValidatorBribesPopover validatorAddress={row.original.id} />;
+    const availableBribes: AggregatedBribe[] | undefined = useAggregatedBribes(
+      row.original.id,
+    );
+    return <BribesPopover bribes={availableBribes} />;
   },
   accessorKey: "bribes",
   enableSorting: false,
