@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
-import { type Validator, usePollValidatorInfo } from "@bera/berajs";
+import { usePollValidatorInfo, type Validator } from "@bera/berajs";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
@@ -14,11 +13,15 @@ const DataTable = dynamic(
   },
 );
 
-export const AllValidator = ({ keyword }: { keyword: any }) => {
+export const AllValidator = ({
+  keyword,
+  onRowClick,
+}: {
+  keyword?: any;
+  onRowClick?: any;
+}) => {
   // const [page, setPage] = useState(0);
-  const router = useRouter();
   const { validatorInfoList, isLoading, isValidating } = usePollValidatorInfo();
-
   // const fetchData = useCallback(
   //   (state: TableState) => setPage(state?.pagination?.pageIndex),
   //   [setPage],
@@ -41,9 +44,7 @@ export const AllValidator = ({ keyword }: { keyword: any }) => {
       //   manualSorting: true,
       //   manualPagination: true,
       // }}
-      onRowClick={(row: any) =>
-        router.push(`/validators/${row.original.coinbase}`)
-      }
+      onRowClick={onRowClick}
     />
   );
 };

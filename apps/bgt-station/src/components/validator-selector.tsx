@@ -15,9 +15,10 @@ import {
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits, getAddress, type Address } from "viem";
+import { type Address } from "viem";
 
-import { validator_table_columns } from "~/columns/validator-table-columns";
+import { AllValidator } from "~/app/validators/components/all-validator";
+import { MyValidator } from "~/app/validators/components/my-validators";
 
 export default function ValidatorSelector({
   validatorAddress = "0x",
@@ -50,7 +51,7 @@ export default function ValidatorSelector({
               address={validValidator.id as Address}
               className="h-8 w-8"
             />
-            {validValidator.name}
+            {validValidator.metadata.name}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         ) : (
@@ -62,24 +63,23 @@ export default function ValidatorSelector({
       </Button>
       <ValidatorModal
         open={open}
-        validators={validatorInfoList}
-        onSelect={(address) => onSelectValidator?.(address)}
+        unbond={showDelegated}
         onClose={() => setOpen(false)}
-        // emptyMessage={emptyMessage}
+        onSelect={(address) => onSelectValidator?.(address)}
       />
     </div>
   );
 }
 
 const ValidatorModal = ({
-  onClose,
   open,
-  validators,
+  unbond,
+  onClose,
   onSelect,
 }: {
-  onClose: () => void;
   open: boolean;
-  validators: any[];
+  unbond?: boolean;
+  onClose: () => void;
   onSelect: (address: string) => void;
 }) => {
   const [search, setSearch] = React.useState("");
@@ -98,15 +98,23 @@ const ValidatorModal = ({
               onChange={(e: any) => setSearch(e.target.value)}
             />
           </div>
-          <DataTable
-            columns={validator_table_columns}
-            data={validators}
-            onRowClick={(value: any) => {
-              onSelect(value.original.id);
-              onClose();
-            }}
-            className="max-h-[500px] min-w-[1000px] overflow-y-scroll"
-          />
+          {unbond ? (
+            <MyValidator
+              keyword={search}
+              onRowClick={(row: any) => {
+                onSelect(row.original.coinbase);
+                onClose();
+              }}
+            />
+          ) : (
+            <AllValidator
+              keyword={search}
+              onRowClick={(row: any) => {
+                onSelect(row.original.coinbase);
+                onClose();
+              }}
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

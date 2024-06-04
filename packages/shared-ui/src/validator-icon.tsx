@@ -44,7 +44,7 @@ export const ValidatorIcon = ({
   const img = useMemo(
     () =>
       //@ts-ignore
-      validatorInfoDictionary[address]?.imageUri,
+      validatorInfoDictionary[address]?.metadata.logoURI,
     [address],
   );
   return (

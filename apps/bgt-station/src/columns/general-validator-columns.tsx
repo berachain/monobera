@@ -116,7 +116,7 @@ export const general_validator_columns: ColumnDef<Validator>[] = [
   VALIDATOR_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN,
   COMMISSION_COLUMN,
-  // APY_COLUMN,
+  APY_COLUMN,
   MOST_WEIGHTED_GAUGE_COLUMN,
   BRIBES_COLUMN,
 ];
@@ -126,6 +126,6 @@ export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
   USER_STAKED_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN as ColumnDef<UserValidator>,
   COMMISSION_COLUMN as ColumnDef<UserValidator>,
-  // APY_COLUMN as ColumnDef<UserValidator>,
+  APY_COLUMN as ColumnDef<UserValidator>,
   BRIBES_COLUMN as ColumnDef<UserValidator>,
 ];

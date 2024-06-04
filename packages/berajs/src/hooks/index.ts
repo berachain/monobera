@@ -1,6 +1,5 @@
 export * from "./useTokenInformation";
 export * from "./useTokens";
-export * from "./useValidatorIcon";
 export * from "./useChainId";
 export * from "./usePollAllowances";
 export * from "./useContractWrite";
