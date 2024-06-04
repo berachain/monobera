@@ -18,3 +18,16 @@ export const GetBgtInflation = gql`
     }
 }
 `;
+
+export const GetUserValidatorInformation = gql`
+  query GetUserValidatorInformation($address: String!) {
+    userValidatorInformations(where: { user: $address }) {
+    id
+    amountQueued
+    amountDeposited
+    latestBlock
+    user
+    coinbase
+  }
+  }
+`;

@@ -1,6 +1,11 @@
 import { get } from "http";
 import React, { useEffect, useMemo } from "react";
-import { formatter, usePollValidatorInfo, type Validator } from "@bera/berajs";
+import {
+  formatter,
+  usePollValidatorInfo,
+  type Validator,
+  useUserValidators,
+} from "@bera/berajs";
 import {
   DataTable,
   SearchInput,
@@ -27,6 +32,8 @@ export default function ValidatorSelector({
 }) {
   const [open, setOpen] = React.useState(false);
   const { validatorInfoList, validatorInfoDictionary } = usePollValidatorInfo();
+  const { data } = useUserValidators();
+  console.log(data);
   //@ts-ignore
   const validValidator = validatorInfoDictionary?.[validatorAddress];
 

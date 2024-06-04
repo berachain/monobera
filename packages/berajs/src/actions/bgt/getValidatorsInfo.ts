@@ -19,11 +19,12 @@ function validatorInfoListToDict(list: Validator[]): {
 export const getValidatorsInfo = async (
   config: BeraConfig,
 ): Promise<GetValidatorsInfo> => {
-  if (!config.endpoints?.bgtEndpoint) {
-    throw new Error("Missing backend endpoint in config");
-  }
+  // if (!config.endpoints?.bgtEndpoint) {
+  //   throw new Error("Missing backend endpoint in config");
+  // }
   try {
     // const validatorList = await fetch(`${config.endpoints?.bgtEndpoint}/validators`);
+    console.log("AAASADSDZFA");
     const validatorList = await fetch("berachain/v1alpha1/beacon/validators");
     const temp = await validatorList.json();
     return {
