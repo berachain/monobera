@@ -8,7 +8,6 @@ import { usePollValidatorInfo } from "./usePollValidatorInfo";
 import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { bgtSubgraphUrl } from "@bera/config";
-import { useBlock } from "wagmi";
 
 /**
  *

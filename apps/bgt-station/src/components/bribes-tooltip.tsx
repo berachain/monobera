@@ -12,6 +12,7 @@ import {
   AggregatedBribe,
   useAggregatedBribes,
 } from "~/hooks/useAggregatedBribes";
+import { Button } from "@bera/ui/button";
 
 interface TotalValues {
   totalIncentives: number;
@@ -174,6 +175,41 @@ export const BribesPopover = ({
           }
           children={<BribesTooltip aggregatedBribes={bribes ?? []} />}
         />
+      )}
+    </>
+  );
+};
+
+export const ClaimBribesPopover = ({
+  bribes,
+  coinbase,
+}: {
+  bribes: AggregatedBribe[] | undefined;
+  coinbase: Address;
+}) => {
+  return (
+    <>
+      {!bribes || bribes?.length === 0 ? (
+        <div className="w-fit rounded-lg border px-2 py-1 text-xs hover:bg-muted">
+          No Incentives
+        </div>
+      ) : (
+        <div className="flex flex-row gap-1 items-center">
+          <Tooltip
+            toolTipTrigger={
+              <div className="w-fit rounded-lg border px-2 py-1 hover:bg-muted">
+                <TokenIconList
+                  tokenList={bribes?.map((ab) => ab.token) ?? []}
+                  showCount={3}
+                  size={"lg"}
+                  className="w-fit"
+                />
+              </div>
+            }
+            children={<BribesTooltip aggregatedBribes={bribes ?? []} />}
+          />
+          <Button disabled>Claim</Button>
+        </div>
       )}
     </>
   );
