@@ -43,35 +43,48 @@ export const getSwap = async ({
       previewBatchSwapSteps[0] &&
       getAddress(tokenIn) === getAddress(nativeTokenAddress)
     ) {
-      if (previewBatchSwapSteps[0].base === nativeTokenAddress) {
+      if (
+        previewBatchSwapSteps[0].base.toLowerCase() ===
+        nativeTokenAddress.toLowerCase()
+      ) {
         previewBatchSwapSteps[0].base = beraTokenAddress;
-      } else {
+      }
+
+      if (
+        previewBatchSwapSteps[0].quote.toLowerCase() ===
+        nativeTokenAddress.toLowerCase()
+      ) {
         previewBatchSwapSteps[0].quote = beraTokenAddress;
       }
     }
 
-    const result = await publicClient.readContract({
-      address: config.contracts.crocMultiSwapAddress,
-      abi: multiswapAbi,
-      functionName: "previewMultiSwap",
-      args: [previewBatchSwapSteps, swapInfo.amountIn],
-    });
+    try {
+      const result = await publicClient.readContract({
+        address: config.contracts.crocMultiSwapAddress,
+        abi: multiswapAbi,
+        functionName: "previewMultiSwap",
+        args: [previewBatchSwapSteps, swapInfo.amountIn],
+      });
 
-    const amountOut = (result as bigint[])[0] as bigint;
-    const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals);
-    const predictedAmountOut = (result as bigint[])[1] as bigint;
-    const formattedPredictedAmountOut = formatUnits(
-      predictedAmountOut,
-      tokenOutDecimals,
-    );
+      const amountOut = (result as bigint[])[0] as bigint;
+      const formattedAmountOut = formatUnits(amountOut, tokenOutDecimals);
+      const predictedAmountOut = (result as bigint[])[1] as bigint;
+      const formattedPredictedAmountOut = formatUnits(
+        predictedAmountOut,
+        tokenOutDecimals,
+      );
 
-    return {
-      ...swapInfo,
-      returnAmount: amountOut,
-      formattedReturnAmount: formattedAmountOut,
-      predictedAmountOut,
-      formattedPredictedAmountOut,
-    };
+      return {
+        ...swapInfo,
+        returnAmount: amountOut,
+        formattedReturnAmount: formattedAmountOut,
+        predictedAmountOut,
+        formattedPredictedAmountOut,
+      };
+    } catch (e) {
+      console.error("Failed to get swap info", e);
+      return swapInfo;
+    }
   }
 
   return swapInfo;
