@@ -39,7 +39,7 @@ export function SelectToken({
       >
         {token ? (
           <>
-            <TokenIcon address={token.address} />
+            <TokenIcon address={token.address} imgOverride={token.logoURI} />
             <span className="w-fit max-w-[140px] overflow-hidden truncate">
               {token?.symbol}{" "}
             </span>
