@@ -129,7 +129,7 @@ export default function Gauge() {
           </TabsList>
 
           <div className="flex w-full items-center gap-3 md:w-fit">
-            <SearchInput
+            {/* <SearchInput
               placeholder="Search..."
               value={keywords}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -142,7 +142,7 @@ export default function Gauge() {
                 }
               }}
               className="w-full md:w-[300px]"
-            />
+            /> */}
             <MarketSelector {...{ markets, setMarkets }} />
           </div>
         </div>

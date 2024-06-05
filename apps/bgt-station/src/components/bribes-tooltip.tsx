@@ -168,7 +168,7 @@ export const ClaimBribesPopover = ({
                 />
               </div>
             }
-            children={<BribesTooltip aggregatedBribes={[]} />}
+            children={<BribesTooltip aggregatedBribes={[]} key="ClaimBribesPopover"/>}
           />
           <Button disabled>Claim</Button>
         </div>
@@ -202,7 +202,7 @@ export const BribesPopover = ({
               />
             </div>
           }
-          children={<BribesTooltip aggregatedBribes={incentives ?? []} />}
+          children={<BribesTooltip aggregatedBribes={incentives ?? []} key="BribesPopover"/>}
         />
       )}
     </>

@@ -86,5 +86,7 @@ export type Gauge = {
   metadata: GaugeInfo;
   stakingTokenAddress: Address;
   vaultAddress: Address;
-  vaultWhitelist: any;
+  vaultWhitelist: {
+    whitelistedTokens: { isWhiteListed: boolean; token: Token }[];
+  };
 };

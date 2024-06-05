@@ -23,24 +23,24 @@ export default function GlobalGaugeWeightTable({
     <div className="w-full ">
       <DataTable
         // fetchData={fetchData}
-        // enablePagination
+        enablePagination
         loading={isLoading}
         validating={isValidating}
         columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
-        data={gaugeList ?? []}
+        data={myGauge ? [] : gaugeList ?? []}
         className="min-w-[1100px] shadow"
-        // additionalTableProps={{
-        //   pageCount: 1,
-        //   manualFiltering: true,
-        //   manualSorting: true,
-        //   manualPagination: true,
-        // }}
-        // onRowClick={(row: any) =>
-        //   window.open(
-        //     `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
-        //     "_self",
-        //   )
-        // }
+        additionalTableProps={{
+          pageCount: 1,
+          manualFiltering: true,
+          manualSorting: true,
+          manualPagination: true,
+        }}
+        onRowClick={(row: any) =>
+          window.open(
+            `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
+            "_self",
+          )
+        }
       />
     </div>
   );
