@@ -58,6 +58,9 @@ const allTargetProjects = [
   "v2perp",
   "v2lend",
   "v2faucet",
+  // testnet projects
+  "testnet-honey",
+  "testnet-dex",
 ];
 
 const rl = readline.createInterface({
