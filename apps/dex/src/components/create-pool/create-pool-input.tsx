@@ -19,7 +19,6 @@ export default function CreatePoolInput({
   const handleTokenSelection = (token: Token | undefined) => {
     onTokenSelection(token);
   };
-  console.log(token);
   return (
     <li className={"flex flex-row items-center justify-between gap-1 p-4"}>
       <SelectToken
