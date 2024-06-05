@@ -16,9 +16,7 @@ import {
 } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import BigNumber from "bignumber.js";
-import { formatUnits, parseUnits } from "viem";
-
-import { Info } from "./info";
+import { parseUnits } from "viem";
 
 export const DepositLP = ({
   lpToken,
@@ -39,6 +37,7 @@ export const DepositLP = ({
   const { refresh } = usePollVaultsInfo({
     vaultAddress: gauge.vaultAddress,
   });
+
   const { write, ModalPortal } = useTxn({
     message: "Deposit LP Tokens",
     actionType: TransactionActionType.ADD_LIQUIDITY,

@@ -29,6 +29,8 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   } = usePollGauges();
   const gauge = gaugeDictionary?.[gaugeAddress];
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
+
+  console.log("gauge", gauge);
   return (
     <>
       {gauge ? (
@@ -87,7 +89,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
                 className="max-h-[300px] min-w-[1000px] shadow"
                 onRowClick={(row: any) => {
                   window.open(
-                    `/incentivize?gauge=${gaugeAddress}&&token=${row.original.token.address}`,
+                    `/incentivize?gauge=${gaugeAddress}&token=${row.original.token.address}`,
                     "_self",
                   );
                 }}
