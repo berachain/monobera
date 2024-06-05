@@ -15,10 +15,6 @@ import { type Address } from "viem";
 
 import { BribesPopover, ClaimBribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
-import {
-  AggregatedBribe,
-  useAggregatedBribes,
-} from "~/hooks/useAggregatedBribes";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
@@ -87,7 +83,7 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
     const cuttingBoards: CuttingBoardWeight[] =
       row.original.cuttingBoard.weights ?? [];
     const mostWeightedCuttingBoard = cuttingBoards.sort(
-      (a, b) => a.percentage - b.percentage,
+      (a, b) => Number(a.percentageNumerator) - Number(b.percentageNumerator),
     )[0];
     return <CuttingBoardDisplay cuttingBoard={mostWeightedCuttingBoard} />;
   },
@@ -100,10 +96,7 @@ const BRIBES_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
-    const availableBribes: AggregatedBribe[] | undefined = useAggregatedBribes(
-      row.original.id,
-    );
-    return <BribesPopover incentives={[]} />;
+    return <BribesPopover incentives={row.original.activeIncentives} />;
   },
   accessorKey: "bribes",
   enableSorting: false,
@@ -114,13 +107,10 @@ const CLAIMABLE_BRIBES_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
-    const availableBribes: AggregatedBribe[] | undefined = useAggregatedBribes(
-      row.original.id,
-    );
     return (
       <ClaimBribesPopover
         coinbase={row.original.coinbase}
-        bribes={availableBribes}
+        bribes={[]}
       />
     );
   },

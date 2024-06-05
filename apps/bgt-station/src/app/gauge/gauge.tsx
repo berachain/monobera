@@ -15,90 +15,6 @@ import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
 import MarketSelector from "./market-selector";
 
-const cuttingboard: CuttingBoardWeight[] = [
-  {
-    percentage: 25,
-    amount: 375000,
-    receiver: {
-      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      name: "Honey Vault",
-      imageUri:
-        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-      website: "https://www.honeyvault.com",
-      activeIncentives: [
-        {
-          token: {
-            name: "Honey Token",
-            symbol: "HNY",
-            address: "0xdeadbeefdeadbeef",
-            decimals: 18,
-          },
-          incentiveRate: 0.05,
-          amountLeft: 50000,
-          id: "0xdeadbeefdeadbeef",
-          vaultId: "0xdeadbeefdeadbeef",
-        },
-      ],
-      market: "HONEY",
-    },
-  },
-  {
-    percentage: 25,
-    amount: 75000,
-    receiver: {
-      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      name: "Honey Vault",
-      imageUri:
-        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-      website: "https://www.honeyvault.com",
-      activeIncentives: [
-        {
-          token: {
-            name: "Honey Token",
-            symbol: "HNY",
-            address: "0xdeadbeefdeadbeef",
-            decimals: 18,
-          },
-          incentiveRate: 0.05,
-          amountLeft: 50000,
-          id: "0xdeadbeefdeadbeef",
-          vaultId: "0xdeadbeefdeadbeef",
-        },
-      ],
-      market: "HONEY",
-    },
-  },
-  {
-    percentage: 25,
-    amount: 375000,
-    receiver: {
-      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      name: "Honey Vault",
-      imageUri:
-        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-      website: "https://www.honeyvault.com",
-      activeIncentives: [
-        {
-          token: {
-            name: "Honey Token",
-            symbol: "HNY",
-            address: "0xdeadbeefdeadbeef",
-            decimals: 18,
-          },
-          incentiveRate: 0.05,
-          amountLeft: 50000,
-          id: "0xdeadbeefdeadbeef",
-          vaultId: "0xdeadbeefdeadbeef",
-        },
-      ],
-      market: "HONEY",
-    },
-  },
-];
-
 export default function Gauge() {
   const { isReady } = useBeraJs();
   const [markets, setMarkets] = useState<string[]>([]);
@@ -112,7 +28,7 @@ export default function Gauge() {
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
           isLoading={isGlobalDataLoading}
-          gaugeWeights={cuttingboard}
+          gaugeWeights={[] as CuttingBoardWeight[]}
           totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
           globalAmountStaked={data?.bgtTotalSupply ?? "0"}
         />

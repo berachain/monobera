@@ -21,14 +21,17 @@ export const CuttingBoardDisplay = ({
   return (
     <Link
       className="flex  h-full w-[160px] items-center justify-start gap-2"
-      href={`${blockExplorerUrl}/address/${getAddress(
-        cuttingBoard.receiver.address,
-      )}`}
+      href={`${blockExplorerUrl}/address/${getAddress(cuttingBoard.receiver)}`}
       target="_blank"
       onClick={(e) => e.stopPropagation()}
     >
-      <GaugeIcon address={cuttingBoard.receiver.address} />
-      <span className="hover:underline">{cuttingBoard.receiver.name}</span>
+      <GaugeIcon
+        address={cuttingBoard.receiverMetadata.vaultAddress}
+        overrideImage={cuttingBoard.receiverMetadata.logoURI}
+      />
+      <span className="hover:underline max-w-[200px] truncate">
+        {cuttingBoard.receiverMetadata.name}
+      </span>
     </Link>
   );
 };

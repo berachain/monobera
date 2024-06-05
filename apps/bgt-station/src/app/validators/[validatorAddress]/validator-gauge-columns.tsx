@@ -10,14 +10,14 @@ import { type CuttingBoardWeight } from "@bera/berajs";
 export const validatorGaugeColumns: ColumnDef<CuttingBoardWeight>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Validator" />
+      <DataTableColumnHeader column={column} title="Gauge Vaults" />
     ),
     cell: ({ row }) => {
       //   const token = row.original.token;
       return <div className="flex flex-row items-center gap-1">1</div>;
     },
-    accessorKey: "token.symbol",
-    enableSorting: true,
+    accessorKey: "gauge-vaults",
+    enableSorting: false,
   },
   {
     header: ({ column }) => (
