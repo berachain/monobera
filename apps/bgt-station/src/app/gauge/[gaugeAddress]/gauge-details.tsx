@@ -32,6 +32,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
   const isTableLoading = isGaugeLoading || isGaugeValidating;
   const { data: TokeList = [] } = usePollWalletBalances();
+
   console.log("gauge", gauge);
   return (
     <>
