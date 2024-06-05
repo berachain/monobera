@@ -1,5 +1,5 @@
 import React from "react";
-import { Token } from "@bera/berajs";
+import { ActiveIncentive, Token } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -9,9 +9,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
-type IncentiveList = Token & { amountLeft: string };
-
-export const gauge_incentives_columns: ColumnDef<IncentiveList>[] = [
+export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
   {
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Bribe Breakdown" />
@@ -19,8 +17,8 @@ export const gauge_incentives_columns: ColumnDef<IncentiveList>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex flex-row items-center gap-1">
-          <TokenIcon address={row.original.address} size="sm" />
-          <div>{row.original.symbol}</div>
+          <TokenIcon address={row.original.token.address} />
+          <div>{row.original.token.symbol}</div>
         </div>
       );
     },
@@ -35,7 +33,7 @@ export const gauge_incentives_columns: ColumnDef<IncentiveList>[] = [
       <FormattedNumber
         value={row.original.amountLeft}
         compact={false}
-        symbol={row.original.symbol}
+        symbol={row.original.token.symbol}
       />
     ),
     accessorKey: "incentiveAmount",

@@ -86,7 +86,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
         useAggregatedBribes(row.original.id);
       return (
         <div className="flex items-center gap-1">
-          <BribesPopover bribes={availableBribes} />;
+          <BribesPopover incentives={[]} />;
           <Button size="sm" className="leading-5">
             Claim
           </Button>
