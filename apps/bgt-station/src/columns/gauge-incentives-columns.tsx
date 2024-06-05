@@ -8,7 +8,6 @@ import {
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
 
-
 export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
   {
     header: ({ column }) => (

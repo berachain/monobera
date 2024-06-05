@@ -107,12 +107,7 @@ const CLAIMABLE_BRIBES_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
-    return (
-      <ClaimBribesPopover
-        coinbase={row.original.coinbase}
-        bribes={[]}
-      />
-    );
+    return <ClaimBribesPopover coinbase={row.original.coinbase} bribes={[]} />;
   },
   accessorKey: "bribes",
   enableSorting: false,

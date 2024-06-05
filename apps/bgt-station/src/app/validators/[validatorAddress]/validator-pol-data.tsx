@@ -1,4 +1,4 @@
-import { Token, Vault, useTokenHoneyPrice, type Validator } from "@bera/berajs";
+import { usePollGauges, type Validator } from "@bera/berajs";
 import {
   DataTable,
   FormattedNumber,
@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { validatorGaugeColumns } from "./validator-gauge-columns";
+
 // import { validatorIncentivesColumns } from "./validator-incentives-columns";
 
 // interface VaultBribeValue {
@@ -186,12 +187,14 @@ export const ValidatorPolData = ({
   isLoading: boolean;
   isValidating: boolean;
 }) => {
-  const incentives = validator.activeIncentives;
-  const gauges = validator.cuttingBoard.weights;
+  const {
+    gaugeList,
+    isLoading: isGaugeListLoading,
+    isValidating: isGaugeListValidating,
+  } = usePollGauges({ validatorId: validator.id });
   // const [selectedBribe, setSelectedBribe] = useState<
   //   AggregatedBribe | undefined
   // >(undefined);
-  console.log("gauges", incentives);
   return (
     <div className="mt-6 flex w-full flex-col gap-6 lg:flex-row">
       {/* <AggregatedBribeDialog
@@ -205,20 +208,19 @@ export const ValidatorPolData = ({
             <TabsTrigger value="incentives">Incentives</TabsTrigger>
           </TabsList>
           <TabsContent value={"gauges"} className="mt-6">
-            {/* <DataTable
-              loading={isLoading}
-              validating={isValidating}
+            <DataTable
+              loading={isGaugeListLoading}
+              validating={isGaugeListValidating}
               columns={validatorGaugeColumns}
-              data={gauges ?? []}
-            /> */}
-            waiting
+              data={gaugeList ?? []}
+            />
           </TabsContent>
           <TabsContent value={"incentives"} className="mt-6">
             <DataTable
               loading={isLoading}
               validating={isValidating}
               columns={gauge_incentives_columns.slice(0, 4)}
-              data={incentives}
+              data={validator.activeIncentives}
               className="w-full overflow-x-scroll"
             />
           </TabsContent>

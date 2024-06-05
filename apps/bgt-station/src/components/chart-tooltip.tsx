@@ -33,11 +33,14 @@ export function ChartTooltip({
             <GaugeIcon
               address={gauge.receiverMetadata.vaultAddress}
               overrideImage={gauge.receiverMetadata.logoURI}
-            />
+            />{" "}
             {gauge.receiverMetadata.name}
           </div>
           <div className="flex items-center gap-1 whitespace-nowrap text-xs leading-4 text-muted-foreground">
-            <MarketIcon market={gauge.receiverMetadata.product} className="h-4 w-4" />{" "}
+            <MarketIcon
+              market={gauge.receiverMetadata.product}
+              className="h-4 w-4"
+            />{" "}
             {gauge.receiverMetadata.product ?? ""}
           </div>
         </div>

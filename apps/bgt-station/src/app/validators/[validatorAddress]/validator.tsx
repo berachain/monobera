@@ -139,10 +139,10 @@ export default function Validator({
   validatorAddress: Address;
 }) {
   const router = useRouter();
-  const { validatorInfoDictionary, isLoading, isValidating } = usePollValidatorInfo();
+  const { validatorInfoDictionary, isLoading, isValidating } =
+    usePollValidatorInfo();
   //@ts-ignore
   const validator = validatorInfoDictionary?.[validatorAddress];
-  console.log(validator);
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
@@ -388,7 +388,11 @@ export default function Validator({
         />
       </div>
       {validator && (
-        <ValidatorPolData validator={validator} isLoading={isLoading} isValidating={isValidating}/>
+        <ValidatorPolData
+          validator={validator}
+          isLoading={isLoading}
+          isValidating={isValidating}
+        />
       )}
     </div>
   );

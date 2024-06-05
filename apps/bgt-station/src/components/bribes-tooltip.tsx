@@ -109,7 +109,11 @@ export const BribesTooltip = ({
           tokenAmountPerProposal: ab.incentiveRate,
         };
         return (
-          <BribeTooltipRow token={ab.token} totalValues={bribeTotalValues} />
+          <BribeTooltipRow
+            token={ab.token}
+            totalValues={bribeTotalValues}
+            key={`${i}-BribeTooltipRow`}
+          />
         );
       })}
       {others && (
@@ -202,12 +206,7 @@ export const BribesPopover = ({
               />
             </div>
           }
-          children={
-            <BribesTooltip
-              activeIncentive={incentives ?? []}
-              key="BribesPopover"
-            />
-          }
+          children={<BribesTooltip activeIncentive={incentives ?? []} />}
         />
       )}
     </>

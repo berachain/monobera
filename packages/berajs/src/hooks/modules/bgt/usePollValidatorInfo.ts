@@ -22,7 +22,7 @@ export const usePollValidatorInfo = (
 ): UsePollValidatorInfoResponse => {
   const { config: beraConfig, account } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePollValidatorInfo", config, account];
+  const QUERY_KEY = ["usePollValidatorInfo", config, account, filter];
   const swrResponse = useSWR<GetValidatorsInfo, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => {

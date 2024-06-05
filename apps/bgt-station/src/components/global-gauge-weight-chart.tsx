@@ -132,12 +132,9 @@ export default function GlobalGaugeWeightChart({
     [gaugeWeights],
   );
 
-  //@ts-ignore
-  const gauge: CuttingBoardWeightMega = {
-    ...gauges.find(
-      (gauge: CuttingBoardWeightMega) => gauge.receiver === selectedGauge,
-    ),
-  };
+  const gauge: CuttingBoardWeightMega | undefined = gauges.find(
+    (gauge: CuttingBoardWeightMega) => gauge.receiver === selectedGauge,
+  );
 
   return (
     <div className="flex w-full shrink-0 flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] lg:items-stretch">
