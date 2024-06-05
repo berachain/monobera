@@ -5,7 +5,7 @@ import {
   usePollVaultsInfo,
   type Gauge,
 } from "@bera/berajs";
-import { useTxn } from "@bera/shared-ui";
+import { FormattedNumber, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
@@ -22,6 +22,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
     onSuccess: () => refresh(),
   });
 
+  console.log("data", data);
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       <GaugueLPChange gauge={gauge} />
@@ -36,7 +37,13 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
               <div className="flex items-center gap-1">
                 {data?.balance ?? 0}
                 <div className="text-sm text-muted-foreground">
-                  ({data.percentage}%)
+                  (
+                  <FormattedNumber
+                    value={data.percentage ?? "0"}
+                    compact
+                    showIsSmallerThanMin
+                  />
+                  %)
                 </div>
               </div>
             </div>

@@ -11,9 +11,9 @@ export const getGauges = async (
   config: BeraConfig,
   filter?: any,
 ): Promise<GetGaugeData> => {
-  if (!config.endpoints?.bgtEndpoint) {
-    throw new Error("Missing backend endpoint in config");
-  }
+  // if (!config.endpoints?.bgtEndpoint) {
+  //   throw new Error("Missing backend endpoint in config");
+  // }
   try {
     // const res = await fetch(`${config.endpoints.bgtEndpoint}/vaults`);
     const res = await fetch(

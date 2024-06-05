@@ -61,7 +61,7 @@ export const usePollVaultsInfo = (
         percentage:
           userBalance === 0n || totalSupply === 0n
             ? "0"
-            : formatEther(userBalance / totalSupply),
+            : (Number(userBalance / totalSupply) * 100).toString(),
       };
     },
     {
