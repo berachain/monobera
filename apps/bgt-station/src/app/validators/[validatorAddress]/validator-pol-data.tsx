@@ -242,7 +242,7 @@ export const ValidatorPolData = ({
         </Tabs>
       </div>
       <GlobalGaugeWeightChart
-        gaugeWeights={validator.cuttingboard ?? []}
+        gaugeWeights={validator.cuttingBoard.weights}
         totalAmountStaked={validator.amountStaked}
         globalAmountStaked={"10000000"}
         isLoading={isLoading}

@@ -11,12 +11,6 @@ import ValidatorsTable from "./components/validators-table";
 export default function Validators() {
   const { validatorCounts, validatorInfoList, isLoading } =
     usePollValidatorInfo();
-
-  console.log({
-    validatorCounts,
-    validatorInfoList,
-    isLoading,
-  });
   const generalInfo = [
     {
       amount: validatorCounts,

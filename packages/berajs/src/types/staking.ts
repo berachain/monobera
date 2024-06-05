@@ -1,4 +1,5 @@
 import { Address } from "viem";
+
 import { Token } from "./dex";
 
 export interface ValidatorInfo {
@@ -16,7 +17,7 @@ export type Validator = {
   commission: string;
   amountStaked: string;
   amountQueued: string;
-  cuttingboard: CuttingBoardWeight[] | null;
+  cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
   allTimeStats: {
     totalBgtDirected: string;

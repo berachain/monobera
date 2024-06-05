@@ -84,7 +84,8 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
   ),
   cell: ({ row }) => {
-    const cuttingBoards: CuttingBoardWeight[] = row.original.cuttingboard ?? [];
+    const cuttingBoards: CuttingBoardWeight[] =
+      row.original.cuttingBoard.weights ?? [];
     const mostWeightedCuttingBoard = cuttingBoards.sort(
       (a, b) => a.percentage - b.percentage,
     )[0];
