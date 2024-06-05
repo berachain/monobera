@@ -17,7 +17,7 @@ export default function GlobalGaugeWeightChart({
   isLoading,
 }: {
   gaugeWeights: CuttingBoardWeight[] | undefined;
-  totalAmountStaked: string;
+  totalAmountStaked: string | number;
   globalAmountStaked: string;
   isLoading: boolean;
 }) {
@@ -164,7 +164,11 @@ export default function GlobalGaugeWeightChart({
               <FormattedNumber value={totalAmountStaked} compact />
             </div>
             <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
-              <FormattedNumber value={globalAmountStaked} compact /> BGT
+              <FormattedNumber
+                value={globalAmountStaked}
+                compact
+                symbol="BGT"
+              />{" "}
               Circulating
             </div>
           </div>

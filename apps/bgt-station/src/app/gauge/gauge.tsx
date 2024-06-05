@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
+import {
+  useBeraJs,
+  usePollGlobalData,
+  type CuttingBoardWeight,
+} from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -100,16 +104,17 @@ export default function Gauge() {
   const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
+  const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
 
   return (
     <div className="flex flex-col gap-12">
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
-          isLoading={false}
+          isLoading={isGlobalDataLoading}
           gaugeWeights={cuttingboard}
-          totalAmountStaked={"100000"}
-          globalAmountStaked={"100000000"}
+          totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
+          globalAmountStaked={data?.bgtTotalSupply ?? "0"}
         />
       </div>
 
