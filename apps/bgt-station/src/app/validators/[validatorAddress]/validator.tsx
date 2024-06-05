@@ -18,8 +18,6 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
-import { ValidatorPolData } from "./validator-pol-data";
-
 export const ValidatorDataCard = ({
   title,
   value,
@@ -146,7 +144,6 @@ export default function Validator({
   } = usePollValidatorInfo();
   //@ts-ignore
   const validator = validatorInfoDictionary?.[validatorAddress];
-  console.log("validator", validator);
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
