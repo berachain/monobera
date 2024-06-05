@@ -72,7 +72,7 @@ const APY_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => (
     <div className="flex h-full w-[91px] items-center">
-      <FormattedNumber value={row.original.rewardRate} percent />
+      <FormattedNumber value={row.original.apy} percent />
     </div>
   ),
   accessorKey: "vApy",

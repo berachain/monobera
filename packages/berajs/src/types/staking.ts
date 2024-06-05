@@ -17,6 +17,7 @@ export type Validator = {
   commission: string;
   amountStaked: string;
   amountQueued: string;
+  apy:number;
   cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
   allTimeStats: {

@@ -3,6 +3,7 @@ import { Address } from "viem";
 
 import {
   GetValidatorsInfo,
+  ValidatorFilter,
   getValidatorsInfo,
 } from "~/actions/bgt/getValidatorsInfo";
 import { useBeraJs } from "~/contexts";
@@ -16,6 +17,7 @@ export interface UsePollValidatorInfoResponse
 }
 
 export const usePollValidatorInfo = (
+  filter?: ValidatorFilter,
   options?: DefaultHookOptions,
 ): UsePollValidatorInfoResponse => {
   const { config: beraConfig, account } = useBeraJs();
@@ -24,7 +26,7 @@ export const usePollValidatorInfo = (
   const swrResponse = useSWR<GetValidatorsInfo, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => {
-      return await getValidatorsInfo(config);
+      return await getValidatorsInfo(config, filter);
     },
     {
       ...options?.opts,
