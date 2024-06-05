@@ -18,6 +18,8 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
+import { ValidatorPolData } from "./validator-pol-data";
+
 export const ValidatorDataCard = ({
   title,
   value,
@@ -54,11 +56,12 @@ export const GaugeOverview = ({
       ) : (
         <div className="inline-flex h-7 items-end gap-1">
           <span className="text-2xl font-semibold leading-6">
-            {totalGauges} (690.42M)
+            {totalGauges}
+            {/* (690.42M) */}
           </span>
         </div>
       )}
-      {isLoading ? (
+      {/* {isLoading ? (
         <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
         <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
@@ -66,14 +69,14 @@ export const GaugeOverview = ({
           <Icons.bendFav className="h-6 w-6" />
           <Icons.berpsFav className="h-6 w-6" />
           <span className="text-sm leading-5 text-muted-foreground"> +4</span>
-          {/* {nonFeaturedGaugeLength !== 0 && (
+          {nonFeaturedGaugeLength !== 0 && (
             <span className="text-sm leading-5 text-muted-foreground">
               {" "}
               +{nonFeaturedGaugeLength}
             </span>
-          )} */}
+          )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
@@ -136,12 +139,8 @@ export default function Validator({
   validatorAddress: Address;
 }) {
   const router = useRouter();
-  const {
-    validatorCounts,
-    validatorInfoDictionary,
-    validatorInfoList,
-    isLoading,
-  } = usePollValidatorInfo();
+  const { validatorInfoDictionary, isLoading, isValidating } =
+    usePollValidatorInfo();
   //@ts-ignore
   const validator = validatorInfoDictionary?.[validatorAddress];
   const validatorDataItems: {
@@ -152,7 +151,11 @@ export default function Validator({
     {
       title: "APY",
       value: (
-        <span className="text-xl font-semibold">{validator?.apy ?? 0}%</span>
+        <FormattedNumber
+          value={validator?.apy ?? 0}
+          percent
+          className="text-xl font-semibold"
+        />
       ),
       tooltipText: "Total BGT directed to this validator",
     },
@@ -160,8 +163,16 @@ export default function Validator({
       title: "Voting Power",
       value: (
         <span className="text-xl font-semibold">
-          {validator?.amountStaked}{" "}
-          <span className="text-sm text-muted-foreground">(0.0069%)</span>
+          <FormattedNumber
+            value={validator?.amountStaked ?? "0"}
+            showIsSmallerThanMin
+            symbol="BGT"
+          />{" "}
+          <FormattedNumber
+            className="text-sm text-muted-foreground"
+            value={validator?.votingPower}
+            percent
+          />
         </span>
       ),
       tooltipText: "Total BGT directed to this validator",
@@ -282,16 +293,16 @@ export default function Validator({
         </div>
       </div>
 
-      <div className="mt-6 grid w-full   grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-4 md:gap-x-4">
+      <div className="mt-6 grid w-full grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-4 md:gap-x-4">
         <ValidatorDataCard
           className="col-span-2 row-start-1  h-[135px]"
           title="Active Gauges Vaults"
           value={
             <GaugeOverview
               isLoading={isLoading}
-              totalGauges={(validator?.cuttingboard ?? []).length}
-              featuredGauges={(validator?.cuttingboard ?? []).map(
-                (cb: any) => cb.receiver.imageUri,
+              totalGauges={(validator?.cuttingBoard.weights ?? []).length}
+              featuredGauges={(validator?.cuttingBoard.weights ?? []).map(
+                (cb: any) => cb.receiverMetadata.logoURI,
               )}
             />
           }
@@ -314,13 +325,16 @@ export default function Validator({
         />
         <ValidatorDataCard
           className="row-start-3 h-[100px] md:row-start-2"
-          title="Reward Rate"
+          title="Reward Rate per Block"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[100px]" />
             ) : (
               <div className="flex flex-row gap-1">
-                <span className="text-2xl font-semibold">100</span>
+                <FormattedNumber
+                  value={validator?.rewardRate ?? 0}
+                  className="text-2xl font-semibold"
+                />
                 <Icons.bgt className="h-6 w-6 self-center" />
               </div>
             )
@@ -373,7 +387,13 @@ export default function Validator({
           }
         />
       </div>
-      {/* <ValidatorPolData validator={validator} isLoading={isLoading} /> */}
+      {validator && (
+        <ValidatorPolData
+          validator={validator}
+          isLoading={isLoading}
+          isValidating={isValidating}
+        />
+      )}
     </div>
   );
 }

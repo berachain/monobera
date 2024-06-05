@@ -10,9 +10,9 @@ export interface GetBGTInfo {
 export const getBGTInfo = async (
   config: BeraConfig,
 ): Promise<GetBGTInfo | undefined> => {
-  if (!config.endpoints?.bgtEndpoint) {
-    throw new Error("Missing backend endpoint in config");
-  }
+  // if (!config.endpoints?.bgtEndpoint) {
+  //   throw new Error("Missing backend endpoint in config");
+  // }
   try {
     // const res = await fetch(`${config.endpoints.bgtEndpoint}/bgt_info`);
     const res = await fetch(
