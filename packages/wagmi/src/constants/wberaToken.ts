@@ -1,8 +1,8 @@
 import { type Token } from "@bera/berajs";
-import { nativeTokenAddress } from "@bera/config";
+import { beraTokenAddress } from "@bera/config";
 
 export const wBeraToken: Token = {
-  address: nativeTokenAddress,
+  address: beraTokenAddress,
   decimals: 18,
   name: "WBera",
   symbol: "WBERA",
