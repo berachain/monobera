@@ -26,7 +26,6 @@ export const AllValidator = ({
   //   (state: TableState) => setPage(state?.pagination?.pageIndex),
   //   [setPage],
   // );
-
   return (
     <DataTable
       //@ts-ignore

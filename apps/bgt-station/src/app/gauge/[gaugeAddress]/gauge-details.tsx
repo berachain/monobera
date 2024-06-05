@@ -32,7 +32,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
   const isTableLoading = isGaugeLoading || isGaugeValidating;
   const { data: TokeList = [] } = usePollWalletBalances();
-  // console.log("gaugeDictionary", gaugeDictionary);
+  console.log("gauge", gauge);
   return (
     <>
       {gauge ? (
@@ -86,14 +86,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
               <DataTable
                 loading={isTableLoading}
                 columns={gauge_incentives_columns}
-                data={TokeList.map((token) => ({
-                  ...token,
-                  amountLeft: "50000",
-                }))}
+                data={gauge?.activeIncentives ?? []}
                 className="max-h-[300px] min-w-[1000px] shadow"
                 onRowClick={(row: any) => {
                   window.open(
-                    `/incentivize?gauge=${gaugeAddress}&&token=${row.original.address}`,
+                    `/incentivize?gauge=${gaugeAddress}&&token=${row.original.token.address}`,
                     "_self",
                   );
                 }}

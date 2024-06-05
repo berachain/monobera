@@ -72,7 +72,7 @@ const APY_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => (
     <div className="flex h-full w-[91px] items-center">
-      {Number(0).toFixed(2)}%
+      <FormattedNumber value={row.original.rewardRate} percent />
     </div>
   ),
   accessorKey: "vApy",
@@ -84,7 +84,8 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
   ),
   cell: ({ row }) => {
-    const cuttingBoards: CuttingBoardWeight[] = row.original.cuttingboard ?? [];
+    const cuttingBoards: CuttingBoardWeight[] =
+      row.original.cuttingBoard.weights ?? [];
     const mostWeightedCuttingBoard = cuttingBoards.sort(
       (a, b) => a.percentage - b.percentage,
     )[0];
@@ -102,7 +103,7 @@ const BRIBES_COLUMN: ColumnDef<Validator> = {
     const availableBribes: AggregatedBribe[] | undefined = useAggregatedBribes(
       row.original.id,
     );
-    return <BribesPopover bribes={availableBribes} />;
+    return <BribesPopover incentives={[]} />;
   },
   accessorKey: "bribes",
   enableSorting: false,

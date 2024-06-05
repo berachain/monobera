@@ -30,8 +30,10 @@ const cuttingboard: CuttingBoardWeight[] = [
             address: "0xdeadbeefdeadbeef",
             decimals: 18,
           },
-          incentiveRate: "0.05",
-          amountLeft: "50000",
+          incentiveRate: 0.05,
+          amountLeft: 50000,
+          id: "0xdeadbeefdeadbeef",
+          vaultId: "0xdeadbeefdeadbeef",
         },
       ],
       market: "HONEY",
@@ -55,8 +57,10 @@ const cuttingboard: CuttingBoardWeight[] = [
             address: "0xdeadbeefdeadbeef",
             decimals: 18,
           },
-          incentiveRate: "0.05",
-          amountLeft: "50000",
+          incentiveRate: 0.05,
+          amountLeft: 50000,
+          id: "0xdeadbeefdeadbeef",
+          vaultId: "0xdeadbeefdeadbeef",
         },
       ],
       market: "HONEY",
@@ -80,8 +84,10 @@ const cuttingboard: CuttingBoardWeight[] = [
             address: "0xdeadbeefdeadbeef",
             decimals: 18,
           },
-          incentiveRate: "0.05",
-          amountLeft: "50000",
+          incentiveRate: 0.05,
+          amountLeft: 50000,
+          id: "0xdeadbeefdeadbeef",
+          vaultId: "0xdeadbeefdeadbeef",
         },
       ],
       market: "HONEY",
@@ -123,7 +129,7 @@ export default function Gauge() {
           </TabsList>
 
           <div className="flex w-full items-center gap-3 md:w-fit">
-            <SearchInput
+            {/* <SearchInput
               placeholder="Search..."
               value={keywords}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -136,7 +142,7 @@ export default function Gauge() {
                 }
               }}
               className="w-full md:w-[300px]"
-            />
+            /> */}
             <MarketSelector {...{ markets, setMarkets }} />
           </div>
         </div>

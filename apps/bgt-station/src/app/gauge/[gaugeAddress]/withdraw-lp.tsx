@@ -23,7 +23,7 @@ export const WithdrawLP = ({
 }) => {
   const [withdrawAmount, setWithdrawAmount] = useState<`${number}`>("0");
   const [withdrawPercent, setWithdrawPercent] = useState<number>(0);
-  const { data, isLoading, refresh } = usePollVaultsInfo({
+  const { data, refresh } = usePollVaultsInfo({
     vaultAddress: gauge.vaultAddress,
   });
   const validAmount =
@@ -33,8 +33,9 @@ export const WithdrawLP = ({
   const { write, ModalPortal } = useTxn({
     message: "Withdraw LP Tokens",
     actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
-    onSuccess: () => {},
+    onSuccess: () => refresh(),
   });
+
   return (
     <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
@@ -53,9 +54,14 @@ export const WithdrawLP = ({
             hidePrice
             showExceeding={true}
             selectable={false}
-            setAmount={(amount: string) =>
-              setWithdrawAmount(amount as `${number}`)
-            }
+            setAmount={(amount: string) => {
+              setWithdrawAmount(amount as `${number}`);
+              if (!data?.balance || BigNumber(data?.balance ?? "0").eq(0))
+                return;
+              setWithdrawPercent(
+                BigNumber(amount).div(data?.balance).times(100).toNumber(),
+              );
+            }}
           />
         </div>
       </div>
@@ -72,7 +78,15 @@ export const WithdrawLP = ({
                   variant={"secondary"}
                   size={"sm"}
                   className="w-full text-foreground"
-                  onClick={() => setWithdrawPercent(percent)}
+                  onClick={() => {
+                    setWithdrawPercent(percent);
+                    setWithdrawAmount(
+                      BigNumber(data?.balance ?? "0")
+                        .times(percent)
+                        .div(100)
+                        .toString() as `${number}`,
+                    );
+                  }}
                 >
                   {percent.toString()}%
                 </Button>
@@ -86,7 +100,14 @@ export const WithdrawLP = ({
           max={100}
           min={0}
           onValueChange={(value: number[]) => {
-            setWithdrawPercent(value[0] ?? 0);
+            const percent = value[0] ?? 0;
+            setWithdrawPercent(percent);
+            setWithdrawAmount(
+              BigNumber(data?.balance ?? "0")
+                .times(percent)
+                .div(100)
+                .toString() as `${number}`,
+            );
           }}
         />
       </div>

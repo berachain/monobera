@@ -10,7 +10,12 @@ import {
   type Token,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { PoolHeader, TokenIconList, TokenInput } from "@bera/shared-ui";
+import {
+  PoolHeader,
+  TokenIcon,
+  TokenIconList,
+  TokenInput,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -105,12 +110,14 @@ export const Incentivize = ({
           <Skeleton className="h-[92px] w-full rounded-sm" />
         ) : (
           <div className="rounded-md border border-border">
-            {/* whitelisted tokens */}
             <TokenInput
               selectable
               showExceeding
               selected={token}
               amount={totalAmount}
+              customTokenList={(
+                gaugeInfo?.vaultWhitelist.whitelistedTokens ?? []
+              ).map((t: any) => t.token)}
               setAmount={(amount) => setTotalAmount(amount as `${number}`)}
               onTokenSelection={(token: Token | undefined) => setToken(token)}
             />
@@ -154,7 +161,8 @@ export const Incentivize = ({
           </div>
           <div className="flex flex-col items-end gap-1">
             <div className="flex items-center gap-1 text-lg font-semibold leading-7">
-              0.69 <Icons.beraIcon className="h-4 w-4" />
+              0.69{" "}
+              <TokenIcon address={token?.address ?? "0x"} className="h-4 w-4" />
             </div>
             <div className="text-[10px] leading-[10px]">$42.69</div>
           </div>
@@ -168,7 +176,8 @@ export const Incentivize = ({
           </div>
           <div className="flex flex-col items-end gap-1">
             <div className="flex items-center gap-1 text-lg font-semibold leading-7">
-              16.65 <Icons.beraIcon className="h-4 w-4" />
+              16.65{" "}
+              <TokenIcon address={token?.address ?? "0x"} className="h-4 w-4" />
             </div>
             <div className="text-[10px] leading-[10px]">$42,690.69</div>
           </div>

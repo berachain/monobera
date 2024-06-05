@@ -1,9 +1,9 @@
 import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { cloudinaryUrl } from "@bera/config";
+import { usePollGlobalData } from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 
 const fakeValidators = [
   {
@@ -24,6 +24,8 @@ const fakeValidators = [
 ];
 
 export default function GaugeInfoCard() {
+  const { data, isLoading } = usePollGlobalData();
+  const bgtInfo = data?.bgtInfo;
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
@@ -66,15 +68,24 @@ export default function GaugeInfoCard() {
             </div>
           ))}
         </div>
+
         <div className="flex flex-col justify-center border-b border-border p-4">
           <div className="text-xs leading-5 text-muted-foreground">
             Est. Yearly BGT Distribution
           </div>
-          <div className="mt-2 flex h-8 w-fit items-center gap-2 rounded-full bg-success-foreground bg-opacity-10 px-2 text-success-foreground">
-            <Icons.bgt className="h-6 w-6" />
-            <b>69.42K Yearly</b>
-          </div>
+          {isLoading ? (
+            <Skeleton className="mt-2 h-8 w-[150px] rounded-full" />
+          ) : (
+            <div className="mt-2 flex h-8 w-fit items-center gap-2 rounded-full bg-success-foreground bg-opacity-10 px-2 text-success-foreground">
+              <Icons.bgt className="h-6 w-6" />
+              <b>
+                <FormattedNumber value={bgtInfo?.blockCountPerYear ?? 0} />{" "}
+                Yearly
+              </b>
+            </div>
+          )}
         </div>
+
         <div className="flex flex-col justify-center border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
             Active Incentives
@@ -100,14 +111,22 @@ export default function GaugeInfoCard() {
             69 Active
           </div>
         </div>
+
         <div className="flex flex-col justify-center gap-2 border-b border-border p-5">
           <div className="text-xs leading-5 text-muted-foreground">
             Total Circulating BGT
           </div>
-          <div className="flex items-center gap-1 text-sm font-bold leading-5">
-            150.69 Million
-            <Icons.bgt className="h-4 w-4" />
-          </div>
+          {isLoading ? (
+            <Skeleton className="h-5 w-full rounded-sm" />
+          ) : (
+            <div className="flex items-center gap-1 text-sm font-bold leading-5">
+              <FormattedNumber
+                value={bgtInfo?.totalStakeBgt ?? 0}
+                compact={false}
+              />
+              <Icons.bgt className="h-4 w-4" />
+            </div>
+          )}
         </div>
       </div>
 
@@ -124,7 +143,11 @@ export default function GaugeInfoCard() {
           </div>
           <div className="flex items-center gap-2 text-2xl font-semibold">
             <Icons.honey className="h-6 w-6" />
-            <span>69,420.98</span>
+            <FormattedNumber
+              value={bgtInfo?.bgtPerBlock ?? 0}
+              compact={false}
+              showIsSmallerThanMin
+            />
           </div>
         </div>
       </div>
