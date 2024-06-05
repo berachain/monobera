@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { ADDRESS_ZERO, type CuttingBoardWeight } from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
+import { Skeleton } from "@bera/ui/skeleton";
 import { type Chart, type TooltipModel } from "chart.js";
 import uniqolor from "uniqolor";
 
-import { FormattedNumber } from "@bera/shared-ui";
-import { Skeleton } from "@bera/ui/skeleton";
 import { ChartTooltip } from "~/components/chart-tooltip";
 
 export const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
@@ -17,7 +17,7 @@ export default function GlobalGaugeWeightChart({
   isLoading,
 }: {
   gaugeWeights: CuttingBoardWeight[] | undefined;
-  totalAmountStaked: string;
+  totalAmountStaked: string | number;
   globalAmountStaked: string;
   isLoading: boolean;
 }) {
@@ -129,7 +129,7 @@ export default function GlobalGaugeWeightChart({
   } as CuttingBoardWeight;
 
   return (
-    <div className="flex w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] shrink-0 lg:items-stretch">
+    <div className="flex w-full shrink-0 flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] lg:items-stretch">
       <div className="text-sm leading-5 text-muted-foreground">
         Gauge Weight
       </div>
@@ -164,13 +164,17 @@ export default function GlobalGaugeWeightChart({
               <FormattedNumber value={totalAmountStaked} compact />
             </div>
             <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
-              <FormattedNumber value={globalAmountStaked} compact /> BGT
+              <FormattedNumber
+                value={globalAmountStaked}
+                compact
+                symbol="BGT"
+              />{" "}
               Circulating
             </div>
           </div>
 
           <div
-            className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block transform -translate-y-1/2"
+            className="z-1 pointer-events-none absolute hidden -translate-y-1/2 transform transition-all duration-200 ease-in-out sm:block"
             style={{
               top: `${tooltipPosition.y}px`,
               ...(tooltipPosition.x < 230 / 2
