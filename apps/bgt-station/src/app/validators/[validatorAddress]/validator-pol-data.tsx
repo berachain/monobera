@@ -39,7 +39,7 @@ export const AggregatedBribeDialog = ({
   const vaultBribeValues: VaultBribeValue[] = !aggregatedBribe
     ? []
     : aggregatedBribe?.sourceVaults.flatMap((vault) => {
-        return vault.activeIncentives.map((incentive:any) => {
+        return vault.activeIncentives.map((incentive: any) => {
           if (incentive.token.address === aggregatedBribe.token.address) {
             return {
               vault,
