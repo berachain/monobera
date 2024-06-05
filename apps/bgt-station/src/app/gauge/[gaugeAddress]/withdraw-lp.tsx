@@ -6,7 +6,7 @@ import {
   TransactionActionType,
   usePollVaultsInfo,
 } from "@bera/berajs";
-import { TokenInput, useTxn } from "@bera/shared-ui";
+import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Slider } from "@bera/ui/slider";
 import BigNumber from "bignumber.js";
@@ -111,20 +111,23 @@ export const WithdrawLP = ({
           }}
         />
       </div>
-      <Info />
-      <Button
-        disabled={!validAmount}
-        onClick={() =>
-          write({
-            address: gauge.vaultAddress,
-            abi: BERA_VAULT_REWARDS_ABI,
-            functionName: "withdraw",
-            params: [parseUnits(withdrawAmount, lpToken.decimals)],
-          })
-        }
-      >
-        Withdraw
-      </Button>
+      {/* <Info /> */}
+      <ActionButton>
+        <Button
+          className="w-full"
+          disabled={!validAmount}
+          onClick={() =>
+            write({
+              address: gauge.vaultAddress,
+              abi: BERA_VAULT_REWARDS_ABI,
+              functionName: "withdraw",
+              params: [parseUnits(withdrawAmount, lpToken.decimals)],
+            })
+          }
+        >
+          Withdraw
+        </Button>
+      </ActionButton>
       {ModalPortal}
     </div>
   );

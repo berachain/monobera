@@ -54,6 +54,7 @@ export const usePollVaultsInfo = (
         publicClient,
       });
 
+      console.log("userBalance", userBalance);
       return {
         totalSupply: formatEther(totalSupply),
         balance: formatEther(userBalance),
@@ -61,7 +62,7 @@ export const usePollVaultsInfo = (
         percentage:
           userBalance === 0n || totalSupply === 0n
             ? "0"
-            : (Number(userBalance / totalSupply) * 100).toString(),
+            : Number(userBalance / totalSupply).toString(),
       };
     },
     {

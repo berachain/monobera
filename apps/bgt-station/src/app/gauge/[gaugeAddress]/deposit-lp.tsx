@@ -6,6 +6,7 @@ import {
   TransactionActionType,
   usePollWalletBalances,
   usePollAllowance,
+  usePollVaultsInfo,
 } from "@bera/berajs";
 import {
   ActionButton,
@@ -35,10 +36,15 @@ export const DepositLP = ({
     BigNumber(depositAmount).gt(0) &&
     BigNumber(depositAmount).lte(balance?.formattedBalance ?? "0");
 
+  const { refresh } = usePollVaultsInfo({
+    vaultAddress: gauge.vaultAddress,
+  });
   const { write, ModalPortal } = useTxn({
     message: "Deposit LP Tokens",
     actionType: TransactionActionType.ADD_LIQUIDITY,
-    onSuccess: () => {},
+    onSuccess: () => {
+      refresh();
+    },
   });
 
   const { data: allowance } = usePollAllowance({
