@@ -6,7 +6,7 @@ import {
   useTokenHoneyPrice,
   type Gauge,
 } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { beraTokenAddress, bgtTokenAddress } from "@bera/config";
 import { FormattedNumber, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -20,7 +20,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
     vaultAddress: gauge.vaultAddress,
   });
   const { data: price } = useTokenHoneyPrice({
-    tokenAddress: bgtTokenAddress,
+    tokenAddress: beraTokenAddress,
   });
   const { write, ModalPortal } = useTxn({
     message: "Claim BGT Rewards",

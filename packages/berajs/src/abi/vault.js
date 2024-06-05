@@ -2,6 +2,20 @@ export const BERA_VAULT_REWARDS_ABI = [
   { type: "constructor", inputs: [], stateMutability: "nonpayable" },
   {
     type: "function",
+    name: "REWARD_TOKEN",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "contract IERC20" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "STAKE_TOKEN",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "contract IERC20" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "addIncentive",
     inputs: [
       { name: "token", type: "address", internalType: "address" },
@@ -20,16 +34,18 @@ export const BERA_VAULT_REWARDS_ABI = [
   },
   {
     type: "function",
-    name: "bgt",
+    name: "beraChef",
     inputs: [],
-    outputs: [{ name: "", type: "address", internalType: "contract IERC20" }],
+    outputs: [
+      { name: "", type: "address", internalType: "contract IBeraChef" },
+    ],
     stateMutability: "view",
   },
   {
     type: "function",
     name: "delegateStake",
     inputs: [
-      { name: "user", type: "address", internalType: "address" },
+      { name: "account", type: "address", internalType: "address" },
       { name: "amount", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
@@ -39,7 +55,7 @@ export const BERA_VAULT_REWARDS_ABI = [
     type: "function",
     name: "delegateWithdraw",
     inputs: [
-      { name: "user", type: "address", internalType: "address" },
+      { name: "account", type: "address", internalType: "address" },
       { name: "amount", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
@@ -69,7 +85,7 @@ export const BERA_VAULT_REWARDS_ABI = [
   {
     type: "function",
     name: "getReward",
-    inputs: [{ name: "user", type: "address", internalType: "address" }],
+    inputs: [{ name: "account", type: "address", internalType: "address" }],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "nonpayable",
   },
@@ -111,6 +127,7 @@ export const BERA_VAULT_REWARDS_ABI = [
     inputs: [
       { name: "_bgt", type: "address", internalType: "address" },
       { name: "_distributor", type: "address", internalType: "address" },
+      { name: "_berachef", type: "address", internalType: "address" },
       { name: "_governance", type: "address", internalType: "address" },
       { name: "_stakingToken", type: "address", internalType: "address" },
     ],
@@ -151,7 +168,7 @@ export const BERA_VAULT_REWARDS_ABI = [
   {
     type: "function",
     name: "operator",
-    inputs: [{ name: "user", type: "address", internalType: "address" }],
+    inputs: [{ name: "account", type: "address", internalType: "address" }],
     outputs: [{ name: "", type: "address", internalType: "address" }],
     stateMutability: "view",
   },
@@ -231,8 +248,8 @@ export const BERA_VAULT_REWARDS_ABI = [
   {
     type: "function",
     name: "rewards",
-    inputs: [{ name: "user", type: "address", internalType: "address" }],
-    outputs: [{ name: "reward", type: "uint256", internalType: "uint256" }],
+    inputs: [{ name: "account", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
   },
   {
@@ -289,13 +306,6 @@ export const BERA_VAULT_REWARDS_ABI = [
   },
   {
     type: "function",
-    name: "stakingToken",
-    inputs: [],
-    outputs: [{ name: "", type: "address", internalType: "address" }],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "totalSupply",
     inputs: [],
     outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
@@ -318,10 +328,8 @@ export const BERA_VAULT_REWARDS_ABI = [
   {
     type: "function",
     name: "userRewardPerTokenPaid",
-    inputs: [{ name: "user", type: "address", internalType: "address" }],
-    outputs: [
-      { name: "rewardsPerTokenPaid", type: "uint256", internalType: "uint256" },
-    ],
+    inputs: [{ name: "account", type: "address", internalType: "address" }],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
     stateMutability: "view",
   },
   {
@@ -702,6 +710,7 @@ export const BERA_VAULT_REWARDS_ABI = [
   { type: "error", name: "AmountLessThanMinIncentiveRate", inputs: [] },
   { type: "error", name: "BlockDoesNotExist", inputs: [] },
   { type: "error", name: "BlockNotInBuffer", inputs: [] },
+  { type: "error", name: "CannotRecoverRewardToken", inputs: [] },
   { type: "error", name: "CannotRecoverStakingToken", inputs: [] },
   { type: "error", name: "EnforcedPause", inputs: [] },
   { type: "error", name: "ExpectedPause", inputs: [] },
@@ -717,10 +726,12 @@ export const BERA_VAULT_REWARDS_ABI = [
   { type: "error", name: "NoWhitelistedTokens", inputs: [] },
   { type: "error", name: "NotActionableBlock", inputs: [] },
   { type: "error", name: "NotApprovedSender", inputs: [] },
+  { type: "error", name: "NotBGT", inputs: [] },
   { type: "error", name: "NotBlockRewardController", inputs: [] },
   { type: "error", name: "NotDistributor", inputs: [] },
   { type: "error", name: "NotEnoughBalance", inputs: [] },
   { type: "error", name: "NotEnoughTime", inputs: [] },
+  { type: "error", name: "NotFeeCollector", inputs: [] },
   { type: "error", name: "NotFriendOfTheChef", inputs: [] },
   { type: "error", name: "NotGovernance", inputs: [] },
   { type: "error", name: "NotInitializing", inputs: [] },
