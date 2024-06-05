@@ -43,6 +43,7 @@ type Props = {
   isActionLoading?: boolean | undefined;
   difference?: number | null;
   filteredTokenTags?: string[];
+  filteredSymbols?: string[];
   beraSafetyMargin?: number;
 };
 
@@ -68,6 +69,7 @@ export function TokenInput({
   isActionLoading = undefined,
   difference,
   filteredTokenTags = [],
+  filteredSymbols = [],
   beraSafetyMargin,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
@@ -162,6 +164,7 @@ export function TokenInput({
             customTokenList={customTokenList}
             filter={[bgtTokenAddress]}
             filteredTokenTags={filteredTokenTags}
+            filteredSymbols={filteredSymbols}
           />
           {selected &&
             isActionLoading !== undefined &&
@@ -261,7 +264,7 @@ export function TokenInput({
             selected &&
             Number(tokenBalance) !== 0 &&
             !hideBalance && (
-              <div className="flex flex-row items-center justify-start gap-1 px-1 mt-1">
+              <div className="mt-1 flex flex-row items-center justify-start gap-1 px-1">
                 <Icons.wallet className="h-3 w-3 text-muted-foreground" />
                 <FormattedNumber
                   value={tokenBalance ? tokenBalance : "0"}
