@@ -1,10 +1,18 @@
-import { FormattedNumber, TokenIconList } from "@bera/shared-ui";
+import {
+  ActionButton,
+  FormattedNumber,
+  TokenIconList,
+  useTxn,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Card, CardContent } from "@bera/ui/card";
 import { useClaimableIncetives } from "~/hooks/useClaimableIncentives";
 import { useTotalBgtRewards } from "~/hooks/useTotalBgtRewards";
 import { Skeleton } from "@bera/ui/skeleton";
+import { useClaimableFees } from "~/hooks/useClaimableFees";
+import { TransactionActionType, BGT_STAKER_ABI } from "@bera/berajs";
+import { bgtStaker } from "@bera/config";
 
 export const GeneralInfo = () => {
   const gauges = [
@@ -41,11 +49,31 @@ export const GeneralInfo = () => {
   const { data: claimableIncentives, isLoading: isClaimableIncentivesLoading } =
     useClaimableIncetives();
 
-  console.log(totalBgtRewards, claimableIncentives);
+  const {
+    data: claimableFees,
+    isLoading: isClaimableFeesLoading,
+    refresh,
+  } = useClaimableFees();
   const isDataReady =
-    !isTotalBgtRewardsLoading && !isClaimableIncentivesLoading;
+    !isTotalBgtRewardsLoading &&
+    !isClaimableIncentivesLoading &&
+    !isClaimableFeesLoading;
+
+  const {
+    write,
+    isLoading: isClaimingRewardsLoading,
+    ModalPortal,
+  } = useTxn({
+    message: "Claiming Honey Fee Rewards",
+    actionType: TransactionActionType.CLAIMING_REWARDS,
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
+      {ModalPortal}
       <Card className="relative w-full overflow-hidden rounded-md">
         <CardContent className="p-4">
           <div className="text-xs leading-[14px] text-muted-foreground">
@@ -63,28 +91,42 @@ export const GeneralInfo = () => {
                 <Icons.bgt className="h-8 w-8" />
               </>
             ) : (
-              <Skeleton className="h-8 w-8" />
+              <Skeleton className="h-8 w-24" />
             )}
           </div>
-          <div className="leading-4 text-muted-foreground">
-            $<FormattedNumber value={0} compact showIsSmallerThanMin />
+          <div className="leading-4 text-muted-foreground mt-1">
+            {isDataReady ? (
+              <>
+                $<FormattedNumber value={0} compact showIsSmallerThanMin />
+              </>
+            ) : (
+              <Skeleton className="w-16 h-4" />
+            )}
           </div>
           <div className="relative z-10 mt-6 flex flex-col gap-1">
             <div className="text-xs leading-5 text-muted-foreground">
               Gauges Earning you BGT:
             </div>
-            {gauges.map((gauge, index) => (
-              <div
-                className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
-                key={`gauge-${index}-${gauge}`}
-              >
-                <Icons.honey className="h-4 w-4" />
-                <span className="text-xs">{gauge.title} </span>
-                <span className="text-[10px] text-muted-foreground">
-                  BGT Earning: {gauge.bgt}
-                </span>
-              </div>
-            ))}
+            {isDataReady &&
+              gauges.map((gauge, index) => (
+                <div
+                  className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
+                  key={`gauge-${index}-${gauge}`}
+                >
+                  <Icons.honey className="h-4 w-4" />
+                  <span className="text-xs">{gauge.title} </span>
+                  <span className="text-[10px] text-muted-foreground">
+                    BGT Earning: {gauge.bgt}
+                  </span>
+                </div>
+              ))}
+            {!isDataReady && (
+              <>
+                <Skeleton className="w-32 h-4" />
+                <Skeleton className="w-32 h-4" />
+                <Skeleton className="w-32 h-4" />
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -105,29 +147,41 @@ export const GeneralInfo = () => {
                 />
               </>
             ) : (
-              <Skeleton className="h-8 w-8" />
+              <Skeleton className="h-8 w-24" />
             )}{" "}
             <TokenIconList size="xl" tokenList={[]} />
           </div>
-          <div className="leading-4 text-muted-foreground">
-            {claimableIncentives?.tokenList.length ?? 0} Tokens
+          <div className="leading-4 text-muted-foreground mt-1">
+            {isDataReady ? (
+              <>{claimableIncentives?.tokenList.length ?? 0} Tokens</>
+            ) : (
+              <Skeleton className="w-16 h-4" />
+            )}
           </div>
           <div className="relative z-10 mt-6 flex flex-col gap-1">
             <div className="text-xs leading-5 text-muted-foreground">
               Incentives You’ve Earned:
             </div>
-            {incentives.map((incentive, index) => (
-              <div
-                className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
-                key={`incentive-${index}-${incentive}`}
-              >
-                <Icons.bgt className="h-4 w-4" />
-                <span className="text-xs">{incentive.title} </span>
-                <span className="text-[10px] text-muted-foreground">
-                  {incentive.amount}
-                </span>
-              </div>
-            ))}
+            {isDataReady &&
+              incentives.map((incentive, index) => (
+                <div
+                  className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
+                  key={`incentive-${index}-${incentive}`}
+                >
+                  <Icons.bgt className="h-4 w-4" />
+                  <span className="text-xs">{incentive.title} </span>
+                  <span className="text-[10px] text-muted-foreground">
+                    {incentive.amount}
+                  </span>
+                </div>
+              ))}
+            {!isDataReady && (
+              <>
+                <Skeleton className="w-32 h-4" />
+                <Skeleton className="w-32 h-4" />
+                <Skeleton className="w-32 h-4" />
+              </>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -139,14 +193,52 @@ export const GeneralInfo = () => {
               Claimable Fees
             </div>
             <div className="mt-2 flex items-center gap-1 text-3xl font-semibold leading-9">
-              420.69K HONEY <Icons.honey className="h-6 w-6" />
+              {isDataReady ? (
+                <>
+                  <FormattedNumber
+                    value={claimableFees}
+                    compact
+                    showIsSmallerThanMin
+                    symbol="HONEY"
+                  />{" "}
+                  <Icons.honey className="h-6 w-6" />
+                </>
+              ) : (
+                <Skeleton className="w-24 h-8" />
+              )}
             </div>
-            <div className="leading-4 text-muted-foreground">$420.96</div>
+            <div className="leading-4 text-muted-foreground mt-1">
+              {isDataReady ? (
+                <>
+                  $
+                  <FormattedNumber value={claimableFees} showIsSmallerThanMin />
+                </>
+              ) : (
+                <Skeleton className="w-16 h-4" />
+              )}
+            </div>
           </div>
-          <Button className="relative z-10 flex w-full gap-1 mt-4" disabled>
-            <Icons.honey className="h-6 w-6" />
-            Coming soon
-          </Button>
+          <ActionButton>
+            <Button
+              onClick={() => {
+                write({
+                  address: bgtStaker,
+                  abi: BGT_STAKER_ABI,
+                  functionName: "getReward",
+                  params: [],
+                });
+              }}
+              className="relative z-10 flex w-full gap-1 mt-4"
+              disabled={
+                parseFloat(claimableFees) === 0 ||
+                !claimableFees ||
+                isClaimingRewardsLoading
+              }
+            >
+              <Icons.honey className="h-6 w-6" />
+              Claim Fees
+            </Button>
+          </ActionButton>
         </CardContent>
       </Card>
     </div>

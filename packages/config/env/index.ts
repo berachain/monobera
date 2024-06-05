@@ -146,7 +146,6 @@ export const beraTokenAddress = process.env
   .NEXT_PUBLIC_WBERA_ADDRESS as Address;
 export const stgusdcTokenAddress = process.env
   .NEXT_PUBLIC_STGUSDC_ADDRESS as Address;
-export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;
 export const wbtcTokenAddress = process.env.NEXT_PUBLIC_WBTC_ADDRESS as Address;
 export const wethTokenAddress = process.env.NEXT_PUBLIC_WETH_ADDRESS as Address;
 export const aHoneyTokenAddress = process.env
@@ -181,6 +180,10 @@ export const bannerEnabled = Boolean(
 export const rpcBannerEnabled = Boolean(
   process.env.NEXT_PUBLIC_RPC_BANNER_ENABLED,
 );
+
+// BGT
+export const bgtStaker = process.env.NEXT_PUBLIC_BGT_STAKER as Address;
+export const bgtTokenAddress = process.env.NEXT_PUBLIC_BGT_ADDRESS as Address;
 
 // Crocswap
 export const crocDexAddress = process.env.NEXT_PUBLIC_RPC_CROC_DEX as Address;
