@@ -187,7 +187,6 @@ export default function Validator({
       tooltipText: "Honey",
     },
   ];
-
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
