@@ -37,6 +37,7 @@ type Props = {
   customTokens?: (Token | undefined)[];
   filter?: string[];
   filteredTokenTags?: string[]; // list of tags excluded from visible token list
+  filteredSymbols?: string[]; // list of symbols excluded from visible token list
 };
 
 export function TokenDialog({
@@ -48,6 +49,7 @@ export function TokenDialog({
   customTokens = undefined,
   filter = [],
   filteredTokenTags = [],
+  filteredSymbols = [],
 }: Props) {
   const [search, setSearch] = useState("");
   const [addTokenOpen, setAddTokenOpen] = useState(false);
@@ -84,7 +86,9 @@ export function TokenDialog({
       ? customTokens
       : tokenData?.tokenList?.filter(
           (token) =>
-            !filter.includes(token.address) && !hasFilteredTag(token.tags),
+            !filter.includes(token.address) &&
+            !hasFilteredTag(token.tags) &&
+            !filteredSymbols.includes(token.symbol),
         ),
   );
 
@@ -92,8 +96,10 @@ export function TokenDialog({
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
       const newFilteredTokens = tokenData?.tokenList?.filter(
-        (token) =>
-          !filter.includes(token.address) && !hasFilteredTag(token.tags),
+        (token: Token) =>
+          !filter.includes(token.address) &&
+          !hasFilteredTag(token.tags) &&
+          !filteredSymbols.includes(token.symbol),
       );
       if (
         JSON.stringify(newFilteredTokens) !== JSON.stringify(filteredTokens)
@@ -116,7 +122,8 @@ export function TokenDialog({
           (token.name.toLowerCase().includes(search.toLowerCase()) ||
             token.symbol.toLowerCase().includes(search.toLowerCase()) ||
             token.address.toLowerCase().includes(search.toLowerCase())) &&
-          !hasFilteredTag(token.tags),
+          !hasFilteredTag(token.tags) &&
+          !filteredSymbols.includes(token.symbol),
       );
 
       if (isAddress(search) && filtered?.length === 0) {
