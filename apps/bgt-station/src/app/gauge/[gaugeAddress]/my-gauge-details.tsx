@@ -68,7 +68,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
                   showIsSmallerThanMin
                 />
                 <FormattedNumber
-                  value={BigNumber(data?.rewards??"0").times(price ?? 0)}
+                  value={BigNumber(data?.rewards ?? "0").times(price ?? 0)}
                   symbol="USD"
                   showIsSmallerThanMin
                   className="text-sm text-muted-foreground"
