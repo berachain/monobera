@@ -1,14 +1,22 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import { ADDRESS_ZERO, type CuttingBoardWeight } from "@bera/berajs";
+import {
+  ADDRESS_ZERO,
+  type CuttingBoardWeight,
+  type Vault,
+} from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
+import { Skeleton } from "@bera/ui/skeleton";
 import { type Chart, type TooltipModel } from "chart.js";
 import uniqolor from "uniqolor";
 
-import { FormattedNumber } from "@bera/shared-ui";
-import { Skeleton } from "@bera/ui/skeleton";
-import { ChartTooltip } from "~/components/chart-tooltip";
+import {
+  ChartTooltip,
+  CuttingBoardWeightMega,
+} from "~/components/chart-tooltip";
 
 export const OTHERS_GAUGES = "Others"; // Identifier for aggregated others
+export const THRESHOLD = 0.04;
 
 export default function GlobalGaugeWeightChart({
   gaugeWeights = [],
@@ -17,7 +25,7 @@ export default function GlobalGaugeWeightChart({
   isLoading,
 }: {
   gaugeWeights: CuttingBoardWeight[] | undefined;
-  totalAmountStaked: string;
+  totalAmountStaked: string | number;
   globalAmountStaked: string;
   isLoading: boolean;
 }) {
@@ -26,45 +34,43 @@ export default function GlobalGaugeWeightChart({
   const [selectedGauge, setSelectedGauge] = useState<any>();
   const [othersIndex, setOthersIndex] = useState<number>(-1);
 
-  const gauges = useMemo(() => {
-    const threshold = 0.04; // 4%
-    const filtered =
-      gaugeWeights?.filter((gauge) => gauge.percentage >= threshold) || [];
-    const others = gaugeWeights?.reduce(
-      (prev, curr) => {
-        if (curr.percentage < threshold) {
-          return {
-            amount: prev.amount + curr.amount,
-            percentage: prev.percentage + curr.percentage,
-            receiver: {
-              name: OTHERS_GAUGES,
-              address: ADDRESS_ZERO,
-              market: {
-                name: OTHERS_GAUGES,
-              },
-            } as any,
-          };
-        }
-        return prev;
-      },
-      { amount: 0, percentage: 0 },
+  const gauges: CuttingBoardWeightMega[] = useMemo(() => {
+    const gaugeW = (gaugeWeights ?? []).map(
+      (gauge: CuttingBoardWeight, index: number) => ({
+        ...gauge,
+        percentage: Number(gauge.percentageNumerator) / 10000,
+        id: index,
+      }),
     );
+
+    let othersPercentage = 0;
+    gaugeW.forEach(
+      (gauge: CuttingBoardWeight & { percentage: number; id: number }) => {
+        if (gauge.percentage < THRESHOLD) othersPercentage += gauge.percentage;
+      },
+    );
+
+    const filtered = gaugeW.filter((gauge) => gauge.percentage >= THRESHOLD);
 
     const combined = [...filtered];
 
-    // Only add the "Others" gauge if it has a significant amount
-    if (others.amount > 0) {
+    // Only add the "Others" gauge if it has a significant percentage
+    if (othersPercentage > THRESHOLD) {
       combined.push({
-        receiver: {
+        receiverMetadata: {
+          logoURI: "",
           name: OTHERS_GAUGES,
-          address: ADDRESS_ZERO,
-          market: {
-            name: OTHERS_GAUGES,
-          },
-        } as any,
-        amount: others.amount,
-        percentage: others.percentage,
-      });
+          product: OTHERS_GAUGES,
+          receiptTokenAddress: ADDRESS_ZERO,
+          url: "",
+          vaultAddress: ADDRESS_ZERO,
+        },
+        id: combined.length,
+        owner: ADDRESS_ZERO,
+        receiver: ADDRESS_ZERO,
+        percentage: othersPercentage,
+        percentageNumerator: "",
+      } as any);
     }
     setOthersIndex(combined.length - 1);
 
@@ -75,21 +81,23 @@ export default function GlobalGaugeWeightChart({
     const backgroundColor = [];
     const hoverBorderColor = [];
     gauges.forEach((gauge) => {
-      if (gauge.receiver.name !== OTHERS_GAUGES) {
-        const bgColor = uniqolor(gauge.receiver.address).color;
+      if (gauge.receiverMetadata.name !== OTHERS_GAUGES) {
+        const bgColor = uniqolor(gauge.receiver).color;
         backgroundColor.push(bgColor);
         hoverBorderColor.push(`${bgColor}52`);
       }
     });
     if (othersIndex > -1 && gauges.length > 1) {
-      if (gauges.some((gauge) => gauge.receiver.name === OTHERS_GAUGES)) {
+      if (
+        gauges.some((gauge) => gauge.receiverMetadata.name === OTHERS_GAUGES)
+      ) {
         const bgColor = uniqolor(ADDRESS_ZERO).color;
         backgroundColor.push(bgColor);
         hoverBorderColor.push(`${bgColor}52`);
       }
     }
     return {
-      labels: gauges?.map((d) => d.receiver.address),
+      labels: gauges?.map((d) => d.receiver),
       datasets: [
         {
           hoverBorderWidth: 10,
@@ -98,7 +106,7 @@ export default function GlobalGaugeWeightChart({
           borderWidth: 0,
           backgroundColor,
           hoverBorderColor,
-          data: gauges?.map((d) => d.amount),
+          data: gauges?.map((d) => d.percentage),
         },
       ],
     };
@@ -124,12 +132,12 @@ export default function GlobalGaugeWeightChart({
     [gaugeWeights],
   );
 
-  const gauge = {
-    ...gauges.find((gauge) => gauge.receiver.address === selectedGauge),
-  } as CuttingBoardWeight;
+  const gauge: CuttingBoardWeightMega | undefined = gauges.find(
+    (gauge: CuttingBoardWeightMega) => gauge.receiver === selectedGauge,
+  );
 
   return (
-    <div className="flex w-full flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] shrink-0 lg:items-stretch">
+    <div className="flex w-full shrink-0 flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] lg:items-stretch">
       <div className="text-sm leading-5 text-muted-foreground">
         Gauge Weight
       </div>
@@ -164,13 +172,17 @@ export default function GlobalGaugeWeightChart({
               <FormattedNumber value={totalAmountStaked} compact />
             </div>
             <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
-              <FormattedNumber value={globalAmountStaked} compact /> BGT
+              <FormattedNumber
+                value={globalAmountStaked}
+                compact
+                symbol="BGT"
+              />{" "}
               Circulating
             </div>
           </div>
 
           <div
-            className="z-1 pointer-events-none absolute hidden transition-all duration-200 ease-in-out sm:block transform -translate-y-1/2"
+            className="z-1 pointer-events-none absolute hidden -translate-y-1/2 transform transition-all duration-200 ease-in-out sm:block"
             style={{
               top: `${tooltipPosition.y}px`,
               ...(tooltipPosition.x < 230 / 2
@@ -178,10 +190,10 @@ export default function GlobalGaugeWeightChart({
                 : { right: 230 - tooltipPosition.x }),
             }}
           >
-            {selectedGauge && <ChartTooltip gauge={gauge} />}
+            <ChartTooltip gauge={gauge} />
           </div>
           <div className="z-1 pointer-events-none absolute left-[50%] top-[50%] block -translate-x-1/2 -translate-y-1/2 transform transition-all duration-200 ease-in-out sm:hidden">
-            {selectedGauge && <ChartTooltip gauge={gauge} />}
+            <ChartTooltip gauge={gauge} />
           </div>
         </div>
       )}

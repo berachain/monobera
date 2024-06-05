@@ -11,10 +11,6 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { Address } from "viem";
 
 import { BribesPopover } from "~/components/bribes-tooltip";
-import {
-  AggregatedBribe,
-  useAggregatedBribes,
-} from "~/hooks/useAggregatedBribes";
 
 export const user_incentives_columns: ColumnDef<Validator>[] = [
   {
@@ -82,8 +78,6 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
       />
     ),
     cell: ({ row }) => {
-      const availableBribes: AggregatedBribe[] | undefined =
-        useAggregatedBribes(row.original.id);
       return (
         <div className="flex items-center gap-1">
           <BribesPopover incentives={[]} />;

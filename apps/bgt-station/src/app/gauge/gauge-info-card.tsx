@@ -25,7 +25,6 @@ const fakeValidators = [
 
 export default function GaugeInfoCard() {
   const { data, isLoading } = usePollGlobalData();
-  const bgtInfo = data?.bgtInfo;
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
@@ -79,7 +78,9 @@ export default function GaugeInfoCard() {
             <div className="mt-2 flex h-8 w-fit items-center gap-2 rounded-full bg-success-foreground bg-opacity-10 px-2 text-success-foreground">
               <Icons.bgt className="h-6 w-6" />
               <b>
-                <FormattedNumber value={bgtInfo?.blockCountPerYear ?? 0} />{" "}
+                <FormattedNumber
+                  value={data?.bgtInfo?.blockCountPerYear ?? 0}
+                />{" "}
                 Yearly
               </b>
             </div>
@@ -121,7 +122,7 @@ export default function GaugeInfoCard() {
           ) : (
             <div className="flex items-center gap-1 text-sm font-bold leading-5">
               <FormattedNumber
-                value={bgtInfo?.totalStakeBgt ?? 0}
+                value={data?.bgtTotalSupply ?? 0}
                 compact={false}
               />
               <Icons.bgt className="h-4 w-4" />
@@ -144,7 +145,7 @@ export default function GaugeInfoCard() {
           <div className="flex items-center gap-2 text-2xl font-semibold">
             <Icons.honey className="h-6 w-6" />
             <FormattedNumber
-              value={bgtInfo?.bgtPerBlock ?? 0}
+              value={data?.bgtInfo?.bgtPerBlock ?? 0}
               compact={false}
               showIsSmallerThanMin
             />
