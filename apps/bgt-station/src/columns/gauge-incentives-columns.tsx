@@ -1,12 +1,11 @@
 import React from "react";
-import { ActiveIncentive, Token } from "@bera/berajs";
+import { ActiveIncentive, useTokenHoneyPrice } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
   TokenIcon,
 } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
 export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
@@ -27,6 +26,20 @@ export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
   },
   {
     header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Incentive Rate Per BGT" />
+    ),
+    cell: ({ row }) => (
+      <FormattedNumber
+        value={row.original.incentiveRate}
+        compact={false}
+        symbol={row.original.token.symbol}
+      />
+    ),
+    accessorKey: "incentiveRate",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Amount Left" />
     ),
     cell: ({ row }) => (
@@ -37,6 +50,25 @@ export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
       />
     ),
     accessorKey: "incentiveAmount",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="USD Amount Left" />
+    ),
+    cell: ({ row }) => {
+      const { data: price } = useTokenHoneyPrice({
+        tokenAddress: row.original.token.address,
+      });
+      return (
+        <FormattedNumber
+          value={Number(price ?? "0") * row.original.amountLeft}
+          compact={false}
+          symbol={"USD"}
+        />
+      );
+    },
+    accessorKey: "incentiveAmountUSD",
     enableSorting: false,
   },
   {

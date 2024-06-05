@@ -14,9 +14,10 @@ export interface ValidatorInfo {
 export type Validator = {
   id: Address;
   coinbase: Address;
-  commission: string;
+  commission: number;
   amountStaked: string;
   amountQueued: string;
+  apy: number;
   cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
   allTimeStats: {
@@ -25,6 +26,7 @@ export type Validator = {
     totalHoneyValueTokenRewards: string;
   };
   active: boolean;
+  activeIncentives: ActiveIncentive[];
   metadata: ValidatorInfo;
 };
 
@@ -37,19 +39,20 @@ export type UserValidator = Validator & {
 };
 
 export type CuttingBoardWeight = {
-  percentage: number;
   amount: number;
-  receiver: Vault;
+  owner: Address;
+  percentageNumerator: string;
+  receiver: Address;
+  receiverMetadata: Vault;
 };
 
 export type Vault = {
-  address: Address;
-  market: string | undefined;
-  stakingToken: Address;
+  logoURI: string;
   name: string;
-  imageUri: string;
-  website: string;
-  activeIncentives: ActiveIncentive[];
+  product: string;
+  receiptTokenAddress: Address;
+  url: string;
+  vaultAddress: Address;
 };
 
 export type ActiveIncentive = {

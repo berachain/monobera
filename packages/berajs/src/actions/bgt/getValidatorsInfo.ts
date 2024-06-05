@@ -7,17 +7,29 @@ export interface GetValidatorsInfo {
   validatorInfoDictionary: { [key: Address]: Validator };
 }
 
+export interface ValidatorFilter {
+  vaultId?: string;
+}
+
 export const getValidatorsInfo = async (
   config: BeraConfig,
+  filter?: ValidatorFilter,
 ): Promise<GetValidatorsInfo> => {
   // if (!config.endpoints?.bgtEndpoint) {
   //   throw new Error("Missing backend endpoint in config");
   // }
   try {
-    // const validatorList = await fetch(`${config.endpoints?.bgtEndpoint}/validators`);
-    const validatorList = await fetch(
-      "http://localhost:3001/berachain/v1alpha1/beacon/validators",
-    );
+    // const url = `${config.endpoints?.bgtEndpoint}/validators`
+    let url = "http://localhost:3001/berachain/v1alpha1/beacon/validators";
+    if (filter) {
+      let isFirstParam = true;
+      Object.keys(filter).forEach((key) => {
+        const filterKey = key as keyof typeof filter;
+        url += `${isFirstParam ? "?" : "&"}${filterKey}=${filter[filterKey]}`;
+        isFirstParam = false;
+      });
+    }
+    const validatorList = await fetch(url);
     const temp = await validatorList.json();
     return {
       validatorInfoList: temp.validators ?? [],
