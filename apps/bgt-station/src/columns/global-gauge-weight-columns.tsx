@@ -36,7 +36,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         symbol="USD"
         compact={false}
         compactThreshold={999_999_999}
-        value={690_490.6994}
+        value={row.original.activeIncentivesInHoney}
       />
     ),
     accessorKey: "incentive-value",
@@ -56,7 +56,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         symbol="BGT"
         compact={false}
         compactThreshold={999_999_999}
-        value={69.42}
+        value={row.original.amountStaked}
       />
     ),
     accessorKey: "bgt-staked",
@@ -71,13 +71,14 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       />
     ),
     cell: ({ row }) => (
-      <FormattedNumber
-        className="w-full justify-center"
-        symbol="BGT"
-        compact={false}
-        compactThreshold={999_999_999}
-        value={42069.42}
-      />
+      <>missing</>
+      // <FormattedNumber
+      //   className="w-full justify-center"
+      //   symbol="BGT"
+      //   compact={false}
+      //   compactThreshold={999_999_999}
+      //   value={42069.42}
+      // />
     ),
     accessorKey: "bgt-inflation",
     enableSorting: false,
@@ -90,7 +91,9 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => <div className="flex w-full justify-center">ha</div>,
+    cell: ({ row }) => (
+      <div className="flex w-full justify-center">need help</div>
+    ),
     accessorKey: "validators-emissions",
     enableSorting: false,
   },

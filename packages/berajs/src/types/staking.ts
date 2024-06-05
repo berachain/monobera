@@ -52,9 +52,11 @@ export type Vault = {
 };
 
 export type ActiveIncentive = {
-  token: Token;
-  incentiveRate: string;
   amountLeft: string;
+  id: Address;
+  incentiveRate: string;
+  token: Token;
+  vaultId: Address;
 };
 
 export type Market = {
@@ -62,4 +64,26 @@ export type Market = {
   logoURI: string;
   url: string;
   description: string;
+};
+
+export type GaugeInfo = {
+  id: Address;
+  gaugeAddress: Address;
+  name: string;
+  logoURI: string;
+  product: string;
+  url: string;
+};
+
+export type Gauge = {
+  activeIncentives: ActiveIncentive[];
+  activeIncentivesInHoney: number;
+  activeValidatorAddresses: Address[];
+  activeValidatorsCount: number;
+  amountStaked: string;
+  id: Address;
+  metadata: GaugeInfo;
+  stakingTokenAddress: Address;
+  vaultAddress: Address;
+  vaultWhitelist: any;
 };
