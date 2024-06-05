@@ -1,8 +1,12 @@
 import React from "react";
-import { type Gauge } from "@bera/berajs";
-import { DataTableColumnHeader, FormattedNumber } from "@bera/shared-ui";
+import { type Gauge, type ValidatorInfo } from "@bera/berajs";
+import {
+  DataTableColumnHeader,
+  FormattedNumber,
+  Tooltip,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { BribesPopover } from "~/components/bribes-tooltip";
@@ -92,7 +96,29 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-full justify-center">need help</div>
+      <div className="flex w-fit gap-1">
+        {row.original.activeValidators.map(
+          (validator: ValidatorInfo, index: number) => (
+            <Tooltip
+              toolTipTrigger={
+                <ValidatorIcon
+                  imgOverride={validator.logoURI}
+                  address={validator.id}
+                  key={index}
+                  className="cursor-pointer"
+                  onClick={(e: React.MouseEvent<HTMLImageElement>) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open(`/validators/${validator.id}`, "_self");
+                  }}
+                />
+              }
+            >
+              <span className="text-xs">{validator.name}</span>
+            </Tooltip>
+          ),
+        )}
+      </div>
     ),
     accessorKey: "validators-emissions",
     enableSorting: false,
@@ -107,7 +133,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex w-full items-center justify-center gap-1">
-        <BribesPopover bribes={row.original.vaultWhitelist.whitelistedTokens} />
+        <BribesPopover incentives={row.original.activeIncentives} />
         <Button
           size="sm"
           variant="ghost"
@@ -124,7 +150,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         </Button>
       </div>
     ),
-    accessorKey: "validators-emissions",
+    accessorKey: "incentives",
     enableSorting: false,
   },
 ];

@@ -53,9 +53,9 @@ export type Vault = {
 };
 
 export type ActiveIncentive = {
-  amountLeft: string;
+  amountLeft: number;
   id: Address;
-  incentiveRate: string;
+  incentiveRate: number;
   token: Token;
   vaultId: Address;
 };
@@ -79,7 +79,7 @@ export type GaugeInfo = {
 export type Gauge = {
   activeIncentives: ActiveIncentive[];
   activeIncentivesInHoney: number;
-  activeValidatorAddresses: Address[];
+  activeValidators: ValidatorInfo[];
   activeValidatorsCount: number;
   amountStaked: string;
   id: Address;

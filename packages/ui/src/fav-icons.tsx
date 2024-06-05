@@ -14,30 +14,30 @@ export const FavIcons = {
       <path
         d="M12 8C12 6.93913 11.5786 5.92172 10.8284 5.17157C10.0783 4.42143 9.06087 4 8 4C6.88176 4.00421 5.80843 4.44054 5.00444 5.21778L4 6.22222"
         stroke="#FEE1C7"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M4 4V6.22222H6.22222"
         stroke="#FEE1C7"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M4 8C4 9.06087 4.42143 10.0783 5.17157 10.8284C5.92172 11.5786 6.93913 12 8 12C9.11824 11.9958 10.1916 11.5595 10.9956 10.7822L12 9.77778"
         stroke="#FEE1C7"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M9.77777 9.77778H12V12"
         stroke="#FEE1C7"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   ),
@@ -91,16 +91,16 @@ export const FavIcons = {
         <path
           d="M12.6666 4.66667L6.14998 11.1833L2.31665 7.35L-2.66669 12.3333"
           stroke="#FFCECE"
-          stroke-width="1.725"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.725"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
         <path
           d="M8.06671 4.66667H12.6667V9.26667"
           stroke="#FFCECE"
-          stroke-width="1.725"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.725"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </g>
       <defs>

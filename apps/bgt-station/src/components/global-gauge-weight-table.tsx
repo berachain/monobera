@@ -18,7 +18,7 @@ export default function GlobalGaugeWeightTable({
   //   (state: TableState) => setPage(state?.pagination?.pageIndex),
   //   [setPage],
   // );
-  console.log("gaugeList", gaugeList);
+
   return (
     <div className="w-full ">
       <DataTable
@@ -35,12 +35,12 @@ export default function GlobalGaugeWeightTable({
         //   manualSorting: true,
         //   manualPagination: true,
         // }}
-        onRowClick={(row: any) =>
-          window.open(
-            `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
-            "_self",
-          )
-        }
+        // onRowClick={(row: any) =>
+        //   window.open(
+        //     `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
+        //     "_self",
+        //   )
+        // }
       />
     </div>
   );

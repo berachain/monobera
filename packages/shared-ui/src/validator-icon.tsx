@@ -32,24 +32,29 @@ interface IconProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof IconVariants> {
   address?: Address;
+  imgOverride?: string;
 }
 
 export const ValidatorIcon = ({
   address = "0x",
+  imgOverride,
   className,
   size,
   ...props
 }: IconProps) => {
   const { validatorInfoDictionary = {} } = usePollValidatorInfo();
   const img = useMemo(
-    () =>
-      //@ts-ignore
-      validatorInfoDictionary[address]?.metadata.logoURI,
+    // @ts-ignore
+    () => validatorInfoDictionary[address]?.metadata.logoURI,
     [address],
   );
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
-      <AvatarImage src={img} className="rounded-full" alt={address} />
+      <AvatarImage
+        src={imgOverride ? imgOverride : img}
+        className="rounded-full"
+        alt={address}
+      />
       <AvatarFallback>
         <Icons.validator className="p-[6px]" />
       </AvatarFallback>
