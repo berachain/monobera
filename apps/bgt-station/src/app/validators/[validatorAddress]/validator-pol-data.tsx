@@ -39,7 +39,7 @@ export const AggregatedBribeDialog = ({
   const vaultBribeValues: VaultBribeValue[] = !aggregatedBribe
     ? []
     : aggregatedBribe?.sourceVaults.flatMap((vault) => {
-        return vault.activeIncentives.map((incentive) => {
+        return vault.activeIncentives.map((incentive: any) => {
           if (incentive.token.address === aggregatedBribe.token.address) {
             return {
               vault,
@@ -188,9 +188,9 @@ export const ValidatorPolData = ({
   validator: Validator;
   isLoading: boolean;
 }) => {
-  //@ts-ignore
-  const aggregatedBribes = useAggregatedBribes(validator.id as Address);
-
+  const aggregatedBribes = useAggregatedBribes(
+    validator?.id ?? ("0x" as Address),
+  );
   const [selectedBribe, setSelectedBribe] = useState<
     AggregatedBribe | undefined
   >(undefined);
@@ -242,7 +242,7 @@ export const ValidatorPolData = ({
         </Tabs>
       </div>
       <GlobalGaugeWeightChart
-        gaugeWeights={validator.cuttingboard ?? []}
+        gaugeWeights={validator.cuttingBoard.weights}
         totalAmountStaked={validator.amountStaked}
         globalAmountStaked={"10000000"}
         isLoading={isLoading}

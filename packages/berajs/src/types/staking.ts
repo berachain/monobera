@@ -1,4 +1,5 @@
 import { Address } from "viem";
+
 import { Token } from "./dex";
 
 export interface ValidatorInfo {
@@ -16,7 +17,7 @@ export type Validator = {
   commission: string;
   amountStaked: string;
   amountQueued: string;
-  cuttingboard: CuttingBoardWeight[] | null;
+  cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
   allTimeStats: {
     totalBgtDirected: string;
@@ -52,9 +53,11 @@ export type Vault = {
 };
 
 export type ActiveIncentive = {
+  amountLeft: number;
+  id: Address;
+  incentiveRate: number;
   token: Token;
-  incentiveRate: string;
-  amountLeft: string;
+  vaultId: Address;
 };
 
 export type Market = {
@@ -62,4 +65,28 @@ export type Market = {
   logoURI: string;
   url: string;
   description: string;
+};
+
+export type GaugeInfo = {
+  id: Address;
+  gaugeAddress: Address;
+  name: string;
+  logoURI: string;
+  product: string;
+  url: string;
+};
+
+export type Gauge = {
+  activeIncentives: ActiveIncentive[];
+  activeIncentivesInHoney: number;
+  activeValidators: ValidatorInfo[];
+  activeValidatorsCount: number;
+  amountStaked: string;
+  id: Address;
+  metadata: GaugeInfo;
+  stakingTokenAddress: Address;
+  vaultAddress: Address;
+  vaultWhitelist: {
+    whitelistedTokens: { isWhiteListed: boolean; token: Token }[];
+  };
 };
