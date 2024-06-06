@@ -27,8 +27,6 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
     actionType: TransactionActionType.CLAIMING_REWARDS,
     onSuccess: () => refresh(),
   });
-
-  console.log("data", data);
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       <GaugueLPChange gauge={gauge} />
