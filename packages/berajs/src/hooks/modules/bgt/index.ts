@@ -7,3 +7,4 @@ export { useUserValidators } from "./useUserValidators";
 export { usePollVaultsInfo } from "./usePollVaultsInfo";
 export { usePollGlobalData } from "./usePollGlobalData";
 export { useUserActiveValidators } from "./useUserActiveValidators";
+export { useBgtUnstakedBalance } from "./useBgtUnstakedBalance";

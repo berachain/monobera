@@ -6,6 +6,7 @@ import {
   BGT_ABI,
   TransactionActionType,
   useBeraJs,
+  useBgtUnstakedBalance,
   usePollWalletBalances,
 } from "@bera/berajs";
 import { bgtTokenAddress, cloudinaryUrl } from "@bera/config";
@@ -20,9 +21,8 @@ import { parseUnits } from "viem";
 
 export default function Redeem() {
   const { isReady, account } = useBeraJs();
-  const { useSelectedWalletBalance } = usePollWalletBalances();
-  const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
-  const bgtFormattedBalance = bgtBalance?.formattedBalance ?? "0";
+  const { data: bgtBalance } = useBgtUnstakedBalance();
+  const bgtFormattedBalance = bgtBalance ? bgtBalance.toString() : "0";
   const [redeemAmount, setRedeemAmount] = useState<string>("");
   const { write, ModalPortal } = useTxn({
     message: `Redeem ${redeemAmount} BERA`,
@@ -99,6 +99,7 @@ export default function Redeem() {
             className="w-full"
             disabled={
               BigNumber(redeemAmount).lte(0) ||
+              redeemAmount === "" ||
               BigNumber(redeemAmount).gt(bgtFormattedBalance) ||
               !isReady
             }
