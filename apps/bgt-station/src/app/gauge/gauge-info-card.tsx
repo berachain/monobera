@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Validator,
+  usePollGauges,
   usePollGlobalData,
   usePollValidatorInfo,
 } from "@bera/berajs";
@@ -65,7 +66,11 @@ export default function GaugeInfoCard() {
                 className="flex h-7 w-fit flex-nowrap items-center gap-2 rounded-full border border-border bg-background px-2"
                 key={`${index}-${validator.id}`}
               >
-                <ValidatorIcon address={validator.id} size={"md"} />
+                <ValidatorIcon
+                  address={validator.id}
+                  size={"md"}
+                  imgOverride={validator.metadata.logoURI}
+                />
                 <span className="text-nowrap text-xs font-medium">
                   {validator.metadata.name}
                 </span>
@@ -176,14 +181,18 @@ export default function GaugeInfoCard() {
           <div className="w-fit text-[10px] text-warning-foreground">
             Est. Avg. Return per Proposed block
           </div>
-          <div className="flex items-center gap-2 text-2xl font-semibold">
-            <Icons.honey className="h-6 w-6" />
-            <FormattedNumber
-              value={data?.bgtInfo?.bgtPerBlock ?? 0}
-              compact={false}
-              showIsSmallerThanMin
-            />
-          </div>
+          {isGlobalDataLoading ? (
+            <Skeleton className="h-8 w-full" />
+          ) : (
+            <div className="flex items-center gap-2 text-2xl font-semibold">
+              <Icons.honey className="h-6 w-6" />
+              <FormattedNumber
+                value={data?.bgtInfo?.bgtPerBlock ?? 0}
+                compact={false}
+                showIsSmallerThanMin
+              />
+            </div>
+          )}
         </div>
       </div>
     </Card>

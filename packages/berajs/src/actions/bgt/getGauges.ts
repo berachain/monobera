@@ -3,12 +3,18 @@ import { Address } from "viem";
 import { BeraConfig, Gauge } from "~/types";
 
 export interface GetGaugeData {
+  gaugeCounts: number;
   gaugeList: Gauge[];
   gaugeDictionary: { [key: Address]: Gauge };
 }
 
 export interface GaugeFilter {
   validatorId?: string;
+  filterByProduct?: string;
+  sortBy?: "activeIncentivesInHoney" | "amountstaked";
+  sortOrder?: "asc" | "desc";
+  page?: number;
+  pageSize?: number;
 }
 
 export const getGauges = async (
@@ -32,6 +38,7 @@ export const getGauges = async (
     const res = await fetch(url);
     const gauges = await res.json();
     return {
+      gaugeCounts: gauges.total,
       gaugeList: gauges.vaults,
       gaugeDictionary: gauges.vaults.reduce(
         (acc: { [key: Address]: Gauge }, item: Gauge) => {
@@ -44,6 +51,7 @@ export const getGauges = async (
   } catch (error) {
     console.error(error);
     return {
+      gaugeCounts: 0,
       gaugeList: [],
       gaugeDictionary: {},
     };
