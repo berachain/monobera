@@ -31,6 +31,7 @@ export const getValidatorsInfo = async (
     }
     const validatorList = await fetch(url);
     const temp = await validatorList.json();
+    console.log(temp);
     return {
       validatorInfoList: temp.validators ?? [],
       validatorInfoDictionary: (temp.validators ?? []).reduce(

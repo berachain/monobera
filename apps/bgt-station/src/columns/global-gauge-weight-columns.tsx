@@ -91,32 +91,45 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Validtors Pointing Emissions"
+        title="Validators"
         className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
-      <div className="flex w-fit gap-1">
-        {row.original.activeValidators.map(
-          (validator: ValidatorInfo, index: number) => (
-            <Tooltip
-              toolTipTrigger={
+      <div className="ml-[5px] flex flex-row gap-1 items-center">
+        {row.original.activeValidators.length > 3
+          ? row.original.activeValidators
+              .slice(0, 3)
+              .map((validator: ValidatorInfo, index: number) => (
                 <ValidatorIcon
                   imgOverride={validator.logoURI}
                   address={validator.id}
                   key={index}
-                  className="cursor-pointer"
+                  className="cursor-pointer ml-[-5px]"
                   onClick={(e: React.MouseEvent<HTMLImageElement>) => {
                     e.stopPropagation();
                     e.preventDefault();
                     window.open(`/validators/${validator.id}`, "_self");
                   }}
                 />
-              }
-            >
-              <span className="text-xs">{validator.name}</span>
-            </Tooltip>
-          ),
+              ))
+          : row.original.activeValidators.map(
+              (validator: ValidatorInfo, index: number) => (
+                <ValidatorIcon
+                  imgOverride={validator.logoURI}
+                  address={validator.id}
+                  key={index}
+                  className="cursor-pointer ml-[-5px]"
+                  onClick={(e: React.MouseEvent<HTMLImageElement>) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open(`/validators/${validator.id}`, "_self");
+                  }}
+                />
+              ),
+            )}
+        {row.original.activeValidators.length > 3 && (
+          <span>+{row.original.activeValidators.length - 3}</span>
         )}
       </div>
     ),

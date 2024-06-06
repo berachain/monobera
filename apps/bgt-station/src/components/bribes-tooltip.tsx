@@ -37,10 +37,10 @@ export const BribeTooltipRow = ({
       <div className="text-md flex flex-row gap-1">
         <FormattedNumber value={totalValues.totalIncentives} compact />
         {totalValues.amountPerProposal !== 0 && (
-          <FormattedNumber
-            value={totalValues.amountPerProposal}
-            className="text-muted-foreground"
-          />
+          <div className="text-muted-foreground">
+            $
+            <FormattedNumber value={totalValues.amountPerProposal} />
+          </div>
         )}
       </div>
     </div>
@@ -131,13 +131,23 @@ export const BribesTooltip = ({
       <div className="flex flex-row justify-between">
         <div className="text-md text-muted-foreground">Total</div>
         <div className="text-md">
-          <FormattedNumber value={totalBribesValue.totalIncentives} compact />
+          $
+          <FormattedNumber
+            value={totalBribesValue.totalIncentives}
+            compact
+            showIsSmallerThanMin
+          />
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="text-md text-muted-foreground">Amount Per Proposal</div>
         <div className="text-md">
-          <FormattedNumber value={totalBribesValue.amountPerProposal} compact />
+          $
+          <FormattedNumber
+            value={totalBribesValue.amountPerProposal}
+            compact
+            showIsSmallerThanMin
+          />
         </div>
       </div>
     </div>
