@@ -71,7 +71,13 @@ export default function GaugeInfoCard() {
                 </span>
                 <span className="text-nowrap text-[10px] text-muted-foreground">
                   BGT/Year:{" "}
-                  <FormattedNumber value={getValidatorEstimatedBgtPerYear(validator, validatorCounts)} showIsSmallerThanMin />
+                  <FormattedNumber
+                    value={getValidatorEstimatedBgtPerYear(
+                      validator,
+                      validatorCounts,
+                    )}
+                    showIsSmallerThanMin
+                  />
                 </span>
               </div>
             ))
