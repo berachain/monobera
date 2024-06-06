@@ -101,7 +101,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
                 validating={isValidatorValidating}
                 data={validatorInfoList}
                 className="min-w-[800px] shadow"
-                enablePagination
+                // enablePagination
                 onRowClick={(row: any) => {
                   window.open(`/validators/${row.original.id}`, "_blank");
                 }}
