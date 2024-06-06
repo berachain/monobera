@@ -1,5 +1,9 @@
 import dynamic from "next/dynamic";
-import { UserValidator, useUserActiveValidators, useUserValidators } from "@bera/berajs";
+import {
+  UserValidator,
+  useUserActiveValidators,
+  useUserValidators,
+} from "@bera/berajs";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { user_general_validator_columns } from "~/columns/general-validator-columns";

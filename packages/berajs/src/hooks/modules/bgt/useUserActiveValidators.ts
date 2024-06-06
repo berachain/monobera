@@ -21,7 +21,7 @@ export const useUserActiveValidators = (
   const swrResponse = useSWR<UserValidator[] | undefined>(
     QUERY_KEY,
     async () => {
-      if (!account) return undefined
+      if (!account) return undefined;
 
       const bgtClient = new ApolloClient({
         uri: bgtSubgraphUrl,
@@ -33,10 +33,11 @@ export const useUserActiveValidators = (
         variables: { address: account.toLowerCase() },
       });
 
-      let url = `http://localhost:3001/berachain/v1alpha1/beacon/user/${account}/validators`;
+      const url = `http://localhost:3001/berachain/v1alpha1/beacon/user/${account}/validators`;
       const validatorList = await fetch(url);
       const temp = await validatorList.json();
-      const validatorInfoList = temp.userValidators.map((t: any) => t.validator) ?? [];
+      const validatorInfoList =
+        temp.userValidators.map((t: any) => t.validator) ?? [];
 
       const userDepositedData: {
         amountQueued: string;
