@@ -65,11 +65,14 @@ const Options = {
           if (label) {
             label += ": ";
           }
-          if (context.parsed.y !== null) {
+          if (context.parsed.y !== null && context.parsed.y >= 0.01) {
             label += new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "USD",
             }).format(context.parsed.y);
+          }
+          if (context.parsed.y !== null && context.parsed.y < 0.01) {
+            label = "<$0.01";
           }
           return label;
         },
@@ -240,17 +243,17 @@ export const PoolChart = ({
         date: poolData.day,
         volumeUsd: `${
           formatHoney(poolData?.volume24HInHoney) < 0.01
-            ? "<0.01"
+            ? "0.009"
             : formatHoney(poolData?.volume24HInHoney)
         }`,
         tvlUsd: `${
           formatHoney(poolData?.tvlInHoney) < 0.01
-            ? "<0.01"
+            ? "0.009"
             : formatHoney(poolData?.tvlInHoney)
         }`,
         feesUsd: `${
           formatHoney(poolData?.fees24HInHoney) < 0.01
-            ? "<0.01"
+            ? "0.009"
             : formatHoney(poolData?.fees24HInHoney)
         }`,
       };
@@ -350,6 +353,7 @@ export const PoolChart = ({
     }
   }, [historicalData, timeFrame, chart]);
 
+  console.log(data);
   return (
     <Card className="bg-muted p-0">
       <Tabs
