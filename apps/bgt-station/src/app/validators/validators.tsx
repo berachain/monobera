@@ -10,8 +10,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import ValidatorsTable from "./components/validators-table";
 
 export default function Validators() {
-  const { validatorCounts, isLoading, validatorInfoList } =
-    usePollValidatorInfo();
+  const { validatorCounts, isLoading } = usePollValidatorInfo();
   const { data } = usePollGlobalData();
   const generalInfo = [
     {

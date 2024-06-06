@@ -40,8 +40,8 @@ export const MarketIcon = ({
   className,
   ...props
 }: IconProps) => {
-  const { data } = usePollMarkets();
-  const imageUri = data?.find((m) => m.name === market)?.logoURI;
+  const { marketDictionary } = usePollMarkets();
+  const imageUri = marketDictionary?.[market]?.logoURI;
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={imageUri} />
