@@ -13,6 +13,7 @@ import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
 import MarketSelector from "./market-selector";
+import UserGaugeWeightTable from "~/components/user-gauge-weight-table";
 
 export default function Gauge() {
   const { isReady } = useBeraJs();
@@ -63,7 +64,9 @@ export default function Gauge() {
               }}
               className="w-full md:w-[300px]"
             /> */}
-            <MarketSelector {...{ markets, setMarkets }} />
+            <TabsContent value="all-gauges">
+              <MarketSelector {...{ markets, setMarkets }} />
+            </TabsContent>
           </div>
         </div>
         {(markets.length !== 0 || keywordList.length !== 0) && (
@@ -105,7 +108,7 @@ export default function Gauge() {
           <GlobalGaugeWeightTable keywords={keywords} />
         </TabsContent>
         <TabsContent value="my-gauges">
-          <GlobalGaugeWeightTable keywords={keywords} myGauge />
+          <UserGaugeWeightTable myGauge />
         </TabsContent>
       </Tabs>
     </div>
