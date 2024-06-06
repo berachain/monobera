@@ -7,6 +7,8 @@ import {
 } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
+import { ActiveIncentiveWithVault } from "~/app/validators/[validatorAddress]/validator";
+import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
 export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
   {
@@ -26,49 +28,62 @@ export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Incentive Rate Per BGT" />
-    ),
-    cell: ({ row }) => (
-      <FormattedNumber
-        value={row.original.incentiveRate}
-        compact={false}
-        symbol={row.original.token.symbol}
+      <DataTableColumnHeader
+        column={column}
+        title="Incentive Rate"
+        tooltip={"The amount of token emitted per BGT sent to the vault"}
       />
-    ),
-    accessorKey: "incentiveRate",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount Left" />
-    ),
-    cell: ({ row }) => (
-      <FormattedNumber
-        value={row.original.amountLeft}
-        compact={false}
-        symbol={row.original.token.symbol}
-      />
-    ),
-    accessorKey: "incentiveAmount",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="USD Amount Left" />
     ),
     cell: ({ row }) => {
       const { data: price } = useTokenHoneyPrice({
         tokenAddress: row.original.token.address,
       });
       return (
-        <FormattedNumber
-          value={Number(price ?? "0") * row.original.amountLeft}
-          compact={false}
-          symbol={"USD"}
-        />
+        <div className="flex flex-col gap-1">
+          <FormattedNumber
+            value={row.original.incentiveRate}
+            symbol={row.original.token.symbol}
+          />
+          <span className="text-xs text-muted-foreground">
+            <FormattedNumber
+              value={row.original.incentiveRate * parseFloat(price ?? "0")}
+              symbol="USD"
+            />
+          </span>
+        </div>
       );
     },
-    accessorKey: "incentiveAmountUSD",
+    accessorKey: "incentiveRate",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Amount Left"
+        tooltip={"the amount of bribes remaining"}
+      />
+    ),
+    cell: ({ row }) => {
+      const { data: price } = useTokenHoneyPrice({
+        tokenAddress: row.original.token.address,
+      });
+      return (
+        <div className="flex flex-col gap-1">
+          <FormattedNumber
+            value={row.original.amountLeft}
+            symbol={row.original.token.symbol}
+          />
+          <span className="text-xs text-muted-foreground">
+            <FormattedNumber
+              value={row.original.amountLeft * parseFloat(price ?? "0")}
+              symbol="USD"
+            />
+          </span>
+        </div>
+      );
+    },
+    accessorKey: "incentiveAmount",
     enableSorting: false,
   },
   {
@@ -81,6 +96,93 @@ export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
       </Button>
     ),
     accessorKey: "hide",
+    enableSorting: false,
+  },
+];
+
+export const validator_gauge_columns: ColumnDef<ActiveIncentiveWithVault>[] = [
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Gauge Vaults" />
+    ),
+    cell: ({ row }) => (
+      <GaugeHeaderWidget
+        address={row.original.cuttingBoard.receiver}
+        className="w-[150px]"
+      />
+    ),
+    accessorKey: "gauge",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Bribe Breakdown" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex flex-row items-center gap-1">
+          <TokenIcon address={row.original.token.address} />
+          <div>{row.original.token.symbol}</div>
+        </div>
+      );
+    },
+    accessorKey: "token",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Incentive Rate"
+        tooltip={"The amount of token emitted per BGT sent to the vault"}
+      />
+    ),
+    cell: ({ row }) => {
+      const { data: price } = useTokenHoneyPrice({
+        tokenAddress: row.original.token.address,
+      });
+      return (
+        <div className="flex flex-col gap-1">
+          <FormattedNumber value={row.original.incentiveRate} compact={false} />
+          <div className="text-xs text-muted-foreground">
+            $
+            <FormattedNumber
+              value={row.original.incentiveRate * parseFloat(price ?? "0")}
+              compact={false}
+            />
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "incentiveRate",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Amount Left"
+        tooltip={"the amount of bribes remaining"}
+      />
+    ),
+    cell: ({ row }) => {
+      const { data: price } = useTokenHoneyPrice({
+        tokenAddress: row.original.token.address,
+      });
+      return (
+        <div className="flex flex-col gap-1">
+          <FormattedNumber value={row.original.amountLeft} compact={false} />
+          <div className="text-xs text-muted-foreground">
+            $
+            <FormattedNumber
+              value={row.original.amountLeft * parseFloat(price ?? "0")}
+              compact={false}
+            />
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "incentiveAmount",
     enableSorting: false,
   },
 ];
