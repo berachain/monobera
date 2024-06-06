@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { usePollGlobalData, usePollValidatorInfo } from "@bera/berajs";
+import {
+  usePollGauges,
+  usePollGlobalData,
+  usePollValidatorInfo,
+} from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -10,9 +14,9 @@ import { Skeleton } from "@bera/ui/skeleton";
 import ValidatorsTable from "./components/validators-table";
 
 export default function Validators() {
-  const { validatorCounts, isLoading, validatorInfoList } =
-    usePollValidatorInfo();
+  const { validatorCounts, isLoading } = usePollValidatorInfo();
   const { data } = usePollGlobalData();
+  const { gaugeCounts } = usePollGauges();
   const generalInfo = [
     {
       amount: validatorCounts,
@@ -48,7 +52,7 @@ export default function Validators() {
       ),
     },
     {
-      amount: "15",
+      amount: gaugeCounts,
       text: "Active gauges",
       img: (
         <div className="absolute bottom-0 right-3">

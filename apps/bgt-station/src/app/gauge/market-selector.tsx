@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import { usePollMarkets, type Market } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import {
@@ -9,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
-import Image from "next/image";
 
 export default function MarketSelector({
   markets,
@@ -18,7 +18,7 @@ export default function MarketSelector({
   markets: string[];
   setMarkets: (markets: string[]) => void;
 }) {
-  const { data = [] } = usePollMarkets();
+  const { marketList = [] } = usePollMarkets();
   const [open, setOpen] = useState(false);
   return (
     <DropdownMenu open={open}>
@@ -42,10 +42,10 @@ export default function MarketSelector({
         />
         <DropdownMenuSeparator className="my-0" />
         <div className="max-h-[200px] overflow-auto p-1">
-          {data.map((market: Market, index: number) => (
+          {marketList.map((market: Market, index: number) => (
             <DropdownMenuCheckboxItem
               key={`selector-${index}-${market.name}`}
-              className="hover:bg-muted hover:text-foreground flex gap-1 items-center"
+              className="flex items-center gap-1 hover:bg-muted hover:text-foreground"
               checked={markets.find((m) => m === market.name) !== undefined}
               onCheckedChange={(checked: boolean) => {
                 if (checked) {
@@ -58,7 +58,7 @@ export default function MarketSelector({
               <Image
                 src={market.logoURI}
                 alt={market.name}
-                className="w-4 h-4"
+                className="h-4 w-4"
                 width={16}
                 height={16}
               />

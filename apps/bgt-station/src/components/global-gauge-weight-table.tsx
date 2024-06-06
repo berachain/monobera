@@ -5,6 +5,8 @@ import { TableState, type ColumnDef } from "@tanstack/react-table";
 
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight-columns";
 
+const GAUGE_PAGE_SIZE = 10;
+
 export default function GlobalGaugeWeightTable({
   myGauge = false,
   keywords = "",
@@ -12,8 +14,13 @@ export default function GlobalGaugeWeightTable({
   myGauge?: boolean;
   keywords?: string;
 }) {
-  const { gaugeList, isLoading, isValidating } = usePollGauges();
   const [page, setPage] = useState(0);
+  const { gaugeCounts, gaugeList, isLoading, isValidating } = usePollGauges({
+    sortBy: "activeIncentivesInHoney",
+    sortOrder: "desc",
+    page: page + 1,
+    pageSize: GAUGE_PAGE_SIZE,
+  });
   const fetchData = useCallback(
     (state: TableState) => setPage(state?.pagination?.pageIndex),
     [setPage],
@@ -29,7 +36,8 @@ export default function GlobalGaugeWeightTable({
         data={myGauge ? [] : gaugeList ?? []}
         className="min-w-[1100px] shadow"
         additionalTableProps={{
-          pageCount: 1,
+          initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
+          pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
           manualFiltering: true,
           manualSorting: true,
           manualPagination: true,
