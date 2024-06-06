@@ -20,14 +20,15 @@ export type Validator = {
   apy: number;
   cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
-  allTimeStats: {
-    totalBgtDirected: string;
-    totalHoneyValueBgtDirected: string;
-    totalHoneyValueTokenRewards: string;
+  allTimeData: {
+    allTimeBgtDirected: number;
+    totalHoneyValueBgtDirected: number;
+    allTimeUniqueTokenCount: number;
   };
   active: boolean;
   activeIncentives: ActiveIncentive[];
   metadata: ValidatorInfo;
+  votingPower: number;
 };
 
 export type UserValidator = Validator & {
