@@ -24,7 +24,8 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
   const { refresh } = useUserValidators();
 
-  const { useSelectedWalletBalance } = usePollWalletBalances();
+  const { useSelectedWalletBalance, refresh: walletBalanceRefresh } =
+    usePollWalletBalances();
   const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
 
   const exceeding = BigNumber(amount ?? "0").gt(
@@ -41,6 +42,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
       refresh();
+      walletBalanceRefresh();
     },
   });
   return (
