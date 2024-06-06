@@ -4,6 +4,7 @@ import {
   BGT_ABI,
   TransactionActionType,
   useBeraJs,
+  useUserActiveValidators,
   useUserValidators,
 } from "@bera/berajs";
 import { bgtTokenAddress, stakingAddress } from "@bera/config";
@@ -24,7 +25,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
   const t = theme === "system" ? systemTheme : theme;
 
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
-  const { data, refresh } = useUserValidators();
+  const { data, refresh } = useUserActiveValidators();
 
   const {
     write: unbondWrite,

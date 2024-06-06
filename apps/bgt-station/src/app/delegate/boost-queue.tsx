@@ -124,7 +124,7 @@ const ConfirmationCard = ({
     parseInt(userValidator.latestBlockTime) + HISTORY_BUFFER * blockTime;
 
   const timeText = (
-    <span className=" text-info-foreground">{timeDifferenceFromNow(time)}</span>
+    <span className=" text-info-foreground">{blocksLeft} blocks remaining</span>
   );
   return (
     <div className="w-full rounded-md border border-border p-4">

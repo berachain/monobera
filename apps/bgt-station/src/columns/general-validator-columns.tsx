@@ -8,6 +8,7 @@ import {
 import {
   DataTableColumnHeader,
   FormattedNumber,
+  Tooltip,
   ValidatorIcon,
   bribeApyTooltipText,
 } from "@bera/shared-ui";
@@ -17,6 +18,7 @@ import { type Address } from "viem";
 import { BribesPopover, ClaimBribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 import { beraTokenAddress } from "@bera/config";
+import { Button } from "@bera/ui/button";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
@@ -109,7 +111,20 @@ const CLAIMABLE_BRIBES_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
-    return <ClaimBribesPopover coinbase={row.original.coinbase} bribes={[]} />;
+    // return <ClaimBribesPopover coinbase={row.original.coinbase} bribes={row.original.activeIncentives} />;
+    return (
+      <div className="flex flex-row items-center gap-1">
+        <BribesPopover incentives={row.original.activeIncentives} />
+        <Tooltip
+          text={"Claiming coming soon"}
+          toolTipTrigger={
+            <Button disabled size="sm">
+              Claim
+            </Button>
+          }
+        />
+      </div>
+    );
   },
   accessorKey: "bribes",
   enableSorting: false,
