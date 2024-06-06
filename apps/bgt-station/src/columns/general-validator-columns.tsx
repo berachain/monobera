@@ -97,7 +97,11 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
 
 const BRIBES_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Incentives" className="w-[160px]" />
+    <DataTableColumnHeader
+      column={column}
+      title="Incentives"
+      className="w-[160px]"
+    />
   ),
   cell: ({ row }) => {
     return <BribesPopover incentives={row.original.activeIncentives} />;
