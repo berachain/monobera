@@ -25,11 +25,11 @@ export const DepositLP = ({
   lpToken: Token;
   gauge: Gauge;
 }) => {
-  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
+  const { useSelectedWalletBalance } = usePollWalletBalances({
     externalTokenList: [lpToken],
   });
   const balance = useSelectedWalletBalance(lpToken.address);
-  const [depositAmount, setDepositAmount] = useState<`${number}`>("0");
+  const [depositAmount, setDepositAmount] = useState("");
   const validAmount =
     BigNumber(depositAmount).gt(0) &&
     BigNumber(depositAmount).lte(balance?.formattedBalance ?? "0");
@@ -50,6 +50,8 @@ export const DepositLP = ({
     spender: gauge.vaultAddress,
     token: lpToken,
   });
+
+  const [exceeding, setExceeding] = useState(false);
   return (
     <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
@@ -68,14 +70,18 @@ export const DepositLP = ({
             setAmount={(amount: string) =>
               setDepositAmount(amount as `${number}`)
             }
+            onExceeding={(exceeding) => setExceeding(exceeding)}
           />
         </div>
       </div>
       {/* <Info /> */}
 
       <ActionButton className="mt-4">
-        {(allowance !== undefined && allowance?.formattedAllowance === "0") ||
-        (allowance?.allowance ?? 0n) < parseUnits(depositAmount, 18) ? (
+        {((allowance !== undefined && allowance?.formattedAllowance === "0") ||
+          (allowance?.allowance ?? 0n) < parseUnits(depositAmount, 18)) &&
+        depositAmount !== "" &&
+        depositAmount !== "0" &&
+        !exceeding ? (
           <ApproveButton
             token={lpToken}
             spender={gauge.vaultAddress}
@@ -84,7 +90,7 @@ export const DepositLP = ({
         ) : (
           <Button
             className="w-full"
-            disabled={!validAmount}
+            disabled={!validAmount || exceeding}
             onClick={() =>
               write({
                 address: gauge.vaultAddress,

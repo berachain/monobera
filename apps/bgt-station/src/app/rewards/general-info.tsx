@@ -1,6 +1,7 @@
 import {
   ActionButton,
   FormattedNumber,
+  GaugeIcon,
   TokenIconList,
   Tooltip,
   useTxn,
@@ -129,15 +130,22 @@ export const GeneralInfo = () => {
               Gauges Earning you BGT:
             </div>
             {isDataReady &&
-              gauges.map((gauge, index) => (
+              userVaultInfo?.vaults.map((gauge, index) => (
                 <div
                   className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
                   key={`gauge-${index}-${gauge}`}
                 >
-                  <Icons.honey className="h-4 w-4" />
-                  <span className="text-xs">{gauge.title} </span>
+                  <GaugeIcon address={gauge.vaultAddress} className="h-4 w-4" />
+
+                  <span className="text-xs">{gauge.name} </span>
                   <span className="text-[10px] text-muted-foreground">
-                    BGT Earning: {gauge.bgt}
+                    BGT Earning:
+                    <FormattedNumber
+                      value={gauge.unclaimedBgt}
+                      showIsSmallerThanMin
+                      compact
+                      symbol="BGT"
+                    />
                   </span>
                 </div>
               ))}
