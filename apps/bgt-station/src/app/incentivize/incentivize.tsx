@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { notFound } from "next/navigation";
 import {
   BERA_VAULT_REWARDS_ABI,
@@ -47,23 +47,21 @@ export const Incentivize = ({
     address: selectedToken,
   });
 
-  useEffect(() => {
-    if (!isTokenLoading && tokenT) setToken(tokenT);
-  }, [tokenT, isTokenLoading]);
+  useMemo(() => {
+    if (tokenT) setToken(tokenT);
+  }, [tokenT]);
 
   const [totalAmount, setTotalAmount] = useState("0");
   const [incentiveRate, setIncentiveRate] = useState("0");
 
-  const whiteListedTokens = gaugeInfo
-    ? gaugeInfo.vaultWhitelist.whitelistedTokens.map((t) => t.token)
-    : [];
+  const whiteListedTokens = useMemo(() => {
+    return gaugeInfo
+      ? gaugeInfo.vaultWhitelist.whitelistedTokens.map((t) => t.token)
+      : [];
+  }, [gaugeInfo]);
 
   const amountOfProposals = useMemo(() => {
     return Number(totalAmount) / Number(incentiveRate);
-  }, [totalAmount, incentiveRate]);
-
-  const isInvalidInput = useMemo(() => {
-    return parseFloat(incentiveRate) > parseFloat(totalAmount);
   }, [totalAmount, incentiveRate]);
 
   const { data: allowance } = usePollAllowance({
@@ -84,7 +82,19 @@ export const Incentivize = ({
     },
   });
 
+  const [exceeding, setExceeding] = useState(false);
   const isLoading = isGaugeLoading || isTokenLoading || isIncentiveTxnLoading;
+
+  const isInvalidInput = useMemo(() => {
+    return (
+      incentiveRate !== "" &&
+      incentiveRate !== "0" &&
+      totalAmount !== "" &&
+      totalAmount !== "0" &&
+      parseFloat(incentiveRate) > parseFloat(totalAmount)
+    );
+  }, [totalAmount, incentiveRate]);
+
   return (
     <div className="mx-auto flex w-full max-w-[480px] flex-col gap-8 rounded-md border border-border p-4 shadow">
       {ModalPortal}
@@ -157,9 +167,10 @@ export const Incentivize = ({
               disabled={isLoading}
               selected={token}
               amount={totalAmount}
-              customTokenList={whiteListedTokens}
+              customTokenList={[...whiteListedTokens]}
               setAmount={(amount) => setTotalAmount(amount as `${number}`)}
               onTokenSelection={(token: Token | undefined) => setToken(token)}
+              onExceeding={(exceeding) => setExceeding(exceeding)}
             />
           </div>
         )}
@@ -221,23 +232,14 @@ export const Incentivize = ({
             </div>
           </div>
         </div>
-        {/* <div className="flex justify-between text-muted-foreground">
-          <div className="flex flex-col gap-1 py-1">
-            <div className="text-sm font-medium leading-5">Estimated Duration</div>
-          </div>
-          <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-1 text-lg font-semibold leading-7">
-              16.65{" "}
-            </div>
-          </div>
-        </div> */}
       </div>
 
       <ActionButton>
         {((allowance !== undefined && allowance?.formattedAllowance === "0") ||
           (allowance?.allowance ?? 0n) < parseUnits(totalAmount, 18)) &&
         totalAmount !== "" &&
-        totalAmount !== "0" ? (
+        totalAmount !== "0" &&
+        !exceeding ? (
           <ApproveButton
             token={token}
             spender={gaugeInfo.vaultAddress}
@@ -246,7 +248,15 @@ export const Incentivize = ({
         ) : (
           <Button
             className="w-full"
-            disabled={isInvalidInput || isIncentiveTxnLoading}
+            disabled={
+              isInvalidInput ||
+              isIncentiveTxnLoading ||
+              totalAmount === "0" ||
+              totalAmount === "" ||
+              incentiveRate === "0" ||
+              incentiveRate === "" ||
+              exceeding
+            }
             onClick={() =>
               write({
                 address: gaugeInfo.vaultAddress,
