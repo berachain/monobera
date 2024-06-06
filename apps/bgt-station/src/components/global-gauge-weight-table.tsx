@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { usePollGauges, type Gauge } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
-import { type ColumnDef } from "@tanstack/react-table";
+import { TableState, type ColumnDef } from "@tanstack/react-table";
 
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight-columns";
 
@@ -13,16 +13,15 @@ export default function GlobalGaugeWeightTable({
   keywords?: string;
 }) {
   const { gaugeList, isLoading, isValidating } = usePollGauges();
-  // const [page, setPage] = useState(0);
-  // const fetchData = useCallback(
-  //   (state: TableState) => setPage(state?.pagination?.pageIndex),
-  //   [setPage],
-  // );
-  console.log("gaugeList", gaugeList);
+  const [page, setPage] = useState(0);
+  const fetchData = useCallback(
+    (state: TableState) => setPage(state?.pagination?.pageIndex),
+    [setPage],
+  );
   return (
     <div className="w-full ">
       <DataTable
-        // fetchData={fetchData}
+        fetchData={fetchData}
         enablePagination
         loading={isLoading}
         validating={isValidating}

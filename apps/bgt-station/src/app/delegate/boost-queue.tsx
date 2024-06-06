@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   BGT_ABI,
   IContractWrite,
@@ -14,13 +15,13 @@ import {
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { useMemo } from "react";
+import { Skeleton } from "@bera/ui/skeleton";
 import { parseUnits } from "viem";
 import { useBlock } from "wagmi";
 
 export const HISTORY_BUFFER = 8192;
 export const BoostQueue = () => {
-  const { data, refresh } = useUserValidators();
+  const { data = [], refresh, isLoading } = useUserValidators();
   const result = useBlock();
   const blockNumber = result?.data?.number;
 
@@ -28,10 +29,10 @@ export const BoostQueue = () => {
     return !data
       ? []
       : data
-          .filter((validator) => {
+          .filter((validator: UserValidator) => {
             return parseFloat(validator.userQueued) !== 0;
           })
-          .map((validator) => {
+          .map((validator: UserValidator) => {
             return {
               ...validator,
               canActivate:
@@ -72,22 +73,31 @@ export const BoostQueue = () => {
       {ActivateModalPortal}
       {CancelModalPortal}
       <div className="text-lg font-semibold leading-7">Delegation Queue</div>
-      {queuedList?.map((validator) => (
-        <ConfirmationCard
-          key={validator.id}
-          userValidator={validator}
-          blocksLeft={
-            parseInt(validator.latestBlock) +
-            HISTORY_BUFFER -
-            Number(blockNumber)
-          }
-          isTxnLoading={isActivationLoading || isCancelLoading}
-          activateWrite={activateWrite}
-          cancelWrite={cancelWrite}
-        />
-      ))}
-      {!queuedList?.length && (
-        <div className="text-muted-foreground">No validators in queue</div>
+      {isLoading ? (
+        <div>
+          <Skeleton className="h-28 w-full rounded-md" />
+          <Skeleton className="h-28 w-full rounded-md" />
+        </div>
+      ) : (
+        <>
+          {queuedList?.map((validator: UserValidator) => (
+            <ConfirmationCard
+              key={validator.id}
+              userValidator={validator}
+              blocksLeft={
+                parseInt(validator.latestBlock) +
+                HISTORY_BUFFER -
+                Number(blockNumber)
+              }
+              isTxnLoading={isActivationLoading || isCancelLoading}
+              activateWrite={activateWrite}
+              cancelWrite={cancelWrite}
+            />
+          ))}
+          {!queuedList?.length && (
+            <div className="text-muted-foreground">No validators in queue</div>
+          )}
+        </>
       )}
     </div>
   );
@@ -180,7 +190,7 @@ const ConfirmationCard = ({
             style={{ width: `${width}%` }}
           />
         </div>
-        <div className="flex justify-between text-sm font-medium leading-6 pt-2">
+        <div className="flex justify-between pt-2 text-sm font-medium leading-6">
           {userValidator.canActivate ? (
             <div className="text-success-foreground">
               Ready for confirmation

@@ -1,6 +1,7 @@
+import { useCallback, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePollValidatorInfo, type Validator } from "@bera/berajs";
-import type { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef, TableState } from "@tanstack/react-table";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
 import { TableLoading } from "./table-loading";
@@ -20,29 +21,29 @@ export const AllValidator = ({
   keyword?: any;
   onRowClick?: any;
 }) => {
-  // const [page, setPage] = useState(0);
-  const { validatorInfoList, isLoading, isValidating } = usePollValidatorInfo();
-  // const fetchData = useCallback(
-  //   (state: TableState) => setPage(state?.pagination?.pageIndex),
-  //   [setPage],
-  // );
+  const [page, setPage] = useState(0);
+  const { validatorInfoList, isLoading, isValidating } = usePollValidatorInfo(
+    {},
+  );
+  const fetchData = useCallback(
+    (state: TableState) => setPage(state?.pagination?.pageIndex),
+    [setPage],
+  );
   return (
-    <DataTable
-      //@ts-ignore
+    <DataTable //@ts-ignore
       columns={general_validator_columns as ColumnDef<Validator>[]}
-      //@ts-ignore
       data={validatorInfoList}
       className="min-w-[900px]"
-      // fetchData={fetchData}
-      // enablePagination
+      fetchData={fetchData}
+      enablePagination
       loading={isLoading}
       validating={isValidating}
-      // additionalTableProps={{
-      //   pageCount: 2,
-      //   manualFiltering: true,
-      //   manualSorting: true,
-      //   manualPagination: true,
-      // }}
+      additionalTableProps={{
+        pageCount: 2,
+        manualFiltering: true,
+        manualSorting: true,
+        manualPagination: true,
+      }}
       onRowClick={onRowClick}
     />
   );
