@@ -11,7 +11,7 @@ import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
-import { general_validator_columns } from "~/columns/general-validator-columns";
+import { gauge_validator_columns } from "~/columns/general-validator-columns";
 import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
 
@@ -30,7 +30,6 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
   const gauge = gaugeDictionary?.[gaugeAddress];
   if (!isGaugeLoading && !gauge) notFound(); //gauge not found
 
-  console.log("gauge", gauge);
   return (
     <>
       {gauge ? (
@@ -97,12 +96,15 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
             </TabsContent>
             <TabsContent value="validators">
               <DataTable
-                columns={general_validator_columns}
+                columns={gauge_validator_columns}
                 loading={isValidatorLoading}
                 validating={isValidatorValidating}
                 data={validatorInfoList}
                 className="min-w-[800px] shadow"
                 enablePagination
+                onRowClick={(row: any) => {
+                  window.open(`/validators/${row.original.id}`, "_blank");
+                }}
               />
             </TabsContent>
           </Tabs>
