@@ -7,6 +7,7 @@ import {
   BGT_ABI,
   useUserValidators,
   useUserActiveValidators,
+  useBgtUnstakedBalance,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { ActionButton, FormattedNumber, useTxn } from "@bera/shared-ui";
@@ -26,12 +27,10 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
   const { refresh } = useUserValidators();
   const { refresh: refreshActive } = useUserActiveValidators();
 
-  const { useSelectedWalletBalance, refresh: walletBalanceRefresh } =
-    usePollWalletBalances();
-  const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
+  const { data: bgtBalance } = useBgtUnstakedBalance();
 
   const exceeding = BigNumber(amount ?? "0").gt(
-    bgtBalance?.formattedBalance ?? "0",
+    bgtBalance ? bgtBalance.toString() : "0",
   );
   const disabled = exceeding || !amount || amount === "" || amount === "0";
 
@@ -45,7 +44,6 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     onSuccess: () => {
       refresh();
       refreshActive();
-      walletBalanceRefresh();
     },
   });
   return (
@@ -85,10 +83,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
         {isReady && exceeding && (
           <Alert variant="destructive">
             This amount exceeds your total balance of{" "}
-            <FormattedNumber
-              value={bgtBalance?.formattedBalance ?? "0"}
-              symbol="BGT"
-            />
+            <FormattedNumber value={bgtBalance ?? "0"} symbol="BGT" />
           </Alert>
         )}
 
