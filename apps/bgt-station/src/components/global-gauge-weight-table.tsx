@@ -37,7 +37,7 @@ export default function GlobalGaugeWeightTable({
         className="min-w-[1100px] shadow"
         additionalTableProps={{
           initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
-        pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
+          pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
           manualFiltering: true,
           manualSorting: true,
           manualPagination: true,
