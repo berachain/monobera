@@ -19,6 +19,7 @@ import { BribesPopover, ClaimBribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 import { beraTokenAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
+import { useValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
@@ -176,22 +177,73 @@ const ESTIMATED_BGT_GAUGE: ColumnDef<Validator> = {
     const { data: price } = useTokenHoneyPrice({
       tokenAddress: beraTokenAddress,
     });
+
     return (
       <div className="flex flex-col gap-1">
-        <FormattedNumber value={0} symbol="BGT" />
+        <FormattedNumber
+          value={row.original.rewardRate}
+          compact
+          showIsSmallerThanMin
+          symbol="BGT"
+        />
         <span className="text-xs text-muted-foreground">
-          <FormattedNumber value={price ?? 0} symbol="USD" />
+          <FormattedNumber
+            value={
+              parseFloat(row.original.rewardRate) * parseFloat(price ?? "0")
+            }
+            showIsSmallerThanMin
+            symbol="USD"
+          />
         </span>
       </div>
     );
   },
-  accessorKey: "userQueued",
+  accessorKey: "rewardRate",
+  enableSorting: true,
+};
+
+const ESTIMATED_YEARLY_BGT_GAUGE: ColumnDef<Validator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader
+      column={column}
+      title="Estimated BGT/yr"
+      tooltip={
+        "amount of BGT this validator is directing to this vault each proposal"
+      }
+    />
+  ),
+  cell: ({ row }) => {
+    const { data: price } = useTokenHoneyPrice({
+      tokenAddress: beraTokenAddress,
+    });
+
+    const estimatedYearlyBgt = useValidatorEstimatedBgtPerYear(row.original);
+    return (
+      <div className="flex flex-col gap-1">
+        <FormattedNumber
+          value={estimatedYearlyBgt}
+          compact
+          showIsSmallerThanMin
+          symbol="BGT"
+        />
+        <span className="text-xs text-muted-foreground">
+          <FormattedNumber
+            value={estimatedYearlyBgt * parseFloat(price ?? "0")}
+            showIsSmallerThanMin
+            symbol="USD"
+          />
+        </span>
+      </div>
+    );
+  },
+  accessorKey: "yearlyBgt",
   enableSorting: false,
 };
 
 export const gauge_validator_columns: ColumnDef<Validator>[] = [
   VALIDATOR_COLUMN,
   ESTIMATED_BGT_GAUGE,
+  ESTIMATED_YEARLY_BGT_GAUGE,
 ];
 
 export const general_validator_columns: ColumnDef<Validator>[] = [

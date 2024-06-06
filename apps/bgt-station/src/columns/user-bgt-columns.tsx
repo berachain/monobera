@@ -39,6 +39,30 @@ export const getUserBgtColumns = ({
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
+          title="Amount Deposited"
+          className="items-center text-center"
+        />
+      ),
+      cell: ({ row }) => (
+        <>
+          <FormattedNumber
+            value={row.original.balance}
+            compact
+            showIsSmallerThanMin
+            className="text-md font-medium"
+          />
+          <span className="text-xs text-muted-foreground ml-1">
+            {row.original.name}
+          </span>
+        </>
+      ),
+      accessorKey: "unclaimedBgt",
+      enableSorting: true,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
           title="BGT Rewards"
           className="items-center text-center"
         />
@@ -69,7 +93,8 @@ export const getUserBgtColumns = ({
           <Button
             size="sm"
             className="leading-5"
-            disabled={isLoading || row.original.unclaimedBgt === ""}
+            variant="ghost"
+            disabled={isLoading || row.original.unclaimedBgt === "0"}
             onClick={(e: any) => {
               e.stopPropagation();
               write({

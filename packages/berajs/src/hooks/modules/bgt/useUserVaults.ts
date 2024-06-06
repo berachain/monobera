@@ -25,6 +25,7 @@ interface Call {
 
 export interface UserVault extends Vault {
   unclaimedBgt: string;
+  balance: string;
 }
 export const useUserVaults = (
   options?: DefaultHookOptions,
@@ -56,7 +57,7 @@ export const useUserVaults = (
       const calls: Call[] = vaultList.map((vault: Vault) => ({
         address: vault.vaultAddress,
         abi: BERA_VAULT_REWARDS_ABI,
-        functionName: "rewards",
+        functionName: "earned",
         args: [account],
       }));
 
@@ -65,27 +66,47 @@ export const useUserVaults = (
         multicallAddress: multicallAddress,
       });
 
+      const balanceCalls: Call[] = vaultList.map((vault: Vault) => ({
+        address: vault.vaultAddress,
+        abi: BERA_VAULT_REWARDS_ABI,
+        functionName: "balanceOf",
+        args: [account],
+      }));
+
+      const balanceResult = await publicClient.multicall({
+        contracts: calls,
+        multicallAddress: multicallAddress,
+      });
+
       let total = 0n;
       const userVaults = vaultList.map((vault: Vault, index: number) => {
         const item = result[index];
+        const balanceItem = balanceResult[index];
         total += item.result as bigint;
         if (item.status === "success") {
           return {
             ...vault,
             unclaimedBgt: formatUnits(item.result as bigint, 18),
+            balance: formatUnits(balanceItem.result as bigint, 18),
           };
         }
         return vault;
       });
 
+      const sortedUserVaults = userVaults.sort((a: any, b: any) => {
+        const aUnclaimed = parseFloat(a.unclaimedBgt);
+        const bUnclaimed = parseFloat(b.unclaimedBgt);
+        return aUnclaimed - bUnclaimed;
+      });
+
       return {
         totalBgtRewards: formatUnits(total, 18),
-        vaults: userVaults as UserVault[],
+        vaults: sortedUserVaults as UserVault[],
       };
     },
     {
       ...options,
-      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW * 2,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.NORMAL,
       keepPreviousData: true,
     },
   );
