@@ -51,13 +51,6 @@ const allTargetProjects = [
   "bex-prod",
   "honey-prod",
   "bend-prod",
-  // v2 projects
-  "v2honey",
-  "v2dex",
-  "v2station",
-  "v2perp",
-  "v2lend",
-  "v2faucet",
 ];
 
 const rl = readline.createInterface({
