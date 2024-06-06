@@ -141,7 +141,7 @@ export const GeneralInfo = () => {
               <>
                 <FormattedNumber
                   value={claimableIncentives.honeyValue}
-                  symbol="BGT"
+                  symbol="USD"
                   compact
                   showIsSmallerThanMin
                 />
@@ -162,19 +162,20 @@ export const GeneralInfo = () => {
             <div className="text-xs leading-5 text-muted-foreground">
               Incentives You’ve Earned:
             </div>
-            {isDataReady &&
-              incentives.map((incentive, index) => (
-                <div
-                  className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
-                  key={`incentive-${index}-${incentive}`}
-                >
-                  <Icons.bgt className="h-4 w-4" />
+            {/* {isDataReady &&
+              incentives.map((incentive, index) => ( */}
+            <div
+              className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2 text-xs text-muted-foreground"
+              // key={`incentive-${index}-${incentive}`}
+            >
+              {/* <Icons.bgt className="h-4 w-4" />
                   <span className="text-xs">{incentive.title} </span>
                   <span className="text-[10px] text-muted-foreground">
                     {incentive.amount}
-                  </span>
-                </div>
-              ))}
+                  </span> */}
+              coming soon
+            </div>
+            {/* ))} */}
             {!isDataReady && (
               <>
                 <Skeleton className="w-32 h-4" />

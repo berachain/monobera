@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { UserValidator, useUserValidators } from "@bera/berajs";
+import { UserValidator, useUserActiveValidators, useUserValidators } from "@bera/berajs";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { user_general_validator_columns } from "~/columns/general-validator-columns";
@@ -25,7 +25,7 @@ export const MyValidator = ({
   //   (state: TableState) => setPage(state?.pagination?.pageIndex),
   //   [setPage],
   // );
-  const { data } = useUserValidators();
+  const { data } = useUserActiveValidators();
 
   const depositedValidators = data?.filter((validator: UserValidator) => {
     return parseFloat(validator.userStaked) !== 0;

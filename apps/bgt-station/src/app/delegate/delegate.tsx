@@ -21,6 +21,7 @@ export default function Delegate({
   const { isReady } = useBeraJs();
   const router = useRouter();
   const { data } = useUserValidators();
+  
 
   return (
     <div className="mx-auto flex w-full max-w-[600px] flex-col gap-6 sm:container sm:px-0 md:px-8 lg:w-[600px]">
