@@ -27,6 +27,7 @@ export const validatorGaugeColumns: ColumnDef<Gauge>[] = [
         column={column}
         title="Total Incentive Value"
         className="whitespace-nowrap"
+        tooltip={"Total value of active incentives outstanding on this vault"}
       />
     ),
     cell: ({ row }) => (
@@ -44,8 +45,11 @@ export const validatorGaugeColumns: ColumnDef<Gauge>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Staked"
+        title="Estimated BGT/yr"
         className="whitespace-nowrap"
+        tooltip={
+          "Estimated BGT rewards per year being sent to this vault by this validator"
+        }
       />
     ),
     cell: ({ row }) => (
@@ -66,12 +70,15 @@ export const validatorGaugeColumns: ColumnDef<Gauge>[] = [
         column={column}
         title="Incentives"
         className="whitespace-nowrap"
+        tooltip={
+          "Incentives being emitted by this vault to attract BGT rewards"
+        }
       />
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-1">
         <BribesPopover incentives={row.original.activeIncentives} />
-        <Button
+        {/* <Button
           size="sm"
           variant="ghost"
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -84,7 +91,7 @@ export const validatorGaugeColumns: ColumnDef<Gauge>[] = [
           }}
         >
           Add
-        </Button>
+        </Button> */}
       </div>
     ),
     accessorKey: "incentives",

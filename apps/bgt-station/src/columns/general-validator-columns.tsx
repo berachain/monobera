@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  useTokenHoneyPrice,
   type CuttingBoardWeight,
   type UserValidator,
   type Validator,
@@ -15,6 +16,7 @@ import { type Address } from "viem";
 
 import { BribesPopover, ClaimBribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
+import { beraTokenAddress } from "@bera/config";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
@@ -35,7 +37,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Voting Power" />
   ),
   cell: ({ row }) => (
-    <div className="w-full text-center">
+    <div className="w-full text-start">
       <FormattedNumber
         value={row.original.amountStaked}
         compact={false}
@@ -140,6 +142,38 @@ const USER_QUEUED_COLUMN: ColumnDef<UserValidator> = {
   accessorKey: "userQueued",
   enableSorting: false,
 };
+
+const ESTIMATED_BGT_GAUGE: ColumnDef<Validator> = {
+  header: ({ column }) => (
+    <DataTableColumnHeader
+      column={column}
+      title="BGT Per Proposal"
+      tooltip={
+        "amount of BGT this validator is directing to this vault each proposal"
+      }
+    />
+  ),
+  cell: ({ row }) => {
+    const { data: price } = useTokenHoneyPrice({
+      tokenAddress: beraTokenAddress,
+    });
+    return (
+      <div className="flex flex-col gap-1">
+        <FormattedNumber value={0} symbol="BGT" />
+        <span className="text-xs text-muted-foreground">
+          <FormattedNumber value={price ?? 0} symbol="USD" />
+        </span>
+      </div>
+    );
+  },
+  accessorKey: "userQueued",
+  enableSorting: false,
+};
+
+export const gauge_validator_columns: ColumnDef<Validator>[] = [
+  VALIDATOR_COLUMN,
+  ESTIMATED_BGT_GAUGE,
+];
 
 export const general_validator_columns: ColumnDef<Validator>[] = [
   VALIDATOR_COLUMN,

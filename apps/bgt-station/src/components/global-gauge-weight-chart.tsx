@@ -23,11 +23,13 @@ export default function GlobalGaugeWeightChart({
   totalAmountStaked,
   globalAmountStaked,
   isLoading,
+  showTotal = true,
 }: {
   gaugeWeights: CuttingBoardWeight[] | undefined;
   totalAmountStaked: string | number;
   globalAmountStaked: string;
   isLoading: boolean;
+  showTotal?: boolean;
 }) {
   const tooltipRef = useRef<string | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -171,14 +173,16 @@ export default function GlobalGaugeWeightChart({
             <div className="text-lg font-bold leading-7">
               <FormattedNumber value={totalAmountStaked} compact />
             </div>
-            <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
-              <FormattedNumber
-                value={globalAmountStaked}
-                compact
-                symbol="BGT"
-              />{" "}
-              Circulating
-            </div>
+            {showTotal && (
+              <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
+                <FormattedNumber
+                  value={globalAmountStaked}
+                  compact
+                  symbol="BGT"
+                />{" "}
+                Circulating
+              </div>
+            )}
           </div>
 
           <div

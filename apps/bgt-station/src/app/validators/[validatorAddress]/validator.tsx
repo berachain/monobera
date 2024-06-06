@@ -4,35 +4,49 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  ActiveIncentive,
+  CuttingBoardWeight,
+  Token,
   truncateHash,
   usePollValidatorInfo,
-  type Validator,
+  useTokenHoneyPrices,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { FormattedNumber, Tooltip, ValidatorIcon } from "@bera/shared-ui";
+import {
+  FormattedNumber,
+  TokenIcon,
+  Tooltip,
+  ValidatorIcon,
+  apyTooltipText,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
-import { ValidatorPolData } from "./validator-pol-data";
+import {
+  ValidatorPolData,
+  getActiveIncentivesArray,
+} from "./validator-pol-data";
 
 export const ValidatorDataCard = ({
   title,
   value,
+  tooltipText,
   className,
 }: {
   title: string;
   value: React.ReactNode;
+  tooltipText?: string | undefined;
   className?: string;
 }) => {
   return (
     <Card className={cn(className, "bg-muted p-5")}>
-      <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground	">
+      <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground items-center flex gap-1">
         {title}
+        {tooltipText && <Tooltip text={tooltipText} />}
       </div>
       <div className="mt-1 text-foreground ">{value}</div>
     </Card>
@@ -61,6 +75,7 @@ export const GaugeOverview = ({
           </span>
         </div>
       )}
+      {/* TODO: MAKE REAL */}
       {/* {isLoading ? (
         <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
@@ -84,12 +99,12 @@ export const GaugeOverview = ({
 export const IncentivesOverview = ({
   totalActiveIncentiveValue,
   totalActiveIncentives,
-  featuredIncentiveTokenImages,
+  featuredTokens,
   isLoading,
 }: {
   totalActiveIncentiveValue: number;
   totalActiveIncentives: number;
-  featuredIncentiveTokenImages: string[];
+  featuredTokens: Token[];
   isLoading: boolean;
 }) => {
   return (
@@ -109,11 +124,20 @@ export const IncentivesOverview = ({
       {isLoading ? (
         <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
-        <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background p-1 pr-2">
-          <Icons.honey className="h-6 w-6" />
-          <Icons.bgt className="h-6 w-6" />
-          <Icons.beraIcon className="h-6 w-6" />
-          <span className="text-sm leading-5 text-muted-foreground"> +27</span>
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background p-1 ">
+          {featuredTokens.map((token, index) => (
+            <TokenIcon
+              key={index}
+              address={token.address}
+              className="h-6 w-6"
+            />
+          ))}
+          {featuredTokens.length > 3 && (
+            <span className="text-sm leading-5 text-muted-foreground">
+              {" "}
+              +{featuredTokens.length - 3}
+            </span>
+          )}
           {/* {featuredIncentiveTokenImages.map((gauge, index) => (
             <Image
               src={gauge}
@@ -133,6 +157,10 @@ export const IncentivesOverview = ({
   );
 };
 
+export interface ActiveIncentiveWithVault extends ActiveIncentive {
+  cuttingBoard: CuttingBoardWeight;
+}
+
 export default function Validator({
   validatorAddress,
 }: {
@@ -146,18 +174,16 @@ export default function Validator({
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
-    tooltipText: string;
+    tooltipText: any;
   }[] = [
     {
       title: "APY",
       value: (
-        <FormattedNumber
-          value={validator?.apy ?? 0}
-          percent
-          className="text-xl font-semibold"
-        />
+        <div className="text-xl font-semibold">
+          <FormattedNumber value={validator?.apy ?? 0} showIsSmallerThanMin />%
+        </div>
       ),
-      tooltipText: "Total BGT directed to this validator",
+      tooltipText: apyTooltipText(),
     },
     {
       title: "Voting Power",
@@ -171,11 +197,13 @@ export default function Validator({
           <FormattedNumber
             className="text-sm text-muted-foreground"
             value={validator?.votingPower}
+            showIsSmallerThanMin
             percent
           />
         </span>
       ),
-      tooltipText: "Total BGT directed to this validator",
+      tooltipText:
+        "Represents the influence in network governance based on the amount delegated to this validator",
     },
     {
       title: "Commission",
@@ -184,7 +212,7 @@ export default function Validator({
           {validator?.commission ?? 0}%
         </span>
       ),
-      tooltipText: "Honey",
+      tooltipText: "Amount of validator rewards retained by this validator",
     },
     {
       title: "Website",
@@ -195,9 +223,41 @@ export default function Validator({
           </Link>
         </span>
       ),
-      tooltipText: "Honey",
+      tooltipText: undefined,
     },
   ];
+
+  const activeIncentivesArray: ActiveIncentiveWithVault[] =
+    getActiveIncentivesArray(validator);
+  const activeIncentivesTokens = [
+    ...new Set(activeIncentivesArray?.map((incentive) => incentive.token)),
+  ];
+  const { data: tokenHoneyPrices } = useTokenHoneyPrices({
+    tokenAddresses: activeIncentivesTokens.map(
+      (t: Token) => t.address,
+    ) as Address[],
+  });
+
+  const activeIncentivesValue: number = activeIncentivesArray?.reduce(
+    (acc: number, ab: ActiveIncentiveWithVault) => {
+      const tokenPrice = parseFloat(
+        tokenHoneyPrices?.[ab.token.address] ?? "0",
+      );
+      return acc + ab.amountLeft * tokenPrice;
+    },
+    0,
+  );
+
+  const returnPerBgt: number = activeIncentivesArray?.reduce(
+    (acc: number, ab: ActiveIncentiveWithVault) => {
+      const tokenPrice = parseFloat(
+        tokenHoneyPrices?.[ab.token.address] ?? "0",
+      );
+      return acc + ab.incentiveRate * tokenPrice;
+    },
+    0,
+  );
+
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -250,7 +310,8 @@ export default function Validator({
                   key={index}
                 >
                   <div className="flex flex-row items-center gap-1 text-muted-foreground">
-                    {item.title} <Tooltip text={item.tooltipText} />
+                    {item.title}{" "}
+                    {item.tooltipText && <Tooltip text={item.tooltipText} />}
                   </div>
                   {isLoading ? (
                     <Skeleton className="h-[30px] w-[150px]" />
@@ -310,22 +371,20 @@ export default function Validator({
         <ValidatorDataCard
           className="col-span-2 row-start-2 h-[135px] md:row-start-1"
           title="Active Incentives"
+          tooltipText="The total value of active incentives that this validator is directing BGT towards"
           value={
             <IncentivesOverview
               isLoading={isLoading}
-              totalActiveIncentiveValue={6420000}
-              totalActiveIncentives={30}
-              featuredIncentiveTokenImages={[
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-              ]}
+              totalActiveIncentiveValue={activeIncentivesValue}
+              totalActiveIncentives={activeIncentivesArray?.length ?? 0}
+              featuredTokens={activeIncentivesTokens.map((token) => token)}
             />
           }
         />
         <ValidatorDataCard
           className="row-start-3 h-[100px] md:row-start-2"
           title="Reward Rate per Block"
+          tooltipText="The amount of BGT directed by this validator per proposal"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[100px]" />
@@ -343,12 +402,18 @@ export default function Validator({
         <ValidatorDataCard
           className="row-start-4 h-[100px] md:row-start-2"
           title="Return per BGT"
+          tooltipText="The estimated amount of incentives received per BGT directed by this validator"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[100px]" />
             ) : (
-              <div className="flex flex-row gap-1">
-                <span className="text-2xl font-semibold">100</span>
+              <div className="flex flex-row gap-1 text-2xl font-semibold">
+                $
+                <FormattedNumber
+                  value={returnPerBgt}
+                  compact
+                  showIsSmallerThanMin
+                />
                 <Icons.honey className="h-6 w-6 self-center" />
               </div>
             )

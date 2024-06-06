@@ -28,6 +28,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
     onSuccess: () => refresh(),
   });
 
+  console.log("data", data);
   return (
     <div className="flex flex-col gap-4 lg:flex-row">
       <GaugueLPChange gauge={gauge} />
@@ -39,7 +40,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
             </div>
             <div className="flex justify-between font-medium leading-6">
               <div>{gauge.metadata.name}</div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-row items-center gap-2">
                 <FormattedNumber
                   value={data?.balance ?? 0}
                   showIsSmallerThanMin
@@ -62,7 +63,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
                 <Icons.bgt className="h-6 w-6" />
                 BGT
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-row items-center gap-2">
                 <FormattedNumber
                   value={data?.rewards ?? 0}
                   showIsSmallerThanMin
