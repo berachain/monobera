@@ -26,7 +26,8 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
   const { refresh } = useUserValidators();
   const { refresh: refreshActive } = useUserActiveValidators();
 
-  const { useSelectedWalletBalance } = usePollWalletBalances();
+  const { useSelectedWalletBalance, refresh: walletBalanceRefresh } =
+    usePollWalletBalances();
   const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
 
   const exceeding = BigNumber(amount ?? "0").gt(
@@ -44,6 +45,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     onSuccess: () => {
       refresh();
       refreshActive();
+      walletBalanceRefresh();
     },
   });
   return (

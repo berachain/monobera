@@ -37,7 +37,7 @@ export const usePollValidatorInfo = (
     ...swrResponse,
     validatorInfoList: swrResponse.data?.validatorInfoList ?? [],
     validatorInfoDictionary: swrResponse.data?.validatorInfoDictionary ?? {},
-    validatorCounts: swrResponse.data?.validatorInfoList.length ?? 0,
+    validatorCounts: swrResponse.data?.counts ?? 0,
     refresh: () => mutate(QUERY_KEY),
   };
 };
