@@ -6,6 +6,7 @@ import {
   usePollWalletBalances,
   BGT_ABI,
   useUserValidators,
+  useUserActiveValidators,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { ActionButton, FormattedNumber, useTxn } from "@bera/shared-ui";
@@ -23,6 +24,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
 
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
   const { refresh } = useUserValidators();
+  const { refresh: refreshActive } = useUserActiveValidators();
 
   const { useSelectedWalletBalance, refresh: walletBalanceRefresh } =
     usePollWalletBalances();
@@ -42,6 +44,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
       refresh();
+      refreshActive();
       walletBalanceRefresh();
     },
   });
