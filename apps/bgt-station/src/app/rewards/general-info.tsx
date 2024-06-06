@@ -2,6 +2,7 @@ import {
   ActionButton,
   FormattedNumber,
   TokenIconList,
+  Tooltip,
   useTxn,
 } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -11,8 +12,15 @@ import { useClaimableIncetives } from "~/hooks/useClaimableIncentives";
 import { useTotalBgtRewards } from "~/hooks/useTotalBgtRewards";
 import { Skeleton } from "@bera/ui/skeleton";
 import { useClaimableFees } from "~/hooks/useClaimableFees";
-import { TransactionActionType, BGT_STAKER_ABI } from "@bera/berajs";
-import { bgtStaker } from "@bera/config";
+import {
+  TransactionActionType,
+  BGT_STAKER_ABI,
+  useUserVaults,
+  multicall3Abi,
+  useTokenHoneyPrice,
+} from "@bera/berajs";
+import { beraTokenAddress, bgtStaker, multicallAddress } from "@bera/config";
+import { useClaimAllBgtCalldata } from "~/hooks/useClaimAllBgtCalldata";
 
 export const GeneralInfo = () => {
   const gauges = [
@@ -29,25 +37,15 @@ export const GeneralInfo = () => {
       bgt: 126.42,
     },
   ];
-  const incentives = [
-    {
-      title: "HONEY",
-      amount: 126.42,
-    },
-    {
-      title: "BERA",
-      amount: 126.42,
-    },
-    {
-      title: "HONEY",
-      amount: 126.42,
-    },
-  ];
 
-  const { data: totalBgtRewards, isLoading: isTotalBgtRewardsLoading } =
-    useTotalBgtRewards();
+  const { data: userVaultInfo, isLoading: isTotalBgtRewardsLoading } =
+    useUserVaults();
   const { data: claimableIncentives, isLoading: isClaimableIncentivesLoading } =
     useClaimableIncetives();
+
+  const { data: price } = useTokenHoneyPrice({
+    tokenAddress: beraTokenAddress,
+  });
 
   const {
     data: claimableFees,
@@ -71,9 +69,24 @@ export const GeneralInfo = () => {
     },
   });
 
+  // const {
+  //   write: claimAllBgtWrite,
+  //   isLoading: isClaimAllBgtLoading,
+  //   ModalPortal: ClaimAllBgtModalPortal,
+  // } = useTxn({
+  //   message: "Claiming all BGT Rewards",
+  //   actionType: TransactionActionType.CLAIMING_REWARDS,
+  //   // onSuccess: () => {
+  //   //   refresh();
+  //   // },
+  // });
+
+  // const claimAllBgtCalldata = useClaimAllBgtCalldata(userVaultInfo?.vaults.map((vault: any) => vault.vaultAddress) ?? [])
+
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
       {ModalPortal}
+      {/* {ClaimAllBgtModalPortal} */}
       <Card className="relative w-full overflow-hidden rounded-md">
         <CardContent className="p-4">
           <div className="text-xs leading-[14px] text-muted-foreground">
@@ -83,7 +96,7 @@ export const GeneralInfo = () => {
             {isDataReady ? (
               <>
                 <FormattedNumber
-                  value={totalBgtRewards.totalBgtRewards}
+                  value={userVaultInfo?.totalBgtRewards ?? "0"}
                   symbol="BGT"
                   compact
                   showIsSmallerThanMin
@@ -97,7 +110,15 @@ export const GeneralInfo = () => {
           <div className="leading-4 text-muted-foreground mt-1">
             {isDataReady ? (
               <>
-                $<FormattedNumber value={0} compact showIsSmallerThanMin />
+                <FormattedNumber
+                  value={
+                    parseFloat(userVaultInfo?.totalBgtRewards ?? "0") *
+                    parseFloat(price ?? "0")
+                  }
+                  symbol="USD"
+                  compact
+                  showIsSmallerThanMin
+                />
               </>
             ) : (
               <Skeleton className="w-16 h-4" />
@@ -128,62 +149,99 @@ export const GeneralInfo = () => {
               </>
             )}
           </div>
+          <ActionButton>
+            <Tooltip
+              text={"Claim all BGT rewards coming soon"}
+              toolTipTrigger={
+                <Button
+                  // onClick={() => {
+                  //   claimAllBgtWrite({
+                  //     address: multicallAddress,
+                  //     abi: multicall3Abi as any,
+                  //     functionName: "aggregate",
+                  //     params: [claimAllBgtCalldata],
+                  //   });
+                  // }}
+                  className="relative z-10 flex w-full gap-1 mt-4"
+                  disabled={true}
+                >
+                  <Icons.bgt className="h-6 w-6" />
+                  Claim BGT
+                </Button>
+              }
+            />
+          </ActionButton>
         </CardContent>
       </Card>
 
       <Card className="relative w-full overflow-hidden rounded-md">
-        <CardContent className="p-4">
-          <div className="text-xs leading-[14px] text-muted-foreground">
-            Claimable Incentives
-          </div>
-          <div className="mt-2 flex items-center gap-1 text-3xl font-semibold leading-9">
-            {isDataReady ? (
-              <>
-                <FormattedNumber
-                  value={claimableIncentives.honeyValue}
-                  symbol="USD"
-                  compact
-                  showIsSmallerThanMin
-                />
-              </>
-            ) : (
-              <Skeleton className="h-8 w-24" />
-            )}{" "}
-            <TokenIconList size="xl" tokenList={[]} />
-          </div>
-          <div className="leading-4 text-muted-foreground mt-1">
-            {isDataReady ? (
-              <>{claimableIncentives?.tokenList.length ?? 0} Tokens</>
-            ) : (
-              <Skeleton className="w-16 h-4" />
-            )}
-          </div>
-          <div className="relative z-10 mt-6 flex flex-col gap-1">
-            <div className="text-xs leading-5 text-muted-foreground">
-              Incentives You’ve Earned:
+        <CardContent className="p-4 flex h-full flex-col justify-between">
+          <div>
+            <div className="text-xs leading-[14px] text-muted-foreground">
+              Claimable Incentives
             </div>
-            {/* {isDataReady &&
+            <div className="mt-2 flex items-center gap-1 text-3xl font-semibold leading-9">
+              {isDataReady ? (
+                <>
+                  <FormattedNumber
+                    value={claimableIncentives.honeyValue}
+                    symbol="USD"
+                    compact
+                    showIsSmallerThanMin
+                  />
+                </>
+              ) : (
+                <Skeleton className="h-8 w-24" />
+              )}{" "}
+              <TokenIconList size="xl" tokenList={[]} />
+            </div>
+            <div className="leading-4 text-muted-foreground mt-1">
+              {isDataReady ? (
+                <>{claimableIncentives?.tokenList.length ?? 0} Tokens</>
+              ) : (
+                <Skeleton className="w-16 h-4" />
+              )}
+            </div>
+            <div className="relative z-10 mt-6 flex flex-col gap-1">
+              <div className="text-xs leading-5 text-muted-foreground">
+                Incentives You’ve Earned:
+              </div>
+              {/* {isDataReady &&
               incentives.map((incentive, index) => ( */}
-            <div
-              className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2 text-xs text-muted-foreground"
-              // key={`incentive-${index}-${incentive}`}
-            >
-              {/* <Icons.bgt className="h-4 w-4" />
+              <div
+                className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2 text-xs text-muted-foreground"
+                // key={`incentive-${index}-${incentive}`}
+              >
+                {/* <Icons.bgt className="h-4 w-4" />
                   <span className="text-xs">{incentive.title} </span>
                   <span className="text-[10px] text-muted-foreground">
                     {incentive.amount}
                   </span> */}
-              coming soon
+                coming soon
+              </div>
+              {/* ))} */}
+              {!isDataReady && (
+                <>
+                  <Skeleton className="w-32 h-4" />
+                  <Skeleton className="w-32 h-4" />
+                  <Skeleton className="w-32 h-4" />
+                </>
+              )}
             </div>
-            {/* ))} */}
-            {!isDataReady && (
-              <>
-                <Skeleton className="w-32 h-4" />
-                <Skeleton className="w-32 h-4" />
-                <Skeleton className="w-32 h-4" />
-              </>
-            )}
           </div>
+          <ActionButton>
+            <Tooltip
+              text={"Claiming incentives coming soon"}
+              toolTipTrigger={
+                <Button
+                  className="relative z-10 flex w-full gap-1 mt-4"
+                  disabled={true}
+                >
+                  Coming Soon
+                </Button>
+              }
+            />
+          </ActionButton>
         </CardContent>
       </Card>
 

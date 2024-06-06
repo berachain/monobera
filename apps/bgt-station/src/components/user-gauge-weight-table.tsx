@@ -1,9 +1,12 @@
+import React from "react";
 import { TransactionActionType, useUserVaults } from "@bera/berajs";
 import { DataTable, useTxn } from "@bera/shared-ui";
-
 import { getUserBgtColumns } from "~/columns/user-bgt-columns";
-
-export const BGTRewardsTable = () => {
+export default function UserGaugeWeightTable({
+  myGauge = false,
+}: {
+  myGauge?: boolean;
+}) {
   const {
     data: userVaultInfo,
     isLoading: isUserVaultInfoLoading,
@@ -21,18 +24,26 @@ export const BGTRewardsTable = () => {
       refresh();
     },
   });
+
   return (
-    <div>
+    <div className="w-full ">
       {ModalPortal}
+
       <DataTable
         columns={getUserBgtColumns({
           isLoading: isClaimingRewardsLoading,
           write,
         })}
         data={userVaultInfo?.vaults ?? []}
-        className="min-w-[700px] shadow"
+        className="min-w-[1100px] shadow"
         loading={isUserVaultInfoLoading}
+        onRowClick={(row: any) =>
+          window.open(
+            `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
+            "_self",
+          )
+        }
       />
     </div>
   );
-};
+}
