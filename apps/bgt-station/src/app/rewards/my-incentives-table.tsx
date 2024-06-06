@@ -11,7 +11,6 @@ export const MyIncentivesTableTable = () => {
         loading={isLoading}
         data={data ?? []}
         className="min-w-[800px] shadow"
-        enablePagination
       />
     </div>
   );
