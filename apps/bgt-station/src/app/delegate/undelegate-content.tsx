@@ -24,8 +24,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
   const t = theme === "system" ? systemTheme : theme;
 
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
-  const bgtDelegated = undefined;
-  const { refresh } = useUserValidators();
+  const { data, refresh } = useUserValidators();
 
   const {
     write: unbondWrite,
@@ -38,6 +37,12 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
       refresh();
     },
   });
+
+  const selectedValidator = data?.find(
+    (v) => v.id.toLowerCase() === validator?.toLowerCase(),
+  );
+
+  const bgtDelegated = selectedValidator ? selectedValidator.userStaked : "0";
 
   return (
     <div>

@@ -82,7 +82,7 @@ export function TokenDialog({
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
-    customTokens
+    customTokens !== undefined && customTokens.length !== 0
       ? customTokens
       : tokenData?.tokenList?.filter(
           (token) =>
