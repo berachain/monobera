@@ -12,8 +12,6 @@ import { Slider } from "@bera/ui/slider";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
-import { Info } from "./info";
-
 export const WithdrawLP = ({
   lpToken,
   gauge,
@@ -122,6 +120,7 @@ export const WithdrawLP = ({
               abi: BERA_VAULT_REWARDS_ABI,
               functionName: "withdraw",
               params: [parseUnits(withdrawAmount, lpToken.decimals)],
+              gasLimit: 200000n,
             })
           }
         >

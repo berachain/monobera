@@ -10,6 +10,7 @@ import {
   truncateHash,
   usePollValidatorInfo,
   useTokenHoneyPrices,
+  useSelectedValidator,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import {
@@ -114,7 +115,11 @@ export const IncentivesOverview = ({
       ) : (
         <div className="inline-flex h-7 items-end gap-1">
           <span className="text-2xl font-semibold leading-6">
-            <FormattedNumber value={totalActiveIncentiveValue} compact />{" "}
+            <FormattedNumber
+              value={totalActiveIncentiveValue}
+              symbol="USD"
+              compact
+            />{" "}
             <span className="text-sm text-muted-foreground">
               ({totalActiveIncentives} Tokens)
             </span>
@@ -167,10 +172,12 @@ export default function Validator({
   validatorAddress: Address;
 }) {
   const router = useRouter();
-  const { validatorInfoDictionary, isLoading, isValidating } =
-    usePollValidatorInfo();
-  //@ts-ignore
-  const validator = validatorInfoDictionary?.[validatorAddress];
+  const {
+    data: validator,
+    isLoading,
+    isValidating,
+  } = useSelectedValidator(validatorAddress);
+
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
@@ -196,7 +203,7 @@ export default function Validator({
           />{" "}
           <FormattedNumber
             className="text-sm text-muted-foreground"
-            value={validator?.votingPower}
+            value={validator ? validator.votingPower / 100 : 0}
             showIsSmallerThanMin
             percent
           />
@@ -218,7 +225,7 @@ export default function Validator({
       title: "Website",
       value: (
         <span className="text-ellipsis text-xl font-semibold hover:underline">
-          <Link href={validator?.website ?? ""}>
+          <Link href={validator?.metadata.website ?? ""}>
             {validator?.metadata.website ?? ""}
           </Link>
         </span>
@@ -258,6 +265,7 @@ export default function Validator({
     0,
   );
 
+  console.log(validator);
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -271,10 +279,7 @@ export default function Validator({
         <div className="mt-2 flex w-full flex-col justify-between gap-6 border-b  border-border pb-6 lg:flex-row ">
           <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
-              <ValidatorIcon
-                address={validator?.id ?? ""}
-                className="h-12 w-12"
-              />
+              <ValidatorIcon address={validator?.id} className="h-12 w-12" />
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (
@@ -288,7 +293,7 @@ export default function Validator({
               ) : (
                 <span className="flex flex-row gap-1 text-foreground hover:underline">
                   <Link href={`${blockExplorerUrl}/${validator?.id}`}>
-                    {truncateHash(validator?.id)}
+                    {truncateHash(validator?.id ?? "")}
                   </Link>
                   <Icons.externalLink className="h-4 w-4 self-center" />
                 </span>
@@ -329,7 +334,7 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=delegate&validator=${validator.id}`,
+                    `/delegate?action=delegate&validator=${validator?.id}`,
                   )
                 }
               >
@@ -341,7 +346,7 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=unbond&validator=${validator.id}`,
+                    `/delegate?action=unbond&validator=${validator?.id}`,
                   )
                 }
               >
@@ -383,7 +388,7 @@ export default function Validator({
         />
         <ValidatorDataCard
           className="row-start-3 h-[100px] md:row-start-2"
-          title="Reward Rate per Block"
+          title="Reward Rate"
           tooltipText="The amount of BGT directed by this validator per proposal"
           value={
             isLoading ? (
@@ -421,17 +426,30 @@ export default function Validator({
         />
         <ValidatorDataCard
           className="row-start-5 h-[100px] md:row-start-2"
-          title="Lifetime Incentives Received"
+          title="Lifetime Incentives"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[150px]" />
             ) : (
               <div className="flex flex-row items-center gap-1">
                 <span className="text-2xl font-semibold">
-                  <FormattedNumber value={6420000} compact />
+                  <FormattedNumber
+                    value={
+                      validator
+                        ? validator.allTimeData.allTimeHoneyValueTokenRewards
+                        : 0
+                    }
+                    showIsSmallerThanMin
+                    compact
+                    symbol="USD"
+                  />
                 </span>
                 <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
-                  (32 Tokens)
+                  (
+                  {validator
+                    ? validator.allTimeData.allTimeUniqueTokenCount
+                    : 0}{" "}
+                  Tokens)
                 </span>
               </div>
             )
@@ -445,7 +463,15 @@ export default function Validator({
               <Skeleton className="h-[30px] w-[100px]" />
             ) : (
               <div className="flex flex-row gap-1">
-                <span className="text-2xl font-semibold">100</span>
+                <span className="text-2xl font-semibold">
+                  <FormattedNumber
+                    value={
+                      validator ? validator.allTimeData.allTimeBgtDirected : 0
+                    }
+                    showIsSmallerThanMin
+                    compact
+                  />
+                </span>
                 <Icons.bgt className="h-6 w-6 self-center" />
               </div>
             )

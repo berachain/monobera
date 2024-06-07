@@ -1,23 +1,16 @@
-import {
-  ActiveIncentive,
-  usePollGauges,
-  usePollValidatorInfo,
-  type Validator,
-} from "@bera/berajs";
+import { ActiveIncentive, usePollGauges, type Validator } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import { validator_gauge_columns } from "~/columns/gauge-incentives-columns";
-import { validatorGaugeColumns } from "./validator-gauge-columns";
+import { getValidatorGaugeColumns } from "./validator-gauge-columns";
 import { ActiveIncentiveWithVault } from "./validator";
-import { blockTime } from "@bera/config";
-import { useMemo } from "react";
-import { useValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 
 export const getActiveIncentivesArray = (
-  validator: Validator,
+  validator: Validator | undefined,
 ): ActiveIncentiveWithVault[] => {
+  if (!validator) return [];
   return validator?.activeIncentives.map((incentive: ActiveIncentive) => {
     const vaultId = incentive.id.split("-")[0];
     const cuttingBoard = validator?.cuttingBoard.weights.find(
@@ -50,8 +43,6 @@ export const ValidatorPolData = ({
   const activeIncentivesArray: ActiveIncentiveWithVault[] =
     getActiveIncentivesArray(validator);
 
-  const estimatedBgtPerYear = useValidatorEstimatedBgtPerYear(validator);
-
   return (
     <div className="mt-6 flex w-full flex-col gap-6 lg:flex-row">
       <div className="w-full">
@@ -64,7 +55,7 @@ export const ValidatorPolData = ({
             <DataTable
               loading={isGaugeListLoading}
               validating={isGaugeListValidating}
-              columns={validatorGaugeColumns}
+              columns={getValidatorGaugeColumns(validator)}
               data={gaugeList ?? []}
             />
           </TabsContent>

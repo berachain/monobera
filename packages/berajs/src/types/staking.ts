@@ -5,7 +5,7 @@ import { Token } from "./dex";
 export interface ValidatorInfo {
   id: Address;
   name: string;
-  description: string;
+  Description: string;
   website: string;
   logoURI: string;
   twitter?: string;
@@ -20,14 +20,15 @@ export type Validator = {
   apy: number;
   cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
-  allTimeStats: {
-    totalBgtDirected: string;
-    totalHoneyValueBgtDirected: string;
-    totalHoneyValueTokenRewards: string;
+  allTimeData: {
+    allTimeBgtDirected: number;
+    allTimeHoneyValueTokenRewards: number;
+    allTimeUniqueTokenCount: number;
   };
   active: boolean;
   activeIncentives: ActiveIncentive[];
   metadata: ValidatorInfo;
+  votingPower: number;
 };
 
 export type UserValidator = Validator & {
@@ -88,6 +89,7 @@ export type Gauge = {
   id: Address;
   metadata: GaugeInfo;
   stakingTokenAddress: Address;
+  bgtInflationCapture: number;
   vaultAddress: Address;
   vaultWhitelist: {
     whitelistedTokens: { isWhiteListed: boolean; token: Token }[];

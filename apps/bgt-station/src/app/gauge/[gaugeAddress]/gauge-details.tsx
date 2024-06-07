@@ -5,6 +5,7 @@ import {
   truncateHash,
   usePollGauges,
   usePollValidatorInfo,
+  useSelectedGauge,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
@@ -14,21 +15,22 @@ import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { gauge_validator_columns } from "~/columns/general-validator-columns";
 import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
+import { Address } from "viem";
 
-export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
+export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
+  // TODO: make relevant
   const {
     data,
     validatorInfoList,
     isLoading: isValidatorLoading,
     isValidating: isValidatorValidating,
   } = usePollValidatorInfo({ vaultId: gaugeAddress });
+
   const {
-    gaugeDictionary,
+    data: gauge,
     isLoading: isGaugeLoading,
     isValidating: isGaugeValidating,
-  } = usePollGauges();
-  const gauge = gaugeDictionary?.[gaugeAddress];
-  if (!isGaugeLoading && !gauge) notFound(); //gauge not found
+  } = useSelectedGauge(gaugeAddress);
 
   return (
     <>

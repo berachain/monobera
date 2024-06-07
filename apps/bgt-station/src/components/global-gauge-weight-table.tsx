@@ -21,6 +21,7 @@ export default function GlobalGaugeWeightTable({
     page: page + 1,
     pageSize: GAUGE_PAGE_SIZE,
   });
+
   const fetchData = useCallback(
     (state: TableState) => setPage(state?.pagination?.pageIndex),
     [setPage],

@@ -31,6 +31,7 @@ export default function Gauge() {
           gaugeWeights={[] as CuttingBoardWeight[]}
           totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
           globalAmountStaked={data?.bgtTotalSupply ?? "0"}
+          showTotal={false}
         />
       </div>
 
