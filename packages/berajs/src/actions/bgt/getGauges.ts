@@ -10,7 +10,7 @@ export interface GetGaugeData {
 
 export interface GaugeFilter {
   validatorId?: Address;
-  filterByProduct?: string;
+  filterByProduct?: string[];
   coinbase?: Address;
   sortBy?: "activeIncentivesInHoney" | "amountstaked" | "bgtInflationCapture";
   sortOrder?: "asc" | "desc";

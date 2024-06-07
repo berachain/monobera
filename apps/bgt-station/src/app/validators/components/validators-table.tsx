@@ -78,7 +78,7 @@ export default function ValidatorsTable() {
           <div className="flex w-fit items-center justify-between gap-2">
             <SearchInput
               value={search}
-              onChange={(e) => {
+              onChange={(e: any) => {
                 setSearch(e.target.value);
                 setIsTyping?.(true);
                 clearTimeout(typingTimer);

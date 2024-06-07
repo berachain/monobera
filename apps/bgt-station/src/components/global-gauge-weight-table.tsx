@@ -15,13 +15,18 @@ export default function GlobalGaugeWeightTable({
   keywords?: string;
 }) {
   const [page, setPage] = useState(0);
+  const [sorting, setSorting] = useState([{ id: "activeIncentivesInHoney", desc: true }]);
+  const handleNewSort = (newSort: any) => {
+    if (newSort === sorting) return;
+    setSorting(newSort);
+  };
   const { gaugeCounts, gaugeList, isLoading, isValidating } = usePollGauges({
-    sortBy: "activeIncentivesInHoney",
-    sortOrder: "desc",
+    sortBy: sorting[0]?.id,
+    sortOrder: sorting[0]?.desc ? "desc" : "asc",
     page: page + 1,
     pageSize: GAUGE_PAGE_SIZE,
+    query: keywords,
   });
-
   const fetchData = useCallback(
     (state: TableState) => setPage(state?.pagination?.pageIndex),
     [setPage],
@@ -35,12 +40,11 @@ export default function GlobalGaugeWeightTable({
         validating={isValidating}
         columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
         data={myGauge ? [] : gaugeList ?? []}
-        className="min-w-[1100px] shadow"
+        className="min-h-[400px] min-w-[1100px] shadow"
         additionalTableProps={{
           initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
           pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
-          manualFiltering: true,
-          manualSorting: true,
+          state: { sorting },
           manualPagination: true,
         }}
         onRowClick={(row: any) =>
@@ -49,6 +53,7 @@ export default function GlobalGaugeWeightTable({
             "_self",
           )
         }
+        onCustomSortingChange={(a: any) => handleNewSort(a)}
       />
     </div>
   );

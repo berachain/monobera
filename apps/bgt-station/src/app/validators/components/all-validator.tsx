@@ -15,14 +15,7 @@ export const AllValidator = ({
   onRowClick?: any;
 }) => {
   const [page, setPage] = useState(0);
-
-  const [sorting, setSorting] = useState<any>([
-    {
-      id: "tvl",
-      desc: true,
-    },
-  ]);
-
+  const [sorting, setSorting] = useState([{ id: "tvl", desc: true }]);
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;
     setSorting(newSort);
@@ -52,7 +45,7 @@ export const AllValidator = ({
       fetchData={fetchData}
       enablePagination
       loading={isLoading}
-      // validating={isValidating}
+      validating={isValidating}
       additionalTableProps={{
         initialState: { pagination: { pageSize: VALIDATOR_PAGE_SIZE } },
         state: { sorting },

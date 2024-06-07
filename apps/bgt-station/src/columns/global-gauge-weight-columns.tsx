@@ -44,8 +44,8 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         value={row.original.activeIncentivesInHoney}
       />
     ),
-    accessorKey: "incentive-value",
-    enableSorting: false,
+    accessorKey: "activeIncentivesInHoney",
+    enableSorting: true,
   },
   // {
   //   header: ({ column }) => (
@@ -87,8 +87,8 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         value={row.original.bgtInflationCapture ?? 0}
       />
     ),
-    accessorKey: "bgt-inflation",
-    enableSorting: false,
+    accessorKey: "bgtInflationCapture",
+    enableSorting: true,
   },
   {
     header: ({ column }) => (

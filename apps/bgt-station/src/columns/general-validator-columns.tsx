@@ -5,6 +5,7 @@ import {
   type UserValidator,
   type Validator,
 } from "@bera/berajs";
+import { beraTokenAddress } from "@bera/config";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -12,13 +13,12 @@ import {
   ValidatorIcon,
   bribeApyTooltipText,
 } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
 import { BribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
-import { beraTokenAddress } from "@bera/config";
-import { Button } from "@bera/ui/button";
 import { useValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
@@ -52,7 +52,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
       />
     </div>
   ),
-  accessorKey: "votingpower",
+  accessorKey: "amountStaked",
   enableSorting: true,
 };
 
@@ -154,7 +154,9 @@ const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
     );
   },
   accessorKey: "userStaked",
-  enableSorting: false,
+  sortingFn: (a, b) =>
+    Number(a.original.userStaked) - Number(b.original.userStaked),
+  enableSorting: true,
 };
 
 const USER_QUEUED_COLUMN: ColumnDef<UserValidator> = {
@@ -165,7 +167,9 @@ const USER_QUEUED_COLUMN: ColumnDef<UserValidator> = {
     return <FormattedNumber value={row.original.userQueued} symbol="BGT" />;
   },
   accessorKey: "userQueued",
-  enableSorting: false,
+  sortingFn: (a, b) =>
+    Number(a.original.userQueued) - Number(b.original.userQueued),
+  enableSorting: true,
 };
 
 const ESTIMATED_BGT_GAUGE: ColumnDef<Validator> = {
@@ -266,10 +270,10 @@ export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
   USER_QUEUED_COLUMN,
   {
     ...GLOBAL_VOTING_POWER_COLUMN,
-    enableSorting: false,
+    enableSorting: true,
   } as ColumnDef<UserValidator>,
-  { ...COMMISSION_COLUMN, enableSorting: false } as ColumnDef<UserValidator>,
-  { ...APY_COLUMN, enableSorting: false } as ColumnDef<UserValidator>,
+  { ...COMMISSION_COLUMN, enableSorting: true } as ColumnDef<UserValidator>,
+  { ...APY_COLUMN, enableSorting: true } as ColumnDef<UserValidator>,
   BRIBES_COLUMN as ColumnDef<UserValidator>,
 ];
 
