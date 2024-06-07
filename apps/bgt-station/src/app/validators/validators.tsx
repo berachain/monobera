@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { usePollValidatorInfo } from "@bera/berajs";
+import {
+  usePollGauges,
+  usePollGlobalData,
+  usePollValidatorInfo,
+} from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -9,14 +14,9 @@ import { Skeleton } from "@bera/ui/skeleton";
 import ValidatorsTable from "./components/validators-table";
 
 export default function Validators() {
-  const { validatorCounts, validatorInfoList, isLoading } =
-    usePollValidatorInfo();
-
-  console.log({
-    validatorCounts,
-    validatorInfoList,
-    isLoading,
-  });
+  const { validatorCounts, isLoading } = usePollValidatorInfo();
+  const { data } = usePollGlobalData();
+  const { gaugeCounts } = usePollGauges();
   const generalInfo = [
     {
       amount: validatorCounts,
@@ -37,7 +37,13 @@ export default function Validators() {
       ),
     },
     {
-      amount: "10%",
+      amount: (
+        <FormattedNumber
+          value={data?.bgtInfo?.bgtInflation ?? 0}
+          percent
+          showIsSmallerThanMin
+        />
+      ),
       text: "BGT Inflation",
       img: (
         <div className="absolute bottom-0 right-0">
@@ -46,7 +52,7 @@ export default function Validators() {
       ),
     },
     {
-      amount: "15",
+      amount: gaugeCounts,
       text: "Active gauges",
       img: (
         <div className="absolute bottom-0 right-3">

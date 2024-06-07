@@ -27,8 +27,8 @@ import { truncateFloat } from "@bera/shared-ui/src/utils";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
-import { Separator } from "@bera/ui/separator";
 import { Icons } from "@bera/ui/icons";
+import { Separator } from "@bera/ui/separator";
 import { Skeleton } from "@bera/ui/skeleton";
 import {
   Table,
@@ -39,6 +39,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { getAddress } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import {
@@ -47,7 +48,6 @@ import {
 } from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
-import { getAddress } from "viem";
 
 interface IPoolPageContent {
   pool: PoolV2;
@@ -362,7 +362,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   const poolHistory = poolHistoryData?.history;
   const timeCreated = poolHistoryData?.info?.timeCreate
-    ? new Date(parseInt(poolHistoryData?.info.timeCreate))
+    ? new Date(parseInt(poolHistoryData?.info.timeCreate) * 1000)
     : null;
 
   const params = useSearchParams();

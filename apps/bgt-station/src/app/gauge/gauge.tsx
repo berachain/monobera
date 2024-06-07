@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
-import { SearchInput } from "@bera/shared-ui";
+import {
+  useBeraJs,
+  usePollGlobalData,
+  type CuttingBoardWeight,
+} from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -10,100 +13,25 @@ import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
 import MarketSelector from "./market-selector";
-
-const cuttingboard: CuttingBoardWeight[] = [
-  {
-    percentage: 25,
-    amount: 375000,
-    receiver: {
-      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      name: "Honey Vault",
-      imageUri:
-        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-      website: "https://www.honeyvault.com",
-      activeIncentives: [
-        {
-          token: {
-            name: "Honey Token",
-            symbol: "HNY",
-            address: "0xdeadbeefdeadbeef",
-            decimals: 18,
-          },
-          incentiveRate: "0.05",
-          amountLeft: "50000",
-        },
-      ],
-      market: "HONEY",
-    },
-  },
-  {
-    percentage: 25,
-    amount: 75000,
-    receiver: {
-      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      name: "Honey Vault",
-      imageUri:
-        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-      website: "https://www.honeyvault.com",
-      activeIncentives: [
-        {
-          token: {
-            name: "Honey Token",
-            symbol: "HNY",
-            address: "0xdeadbeefdeadbeef",
-            decimals: 18,
-          },
-          incentiveRate: "0.05",
-          amountLeft: "50000",
-        },
-      ],
-      market: "HONEY",
-    },
-  },
-  {
-    percentage: 25,
-    amount: 375000,
-    receiver: {
-      address: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      stakingToken: "0xb10a6CE3423Bf521EcB144b416F42D55A22eb0aD",
-      name: "Honey Vault",
-      imageUri:
-        "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-      website: "https://www.honeyvault.com",
-      activeIncentives: [
-        {
-          token: {
-            name: "Honey Token",
-            symbol: "HNY",
-            address: "0xdeadbeefdeadbeef",
-            decimals: 18,
-          },
-          incentiveRate: "0.05",
-          amountLeft: "50000",
-        },
-      ],
-      market: "HONEY",
-    },
-  },
-];
+import UserGaugeWeightTable from "~/components/user-gauge-weight-table";
 
 export default function Gauge() {
   const { isReady } = useBeraJs();
   const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
+  const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
 
   return (
     <div className="flex flex-col gap-12">
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
-          isLoading={false}
-          gaugeWeights={cuttingboard}
-          totalAmountStaked={"100000"}
-          globalAmountStaked={"100000000"}
+          isLoading={isGlobalDataLoading}
+          gaugeWeights={[] as CuttingBoardWeight[]}
+          totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
+          globalAmountStaked={data?.bgtTotalSupply ?? "0"}
+          showTotal={false}
         />
       </div>
 
@@ -123,7 +51,7 @@ export default function Gauge() {
           </TabsList>
 
           <div className="flex w-full items-center gap-3 md:w-fit">
-            <SearchInput
+            {/* <SearchInput
               placeholder="Search..."
               value={keywords}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -136,8 +64,10 @@ export default function Gauge() {
                 }
               }}
               className="w-full md:w-[300px]"
-            />
-            <MarketSelector {...{ markets, setMarkets }} />
+            /> */}
+            <TabsContent value="all-gauges">
+              <MarketSelector {...{ markets, setMarkets }} />
+            </TabsContent>
           </div>
         </div>
         {(markets.length !== 0 || keywordList.length !== 0) && (
@@ -179,7 +109,7 @@ export default function Gauge() {
           <GlobalGaugeWeightTable keywords={keywords} />
         </TabsContent>
         <TabsContent value="my-gauges">
-          <GlobalGaugeWeightTable keywords={keywords} myGauge />
+          <UserGaugeWeightTable myGauge />
         </TabsContent>
       </Tabs>
     </div>

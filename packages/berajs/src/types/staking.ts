@@ -1,10 +1,11 @@
 import { Address } from "viem";
+
 import { Token } from "./dex";
 
 export interface ValidatorInfo {
   id: Address;
   name: string;
-  description: string;
+  Description: string;
   website: string;
   logoURI: string;
   twitter?: string;
@@ -13,18 +14,21 @@ export interface ValidatorInfo {
 export type Validator = {
   id: Address;
   coinbase: Address;
-  commission: string;
+  commission: number;
   amountStaked: string;
   amountQueued: string;
-  cuttingboard: CuttingBoardWeight[] | null;
+  apy: number;
+  cuttingBoard: { startBlock: string; weights: CuttingBoardWeight[] };
   rewardRate: string;
-  allTimeStats: {
-    totalBgtDirected: string;
-    totalHoneyValueBgtDirected: string;
-    totalHoneyValueTokenRewards: string;
+  allTimeData: {
+    allTimeBgtDirected: number;
+    allTimeHoneyValueTokenRewards: number;
+    allTimeUniqueTokenCount: number;
   };
   active: boolean;
+  activeIncentives: ActiveIncentive[];
   metadata: ValidatorInfo;
+  votingPower: number;
 };
 
 export type UserValidator = Validator & {
@@ -36,25 +40,28 @@ export type UserValidator = Validator & {
 };
 
 export type CuttingBoardWeight = {
-  percentage: number;
   amount: number;
-  receiver: Vault;
+  owner: Address;
+  percentageNumerator: string;
+  receiver: Address;
+  receiverMetadata: Vault;
 };
 
 export type Vault = {
-  address: Address;
-  market: string | undefined;
-  stakingToken: Address;
+  logoURI: string;
   name: string;
-  imageUri: string;
-  website: string;
-  activeIncentives: ActiveIncentive[];
+  product: string;
+  receiptTokenAddress: Address;
+  url: string;
+  vaultAddress: Address;
 };
 
 export type ActiveIncentive = {
+  amountLeft: number;
+  id: Address;
+  incentiveRate: number;
   token: Token;
-  incentiveRate: string;
-  amountLeft: string;
+  vaultId: Address;
 };
 
 export type Market = {
@@ -62,4 +69,29 @@ export type Market = {
   logoURI: string;
   url: string;
   description: string;
+};
+
+export type GaugeInfo = {
+  id: Address;
+  gaugeAddress: Address;
+  name: string;
+  logoURI: string;
+  product: string;
+  url: string;
+};
+
+export type Gauge = {
+  activeIncentives: ActiveIncentive[];
+  activeIncentivesInHoney: number;
+  activeValidators: ValidatorInfo[];
+  activeValidatorsCount: number;
+  amountStaked: string;
+  id: Address;
+  metadata: GaugeInfo;
+  stakingTokenAddress: Address;
+  bgtInflationCapture: number;
+  vaultAddress: Address;
+  vaultWhitelist: {
+    whitelistedTokens: { isWhiteListed: boolean; token: Token }[];
+  };
 };

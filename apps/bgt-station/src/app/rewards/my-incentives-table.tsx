@@ -1,19 +1,16 @@
-import { usePollValidatorInfo } from "@bera/berajs";
+import { useUserActiveValidators } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
-
-import { user_incentives_columns } from "~/columns/user-incentives-columns";
+import { user_incentives_columns } from "~/columns/general-validator-columns";
 
 export const MyIncentivesTableTable = () => {
-  const { data, isLoading, isValidating } = usePollValidatorInfo();
+  const { data, isLoading } = useUserActiveValidators();
   return (
     <div>
       <DataTable
-        columns={user_incentives_columns as any}
+        columns={user_incentives_columns}
         loading={isLoading}
-        validating={isValidating}
-        data={[]}
+        data={data ?? []}
         className="min-w-[800px] shadow"
-        enablePagination
       />
     </div>
   );

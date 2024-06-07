@@ -1,17 +1,13 @@
 import React from "react";
-import { Token, useTokenHoneyPrices } from "@bera/berajs";
+import { ActiveIncentive, Token, useTokenHoneyPrices } from "@bera/berajs";
 import {
   FormattedNumber,
   TokenIcon,
   TokenIconList,
   Tooltip,
 } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
 import { type Address } from "viem";
-
-import {
-  AggregatedBribe,
-  useAggregatedBribes,
-} from "~/hooks/useAggregatedBribes";
 
 interface TotalValues {
   totalIncentives: number;
@@ -41,10 +37,10 @@ export const BribeTooltipRow = ({
       <div className="text-md flex flex-row gap-1">
         <FormattedNumber value={totalValues.totalIncentives} compact />
         {totalValues.amountPerProposal !== 0 && (
-          <FormattedNumber
-            value={totalValues.amountPerProposal}
-            className="text-muted-foreground"
-          />
+          <div className="text-muted-foreground">
+            $
+            <FormattedNumber value={totalValues.amountPerProposal} />
+          </div>
         )}
       </div>
     </div>
@@ -52,26 +48,24 @@ export const BribeTooltipRow = ({
 };
 
 export const BribesTooltip = ({
-  aggregatedBribes,
+  activeIncentive,
 }: {
-  aggregatedBribes: AggregatedBribe[];
+  activeIncentive: ActiveIncentive[];
 }) => {
   const { data: tokenHoneyPrices } = useTokenHoneyPrices({
-    tokenAddresses: aggregatedBribes.map(
-      (ab: AggregatedBribe) => ab.token.address,
+    tokenAddresses: activeIncentive.map(
+      (ab: ActiveIncentive) => ab.token.address,
     ) as Address[],
   });
-  const totalBribesValue: TotalValues = aggregatedBribes.reduce(
-    (acc: TotalValues, ab) => {
-      const tokenPrice = tokenHoneyPrices
-        ? parseFloat(tokenHoneyPrices[ab.token.address] ?? 0) ?? 0
-        : 0;
+  const totalBribesValue: TotalValues = activeIncentive.reduce(
+    (acc: TotalValues, ab: ActiveIncentive) => {
+      const tokenPrice = parseFloat(
+        tokenHoneyPrices?.[ab.token.address] ?? "0",
+      );
       return {
-        totalIncentives:
-          acc.totalIncentives +
-          parseFloat(ab.bribeTotalAmountLeft) * tokenPrice,
+        totalIncentives: acc.totalIncentives + ab.amountLeft * tokenPrice,
         amountPerProposal:
-          acc.amountPerProposal + parseFloat(ab.amountPerProposal) * tokenPrice,
+          acc.amountPerProposal + ab.incentiveRate * tokenPrice,
       };
     },
     {
@@ -81,19 +75,16 @@ export const BribesTooltip = ({
   );
 
   const others: TotalValues | undefined =
-    aggregatedBribes.length > 3
-      ? aggregatedBribes.reduce(
-          (acc: TotalValues, ab) => {
-            const tokenPrice = tokenHoneyPrices
-              ? parseFloat(tokenHoneyPrices[ab.token.address] ?? 0) ?? 0
-              : 0;
+    activeIncentive.length > 5
+      ? activeIncentive.reduce(
+          (acc: TotalValues, ab: ActiveIncentive) => {
+            const tokenPrice = parseFloat(
+              tokenHoneyPrices?.[ab.token.address] ?? "0",
+            );
             return {
-              totalIncentives:
-                acc.totalIncentives +
-                parseFloat(ab.bribeTotalAmountLeft) * tokenPrice,
+              totalIncentives: acc.totalIncentives + ab.amountLeft * tokenPrice,
               amountPerProposal:
-                acc.amountPerProposal +
-                parseFloat(ab.amountPerProposal) * tokenPrice,
+                acc.amountPerProposal + ab.incentiveRate * tokenPrice,
             };
           },
           {
@@ -105,27 +96,31 @@ export const BribesTooltip = ({
 
   return (
     <div className="flex w-[250px] flex-col gap-1 p-1">
-      {aggregatedBribes.map((ab, i) => {
-        if (i > 2) {
+      {activeIncentive.map((ab: ActiveIncentive, i: number) => {
+        if (i > 4) {
           return;
         }
-        const tokenPrice = tokenHoneyPrices
-          ? parseFloat(tokenHoneyPrices[ab.token.address] ?? 0)
-          : 0;
+        const tokenPrice = parseFloat(
+          tokenHoneyPrices?.[ab.token.address] ?? "0",
+        );
         const bribeTotalValues: TotalValues = {
-          totalIncentives: parseFloat(ab.bribeTotalAmountLeft) * tokenPrice,
-          amountPerProposal: parseFloat(ab.amountPerProposal) * tokenPrice,
-          tokenAmountPerProposal: parseFloat(ab.amountPerProposal),
+          totalIncentives: ab.amountLeft * tokenPrice,
+          amountPerProposal: ab.incentiveRate * tokenPrice,
+          tokenAmountPerProposal: ab.incentiveRate,
         };
         return (
-          <BribeTooltipRow token={ab.token} totalValues={bribeTotalValues} />
+          <BribeTooltipRow
+            token={ab.token}
+            totalValues={bribeTotalValues}
+            key={`${i}-BribeTooltipRow`}
+          />
         );
       })}
       {others && (
         <BribeTooltipRow
           token={{
             address: "0x0",
-            symbol: `Others (+${aggregatedBribes.length - 3})`,
+            symbol: `Others (+${activeIncentive.length - 5})`,
             decimals: 18,
             name: "Others",
           }}
@@ -136,23 +131,35 @@ export const BribesTooltip = ({
       <div className="flex flex-row justify-between">
         <div className="text-md text-muted-foreground">Total</div>
         <div className="text-md">
-          <FormattedNumber value={totalBribesValue.totalIncentives} compact />
+          $
+          <FormattedNumber
+            value={totalBribesValue.totalIncentives}
+            compact
+            showIsSmallerThanMin
+          />
         </div>
       </div>
       <div className="flex flex-row justify-between">
         <div className="text-md text-muted-foreground">Amount Per Proposal</div>
         <div className="text-md">
-          <FormattedNumber value={totalBribesValue.amountPerProposal} compact />
+          $
+          <FormattedNumber
+            value={totalBribesValue.amountPerProposal}
+            compact
+            showIsSmallerThanMin
+          />
         </div>
       </div>
     </div>
   );
 };
 
-export const BribesPopover = ({
+export const ClaimBribesPopover = ({
   bribes,
+  coinbase,
 }: {
-  bribes: AggregatedBribe[] | undefined;
+  bribes: ActiveIncentive[] | undefined;
+  coinbase: Address;
 }) => {
   return (
     <>
@@ -161,18 +168,55 @@ export const BribesPopover = ({
           No Incentives
         </div>
       ) : (
+        <div className="flex flex-row items-center gap-1">
+          <Tooltip
+            toolTipTrigger={
+              <div className="w-fit rounded-lg border px-2 py-1 hover:bg-muted">
+                <TokenIconList
+                  tokenList={bribes?.map((ab) => ab.token) ?? []}
+                  showCount={3}
+                  size={"lg"}
+                  className="w-fit"
+                />
+              </div>
+            }
+            children={
+              <BribesTooltip activeIncentive={[]} key="ClaimBribesPopover" />
+            }
+          />
+          <Button disabled>Claim</Button>
+        </div>
+      )}
+    </>
+  );
+};
+
+export const BribesPopover = ({
+  incentives,
+}: {
+  incentives: ActiveIncentive[];
+}) => {
+  return (
+    <>
+      {!incentives || incentives?.length === 0 ? (
+        <div className="w-fit rounded-lg border px-2 py-1 text-xs hover:bg-muted">
+          No Incentives
+        </div>
+      ) : (
         <Tooltip
           toolTipTrigger={
-            <div className="w-fit rounded-lg border px-2 py-1 hover:bg-muted">
+            <div className="w-fit rounded-lg border p-1 hover:bg-muted">
               <TokenIconList
-                tokenList={bribes?.map((ab) => ab.token) ?? []}
+                tokenList={
+                  incentives?.map((incentive) => incentive.token) ?? []
+                }
                 showCount={3}
                 size={"lg"}
                 className="w-fit"
               />
             </div>
           }
-          children={<BribesTooltip aggregatedBribes={bribes ?? []} />}
+          children={<BribesTooltip activeIncentive={incentives ?? []} />}
         />
       )}
     </>

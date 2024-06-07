@@ -18,3 +18,5 @@ export * from "./bexQueryAbi";
 export * from "./multiswapAbi";
 export * from "./referralsAbi";
 export * from "./pythAbi";
+export * from "./vault";
+export * from "./bgtStaker";

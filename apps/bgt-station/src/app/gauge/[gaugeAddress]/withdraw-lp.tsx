@@ -1,21 +1,39 @@
 import { useState } from "react";
-import { Token, usePollWalletBalances } from "@bera/berajs";
-import { TokenInput } from "@bera/shared-ui";
+import {
+  BERA_VAULT_REWARDS_ABI,
+  Gauge,
+  Token,
+  TransactionActionType,
+  usePollVaultsInfo,
+} from "@bera/berajs";
+import { ActionButton, TokenInput, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Slider } from "@bera/ui/slider";
 import BigNumber from "bignumber.js";
-import { Info } from "./info";
+import { parseUnits } from "viem";
 
-export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
+export const WithdrawLP = ({
+  lpToken,
+  gauge,
+}: {
+  lpToken: Token;
+  gauge: Gauge;
+}) => {
   const [withdrawAmount, setWithdrawAmount] = useState<`${number}`>("0");
   const [withdrawPercent, setWithdrawPercent] = useState<number>(0);
-  const { useSelectedWalletBalance, isLoading } = usePollWalletBalances({
-    externalTokenList: [lpReceiptToken],
+  const { data, refresh } = usePollVaultsInfo({
+    vaultAddress: gauge.vaultAddress,
   });
-  const balance = useSelectedWalletBalance(lpReceiptToken.address);
   const validAmount =
     BigNumber(withdrawAmount).gt(0) &&
-    BigNumber(withdrawAmount).lte(balance?.formattedBalance ?? "0");
+    BigNumber(withdrawAmount).lte(data?.balance ?? "0");
+
+  const { write, ModalPortal } = useTxn({
+    message: "Withdraw LP Tokens",
+    actionType: TransactionActionType.WITHDRAW_LIQUIDITY,
+    onSuccess: () => refresh(),
+  });
+
   return (
     <div className="flex flex-col gap-4 rounded-md border border-border p-4">
       <div>
@@ -28,13 +46,20 @@ export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
         </div>
         <div className="mt-4 rounded-md border border-border bg-muted">
           <TokenInput
-            selected={lpReceiptToken}
+            selected={lpToken}
             amount={withdrawAmount}
-            balance={balance?.formattedBalance}
+            balance={data?.balance ?? "0"}
             hidePrice
             showExceeding={true}
             selectable={false}
-            setAmount={(amount) => setWithdrawAmount(amount as `${number}`)}
+            setAmount={(amount: string) => {
+              setWithdrawAmount(amount as `${number}`);
+              if (!data?.balance || BigNumber(data?.balance ?? "0").eq(0))
+                return;
+              setWithdrawPercent(
+                BigNumber(amount).div(data?.balance).times(100).toNumber(),
+              );
+            }}
           />
         </div>
       </div>
@@ -51,7 +76,15 @@ export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
                   variant={"secondary"}
                   size={"sm"}
                   className="w-full text-foreground"
-                  onClick={() => setWithdrawPercent(percent)}
+                  onClick={() => {
+                    setWithdrawPercent(percent);
+                    setWithdrawAmount(
+                      BigNumber(data?.balance ?? "0")
+                        .times(percent)
+                        .div(100)
+                        .toString() as `${number}`,
+                    );
+                  }}
                 >
                   {percent.toString()}%
                 </Button>
@@ -65,12 +98,36 @@ export const WithdrawLP = ({ lpReceiptToken }: { lpReceiptToken: Token }) => {
           max={100}
           min={0}
           onValueChange={(value: number[]) => {
-            setWithdrawPercent(value[0] ?? 0);
+            const percent = value[0] ?? 0;
+            setWithdrawPercent(percent);
+            setWithdrawAmount(
+              BigNumber(data?.balance ?? "0")
+                .times(percent)
+                .div(100)
+                .toString() as `${number}`,
+            );
           }}
         />
       </div>
-      <Info />
-      <Button disabled={!validAmount}>Withdraw</Button>
+      {/* <Info /> */}
+      <ActionButton>
+        <Button
+          className="w-full"
+          disabled={!validAmount}
+          onClick={() =>
+            write({
+              address: gauge.vaultAddress,
+              abi: BERA_VAULT_REWARDS_ABI,
+              functionName: "withdraw",
+              params: [parseUnits(withdrawAmount, lpToken.decimals)],
+              gasLimit: 200000n,
+            })
+          }
+        >
+          Withdraw
+        </Button>
+      </ActionButton>
+      {ModalPortal}
     </div>
   );
 };

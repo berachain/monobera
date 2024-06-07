@@ -1,37 +1,37 @@
-import { DataTable } from "@bera/shared-ui";
+import { TransactionActionType, useUserVaults } from "@bera/berajs";
+import { DataTable, useTxn } from "@bera/shared-ui";
 
-import { user_bgt_columns } from "~/columns/user-bgt-columns";
+import { getUserBgtColumns } from "~/columns/user-bgt-columns";
 
-const fakedata = [
-  {
-    gaugeAddress: "Validator 1",
-    vAPY: 0.1,
-    BGT: 0.1,
-  },
-  {
-    gaugeAddress: "Validator 1",
-    vAPY: 0.1,
-    BGT: 0.1,
-  },
-  {
-    gaugeAddress: "Validator 1",
-    vAPY: 0.1,
-    BGT: 0.1,
-  },
-  {
-    gaugeAddress: "Validator 1",
-    vAPY: 0.1,
-    BGT: 0.1,
-  },
-];
 export const BGTRewardsTable = () => {
+  const {
+    data: userVaultInfo,
+    isLoading: isUserVaultInfoLoading,
+    refresh,
+  } = useUserVaults();
+
+  const {
+    write,
+    isLoading: isClaimingRewardsLoading,
+    ModalPortal,
+  } = useTxn({
+    message: "Claiming BGT Rewards",
+    actionType: TransactionActionType.CLAIMING_REWARDS,
+    onSuccess: () => {
+      refresh();
+    },
+  });
   return (
     <div>
+      {ModalPortal}
       <DataTable
-        columns={user_bgt_columns as any}
-        data={fakedata}
+        columns={getUserBgtColumns({
+          isLoading: isClaimingRewardsLoading,
+          write,
+        })}
+        data={userVaultInfo?.vaults ?? []}
         className="min-w-[700px] shadow"
-        enablePagination
+        loading={isUserVaultInfoLoading}
       />
     </div>
   );

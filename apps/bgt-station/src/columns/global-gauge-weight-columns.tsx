@@ -1,8 +1,12 @@
 import React from "react";
-import { type Gauge } from "@bera/berajs";
-import { DataTableColumnHeader, FormattedNumber } from "@bera/shared-ui";
+import { type Gauge, type ValidatorInfo } from "@bera/berajs";
+import {
+  DataTableColumnHeader,
+  FormattedNumber,
+  Tooltip,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { BribesPopover } from "~/components/bribes-tooltip";
@@ -28,55 +32,59 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         column={column}
         title="Total Incentive Value"
         className="whitespace-nowrap"
+        tooltip={"The total value of incentives in the gauge."}
       />
     ),
     cell: ({ row }) => (
       <FormattedNumber
-        className="w-full justify-center"
+        className="w-full justify-start"
         symbol="USD"
         compact={false}
         compactThreshold={999_999_999}
-        value={690_490.6994}
+        value={row.original.activeIncentivesInHoney}
       />
     ),
     accessorKey: "incentive-value",
     enableSorting: false,
   },
+  // {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="BGT Staked"
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <FormattedNumber
+  //       className="w-full justify-start"
+  //       symbol="BGT"
+  //       compact={false}
+  //       compactThreshold={999_999_999}
+  //       value={row.original.amountStaked}
+  //     />
+  //   ),
+  //   accessorKey: "bgt-staked",
+  //   enableSorting: false,
+  // },
   {
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Staked"
+        title="BGT Inflation Capture"
+        tooltip={
+          "The percentage of global BGT inflation captured by the gauge."
+        }
         className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
       <FormattedNumber
         className="w-full justify-start"
-        symbol="BGT"
         compact={false}
         compactThreshold={999_999_999}
-        value={69.42}
-      />
-    ),
-    accessorKey: "bgt-staked",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="BGT Inflation Capture"
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => (
-      <FormattedNumber
-        className="w-full justify-center"
-        symbol="BGT"
-        compact={false}
-        compactThreshold={999_999_999}
-        value={42069.42}
+        percent
+        value={row.original.bgtInflationCapture ?? 0}
       />
     ),
     accessorKey: "bgt-inflation",
@@ -86,11 +94,51 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="Validtors Pointing Emissions"
+        title="Validators"
+        tooltip={
+          "The validators that are directing BGT emissions to this gauge."
+        }
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => <div className="flex w-full justify-center">ha</div>,
+    cell: ({ row }) => (
+      <div className="ml-[5px] flex flex-row gap-1 items-center">
+        {row.original.activeValidators.length > 3
+          ? row.original.activeValidators
+              .slice(0, 3)
+              .map((validator: ValidatorInfo, index: number) => (
+                <ValidatorIcon
+                  imgOverride={validator.logoURI}
+                  address={validator.id}
+                  key={index}
+                  className="cursor-pointer ml-[-5px]"
+                  onClick={(e: React.MouseEvent<HTMLImageElement>) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open(`/validators/${validator.id}`, "_self");
+                  }}
+                />
+              ))
+          : row.original.activeValidators.map(
+              (validator: ValidatorInfo, index: number) => (
+                <ValidatorIcon
+                  imgOverride={validator.logoURI}
+                  address={validator.id}
+                  key={index}
+                  className="cursor-pointer ml-[-5px]"
+                  onClick={(e: React.MouseEvent<HTMLImageElement>) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    window.open(`/validators/${validator.id}`, "_self");
+                  }}
+                />
+              ),
+            )}
+        {row.original.activeValidators.length > 3 && (
+          <span>+{row.original.activeValidators.length - 3}</span>
+        )}
+      </div>
+    ),
     accessorKey: "validators-emissions",
     enableSorting: false,
   },
@@ -104,7 +152,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     ),
     cell: ({ row }) => (
       <div className="flex w-full items-center justify-center gap-1">
-        <BribesPopover bribes={row.original.vaultWhitelist.whitelistedTokens} />
+        <BribesPopover incentives={row.original.activeIncentives} />
         <Button
           size="sm"
           variant="ghost"
@@ -121,7 +169,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         </Button>
       </div>
     ),
-    accessorKey: "validators-emissions",
+    accessorKey: "incentives",
     enableSorting: false,
   },
 ];

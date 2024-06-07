@@ -1,38 +1,32 @@
 "use client";
 
-import { notFound } from "next/navigation";
 import {
   truncateHash,
-  usePollGauges,
-  usePollValidatorInfo,
-  usePollWalletBalances,
+  useSelectedGauge,
+  useSelectedGaugeValidators,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
-import { general_validator_columns } from "~/columns/general-validator-columns";
+import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
 import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
+import { Address } from "viem";
 
-export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
+export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
   const {
-    data: validators,
-    isLoading: isValidatorLoading,
-    isValidating: isValidatorValidating,
-  } = usePollValidatorInfo();
-  const {
-    gaugeDictionary,
+    data: gauge,
     isLoading: isGaugeLoading,
     isValidating: isGaugeValidating,
-  } = usePollGauges();
-  const gauge = gaugeDictionary?.[gaugeAddress];
-  if (!isGaugeLoading && !gauge) notFound(); //gauge not found
-  const isTableLoading = isGaugeLoading || isGaugeValidating;
-  const { data: TokeList = [] } = usePollWalletBalances();
-  console.log("gaugeDictionary", gaugeDictionary);
+  } = useSelectedGauge(gaugeAddress);
+
+  const {
+    data: validators,
+    isLoading: isValidatorsLoading,
+    isValidating: isValidatorsValidating,
+  } = useSelectedGaugeValidators(gaugeAddress);
   return (
     <>
       {gauge ? (
@@ -58,7 +52,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
                     {gauge?.metadata.product}
                   </>
                 ),
-                externalLink: "https://berachain.com",
+                externalLink: gauge?.metadata.url,
               },
               {
                 title: "Pool Contract",
@@ -84,16 +78,14 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
 
             <TabsContent value="incentives">
               <DataTable
-                loading={isTableLoading}
+                loading={isGaugeLoading}
+                validating={isGaugeValidating}
                 columns={gauge_incentives_columns}
-                data={TokeList.map((token) => ({
-                  ...token,
-                  amountLeft: "50000",
-                }))}
+                data={gauge?.activeIncentives ?? []}
                 className="max-h-[300px] min-w-[1000px] shadow"
                 onRowClick={(row: any) => {
                   window.open(
-                    `/incentivize?gauge=${gaugeAddress}&&token=${row.original.address}`,
+                    `/incentivize?gauge=${gaugeAddress}&token=${row.original.token.address}`,
                     "_self",
                   );
                 }}
@@ -101,12 +93,15 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: string }) => {
             </TabsContent>
             <TabsContent value="validators">
               <DataTable
-                columns={general_validator_columns as any}
-                loading={isTableLoading}
-                validating={isValidatorValidating}
-                data={[]} //validators ??
+                columns={getGaugeValidatorColumns(gauge)}
+                loading={isValidatorsLoading}
+                validating={isValidatorsValidating}
+                data={validators ?? []}
                 className="min-w-[800px] shadow"
-                enablePagination
+                // enablePagination
+                onRowClick={(row: any) => {
+                  window.open(`/validators/${row.original.id}`, "_blank");
+                }}
               />
             </TabsContent>
           </Tabs>

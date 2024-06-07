@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import {
   formatInputTokenValue,
   useBeraJs,
+  useBgtUnstakedBalance,
   usePollWalletBalances,
   useUserValidators,
 } from "@bera/berajs";
@@ -38,8 +39,8 @@ export default function ValidatorInput({
 }) {
   const router = useRouter();
   const { isReady } = useBeraJs();
-  const { useSelectedWalletBalance } = usePollWalletBalances();
-  const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
+  const { data: bgtBalance } = useBgtUnstakedBalance();
+
   const { data } = useUserValidators();
 
   const selectedValidator = data?.find(
@@ -82,14 +83,14 @@ export default function ValidatorInput({
         <div className=" mt-2 flex h-3 w-full items-center justify-end gap-1 text-[10px] text-muted-foreground">
           <Icons.wallet className="relative inline-block h-3 w-3 " />
           <FormattedNumber
-            value={bgtBalance?.formattedBalance ?? "0"}
+            value={bgtBalance ?? "0"}
             symbol="BGT"
             compact={false}
           />
           <span
             className="underline hover:cursor-pointer"
             onClick={() => {
-              onAmountChange(bgtBalance?.formattedBalance ?? "0");
+              onAmountChange(bgtBalance ? bgtBalance.toString() : "0");
             }}
           >
             MAX

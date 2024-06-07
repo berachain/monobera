@@ -4,35 +4,50 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  ActiveIncentive,
+  CuttingBoardWeight,
+  Token,
   truncateHash,
   usePollValidatorInfo,
-  type Validator,
+  useTokenHoneyPrices,
+  useSelectedValidator,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
-import { FormattedNumber, Tooltip, ValidatorIcon } from "@bera/shared-ui";
+import {
+  FormattedNumber,
+  TokenIcon,
+  Tooltip,
+  ValidatorIcon,
+  apyTooltipText,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
-import { ValidatorPolData } from "./validator-pol-data";
+import {
+  ValidatorPolData,
+  getActiveIncentivesArray,
+} from "./validator-pol-data";
 
 export const ValidatorDataCard = ({
   title,
   value,
+  tooltipText,
   className,
 }: {
   title: string;
   value: React.ReactNode;
+  tooltipText?: string | undefined;
   className?: string;
 }) => {
   return (
     <Card className={cn(className, "bg-muted p-5")}>
-      <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground	">
+      <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground items-center flex gap-1">
         {title}
+        {tooltipText && <Tooltip text={tooltipText} />}
       </div>
       <div className="mt-1 text-foreground ">{value}</div>
     </Card>
@@ -56,11 +71,13 @@ export const GaugeOverview = ({
       ) : (
         <div className="inline-flex h-7 items-end gap-1">
           <span className="text-2xl font-semibold leading-6">
-            {totalGauges} (690.42M)
+            {totalGauges}
+            {/* (690.42M) */}
           </span>
         </div>
       )}
-      {isLoading ? (
+      {/* TODO: MAKE REAL */}
+      {/* {isLoading ? (
         <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
         <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
@@ -68,14 +85,14 @@ export const GaugeOverview = ({
           <Icons.bendFav className="h-6 w-6" />
           <Icons.berpsFav className="h-6 w-6" />
           <span className="text-sm leading-5 text-muted-foreground"> +4</span>
-          {/* {nonFeaturedGaugeLength !== 0 && (
+          {nonFeaturedGaugeLength !== 0 && (
             <span className="text-sm leading-5 text-muted-foreground">
               {" "}
               +{nonFeaturedGaugeLength}
             </span>
-          )} */}
+          )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
@@ -83,12 +100,12 @@ export const GaugeOverview = ({
 export const IncentivesOverview = ({
   totalActiveIncentiveValue,
   totalActiveIncentives,
-  featuredIncentiveTokenImages,
+  featuredTokens,
   isLoading,
 }: {
   totalActiveIncentiveValue: number;
   totalActiveIncentives: number;
-  featuredIncentiveTokenImages: string[];
+  featuredTokens: Token[];
   isLoading: boolean;
 }) => {
   return (
@@ -98,7 +115,11 @@ export const IncentivesOverview = ({
       ) : (
         <div className="inline-flex h-7 items-end gap-1">
           <span className="text-2xl font-semibold leading-6">
-            <FormattedNumber value={totalActiveIncentiveValue} compact />{" "}
+            <FormattedNumber
+              value={totalActiveIncentiveValue}
+              symbol="USD"
+              compact
+            />{" "}
             <span className="text-sm text-muted-foreground">
               ({totalActiveIncentives} Tokens)
             </span>
@@ -108,11 +129,20 @@ export const IncentivesOverview = ({
       {isLoading ? (
         <Skeleton className="mt-1 h-[25px] w-[100px]" />
       ) : (
-        <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background p-1 pr-2">
-          <Icons.honey className="h-6 w-6" />
-          <Icons.bgt className="h-6 w-6" />
-          <Icons.beraIcon className="h-6 w-6" />
-          <span className="text-sm leading-5 text-muted-foreground"> +27</span>
+        <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background p-1 ">
+          {featuredTokens.map((token, index) => (
+            <TokenIcon
+              key={index}
+              address={token.address}
+              className="h-6 w-6"
+            />
+          ))}
+          {featuredTokens.length > 3 && (
+            <span className="text-sm leading-5 text-muted-foreground">
+              {" "}
+              +{featuredTokens.length - 3}
+            </span>
+          )}
           {/* {featuredIncentiveTokenImages.map((gauge, index) => (
             <Image
               src={gauge}
@@ -132,6 +162,10 @@ export const IncentivesOverview = ({
   );
 };
 
+export interface ActiveIncentiveWithVault extends ActiveIncentive {
+  cuttingBoard: CuttingBoardWeight;
+}
+
 export default function Validator({
   validatorAddress,
 }: {
@@ -139,35 +173,44 @@ export default function Validator({
 }) {
   const router = useRouter();
   const {
-    validatorCounts,
-    validatorInfoDictionary,
-    validatorInfoList,
+    data: validator,
     isLoading,
-  } = usePollValidatorInfo();
-  //@ts-ignore
-  const validator = validatorInfoDictionary?.[validatorAddress];
-  console.log("validator", validator);
+    isValidating,
+  } = useSelectedValidator(validatorAddress);
+
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
-    tooltipText: string;
+    tooltipText: any;
   }[] = [
     {
       title: "APY",
       value: (
-        <span className="text-xl font-semibold">{validator?.apy ?? 0}%</span>
+        <div className="text-xl font-semibold">
+          <FormattedNumber value={validator?.apy ?? 0} showIsSmallerThanMin />%
+        </div>
       ),
-      tooltipText: "Total BGT directed to this validator",
+      tooltipText: apyTooltipText(),
     },
     {
       title: "Voting Power",
       value: (
         <span className="text-xl font-semibold">
-          {validator?.amountStaked}{" "}
-          <span className="text-sm text-muted-foreground">(0.0069%)</span>
+          <FormattedNumber
+            value={validator?.amountStaked ?? "0"}
+            showIsSmallerThanMin
+            symbol="BGT"
+          />{" "}
+          <FormattedNumber
+            className="text-sm text-muted-foreground"
+            value={validator ? validator.votingPower / 100 : 0}
+            showIsSmallerThanMin
+            percent
+          />
         </span>
       ),
-      tooltipText: "Total BGT directed to this validator",
+      tooltipText:
+        "Represents the influence in network governance based on the amount delegated to this validator",
     },
     {
       title: "Commission",
@@ -176,21 +219,53 @@ export default function Validator({
           {validator?.commission ?? 0}%
         </span>
       ),
-      tooltipText: "Honey",
+      tooltipText: "Amount of validator rewards retained by this validator",
     },
     {
       title: "Website",
       value: (
         <span className="text-ellipsis text-xl font-semibold hover:underline">
-          <Link href={validator?.website ?? ""}>
+          <Link href={validator?.metadata.website ?? ""}>
             {validator?.metadata.website ?? ""}
           </Link>
         </span>
       ),
-      tooltipText: "Honey",
+      tooltipText: undefined,
     },
   ];
 
+  const activeIncentivesArray: ActiveIncentiveWithVault[] =
+    getActiveIncentivesArray(validator);
+  const activeIncentivesTokens = [
+    ...new Set(activeIncentivesArray?.map((incentive) => incentive.token)),
+  ];
+  const { data: tokenHoneyPrices } = useTokenHoneyPrices({
+    tokenAddresses: activeIncentivesTokens.map(
+      (t: Token) => t.address,
+    ) as Address[],
+  });
+
+  const activeIncentivesValue: number = activeIncentivesArray?.reduce(
+    (acc: number, ab: ActiveIncentiveWithVault) => {
+      const tokenPrice = parseFloat(
+        tokenHoneyPrices?.[ab.token.address] ?? "0",
+      );
+      return acc + ab.amountLeft * tokenPrice;
+    },
+    0,
+  );
+
+  const returnPerBgt: number = activeIncentivesArray?.reduce(
+    (acc: number, ab: ActiveIncentiveWithVault) => {
+      const tokenPrice = parseFloat(
+        tokenHoneyPrices?.[ab.token.address] ?? "0",
+      );
+      return acc + ab.incentiveRate * tokenPrice;
+    },
+    0,
+  );
+
+  console.log(validator);
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -204,10 +279,7 @@ export default function Validator({
         <div className="mt-2 flex w-full flex-col justify-between gap-6 border-b  border-border pb-6 lg:flex-row ">
           <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
-              <ValidatorIcon
-                address={validator?.id ?? ""}
-                className="h-12 w-12"
-              />
+              <ValidatorIcon address={validator?.id} className="h-12 w-12" />
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (
@@ -221,7 +293,7 @@ export default function Validator({
               ) : (
                 <span className="flex flex-row gap-1 text-foreground hover:underline">
                   <Link href={`${blockExplorerUrl}/${validator?.id}`}>
-                    {truncateHash(validator?.id)}
+                    {truncateHash(validator?.id ?? "")}
                   </Link>
                   <Icons.externalLink className="h-4 w-4 self-center" />
                 </span>
@@ -243,7 +315,8 @@ export default function Validator({
                   key={index}
                 >
                   <div className="flex flex-row items-center gap-1 text-muted-foreground">
-                    {item.title} <Tooltip text={item.tooltipText} />
+                    {item.title}{" "}
+                    {item.tooltipText && <Tooltip text={item.tooltipText} />}
                   </div>
                   {isLoading ? (
                     <Skeleton className="h-[30px] w-[150px]" />
@@ -261,7 +334,7 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=delegate&validator=${validator.id}`,
+                    `/delegate?action=delegate&validator=${validator?.id}`,
                   )
                 }
               >
@@ -273,7 +346,7 @@ export default function Validator({
                 disabled={isLoading}
                 onClick={() =>
                   router.push(
-                    `/delegate?action=unbond&validator=${validator.id}`,
+                    `/delegate?action=unbond&validator=${validator?.id}`,
                   )
                 }
               >
@@ -286,16 +359,16 @@ export default function Validator({
         </div>
       </div>
 
-      <div className="mt-6 grid w-full   grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-4 md:gap-x-4">
+      <div className="mt-6 grid w-full grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-4 md:gap-x-4">
         <ValidatorDataCard
           className="col-span-2 row-start-1  h-[135px]"
           title="Active Gauges Vaults"
           value={
             <GaugeOverview
               isLoading={isLoading}
-              totalGauges={(validator?.cuttingboard ?? []).length}
-              featuredGauges={(validator?.cuttingboard ?? []).map(
-                (cb: any) => cb.receiver.imageUri,
+              totalGauges={(validator?.cuttingBoard.weights ?? []).length}
+              featuredGauges={(validator?.cuttingBoard.weights ?? []).map(
+                (cb: any) => cb.receiverMetadata.logoURI,
               )}
             />
           }
@@ -303,28 +376,29 @@ export default function Validator({
         <ValidatorDataCard
           className="col-span-2 row-start-2 h-[135px] md:row-start-1"
           title="Active Incentives"
+          tooltipText="The total value of active incentives that this validator is directing BGT towards"
           value={
             <IncentivesOverview
               isLoading={isLoading}
-              totalActiveIncentiveValue={6420000}
-              totalActiveIncentives={30}
-              featuredIncentiveTokenImages={[
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-                "https://res.cloudinary.com/duv0g402y/image/upload/v1693160761/honey/qqyo5g3phzdwezvazsih.png",
-              ]}
+              totalActiveIncentiveValue={activeIncentivesValue}
+              totalActiveIncentives={activeIncentivesArray?.length ?? 0}
+              featuredTokens={activeIncentivesTokens.map((token) => token)}
             />
           }
         />
         <ValidatorDataCard
           className="row-start-3 h-[100px] md:row-start-2"
           title="Reward Rate"
+          tooltipText="The amount of BGT directed by this validator per proposal"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[100px]" />
             ) : (
               <div className="flex flex-row gap-1">
-                <span className="text-2xl font-semibold">100</span>
+                <FormattedNumber
+                  value={validator?.rewardRate ?? 0}
+                  className="text-2xl font-semibold"
+                />
                 <Icons.bgt className="h-6 w-6 self-center" />
               </div>
             )
@@ -333,12 +407,18 @@ export default function Validator({
         <ValidatorDataCard
           className="row-start-4 h-[100px] md:row-start-2"
           title="Return per BGT"
+          tooltipText="The estimated amount of incentives received per BGT directed by this validator"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[100px]" />
             ) : (
-              <div className="flex flex-row gap-1">
-                <span className="text-2xl font-semibold">100</span>
+              <div className="flex flex-row gap-1 text-2xl font-semibold">
+                $
+                <FormattedNumber
+                  value={returnPerBgt}
+                  compact
+                  showIsSmallerThanMin
+                />
                 <Icons.honey className="h-6 w-6 self-center" />
               </div>
             )
@@ -346,17 +426,30 @@ export default function Validator({
         />
         <ValidatorDataCard
           className="row-start-5 h-[100px] md:row-start-2"
-          title="Lifetime Incentives Received"
+          title="Lifetime Incentives"
           value={
             isLoading ? (
               <Skeleton className="h-[30px] w-[150px]" />
             ) : (
               <div className="flex flex-row items-center gap-1">
                 <span className="text-2xl font-semibold">
-                  <FormattedNumber value={6420000} compact />
+                  <FormattedNumber
+                    value={
+                      validator
+                        ? validator.allTimeData.allTimeHoneyValueTokenRewards
+                        : 0
+                    }
+                    showIsSmallerThanMin
+                    compact
+                    symbol="USD"
+                  />
                 </span>
                 <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
-                  (32 Tokens)
+                  (
+                  {validator
+                    ? validator.allTimeData.allTimeUniqueTokenCount
+                    : 0}{" "}
+                  Tokens)
                 </span>
               </div>
             )
@@ -370,14 +463,28 @@ export default function Validator({
               <Skeleton className="h-[30px] w-[100px]" />
             ) : (
               <div className="flex flex-row gap-1">
-                <span className="text-2xl font-semibold">100</span>
+                <span className="text-2xl font-semibold">
+                  <FormattedNumber
+                    value={
+                      validator ? validator.allTimeData.allTimeBgtDirected : 0
+                    }
+                    showIsSmallerThanMin
+                    compact
+                  />
+                </span>
                 <Icons.bgt className="h-6 w-6 self-center" />
               </div>
             )
           }
         />
       </div>
-      {/* <ValidatorPolData validator={validator} isLoading={isLoading} /> */}
+      {validator && (
+        <ValidatorPolData
+          validator={validator}
+          isLoading={isLoading}
+          isValidating={isValidating}
+        />
+      )}
     </div>
   );
 }
