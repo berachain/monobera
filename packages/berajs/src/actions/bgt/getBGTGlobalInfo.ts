@@ -23,14 +23,11 @@ export interface GlobalInfo {
 export const getBGTGlobalInfo = async (
   config: BeraConfig,
 ): Promise<GlobalInfo | undefined> => {
-  // if (!config.endpoints?.bgtEndpoint) {
-  //   throw new Error("Missing backend endpoint in config");
-  // }
+  if (!config.endpoints?.bgtEndpoint) {
+    throw new Error("Missing backend endpoint in config");
+  }
   try {
-    // const res = await fetch(`${config.endpoints.bgtEndpoint}/bgt_info`);
-    const res = await fetch(
-      "http://localhost:3001/berachain/v1alpha1/beacon/homepage",
-    );
+    const res = await fetch(`${config.endpoints.bgtEndpoint}/homepage`);
     return await res.json();
   } catch (error) {
     console.error(error);
