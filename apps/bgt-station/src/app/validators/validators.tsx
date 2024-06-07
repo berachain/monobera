@@ -1,11 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  usePollGauges,
-  usePollGlobalData,
-  usePollValidatorInfo,
-} from "@bera/berajs";
+import { usePollGlobalData } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -14,12 +10,16 @@ import { Skeleton } from "@bera/ui/skeleton";
 import ValidatorsTable from "./components/validators-table";
 
 export default function Validators() {
-  const { validatorCounts, isLoading } = usePollValidatorInfo();
-  const { data } = usePollGlobalData();
-  const { gaugeCounts } = usePollGauges();
+  const { data, isLoading } = usePollGlobalData();
   const generalInfo = [
     {
-      amount: validatorCounts,
+      amount: (
+        <FormattedNumber
+          value={data?.validatorCount ?? 0}
+          compact={false}
+          visibleDecimals={0}
+        />
+      ),
       text: "Total Validators",
       img: (
         <div className="absolute bottom-3 right-3">
@@ -28,7 +28,12 @@ export default function Validators() {
       ),
     },
     {
-      amount: "$130.123",
+      amount: (
+        <FormattedNumber
+          value={data?.sumAllIncentivesInHoney ?? 0}
+          symbol="USD"
+        />
+      ),
       text: "Total Active Incentives",
       img: (
         <div className="absolute bottom-3 right-3">
@@ -52,7 +57,13 @@ export default function Validators() {
       ),
     },
     {
-      amount: gaugeCounts,
+      amount: (
+        <FormattedNumber
+          value={data?.vaultCount ?? 0}
+          compact={false}
+          visibleDecimals={0}
+        />
+      ),
       text: "Active gauges",
       img: (
         <div className="absolute bottom-0 right-3">

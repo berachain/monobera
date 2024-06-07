@@ -22,7 +22,6 @@ export const useSelectedGauge = (
       const url = `http://localhost:3001/berachain/v1alpha1/beacon/vaults/${id}`;
       const gauge = await fetch(url);
       const temp = await gauge.json();
-      console.log(temp);
       return temp.vault;
     },
     {

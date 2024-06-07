@@ -24,7 +24,6 @@ export default function Gauge() {
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
-  const { validatorInfoList = [] } = usePollValidatorInfo();
 
   useEffect(() => {
     return () => {
@@ -37,11 +36,10 @@ export default function Gauge() {
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
-          gaugeWeights={validatorInfoList?.[1]?.cuttingBoard.weights ?? []}
+          gaugeWeights={data?.globalCuttingBoard ?? []}
           isLoading={isGlobalDataLoading}
           totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
           globalAmountStaked={data?.bgtTotalSupply ?? "0"}
-          showTotal={false}
         />
       </div>
 

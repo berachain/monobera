@@ -6,12 +6,10 @@ import { useRouter } from "next/navigation";
 import {
   ActiveIncentive,
   CuttingBoardWeight,
-  Gauge,
   Token,
   truncateHash,
-  usePollValidatorInfo,
-  useTokenHoneyPrices,
   useSelectedValidator,
+  useTokenHoneyPrices,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import {

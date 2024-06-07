@@ -1,11 +1,15 @@
 import React from "react";
 import {
-  Gauge,
-  Validator,
-  usePollGauges,
   usePollGlobalData,
+  type ActiveIncentive,
+  type Validator,
 } from "@bera/berajs";
-import { FormattedNumber, GaugeIcon, ValidatorIcon } from "@bera/shared-ui";
+import {
+  FormattedNumber,
+  GaugeIcon,
+  TokenIcon,
+  ValidatorIcon,
+} from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -14,13 +18,7 @@ import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBg
 
 export default function GaugeInfoCard() {
   const { data: globalData, isLoading } = usePollGlobalData();
-  const { gaugeCounts, gaugeList } = usePollGauges({
-    sortBy: "bgtInflationCapture",
-    sortOrder: "desc",
-    page: 1,
-    pageSize: 3,
-  });
-
+  console.log(globalData);
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
@@ -31,15 +29,15 @@ export default function GaugeInfoCard() {
           {!isLoading ? (
             <div className="inline-flex h-7 items-end gap-1">
               <span className="text-2xl font-semibold leading-6">
-                {gaugeCounts}
+                {globalData?.vaultCount}
               </span>
             </div>
           ) : (
             <Skeleton className="h-7 w-[125px] " />
           )}
-          {!isLoading ? (
+          {!isLoading && globalData ? (
             <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-              {gaugeList.map((gauge: Gauge, index: number) => (
+              {globalData.top3Vaults.vaults.map((gauge: any, index: number) => (
                 <GaugeIcon
                   key={index}
                   address={gauge.id}
@@ -47,10 +45,10 @@ export default function GaugeInfoCard() {
                   overrideImage={gauge.metadata.logoURI}
                 />
               ))}
-              {gaugeCounts > 3 && (
+              {globalData.vaultCount > 3 && (
                 <span className="text-sm leading-5 text-muted-foreground">
                   {" "}
-                  +{gaugeCounts - 3}
+                  +{globalData.vaultCount - 3}
                 </span>
               )}
             </div>
@@ -125,22 +123,33 @@ export default function GaugeInfoCard() {
           <div className="text-xs leading-5 text-muted-foreground">
             Active Incentives
           </div>
-          {!isLoading ? (
+          {!isLoading && globalData ? (
             <div className="flex items-center gap-2 text-xl font-bold leading-5">
-              690.42K
+              <FormattedNumber
+                value={globalData.sumAllIncentivesInHoney}
+                symbol="USD"
+              />
             </div>
           ) : (
             <Skeleton className="h-6 w-[100px]" />
           )}
-          {!isLoading ? (
+          {!isLoading && globalData ? (
             <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background px-2 py-1">
-              <Icons.bgt className="h-4 w-4" />
-              <Icons.honey className="h-4 w-4" />
-              <Icons.bera className="h-4 w-4" />
-              <span className="text-xs leading-5 text-muted-foreground">
-                {" "}
-                +420,69
-              </span>
+              {globalData.top3Incentives.activeIncentives.map(
+                (incentive: ActiveIncentive) => (
+                  <TokenIcon address={incentive.token.address} size={"md"} />
+                ),
+              )}
+              {globalData.incentiveCount > 3 && (
+                <span className="text-xs leading-5 text-muted-foreground">
+                  {" "}
+                  +
+                  <FormattedNumber
+                    value={globalData.incentiveCount - 3}
+                    visibleDecimals={0}
+                  />
+                </span>
+              )}
             </div>
           ) : (
             <Skeleton className="mt-1 h-6 w-[75px]" />

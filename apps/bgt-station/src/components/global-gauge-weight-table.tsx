@@ -43,30 +43,27 @@ export default function GlobalGaugeWeightTable({
     [setPage],
   );
   return (
-    <div className="w-full ">
-      {String(isTyping)}
-      <DataTable
-        fetchData={fetchData}
-        enablePagination
-        loading={isLoading}
-        validating={isValidating}
-        columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
-        data={myGauge ? [] : gaugeList ?? []}
-        className="min-h-[200px] min-w-[1100px] shadow"
-        additionalTableProps={{
-          initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
-          pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
-          state: { sorting },
-          manualPagination: true,
-        }}
-        onRowClick={(row: any) =>
-          window.open(
-            `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
-            "_self",
-          )
-        }
-        onCustomSortingChange={(a: any) => handleNewSort(a)}
-      />
-    </div>
+    <DataTable
+      fetchData={fetchData}
+      enablePagination
+      loading={isLoading}
+      validating={isValidating}
+      columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
+      data={myGauge ? [] : gaugeList ?? []}
+      className="min-h-[200px] min-w-[1100px] shadow"
+      additionalTableProps={{
+        initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
+        pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
+        state: { sorting },
+        manualPagination: true,
+      }}
+      onRowClick={(row: any) =>
+        window.open(
+          `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
+          "_self",
+        )
+      }
+      onCustomSortingChange={(a: any) => handleNewSort(a)}
+    />
   );
 }

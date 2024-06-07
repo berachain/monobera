@@ -9,21 +9,15 @@ export interface GlobalInfo {
     blockCountPerYear: number;
     totalStakeBgt: number;
   };
-  honeyPrices: {
-    incentiveHoneyPrices: {
-      address: Address;
-      price: string;
-    }[];
-    incentivesCount: number;
-  };
-  top3EmittingValidators: {
-    validators: {
-      stakedVotingPower: number;
-      validator: Validator;
-    }[];
-  };
+  incentiveCount: number;
+  sumAllIncentivesInHoney: string;
   top3Incentives: { activeIncentives: ActiveIncentive[] };
+  top3Vaults: { vaults: ActiveIncentive[]; total: number };
+  top3EmittingValidators: {
+    validators: { validator: Validator; stakedVotingPower: number }[];
+  };
   validatorCount: number;
+  vaultCount: number;
 }
 
 export const getBGTGlobalInfo = async (
