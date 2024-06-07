@@ -27,7 +27,7 @@ export const AllValidator = ({
     isValidating,
     validatorCounts = 0,
   } = usePollValidatorInfo({
-    sortBy: sorting[0]?.id,
+    sortBy: sorting[0]?.id as "commission" | "apy" | "votingpower" | undefined,
     sortOrder: sorting[0]?.desc ? "desc" : "asc",
     page: page + 1,
     pageSize: VALIDATOR_PAGE_SIZE,

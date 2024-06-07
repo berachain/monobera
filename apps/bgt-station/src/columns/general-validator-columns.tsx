@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Gauge,
   useTokenHoneyPrice,
   type CuttingBoardWeight,
   type UserValidator,
@@ -249,11 +250,121 @@ const ESTIMATED_YEARLY_BGT_GAUGE: ColumnDef<Validator> = {
   enableSorting: false,
 };
 
-export const gauge_validator_columns: ColumnDef<Validator>[] = [
-  VALIDATOR_COLUMN,
-  ESTIMATED_BGT_GAUGE,
-  ESTIMATED_YEARLY_BGT_GAUGE,
-];
+export const getGaugeValidatorColumns = (gauge: Gauge) => {
+  const gauge_validator_columns: ColumnDef<Validator>[] = [
+    VALIDATOR_COLUMN,
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="BGT Per Proposal"
+          tooltip={
+            "amount of BGT this validator is directing to this vault each proposal"
+          }
+        />
+      ),
+      cell: ({ row }) => {
+        const { data: price } = useTokenHoneyPrice({
+          tokenAddress: beraTokenAddress,
+        });
+
+        const cuttingBoard = row.original.cuttingBoard.weights.find(
+          (cb: any) => cb.receiver.toLowerCase() === gauge.id.toLowerCase(),
+        );
+        if (!cuttingBoard)
+          return (
+            <FormattedNumber
+              className="w-full justify-start"
+              symbol="BGT"
+              compact={false}
+              compactThreshold={999_999_999}
+              value={0}
+            />
+          );
+        const weight =
+          parseFloat(cuttingBoard?.percentageNumerator) / 10000 ?? 0;
+        const perProposal = weight * parseFloat(row.original.rewardRate);
+        return (
+          <div className="flex flex-col gap-1">
+            <FormattedNumber
+              value={perProposal}
+              compact
+              showIsSmallerThanMin
+              symbol="BGT"
+            />
+            <span className="text-xs text-muted-foreground">
+              <FormattedNumber
+                value={perProposal * parseFloat(price ?? "0")}
+                showIsSmallerThanMin
+                symbol="USD"
+              />
+            </span>
+          </div>
+        );
+      },
+      accessorKey: "rewardRate",
+      enableSorting: true,
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title="Estimated BGT/yr"
+          tooltip={
+            "amount of BGT this validator is directing to this vault each proposal"
+          }
+        />
+      ),
+      cell: ({ row }) => {
+        const { data: price } = useTokenHoneyPrice({
+          tokenAddress: beraTokenAddress,
+        });
+
+        const cuttingBoard = row.original.cuttingBoard.weights.find(
+          (cb: any) => cb.receiver.toLowerCase() === gauge.id.toLowerCase(),
+        );
+        if (!cuttingBoard)
+          return (
+            <FormattedNumber
+              className="w-full justify-start"
+              symbol="BGT"
+              compact={false}
+              compactThreshold={999_999_999}
+              value={0}
+            />
+          );
+        const estimatedYearlyBgt = useValidatorEstimatedBgtPerYear(
+          row.original,
+        );
+        const weight =
+          parseFloat(cuttingBoard?.percentageNumerator) / 10000 ?? 0;
+
+        const estimatedAmountDirected = weight * estimatedYearlyBgt;
+        return (
+          <div className="flex flex-col gap-1">
+            <FormattedNumber
+              value={estimatedAmountDirected}
+              compact
+              showIsSmallerThanMin
+              symbol="BGT"
+            />
+            <span className="text-xs text-muted-foreground">
+              <FormattedNumber
+                value={estimatedAmountDirected * parseFloat(price ?? "0")}
+                showIsSmallerThanMin
+                symbol="USD"
+              />
+            </span>
+          </div>
+        );
+      },
+      accessorKey: "yearlyBgt",
+      enableSorting: false,
+    },
+  ];
+
+  return gauge_validator_columns;
+};
 
 export const general_validator_columns: ColumnDef<Validator>[] = [
   VALIDATOR_COLUMN,

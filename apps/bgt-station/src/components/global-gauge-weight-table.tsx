@@ -15,13 +15,19 @@ export default function GlobalGaugeWeightTable({
   keywords?: string;
 }) {
   const [page, setPage] = useState(0);
-  const [sorting, setSorting] = useState([{ id: "activeIncentivesInHoney", desc: true }]);
+  const [sorting, setSorting] = useState([
+    { id: "activeIncentivesInHoney", desc: true },
+  ]);
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;
     setSorting(newSort);
   };
   const { gaugeCounts, gaugeList, isLoading, isValidating } = usePollGauges({
-    sortBy: sorting[0]?.id,
+    sortBy: sorting[0]?.id as
+      | "activeIncentivesInHoney"
+      | "amountstaked"
+      | "bgtInflationCapture"
+      | undefined,
     sortOrder: sorting[0]?.desc ? "desc" : "asc",
     page: page + 1,
     pageSize: GAUGE_PAGE_SIZE,
