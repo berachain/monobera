@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { Address } from "viem";
-import { GetBgtInflation, getTokenHoneyPriceReq } from "@bera/graphql";
+import { getApyInfo, getTokenHoneyPriceReq } from "@bera/graphql";
 import { BeraConfig } from "~/types/global";
 import { beraTokenAddress, blockTime } from "@bera/config";
 
@@ -56,29 +56,32 @@ export const getBgtApy = async ({
       console.log(e);
       return "0";
     });
-  const rewardRates: {
-    baseRate: string;
-    rewardRate: string;
-  } = await bgtClient
-    .query({
-      query: GetBgtInflation,
-    })
-    .then((res: any) => {
-      return {
-        baseRate: res.data.globalInfo.baseRewardRate,
-        rewardRate: res.data.globalInfo.rewardRate,
-      };
-    })
-    .catch((e: any) => {
-      console.log(e);
-      return {
-        baseRate: "0",
-        rewardRate: "0",
-      };
-    });
+    const apyInfo: any= await bgtClient
+      .query({
+        query: getApyInfo,
+      })
+      .then((res: any) => {
+        return {
+          baseRate: res.data.globalInfo.baseRewardRate,
+          rewardRate: res.data.globalInfo.rewardRate,
+        };
+      })
+      .catch((e: any) => {
+        console.log(e);
+        return undefined
+      });
 
-  const estimatedBgtPerBlock =
-    parseFloat(rewardRates.baseRate) + parseFloat(rewardRates.rewardRate);
+  if (!apyInfo) return '0'
+
+  const globalRewardRate = parseFloat(apyInfo.data.globalInfo.baseRate) + parseFloat(apyInfo.data.globalInfo.rewardRate);
+
+  const totalBgtStaked = parseFloat(apyInfo.data.globalInfo.totalBgtStaked);
+
+  const selectedCuttingBoard = apyInfo.data.globalCuttingBoardWeights.find((cb: any) => cb.vault.stakingToken.id.toLowerCase() === receiptTokenAddress.toLowerCase());
+
+  if (!selectedCuttingBoard) return '0'
+
+  const estimatedBgtPerBlock = (parseFloat(selectedCuttingBoard.amount) / totalBgtStaked) * globalRewardRate;
   const secondsInAYear = 60 * 60 * 24 * 365;
   const blocksPerSecond = 1 / blockTime;
   const blocksPerYear = secondsInAYear * blocksPerSecond;
