@@ -9,41 +9,35 @@ const VALIDATOR_PAGE_SIZE = 10;
 
 export const AllValidator = ({
   keyword,
+  isTyping,
   onRowClick,
 }: {
   keyword?: any;
+  isTyping?: boolean;
   onRowClick?: any;
 }) => {
   const [page, setPage] = useState(0);
-
-  const [sorting, setSorting] = useState<any>([
-    {
-      id: "tvl",
-      desc: true,
-    },
-  ]);
-
+  const [sorting, setSorting] = useState([{ id: "votingpower", desc: true }]);
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;
     setSorting(newSort);
   };
-
+  const fetchData = useCallback(
+    (state: TableState) => setPage(state?.pagination?.pageIndex),
+    [setPage],
+  );
   const {
     validatorInfoList,
     isLoading,
     isValidating,
     validatorCounts = 0,
   } = usePollValidatorInfo({
-    sortBy: sorting[0]?.id,
+    sortBy: sorting[0]?.id as "commission" | "apy" | "votingpower" | undefined,
     sortOrder: sorting[0]?.desc ? "desc" : "asc",
     page: page + 1,
     pageSize: VALIDATOR_PAGE_SIZE,
-    query: keyword,
+    query: isTyping ? "" : keyword,
   });
-  const fetchData = useCallback(
-    (state: TableState) => setPage(state?.pagination?.pageIndex),
-    [setPage],
-  );
   return (
     <DataTable
       columns={general_validator_columns as ColumnDef<Validator>[]}
@@ -52,7 +46,7 @@ export const AllValidator = ({
       fetchData={fetchData}
       enablePagination
       loading={isLoading}
-      // validating={isValidating}
+      validating={isValidating}
       additionalTableProps={{
         initialState: { pagination: { pageSize: VALIDATOR_PAGE_SIZE } },
         state: { sorting },

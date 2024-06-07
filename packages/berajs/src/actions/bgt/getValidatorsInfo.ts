@@ -10,6 +10,7 @@ export interface GetValidatorsInfo {
 
 export interface ValidatorFilter {
   vaultId?: string;
+  filterByProducts?: string;
   sortBy?: "votingpower" | "commission" | "apy";
   sortOrder?: "asc" | "desc";
   page?: number;
@@ -21,12 +22,11 @@ export const getValidatorsInfo = async (
   config: BeraConfig,
   filter?: ValidatorFilter,
 ): Promise<GetValidatorsInfo> => {
-  // if (!config.endpoints?.bgtEndpoint) {
-  //   throw new Error("Missing backend endpoint in config");
-  // }
+  if (!config.endpoints?.bgtEndpoint) {
+    throw new Error("Missing backend endpoint in config");
+  }
   try {
-    // const url = `${config.endpoints?.bgtEndpoint}/validators`
-    let url = "http://localhost:3001/berachain/v1alpha1/beacon/validators";
+    let url = `${config.endpoints?.bgtEndpoint}/validators`;
     if (filter) {
       let isFirstParam = true;
       Object.keys(filter).forEach((key) => {

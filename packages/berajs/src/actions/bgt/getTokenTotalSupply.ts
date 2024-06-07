@@ -1,6 +1,6 @@
-import { Address, PublicClient, erc20Abi } from "viem";
+import { Address, PublicClient, erc20Abi, formatEther } from "viem";
 
-export interface GetBGTInfo {
+export interface GetTokenTotalSupply {
   token: Address;
   publicClient: PublicClient | undefined;
 }
@@ -8,7 +8,7 @@ export interface GetBGTInfo {
 export const getTokenTotalSupply = async ({
   token,
   publicClient,
-}: GetBGTInfo): Promise<bigint | undefined> => {
+}: GetTokenTotalSupply): Promise<string> => {
   if (!publicClient) throw new Error("Missing public client");
   if (!token) throw new Error("Missing token address");
   try {
@@ -18,9 +18,9 @@ export const getTokenTotalSupply = async ({
       functionName: "totalSupply",
       args: [],
     });
-    return result as bigint;
+    return formatEther(result ?? 0n);
   } catch (error) {
     console.log(error);
-    return 0n;
+    return "0";
   }
 };

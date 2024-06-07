@@ -8,13 +8,13 @@ import {
   CuttingBoardWeight,
   Token,
   truncateHash,
-  usePollValidatorInfo,
-  useTokenHoneyPrices,
   useSelectedValidator,
+  useTokenHoneyPrices,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import {
   FormattedNumber,
+  GaugeIcon,
   TokenIcon,
   Tooltip,
   ValidatorIcon,
@@ -45,7 +45,7 @@ export const ValidatorDataCard = ({
 }) => {
   return (
     <Card className={cn(className, "bg-muted p-5")}>
-      <div className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground items-center flex gap-1">
+      <div className="flex w-full items-center gap-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
         {title}
         {tooltipText && <Tooltip text={tooltipText} />}
       </div>
@@ -60,10 +60,9 @@ export const GaugeOverview = ({
   isLoading,
 }: {
   totalGauges: number;
-  featuredGauges: string[];
+  featuredGauges: CuttingBoardWeight[];
   isLoading: boolean;
 }) => {
-  const nonFeaturedGaugeLength = totalGauges - featuredGauges.length;
   return (
     <div>
       {isLoading ? (
@@ -72,27 +71,29 @@ export const GaugeOverview = ({
         <div className="inline-flex h-7 items-end gap-1">
           <span className="text-2xl font-semibold leading-6">
             {totalGauges}
-            {/* (690.42M) */}
           </span>
         </div>
       )}
-      {/* TODO: MAKE REAL */}
-      {/* {isLoading ? (
-        <Skeleton className="mt-1 h-[25px] w-[100px]" />
-      ) : (
+      {!isLoading ? (
         <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-          <Icons.bexFav className="h-6 w-6" />
-          <Icons.bendFav className="h-6 w-6" />
-          <Icons.berpsFav className="h-6 w-6" />
-          <span className="text-sm leading-5 text-muted-foreground"> +4</span>
-          {nonFeaturedGaugeLength !== 0 && (
+          {featuredGauges.map((gauge: CuttingBoardWeight, index: number) => (
+            <GaugeIcon
+              key={index}
+              address={gauge.receiver}
+              size="md"
+              overrideImage={gauge.receiverMetadata.logoURI}
+            />
+          ))}
+          {totalGauges > 3 && (
             <span className="text-sm leading-5 text-muted-foreground">
               {" "}
-              +{nonFeaturedGaugeLength}
+              +{totalGauges - 3}
             </span>
           )}
         </div>
-      )} */}
+      ) : (
+        <Skeleton className="mt-1 h-6 w-[75px]" />
+      )}
     </div>
   );
 };
@@ -265,7 +266,6 @@ export default function Validator({
     0,
   );
 
-  console.log(validator);
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -367,9 +367,7 @@ export default function Validator({
             <GaugeOverview
               isLoading={isLoading}
               totalGauges={(validator?.cuttingBoard.weights ?? []).length}
-              featuredGauges={(validator?.cuttingBoard.weights ?? []).map(
-                (cb: any) => cb.receiverMetadata.logoURI,
-              )}
+              featuredGauges={validator?.cuttingBoard.weights ?? []}
             />
           }
         />
