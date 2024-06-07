@@ -9,7 +9,7 @@ import POLLING from "~/enum/polling";
 
 export const usePollHoneyVaultBalance = () => {
   const publicClient = usePublicClient();
-  const method = "tvl";
+  const method = "availableAssets";
   const QUERY_KEY = ["bhoney", method];
   const { isLoading } = useSWR(
     QUERY_KEY,
