@@ -32,11 +32,12 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         column={column}
         title="Total Incentive Value"
         className="whitespace-nowrap"
+        tooltip={"The total value of incentives in the gauge."}
       />
     ),
     cell: ({ row }) => (
       <FormattedNumber
-        className="w-full justify-center"
+        className="w-full justify-start"
         symbol="USD"
         compact={false}
         compactThreshold={999_999_999}
@@ -46,43 +47,45 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     accessorKey: "incentive-value",
     enableSorting: false,
   },
+  // {
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="BGT Staked"
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <FormattedNumber
+  //       className="w-full justify-start"
+  //       symbol="BGT"
+  //       compact={false}
+  //       compactThreshold={999_999_999}
+  //       value={row.original.amountStaked}
+  //     />
+  //   ),
+  //   accessorKey: "bgt-staked",
+  //   enableSorting: false,
+  // },
   {
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Staked"
+        title="BGT Inflation Capture"
+        tooltip={
+          "The percentage of global BGT inflation captured by the gauge."
+        }
         className="whitespace-nowrap"
       />
     ),
     cell: ({ row }) => (
       <FormattedNumber
         className="w-full justify-start"
-        symbol="BGT"
         compact={false}
         compactThreshold={999_999_999}
-        value={row.original.amountStaked}
+        percent
+        value={row.original.bgtInflationCapture ?? 0}
       />
-    ),
-    accessorKey: "bgt-staked",
-    enableSorting: false,
-  },
-  {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="BGT Inflation Capture"
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => (
-      <>missing</>
-      // <FormattedNumber
-      //   className="w-full justify-center"
-      //   symbol="BGT"
-      //   compact={false}
-      //   compactThreshold={999_999_999}
-      //   value={42069.42}
-      // />
     ),
     accessorKey: "bgt-inflation",
     enableSorting: false,
@@ -92,6 +95,9 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       <DataTableColumnHeader
         column={column}
         title="Validators"
+        tooltip={
+          "The validators that are directing BGT emissions to this gauge."
+        }
         className="whitespace-nowrap"
       />
     ),
