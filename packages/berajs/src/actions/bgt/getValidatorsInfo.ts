@@ -26,7 +26,7 @@ export const getValidatorsInfo = async (
     throw new Error("Missing backend endpoint in config");
   }
   try {
-    let url = `${config.endpoints?.bgtEndpoint}/validators`
+    let url = `${config.endpoints?.bgtEndpoint}/validators`;
     if (filter) {
       let isFirstParam = true;
       Object.keys(filter).forEach((key) => {
