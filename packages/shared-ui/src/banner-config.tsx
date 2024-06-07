@@ -39,7 +39,7 @@ export const bannerConfig: BannerConfig = {
       bannerComponent: <LaunchBanner appName="Berachain Dapps" />,
     },
     [DappBannerType.RPC]: {
-      enabled: false,
+      enabled: true,
       bannerComponent: <RPCBanner />,
     },
     [DappBannerType.SLOW]: {
