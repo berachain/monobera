@@ -5,7 +5,7 @@ import type { ColumnDef, TableState } from "@tanstack/react-table";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
 
-const VALIDATOR_PAGE_SIZE = 2;
+const VALIDATOR_PAGE_SIZE = 10;
 
 export const AllValidator = ({
   keyword,
@@ -15,16 +15,30 @@ export const AllValidator = ({
   onRowClick?: any;
 }) => {
   const [page, setPage] = useState(0);
+
+  const [sorting, setSorting] = useState<any>([
+    {
+      id: "tvl",
+      desc: true,
+    },
+  ]);
+
+  const handleNewSort = (newSort: any) => {
+    if (newSort === sorting) return;
+    setSorting(newSort);
+  };
+
   const {
     validatorInfoList,
     isLoading,
     isValidating,
     validatorCounts = 0,
   } = usePollValidatorInfo({
-    sortBy: "votingpower",
-    sortOrder: "desc",
+    sortBy: sorting[0]?.id,
+    sortOrder: sorting[0]?.desc ? "desc" : "asc",
     page: page + 1,
     pageSize: VALIDATOR_PAGE_SIZE,
+    query: keyword,
   });
   const fetchData = useCallback(
     (state: TableState) => setPage(state?.pagination?.pageIndex),
@@ -38,18 +52,15 @@ export const AllValidator = ({
       fetchData={fetchData}
       enablePagination
       loading={isLoading}
-      validating={isValidating}
+      // validating={isValidating}
       additionalTableProps={{
         initialState: { pagination: { pageSize: VALIDATOR_PAGE_SIZE } },
+        state: { sorting },
         pageCount: Math.ceil(validatorCounts / VALIDATOR_PAGE_SIZE),
-        manualFiltering: true,
-        manualSorting: true,
         manualPagination: true,
       }}
       onRowClick={onRowClick}
-      onCustomSortingChange={(sort) => {
-        console.log(sort);
-      }}
+      onCustomSortingChange={(a: any) => handleNewSort(a)}
     />
   );
 };

@@ -13,6 +13,7 @@ export interface ValidatorFilter {
   sortBy?: "votingpower" | "commission" | "apy";
   sortOrder?: "asc" | "desc";
   page?: number;
+  query?: string;
   pageSize?: number;
 }
 
