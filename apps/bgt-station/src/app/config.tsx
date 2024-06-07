@@ -19,7 +19,7 @@ import { Icons } from "@bera/ui/icons";
 export const navItems = [
   {
     href: "/gauge",
-    title: "Market",
+    title: "Gauge",
   },
   {
     href: "/validators",
