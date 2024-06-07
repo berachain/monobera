@@ -88,7 +88,7 @@ export function OrderHistoryTable({
         filters: undefined,
         pairIndex: undefined,
         sortBy: undefined,
-        sortDir: "asc",
+        sortDir: "desc",
       };
       // Filters
       if (state.columnFilters.length > 0) {

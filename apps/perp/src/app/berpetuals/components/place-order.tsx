@@ -33,6 +33,8 @@ import {
 import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "~/types/order-type";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 
 export function PlaceOrder({
   form,
@@ -55,8 +57,10 @@ export function PlaceOrder({
   const isPythConnected = useIsPythConnected();
   const pythUpdateFee = usePythUpdateFeeFormatted();
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenPositions(tableState);
-
+  const { refresh: refreshPositions } = usePollOpenPositions(tableState);
+  const { refresh: refreshOpenLimitOrders } =
+    usePollOpenLimitOrders(tableState);
+  const { refresh: refreshMarketHistory } = usePollMarketOrders(tableState);
   const slippage = useSlippage();
   const { setSlippageMode, setSlippage } = useSetSlippage();
 
@@ -91,7 +95,9 @@ export function PlaceOrder({
           ? `Placing Limit Long Order ${form.assets}`
           : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
-      refresh();
+      refreshPositions();
+      refreshOpenLimitOrders();
+      refreshMarketHistory();
     },
   });
 
@@ -273,7 +279,7 @@ export function PlaceOrder({
           {formatUsd(
             BigNumber(posSize)
               .minus(
-                BigNumber(posSize).times(formatFromBaseUnit(openingFee, 10)),
+                BigNumber(posSize).times(formatFromBaseUnit(openingFee, 12)),
               )
               .toString(10),
           )}{" "}

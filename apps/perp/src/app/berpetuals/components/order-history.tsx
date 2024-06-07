@@ -1,7 +1,12 @@
 "use client";
 
 import { useContext, useEffect, useMemo, useState } from "react";
-import { useBeraJs } from "@bera/berajs";
+import {
+  useBeraJs,
+  usePollOrdersLiqFeePrices,
+  usePollPositionsLiqFeePrices,
+} from "@bera/berajs";
+import type { OpenTrade } from "@bera/proto/src";
 import { usePrevious } from "@bera/shared-ui";
 import { ColumnDef } from "@tanstack/react-table";
 
@@ -24,10 +29,10 @@ import type {
   IMarketOrder,
   IOpenTrade,
 } from "~/types/order-history";
+import { TotalAmount } from "../../components/total-amount";
 import { getAssetCardList } from "./asset-cards/getAssetCards";
 import { OrderHistoryHeader } from "./order-history-header";
 import { OrderHistoryTable } from "./order-history-table";
-import { TotalAmount } from "../../components/total-amount";
 
 export function OrderHistory({
   markets,
@@ -67,6 +72,25 @@ export function OrderHistory({
     isLoading: isClosedTradesLoading,
     isValidating: isClosedTradesValidation,
   } = usePollClosedTrades(tableState);
+
+  const { data: openPositionsLiqFeesData } = usePollPositionsLiqFeePrices(
+    openPositionData?.result && tableState.tabType === "positions"
+      ? openPositionData.result.map((position: OpenTrade) =>
+          Number(position.index),
+        )
+      : [],
+  );
+
+  const { data: historyLiqFeesData } = usePollOrdersLiqFeePrices(
+    marketOrdersData?.result && tableState.tabType === "history"
+      ? marketOrdersData.result.reduce((acc: number[], order: IMarketOrder) => {
+          if (order.trade_open) {
+            acc.push(Number(order.index));
+          }
+          return acc;
+        }, [])
+      : [],
+  );
 
   const openMarketPositions = useMemo(
     () => generateMarketOrders(openPositionData, markets) ?? [],
@@ -116,10 +140,27 @@ export function OrderHistory({
     let totalPages = 1;
     let isLoading = false;
     let isValidating = false;
+    let liqFeeCounter = 0;
 
     switch (tableState.tabType) {
       case "positions":
-        data = openMarketPositions;
+        data = openMarketPositions.map((position, index) => {
+          return {
+            ...position,
+            borrowing_fee:
+              Array.isArray(openPositionsLiqFeesData) &&
+              openPositionsLiqFeesData[1] &&
+              openPositionsLiqFeesData[1][index] !== undefined
+                ? openPositionsLiqFeesData[1][index].toString()
+                : "0",
+            liq_price:
+              Array.isArray(openPositionsLiqFeesData) &&
+              openPositionsLiqFeesData[0] &&
+              openPositionsLiqFeesData[0][index] !== undefined
+                ? openPositionsLiqFeesData[0][index].toString()
+                : "0",
+          };
+        });
         columns = markets
           ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
           : [];
@@ -135,7 +176,22 @@ export function OrderHistory({
         isValidating = isOpenOrdersValidation;
         break;
       case "history":
-        data = marketOrders;
+        data = marketOrders.map((position: any) => {
+          if (position.trade_open) {
+            const result = {
+              ...position,
+              borrowing_fee:
+                Array.isArray(historyLiqFeesData) &&
+                historyLiqFeesData[1] &&
+                historyLiqFeesData[1][liqFeeCounter] !== undefined
+                  ? historyLiqFeesData[1][liqFeeCounter].toString()
+                  : "0",
+            };
+            liqFeeCounter = liqFeeCounter + 1;
+            return result;
+          }
+          return position;
+        });
         columns = markets ? generateHistoryColumns(markets) : [];
         totalPages = marketOrdersPagination?.total_pages ?? 1;
         isLoading = isMarketOrdersLoading || !isConnected;
@@ -182,6 +238,8 @@ export function OrderHistory({
     isClosedTradesLoading,
     isClosedTradesValidation,
     isConnected,
+    openPositionsLiqFeesData,
+    historyLiqFeesData,
   ]);
 
   const assetCardItems = useMemo(() => {

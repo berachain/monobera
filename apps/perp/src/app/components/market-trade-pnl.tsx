@@ -37,16 +37,16 @@ export const MarketTradePNL = ({
     positionSize: positionSize,
   });
 
+  const positionSizeBN = formatFromBaseUnit(positionSize ?? "0", 18);
   const percentage = useMemo(() => {
     if (!pnl || !position) return "0";
-    const positionSizeBN = formatFromBaseUnit(positionSize, 18);
     const currentSize = positionSizeBN.plus(pnl);
     const percentage = currentSize
       .minus(positionSizeBN)
       .div(positionSizeBN)
       .times(100);
     return percentage.isFinite() ? percentage.dp(2).toString(10) : "-";
-  }, [pnl, position]);
+  }, [pnl, positionSizeBN]);
 
   const initialCollateral = formatFromBaseUnit(positionSize, 18)
     .plus(formatFromBaseUnit(position.open_fee || "0", 18))
@@ -55,9 +55,16 @@ export const MarketTradePNL = ({
     position.borrowing_fee || "0",
     18,
   ).toString(10);
-  const closeFee = formatFromBaseUnit(position.closing_fee || "0", 18).toString(
-    10,
-  );
+  const closeFee = position.closing_fee
+    ? formatFromBaseUnit(position.closing_fee || "0", 18).toString(10)
+    : formatFromBaseUnit(
+        position?.market?.pair_fixed_fee?.close_fee_p ?? "0",
+        12,
+      )
+        .times(positionSizeBN)
+        .times(position.leverage)
+        .toString(10);
+
   const openFee = formatFromBaseUnit(position.open_fee || "0", 18).toString(10);
 
   return (

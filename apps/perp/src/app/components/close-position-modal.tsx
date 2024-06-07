@@ -12,6 +12,7 @@ import { type Address } from "viem";
 import { TableContext } from "~/context/table-context";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IOpenTrade } from "~/types/order-history";
 import { MarketTradePNL } from "./market-trade-pnl";
@@ -41,6 +42,7 @@ export function ClosePositionModal({
   const [open, setOpen] = useState<boolean>(false);
   const { tableState } = useContext(TableContext);
   const { refresh } = usePollOpenPositions(tableState);
+  const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -72,6 +74,7 @@ export function ClosePositionModal({
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
       refresh();
+      refetchMarketHistory();
       handleOpenChange(false);
     },
   });
@@ -82,7 +85,6 @@ export function ClosePositionModal({
       abi: tradingAbi,
       functionName: "closeTradeMarket",
       params: [
-        openPosition?.market?.pair_index,
         openPosition?.index,
         generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
       ],

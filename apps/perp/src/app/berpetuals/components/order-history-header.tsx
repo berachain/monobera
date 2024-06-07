@@ -1,27 +1,31 @@
 import { useCallback, useContext, useMemo } from "react";
-import { tradingAbi, TransactionActionType } from "@bera/berajs";
+import { TransactionActionType, tradingAbi } from "@bera/berajs";
+import { Tooltip } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { RowSelectionState } from "@tanstack/react-table";
 import { encodeFunctionData, type Address } from "viem";
-import type { IMarket } from "~/types/market";
 
-import { generateMarketOrders } from "~/utils/generateMarketOrders";
-import type { CloseOrderPayload } from "~/types/order-history";
-import type { TableTabTypes } from "~/types/table";
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import { usePriceData } from "~/context/price-context";
+import { generateMarketOrders } from "~/utils/generateMarketOrders";
+import {
+  usePriceData,
+  usePythUpdateFeeFormatted,
+} from "~/context/price-context";
 import { TableContext, defaultTableState } from "~/context/table-context";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import type { IOpenTrade, ILimitOrder } from "~/types/order-history";
+import type { IMarket } from "~/types/market";
+import type {
+  CloseOrderPayload,
+  ILimitOrder,
+  IOpenTrade,
+} from "~/types/order-history";
+import type { TableTabTypes } from "~/types/table";
 
-export function OrderHistoryHeader({
-  markets,
-}: {
-  markets: IMarket[];
-}) {
+export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
   const { tableState, setTableState } = useContext(TableContext);
 
   const {
@@ -40,10 +44,14 @@ export function OrderHistoryHeader({
     refresh: refetchOrders,
     total: totalOpenOrders,
   } = usePollOpenLimitOrders(tableState);
+
+  const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
   const openOrders = useMemo(
     () => generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[],
     [openLimitOrdersData, markets],
   );
+
+  const pythUpdateFee = usePythUpdateFeeFormatted();
 
   const prices = usePriceData();
 
@@ -104,6 +112,11 @@ export function OrderHistoryHeader({
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
         refetchPositions();
+        refetchMarketHistory();
+        setTableState((prev) => ({
+          ...prev,
+          selection: {},
+        }));
       },
     });
   const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
@@ -112,6 +125,10 @@ export function OrderHistoryHeader({
       actionType: TransactionActionType.CANCEL_ALL_ORDERS,
       onSuccess: () => {
         refetchOrders();
+        setTableState((prev) => ({
+          ...prev,
+          selection: {},
+        }));
       },
     });
 
@@ -124,7 +141,6 @@ export function OrderHistoryHeader({
         abi: tradingAbi,
         functionName: "closeTradeMarket",
         args: [
-          pos.pairIndex,
           pos.index,
           generateEncodedPythPrices(prices, pos.pairIndex.toString()),
         ],
@@ -135,6 +151,7 @@ export function OrderHistoryHeader({
       abi: tradingAbi,
       functionName: "multicall",
       params: [true, encodedData],
+      value: pythUpdateFee * BigInt(closePositionsPayload.length),
     });
   }, [closePositionsPayload, prices, writePositionsClose]);
 
@@ -192,6 +209,10 @@ export function OrderHistoryHeader({
               {`🌋 Close ${selectionSize ? selectionSize : "All"} Position${
                 selectionSize && selectionSize === 1 ? "" : "s"
               }`}
+              <Tooltip
+                className="ml-1"
+                text="Can close a maximum of 10 positions at a time"
+              />
             </Button>
           </div>
         )}
@@ -208,7 +229,7 @@ export function OrderHistoryHeader({
                   return encodeFunctionData({
                     abi: tradingAbi,
                     functionName: "cancelOpenLimitOrder",
-                    args: [order.pairIndex, order.index],
+                    args: [order.index],
                   });
                 });
                 writeOrdersClose({
@@ -223,6 +244,10 @@ export function OrderHistoryHeader({
               {`🌋 Close ${selectionSize ? selectionSize : "All"} Order${
                 selectionSize && selectionSize === 1 ? "" : "s"
               }`}
+              <Tooltip
+                className="ml-1"
+                text="Can close a maximum of 10 orders at a time"
+              />
             </Button>
           </div>
         )}
