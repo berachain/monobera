@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  useBeraJs,
-  usePollGlobalData,
-} from "@bera/berajs";
+import { useBeraJs, usePollGlobalData } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
