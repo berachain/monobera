@@ -229,9 +229,7 @@ export const generatePositionColumns = (
         );
       },
       accessorKey: "borrow_fee",
-      enableSorting: true,
-      minSize: 140,
-      size: 140,
+      enableSorting: false,
     },
     {
       header: "Manage",

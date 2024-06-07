@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { cloudinaryUrl } from "@bera/config";
-import { DataTable } from "@bera/shared-ui";
+import { SimpleTable, useBaseTable } from "@bera/shared-ui";
 import {
   Select,
   SelectContent,
@@ -39,6 +39,12 @@ export default function LeaderBoard() {
   });
 
   const leaderBoardData = useLeaderBoardData();
+
+  const table = useBaseTable({
+    data: leaderBoardData ?? [],
+    columns: getColumns(leaderboardType.toString()),
+  });
+
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
       <div className="flex w-full flex-col items-center justify-center gap-2 sm:flex-row sm:justify-start">
@@ -165,13 +171,12 @@ export default function LeaderBoard() {
           </SelectContent>
         </Select>
       </div>
-      <div className="w-full ">
-        <DataTable
-          columns={getColumns(leaderboardType as any)}
-          data={leaderBoardData ?? []}
-          className="w-full"
-        />
-      </div>
+      <SimpleTable
+        table={table}
+        flexTable
+        showToolbar={false}
+        className="w-full"
+      />
     </div>
   );
 }

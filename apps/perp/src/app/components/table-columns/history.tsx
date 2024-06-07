@@ -164,13 +164,13 @@ export const generateHistoryColumns = (
     header: "Fees",
     cell: ({ row }) => {
       const fees = formatFromBaseUnit(
-        row.original?.rollover_fee ?? "0",
+        row.original?.rollover_fee || "0",
         18,
       ).plus(
-        formatFromBaseUnit(row.original?.funding_fee ?? "0", 18).plus(
-          formatFromBaseUnit(row.original?.closing_fee ?? "0", 18).plus(
-            formatFromBaseUnit(row.original?.borrowing_fee ?? "0", 18).plus(
-              formatFromBaseUnit(row.original?.open_fee ?? "0", 18),
+        formatFromBaseUnit(row.original?.funding_fee || "0", 18).plus(
+          formatFromBaseUnit(row.original?.closing_fee || "0", 18).plus(
+            formatFromBaseUnit(row.original?.borrowing_fee || "0", 18).plus(
+              formatFromBaseUnit(row.original?.open_fee || "0", 18),
             ),
           ),
         ),
@@ -180,7 +180,7 @@ export const generateHistoryColumns = (
     minSize: 130,
     size: 130,
     accessorKey: "fees",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     header: "PnL",

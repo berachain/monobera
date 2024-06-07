@@ -62,7 +62,7 @@ export const generateEncodedPythPrices = (
 
   let encodedMarketData = priceMarketData.getVAA();
   let encodedUsdUsdcData = priceUSDUSDC.getVAA();
-  if (perpsPythPricesMocked) {
+  if (perpsPythPricesMocked === "true") {
     const priceUpdateData = formatPythPriceFeed(priceMarketData);
     const usdusdcPrice = formatPythPriceFeed(priceUSDUSDC);
     encodedMarketData = encodeAbiParameters(PYTH_ABI, [

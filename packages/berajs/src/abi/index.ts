@@ -20,3 +20,4 @@ export * from "./referralsAbi";
 export * from "./pythAbi";
 export * from "./vault";
 export * from "./bgtStaker";
+export * from "./borrowingAbi";

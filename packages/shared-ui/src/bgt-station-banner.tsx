@@ -14,7 +14,7 @@ export const BgtStationBanner = ({
   return (
     <Card>
       <CardContent className="w-full flex flex-row justify-between items-center pt-4 p-4">
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start pr-4">
           <div className="font-medium text-muted-foregorund">
             Deposit your Receipt Tokens
           </div>

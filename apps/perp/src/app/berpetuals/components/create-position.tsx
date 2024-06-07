@@ -42,7 +42,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     "market",
   );
 
-  const asset = market.name.split("-")[0] as string;
+  const asset = market?.name.split("-")[0] as string;
   const initialState: OrderType = {
     assets: asset,
     orderType: (orderType ?? "long") as "long" | "short",
@@ -184,8 +184,8 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   ]);
 
   const liqPrice = useCalculateLiqPrice({
-    bfLong: market.pair_borrowing_fee?.bf_long ?? "0",
-    bfShort: market.pair_borrowing_fee?.bf_short ?? "0",
+    bfLong: market?.pair_borrowing_fee?.bf_long ?? "0",
+    bfShort: market?.pair_borrowing_fee?.bf_short ?? "0",
     orderType: form.orderType,
     price: form.optionType === "market" ? price : form.limitPrice,
     leverage: form.leverage,
@@ -385,13 +385,13 @@ export function CreatePosition({ market, params }: ICreatePosition) {
               endAdornment={
                 <div className="pointer-events-none flex items-center gap-1 pl-3 pr-6 text-sm text-muted-foreground">
                   <Image
-                    src={market.imageUri ?? ""}
+                    src={market?.imageUri ?? ""}
                     alt={"selectedMarket"}
                     width={24}
                     height={24}
                     className="rounded-full"
                   />
-                  {market.name.split("-")[0]}
+                  {market?.name.split("-")[0]}
                 </div>
               }
             />
@@ -452,10 +452,10 @@ export function CreatePosition({ market, params }: ICreatePosition) {
             form={form}
             error={error}
             price={price}
-            pairIndex={market.pair_index ?? "0"}
-            openingFee={market.pair_fixed_fee?.open_fee_p ?? "0"}
-            bfLong={market.pair_borrowing_fee?.bf_long ?? "0"}
-            bfShort={market.pair_borrowing_fee?.bf_short ?? "0"}
+            pairIndex={market?.pair_index ?? "0"}
+            openingFee={market?.pair_fixed_fee?.open_fee_p ?? "0"}
+            bfLong={market?.pair_borrowing_fee?.bf_long ?? "0"}
+            bfShort={market?.pair_borrowing_fee?.bf_short ?? "0"}
             liqPrice={liqPrice}
           />
         </div>

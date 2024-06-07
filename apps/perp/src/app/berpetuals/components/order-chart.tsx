@@ -68,7 +68,7 @@ export function OrderChart({
   const [chartReady, setChartReady] = useState(false);
 
   const defaultWidgetProps: Partial<ChartingLibraryWidgetOptions> = {
-    symbol: marketName,
+    symbol: marketName ?? "Not Found",
     interval: "15" as ResolutionString,
     library_path: "/static/charting_library/",
     locale: "en",
