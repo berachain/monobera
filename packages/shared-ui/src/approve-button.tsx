@@ -19,6 +19,7 @@ type Props = {
   amount?: bigint;
   className?: string;
   onApproval?: () => void;
+  disabled?: boolean;
 };
 
 export const ApproveButton = ({
@@ -27,6 +28,7 @@ export const ApproveButton = ({
   amount,
   className,
   onApproval,
+  disabled,
 }: Props) => {
   const { refresh } = usePollAllowance({
     spender,
@@ -76,7 +78,7 @@ export const ApproveButton = ({
       {amount !== undefined && (
         <Button
           className="w-full"
-          disabled={!token || isLoading || isSubmitting}
+          disabled={!token || isLoading || isSubmitting || disabled}
           onClick={() => {
             write({
               address: token?.address as `0x${string}`,
@@ -91,7 +93,7 @@ export const ApproveButton = ({
       )}
       <Button
         className="w-full"
-        disabled={!token || isLoading || isSubmitting}
+        disabled={!token || isLoading || isSubmitting || disabled}
         onClick={() => {
           write({
             address: token?.address as `0x${string}`,

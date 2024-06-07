@@ -108,29 +108,29 @@ export function InstrumentDropdown({
       >
         <div className="flex items-center gap-2 font-semibold leading-7">
           {dropdownOpen ? (
-            <>Choose Market</>
+            <span>Choose Market</span>
           ) : (
             <>
               <Image
-                src={selectedMarket.imageUri ?? ""}
+                src={selectedMarket?.imageUri ?? ""}
                 alt={"selectedMarket"}
                 width={24}
                 height={24}
                 className="rounded-full"
               />
-              {selectedMarket.name}
+              {selectedMarket?.name}
             </>
           )}
         </div>
-        <div className="text-xs font-medium text-muted-foreground">
+        <div className="text-xs font-medium text-muted-foreground select-none">
           {!dropdownOpen ? (
-            <>
+            <span className="select-none">
               All Markets <Icons.chevronDown className="inline-block h-3 w-3" />
-            </>
+            </span>
           ) : (
-            <>
+            <span className="select-none">
               Close <Icons.chevronUp className="inline-block h-3 w-3" />
-            </>
+            </span>
           )}
         </div>
       </DropdownMenuTrigger>

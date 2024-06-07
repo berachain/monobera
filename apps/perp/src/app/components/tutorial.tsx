@@ -1,10 +1,10 @@
 import React from "react";
-
+import { type GlobalParams } from "@bera/proto/src";
 import { LandingCard1 } from "./landing-card-1";
 import { LandingCard2 } from "./landing-card-2";
 import { LandingCard3 } from "./landing-card-3";
 
-export default function Tutorial() {
+export default function Tutorial({ params }: { params: GlobalParams }) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-[128px] px-[172px] xl:flex-row">
       <div className="relative mb-8 hidden h-[520px] w-[480px] flex-shrink-0 sm:block">
@@ -15,7 +15,7 @@ export default function Tutorial() {
           <LandingCard2 />
         </div>
         <div className="absolute right-0 top-0">
-          <LandingCard1 />
+          <LandingCard1 params={params} />
         </div>
       </div>
       <div className="flex flex-shrink-0 flex-col gap-4">

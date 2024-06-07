@@ -27,7 +27,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
   const price = marketPrices[market?.pair_index ?? ""] ?? "0";
   const [open, setOpen] = useState(false);
 
-  const historicPrice = priceChange[Number(market.pair_index)];
+  const historicPrice = priceChange[Number(market?.pair_index)];
   const difference = useMemo(() => {
     return calculatePercentDifference(historicPrice?.toString() ?? "0", price);
   }, [historicPrice, price]);
@@ -39,26 +39,26 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
   useEffect(() => {
     document.title =
       price === "0"
-        ? `${market.name} | ${perpsName}`
-        : `${formatUsd(price)} | ${market.name} | ${perpsName}`;
+        ? `${market?.name} | ${perpsName}`
+        : `${formatUsd(price)} | ${market?.name} | ${perpsName}`;
   }, [price]);
 
   const formattedLongOi = formatFromBaseUnit(
-    market.open_interest?.oi_long ?? "0",
+    market?.open_interest?.oi_long ?? "0",
     18,
   ).toString(10);
   const formattedShortOi = formatFromBaseUnit(
-    market.open_interest?.oi_short ?? "0",
+    market?.open_interest?.oi_short ?? "0",
     18,
   ).toString(10);
   const formattedBorrowingL = formatFromBaseUnit(
-    market.pair_borrowing_fee?.bf_long ?? "0",
+    market?.pair_borrowing_fee?.bf_long ?? "0",
     18,
   )
     .dp(6)
     .toString(10);
   const formattedBorrowingS = formatFromBaseUnit(
-    market.pair_borrowing_fee?.bf_short ?? "0",
+    market?.pair_borrowing_fee?.bf_short ?? "0",
     18,
   )
     .dp(6)
@@ -110,7 +110,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
           24h Volume
           <div className="text-muted-foreground">
-            {formatUsd(market.dailyVolume ?? 0)}
+            {formatUsd(market?.dailyVolume ?? 0)}
           </div>
         </div>
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs xl:block">
@@ -173,7 +173,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
                   24H Volume
                 </div>
                 <div className="text-muted-foreground">
-                  {formatUsd(market.dailyVolume ?? 0)}
+                  {formatUsd(market?.dailyVolume ?? 0)}
                 </div>
               </div>
               <div className="flex w-full flex-row justify-between text-xs">

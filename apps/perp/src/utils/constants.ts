@@ -43,7 +43,7 @@ export const CLOSED_TRADES_SORTING_MAP = {
   pnl: "SORT_BY_PNL",
 };
 
-export const DEFAULT_QUERY = "page=1&perPage=10";
+export const DEFAULT_QUERY = "page=1&perPage=10&sortDir=desc";
 
 export const API_FILTERS = [
   "page",
