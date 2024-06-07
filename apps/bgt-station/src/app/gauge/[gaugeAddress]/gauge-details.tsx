@@ -1,37 +1,32 @@
 "use client";
 
-import { notFound } from "next/navigation";
 import {
   truncateHash,
-  usePollGauges,
-  usePollValidatorInfo,
   useSelectedGauge,
+  useSelectedGaugeValidators,
 } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
-import { gauge_validator_columns } from "~/columns/general-validator-columns";
+import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
 import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
 import { Address } from "viem";
 
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
-  // TODO: make relevant
-  const {
-    data,
-    validatorInfoList,
-    isLoading: isValidatorLoading,
-    isValidating: isValidatorValidating,
-  } = usePollValidatorInfo({ vaultId: gaugeAddress });
-
   const {
     data: gauge,
     isLoading: isGaugeLoading,
     isValidating: isGaugeValidating,
   } = useSelectedGauge(gaugeAddress);
 
+  const {
+    data: validators,
+    isLoading: isValidatorsLoading,
+    isValidating: isValidatorsValidating,
+  } = useSelectedGaugeValidators(gaugeAddress);
   return (
     <>
       {gauge ? (
@@ -98,10 +93,10 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
             </TabsContent>
             <TabsContent value="validators">
               <DataTable
-                columns={gauge_validator_columns}
-                loading={isValidatorLoading}
-                validating={isValidatorValidating}
-                data={validatorInfoList}
+                columns={getGaugeValidatorColumns(gauge)}
+                loading={isValidatorsLoading}
+                validating={isValidatorsValidating}
+                data={validators ?? []}
                 className="min-w-[800px] shadow"
                 // enablePagination
                 onRowClick={(row: any) => {

@@ -72,7 +72,7 @@ export const getValidatorGaugeColumns = (validator: Validator) => {
         const weight =
           parseFloat(cuttingBoard?.percentageNumerator) / 10000 ?? 0;
         const perProposal = weight * parseFloat(validator.rewardRate);
-        console.log(perProposal);
+
         return (
           <FormattedNumber
             className="w-full justify-start"
