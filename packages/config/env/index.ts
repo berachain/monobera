@@ -19,7 +19,8 @@ export const faucetEndpointUrl = process.env
   .NEXT_PUBLIC_FAUCET_ENDPOINT as string;
 export const validatorEndpointUrl = process.env.NEXT_PUBLIC_VALIDATOR_ENDPOINT;
 export const awsUrl = process.env.NEXT_PUBLIC_AWS_URL as string;
-
+export const governanceUrl = process.env.NEXT_PUBLIC_GOVERNANCE_URL as string;
+export const governanceName = process.env.NEXT_PUBLIC_GOVERNANCE_NAME as string;
 // Subgraphs
 export const crocSubgraphEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_SUBGRAPH as Address;
