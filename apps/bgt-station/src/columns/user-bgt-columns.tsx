@@ -56,7 +56,7 @@ export const getUserBgtColumns = ({
           </span>
         </>
       ),
-      accessorKey: "unclaimedBgt",
+      accessorKey: "amountDeposited",
       enableSorting: true,
     },
     {
@@ -110,6 +110,7 @@ export const getUserBgtColumns = ({
         );
       },
       accessorKey: "inflation",
+      enableSorting: false,
     },
   ];
   return user_bgt_columns;

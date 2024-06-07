@@ -32,9 +32,6 @@ export const useBgtUnstakedBalance = (
       const unavailableBalance = data?.reduce((acc, val) => {
         return acc + parseFloat(val.userStaked) + parseFloat(val.userQueued);
       }, 0);
-
-      console.log("unavailableBalance", unavailableBalance);
-      console.log("formattedBalance", formattedBalance);
       return formattedBalance - (unavailableBalance ?? 0);
     },
     {

@@ -2,13 +2,18 @@ import { bgtTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
-import { GetBGTInfo, getBGTInfo } from "~/actions/bgt/getBGTInfo";
+import { GlobalInfo, getBGTGlobalInfo } from "~/actions/bgt/getBGTGlobalInfo";
+import { getGlobalCuttingBoard } from "~/actions/bgt/getGlobalCuttingBoard";
 import { getTokenTotalSupply } from "~/actions/bgt/getTokenTotalSupply";
-import { DefaultHookOptions, DefaultHookReturnType, useBeraJs } from "../../..";
-import { formatEther } from "viem";
+import {
+  CuttingBoardWeight,
+  DefaultHookOptions,
+  DefaultHookReturnType,
+  useBeraJs,
+} from "../../..";
 
-interface GlobalData {
-  bgtInfo: GetBGTInfo | undefined;
+interface GlobalData extends GlobalInfo {
+  globalCuttingBoard: CuttingBoardWeight[];
   bgtTotalSupply: string | undefined;
 }
 export interface IUsePollGlobalDataResponse
@@ -24,12 +29,20 @@ export const usePollGlobalData = (
   const swrResponse = useSWR<GlobalData, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => {
-      const bgtInfo = await getBGTInfo(config);
-      const bgtTotalSupply = await getTokenTotalSupply({
-        token: bgtTokenAddress,
-        publicClient,
-      });
-      return { bgtInfo, bgtTotalSupply: formatEther(bgtTotalSupply ?? 0n) };
+      const [globalData, globalCuttingBoard, bgtTotalSupply] =
+        await Promise.all([
+          getBGTGlobalInfo(config),
+          getGlobalCuttingBoard(300, config),
+          getTokenTotalSupply({
+            token: bgtTokenAddress,
+            publicClient,
+          }),
+        ]);
+      return {
+        bgtTotalSupply,
+        globalCuttingBoard: globalCuttingBoard.globalCBWs,
+        ...globalData,
+      } as any;
     },
     {
       ...options?.opts,
