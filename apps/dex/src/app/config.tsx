@@ -14,7 +14,7 @@ import {
   perpsName,
   perpsUrl,
   governanceName,
-  governanceUrl
+  governanceUrl,
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
