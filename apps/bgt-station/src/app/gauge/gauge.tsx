@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import {
   useBeraJs,
   usePollGlobalData,
-  usePollValidatorInfo,
 } from "@bera/berajs";
 import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
