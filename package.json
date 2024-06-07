@@ -2,9 +2,10 @@
   "name": "monobera",
   "private": true,
   "engines": {
-    "node": ">=v18.16.0"
+    "node": ">=v18.16.0",
+    "pnpm": ">=9"
   },
-  "packageManager": "pnpm@8.3.1",
+  "packageManager": "pnpm@9.2.0",
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean && git clean -xdf node_modules",
@@ -17,7 +18,7 @@
     "build:perp": "turbo build --filter=perp --filter='./packages/*' --concurrency=20",
     "build:faucet": "turbo build --filter=faucet --filter='./packages/*' --concurrency=20",
     "build:berajs-docs": "turbo build --filter=berajs-docs --filter='./packages/*' --concurrency=20",
-    "build:pkg": "turbo build --filter='./packages/*' --concurrency=20",
+    "build:pkg": "turbo build --filter='./packages/**' --concurrency=20",
     "dev:dex": "turbo dev --filter=dex --filter='./packages/*' --concurrency=20 --parallel",
     "dev:honey": "turbo dev --filter=honey --filter='./packages/*' --concurrency=20",
     "dev:bgt": "turbo dev --filter=bgt-station --filter='./packages/*' --concurrency=20",
@@ -43,7 +44,7 @@
     "husky": "^8.0.0",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
-    "turbo": "^1.10.15",
+    "turbo": "^1.13.4",
     "typescript": "^5.0.4",
     "vocs": "latest"
   },
@@ -56,6 +57,13 @@
     "yargs": "^17.7.2"
   },
   "resolutions": {
-    "rpc-websockets": "7.11.0"
+    "rpc-websockets": "7.10.0",
+    "@solana/web3.js" : "^1.91.6"
+  },
+  "pnpm": {
+    "overrides": {
+      "rpc-websockets": "7.10.0",
+      "@solana/web3.js" : "^1.91.6"
+    }
   }
 }
