@@ -1,11 +1,12 @@
 import React from "react";
 import {
+  Gauge,
   Validator,
   usePollGauges,
   usePollGlobalData,
   usePollValidatorInfo,
 } from "@bera/berajs";
-import { FormattedNumber, ValidatorIcon } from "@bera/shared-ui";
+import { FormattedNumber, GaugeIcon, ValidatorIcon } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -14,6 +15,12 @@ import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBg
 
 export default function GaugeInfoCard() {
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
+  const { gaugeCounts, gaugeList } = usePollGauges({
+    sortBy: "bgtInflationCapture",
+    sortOrder: "desc",
+    page: 1,
+    pageSize: 3,
+  });
   const {
     validatorCounts,
     validatorInfoList,
@@ -34,9 +41,8 @@ export default function GaugeInfoCard() {
           </div>
           {!isLoading ? (
             <div className="inline-flex h-7 items-end gap-1">
-              <span className="text-2xl font-semibold leading-6">142</span>
-              <span className="font-medium leading-5 text-muted-foreground">
-                (690.42M)
+              <span className="text-2xl font-semibold leading-6">
+                {gaugeCounts}
               </span>
             </div>
           ) : (
@@ -44,13 +50,20 @@ export default function GaugeInfoCard() {
           )}
           {!isLoading ? (
             <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-              <Icons.bexFav className="h-4 w-4" />
-              <Icons.berpsFav className="h-4 w-4" />
-              <Icons.bendFav className="h-4 w-4" />
-              <span className="text-sm leading-5 text-muted-foreground">
-                {" "}
-                +69
-              </span>
+              {gaugeList.map((gauge: Gauge, index: number) => (
+                <GaugeIcon
+                  key={index}
+                  address={gauge.id}
+                  size="md"
+                  overrideImage={gauge.metadata.logoURI}
+                />
+              ))}
+              {gaugeCounts > 3 && (
+                <span className="text-sm leading-5 text-muted-foreground">
+                  {" "}
+                  +{gaugeCounts - 3}
+                </span>
+              )}
             </div>
           ) : (
             <Skeleton className="mt-1 h-6 w-[75px]" />

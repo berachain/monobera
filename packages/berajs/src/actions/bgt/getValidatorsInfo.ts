@@ -10,6 +10,7 @@ export interface GetValidatorsInfo {
 
 export interface ValidatorFilter {
   vaultId?: string;
+  filterByProducts?: string;
   sortBy?: "votingpower" | "commission" | "apy";
   sortOrder?: "asc" | "desc";
   page?: number;

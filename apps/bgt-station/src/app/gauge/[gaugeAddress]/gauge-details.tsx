@@ -20,7 +20,6 @@ import { Address } from "viem";
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
   // TODO: make relevant
   const {
-    data,
     validatorInfoList,
     isLoading: isValidatorLoading,
     isValidating: isValidatorValidating,

@@ -15,7 +15,7 @@ import {
 import { type ColumnDef } from "@tanstack/react-table";
 import { type Address } from "viem";
 
-import { BribesPopover, ClaimBribesPopover } from "~/components/bribes-tooltip";
+import { BribesPopover } from "~/components/bribes-tooltip";
 import { CuttingBoardDisplay } from "~/app/validators/components/validators-table";
 import { beraTokenAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";

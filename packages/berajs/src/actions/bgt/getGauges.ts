@@ -9,10 +9,12 @@ export interface GetGaugeData {
 }
 
 export interface GaugeFilter {
-  validatorId?: string;
+  validatorId?: Address;
   filterByProduct?: string;
-  sortBy?: "activeIncentivesInHoney" | "amountstaked";
+  coinbase?: Address;
+  sortBy?: "activeIncentivesInHoney" | "amountstaked" | "bgtInflationCapture";
   sortOrder?: "asc" | "desc";
+  query?: string;
   page?: number;
   pageSize?: number;
 }

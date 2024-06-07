@@ -14,6 +14,7 @@ import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
 import MarketSelector from "./market-selector";
 import UserGaugeWeightTable from "~/components/user-gauge-weight-table";
+import { SearchInput } from "@bera/shared-ui";
 
 export default function Gauge() {
   const { isReady } = useBeraJs();
@@ -51,7 +52,7 @@ export default function Gauge() {
           </TabsList>
 
           <div className="flex w-full items-center gap-3 md:w-fit">
-            {/* <SearchInput
+            <SearchInput
               placeholder="Search..."
               value={keywords}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -64,7 +65,7 @@ export default function Gauge() {
                 }
               }}
               className="w-full md:w-[300px]"
-            /> */}
+            />
             <TabsContent value="all-gauges">
               <MarketSelector {...{ markets, setMarkets }} />
             </TabsContent>
