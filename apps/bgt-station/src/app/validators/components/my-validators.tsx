@@ -1,21 +1,9 @@
-import dynamic from "next/dynamic";
-import {
-  UserValidator,
-  useUserActiveValidators,
-  useUserValidators,
-} from "@bera/berajs";
+import { useMemo } from "react";
+import { useUserActiveValidators, type UserValidator } from "@bera/berajs";
+import { DataTable } from "@bera/shared-ui";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { user_general_validator_columns } from "~/columns/general-validator-columns";
-import { TableLoading } from "./table-loading";
-
-const DataTable = dynamic(
-  () => import("@bera/shared-ui").then((mod) => mod.DataTable),
-  {
-    ssr: false,
-    loading: () => <TableLoading />,
-  },
-);
 
 export const MyValidator = ({
   keyword,
@@ -24,33 +12,25 @@ export const MyValidator = ({
   keyword: any;
   onRowClick: any;
 }) => {
-  // const [page, setPage] = useState(0);
-  // const fetchData = useCallback(
-  //   (state: TableState) => setPage(state?.pagination?.pageIndex),
-  //   [setPage],
-  // );
-  const { data } = useUserActiveValidators();
-
-  const depositedValidators = data?.filter((validator: UserValidator) => {
-    return parseFloat(validator.userStaked) !== 0;
-  });
-
+  const { data = [], isLoading, isValidating } = useUserActiveValidators();
+  const validators = useMemo(() => {
+    return data.filter((validator: UserValidator) => {
+      if (parseFloat(validator.userStaked) !== 0) {
+        if (keyword === "") return true;
+        if (validator.id.includes(keyword)) return true;
+        if (validator.metadata.name.includes(keyword)) return true;
+      } else {
+        return false;
+      }
+    });
+  }, [data, keyword]);
   return (
     <DataTable
-      //@ts-ignore
+      loading={isLoading}
+      validating={isValidating}
       columns={user_general_validator_columns as ColumnDef<UserValidator>[]}
-      data={depositedValidators ?? []}
+      data={validators}
       className="min-w-[900px]"
-      // fetchData={fetchData}
-      // enablePagination
-      // loading={isLoading}
-      // validating={isValidating}
-      // additionalTableProps={{
-      //   pageCount: 2,
-      //   manualFiltering: true,
-      //   manualSorting: true,
-      //   manualPagination: true,
-      // }}
       onRowClick={onRowClick}
     />
   );

@@ -1,37 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  useBeraJs,
-  usePollGlobalData,
-  type CuttingBoardWeight,
-} from "@bera/berajs";
+import React, { useEffect, useState } from "react";
+import { useBeraJs, usePollGlobalData } from "@bera/berajs";
+import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
+import UserGaugeWeightTable from "~/components/user-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
 import MarketSelector from "./market-selector";
-import UserGaugeWeightTable from "~/components/user-gauge-weight-table";
 
 export default function Gauge() {
   const { isReady } = useBeraJs();
   const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
+
+  useEffect(() => {
+    return () => {
+      if (typingTimer) clearTimeout(typingTimer);
+    };
+  }, [typingTimer]);
 
   return (
     <div className="flex flex-col gap-12">
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
+          gaugeWeights={data?.globalCuttingBoard ?? []}
           isLoading={isGlobalDataLoading}
-          gaugeWeights={[] as CuttingBoardWeight[]}
           totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
           globalAmountStaked={data?.bgtTotalSupply ?? "0"}
-          showTotal={false}
         />
       </div>
 
@@ -51,20 +55,26 @@ export default function Gauge() {
           </TabsList>
 
           <div className="flex w-full items-center gap-3 md:w-fit">
-            {/* <SearchInput
+            <SearchInput
               placeholder="Search..."
               value={keywords}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setKeywords(e.target.value)
-              }
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                if (e.key === "Enter" && keywords) {
-                  setKeywordList([...keywordList, keywords]);
-                  setKeywords("");
-                }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setKeywords(e.target.value);
+                setIsTyping?.(true);
+                if (typingTimer) clearTimeout(typingTimer);
+                const newTimer = setTimeout(() => {
+                  setIsTyping(false);
+                }, 1000);
+                setTypingTimer(newTimer);
               }}
+              // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              //   if (e.key === "Enter" && keywords) {
+              //     setKeywordList([...keywordList, keywords]);
+              //     setKeywords("");
+              //   }
+              // }}
               className="w-full md:w-[300px]"
-            /> */}
+            />
             <TabsContent value="all-gauges">
               <MarketSelector {...{ markets, setMarkets }} />
             </TabsContent>
@@ -106,10 +116,14 @@ export default function Gauge() {
           </div>
         )}
         <TabsContent value="all-gauges">
-          <GlobalGaugeWeightTable keywords={keywords} />
+          <GlobalGaugeWeightTable
+            keywords={keywords}
+            markets={markets}
+            isTyping={isTyping}
+          />
         </TabsContent>
         <TabsContent value="my-gauges">
-          <UserGaugeWeightTable myGauge />
+          <UserGaugeWeightTable myGauge keywords={keywords} />
         </TabsContent>
       </Tabs>
     </div>

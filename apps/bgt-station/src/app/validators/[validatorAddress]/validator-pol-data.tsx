@@ -6,6 +6,7 @@ import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import { validator_gauge_columns } from "~/columns/gauge-incentives-columns";
 import { getValidatorGaugeColumns } from "./validator-gauge-columns";
 import { ActiveIncentiveWithVault } from "./validator";
+import { useValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 
 export const getActiveIncentivesArray = (
   validator: Validator | undefined,
@@ -42,7 +43,7 @@ export const ValidatorPolData = ({
 
   const activeIncentivesArray: ActiveIncentiveWithVault[] =
     getActiveIncentivesArray(validator);
-
+  const estimatedBgtPerYear = useValidatorEstimatedBgtPerYear(validator);
   return (
     <div className="mt-6 flex w-full flex-col gap-6 lg:flex-row">
       <div className="w-full">
