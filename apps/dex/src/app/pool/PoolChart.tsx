@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { BigNumber } from "bignumber.js";
+import { startOfDay } from "date-fns";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 
@@ -197,7 +198,12 @@ export const PoolChart = ({
   const quarterlyDayStartTimes: number[] = [];
   for (let i = 0; i < 90; i++) {
     const dayStartTimestamp = getDayStartTimestampDaysAgo(i);
-    if (timeCreated && new Date(dayStartTimestamp) < timeCreated) {
+    const startOfCreationDay = timeCreated && startOfDay(timeCreated!);
+    if (
+      timeCreated &&
+      startOfCreationDay &&
+      new Date(dayStartTimestamp * 1000) < startOfCreationDay
+    ) {
       break;
     }
     quarterlyDayStartTimes.push(dayStartTimestamp);
@@ -353,7 +359,6 @@ export const PoolChart = ({
     }
   }, [historicalData, timeFrame, chart]);
 
-  console.log(data);
   return (
     <Card className="bg-muted p-0">
       <Tabs
