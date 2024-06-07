@@ -6,6 +6,7 @@ export interface IContractWrite {
   functionName: string;
   params: any[];
   txnName?: string;
+  gasLimit?: bigint;
   value?: bigint;
 }
 

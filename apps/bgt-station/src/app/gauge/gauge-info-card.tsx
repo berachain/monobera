@@ -1,33 +1,29 @@
 import React from "react";
-import { usePollGlobalData, usePollValidatorInfo } from "@bera/berajs";
-import { FormattedNumber } from "@bera/shared-ui";
+import {
+  Validator,
+  usePollGauges,
+  usePollGlobalData,
+  usePollValidatorInfo,
+} from "@bera/berajs";
+import { FormattedNumber, ValidatorIcon } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-const fakeValidators = [
-  {
-    icon: <Icons.bgt className="h-4 w-4" />,
-    name: "Validator 1",
-    bgtAmount: 100,
-  },
-  {
-    icon: <Icons.bgt className="h-4 w-4" />,
-    name: "Validator 1",
-    bgtAmount: 100,
-  },
-  {
-    icon: <Icons.bgt className="h-4 w-4" />,
-    name: "Validator 1",
-    bgtAmount: 100,
-  },
-];
+import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 
 export default function GaugeInfoCard() {
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
-  const { validatorCounts, isLoading: isValidatorCountLoading } =
-    usePollValidatorInfo();
-
+  const {
+    validatorCounts,
+    validatorInfoList,
+    isLoading: isValidatorCountLoading,
+  } = usePollValidatorInfo({
+    sortBy: "votingpower",
+    sortOrder: "desc",
+    page: 1,
+    pageSize: 3,
+  });
   const isLoading = isGlobalDataLoading || isValidatorCountLoading;
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
@@ -57,7 +53,7 @@ export default function GaugeInfoCard() {
               </span>
             </div>
           ) : (
-            <Skeleton className="h-6 w-[75px] mt-1" />
+            <Skeleton className="mt-1 h-6 w-[75px]" />
           )}
         </div>
         <div className="flex flex-col justify-center gap-1 border-x border-b border-border p-4">
@@ -65,17 +61,28 @@ export default function GaugeInfoCard() {
             Top 3 Validators
           </div>
           {!isLoading ? (
-            fakeValidators.map((validator, index) => (
+            validatorInfoList.map((validator: Validator, index: number) => (
               <div
                 className="flex h-7 w-fit flex-nowrap items-center gap-2 rounded-full border border-border bg-background px-2"
-                key={`${index}-${validator.name}`}
+                key={`${index}-${validator.id}`}
               >
-                {validator.icon}
+                <ValidatorIcon
+                  address={validator.id}
+                  size={"md"}
+                  imgOverride={validator.metadata.logoURI}
+                />
                 <span className="text-nowrap text-xs font-medium">
-                  {validator.name}
+                  {validator.metadata.name}
                 </span>
                 <span className="text-nowrap text-[10px] text-muted-foreground">
-                  BGT/Year: {validator.bgtAmount}
+                  BGT/Year:{" "}
+                  <FormattedNumber
+                    value={getValidatorEstimatedBgtPerYear(
+                      validator,
+                      validatorCounts,
+                    )}
+                    showIsSmallerThanMin
+                  />
                 </span>
               </div>
             ))
@@ -129,7 +136,7 @@ export default function GaugeInfoCard() {
               </span>
             </div>
           ) : (
-            <Skeleton className="h-6 w-[75px] mt-1" />
+            <Skeleton className="mt-1 h-6 w-[75px]" />
           )}
         </div>
         <div className="flex flex-col justify-center gap-2 border-x border-b border-border p-5">
@@ -174,14 +181,18 @@ export default function GaugeInfoCard() {
           <div className="w-fit text-[10px] text-warning-foreground">
             Est. Avg. Return per Proposed block
           </div>
-          <div className="flex items-center gap-2 text-2xl font-semibold">
-            <Icons.honey className="h-6 w-6" />
-            <FormattedNumber
-              value={data?.bgtInfo?.bgtPerBlock ?? 0}
-              compact={false}
-              showIsSmallerThanMin
-            />
-          </div>
+          {isGlobalDataLoading ? (
+            <Skeleton className="h-8 w-full" />
+          ) : (
+            <div className="flex items-center gap-2 text-2xl font-semibold">
+              <Icons.honey className="h-6 w-6" />
+              <FormattedNumber
+                value={data?.bgtInfo?.bgtPerBlock ?? 0}
+                compact={false}
+                showIsSmallerThanMin
+              />
+            </div>
+          )}
         </div>
       </div>
     </Card>

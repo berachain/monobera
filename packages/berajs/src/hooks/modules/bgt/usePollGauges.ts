@@ -10,6 +10,7 @@ import {
 
 export interface IUseGaugessResponse
   extends DefaultHookReturnType<GetGaugeData> {
+  gaugeCounts: number;
   gaugeList: Gauge[];
   gaugeDictionary: { [key: string]: Gauge };
 }
@@ -31,6 +32,7 @@ export const usePollGauges = (
 
   return {
     ...swrResponse,
+    gaugeCounts: swrResponse.data?.gaugeCounts ?? 0,
     gaugeList: swrResponse.data?.gaugeList ?? [],
     gaugeDictionary: swrResponse.data?.gaugeDictionary ?? {},
     refresh: swrResponse.mutate,

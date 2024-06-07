@@ -35,6 +35,7 @@ const useBeraContractWrite = ({
       functionName,
       params,
       value = 0n,
+      gasLimit = undefined,
     }: IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       onLoading?.();
@@ -51,7 +52,10 @@ const useBeraContractWrite = ({
           value: value,
           account: account,
         });
-        receipt = await writeContractAsync({ ...request });
+        receipt = await writeContractAsync({
+          ...request,
+          gas: gasLimit ?? request.gas,
+        });
         dispatch({ type: ActionEnum.SUBMITTING });
         if (receipt) {
           onSubmission?.(receipt);

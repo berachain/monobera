@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   useBeraJs,
   usePollWalletBalances,
@@ -82,7 +82,7 @@ export function TokenDialog({
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
-    customTokens !== undefined && customTokens.length !== 0
+    customTokens !== undefined
       ? customTokens
       : tokenData?.tokenList?.filter(
           (token) =>
@@ -92,6 +92,11 @@ export function TokenDialog({
         ),
   );
 
+  useMemo(() => {
+    if (customTokens) {
+      setFilteredTokens(customTokens);
+    }
+  }, [customTokens]);
   useEffect(() => {
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state

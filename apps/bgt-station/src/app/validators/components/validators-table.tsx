@@ -57,7 +57,7 @@ export default function ValidatorsTable() {
   return (
     <div className="mt-16">
       <Tabs defaultValue="all-validators">
-        <div className="mb-6 flex w-full flex-col justify-between gap-6 sm:flex-row">
+        <div className="mb-6 flex w-full flex-col justify-start gap-6 sm:flex-row">
           <TabsList>
             <TabsTrigger
               value="all-validators"
@@ -75,7 +75,7 @@ export default function ValidatorsTable() {
               My Validators
             </TabsTrigger>
           </TabsList>
-          <div className="flex w-fit items-start justify-between gap-2">
+          <div className="flex w-fit items-center justify-between gap-2">
             <SearchInput
               value={search}
               onChange={(e) => {

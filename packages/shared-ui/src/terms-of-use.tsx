@@ -18,10 +18,10 @@ import Terms from "./utils/terms-of-use.json";
 export const TermsOfUse = () => {
   return (
     <div className="flex flex-col gap-4">
-      <div className="sm:leading-12 text-center text-xl font-bold leading-8 sm:text-3xl">
+      <div className="sm:leading-12 text-left text-xl font-bold leading-8 sm:text-2xl">
         Public Testnet Terms of Use
       </div>
-      <div className="text-md text-center font-semibold leading-4 sm:text-lg sm:leading-7">
+      <div className="text-md text-left font-semibold leading-4 sm:text-lg sm:leading-7">
         Last updated: January 9, 2024
       </div>
       <div className="sm:text-md text-sm leading-4 sm:leading-6">
@@ -37,7 +37,7 @@ export const TermsOfUse = () => {
         ”) incentivized public testnet (the “<b>Testnet</b>
         ”).
       </div>
-      <div className="text-md text-center font-semibold leading-4 sm:text-lg sm:leading-7">
+      <div className="text-md text-left font-semibold leading-4 sm:text-lg sm:leading-7">
         YOUR PARTICIPATION IN THE TESTNET IS ENTIRELY VOLUNTARY. IF YOU ARE
         PARTICIPATING IN THE TESTNET, YOU MUST STRICTLY ADHERE TO THESE TERMS.
       </div>
@@ -52,7 +52,7 @@ export const TermsOfUse = () => {
           key={`${index}-privacy-termscontent`}
           className="flex flex-col gap-8"
         >
-          <div className="text-center text-lg font-semibold leading-6 sm:text-2xl sm:leading-8">
+          <div className="text-left text-lg font-semibold leading-6 sm:text-2xl sm:leading-8">
             {index + 1}. {term.title}
           </div>
           <>
@@ -74,10 +74,10 @@ export const TermsOfUse = () => {
 export const PrivacyPolicy = () => {
   return (
     <div className="flex flex-col gap-4">
-      <div className="sm:leading-12 text-center text-xl font-bold leading-8 sm:text-3xl">
+      <div className="sm:leading-12 text-left text-xl font-bold leading-8 sm:text-2xl">
         {Privacy.title}
       </div>
-      <div className="test-md text-center font-semibold leading-4 sm:text-lg sm:leading-7">
+      <div className="test-md text-left font-semibold leading-4 sm:text-lg sm:leading-7">
         Last updated: {Privacy.last_updated}
       </div>
       <div className="sm:text-md text-sm leading-4 sm:leading-6">
@@ -90,7 +90,7 @@ export const PrivacyPolicy = () => {
       {Privacy.content.map((privacy, index) => (
         <div key={`${index}-privacy-content`} className="flex flex-col gap-8">
           {privacy.title && (
-            <div className="text-center text-lg font-semibold leading-6 sm:text-2xl sm:leading-8">
+            <div className="text-left text-lg font-semibold leading-6 sm:text-2xl sm:leading-8">
               {privacy.title}
             </div>
           )}
@@ -143,7 +143,9 @@ export const TermOfUseModal = ({
         className="h-screen overflow-y-hidden pb-6 focus:outline-none md:h-fit md:w-[calc(100vw-32px)] lg:w-[800px] lg:min-w-[800px]"
       >
         <DialogHeader>
-          <DialogTitle className="mb-3">Terms of Service</DialogTitle>
+          <DialogTitle className="mb-3 font-semibold">
+            Terms of Service
+          </DialogTitle>
         </DialogHeader>
         <div className="max-h-[100vh-200px)] flex flex-grow-0 flex-col gap-4 overflow-y-scroll sm:h-full sm:max-h-[600px]">
           <div className="h-full max-h-[300px] flex-grow-0 overflow-y-scroll rounded-xl border border-border bg-muted p-4 pr-8">

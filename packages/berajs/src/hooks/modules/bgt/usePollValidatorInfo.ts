@@ -20,9 +20,9 @@ export const usePollValidatorInfo = (
   filter?: ValidatorFilter,
   options?: DefaultHookOptions,
 ): UsePollValidatorInfoResponse => {
-  const { config: beraConfig, account } = useBeraJs();
+  const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePollValidatorInfo", config, account, filter];
+  const QUERY_KEY = ["usePollValidatorInfo", config, filter];
   const swrResponse = useSWR<GetValidatorsInfo, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => {
@@ -30,6 +30,7 @@ export const usePollValidatorInfo = (
     },
     {
       ...options?.opts,
+      keepPreviousData: true,
     },
   );
 
@@ -37,7 +38,7 @@ export const usePollValidatorInfo = (
     ...swrResponse,
     validatorInfoList: swrResponse.data?.validatorInfoList ?? [],
     validatorInfoDictionary: swrResponse.data?.validatorInfoDictionary ?? {},
-    validatorCounts: swrResponse.data?.validatorInfoList.length ?? 0,
+    validatorCounts: swrResponse.data?.counts ?? 0,
     refresh: () => mutate(QUERY_KEY),
   };
 };

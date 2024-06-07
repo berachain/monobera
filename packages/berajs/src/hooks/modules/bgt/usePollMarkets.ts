@@ -1,11 +1,15 @@
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
-import { getMarkets } from "~/actions/bgt/getMarket";
+
+import { GetMarkets, getMarkets } from "~/actions/bgt/getMarket";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType, Market } from "~/types";
 
 export interface UsePollMarketsResponse
-  extends DefaultHookReturnType<Market[]> {}
+  extends DefaultHookReturnType<GetMarkets> {
+  marketList: Market[];
+  marketDictionary: { [key: string]: Market };
+}
 
 export const usePollMarkets = (
   options?: DefaultHookOptions,
@@ -13,7 +17,7 @@ export const usePollMarkets = (
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = ["usePollMarkets"];
-  const swrResponse = useSWRImmutable<Market[], any, typeof QUERY_KEY>(
+  const swrResponse = useSWRImmutable<GetMarkets, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => await getMarkets(config),
     {
@@ -23,6 +27,8 @@ export const usePollMarkets = (
 
   return {
     ...swrResponse,
+    marketList: swrResponse.data?.marketList ?? [],
+    marketDictionary: swrResponse.data?.marketDictionary ?? {},
     refresh: () => mutate(QUERY_KEY),
   };
 };

@@ -1,17 +1,11 @@
-import dynamic from "next/dynamic";
+import { useCallback, useState } from "react";
 import { usePollValidatorInfo, type Validator } from "@bera/berajs";
-import type { ColumnDef } from "@tanstack/react-table";
+import { DataTable } from "@bera/shared-ui";
+import type { ColumnDef, TableState } from "@tanstack/react-table";
 
 import { general_validator_columns } from "~/columns/general-validator-columns";
-import { TableLoading } from "./table-loading";
 
-const DataTable = dynamic(
-  () => import("@bera/shared-ui").then((mod) => mod.DataTable),
-  {
-    ssr: false,
-    loading: () => <TableLoading />,
-  },
-);
+const VALIDATOR_PAGE_SIZE = 10;
 
 export const AllValidator = ({
   keyword,
@@ -20,30 +14,53 @@ export const AllValidator = ({
   keyword?: any;
   onRowClick?: any;
 }) => {
-  // const [page, setPage] = useState(0);
-  const { validatorInfoList, isLoading, isValidating } = usePollValidatorInfo();
-  // const fetchData = useCallback(
-  //   (state: TableState) => setPage(state?.pagination?.pageIndex),
-  //   [setPage],
-  // );
+  const [page, setPage] = useState(0);
+
+  const [sorting, setSorting] = useState<any>([
+    {
+      id: "tvl",
+      desc: true,
+    },
+  ]);
+
+  const handleNewSort = (newSort: any) => {
+    if (newSort === sorting) return;
+    setSorting(newSort);
+  };
+
+  const {
+    validatorInfoList,
+    isLoading,
+    isValidating,
+    validatorCounts = 0,
+  } = usePollValidatorInfo({
+    sortBy: sorting[0]?.id,
+    sortOrder: sorting[0]?.desc ? "desc" : "asc",
+    page: page + 1,
+    pageSize: VALIDATOR_PAGE_SIZE,
+    query: keyword,
+  });
+  const fetchData = useCallback(
+    (state: TableState) => setPage(state?.pagination?.pageIndex),
+    [setPage],
+  );
   return (
     <DataTable
-      //@ts-ignore
       columns={general_validator_columns as ColumnDef<Validator>[]}
-      //@ts-ignore
       data={validatorInfoList}
       className="min-w-[900px]"
-      // fetchData={fetchData}
-      // enablePagination
+      fetchData={fetchData}
+      enablePagination
       loading={isLoading}
-      validating={isValidating}
-      // additionalTableProps={{
-      //   pageCount: 2,
-      //   manualFiltering: true,
-      //   manualSorting: true,
-      //   manualPagination: true,
-      // }}
+      // validating={isValidating}
+      additionalTableProps={{
+        initialState: { pagination: { pageSize: VALIDATOR_PAGE_SIZE } },
+        state: { sorting },
+        pageCount: Math.ceil(validatorCounts / VALIDATOR_PAGE_SIZE),
+        manualPagination: true,
+      }}
       onRowClick={onRowClick}
+      onCustomSortingChange={(a: any) => handleNewSort(a)}
     />
   );
 };

@@ -3,12 +3,18 @@ import { Address } from "viem";
 import { BeraConfig, Validator } from "../../types";
 
 export interface GetValidatorsInfo {
+  counts: number;
   validatorInfoList: Validator[];
   validatorInfoDictionary: { [key: Address]: Validator };
 }
 
 export interface ValidatorFilter {
   vaultId?: string;
+  sortBy?: "votingpower" | "commission" | "apy";
+  sortOrder?: "asc" | "desc";
+  page?: number;
+  query?: string;
+  pageSize?: number;
 }
 
 export const getValidatorsInfo = async (
@@ -31,8 +37,8 @@ export const getValidatorsInfo = async (
     }
     const validatorList = await fetch(url);
     const temp = await validatorList.json();
-    console.log(temp);
     return {
+      counts: temp.total ?? 0,
       validatorInfoList: temp.validators ?? [],
       validatorInfoDictionary: (temp.validators ?? []).reduce(
         (acc: { [key: Address]: Validator }, item: Validator) => {
@@ -45,6 +51,7 @@ export const getValidatorsInfo = async (
   } catch (error) {
     console.error("Error fetching validator information", error);
     return {
+      counts: 0,
       validatorInfoList: [],
       validatorInfoDictionary: {},
     };
