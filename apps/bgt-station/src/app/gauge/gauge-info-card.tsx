@@ -21,7 +21,6 @@ export default function GaugeInfoCard() {
     pageSize: 3,
   });
 
-  console.log("gaugeCounts", globalData);
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
