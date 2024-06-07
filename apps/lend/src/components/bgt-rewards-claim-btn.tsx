@@ -33,7 +33,7 @@ export default function BGTRewardsClaimBtn() {
           write({
             address: lendRewardsAddress,
             abi: lendRewardHelperAbi,
-            functionName: "claimAllRewards",
+            functionName: "getReward",
             params: [account],
           })
         }

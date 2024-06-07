@@ -10,7 +10,6 @@ import {
 import {
   cloudinaryUrl,
   honeyTokenAddress,
-  lendHoneyDebtTokenAddress,
   vdHoneyTokenAddress,
 } from "@bera/config";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
@@ -28,7 +27,7 @@ export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
     usePollLendUserBGTRewards();
   const { useBgtApr } = usePollBgtRewardsForAddress({
-    address: lendHoneyDebtTokenAddress,
+    address: vdHoneyTokenAddress,
   });
 
   const { totalBorrowed, getSelectedReserve } = usePollReservesDataList();
