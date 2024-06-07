@@ -66,7 +66,7 @@ export default async function Home({
   const defaultMarket = markets.find((m: Market) => m.name === DEFAULT_MARKET);
 
   if (!data || !defaultMarket || !data.params) {
-    notFound();
+    // notFound();
   }
 
   return (
@@ -77,19 +77,19 @@ export default async function Home({
         <div className="mx-2 mt-2 h-fit w-[calc(100%-16px)] flex-shrink-0 flex-grow-0 rounded-md border border-border lg:mr-0 lg:w-[400px]">
           <InstrumentDropdown
             markets={markets}
-            selectedMarket={defaultMarket}
+            selectedMarket={defaultMarket as IMarket}
             priceChange={data.priceChange}
           />
         </div>
         <GeneralInfoBanner
-          market={defaultMarket}
+          market={defaultMarket as IMarket}
           priceChange={data.priceChange}
         />
         <OneClickBanner className="hidden lg:flex" />
       </div>
       <OrderWrapper
         markets={markets}
-        defaultMarket={defaultMarket}
+        defaultMarket={defaultMarket as IMarket}
         params={data?.params}
       />
     </div>

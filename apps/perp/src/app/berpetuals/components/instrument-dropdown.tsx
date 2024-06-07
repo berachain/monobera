@@ -112,13 +112,13 @@ export function InstrumentDropdown({
           ) : (
             <>
               <Image
-                src={selectedMarket.imageUri ?? ""}
+                src={selectedMarket?.imageUri ?? ""}
                 alt={"selectedMarket"}
                 width={24}
                 height={24}
                 className="rounded-full"
               />
-              {selectedMarket.name}
+              {selectedMarket?.name}
             </>
           )}
         </div>
