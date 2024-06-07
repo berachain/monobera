@@ -37,7 +37,11 @@ const VALIDATOR_COLUMN: ColumnDef<Validator> = {
 
 const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Voting Power" />
+    <DataTableColumnHeader
+      column={column}
+      title="Voting Power"
+      className="min-w-[200px]"
+    />
   ),
   cell: ({ row }) => (
     <div className="w-full text-start">
@@ -48,8 +52,8 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
       />
     </div>
   ),
-  accessorKey: "amountStaked",
-  enableSorting: false,
+  accessorKey: "votingpower",
+  enableSorting: true,
 };
 
 const COMMISSION_COLUMN: ColumnDef<Validator> = {
@@ -60,13 +64,14 @@ const COMMISSION_COLUMN: ColumnDef<Validator> = {
     return <div className="text-center"> {row.original.commission ?? 0}%</div>;
   },
   accessorKey: "commission",
-  enableSorting: false,
+  enableSorting: true,
 };
 
 const APY_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
+      className="min-w-[150px]"
       title="vApy"
       tooltip={bribeApyTooltipText()}
     />
@@ -76,8 +81,8 @@ const APY_COLUMN: ColumnDef<Validator> = {
       <FormattedNumber value={row.original.apy} percent />
     </div>
   ),
-  accessorKey: "vApy",
-  enableSorting: false,
+  accessorKey: "apy",
+  enableSorting: true,
 };
 
 const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
@@ -259,9 +264,12 @@ export const user_general_validator_columns: ColumnDef<UserValidator>[] = [
   VALIDATOR_COLUMN as ColumnDef<UserValidator>,
   USER_STAKED_COLUMN,
   USER_QUEUED_COLUMN,
-  GLOBAL_VOTING_POWER_COLUMN as ColumnDef<UserValidator>,
-  COMMISSION_COLUMN as ColumnDef<UserValidator>,
-  APY_COLUMN as ColumnDef<UserValidator>,
+  {
+    ...GLOBAL_VOTING_POWER_COLUMN,
+    enableSorting: false,
+  } as ColumnDef<UserValidator>,
+  { ...COMMISSION_COLUMN, enableSorting: false } as ColumnDef<UserValidator>,
+  { ...APY_COLUMN, enableSorting: false } as ColumnDef<UserValidator>,
   BRIBES_COLUMN as ColumnDef<UserValidator>,
 ];
 

@@ -30,6 +30,7 @@ export const usePollValidatorInfo = (
     },
     {
       ...options?.opts,
+      keepPreviousData: true,
     },
   );
 
