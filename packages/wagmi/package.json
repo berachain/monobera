@@ -24,7 +24,9 @@
     "@wagmi/core": "^2.6.15",
     "viem": "~2.7.22",
     "wagmi": "^2.5.7",
-    "next-themes": "^0.2.1"
+    "next-themes": "^0.2.1",
+    "rpc-websockets": "^7.11.1",
+    "@solana/web3.js" : "^1.91.6"
   },
   "peerDependencies": {
     "react": "^18.2.0",

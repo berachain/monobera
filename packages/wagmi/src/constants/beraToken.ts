@@ -1,7 +1,7 @@
-import { Token } from "@bera/berajs";
+// import { type Token } from "@bera/berajs";
 import { nativeTokenAddress } from "@bera/config";
 
-export const beraToken: Token = {
+export const beraToken: any = {
   address: nativeTokenAddress,
   decimals: 18,
   name: "Bera",

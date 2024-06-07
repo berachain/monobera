@@ -1,7 +1,7 @@
-import { type Token } from "@bera/berajs";
+// import { type Token } from "@bera/berajs";
 import { beraTokenAddress } from "@bera/config";
 
-export const wBeraToken: Token = {
+export const wBeraToken: any = {
   address: beraTokenAddress,
   decimals: 18,
   name: "WBera",
