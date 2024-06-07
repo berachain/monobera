@@ -4,17 +4,17 @@ import React, { useState } from "react";
 import {
   useBeraJs,
   usePollGlobalData,
-  type CuttingBoardWeight,
+  usePollValidatorInfo,
 } from "@bera/berajs";
+import { SearchInput } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GlobalGaugeWeightTable from "~/components/global-gauge-weight-table";
+import UserGaugeWeightTable from "~/components/user-gauge-weight-table";
 import GaugeInfoCard from "./gauge-info-card";
 import MarketSelector from "./market-selector";
-import UserGaugeWeightTable from "~/components/user-gauge-weight-table";
-import { SearchInput } from "@bera/shared-ui";
 
 export default function Gauge() {
   const { isReady } = useBeraJs();
@@ -22,14 +22,15 @@ export default function Gauge() {
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
+  const { validatorInfoList=[] } = usePollValidatorInfo();
 
   return (
     <div className="flex flex-col gap-12">
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
+          gaugeWeights={validatorInfoList?.[1]?.cuttingBoard.weights??[]}
           isLoading={isGlobalDataLoading}
-          gaugeWeights={[] as CuttingBoardWeight[]}
           totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
           globalAmountStaked={data?.bgtTotalSupply ?? "0"}
           showTotal={false}

@@ -46,7 +46,7 @@ export default function GlobalGaugeWeightTable({
         validating={isValidating}
         columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
         data={myGauge ? [] : gaugeList ?? []}
-        className="min-h-[400px] min-w-[1100px] shadow"
+        className="min-h-[200px] min-w-[1100px] shadow"
         additionalTableProps={{
           initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
           pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),

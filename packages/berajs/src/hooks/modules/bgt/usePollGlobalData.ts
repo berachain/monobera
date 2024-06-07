@@ -6,10 +6,12 @@ import { GetBGTInfo, getBGTInfo } from "~/actions/bgt/getBGTInfo";
 import { getTokenTotalSupply } from "~/actions/bgt/getTokenTotalSupply";
 import { DefaultHookOptions, DefaultHookReturnType, useBeraJs } from "../../..";
 import { formatEther } from "viem";
+import { getBGTGlobalInfo } from "~/actions/bgt/getBGTGlobalInfo";
 
 interface GlobalData {
   bgtInfo: GetBGTInfo | undefined;
   bgtTotalSupply: string | undefined;
+  globalData: any | undefined;
 }
 export interface IUsePollGlobalDataResponse
   extends DefaultHookReturnType<GlobalData> {}
@@ -25,11 +27,12 @@ export const usePollGlobalData = (
     QUERY_KEY,
     async () => {
       const bgtInfo = await getBGTInfo(config);
+      const globalData = await getBGTGlobalInfo(config);
       const bgtTotalSupply = await getTokenTotalSupply({
         token: bgtTokenAddress,
         publicClient,
       });
-      return { bgtInfo, bgtTotalSupply: formatEther(bgtTotalSupply ?? 0n) };
+      return { bgtInfo, bgtTotalSupply: formatEther(bgtTotalSupply ?? 0n), globalData };
     },
     {
       ...options?.opts,
