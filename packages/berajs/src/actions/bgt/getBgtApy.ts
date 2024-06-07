@@ -46,7 +46,7 @@ export const getBgtApy = async ({
     .query({
       query: getTokenHoneyPriceReq,
       variables: {
-        id: beraTokenAddress,
+        id: beraTokenAddress.toLowerCase(),
       },
     })
     .then((res: any) => {

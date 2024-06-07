@@ -1,37 +1,43 @@
-import useSWR, { useSWRConfig } from "swr";
+import { lendRewardsAddress } from "@bera/config";
+import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
+import { lendRewardHelperAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
+import POLLING from "~/enum/polling";
 import { DefaultHookOptions } from "~/types";
 
 export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
   const publicClient = usePublicClient();
-  const { account } = useBeraJs();
-
-  // const { account, config: beraConfig } = useBeraJs();
-  // const config = options?.beraConfigOverride ?? beraConfig;
+  const { account, config: beraConfig } = useBeraJs();
+  const config = options?.beraConfigOverride ?? beraConfig;
 
   const QUERY_KEY = ["getUserBGTRewardsLend", account];
-  const swrResponse = useSWR(QUERY_KEY, async () => {
-    if (!publicClient) throw new Error("publicClient is not defined");
-    // if (account) {
-    // try {
-    //   const result = await publicClient.readContract({
-    //     address: lendRewardsAddress,
-    //     abi: lendRewardHelperAbi,
-    //     functionName: "getAllRewards",
-    //     args: [account],
-    //   });
-    //   return result;
-    // } catch (e) {
-    //   console.log(e);
-    //   return null;
-    // }
-    // } else {
-    //   return null;
-    // }
-    return null;
-  });
+  const swrResponse = useSWR(
+    QUERY_KEY,
+    async () => {
+      if (!publicClient) throw new Error("publicClient is not defined");
+      if (!config) throw new Error("missing beraConfig");
+      if (account) {
+        try {
+          const { result } = await publicClient.simulateContract({
+            address: lendRewardsAddress,
+            abi: lendRewardHelperAbi,
+            functionName: "getReward",
+            args: [account],
+          });
+          return result;
+        } catch (e) {
+          console.log(e);
+          return;
+        }
+      }
+    },
+    {
+      ...options?.opts,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
+    },
+  );
 
   return {
     ...swrResponse,
