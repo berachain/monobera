@@ -164,7 +164,7 @@ export const Incentivize = ({
             <TokenInput
               selectable={selectedToken === undefined}
               showExceeding
-              disabled={isLoading}
+              disabled={isLoading || !token}
               selected={token}
               amount={totalAmount}
               customTokenList={[...whiteListedTokens]}
@@ -239,7 +239,8 @@ export const Incentivize = ({
           (allowance?.allowance ?? 0n) < parseUnits(totalAmount, 18)) &&
         totalAmount !== "" &&
         totalAmount !== "0" &&
-        !exceeding ? (
+        !exceeding &&
+        token ? (
           <ApproveButton
             token={token}
             spender={gaugeInfo.vaultAddress}

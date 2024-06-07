@@ -9,3 +9,5 @@ export { usePollGlobalData } from "./usePollGlobalData";
 export { useUserActiveValidators } from "./useUserActiveValidators";
 export { useBgtUnstakedBalance } from "./useBgtUnstakedBalance";
 export { useUserVaults } from "./useUserVaults";
+export { useSelectedValidator } from "./useSelectedValidator";
+export { useSelectedGauge } from "./useSelectedGauge";
