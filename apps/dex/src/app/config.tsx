@@ -13,6 +13,8 @@ import {
   lendUrl,
   perpsName,
   perpsUrl,
+  governanceName,
+  governanceUrl
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
@@ -82,6 +84,13 @@ export const navItems = [
         blurb: "Explore Berachain and learn more about our vision",
         icon: <Icons.foundationFav className="h-8 w-8" />,
       },
+      // {
+      //   href: governanceUrl,
+      //   type: "external",
+      //   title: governanceName,
+      //   blurb: "Submit and vote on proposals for the Berachain ecosystem",
+      //   icon: <Icons.faucetFav className="h-8 w-8" />,
+      // },
       {
         href: faucetUrl,
         type: "external",
