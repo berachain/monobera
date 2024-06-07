@@ -61,6 +61,7 @@ const allTargetProjects = [
   // testnet projects
   "testnet-honey",
   "testnet-dex",
+  "testnet-bend",
 ];
 
 const rl = readline.createInterface({

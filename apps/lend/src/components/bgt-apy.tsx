@@ -2,30 +2,35 @@
 
 import {
   usePollBgtRewardsForAddress,
+  useBgtApy,
   usePollReservesDataList,
 } from "@bera/berajs";
-import { honeyTokenAddress, lendHoneyDebtTokenAddress } from "@bera/config";
+import { honeyTokenAddress, vdHoneyTokenAddress } from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
+import { formatFromBaseUnit, formatToBaseUnit } from "../utils/formatBigNumber";
 
 export default function BGTApy() {
   const { getSelectedReserve, totalBorrowed } = usePollReservesDataList();
   const honey = getSelectedReserve(honeyTokenAddress);
 
-  const { useBgtApr } = usePollBgtRewardsForAddress({
-    address: lendHoneyDebtTokenAddress,
+  const { data: bgtApr } = useBgtApy({
+    receiptTokenAddress: vdHoneyTokenAddress,
+    tvlInHoney: Number(honey?.totalVariableDebt),
   });
-  const bgtApr = useBgtApr(totalBorrowed) ?? 0; // is this apr or apy? i am confused
+
   const borrowApy = Number(honey?.variableBorrowAPY ?? "0");
 
   return (
     <div className="flex h-12 w-fit items-center justify-center gap-2 rounded-full bg-accent bg-opacity-10 pr-4 text-xl font-semibold sm:text-3xl">
       <Icons.honey className="h-10 w-10" />
       <Icons.bgt className="-ml-7 h-10 w-10" />
-      <FormattedNumber value={bgtApr - borrowApy} percent /> APY
+      <FormattedNumber value={Number(bgtApr ?? 0) - borrowApy} percent /> APY
       <Tooltip
         size={8}
-        text={<BGTAPYTooltip bgtApy={bgtApr ?? 0} borrowApy={borrowApy} />}
+        text={
+          <BGTAPYTooltip bgtApy={Number(bgtApr ?? 0)} borrowApy={borrowApy} />
+        }
       />
     </div>
   );
