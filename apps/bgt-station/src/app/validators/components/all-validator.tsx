@@ -9,18 +9,23 @@ const VALIDATOR_PAGE_SIZE = 10;
 
 export const AllValidator = ({
   keyword,
+  isTyping,
   onRowClick,
 }: {
   keyword?: any;
+  isTyping?: boolean;
   onRowClick?: any;
 }) => {
   const [page, setPage] = useState(0);
-  const [sorting, setSorting] = useState([{ id: "tvl", desc: true }]);
+  const [sorting, setSorting] = useState([{ id: "votingpower", desc: true }]);
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;
     setSorting(newSort);
   };
-
+  const fetchData = useCallback(
+    (state: TableState) => setPage(state?.pagination?.pageIndex),
+    [setPage],
+  );
   const {
     validatorInfoList,
     isLoading,
@@ -31,12 +36,8 @@ export const AllValidator = ({
     sortOrder: sorting[0]?.desc ? "desc" : "asc",
     page: page + 1,
     pageSize: VALIDATOR_PAGE_SIZE,
-    query: keyword,
+    query: isTyping ? "" : keyword,
   });
-  const fetchData = useCallback(
-    (state: TableState) => setPage(state?.pagination?.pageIndex),
-    [setPage],
-  );
   return (
     <DataTable
       columns={general_validator_columns as ColumnDef<Validator>[]}

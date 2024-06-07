@@ -10,9 +10,13 @@ const GAUGE_PAGE_SIZE = 10;
 export default function GlobalGaugeWeightTable({
   myGauge = false,
   keywords = "",
+  markets = [],
+  isTyping = false,
 }: {
   myGauge?: boolean;
   keywords?: string;
+  markets?: string[];
+  isTyping?: boolean;
 }) {
   const [page, setPage] = useState(0);
   const [sorting, setSorting] = useState([
@@ -30,8 +34,9 @@ export default function GlobalGaugeWeightTable({
       | undefined,
     sortOrder: sorting[0]?.desc ? "desc" : "asc",
     page: page + 1,
+    filterByProduct: markets,
     pageSize: GAUGE_PAGE_SIZE,
-    query: keywords,
+    query: isTyping ? "" : keywords,
   });
   const fetchData = useCallback(
     (state: TableState) => setPage(state?.pagination?.pageIndex),
@@ -39,6 +44,7 @@ export default function GlobalGaugeWeightTable({
   );
   return (
     <div className="w-full ">
+      {String(isTyping)}
       <DataTable
         fetchData={fetchData}
         enablePagination

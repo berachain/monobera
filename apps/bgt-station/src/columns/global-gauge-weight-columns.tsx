@@ -71,10 +71,8 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        title="BGT Inflation Capture"
-        tooltip={
-          "The percentage of global BGT inflation captured by the gauge."
-        }
+        title="BGT Capture"
+        tooltip={"The percentage of global BGT captured by the gauge."}
         className="whitespace-nowrap"
       />
     ),

@@ -2,16 +2,12 @@ import { bgtTokenAddress } from "@bera/config";
 import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
-import { GetBGTInfo, getBGTInfo } from "~/actions/bgt/getBGTInfo";
+import { GlobalInfo, getBGTGlobalInfo } from "~/actions/bgt/getBGTGlobalInfo";
 import { getTokenTotalSupply } from "~/actions/bgt/getTokenTotalSupply";
 import { DefaultHookOptions, DefaultHookReturnType, useBeraJs } from "../../..";
-import { formatEther } from "viem";
-import { getBGTGlobalInfo } from "~/actions/bgt/getBGTGlobalInfo";
 
-interface GlobalData {
-  bgtInfo: GetBGTInfo | undefined;
+interface GlobalData extends GlobalInfo {
   bgtTotalSupply: string | undefined;
-  globalData: any | undefined;
 }
 export interface IUsePollGlobalDataResponse
   extends DefaultHookReturnType<GlobalData> {}
@@ -26,17 +22,17 @@ export const usePollGlobalData = (
   const swrResponse = useSWR<GlobalData, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => {
-      const bgtInfo = await getBGTInfo(config);
-      const globalData = await getBGTGlobalInfo(config);
-      const bgtTotalSupply = await getTokenTotalSupply({
-        token: bgtTokenAddress,
-        publicClient,
-      });
+      const [globalData, bgtTotalSupply] = await Promise.all([
+        getBGTGlobalInfo(config),
+        getTokenTotalSupply({
+          token: bgtTokenAddress,
+          publicClient,
+        }),
+      ]);
       return {
-        bgtInfo,
-        bgtTotalSupply: formatEther(bgtTotalSupply ?? 0n),
-        globalData,
-      };
+        bgtTotalSupply,
+        ...globalData,
+      } as any;
     },
     {
       ...options?.opts,

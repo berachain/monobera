@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useBeraJs,
   usePollGlobalData,
@@ -21,8 +21,16 @@ export default function Gauge() {
   const [markets, setMarkets] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
   const { validatorInfoList = [] } = usePollValidatorInfo();
+
+  useEffect(() => {
+    return () => {
+      if (typingTimer) clearTimeout(typingTimer);
+    };
+  }, [typingTimer]);
 
   return (
     <div className="flex flex-col gap-12">
@@ -56,15 +64,21 @@ export default function Gauge() {
             <SearchInput
               placeholder="Search..."
               value={keywords}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setKeywords(e.target.value)
-              }
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                if (e.key === "Enter" && keywords) {
-                  setKeywordList([...keywordList, keywords]);
-                  setKeywords("");
-                }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setKeywords(e.target.value);
+                setIsTyping?.(true);
+                if (typingTimer) clearTimeout(typingTimer);
+                const newTimer = setTimeout(() => {
+                  setIsTyping(false);
+                }, 1000);
+                setTypingTimer(newTimer);
               }}
+              // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+              //   if (e.key === "Enter" && keywords) {
+              //     setKeywordList([...keywordList, keywords]);
+              //     setKeywords("");
+              //   }
+              // }}
               className="w-full md:w-[300px]"
             />
             <TabsContent value="all-gauges">
@@ -108,10 +122,14 @@ export default function Gauge() {
           </div>
         )}
         <TabsContent value="all-gauges">
-          <GlobalGaugeWeightTable keywords={keywords} />
+          <GlobalGaugeWeightTable
+            keywords={keywords}
+            markets={markets}
+            isTyping={isTyping}
+          />
         </TabsContent>
         <TabsContent value="my-gauges">
-          <UserGaugeWeightTable myGauge />
+          <UserGaugeWeightTable myGauge keywords={keywords} />
         </TabsContent>
       </Tabs>
     </div>

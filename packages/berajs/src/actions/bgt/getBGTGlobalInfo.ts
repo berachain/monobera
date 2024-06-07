@@ -1,15 +1,34 @@
-import { BeraConfig } from "~/types";
+import { Address } from "viem";
 
-export interface GetBGTInfo {
-  bgtPerBlock: number;
-  blockCountPerYear: number;
-  totalStakeBgt: number;
-  bgtInflation: number;
+import { ActiveIncentive, BeraConfig, Validator } from "~/types";
+
+export interface GlobalInfo {
+  bgtInfo: {
+    bgtInflation: number;
+    bgtPerBlock: number;
+    blockCountPerYear: number;
+    totalStakeBgt: number;
+  };
+  honeyPrices: {
+    incentiveHoneyPrices: {
+      address: Address;
+      price: string;
+    }[];
+    incentivesCount: number;
+  };
+  top3EmittingValidators: {
+    validators: {
+      stakedVotingPower: number;
+      validator: Validator;
+    }[];
+  };
+  top3Incentives: { activeIncentives: ActiveIncentive[] };
+  validatorCount: number;
 }
 
 export const getBGTGlobalInfo = async (
   config: BeraConfig,
-): Promise<any | undefined> => {
+): Promise<GlobalInfo | undefined> => {
   // if (!config.endpoints?.bgtEndpoint) {
   //   throw new Error("Missing backend endpoint in config");
   // }

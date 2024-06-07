@@ -29,7 +29,7 @@ export const CuttingBoardDisplay = ({
         address={cuttingBoard.receiverMetadata.vaultAddress}
         overrideImage={cuttingBoard.receiverMetadata.logoURI}
       />
-      <span className="hover:underline max-w-[200px] truncate">
+      <span className="max-w-[200px] truncate hover:underline">
         {cuttingBoard.receiverMetadata.name}
       </span>
     </Link>
@@ -39,36 +39,31 @@ export const CuttingBoardDisplay = ({
 export default function ValidatorsTable() {
   const { isReady } = useBeraJs();
   const [isTyping, setIsTyping] = useState(false);
-  const [search, setSearch] = useState("");
+  const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [keyword, setKeyword] = useState("");
   const router = useRouter();
-  let typingTimer: NodeJS.Timeout;
 
   useEffect(() => {
-    if (isTyping) return;
-    setKeyword(search);
-  }, [isTyping, search]);
-
-  const handleClearSearch = () => {
-    setKeyword("");
-    setSearch("");
-  };
+    return () => {
+      if (typingTimer) clearTimeout(typingTimer);
+    };
+  }, [typingTimer]);
 
   return (
     <div className="mt-16">
       <Tabs defaultValue="all-validators">
-        <div className="mb-6 flex w-full flex-col justify-start gap-6 sm:flex-row">
+        <div className="mb-6 flex w-full flex-col justify-between gap-6 sm:flex-row">
           <TabsList>
             <TabsTrigger
               value="all-validators"
-              onClick={handleClearSearch}
+              onClick={() => setKeyword("")}
               className="w-full"
             >
               All Validators
             </TabsTrigger>
             <TabsTrigger
               value="my-validators"
-              onClick={handleClearSearch}
+              onClick={() => setKeyword("")}
               className="w-full"
               disabled={!isReady}
             >
@@ -77,24 +72,24 @@ export default function ValidatorsTable() {
           </TabsList>
           <div className="flex w-fit items-center justify-between gap-2">
             <SearchInput
-              value={search}
+              value={keyword}
               onChange={(e: any) => {
-                setSearch(e.target.value);
+                setKeyword(e.target.value);
                 setIsTyping?.(true);
-                clearTimeout(typingTimer);
-                typingTimer = setTimeout(() => {
-                  setIsTyping?.(false);
+                if (typingTimer) clearTimeout(typingTimer);
+                const newTimer = setTimeout(() => {
+                  setIsTyping(false);
                 }, 1000);
-                return;
+                setTypingTimer(newTimer);
               }}
               placeholder="Search..."
-              onKeyDown={(e: any) => {
-                if (e.key === "Enter") {
-                  setKeyword(search);
-                  clearTimeout(typingTimer);
-                  setIsTyping?.(false);
-                }
-              }}
+              // onKeyDown={(e: any) => {
+              //   if (e.key === "Enter") {
+              //     setKeyword(search);
+              //     clearTimeout(typingTimer);
+              //     setIsTyping?.(false);
+              //   }
+              // }}
               id="all-pool-search"
               className="w-full md:w-[350px]"
             />
@@ -125,6 +120,7 @@ export default function ValidatorsTable() {
         <TabsContent value="all-validators">
           <AllValidator
             keyword={keyword}
+            isTyping={isTyping}
             onRowClick={(row: any) =>
               router.push(`/validators/${row.original.coinbase}`)
             }

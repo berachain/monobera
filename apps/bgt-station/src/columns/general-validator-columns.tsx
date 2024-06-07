@@ -53,7 +53,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
       />
     </div>
   ),
-  accessorKey: "amountStaked",
+  accessorKey: "votingpower",
   enableSorting: true,
 };
 

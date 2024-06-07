@@ -4,7 +4,6 @@ import {
   Validator,
   usePollGauges,
   usePollGlobalData,
-  usePollValidatorInfo,
 } from "@bera/berajs";
 import { FormattedNumber, GaugeIcon, ValidatorIcon } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
@@ -14,24 +13,15 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 
 export default function GaugeInfoCard() {
-  const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
+  const { data: globalData, isLoading } = usePollGlobalData();
   const { gaugeCounts, gaugeList } = usePollGauges({
     sortBy: "bgtInflationCapture",
     sortOrder: "desc",
     page: 1,
     pageSize: 3,
   });
-  const {
-    validatorCounts,
-    validatorInfoList,
-    isLoading: isValidatorCountLoading,
-  } = usePollValidatorInfo({
-    sortBy: "votingpower",
-    sortOrder: "desc",
-    page: 1,
-    pageSize: 3,
-  });
-  const isLoading = isGlobalDataLoading || isValidatorCountLoading;
+
+  console.log("gaugeCounts", globalData);
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
@@ -73,32 +63,37 @@ export default function GaugeInfoCard() {
           <div className="text-xs leading-5 text-muted-foreground">
             Top 3 Validators
           </div>
-          {!isLoading ? (
-            validatorInfoList.map((validator: Validator, index: number) => (
-              <div
-                className="flex h-7 w-fit flex-nowrap items-center gap-2 rounded-full border border-border bg-background px-2"
-                key={`${index}-${validator.id}`}
-              >
-                <ValidatorIcon
-                  address={validator.id}
-                  size={"md"}
-                  imgOverride={validator.metadata.logoURI}
-                />
-                <span className="text-nowrap text-xs font-medium">
-                  {validator.metadata.name}
-                </span>
-                <span className="text-nowrap text-[10px] text-muted-foreground">
-                  BGT/Year:{" "}
-                  <FormattedNumber
-                    value={getValidatorEstimatedBgtPerYear(
-                      validator,
-                      validatorCounts,
-                    )}
-                    showIsSmallerThanMin
+          {!isLoading && globalData ? (
+            globalData.top3EmittingValidators.validators.map(
+              (
+                validator: { stakedVotingPower: number; validator: Validator },
+                index: number,
+              ) => (
+                <div
+                  className="flex h-7 w-fit flex-nowrap items-center gap-2 rounded-full border border-border bg-background px-2"
+                  key={`${index}-${validator.validator.id}`}
+                >
+                  <ValidatorIcon
+                    address={validator.validator.id}
+                    size={"md"}
+                    imgOverride={validator.validator.metadata.logoURI}
                   />
-                </span>
-              </div>
-            ))
+                  <span className="text-nowrap text-xs font-medium">
+                    {validator.validator.metadata.name}
+                  </span>
+                  <span className="text-nowrap text-[10px] text-muted-foreground">
+                    BGT/Year:{" "}
+                    <FormattedNumber
+                      value={getValidatorEstimatedBgtPerYear(
+                        validator.validator,
+                        globalData.validatorCount,
+                      )}
+                      showIsSmallerThanMin
+                    />
+                  </span>
+                </div>
+              ),
+            )
           ) : (
             <>
               <Skeleton className="h-4 w-[150px] rounded-full" />
@@ -119,7 +114,7 @@ export default function GaugeInfoCard() {
               <Icons.bgt className="h-6 w-6" />
               <b>
                 <FormattedNumber
-                  value={data?.bgtInfo?.blockCountPerYear ?? 0}
+                  value={globalData?.bgtInfo?.blockCountPerYear ?? 0}
                 />{" "}
                 Yearly
               </b>
@@ -156,11 +151,11 @@ export default function GaugeInfoCard() {
           <div className="text-xs leading-5 text-muted-foreground">
             Total No. of Validators
           </div>
-          {isLoading ? (
+          {isLoading || !globalData ? (
             <Skeleton className="h-5 w-16 rounded-sm" />
           ) : (
             <div className="w-fit rounded-full bg-success-foreground bg-opacity-10 px-2 py-1 text-sm font-medium leading-[18px] text-success-foreground">
-              {validatorCounts} Active
+              {globalData.validatorCount} Active
             </div>
           )}
         </div>
@@ -174,7 +169,7 @@ export default function GaugeInfoCard() {
           ) : (
             <div className="flex items-center gap-1 text-sm font-bold leading-5">
               <FormattedNumber
-                value={data?.bgtTotalSupply ?? 0}
+                value={globalData?.bgtTotalSupply ?? 0}
                 compact={false}
               />
               <Icons.bgt className="h-4 w-4" />
@@ -194,13 +189,13 @@ export default function GaugeInfoCard() {
           <div className="w-fit text-[10px] text-warning-foreground">
             Est. Avg. Return per Proposed block
           </div>
-          {isGlobalDataLoading ? (
+          {isLoading ? (
             <Skeleton className="h-8 w-full" />
           ) : (
             <div className="flex items-center gap-2 text-2xl font-semibold">
               <Icons.honey className="h-6 w-6" />
               <FormattedNumber
-                value={data?.bgtInfo?.bgtPerBlock ?? 0}
+                value={globalData?.bgtInfo?.bgtPerBlock ?? 0}
                 compact={false}
                 showIsSmallerThanMin
               />
