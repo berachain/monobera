@@ -32,7 +32,11 @@ export const usePollGlobalData = (
         token: bgtTokenAddress,
         publicClient,
       });
-      return { bgtInfo, bgtTotalSupply: formatEther(bgtTotalSupply ?? 0n), globalData };
+      return {
+        bgtInfo,
+        bgtTotalSupply: formatEther(bgtTotalSupply ?? 0n),
+        globalData,
+      };
     },
     {
       ...options?.opts,

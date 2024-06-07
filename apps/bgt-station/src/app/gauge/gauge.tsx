@@ -22,14 +22,14 @@ export default function Gauge() {
   const [keywords, setKeywords] = useState<string | undefined>(undefined);
   const [keywordList, setKeywordList] = useState<string[]>([]);
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
-  const { validatorInfoList=[] } = usePollValidatorInfo();
+  const { validatorInfoList = [] } = usePollValidatorInfo();
 
   return (
     <div className="flex flex-col gap-12">
       <div className="xs:gap-3 flex flex-col gap-8 lg:flex-row">
         <GaugeInfoCard />
         <GlobalGaugeWeightChart
-          gaugeWeights={validatorInfoList?.[1]?.cuttingBoard.weights??[]}
+          gaugeWeights={validatorInfoList?.[1]?.cuttingBoard.weights ?? []}
           isLoading={isGlobalDataLoading}
           totalAmountStaked={data?.bgtInfo?.totalStakeBgt ?? "0"}
           globalAmountStaked={data?.bgtTotalSupply ?? "0"}
