@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { Address } from "viem";
-import { getApyInfo, getTokenHoneyPriceReq } from "@bera/graphql";
+import { getTokenHoneyPriceReq } from "@bera/graphql";
 import { BeraConfig } from "~/types/global";
 import { beraTokenAddress, blockTime } from "@bera/config";
 
@@ -56,47 +56,48 @@ export const getBgtApy = async ({
       console.log(e);
       return "0";
     });
-  const apyInfo: any = await bgtClient
-    .query({
-      query: getApyInfo,
-    })
-    .then((res: any) => {
-      return {
-        baseRate: res.data.globalInfo.baseRewardRate,
-        rewardRate: res.data.globalInfo.rewardRate,
-      };
-    })
-    .catch((e: any) => {
-      console.log(e);
-      return undefined;
-    });
+  // const apyInfo: any = await bgtClient
+  //   .query({
+  //     query: getApyInfo,
+  //   })
+  //   .then((res: any) => {
+  //     return {
+  //       baseRate: res.data.globalInfo.baseRewardRate,
+  //       rewardRate: res.data.globalInfo.rewardRate,
+  //     };
+  //   })
+  //   .catch((e: any) => {
+  //     console.log(e);
+  //     return undefined;
+  //   });
 
-  if (!apyInfo) return "0";
+  // if (!apyInfo) return "0";
 
-  const globalRewardRate =
-    parseFloat(apyInfo.data.globalInfo.baseRate) +
-    parseFloat(apyInfo.data.globalInfo.rewardRate);
+  // const globalRewardRate =
+  //   parseFloat(apyInfo.data.globalInfo.baseRate) +
+  //   parseFloat(apyInfo.data.globalInfo.rewardRate);
 
-  const totalBgtStaked = parseFloat(apyInfo.data.globalInfo.totalBgtStaked);
+  // const totalBgtStaked = parseFloat(apyInfo.data.globalInfo.totalBgtStaked);
 
-  const selectedCuttingBoard = apyInfo.data.globalCuttingBoardWeights.find(
-    (cb: any) =>
-      cb.vault.stakingToken.id.toLowerCase() ===
-      receiptTokenAddress.toLowerCase(),
-  );
+  // const selectedCuttingBoard = apyInfo.data.globalCuttingBoardWeights.find(
+  //   (cb: any) =>
+  //     cb.vault.stakingToken.id.toLowerCase() ===
+  //     receiptTokenAddress.toLowerCase(),
+  // );
 
-  if (!selectedCuttingBoard) return "0";
+  // if (!selectedCuttingBoard) return "0";
 
-  const estimatedBgtPerBlock =
-    (parseFloat(selectedCuttingBoard.amount) / totalBgtStaked) *
-    globalRewardRate;
-  const secondsInAYear = 60 * 60 * 24 * 365;
-  const blocksPerSecond = 1 / blockTime;
-  const blocksPerYear = secondsInAYear * blocksPerSecond;
-  const estimatedBgtPerYear = estimatedBgtPerBlock * blocksPerYear;
-  const honeyValueEstimatedBgtPerYear =
-    estimatedBgtPerYear * parseFloat(beraHoneyPrice);
+  // const estimatedBgtPerBlock =
+  //   (parseFloat(selectedCuttingBoard.amount) / totalBgtStaked) *
+  //   globalRewardRate;
+  // const secondsInAYear = 60 * 60 * 24 * 365;
+  // const blocksPerSecond = 1 / blockTime;
+  // const blocksPerYear = secondsInAYear * blocksPerSecond;
+  // const estimatedBgtPerYear = estimatedBgtPerBlock * blocksPerYear;
+  // const honeyValueEstimatedBgtPerYear =
+  //   estimatedBgtPerYear * parseFloat(beraHoneyPrice);
 
-  const apy = ((honeyValueEstimatedBgtPerYear / tvlInHoney) * 100).toString();
-  return apy;
+  // const apy = ((honeyValueEstimatedBgtPerYear / tvlInHoney) * 100).toString();
+  // return apy;
+  return "0";
 };
