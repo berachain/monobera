@@ -5,7 +5,7 @@ import { Token } from "./dex";
 export interface ValidatorInfo {
   id: Address;
   name: string;
-  description: string;
+  Description: string;
   website: string;
   logoURI: string;
   twitter?: string;
@@ -22,7 +22,7 @@ export type Validator = {
   rewardRate: string;
   allTimeData: {
     allTimeBgtDirected: number;
-    totalHoneyValueBgtDirected: number;
+    allTimeHoneyValueTokenRewards: number;
     allTimeUniqueTokenCount: number;
   };
   active: boolean;
@@ -89,6 +89,7 @@ export type Gauge = {
   id: Address;
   metadata: GaugeInfo;
   stakingTokenAddress: Address;
+  bgtInflationCapture: number;
   vaultAddress: Address;
   vaultWhitelist: {
     whitelistedTokens: { isWhiteListed: boolean; token: Token }[];

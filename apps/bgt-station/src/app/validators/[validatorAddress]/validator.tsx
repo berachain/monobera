@@ -303,7 +303,7 @@ export default function Validator({
               <Skeleton className="h-[100px] w-[350px]" />
             ) : (
               <div className="w-full overflow-hidden text-ellipsis text-foreground">
-                {validator?.metadata.description}
+                {validator?.metadata.Description}
               </div>
             )}
           </div>
