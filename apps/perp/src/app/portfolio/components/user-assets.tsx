@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useCallback, useContext, useMemo, useState } from "react";
+import { usePollPositionsLiqFeePrices } from "@bera/berajs";
+import type { OpenTrade } from "@bera/proto/src";
 import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import {
   TableState,
@@ -24,7 +26,31 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
   const { tableState, setTableState } = useContext(TableContext);
   const { data, pagination, isLoading, isValidating } =
     usePollOpenPositions(tableState);
-  const openPositions = generateMarketOrders(data, markets);
+  const { data: openPositionsLiqFeesData } = usePollPositionsLiqFeePrices(
+    data?.result
+      ? data.result.map((position: OpenTrade) => Number(position.index))
+      : [],
+  );
+
+  let openPositions = generateMarketOrders(data, markets);
+  openPositions = openPositions.map((position, index) => {
+    return {
+      ...position,
+      borrowing_fee:
+        Array.isArray(openPositionsLiqFeesData) &&
+        openPositionsLiqFeesData[1] &&
+        openPositionsLiqFeesData[1][index] !== undefined
+          ? openPositionsLiqFeesData[1][index].toString()
+          : "0",
+      liq_price:
+        Array.isArray(openPositionsLiqFeesData) &&
+        openPositionsLiqFeesData[0] &&
+        openPositionsLiqFeesData[0][index] !== undefined
+          ? openPositionsLiqFeesData[0][index].toString()
+          : "0",
+    };
+  });
+
   const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
   const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
 
@@ -54,7 +80,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
         filters: undefined,
         pairIndex: undefined,
         sortBy: undefined,
-        sortDir: "asc",
+        sortDir: "desc",
       };
       // Filters
       if (state.columnFilters.length > 0) {

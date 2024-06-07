@@ -1,29 +1,57 @@
 "use client";
 
-import React, { useContext, useCallback, useMemo } from "react";
-import { useAsyncTable, SimpleTable } from "@bera/shared-ui";
+import React, { useCallback, useContext, useMemo } from "react";
+import { usePollOrdersLiqFeePrices } from "@bera/berajs";
+import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import {
   TableState,
   type PaginationState,
   type Updater,
 } from "@tanstack/react-table";
-import { TableContext } from "~/context/table-context";
-import type { FilterableTableState } from "~/types/table";
-import { TotalAmount } from "../../components/total-amount";
 
 import { HISTORY_SORTING_MAP } from "~/utils/constants";
-
+import { generateMarketOrders } from "~/utils/generateMarketOrders";
 import { generateHistoryColumns } from "~/app/components/table-columns/history";
+import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import type { IMarket } from "~/types/market";
-import { generateMarketOrders } from "~/utils/generateMarketOrders";
 import type { IMarketOrder } from "~/types/order-history";
+import type { FilterableTableState } from "~/types/table";
+import { TotalAmount } from "../../components/total-amount";
 
 export default function TradingHistory({ markets }: { markets: IMarket[] }) {
   const { tableState, setTableState } = useContext(TableContext);
   const { data, pagination, isLoading, isValidating } =
     usePollMarketOrders(tableState);
-  const marketOrders = generateMarketOrders(data, markets);
+  const { data: historyLiqFeesData } = usePollOrdersLiqFeePrices(
+    data?.result
+      ? data.result.reduce((acc: number[], order: IMarketOrder) => {
+          if (order.trade_open) {
+            acc.push(Number(order.index));
+          }
+          return acc;
+        }, [])
+      : [],
+  );
+  let marketOrders = generateMarketOrders(data, markets);
+
+  let liqFeeCounter = 0;
+  marketOrders = marketOrders.map((position: any) => {
+    if (position.trade_open) {
+      const result = {
+        ...position,
+        borrowing_fee:
+          Array.isArray(historyLiqFeesData) &&
+          historyLiqFeesData[1] &&
+          historyLiqFeesData[1][liqFeeCounter] !== undefined
+            ? historyLiqFeesData[1][liqFeeCounter].toString()
+            : "0",
+      };
+      liqFeeCounter = liqFeeCounter + 1;
+      return result;
+    }
+    return position;
+  });
 
   const handlePaginationChange = (updater: Updater<PaginationState>) => {
     setTableState((prev) => {
@@ -51,7 +79,7 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
         filters: undefined,
         pairIndex: undefined,
         sortBy: undefined,
-        sortDir: "asc",
+        sortDir: "desc",
       };
       // Filters
       if (state.columnFilters.length > 0) {

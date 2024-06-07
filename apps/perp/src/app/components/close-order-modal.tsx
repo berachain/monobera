@@ -94,7 +94,7 @@ export function CloseOrderModal({
       address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
       abi: tradingAbi,
       functionName: "cancelOpenLimitOrder",
-      params: [openOrder?.market?.pair_index, openOrder?.index],
+      params: [openOrder?.index],
     });
   }, [openOrder, write]);
 

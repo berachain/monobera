@@ -67,7 +67,7 @@ export default function OrderWrapper({
                   <OrderChart
                     key="lg"
                     markets={markets}
-                    marketName={defaultMarket.name}
+                    marketName={defaultMarket?.name}
                   />
                 )}
               </div>

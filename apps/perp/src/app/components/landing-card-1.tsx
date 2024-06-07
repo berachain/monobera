@@ -1,5 +1,5 @@
 "use client";
-
+import { type GlobalParams } from "@bera/proto/src";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -7,7 +7,7 @@ import { CustomizeInput } from "../berpetuals/components/customize-input";
 import { LeverageSlider } from "../berpetuals/components/leverage-slider";
 import { LongShortTab } from "../berpetuals/components/long-short-tab";
 
-export function LandingCard1() {
+export function LandingCard1({ params }: { params: GlobalParams }) {
   return (
     <div className="w-[268px] overflow-hidden rounded-xl bg-background shadow-light-shadow dark:shadow-dark-shadow">
       <LongShortTab />
@@ -77,7 +77,10 @@ export function LandingCard1() {
             }
           />
         </div>
-        <LeverageSlider defaultValue={80} />
+        <LeverageSlider
+          maxLeverage={Number(params.max_leverage ?? "100")}
+          defaultValue={80}
+        />
       </div>
     </div>
   );

@@ -33,6 +33,8 @@ import {
 import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "~/types/order-type";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 
 export function PlaceOrder({
   form,
@@ -55,7 +57,12 @@ export function PlaceOrder({
   const isPythConnected = useIsPythConnected();
   const pythUpdateFee = usePythUpdateFeeFormatted();
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenPositions(tableState);
+
+  const { refresh: refreshPositions } = usePollOpenPositions(tableState);
+  const { refresh: refreshOpenLimitOrders } =
+    usePollOpenLimitOrders(tableState);
+  const { refresh: refreshMarketHistory } = usePollMarketOrders(tableState);
+  let warning = undefined;
 
   const slippage = useSlippage();
   const { setSlippageMode, setSlippage } = useSetSlippage();
@@ -70,6 +77,12 @@ export function PlaceOrder({
     setSlippageMode(SLIPPAGE_MODE.CUSTOM);
     setSlippage(newSlippage);
   };
+
+  if ((slippage ?? 0) < 0.3) {
+    warning = "Slippage is set very low, your order may not be filled.";
+  } else {
+    warning = undefined;
+  }
 
   const safeAmount = form.amount === "" ? "0" : form.amount;
 
@@ -91,7 +104,9 @@ export function PlaceOrder({
           ? `Placing Limit Long Order ${form.assets}`
           : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
-      refresh();
+      refreshPositions();
+      refreshOpenLimitOrders();
+      refreshMarketHistory();
     },
   });
 
@@ -273,7 +288,7 @@ export function PlaceOrder({
           {formatUsd(
             BigNumber(posSize)
               .minus(
-                BigNumber(posSize).times(formatFromBaseUnit(openingFee, 10)),
+                BigNumber(posSize).times(formatFromBaseUnit(openingFee, 12)),
               )
               .toString(10),
           )}{" "}
@@ -289,6 +304,12 @@ export function PlaceOrder({
             token={honey}
             spender={storageContract}
             amount={parseUnits(safeAmount, 18)}
+            disabled={
+              isLoading ||
+              form.amount === "0" ||
+              form.amount === "" ||
+              error !== undefined
+            }
           />
         ) : (
           <Button
@@ -313,6 +334,11 @@ export function PlaceOrder({
           </Button>
         )}
       </ActionButton>
+      {warning !== undefined && (
+        <Alert variant="warning" className="mt-2">
+          {warning}
+        </Alert>
+      )}
       {error !== undefined && (
         <Alert variant="destructive" className="mt-2">
           {error}

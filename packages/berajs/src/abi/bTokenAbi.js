@@ -1,26 +1,18 @@
 export const bTokenAbi = [
   {
-    type: "function",
-    name: "accBlockWeightedMarketCap",
+    type: "constructor",
     inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
+    stateMutability: "nonpayable",
   },
   {
     type: "function",
-    name: "accBlockWeightedMarketCapLastStored",
+    name: "UPGRADE_INTERFACE_VERSION",
     inputs: [],
     outputs: [
       {
         name: "",
-        type: "uint256",
-        internalType: "uint256",
+        type: "string",
+        internalType: "string",
       },
     ],
     stateMutability: "view",
@@ -40,20 +32,33 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "accPnlPerTokenUsed",
+    name: "accRewardsPerToken",
     inputs: [],
     outputs: [
       {
         name: "",
-        type: "int256",
-        internalType: "int256",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
   },
   {
     type: "function",
-    name: "accRewardsPerToken",
+    name: "accTimeWeightedMarketCap",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "accTimeWeightedMarketCapLastStored",
     inputs: [],
     outputs: [
       {
@@ -98,7 +103,7 @@ export const bTokenAbi = [
         internalType: "address",
       },
       {
-        name: "amount",
+        name: "value",
         type: "uint256",
         internalType: "uint256",
       },
@@ -196,24 +201,6 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "claimBGT",
-    inputs: [
-      {
-        name: "amount",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "recipient",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "collateralizationP",
     inputs: [],
     outputs: [
@@ -266,19 +253,6 @@ export const bTokenAbi = [
   {
     type: "function",
     name: "currentEpoch",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "currentEpochEnd",
     inputs: [],
     outputs: [
       {
@@ -356,30 +330,6 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "decreaseAllowance",
-    inputs: [
-      {
-        name: "spender",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "subtractedValue",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bool",
-        internalType: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "deposit",
     inputs: [
       {
@@ -430,19 +380,6 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "feesToPolP",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "forceNewEpoch",
     inputs: [],
     outputs: [],
@@ -450,10 +387,10 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "getPendingAccBlockWeightedMarketCap",
+    name: "getPendingAccTimeWeightedMarketCap",
     inputs: [
       {
-        name: "currentBlock",
+        name: "currentTime",
         type: "uint256",
         internalType: "uint256",
       },
@@ -466,30 +403,6 @@ export const bTokenAbi = [
       },
     ],
     stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "increaseAllowance",
-    inputs: [
-      {
-        name: "spender",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "addedValue",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        name: "",
-        type: "bool",
-        internalType: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
   },
   {
     type: "function",
@@ -508,7 +421,7 @@ export const bTokenAbi = [
       {
         name: "_contractAddresses",
         type: "tuple",
-        internalType: "struct IBToken.ContractAddresses",
+        internalType: "struct IVault.ContractAddresses",
         components: [
           {
             name: "asset",
@@ -530,51 +443,56 @@ export const bTokenAbi = [
             type: "address",
             internalType: "address",
           },
+          {
+            name: "safetyModule",
+            type: "address",
+            internalType: "address",
+          },
         ],
       },
       {
-        name: "_maxDailyAccPnlDelta",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "_withdrawLockThresholdsPLow",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "_withdrawLockThresholdsPHigh",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "_maxSupplyIncreaseDailyP",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "_lossesBurnP",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "_epochLength",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "_feesToPolP",
-        type: "uint256",
-        internalType: "uint256",
+        name: "params",
+        type: "tuple",
+        internalType: "struct IVault.Params",
+        components: [
+          {
+            name: "_maxDailyAccPnlDelta",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "_withdrawLockThresholdsPLow",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "_withdrawLockThresholdsPHigh",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "_maxSupplyIncreaseDailyP",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "_epochLength",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "_minRecollatP",
+            type: "uint256",
+            internalType: "uint256",
+          },
+          {
+            name: "_safeMinSharePrice",
+            type: "uint256",
+            internalType: "uint256",
+          },
+        ],
       },
     ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "initializeV2",
-    inputs: [],
     outputs: [],
     stateMutability: "nonpayable",
   },
@@ -594,19 +512,6 @@ export const bTokenAbi = [
   {
     type: "function",
     name: "lastMaxSupplyUpdate",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "lossesBurnP",
     inputs: [],
     outputs: [
       {
@@ -773,6 +678,19 @@ export const bTokenAbi = [
   },
   {
     type: "function",
+    name: "minRecollatP",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "mint",
     inputs: [
       {
@@ -810,25 +728,12 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "owner",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "pendingBGT",
+    name: "numEpochsWithdrawLocked",
     inputs: [
       {
-        name: "owner",
-        type: "address",
-        internalType: "address",
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
     outputs: [
@@ -836,6 +741,19 @@ export const bTokenAbi = [
         name: "",
         type: "uint256",
         internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "owner",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
@@ -931,6 +849,32 @@ export const bTokenAbi = [
   },
   {
     type: "function",
+    name: "proxiableUUID",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "recapitalize",
+    inputs: [
+      {
+        name: "assets",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "receiveAssets",
     inputs: [
       {
@@ -985,13 +929,26 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "rewarder",
+    name: "safeMinSharePrice",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "safetyModule",
     inputs: [],
     outputs: [
       {
         name: "",
         type: "address",
-        internalType: "contract IPoLRewarder",
+        internalType: "address",
       },
     ],
     stateMutability: "view",
@@ -1029,7 +986,7 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "storeAccBlockWeightedMarketCap",
+    name: "storeAccTimeWeightedMarketCap",
     inputs: [],
     outputs: [],
     stateMutability: "nonpayable",
@@ -1095,6 +1052,19 @@ export const bTokenAbi = [
         name: "",
         type: "int256",
         internalType: "int256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "totalRecapitalized",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1239,7 +1209,7 @@ export const bTokenAbi = [
   },
   {
     type: "function",
-    name: "updateLossesBurnP",
+    name: "updateEpochLength",
     inputs: [
       {
         name: "newValue",
@@ -1291,7 +1261,46 @@ export const bTokenAbi = [
   },
   {
     type: "function",
+    name: "updateMinRecollatP",
+    inputs: [
+      {
+        name: "newValue",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "updatePnlHandler",
+    inputs: [
+      {
+        name: "newValue",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "updateSafeMinSharePrice",
+    inputs: [
+      {
+        name: "newValue",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "updateSafetyModule",
     inputs: [
       {
         name: "newValue",
@@ -1314,6 +1323,24 @@ export const bTokenAbi = [
     ],
     outputs: [],
     stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "upgradeToAndCall",
+    inputs: [
+      {
+        name: "newImplementation",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "data",
+        type: "bytes",
+        internalType: "bytes",
+      },
+    ],
+    outputs: [],
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -1402,38 +1429,19 @@ export const bTokenAbi = [
   },
   {
     type: "event",
-    name: "AccBlockWeightedMarketCapStored",
+    name: "AccTimeWeightedMarketCapStored",
     inputs: [
+      {
+        name: "currentTime",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
       {
         name: "newAccValue",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "AccPnlPerTokenUsedUpdated",
-    inputs: [
-      {
-        name: "newEpoch",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
-      {
-        name: "newEpochPositiveOpenPnl",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "newAccPnlPerTokenUsed",
-        type: "int256",
-        indexed: false,
-        internalType: "int256",
       },
     ],
     anonymous: false,
@@ -1484,6 +1492,31 @@ export const bTokenAbi = [
   },
   {
     type: "event",
+    name: "AssetsDirectedToSafetyModule",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "assets",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "collatPSnapshot",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "AssetsReceived",
     inputs: [
       {
@@ -1500,12 +1533,6 @@ export const bTokenAbi = [
       },
       {
         name: "assets",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "assetsLessDeplete",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
@@ -1593,25 +1620,32 @@ export const bTokenAbi = [
     name: "FeesDistributed",
     inputs: [
       {
-        name: "assetsToHoney",
+        name: "assetsToVault",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
       },
       {
-        name: "assetsToBGT",
+        name: "totalDepositedSnapshot",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "FeesSentToSafetyModule",
+    inputs: [
+      {
+        name: "assets",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
       },
       {
-        name: "assetsTotal",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "vaultTVL",
+        name: "shareToAssetsPriceSnapshot",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
@@ -1625,9 +1659,9 @@ export const bTokenAbi = [
     inputs: [
       {
         name: "version",
-        type: "uint8",
+        type: "uint64",
         indexed: false,
-        internalType: "uint8",
+        internalType: "uint64",
       },
     ],
     anonymous: false,
@@ -1710,6 +1744,31 @@ export const bTokenAbi = [
   },
   {
     type: "event",
+    name: "Recapitalized",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "assetsRecapitalized",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "collatPSnapshot",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "ShareToAssetsPriceUpdated",
     inputs: [
       {
@@ -1742,6 +1801,19 @@ export const bTokenAbi = [
         type: "uint256",
         indexed: false,
         internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Upgraded",
+    inputs: [
+      {
+        name: "implementation",
+        type: "address",
+        indexed: true,
+        internalType: "address",
       },
     ],
     anonymous: false,
@@ -1869,5 +1941,282 @@ export const bTokenAbi = [
       },
     ],
     anonymous: false,
+  },
+  {
+    type: "error",
+    name: "AddressEmptyCode",
+    inputs: [
+      {
+        name: "target",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "AddressInsufficientBalance",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC1967InvalidImplementation",
+    inputs: [
+      {
+        name: "implementation",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC1967NonPayable",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "ERC20InsufficientAllowance",
+    inputs: [
+      {
+        name: "spender",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "allowance",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "needed",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC20InsufficientBalance",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "balance",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "needed",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC20InvalidApprover",
+    inputs: [
+      {
+        name: "approver",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC20InvalidReceiver",
+    inputs: [
+      {
+        name: "receiver",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC20InvalidSender",
+    inputs: [
+      {
+        name: "sender",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC20InvalidSpender",
+    inputs: [
+      {
+        name: "spender",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC4626ExceededMaxDeposit",
+    inputs: [
+      {
+        name: "receiver",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "assets",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "max",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC4626ExceededMaxMint",
+    inputs: [
+      {
+        name: "receiver",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "shares",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "max",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC4626ExceededMaxRedeem",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "shares",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "max",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "ERC4626ExceededMaxWithdraw",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "assets",
+        type: "uint256",
+        internalType: "uint256",
+      },
+      {
+        name: "max",
+        type: "uint256",
+        internalType: "uint256",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "FailedInnerCall",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidInitialization",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "MathOverflowedMulDiv",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "NotInitializing",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "OwnableInvalidOwner",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "OwnableUnauthorizedAccount",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "SafeERC20FailedOperation",
+    inputs: [
+      {
+        name: "token",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "UUPSUnauthorizedCallContext",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "UUPSUnsupportedProxiableUUID",
+    inputs: [
+      {
+        name: "slot",
+        type: "bytes32",
+        internalType: "bytes32",
+      },
+    ],
   },
 ];

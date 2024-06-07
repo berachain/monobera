@@ -36,28 +36,10 @@ export const tradingAbi = [
   },
   {
     type: "function",
-    name: "borrowingFees",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "contract IBorrowingFees",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "cancelOpenLimitOrder",
     inputs: [
       {
-        name: "pairIndex",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "index",
+        name: "limitIndex",
         type: "uint256",
         internalType: "uint256",
       },
@@ -70,12 +52,7 @@ export const tradingAbi = [
     name: "closeTradeMarket",
     inputs: [
       {
-        name: "pairIndex",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "index",
+        name: "tradeIndex",
         type: "uint256",
         internalType: "uint256",
       },
@@ -143,21 +120,6 @@ export const tradingAbi = [
     name: "executeLimitOrder",
     inputs: [
       {
-        name: "orderType",
-        type: "uint8",
-        internalType: "enum ITradingStorage.LimitOrder",
-      },
-      {
-        name: "trader",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "pairIndex",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
         name: "index",
         type: "uint256",
         internalType: "uint256",
@@ -173,42 +135,68 @@ export const tradingAbi = [
   },
   {
     type: "function",
+    name: "feesAccrued",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IFeesAccrued",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "feesMarkets",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IFeesMarkets",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "initialize",
     inputs: [
       {
-        name: "pythContract",
+        name: "_pyth",
         type: "address",
         internalType: "address",
       },
       {
-        name: "_tradingStorage",
+        name: "_orders",
         type: "address",
-        internalType: "contract ITradingStorage",
+        internalType: "address",
       },
       {
-        name: "_pairInfos",
+        name: "_feesMarkets",
         type: "address",
-        internalType: "contract IPairInfos",
+        internalType: "address",
       },
       {
-        name: "_borrowingFees",
+        name: "_feesAccrued",
         type: "address",
-        internalType: "contract IBorrowingFees",
+        internalType: "address",
       },
       {
         name: "_pythCfg",
         type: "tuple",
-        internalType: "struct ITrading.PythConfig",
+        internalType: "struct IEntrypoint.PythConfig",
         components: [
           {
             name: "confThresholdP",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "staleTolerance",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "useEma",
@@ -296,7 +284,7 @@ export const tradingAbi = [
       {
         name: "t",
         type: "tuple",
-        internalType: "struct ITradingStorage.Trade",
+        internalType: "struct IOrders.Trade",
         components: [
           {
             name: "trader",
@@ -325,8 +313,8 @@ export const tradingAbi = [
           },
           {
             name: "openPrice",
-            type: "uint256",
-            internalType: "uint256",
+            type: "int64",
+            internalType: "int64",
           },
           {
             name: "buy",
@@ -340,25 +328,25 @@ export const tradingAbi = [
           },
           {
             name: "tp",
-            type: "uint256",
-            internalType: "uint256",
+            type: "int64",
+            internalType: "int64",
           },
           {
             name: "sl",
-            type: "uint256",
-            internalType: "uint256",
+            type: "int64",
+            internalType: "int64",
           },
         ],
       },
       {
         name: "orderType",
         type: "uint8",
-        internalType: "enum ITradingCallbacks.TradeType",
+        internalType: "enum ISettlement.TradeType",
       },
       {
         name: "slippageP",
-        type: "uint256",
-        internalType: "uint256",
+        type: "int64",
+        internalType: "int64",
       },
       {
         name: "priceUpdateData",
@@ -371,13 +359,13 @@ export const tradingAbi = [
   },
   {
     type: "function",
-    name: "pairInfos",
+    name: "orders",
     inputs: [],
     outputs: [
       {
         name: "",
         type: "address",
-        internalType: "contract IPairInfos",
+        internalType: "contract IOrders",
       },
     ],
     stateMutability: "view",
@@ -423,17 +411,17 @@ export const tradingAbi = [
       {
         name: "",
         type: "tuple",
-        internalType: "struct ITrading.PythConfig",
+        internalType: "struct IEntrypoint.PythConfig",
         components: [
           {
             name: "confThresholdP",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "staleTolerance",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "useEma",
@@ -444,6 +432,13 @@ export const tradingAbi = [
       },
     ],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "refundValue",
+    inputs: [],
+    outputs: [],
+    stateMutability: "payable",
   },
   {
     type: "function",
@@ -480,22 +475,35 @@ export const tradingAbi = [
   },
   {
     type: "function",
+    name: "setPyth",
+    inputs: [
+      {
+        name: "_pyth",
+        type: "address",
+        internalType: "contract IPyth",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "setPythConfig",
     inputs: [
       {
         name: "_pythCfg",
         type: "tuple",
-        internalType: "struct ITrading.PythConfig",
+        internalType: "struct IEntrypoint.PythConfig",
         components: [
           {
             name: "confThresholdP",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "staleTolerance",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "useEma",
@@ -510,45 +518,27 @@ export const tradingAbi = [
   },
   {
     type: "function",
-    name: "tradingStorage",
-    inputs: [],
-    outputs: [
-      {
-        name: "",
-        type: "address",
-        internalType: "contract ITradingStorage",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "updateOpenLimitOrder",
     inputs: [
       {
-        name: "pairIndex",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "index",
+        name: "limitIndex",
         type: "uint256",
         internalType: "uint256",
       },
       {
         name: "newPrice",
-        type: "uint256",
-        internalType: "uint256",
+        type: "int64",
+        internalType: "int64",
       },
       {
         name: "tp",
-        type: "uint256",
-        internalType: "uint256",
+        type: "int64",
+        internalType: "int64",
       },
       {
         name: "sl",
-        type: "uint256",
-        internalType: "uint256",
+        type: "int64",
+        internalType: "int64",
       },
       {
         name: "priceUpdateData",
@@ -564,19 +554,14 @@ export const tradingAbi = [
     name: "updateSl",
     inputs: [
       {
-        name: "pairIndex",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "index",
+        name: "tradeIndex",
         type: "uint256",
         internalType: "uint256",
       },
       {
         name: "newSl",
-        type: "uint256",
-        internalType: "uint256",
+        type: "int64",
+        internalType: "int64",
       },
       {
         name: "priceUpdateData",
@@ -592,19 +577,14 @@ export const tradingAbi = [
     name: "updateTp",
     inputs: [
       {
-        name: "pairIndex",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "index",
+        name: "tradeIndex",
         type: "uint256",
         internalType: "uint256",
       },
       {
         name: "newTp",
-        type: "uint256",
-        internalType: "uint256",
+        type: "int64",
+        internalType: "int64",
       },
     ],
     outputs: [],
@@ -672,25 +652,7 @@ export const tradingAbi = [
     name: "OpenLimitCanceled",
     inputs: [
       {
-        name: "trader",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "pairIndex",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
-      {
         name: "index",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "openTime",
         type: "uint256",
         indexed: false,
         internalType: "uint256",
@@ -703,28 +665,10 @@ export const tradingAbi = [
     name: "OpenLimitPlaced",
     inputs: [
       {
-        name: "trader",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "pairIndex",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
-      {
-        name: "index",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
         name: "order",
         type: "tuple",
         indexed: false,
-        internalType: "struct ITradingStorage.OpenLimitOrder",
+        internalType: "struct IOrders.OpenLimitOrder",
         components: [
           {
             name: "trader",
@@ -758,28 +702,23 @@ export const tradingAbi = [
           },
           {
             name: "tp",
-            type: "uint256",
-            internalType: "uint256",
+            type: "int64",
+            internalType: "int64",
           },
           {
             name: "sl",
-            type: "uint256",
-            internalType: "uint256",
+            type: "int64",
+            internalType: "int64",
           },
           {
             name: "minPrice",
-            type: "uint256",
-            internalType: "uint256",
+            type: "int64",
+            internalType: "int64",
           },
           {
             name: "maxPrice",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "openTime",
-            type: "uint256",
-            internalType: "uint256",
+            type: "int64",
+            internalType: "int64",
           },
         ],
       },
@@ -791,18 +730,6 @@ export const tradingAbi = [
     name: "OpenLimitUpdated",
     inputs: [
       {
-        name: "trader",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "pairIndex",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
-      {
         name: "index",
         type: "uint256",
         indexed: false,
@@ -810,84 +737,21 @@ export const tradingAbi = [
       },
       {
         name: "newPrice",
-        type: "uint256",
+        type: "int64",
         indexed: false,
-        internalType: "uint256",
+        internalType: "int64",
       },
       {
         name: "newTp",
-        type: "uint256",
+        type: "int64",
         indexed: false,
-        internalType: "uint256",
+        internalType: "int64",
       },
       {
         name: "newSl",
-        type: "uint256",
+        type: "int64",
         indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "order",
-        type: "tuple",
-        indexed: false,
-        internalType: "struct ITradingStorage.OpenLimitOrder",
-        components: [
-          {
-            name: "trader",
-            type: "address",
-            internalType: "address",
-          },
-          {
-            name: "pairIndex",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "index",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "positionSize",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "buy",
-            type: "bool",
-            internalType: "bool",
-          },
-          {
-            name: "leverage",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "tp",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "sl",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "minPrice",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "maxPrice",
-            type: "uint256",
-            internalType: "uint256",
-          },
-          {
-            name: "openTime",
-            type: "uint256",
-            internalType: "uint256",
-          },
-        ],
+        internalType: "int64",
       },
     ],
     anonymous: false,
@@ -913,17 +777,17 @@ export const tradingAbi = [
         name: "config",
         type: "tuple",
         indexed: false,
-        internalType: "struct ITrading.PythConfig",
+        internalType: "struct IEntrypoint.PythConfig",
         components: [
           {
             name: "confThresholdP",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "staleTolerance",
-            type: "uint256",
-            internalType: "uint256",
+            type: "uint64",
+            internalType: "uint64",
           },
           {
             name: "useEma",
@@ -937,20 +801,21 @@ export const tradingAbi = [
   },
   {
     type: "event",
-    name: "SlUpdated",
+    name: "PythUpdated",
     inputs: [
       {
-        name: "trader",
+        name: "pyth",
         type: "address",
-        indexed: true,
-        internalType: "address",
+        indexed: false,
+        internalType: "contract IPyth",
       },
-      {
-        name: "pairIndex",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "SlUpdated",
+    inputs: [
       {
         name: "index",
         type: "uint256",
@@ -959,15 +824,9 @@ export const tradingAbi = [
       },
       {
         name: "newSl",
-        type: "uint256",
+        type: "int64",
         indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "openTime",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
+        internalType: "int64",
       },
     ],
     anonymous: false,
@@ -977,18 +836,6 @@ export const tradingAbi = [
     name: "TpUpdated",
     inputs: [
       {
-        name: "trader",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "pairIndex",
-        type: "uint256",
-        indexed: true,
-        internalType: "uint256",
-      },
-      {
         name: "index",
         type: "uint256",
         indexed: false,
@@ -996,15 +843,9 @@ export const tradingAbi = [
       },
       {
         name: "newTp",
-        type: "uint256",
+        type: "int64",
         indexed: false,
-        internalType: "uint256",
-      },
-      {
-        name: "openTime",
-        type: "uint256",
-        indexed: false,
-        internalType: "uint256",
+        internalType: "int64",
       },
     ],
     anonymous: false,
@@ -1024,16 +865,6 @@ export const tradingAbi = [
   },
   {
     type: "error",
-    name: "AboveMaxGroupCollateral",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "AboveMaxPos",
-    inputs: [],
-  },
-  {
-    type: "error",
     name: "AddressEmptyCode",
     inputs: [
       {
@@ -1046,16 +877,6 @@ export const tradingAbi = [
   {
     type: "error",
     name: "AmountOverflow",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "BelowMinPos",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "Done",
     inputs: [],
   },
   {
@@ -1082,16 +903,6 @@ export const tradingAbi = [
   {
     type: "error",
     name: "FailedInnerCall",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "HasSl",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "InTimeout",
     inputs: [],
   },
   {
@@ -1123,62 +934,12 @@ export const tradingAbi = [
   },
   {
     type: "error",
-    name: "LeverageIncorrect",
-    inputs: [],
-  },
-  {
-    type: "error",
     name: "MarketClosed",
     inputs: [],
   },
   {
     type: "error",
-    name: "MaxTradesPerPair",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "NoLimit",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "NoSl",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "NoTp",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "NoTrade",
-    inputs: [],
-  },
-  {
-    type: "error",
     name: "NotInitializing",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "PairNotListed",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "Paused",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "PriceImpactTooHigh",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "SlTooBig",
     inputs: [],
   },
   {
@@ -1196,30 +957,5 @@ export const tradingAbi = [
         internalType: "bytes32",
       },
     ],
-  },
-  {
-    type: "error",
-    name: "Unauthorized",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "WrongLimitPrice",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "WrongParams",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "WrongSl",
-    inputs: [],
-  },
-  {
-    type: "error",
-    name: "WrongTp",
-    inputs: [],
   },
 ];
