@@ -81,7 +81,7 @@ export const GaugeOverview = ({
               key={index}
               address={gauge.receiver}
               size="md"
-              overrideImage={gauge.receiverMetadata.logoURI}
+              overrideImage={gauge.receiverMetadata?.logoURI ?? ""}
             />
           ))}
           {totalGauges > 3 && (
@@ -226,8 +226,8 @@ export default function Validator({
       title: "Website",
       value: (
         <span className="text-ellipsis text-xl font-semibold hover:underline">
-          <Link href={validator?.metadata.website ?? ""}>
-            {validator?.metadata.website ?? ""}
+          <Link href={validator?.metadata?.website ?? ""}>
+            {validator?.metadata?.website ?? ""}
           </Link>
         </span>
       ),
@@ -266,6 +266,7 @@ export default function Validator({
     0,
   );
 
+  console.log(validator);
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -283,7 +284,7 @@ export default function Validator({
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (
-                validator?.metadata.name
+                validator?.metadata?.name ?? ""
               )}
             </div>
             <div className="my-4 flex w-full flex-row gap-1 text-muted-foreground">
@@ -303,7 +304,7 @@ export default function Validator({
               <Skeleton className="h-[100px] w-[350px]" />
             ) : (
               <div className="w-full overflow-hidden text-ellipsis text-foreground">
-                {validator?.metadata.Description}
+                {validator?.metadata?.Description ?? ""}
               </div>
             )}
           </div>
