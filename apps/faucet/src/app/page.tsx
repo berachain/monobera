@@ -18,7 +18,7 @@ export default function Page() {
         <Content />
         <RiveAnimation />
       </div>
-      <FaucetPartners />
+      {/* <FaucetPartners /> */}
       <Explore />
     </div>
   );
