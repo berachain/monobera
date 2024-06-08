@@ -5,10 +5,10 @@ import type { ColumnDef } from "@tanstack/react-table";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { PositionTitle } from "~/app/components/position-title";
+import { IMarket } from "~/types/market";
 import type { IMarketOrder, IOpenTrade } from "~/types/order-history";
 import { MarketTradePNL } from "../market-trade-pnl";
 import { PnlWithPercentage } from "../pnl-with-percentage";
-import { IMarket } from "~/types/market";
 
 export const generateHistoryColumns = (
   markets: IMarket[],
@@ -112,12 +112,14 @@ export const generateHistoryColumns = (
 
   {
     header: "Close Price",
-    cell: ({ row }) => (
+    cell: ({ row }: { row: any }) => (
       <div className="text-sm font-medium leading-tight text-foreground">
         {row.original.price === "" || row.original.trade_open
           ? "-"
           : formatUsd(
-              formatFromBaseUnit(row.original.price ?? "0", 10).toString(10),
+              formatFromBaseUnit(row.original.close_price ?? "0", 10).toString(
+                10,
+              ),
             )}
       </div>
     ),
