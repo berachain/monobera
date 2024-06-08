@@ -182,6 +182,17 @@ const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
   return dayStartTimestamp;
 };
 
+function beginningOfDayTimestampGMT(date: Date): Date {
+  // Create a new date object for the target date at the beginning of the day (00:00:00) in GMT
+  const targetYear = date.getUTCFullYear();
+  const targetMonth = date.getUTCMonth();
+  const targetDay = date.getUTCDate();
+  const beginningOfDay = new Date(Date.UTC(targetYear, targetMonth, targetDay));
+  // Convert to Unix timestamp (in seconds)
+  const timestamp = Math.floor(beginningOfDay.getTime() / 1000);
+  return new Date(timestamp * 1000);
+}
+
 export const PoolChart = ({
   pool,
   currentTvl,
@@ -198,7 +209,8 @@ export const PoolChart = ({
   const quarterlyDayStartTimes: number[] = [];
   for (let i = 0; i < 90; i++) {
     const dayStartTimestamp = getDayStartTimestampDaysAgo(i);
-    const startOfCreationDay = timeCreated && startOfDay(timeCreated!);
+    const startOfCreationDay =
+      timeCreated && beginningOfDayTimestampGMT(timeCreated!);
     if (
       timeCreated &&
       startOfCreationDay &&
