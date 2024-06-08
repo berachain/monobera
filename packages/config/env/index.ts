@@ -137,6 +137,8 @@ export const bhoneyVaultContractAddress = process.env
   .NEXT_PUBLIC_BHONEY_VAULT_CONTRACT_ADDRESS as Address;
 export const pythContractAddress = process.env
   .NEXT_PUBLIC_PYTH_CONTRACT_ADDRESS as Address;
+export const peripheryDebtToken = process.env
+  .NEXT_PUBLIC_PERIPHERY_DEBT_TOKEN_ADDRESS as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env
