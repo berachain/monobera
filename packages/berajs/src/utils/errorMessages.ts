@@ -53,35 +53,42 @@ const errorMsgMap: ErrorMessages = {
         "Currently, Limit Prices must be set below the current price for long positions and above for short positions.",
     },
     PRICE_IMPACT_TOO_HIGH: {
-      keywords: ["PRICE_IMPACT_TOO_HIGH"],
+      keywords: ["PRICE_IMPACT_TOO_HIGH", "0xfb30d03a"],
       errorMSG: "This trade has too much price impact.",
     },
     MAX_TRADES_PER_PAIR: {
-      keywords: ["MAX_TRADES_PER_PAIR"],
+      keywords: ["MAX_TRADES_PER_PAIR", "0xa38355c0"],
       errorMSG: "You've exceeded your maximum amount of trades for this pair!",
     },
     ABOVE_MAX_POS: {
-      keywords: ["ABOVE_MAX_POS"],
+      keywords: ["ABOVE_MAX_POS", "0xb4503281"],
       errorMSG: "The trade's position size is too high.",
     },
     ABOVE_MAX_GROUP_COLLATERAL: {
-      keywords: ["ABOVE_MAX_GROUP_COLLATERAL"],
+      keywords: ["ABOVE_MAX_GROUP_COLLATERAL", "0x7061e4f8"],
       errorMSG: "The trade's collateral is more than the vault can support.",
     },
     BELOW_MIN_POS: {
-      keywords: ["BELOW_MIN_POS"],
+      keywords: ["BELOW_MIN_POS", "0x8d5543b1"],
       errorMSG: "The trade's position size is too low.",
     },
     LEVERAGE_INCORRECT: {
-      keywords: ["LEVERAGE_INCORRECT"],
+      keywords: ["LEVERAGE_INCORRECT", "0x7061fe95"],
       errorMSG: "The leverage for this trade is either too low or too high.",
     },
     WRONG_TP: {
-      keywords: ["WRONG_TP", "TP_REACHED"],
+      keywords: ["WRONG_TP", "TP_REACHED", "0x7f527065", "0x40305e8d"],
       errorMSG: "The Take Profit is invalid for this trade.",
     },
     WRONG_SL: {
-      keywords: ["WRONG_SL", "SL_TOO_BIG", "SL_REACHED"],
+      keywords: [
+        "WRONG_SL",
+        "SL_TOO_BIG",
+        "SL_REACHED",
+        "0x62dd5ee3",
+        "0xe4d44add",
+        "0xfa0789e0",
+      ],
       errorMSG: "The Stop Loss is invalid for this trade.",
     },
     TOO_MANY_PAIRS: {
@@ -93,38 +100,38 @@ const errorMsgMap: ErrorMessages = {
       errorMSG: "This trade is currently being closed or has been closed.",
     },
     NO_TRADE: {
-      keywords: ["NO_TRADE"],
+      keywords: ["NO_TRADE", "0xa3b36525"],
       errorMSG: "This position is no longer open.",
     },
     NO_LIMIT: {
-      keywords: ["NO_LIMIT"],
+      keywords: ["NO_LIMIT", "0xe6803dc4"],
       errorMSG: "This order is no longer open.",
     },
     SLIPPAGE_EXCEEDED: {
-      keywords: ["SLIPPAGE_EXCEEDED"],
+      keywords: ["SLIPPAGE_EXCEEDED", "0x8199f5f3"],
       errorMSG:
         "The price just moved significantly! Please set a higher slippage.",
     },
     PAST_EXPOSURE_LIMITS: {
-      keywords: ["PAST_EXPOSURE_LIMITS"],
+      keywords: ["PAST_EXPOSURE_LIMITS", "0x0c26d69e"],
       errorMSG:
         "This position's size is beyond the safe exposure limits of the system. Please try again later or with a smaller size.",
     },
     PENDING_WITHDRAWAL: {
-      keywords: ["PENDING_WITHDRAWAL"],
+      keywords: ["PENDING_WITHDRAWAL", "0x423023f1"],
       errorMSG:
         "You have a pending withdrawal. Please wait for it to be processed.",
     },
     MORE_THAN_WITHDRAW_AMOUNT: {
-      keywords: ["MORE_THAN_WITHDRAW_AMOUNT"],
+      keywords: ["MORE_THAN_WITHDRAW_AMOUNT", "0xf4d678b8"],
       errorMSG: "You can't cancel more than you've requested to withdraw.",
     },
     NOT_ENOUGH_ASSETS: {
-      keywords: ["NOT_ENOUGH_ASSETS"],
+      keywords: ["NOT_ENOUGH_ASSETS", "0x3786fdd4"],
       errorMSG: "The vault cannot settle your position at this time.",
     },
     MAX_DAILY_PNL: {
-      keywords: ["MAX_DAILY_PNL"],
+      keywords: ["MAX_DAILY_PNL", "0xb2ac7c0c"],
       errorMSG:
         "This trade exceeds the daily maximum allowed PnL on the vault.",
     },
@@ -133,15 +140,15 @@ const errorMsgMap: ErrorMessages = {
       errorMSG: "This operation reverted on chain. Please try again later.",
     },
     INVALID_REFERRER: {
-      keywords: ["INVALID_REFERRER"],
+      keywords: ["INVALID_REFERRER", "0x61104228"],
       errorMSG: "The referrer address is invalid.",
     },
     ALREADY_REFERRED: {
-      keywords: ["ALREADY_REFERRED"],
+      keywords: ["ALREADY_REFERRED", "0x7aabdfe3"],
       errorMSG: "You have already been referred.",
     },
     REFERRAL_CYCLE: {
-      keywords: ["REFERRAL_CYCLE"],
+      keywords: ["REFERRAL_CYCLE", "0x8f6f8611"],
       errorMSG: "You cannot be referred by someone you have referred.",
     },
     BGT_CLAIMING_ERROR: {
@@ -149,9 +156,39 @@ const errorMsgMap: ErrorMessages = {
       errorMSG: "BGT claiming is currently disabled for maintenance.",
     },
     STALE_FEED: {
-      keywords: ["STALE_FEED"],
+      keywords: ["STALE_FEED", "0x19abf40e"],
       errorMSG:
         "The price feed from the oracle is currently stale. Please try again later.",
+    },
+    INVALID_LIMIT: {
+      keywords: ["0x3577cd46"],
+      errorMSG: "The limit price is invalid.",
+    },
+    GENERIC_PARAMETERS_ERROR: {
+      keywords: ["0x5863f789"],
+      errorMSG: "The given parameters are invalid.",
+    },
+    INVALID_PERMISSIONS: {
+      keywords: ["0xee90c468"],
+      errorMSG: "You are not permitted to execute this operation.",
+    },
+    PRICE_ORACLE_ERROR: {
+      keywords: ["0x39c733d8", "0xe7cd821c"],
+      errorMSG:
+        "The price oracle failed to return correctly, please try again later.",
+    },
+    TRADING_PAUSED: {
+      keywords: ["0x9e87fac8"],
+      errorMSG: "Trading has been momentarily paused.",
+    },
+    TRADING_DISABLED: {
+      keywords: ["0x9f9fb434"],
+      errorMSG: "Trading on the current contracts is done.",
+    },
+    POSITION_TIMEOUT: {
+      keywords: ["0x506bf1a8"],
+      errorMSG:
+        "This position is currently in timeout. Please wait for the timeout to expire to execute.",
     },
   },
 };
