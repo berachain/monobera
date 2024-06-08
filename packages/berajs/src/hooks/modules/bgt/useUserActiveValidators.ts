@@ -6,7 +6,7 @@ import { useBeraJs } from "~/contexts";
 import { UserValidator, Validator } from "~/types";
 import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { bgtEndpointUrl, bgtSubgraphUrl } from "@bera/config";
+import { bgtEndpointUrl, bgtStakerSubgraphUrl } from "@bera/config";
 
 /**
  *
@@ -24,7 +24,7 @@ export const useUserActiveValidators = (
       if (!account) return undefined;
 
       const bgtClient = new ApolloClient({
-        uri: bgtSubgraphUrl,
+        uri: bgtStakerSubgraphUrl,
         cache: new InMemoryCache(),
       });
 
@@ -43,7 +43,6 @@ export const useUserActiveValidators = (
         amountQueued: string;
         amountDeposited: string;
         latestBlock: string;
-        latestBlockTime: string;
         user: string;
         coinbase: string;
       }[] = userDeposited.data.userValidatorInformations;
@@ -58,7 +57,6 @@ export const useUserActiveValidators = (
           userStaked: userDeposited?.amountDeposited ?? "0",
           userQueued: userDeposited?.amountQueued ?? "0",
           latestBlock: userDeposited?.latestBlock ?? "0",
-          latestBlockTime: userDeposited?.latestBlockTime ?? "0",
         };
       });
     },

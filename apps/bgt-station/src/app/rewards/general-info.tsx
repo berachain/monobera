@@ -21,24 +21,10 @@ import {
   useTokenHoneyPrice,
 } from "@bera/berajs";
 import { beraTokenAddress, bgtStaker, multicallAddress } from "@bera/config";
-import { useClaimAllBgtCalldata } from "~/hooks/useClaimAllBgtCalldata";
+import { useState, useEffect } from "react";
+// import { useClaimAllBgtCalldata } from "~/hooks/useClaimAllBgtCalldata";
 
 export const GeneralInfo = () => {
-  const gauges = [
-    {
-      title: "HONEY / bHONEY",
-      bgt: 126.42,
-    },
-    {
-      title: "BERA / ETH",
-      bgt: 126.42,
-    },
-    {
-      title: "HONEY / bHONEY",
-      bgt: 126.42,
-    },
-  ];
-
   const { data: userVaultInfo, isLoading: isTotalBgtRewardsLoading } =
     useUserVaults();
   const { data: claimableIncentives, isLoading: isClaimableIncentivesLoading } =
@@ -53,11 +39,27 @@ export const GeneralInfo = () => {
     isLoading: isClaimableFeesLoading,
     refresh,
   } = useClaimableFees();
-  const isDataReady =
-    !isTotalBgtRewardsLoading &&
-    !isClaimableIncentivesLoading &&
-    !isClaimableFeesLoading;
+  // const isDataReady =
+  //   !isTotalBgtRewardsLoading &&
+  //   !isClaimableIncentivesLoading &&
+  //   !isClaimableFeesLoading
 
+  const [isDataReady, setIsDataReady] = useState(false);
+
+  useEffect(() => {
+    if (
+      !isTotalBgtRewardsLoading &&
+      !isClaimableIncentivesLoading &&
+      !isClaimableFeesLoading &&
+      !isDataReady
+    ) {
+      setIsDataReady(true);
+    }
+  }, [
+    isTotalBgtRewardsLoading,
+    isClaimableIncentivesLoading,
+    isClaimableFeesLoading,
+  ]);
   const {
     write,
     isLoading: isClaimingRewardsLoading,

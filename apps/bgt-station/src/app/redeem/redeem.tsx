@@ -21,12 +21,16 @@ import { parseUnits } from "viem";
 
 export default function Redeem() {
   const { isReady, account } = useBeraJs();
-  const { data: bgtBalance } = useBgtUnstakedBalance();
+  const { data: bgtBalance, refresh } = useBgtUnstakedBalance();
   const bgtFormattedBalance = bgtBalance ? bgtBalance.toString() : "0";
   const [redeemAmount, setRedeemAmount] = useState<string>("");
   const { write, ModalPortal } = useTxn({
     message: `Redeem ${redeemAmount} BERA`,
     actionType: TransactionActionType.REDEEM_BERA,
+    onSuccess: () => {
+      refresh();
+      setRedeemAmount("");
+    },
   });
 
   return (
