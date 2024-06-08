@@ -44,7 +44,7 @@ export const GaugeIcon = ({
 }: IconProps) => {
   const { gaugeDictionary } = usePollGauges();
   const img = useMemo(
-    () => gaugeDictionary?.[address]?.metadata.logoURI,
+    () => gaugeDictionary?.[address]?.metadata?.logoURI ?? "",
     [address],
   );
   return (

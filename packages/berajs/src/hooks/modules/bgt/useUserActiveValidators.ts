@@ -6,7 +6,7 @@ import { useBeraJs } from "~/contexts";
 import { UserValidator, Validator } from "~/types";
 import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { bgtSubgraphUrl } from "@bera/config";
+import { bgtEndpointUrl, bgtSubgraphUrl } from "@bera/config";
 
 /**
  *
@@ -33,7 +33,7 @@ export const useUserActiveValidators = (
         variables: { address: account.toLowerCase() },
       });
 
-      const url = `http://localhost:3001/berachain/v1alpha1/beacon/user/${account}/validators`;
+      const url = `${bgtEndpointUrl}/user/${account}/validators`;
       const validatorList = await fetch(url);
       const temp = await validatorList.json();
       const validatorInfoList =

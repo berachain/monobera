@@ -27,6 +27,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
     isLoading: isValidatorsLoading,
     isValidating: isValidatorsValidating,
   } = useSelectedGaugeValidators(gaugeAddress);
+
   return (
     <>
       {gauge ? (
@@ -39,7 +40,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
             title={
               <>
                 <GaugeIcon address={gauge?.vaultAddress} size="xl" />
-                {gauge?.metadata.name}
+                {gauge?.metadata?.name ?? ""}
               </>
             }
             subtitles={[
@@ -48,11 +49,14 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 content: (
                   <>
                     {" "}
-                    <MarketIcon market={gauge?.metadata.product} size={"md"} />
-                    {gauge?.metadata.product}
+                    <MarketIcon
+                      market={gauge?.metadata?.product ?? ""}
+                      size={"md"}
+                    />
+                    {gauge?.metadata?.product ?? "OTHER"}
                   </>
                 ),
-                externalLink: gauge?.metadata.url,
+                externalLink: gauge?.metadata?.url ?? "",
               },
               {
                 title: "Pool Contract",

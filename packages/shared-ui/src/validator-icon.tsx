@@ -45,7 +45,7 @@ export const ValidatorIcon = ({
   const { validatorInfoDictionary = {} } = usePollValidatorInfo();
   const img = useMemo(
     // @ts-ignore
-    () => validatorInfoDictionary[address]?.metadata.logoURI,
+    () => validatorInfoDictionary[address]?.metadata?.logoURI ?? "",
     [address],
   );
   return (
