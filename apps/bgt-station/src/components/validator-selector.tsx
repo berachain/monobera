@@ -1,17 +1,6 @@
-import { get } from "http";
-import React, { useEffect, useMemo } from "react";
-import {
-  formatter,
-  usePollValidatorInfo,
-  type Validator,
-  useUserValidators,
-} from "@bera/berajs";
-import {
-  DataTable,
-  SearchInput,
-  TokenIconList,
-  ValidatorIcon,
-} from "@bera/shared-ui";
+import React, { useEffect, useState } from "react";
+import { truncateHash, useBeraJs, usePollValidatorInfo } from "@bera/berajs";
+import { SearchInput, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -19,7 +8,6 @@ import { type Address } from "viem";
 
 import { AllValidator } from "~/app/validators/components/all-validator";
 import { MyValidator } from "~/app/validators/components/my-validators";
-import { AllValidatorModal } from "~/app/validators/components/validator-modal";
 
 export default function ValidatorSelector({
   validatorAddress = "0x",
@@ -35,8 +23,7 @@ export default function ValidatorSelector({
   showSearch?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
-  const { validatorInfoList, validatorInfoDictionary } = usePollValidatorInfo();
-  const { data } = useUserValidators();
+  const { validatorInfoDictionary } = usePollValidatorInfo();
   //@ts-ignore
   const validValidator = validatorInfoDictionary?.[validatorAddress];
 
@@ -53,7 +40,7 @@ export default function ValidatorSelector({
               address={validValidator.id as Address}
               className="h-8 w-8"
             />
-            {validValidator.metadata.name}
+            {validValidator.metadata?.name ?? truncateHash(validValidator.id)}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         ) : (
@@ -87,7 +74,17 @@ const ValidatorModal = ({
   onClose: () => void;
   onSelect: (address: string) => void;
 }) => {
-  const [search, setSearch] = React.useState("");
+  const { isReady } = useBeraJs();
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
+  const [keyword, setKeyword] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (typingTimer) clearTimeout(typingTimer);
+    };
+  }, [typingTimer]);
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="w-full justify-center sm:max-w-fit">
@@ -98,24 +95,34 @@ const ValidatorModal = ({
           {showSearch === true && (
             <div className="flex justify-between">
               <SearchInput
-                placeholder="Search by name, address, or token"
+                placeholder="Search by name or address"
                 className="w-full md:w-[400px]"
-                value={search}
-                onChange={(e: any) => setSearch(e.target.value)}
+                value={keyword}
+                onChange={(e: any) => {
+                  setKeyword(e.target.value);
+                  setIsTyping?.(true);
+                  if (typingTimer) clearTimeout(typingTimer);
+                  const newTimer = setTimeout(() => {
+                    setIsTyping(false);
+                  }, 1000);
+                  setTypingTimer(newTimer);
+                }}
               />
             </div>
           )}
           {unbond ? (
             <MyValidator
-              keyword={search}
+              keyword={keyword}
               onRowClick={(row: any) => {
                 onSelect(row.original.coinbase);
                 onClose();
               }}
             />
           ) : (
-            <AllValidatorModal
-              keyword={search}
+            <AllValidator
+              user={isReady}
+              keyword={keyword}
+              isTyping={isTyping}
               onRowClick={(row: any) => {
                 onSelect(row.original.coinbase);
                 onClose();

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  truncateHash,
   usePollGlobalData,
   type ActiveIncentive,
   type Validator,
@@ -18,7 +19,6 @@ import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBg
 
 export default function GaugeInfoCard() {
   const { data: globalData, isLoading } = usePollGlobalData();
-  console.log(globalData);
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
@@ -77,8 +77,17 @@ export default function GaugeInfoCard() {
                     size={"md"}
                     imgOverride={validator.validator.metadata?.logoURI}
                   />
-                  <span className="text-nowrap text-xs font-medium">
-                    {validator.validator?.metadata?.name ?? ""}
+                  <span
+                    className="cursor-pointer text-nowrap text-xs font-medium hover:underline"
+                    onClick={() =>
+                      window.open(
+                        `/validators/${validator.validator.id}`,
+                        "_self",
+                      )
+                    }
+                  >
+                    {validator.validator?.metadata?.name ??
+                      truncateHash(validator.validator.id)}
                   </span>
                   <span className="text-nowrap text-[10px] text-muted-foreground">
                     BGT/Year:{" "}
@@ -207,6 +216,7 @@ export default function GaugeInfoCard() {
               <FormattedNumber
                 value={globalData?.bgtInfo?.bgtPerBlock ?? 0}
                 compact={false}
+                compactThreshold={999_999}
                 showIsSmallerThanMin
               />
             </div>

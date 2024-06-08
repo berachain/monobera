@@ -122,7 +122,7 @@ export const IncentivesOverview = ({
               compact
             />{" "}
             <span className="text-sm text-muted-foreground">
-              ({totalActiveIncentives} Tokens)
+              ({totalActiveIncentives} Incentives)
             </span>
           </span>
         </div>
@@ -266,7 +266,6 @@ export default function Validator({
     0,
   );
 
-  console.log(validator);
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">
@@ -284,7 +283,7 @@ export default function Validator({
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (
-                validator?.metadata?.name ?? ""
+                validator?.metadata?.name ?? truncateHash(validator?.id ?? "")
               )}
             </div>
             <div className="my-4 flex w-full flex-row gap-1 text-muted-foreground">
