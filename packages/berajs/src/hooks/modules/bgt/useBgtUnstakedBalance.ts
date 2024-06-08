@@ -6,33 +6,29 @@ import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 import { useUserActiveValidators } from "./useUserActiveValidators";
 import { bgtTokenAddress } from "@bera/config";
+import { BGT_ABI } from "~/abi";
 
 // TODO: REFACTOR ON REDEPLOY
 export const useBgtUnstakedBalance = (
   options?: DefaultHookOptions,
-): DefaultHookReturnType<number | undefined> => {
+): DefaultHookReturnType<string | undefined> => {
   const { account, config: beraConfig } = useBeraJs();
   const publicClient = usePublicClient();
   const { data } = useUserActiveValidators();
   const QUERY_KEY = ["bgtUnstakedBalance", account, data];
 
-  const swrResponse = useSWR<number | undefined>(
+  const swrResponse = useSWR<string | undefined>(
     QUERY_KEY,
     async () => {
       if (!account || !publicClient || !data) return undefined;
 
       const bgtBalance = await publicClient.readContract({
         address: bgtTokenAddress,
-        abi: erc20Abi,
-        functionName: "balanceOf",
+        abi: BGT_ABI,
+        functionName: "unboostedBalanceOf",
         args: [account],
       });
-
-      const formattedBalance = parseFloat(formatEther(bgtBalance));
-      const unavailableBalance = data?.reduce((acc, val) => {
-        return acc + parseFloat(val.userStaked) + parseFloat(val.userQueued);
-      }, 0);
-      return formattedBalance - (unavailableBalance ?? 0);
+      return formatEther(bgtBalance as bigint);
     },
     {
       ...options,

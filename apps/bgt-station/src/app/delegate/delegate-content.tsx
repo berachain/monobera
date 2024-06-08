@@ -27,7 +27,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
   const { refresh } = useUserValidators();
   const { refresh: refreshActive } = useUserActiveValidators();
 
-  const { data: bgtBalance } = useBgtUnstakedBalance();
+  const { data: bgtBalance, refresh: refreshBalance } = useBgtUnstakedBalance();
 
   const exceeding = BigNumber(amount ?? "0").gt(
     bgtBalance ? bgtBalance.toString() : "0",
@@ -44,6 +44,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     onSuccess: () => {
       refresh();
       refreshActive();
+      refreshBalance();
     },
   });
   return (
