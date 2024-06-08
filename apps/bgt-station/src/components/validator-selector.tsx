@@ -1,23 +1,11 @@
-import { get } from "http";
-import React, { useEffect, useMemo } from "react";
-import {
-  formatter,
-  usePollValidatorInfo,
-  type Validator,
-  useUserValidators,
-} from "@bera/berajs";
-import {
-  DataTable,
-  SearchInput,
-  TokenIconList,
-  ValidatorIcon,
-} from "@bera/shared-ui";
+import React from "react";
+import { truncateHash, usePollValidatorInfo, useUserValidators } from "@bera/berajs";
+import { SearchInput, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
-import { AllValidator } from "~/app/validators/components/all-validator";
 import { MyValidator } from "~/app/validators/components/my-validators";
 import { AllValidatorModal } from "~/app/validators/components/validator-modal";
 
@@ -35,8 +23,7 @@ export default function ValidatorSelector({
   showSearch?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
-  const { validatorInfoList, validatorInfoDictionary } = usePollValidatorInfo();
-  const { data } = useUserValidators();
+  const { validatorInfoDictionary } = usePollValidatorInfo();
   //@ts-ignore
   const validValidator = validatorInfoDictionary?.[validatorAddress];
 
@@ -53,7 +40,7 @@ export default function ValidatorSelector({
               address={validValidator.id as Address}
               className="h-8 w-8"
             />
-            {validValidator.metadata.name}
+            {validValidator.metadata?.name?? truncateHash(validValidator.id)}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         ) : (
