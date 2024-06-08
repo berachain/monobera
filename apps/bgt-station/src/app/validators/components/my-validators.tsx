@@ -30,7 +30,7 @@ export const MyValidator = ({
       validating={isValidating}
       columns={user_general_validator_columns as ColumnDef<UserValidator>[]}
       data={validators}
-      className="min-w-[900px]"
+      className="min-w-[1000px]"
       onRowClick={onRowClick}
     />
   );

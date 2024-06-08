@@ -1,17 +1,13 @@
-import React from "react";
-import {
-  truncateHash,
-  usePollValidatorInfo,
-  useUserValidators,
-} from "@bera/berajs";
+import React, { useEffect, useState } from "react";
+import { truncateHash, useBeraJs, usePollValidatorInfo } from "@bera/berajs";
 import { SearchInput, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
+import { AllValidator } from "~/app/validators/components/all-validator";
 import { MyValidator } from "~/app/validators/components/my-validators";
-import { AllValidatorModal } from "~/app/validators/components/validator-modal";
 
 export default function ValidatorSelector({
   validatorAddress = "0x",
@@ -78,7 +74,17 @@ const ValidatorModal = ({
   onClose: () => void;
   onSelect: (address: string) => void;
 }) => {
-  const [search, setSearch] = React.useState("");
+  const { isReady } = useBeraJs();
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
+  const [keyword, setKeyword] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (typingTimer) clearTimeout(typingTimer);
+    };
+  }, [typingTimer]);
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="w-full justify-center sm:max-w-fit">
@@ -89,24 +95,34 @@ const ValidatorModal = ({
           {showSearch === true && (
             <div className="flex justify-between">
               <SearchInput
-                placeholder="Search by name, address, or token"
+                placeholder="Search by name or address"
                 className="w-full md:w-[400px]"
-                value={search}
-                onChange={(e: any) => setSearch(e.target.value)}
+                value={keyword}
+                onChange={(e: any) => {
+                  setKeyword(e.target.value);
+                  setIsTyping?.(true);
+                  if (typingTimer) clearTimeout(typingTimer);
+                  const newTimer = setTimeout(() => {
+                    setIsTyping(false);
+                  }, 1000);
+                  setTypingTimer(newTimer);
+                }}
               />
             </div>
           )}
           {unbond ? (
             <MyValidator
-              keyword={search}
+              keyword={keyword}
               onRowClick={(row: any) => {
                 onSelect(row.original.coinbase);
                 onClose();
               }}
             />
           ) : (
-            <AllValidatorModal
-              keyword={search}
+            <AllValidator
+              user={isReady}
+              keyword={keyword}
+              isTyping={isTyping}
               onRowClick={(row: any) => {
                 onSelect(row.original.coinbase);
                 onClose();

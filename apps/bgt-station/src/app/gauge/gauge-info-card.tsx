@@ -19,7 +19,6 @@ import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBg
 
 export default function GaugeInfoCard() {
   const { data: globalData, isLoading } = usePollGlobalData();
-  console.log(globalData);
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
