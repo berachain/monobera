@@ -54,31 +54,33 @@ const errorMsgMap: ErrorMessages = {
     },
     PRICE_IMPACT_TOO_HIGH: {
       keywords: ["PRICE_IMPACT_TOO_HIGH", "0xfb30d03a"],
-      errorMSG: "This trade has too much price impact.",
+      errorMSG: "This position causes too much price impact.",
     },
     MAX_TRADES_PER_PAIR: {
       keywords: ["MAX_TRADES_PER_PAIR", "0xa38355c0"],
-      errorMSG: "You've exceeded your maximum amount of trades for this pair!",
+      errorMSG:
+        "You've exceeded your maximum amount of trades for this market!",
     },
     ABOVE_MAX_POS: {
       keywords: ["ABOVE_MAX_POS", "0xb4503281"],
-      errorMSG: "The trade's position size is too high.",
+      errorMSG: "The position's collateral is too high.",
     },
     ABOVE_MAX_GROUP_COLLATERAL: {
       keywords: ["ABOVE_MAX_GROUP_COLLATERAL", "0x7061e4f8"],
-      errorMSG: "The trade's collateral is more than the vault can support.",
+      errorMSG:
+        "The position's collateral is more than the vault can support for this market.",
     },
     BELOW_MIN_POS: {
       keywords: ["BELOW_MIN_POS", "0x8d5543b1"],
-      errorMSG: "The trade's position size is too low.",
+      errorMSG: "The position's volume (leveraged position size) is too low.",
     },
     LEVERAGE_INCORRECT: {
       keywords: ["LEVERAGE_INCORRECT", "0x7061fe95"],
-      errorMSG: "The leverage for this trade is either too low or too high.",
+      errorMSG: "The leverage for this position is either too low or too high.",
     },
     WRONG_TP: {
       keywords: ["WRONG_TP", "TP_REACHED", "0x7f527065", "0x40305e8d"],
-      errorMSG: "The Take Profit is invalid for this trade.",
+      errorMSG: "The Take Profit is invalid for this position.",
     },
     WRONG_SL: {
       keywords: [
@@ -86,10 +88,9 @@ const errorMsgMap: ErrorMessages = {
         "SL_TOO_BIG",
         "SL_REACHED",
         "0x62dd5ee3",
-        "0xe4d44add",
         "0xfa0789e0",
       ],
-      errorMSG: "The Stop Loss is invalid for this trade.",
+      errorMSG: "The Stop Loss is invalid for this position.",
     },
     TOO_MANY_PAIRS: {
       keywords: ["TOO_MANY_PAIRS"],
@@ -115,7 +116,7 @@ const errorMsgMap: ErrorMessages = {
     PAST_EXPOSURE_LIMITS: {
       keywords: ["PAST_EXPOSURE_LIMITS", "0x0c26d69e"],
       errorMSG:
-        "This position's size is beyond the safe exposure limits of the system. Please try again later or with a smaller size.",
+        "This position's volume is beyond the safe exposure limits of open interest. Please try again later or with a smaller size.",
     },
     PENDING_WITHDRAWAL: {
       keywords: ["PENDING_WITHDRAWAL", "0x423023f1"],
@@ -127,11 +128,11 @@ const errorMsgMap: ErrorMessages = {
       errorMSG: "You can't cancel more than you've requested to withdraw.",
     },
     NOT_ENOUGH_ASSETS: {
-      keywords: ["NOT_ENOUGH_ASSETS", "0x3786fdd4"],
+      keywords: ["NOT_ENOUGH_ASSETS", "0x3786fdd4", "0xb2ac7c0c"],
       errorMSG: "The vault cannot settle your position at this time.",
     },
     MAX_DAILY_PNL: {
-      keywords: ["MAX_DAILY_PNL", "0xb2ac7c0c"],
+      keywords: ["MAX_DAILY_PNL"],
       errorMSG:
         "This trade exceeds the daily maximum allowed PnL on the vault.",
     },
@@ -149,11 +150,7 @@ const errorMsgMap: ErrorMessages = {
     },
     REFERRAL_CYCLE: {
       keywords: ["REFERRAL_CYCLE", "0x8f6f8611"],
-      errorMSG: "You cannot be referred by someone you have referred.",
-    },
-    BGT_CLAIMING_ERROR: {
-      keywords: ["unexpected withdraw amount from Rewards Module"],
-      errorMSG: "BGT claiming is currently disabled for maintenance.",
+      errorMSG: "You cannot be referred by someone you have already referred.",
     },
     STALE_FEED: {
       keywords: ["STALE_FEED", "0x19abf40e"],
@@ -162,7 +159,8 @@ const errorMsgMap: ErrorMessages = {
     },
     INVALID_LIMIT: {
       keywords: ["0x3577cd46"],
-      errorMSG: "The limit price is invalid.",
+      errorMSG:
+        "Invalid limit conditions. For reversal limit orders on Berps, you must set an open price that is below the current price for a long position, or above the current price for a short position.",
     },
     GENERIC_PARAMETERS_ERROR: {
       keywords: ["0x5863f789"],
@@ -173,7 +171,13 @@ const errorMsgMap: ErrorMessages = {
       errorMSG: "You are not permitted to execute this operation.",
     },
     PRICE_ORACLE_ERROR: {
-      keywords: ["0x39c733d8", "0xe7cd821c"],
+      keywords: [
+        "0x39c733d8",
+        "0xe7cd821c",
+        "0xde2c57fa",
+        "0x45805f5d",
+        "0x14aebe68",
+      ],
       errorMSG:
         "The price oracle failed to return correctly, please try again later.",
     },
