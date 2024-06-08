@@ -37,14 +37,16 @@ export default function GaugeInfoCard() {
           )}
           {!isLoading && globalData ? (
             <div className="mt-1 flex w-fit items-center gap-1 rounded-sm border border-border bg-background p-1 pr-2">
-              {globalData.top3Vaults.vaults.map((gauge: any, index: number) => (
-                <GaugeIcon
-                  key={index}
-                  address={gauge.id}
-                  size="md"
-                  overrideImage={gauge.metadata.logoURI}
-                />
-              ))}
+              {globalData?.top3Vaults?.vaults?.map(
+                (gauge: any, index: number) => (
+                  <GaugeIcon
+                    key={index}
+                    address={gauge.id}
+                    size="md"
+                    overrideImage={gauge.metadata.logoURI}
+                  />
+                ),
+              )}
               {globalData.vaultCount > 3 && (
                 <span className="text-sm leading-5 text-muted-foreground">
                   {" "}
@@ -61,7 +63,7 @@ export default function GaugeInfoCard() {
             Top 3 Validators
           </div>
           {!isLoading && globalData ? (
-            globalData.top3EmittingValidators.validators.map(
+            globalData.top3EmittingValidators?.validators?.map(
               (
                 validator: { stakedVotingPower: number; validator: Validator },
                 index: number,
@@ -135,7 +137,7 @@ export default function GaugeInfoCard() {
           )}
           {!isLoading && globalData ? (
             <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background px-2 py-1">
-              {globalData.top3Incentives.activeIncentives.map(
+              {globalData.top3Incentives?.activeIncentives?.map(
                 (incentive: ActiveIncentive) => (
                   <TokenIcon address={incentive.token.address} size={"md"} />
                 ),
