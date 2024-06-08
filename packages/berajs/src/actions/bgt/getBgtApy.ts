@@ -89,6 +89,7 @@ export const getBgtApy = async ({
   if (!selectedCuttingBoard) return "0";
 
 
+  if(selectedCuttingBoard.amount === "0") return "0";
   const estimatedBgtPerBlock =
     (parseFloat(selectedCuttingBoard.amount) / totalBgtStaked) *
     globalRewardRate;
@@ -96,6 +97,10 @@ export const getBgtApy = async ({
   const blocksPerSecond = 1 / blockTime;
   const blocksPerYear = secondsInAYear * blocksPerSecond;
   const estimatedBgtPerYear = estimatedBgtPerBlock * blocksPerYear;
+  console.log({
+    estimatedBgtPerBlock,
+    estimatedBgtPerYear,
+  })
   const honeyValueEstimatedBgtPerYear =
     estimatedBgtPerYear * parseFloat(beraHoneyPrice);
 
