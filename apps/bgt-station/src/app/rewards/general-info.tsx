@@ -89,73 +89,78 @@ export const GeneralInfo = () => {
       {ModalPortal}
       {/* {ClaimAllBgtModalPortal} */}
       <Card className="relative w-full overflow-hidden rounded-md">
-        <CardContent className="p-4">
-          <div className="text-xs leading-[14px] text-muted-foreground">
-            Claimable BGT
-          </div>
-          <div className="mt-2 flex items-center gap-1 text-3xl font-semibold leading-9">
-            {isDataReady ? (
-              <>
-                <FormattedNumber
-                  value={userVaultInfo?.totalBgtRewards ?? "0"}
-                  symbol="BGT"
-                  compact
-                  showIsSmallerThanMin
-                />
-                <Icons.bgt className="h-8 w-8" />
-              </>
-            ) : (
-              <Skeleton className="h-8 w-24" />
-            )}
-          </div>
-          <div className="leading-4 text-muted-foreground mt-1">
-            {isDataReady ? (
-              <>
-                <FormattedNumber
-                  value={
-                    parseFloat(userVaultInfo?.totalBgtRewards ?? "0") *
-                    parseFloat(price ?? "0")
-                  }
-                  symbol="USD"
-                  compact
-                  showIsSmallerThanMin
-                />
-              </>
-            ) : (
-              <Skeleton className="w-16 h-4" />
-            )}
-          </div>
-          <div className="relative z-10 mt-6 flex flex-col gap-1">
-            <div className="text-xs leading-5 text-muted-foreground">
-              Gauges Earning you BGT:
+        <CardContent className="p-4 flex h-full flex-col justify-between">
+          <div>
+            <div className="text-xs leading-[14px] text-muted-foreground">
+              Claimable BGT
             </div>
-            {isDataReady &&
-              userVaultInfo?.vaults.map((gauge, index) => (
-                <div
-                  className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
-                  key={`gauge-${index}-${gauge}`}
-                >
-                  <GaugeIcon address={gauge.vaultAddress} className="h-4 w-4" />
-
-                  <span className="text-xs">{gauge.name} </span>
-                  <span className="text-[10px] text-muted-foreground">
-                    BGT Earning:
-                    <FormattedNumber
-                      value={gauge.unclaimedBgt}
-                      showIsSmallerThanMin
-                      compact
-                      symbol="BGT"
+            <div className="mt-2 flex items-center gap-1 text-3xl font-semibold leading-9">
+              {isDataReady ? (
+                <>
+                  <FormattedNumber
+                    value={userVaultInfo?.totalBgtRewards ?? "0"}
+                    symbol="BGT"
+                    compact
+                    showIsSmallerThanMin
+                  />
+                  <Icons.bgt className="h-8 w-8" />
+                </>
+              ) : (
+                <Skeleton className="h-8 w-24" />
+              )}
+            </div>
+            <div className="leading-4 text-muted-foreground mt-1">
+              {isDataReady ? (
+                <>
+                  <FormattedNumber
+                    value={
+                      parseFloat(userVaultInfo?.totalBgtRewards ?? "0") *
+                      parseFloat(price ?? "0")
+                    }
+                    symbol="USD"
+                    compact
+                    showIsSmallerThanMin
+                  />
+                </>
+              ) : (
+                <Skeleton className="w-16 h-4" />
+              )}
+            </div>
+            <div className="relative z-10 mt-6 flex flex-col gap-1">
+              <div className="text-xs leading-5 text-muted-foreground">
+                Gauges Earning you BGT:
+              </div>
+              {isDataReady &&
+                userVaultInfo?.vaults.map((gauge, index) => (
+                  <div
+                    className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
+                    key={`gauge-${index}-${gauge}`}
+                  >
+                    <GaugeIcon
+                      address={gauge.vaultAddress}
+                      className="h-4 w-4"
                     />
-                  </span>
-                </div>
-              ))}
-            {!isDataReady && (
-              <>
-                <Skeleton className="w-32 h-4" />
-                <Skeleton className="w-32 h-4" />
-                <Skeleton className="w-32 h-4" />
-              </>
-            )}
+
+                    <span className="text-xs">{gauge.name} </span>
+                    <span className="text-[10px] text-muted-foreground">
+                      BGT Earning:
+                      <FormattedNumber
+                        value={gauge.unclaimedBgt}
+                        showIsSmallerThanMin
+                        compact
+                        symbol="BGT"
+                      />
+                    </span>
+                  </div>
+                ))}
+              {!isDataReady && (
+                <>
+                  <Skeleton className="w-32 h-4" />
+                  <Skeleton className="w-32 h-4" />
+                  <Skeleton className="w-32 h-4" />
+                </>
+              )}
+            </div>
           </div>
           <ActionButton>
             <Tooltip

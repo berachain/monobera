@@ -43,7 +43,8 @@ export const ValidatorPolData = ({
 
   const activeIncentivesArray: ActiveIncentiveWithVault[] =
     getActiveIncentivesArray(validator);
-  const estimatedBgtPerYear = useValidatorEstimatedBgtPerYear(validator);
+
+  console.log(activeIncentivesArray);
   return (
     <div className="mt-6 flex w-full flex-col gap-6 lg:flex-row">
       <div className="w-full">

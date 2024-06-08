@@ -37,7 +37,7 @@ export const MyGaugeDetails = ({ gauge }: { gauge: Gauge }) => {
               My Vault Deposits
             </div>
             <div className="flex justify-between font-medium leading-6">
-              <div>{gauge.metadata.name}</div>
+              <div>{gauge.metadata?.name}</div>
               <div className="flex flex-row items-center gap-2">
                 <FormattedNumber
                   value={data?.balance ?? 0}
