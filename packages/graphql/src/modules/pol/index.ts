@@ -26,7 +26,6 @@ export const GetUserValidatorInformation = gql`
     amountQueued
     amountDeposited
     latestBlock
-    latestBlockTime
     user
     coinbase
   }

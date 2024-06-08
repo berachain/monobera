@@ -15,7 +15,10 @@ export const MyValidator = ({
   const { data = [], isLoading, isValidating } = useUserActiveValidators();
   const validators = useMemo(() => {
     return data.filter((validator: UserValidator) => {
-      if (parseFloat(validator.userStaked) !== 0) {
+      if (
+        parseFloat(validator.userStaked) !== 0 ||
+        parseFloat(validator.userQueued) !== 0
+      ) {
         if (keyword === "") return true;
         if (validator.id.includes(keyword)) return true;
         if (validator.metadata.name.includes(keyword)) return true;
