@@ -233,6 +233,7 @@ const BorrowModalContent = ({
             abi: lendPoolImplementationAbi,
             functionName: "borrow",
             params: payload,
+            gasLimit: 1000000n,
           });
         }}
       >
