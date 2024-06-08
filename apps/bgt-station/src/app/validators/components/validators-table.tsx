@@ -30,7 +30,8 @@ export const CuttingBoardDisplay = ({
         overrideImage={cuttingBoard.receiverMetadata?.logoURI ?? ""}
       />
       <span className="max-w-[200px] truncate hover:underline">
-        {cuttingBoard.receiverMetadata?.name ?? truncateHash(cuttingBoard.receiver)}
+        {cuttingBoard.receiverMetadata?.name ??
+          truncateHash(cuttingBoard.receiver)}
       </span>
     </Link>
   );

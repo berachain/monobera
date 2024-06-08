@@ -133,7 +133,9 @@ const ConfirmationCard = ({
         <div className="font-medium">
           <div className="flex items-center gap-2">
             <ValidatorIcon address={userValidator.id} className="h-8 w-8" />
-            <div>{userValidator.metadata?.name?? truncateHash(userValidator.id)}</div>
+            <div>
+              {userValidator.metadata?.name ?? truncateHash(userValidator.id)}
+            </div>
           </div>
           <div className="ml-8 text-muted-foreground ">
             <FormattedNumber
