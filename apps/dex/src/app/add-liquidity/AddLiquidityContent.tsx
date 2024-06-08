@@ -144,7 +144,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const bnQuoteAmount = parseUnits(
     quoteTokenInitialLiquidity as string,
-    baseToken.decimals,
+    quoteToken.decimals,
   );
 
   const maxBaseApprovalAmount = useMemo(() => {

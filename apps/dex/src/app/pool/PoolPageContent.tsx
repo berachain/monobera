@@ -548,6 +548,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                                 userPositionBreakdown?.formattedBaseAmount,
                                 6,
                               )?.toString() ?? "0",
+                            valueUSD:
+                              userPositionBreakdown?.baseHoneyValue ?? "0",
                           },
                           {
                             address: pool.quoteInfo.address,
@@ -557,6 +559,8 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                                 userPositionBreakdown?.formattedQuoteAmount,
                                 6,
                               )?.toString() ?? "0",
+                            valueUSD:
+                              userPositionBreakdown?.quoteHoneyValue ?? "0",
                           },
                         ]}
                       />
