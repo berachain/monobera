@@ -7,6 +7,7 @@ import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { VariantProps, cva } from "class-variance-authority";
+import { Icons } from "@bera/ui/icons";
 
 const IconVariants = cva(
   "aspect-square flex items-center justify-center rounded-xs text-foreground",
@@ -46,13 +47,7 @@ export const MarketIcon = ({
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={imageUri} />
       <AvatarFallback>
-        <Image
-          src={`${cloudinaryUrl}/shared/wx4snihxcxxdko2wpsbj`}
-          width={100}
-          height={100}
-          className="h-full w-full rounded-sm border border-border p-1"
-          alt={"validator-icon"}
-        />
+        <Icons.badgePlus className="h-full w-full p-[10%]"/>
       </AvatarFallback>
     </Avatar>
   );

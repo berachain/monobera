@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 
 export default function DashBoard() {
   return (
-    <div className="container mb-40">
+    <>
       <Hero />
       <Gauge />
-    </div>
+    </>
   );
 }

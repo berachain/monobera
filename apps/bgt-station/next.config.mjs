@@ -38,11 +38,11 @@ const config = {
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/gauge',
-        permanent: true,  // Set to false if you don't want the redirect to be cached permanently by browsers
+        source: "/",
+        destination: "/gauge",
+        permanent: true, // Set to false if you don't want the redirect to be cached permanently by browsers
       },
-    ]
+    ];
   },
 };
 

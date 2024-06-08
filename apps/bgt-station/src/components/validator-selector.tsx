@@ -1,5 +1,9 @@
 import React from "react";
-import { truncateHash, usePollValidatorInfo, useUserValidators } from "@bera/berajs";
+import {
+  truncateHash,
+  usePollValidatorInfo,
+  useUserValidators,
+} from "@bera/berajs";
 import { SearchInput, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -40,7 +44,7 @@ export default function ValidatorSelector({
               address={validValidator.id as Address}
               className="h-8 w-8"
             />
-            {validValidator.metadata?.name?? truncateHash(validValidator.id)}
+            {validValidator.metadata?.name ?? truncateHash(validValidator.id)}
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         ) : (
