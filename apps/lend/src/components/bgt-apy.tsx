@@ -1,10 +1,11 @@
 "use client";
 
+import { useBgtApy, usePollReservesDataList } from "@bera/berajs";
 import {
-  useBgtApy,
-  usePollReservesDataList,
-} from "@bera/berajs";
-import { honeyTokenAddress, vdHoneyTokenAddress, peripheryDebtToken } from "@bera/config";
+  honeyTokenAddress,
+  vdHoneyTokenAddress,
+  peripheryDebtToken,
+} from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 

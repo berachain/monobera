@@ -2,7 +2,7 @@ import { lendRewardsAddress, peripheryDebtToken } from "@bera/config";
 import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
-import { lendRewardHelperAbi } from "~/abi";
+import { BERA_VAULT_REWARDS_ABI, lendRewardHelperAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
 import { DefaultHookOptions } from "~/types";
@@ -21,11 +21,13 @@ export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
       if (account) {
         try {
           const { result } = await publicClient.simulateContract({
-            address: peripheryDebtToken,
-            abi: lendRewardHelperAbi,
+            address: lendRewardsAddress,
+            abi: BERA_VAULT_REWARDS_ABI,
             functionName: "getReward",
+            account: account,
             args: [account],
           });
+          console.log("result", result);
           return result;
         } catch (e) {
           console.log(e);

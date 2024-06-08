@@ -61,7 +61,7 @@ export const getBgtApy = async ({
       query: getApyInfo,
     })
     .then((res: any) => {
-      return res
+      return res;
     })
     .catch((e: any) => {
       console.log(e);
@@ -84,8 +84,7 @@ export const getBgtApy = async ({
 
   if (!selectedCuttingBoard) return "0";
 
-
-  if(selectedCuttingBoard.amount === "0") return "0";
+  if (selectedCuttingBoard.amount === "0") return "0";
   const estimatedBgtPerBlock =
     (parseFloat(selectedCuttingBoard.amount) / totalBgtStaked) *
     globalRewardRate;
@@ -97,5 +96,4 @@ export const getBgtApy = async ({
     estimatedBgtPerYear * parseFloat(beraHoneyPrice);
   const apy = ((honeyValueEstimatedBgtPerYear / tvlInHoney) * 100).toString();
   return apy;
-  return "0";
 };
