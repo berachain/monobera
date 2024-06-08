@@ -20,7 +20,7 @@ export default function Gauge() {
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
-  console.log(data);
+
   useEffect(() => {
     return () => {
       if (typingTimer) clearTimeout(typingTimer);
