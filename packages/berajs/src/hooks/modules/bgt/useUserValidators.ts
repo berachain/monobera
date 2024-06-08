@@ -7,7 +7,7 @@ import { UserValidator, Validator } from "~/types";
 import { usePollValidatorInfo } from "./usePollValidatorInfo";
 import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { bgtSubgraphUrl } from "@bera/config";
+import { bgtStakerSubgraphUrl } from "@bera/config";
 
 /**
  *
@@ -36,38 +36,43 @@ export const useUserValidators = (
         });
       }
 
-      const bgtClient = new ApolloClient({
-        uri: bgtSubgraphUrl,
-        cache: new InMemoryCache(),
-      });
+      try {
+        const bgtClient = new ApolloClient({
+          uri: bgtStakerSubgraphUrl,
+          cache: new InMemoryCache(),
+        });
 
-      const userDeposited = await bgtClient.query({
-        query: GetUserValidatorInformation,
-        variables: { address: account.toLowerCase() },
-      });
+        const userDeposited = await bgtClient.query({
+          query: GetUserValidatorInformation,
+          variables: { address: account.toLowerCase() },
+        });
 
-      const userDepositedData: {
-        amountQueued: string;
-        amountDeposited: string;
-        latestBlock: string;
-        latestBlockTime: string;
-        user: string;
-        coinbase: string;
-      }[] = userDeposited.data.userValidatorInformations;
+        const userDepositedData: {
+          amountQueued: string;
+          amountDeposited: string;
+          latestBlock: string;
+          latestBlockTime: string;
+          user: string;
+          coinbase: string;
+        }[] = userDeposited.data.userValidatorInformations;
 
-      return validatorInfoList.map((validator: Validator) => {
-        const userDeposited = userDepositedData.find(
-          (data) =>
-            data.coinbase.toLowerCase() === validator.coinbase.toLowerCase(),
-        );
-        return {
-          ...validator,
-          userStaked: userDeposited?.amountDeposited ?? "0",
-          userQueued: userDeposited?.amountQueued ?? "0",
-          latestBlock: userDeposited?.latestBlock ?? "0",
-          latestBlockTime: userDeposited?.latestBlockTime ?? "0",
-        };
-      });
+        return validatorInfoList.map((validator: Validator) => {
+          const userDeposited = userDepositedData.find(
+            (data) =>
+              data.coinbase.toLowerCase() === validator.coinbase.toLowerCase(),
+          );
+
+          return {
+            ...validator,
+            userStaked: userDeposited?.amountDeposited ?? "0",
+            userQueued: userDeposited?.amountQueued ?? "0",
+            latestBlock: userDeposited?.latestBlock ?? "0",
+            latestBlockTime: userDeposited?.latestBlockTime ?? "0",
+          };
+        });
+      } catch (e) {
+        console.log("error", e);
+      }
     },
     {
       ...options,
