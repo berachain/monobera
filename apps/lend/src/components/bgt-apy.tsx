@@ -1,21 +1,19 @@
 "use client";
 
 import {
-  usePollBgtRewardsForAddress,
   useBgtApy,
   usePollReservesDataList,
 } from "@bera/berajs";
-import { honeyTokenAddress, vdHoneyTokenAddress } from "@bera/config";
+import { honeyTokenAddress, vdHoneyTokenAddress, peripheryDebtToken } from "@bera/config";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
-import { formatFromBaseUnit, formatToBaseUnit } from "../utils/formatBigNumber";
 
 export default function BGTApy() {
   const { getSelectedReserve, totalBorrowed } = usePollReservesDataList();
   const honey = getSelectedReserve(honeyTokenAddress);
 
   const { data: bgtApr } = useBgtApy({
-    receiptTokenAddress: vdHoneyTokenAddress,
+    receiptTokenAddress: peripheryDebtToken,
     tvlInHoney: Number(honey?.totalVariableDebt),
   });
 
