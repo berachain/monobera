@@ -142,7 +142,6 @@ export function UpdateLimitOrderModal({
       abi: tradingAbi,
       functionName: "updateOpenLimitOrder",
       params: [
-        openOrder?.market.pair_index,
         openOrder?.index,
         parseUnits(`${executionPrice}`, 10),
         ethersParseUnits(
