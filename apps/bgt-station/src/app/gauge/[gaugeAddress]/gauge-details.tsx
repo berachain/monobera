@@ -40,7 +40,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
             title={
               <>
                 <GaugeIcon address={gauge?.vaultAddress} size="xl" />
-                {gauge?.metadata?.name ?? ""}
+                {gauge?.metadata?.name ?? truncateHash(gaugeAddress)}
               </>
             }
             subtitles={[

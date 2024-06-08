@@ -4,6 +4,7 @@ import {
   IContractWrite,
   TransactionActionType,
   UserValidator,
+  truncateHash,
   useUserValidators,
 } from "@bera/berajs";
 import { bgtTokenAddress, blockTime } from "@bera/config";
@@ -132,7 +133,9 @@ const ConfirmationCard = ({
         <div className="font-medium">
           <div className="flex items-center gap-2">
             <ValidatorIcon address={userValidator.id} className="h-8 w-8" />
-            <div>{userValidator.metadata.name}</div>
+            <div>
+              {userValidator.metadata?.name ?? truncateHash(userValidator.id)}
+            </div>
           </div>
           <div className="ml-8 text-muted-foreground ">
             <FormattedNumber

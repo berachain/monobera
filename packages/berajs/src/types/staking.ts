@@ -27,7 +27,7 @@ export type Validator = {
   };
   active: boolean;
   activeIncentives: ActiveIncentive[];
-  metadata: ValidatorInfo;
+  metadata?: ValidatorInfo;
   votingPower: number;
 };
 
@@ -44,7 +44,7 @@ export type CuttingBoardWeight = {
   owner: Address;
   percentageNumerator: string;
   receiver: Address;
-  receiverMetadata: Vault;
+  receiverMetadata?: Vault;
 };
 
 export type Vault = {
@@ -87,7 +87,7 @@ export type Gauge = {
   activeValidatorsCount: number;
   amountStaked: string;
   id: Address;
-  metadata: GaugeInfo;
+  metadata?: GaugeInfo;
   stakingTokenAddress: Address;
   bgtInflationCapture: number;
   vaultAddress: Address;

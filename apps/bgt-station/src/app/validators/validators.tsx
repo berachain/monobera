@@ -45,11 +45,11 @@ export default function Validators() {
       amount: (
         <FormattedNumber
           value={data?.bgtInfo?.bgtInflation ?? 0}
-          percent
+          symbol="BGT"
           showIsSmallerThanMin
         />
       ),
-      text: "BGT Inflation",
+      text: "BGT Inflation per year",
       img: (
         <div className="absolute bottom-0 right-0">
           <Icons.inflationIcons />
