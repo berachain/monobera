@@ -55,8 +55,8 @@ export const ValidatorIcon = ({
         className="rounded-full"
         alt={address}
       />
-      <AvatarFallback>
-        <Icons.validator className="p-[6px]" />
+      <AvatarFallback className="flex justify-center items-center">
+        <Icons.validator className="w-full h-full p-[20%]" />
       </AvatarFallback>
     </Avatar>
   );

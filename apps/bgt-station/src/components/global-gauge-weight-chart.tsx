@@ -1,9 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import {
-  ADDRESS_ZERO,
-  type CuttingBoardWeight,
-  type Vault,
-} from "@bera/berajs";
+import { ADDRESS_ZERO, type CuttingBoardWeight } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -83,10 +79,7 @@ export default function GlobalGaugeWeightChart({
     const backgroundColor = [];
     const hoverBorderColor = [];
     gauges.forEach((gauge) => {
-      if (
-        gauge.receiverMetadata?.name &&
-        gauge.receiverMetadata?.name !== OTHERS_GAUGES
-      ) {
+      if (gauge.receiver && gauge.receiver !== ADDRESS_ZERO) {
         const bgColor = uniqolor(gauge.receiver).color;
         backgroundColor.push(bgColor);
         hoverBorderColor.push(`${bgColor}52`);
@@ -95,9 +88,7 @@ export default function GlobalGaugeWeightChart({
     if (othersIndex > -1 && gauges.length > 1) {
       if (
         gauges.some(
-          (gauge) =>
-            gauge.receiverMetadata?.name &&
-            gauge.receiverMetadata?.name === OTHERS_GAUGES,
+          (gauge) => gauge.receiver && gauge.receiver === ADDRESS_ZERO,
         )
       ) {
         const bgColor = uniqolor(ADDRESS_ZERO).color;

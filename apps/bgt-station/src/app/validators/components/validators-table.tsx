@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
+import { truncateHash, useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -30,7 +30,8 @@ export const CuttingBoardDisplay = ({
         overrideImage={cuttingBoard.receiverMetadata?.logoURI ?? ""}
       />
       <span className="max-w-[200px] truncate hover:underline">
-        {cuttingBoard.receiverMetadata?.name ?? ""}
+        {cuttingBoard.receiverMetadata?.name ??
+          truncateHash(cuttingBoard.receiver)}
       </span>
     </Link>
   );

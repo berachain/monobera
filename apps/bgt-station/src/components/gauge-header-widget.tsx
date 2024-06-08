@@ -1,4 +1,4 @@
-import { usePollGauges, useTokens } from "@bera/berajs";
+import { truncateHash, usePollGauges, useTokens } from "@bera/berajs";
 import { GaugeIcon, MarketIcon, TokenIconList } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Address } from "viem";
@@ -10,7 +10,7 @@ export const GaugeHeaderWidget = ({
   address: Address;
   className?: string;
 }) => {
-  const { gaugeDictionary, isLoading, isValidating } = usePollGauges();
+  const { gaugeDictionary, isLoading } = usePollGauges();
   const gauge = gaugeDictionary?.[address];
 
   const { data } = useTokens();
@@ -32,7 +32,7 @@ export const GaugeHeaderWidget = ({
         >
           <div className="text-md flex items-center gap-1 font-medium leading-6">
             <GaugeIcon address={gauge.id} />
-            {gauge.metadata?.name ?? ""}
+            {gauge.metadata?.name ?? truncateHash(gauge.id)}
           </div>
           <div className="flex items-center gap-1 text-sm font-medium leading-5 ml-2">
             <MarketIcon market={gauge.metadata?.product ?? "OTHER"} size="md" />

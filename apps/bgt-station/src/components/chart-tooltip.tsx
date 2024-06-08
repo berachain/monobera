@@ -1,4 +1,4 @@
-import { type CuttingBoardWeight } from "@bera/berajs";
+import { truncateHash, type CuttingBoardWeight } from "@bera/berajs";
 import { GaugeIcon, MarketIcon } from "@bera/shared-ui";
 import uniqolor from "uniqolor";
 
@@ -31,17 +31,17 @@ export function ChartTooltip({
         <div className="flex flex-col items-start justify-center gap-1">
           <div className="text-forgeound flex flex-row items-center gap-2 whitespace-nowrap font-bold leading-5">
             <GaugeIcon
-              address={gauge.receiverMetadata?.vaultAddress ?? ""}
+              address={gauge.receiverMetadata?.vaultAddress ?? "0x"}
               overrideImage={gauge.receiverMetadata?.logoURI ?? ""}
             />{" "}
-            {gauge.receiverMetadata?.name ?? ""}
+            {gauge.receiverMetadata?.name ?? truncateHash(gauge.receiver)}
           </div>
           <div className="flex items-center gap-1 whitespace-nowrap text-xs leading-4 text-muted-foreground">
             <MarketIcon
               market={gauge.receiverMetadata?.product ?? ""}
               className="h-4 w-4"
             />{" "}
-            {gauge.receiverMetadata?.product ?? ""}
+            {gauge.receiverMetadata?.product ?? "OTHER"}
           </div>
         </div>
       </div>
