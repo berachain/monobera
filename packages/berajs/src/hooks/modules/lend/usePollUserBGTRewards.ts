@@ -1,4 +1,4 @@
-import { lendRewardsAddress } from "@bera/config";
+import { lendRewardsAddress, peripheryDebtToken } from "@bera/config";
 import useSWR from "swr";
 import { usePublicClient } from "wagmi";
 
@@ -21,7 +21,7 @@ export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
       if (account) {
         try {
           const { result } = await publicClient.simulateContract({
-            address: lendRewardsAddress,
+            address: peripheryDebtToken,
             abi: lendRewardHelperAbi,
             functionName: "getReward",
             args: [account],

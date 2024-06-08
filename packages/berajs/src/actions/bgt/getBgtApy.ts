@@ -68,7 +68,6 @@ export const getBgtApy = async ({
       return undefined;
     });
 
-  console.log(apyInfo)
   if (!apyInfo) return "0";
 
   const globalRewardRate =
@@ -77,14 +76,11 @@ export const getBgtApy = async ({
 
   const totalBgtStaked = parseFloat(apyInfo.data.globalInfo.totalBgtStaked);
 
-  console.log(receiptTokenAddress, apyInfo.data.globalCuttingBoardWeights)
   const selectedCuttingBoard = apyInfo.data.globalCuttingBoardWeights.find(
     (cb: any) =>
       cb.vault.stakingToken.id.toLowerCase() ===
       receiptTokenAddress.toLowerCase(),
   );
-
-  console.log(selectedCuttingBoard)
 
   if (!selectedCuttingBoard) return "0";
 
@@ -97,18 +93,8 @@ export const getBgtApy = async ({
   const blocksPerSecond = 1 / blockTime;
   const blocksPerYear = secondsInAYear * blocksPerSecond;
   const estimatedBgtPerYear = estimatedBgtPerBlock * blocksPerYear;
-  console.log({
-    estimatedBgtPerBlock,
-    estimatedBgtPerYear,
-  })
   const honeyValueEstimatedBgtPerYear =
     estimatedBgtPerYear * parseFloat(beraHoneyPrice);
-
-    console.log({
-      honeyValueEstimatedBgtPerYear,
-      tvlInHoney,
-      apy: ((honeyValueEstimatedBgtPerYear / tvlInHoney) * 100).toString(),
-    })
   const apy = ((honeyValueEstimatedBgtPerYear / tvlInHoney) * 100).toString();
   return apy;
   return "0";
