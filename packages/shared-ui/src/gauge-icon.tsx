@@ -55,7 +55,7 @@ export const GaugeIcon = ({
         alt={address}
       />
       <AvatarFallback>
-        <Icons.gauge className="w-full h-full p-[15%]"/>
+        <Icons.gauge className="w-full h-full p-[15%]" />
       </AvatarFallback>
     </Avatar>
   );

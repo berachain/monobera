@@ -47,7 +47,7 @@ export const MarketIcon = ({
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage src={imageUri} />
       <AvatarFallback>
-        <Icons.badgePlus className="h-full w-full p-[10%]"/>
+        <Icons.badgePlus className="h-full w-full p-[10%]" />
       </AvatarFallback>
     </Avatar>
   );
