@@ -43,7 +43,7 @@ export default function GaugeInfoCard() {
                     key={index}
                     address={gauge.id}
                     size="md"
-                    overrideImage={gauge.metadata.logoURI}
+                    overrideImage={gauge.metadata?.logoURI}
                   />
                 ),
               )}
@@ -75,10 +75,10 @@ export default function GaugeInfoCard() {
                   <ValidatorIcon
                     address={validator.validator.id}
                     size={"md"}
-                    imgOverride={validator.validator.metadata.logoURI}
+                    imgOverride={validator.validator.metadata?.logoURI}
                   />
                   <span className="text-nowrap text-xs font-medium">
-                    {validator.validator.metadata.name}
+                    {validator.validator?.metadata?.name ?? ""}
                   </span>
                   <span className="text-nowrap text-[10px] text-muted-foreground">
                     BGT/Year:{" "}

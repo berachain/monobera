@@ -1,3 +1,4 @@
+import { bgtEndpointUrl } from "@bera/config";
 import useSWR, { mutate } from "swr";
 import { Address } from "viem";
 import {
@@ -19,7 +20,7 @@ export const useSelectedGaugeValidators = (
     QUERY_KEY,
     async () => {
       if (!id) return undefined;
-      const url = `http://localhost:3001/berachain/v1alpha1/beacon/validators?vaultId=${id}`;
+      const url = `${bgtEndpointUrl}/validators?vaultId=${id}`;
       const gauge = await fetch(url);
       const temp = await gauge.json();
       return temp.validators;
