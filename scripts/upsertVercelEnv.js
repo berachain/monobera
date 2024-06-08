@@ -293,12 +293,24 @@ Continue? (Y/n)`,
     return ["development", "preview"];
   };
 
-  const requestBody = Object.entries(envVariables).map(([key, value]) => ({
-    key,
-    value,
-    type: "encrypted",
-    target: getTargetEnvs(),
-  }));
+  const requestBody = (projectName) => {
+    return Object.entries(envVariables).map(([key, value]) => {
+      if (key === "SENTRY_PROJECT" || key === "NEXT_PUBLIC_PROJECT_NAME") {
+        return {
+          key,
+          value: projectName,
+          type: "encrypted",
+          target: getTargetEnvs(),
+        };
+      }
+      return {
+        key,
+        value,
+        type: "encrypted",
+        target: getTargetEnvs(),
+      };
+    });
+  };
 
   if (Object.keys(envVariables) < 1) {
     console.log(
@@ -330,7 +342,11 @@ Continue? (Y/n)`,
     const promises = [];
     projects.forEach((projectName) => {
       promises.push(
-        upsertVercelEnvToProject(projectName, bearerToken, requestBody),
+        upsertVercelEnvToProject(
+          projectName,
+          bearerToken,
+          requestBody(projectName),
+        ),
       );
     });
     await Promise.all(promises);
@@ -338,7 +354,11 @@ Continue? (Y/n)`,
     const promises = [];
     allTargetProjects.forEach((projectName) => {
       promises.push(
-        upsertVercelEnvToProject(projectName, bearerToken, requestBody),
+        upsertVercelEnvToProject(
+          projectName,
+          bearerToken,
+          requestBody(projectName),
+        ),
       );
     });
     await Promise.all(promises);
