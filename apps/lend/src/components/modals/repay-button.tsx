@@ -255,6 +255,7 @@ const RepayModalContent = ({
               abi: lendPoolImplementationAbi,
               functionName: "repay",
               params: payload,
+              gasLimit: 1000000n,
             });
           }}
         >
