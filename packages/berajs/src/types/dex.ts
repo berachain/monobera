@@ -80,6 +80,8 @@ export interface IUserPosition {
   quoteAmount: BigNumber;
   formattedBaseAmount: string;
   formattedQuoteAmount: string;
+  baseHoneyValue?: string;
+  quoteHoneyValue?: string;
   estimatedHoneyValue: number;
   seeds: bigint;
 }
