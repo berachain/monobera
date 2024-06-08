@@ -95,7 +95,7 @@ const ReferralsData = ({
 
 const ReferralCard = ({ bgId, title, text }: ReferralCardProps) => {
   return (
-    <div className="relative h-[260px] w-full rounded-lg border border-warning-foreground dark:border-border">
+    <div className="dark:bg-brown-800 relative h-[260px] w-full rounded-lg border border-warning-foreground bg-yellow-600 bg-opacity-60 dark:border-border dark:bg-opacity-10">
       <Image
         src={`${cloudinaryUrl}/BERPS/${bgId}`}
         alt={`Referral Card Image - ${bgId}`}
@@ -217,34 +217,34 @@ export default function Referrals() {
       <div className="hidden sm:block">
         <div className="mt-4 hidden justify-between gap-6 dark:flex">
           <ReferralCard
-            bgId={"Frame_Dark_3_obukzi"}
+            bgId={"hyczmcyl2mgsd7oj88on"}
             title="Refer Friends"
             text="Share your unique referral link to start earning some BGT Rewards."
           />
           <ReferralCard
-            bgId={"Frame_Dark_2_oax7ew"}
+            bgId={"pvn05fnze5nzvsmxnrrv"}
             title="New Users"
             text="When a new user enters & deposits via your link, they become your referral."
           />
           <ReferralCard
-            bgId={"Frame_Dark_1_hb3r9r"}
+            bgId={"szbknmf0rbcdwjwuwf7p"}
             title="Details"
             text="Honey Rewards accumulate in real-time and disperse to your wallet as soon as the platform collect’s the fee."
           />
         </div>
         <div className="mt-4 flex justify-between gap-6 dark:hidden ">
           <ReferralCard
-            bgId={"Frame_Light_3_mkjrlm"}
+            bgId={"bqz0dsrdw4ion4hhbcfz"}
             title="Refer Friends"
             text="Share your unique referral link to start earning some BGT Rewards."
           />
           <ReferralCard
-            bgId={"Frame_Light_2_rai62d"}
+            bgId={"g2p8sdyfhvec2kmisd3k"}
             title="New Users"
             text="When a new user enters & deposits via your link, they become your referral."
           />
           <ReferralCard
-            bgId={"Frame_Light_1_apajeb"}
+            bgId={"petpjfz6jrhyr8l6aqyv"}
             title="Details"
             text="Honey Rewards accumulate in real-time and disperse to your wallet as soon as the platform collect’s the fee."
           />
