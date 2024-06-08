@@ -75,18 +75,20 @@ export const getPoolUserPosition = async ({
     const baseAmount = liq.times(sqrtPrice);
     const quoteAmount = liq.div(sqrtPrice);
 
+    const baseDecimals = pool.baseInfo.decimals;
+    const quoteDecimals = pool.quoteInfo.decimals;
     const formattedBaseAmount = baseAmount
-      .div(10 ** 18)
+      .div(10 ** baseDecimals)
       .toString()
       .includes("e")
       ? "0"
-      : baseAmount.div(10 ** 18).toString();
+      : baseAmount.div(10 ** baseDecimals).toString();
     const formattedQuoteAmount = quoteAmount
-      .div(10 ** 18)
+      .div(10 ** quoteDecimals)
       .toString()
       .includes("e")
       ? "0"
-      : quoteAmount.div(10 ** 18).toString();
+      : quoteAmount.div(10 ** quoteDecimals).toString();
 
     const estimatedHoneyValue = tokenHoneyPrices
       ? Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
@@ -95,12 +97,24 @@ export const getPoolUserPosition = async ({
           Number(formattedQuoteAmount)
       : 0;
 
+    const baseHoneyValue = tokenHoneyPrices
+      ? Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
+        Number(formattedBaseAmount)
+      : 0;
+
+    const quoteHoneyValue = tokenHoneyPrices
+      ? Number(tokenHoneyPrices[getAddress(pool.quote)] ?? 0) *
+        Number(formattedQuoteAmount)
+      : 0;
+
     const userPosition: IUserPosition = {
       baseAmount,
       quoteAmount,
       formattedBaseAmount,
       formattedQuoteAmount,
       estimatedHoneyValue,
+      baseHoneyValue: baseHoneyValue.toString(),
+      quoteHoneyValue: quoteHoneyValue.toString(),
       seeds: lpBalance,
     };
     return {

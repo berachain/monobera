@@ -4,10 +4,7 @@ import { useAccount, usePublicClient } from "wagmi";
 import POLLING from "~/enum/polling";
 import { PoolV2, useBeraJs, type IUserPosition } from "../../..";
 import { getPoolUserPosition } from "../../../actions";
-import {
-  DefaultHookOptions,
-  DefaultHookReturnType,
-} from "../../../types/global";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 
 type IUsePoolUserPositionArgs = {
   pool: PoolV2;
