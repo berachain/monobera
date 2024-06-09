@@ -13,7 +13,7 @@ import {
 } from "./types";
 
 const increaseByPercentage = (value: bigint, percentage: number) => {
-  return value + (value * BigInt(percentage) / BigInt(100));
+  return value + (value * BigInt(percentage)) / BigInt(100);
 };
 
 const useBeraContractWrite = ({
