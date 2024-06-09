@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { honeyTokenAddress } from "@bera/config";
+import { beraTokenAddress, bgtTokenAddress, honeyTokenAddress } from "@bera/config";
 import { getTokenHoneyPriceReq } from "@bera/graphql";
 import { Address } from "viem";
 
@@ -37,7 +37,7 @@ export const getTokenHoneyPrice = async ({
     .query({
       query: getTokenHoneyPriceReq,
       variables: {
-        id: handleNativeBera(tokenAddress as Address).toLowerCase(),
+        id: handleNativeBera(tokenAddress as Address).toLowerCase() === bgtTokenAddress.toLowerCase() ? beraTokenAddress.toLowerCase() : handleNativeBera(tokenAddress as Address).toLowerCase(),
       },
     })
     .then((res: any) => {
