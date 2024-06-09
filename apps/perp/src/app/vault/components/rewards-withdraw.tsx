@@ -2,30 +2,13 @@
 
 import { useMemo, useState } from "react";
 import Image from "next/image";
-import {
-  // bTokenAbi,
-  // TransactionActionType,
-  // formatter,
-  // useBeraJs,
-  usePollBHoneyBalance,
-  usePollBHoneyPrice,
-  usePollBalanceOfAssets,
-  // usePollPerpsBgtRewards,
-} from "@bera/berajs";
+import { usePollBHoneyBalance, usePollBalanceOfAssets } from "@bera/berajs";
 import { bhoneyVaultContractAddress } from "@bera/config";
-import {
-  BgtStationBanner,
-  DataTable,
-  DynamicRewardBtn,
-  FormattedNumber,
-  Tooltip,
-  useTxn,
-} from "@bera/shared-ui";
+import { BgtStationBanner, DataTable, FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import BigNumber from "bignumber.js";
-import { parseUnits } from "ethers";
-import { type Address } from "viem";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { usePollVaultEarnings } from "~/hooks/usePollVaultEarnings";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdrawQueueColumns } from "./withdraw-queue-columns";
 
@@ -33,58 +16,30 @@ export const RewardsWithdraw = () => {
   const { isLoading: isGHoneyBalanceLoading, useFormattedBHoneyBalance } =
     usePollBHoneyBalance();
 
-  const { isLoading: isBHoneyPriceLoading, useFormattedHoneyPrice } =
-    usePollBHoneyPrice();
-
   const { isLoading: isBalanceOfAssetsLoading, useFormattedBalanceOfAssets } =
     usePollBalanceOfAssets();
-  const honeyPrice = useFormattedHoneyPrice();
+
+  const { data: earnings, isLoading: isEarningsLoading } =
+    usePollVaultEarnings();
 
   const ghoneyBalance = useFormattedBHoneyBalance();
 
   const balanceOfAssets = useFormattedBalanceOfAssets();
-  const stakedHoney = useMemo(() => {
-    return Number(ghoneyBalance) * honeyPrice;
-  }, [ghoneyBalance, honeyPrice]);
+
+  const formattedEarnings = formatFromBaseUnit(earnings ?? 0, 18).toString(10);
 
   const estimatedEarnings = useMemo(() => {
-    return Math.abs(stakedHoney - balanceOfAssets);
-  }, [stakedHoney, balanceOfAssets]);
+    return balanceOfAssets + Number(formattedEarnings);
+  }, [formattedEarnings, balanceOfAssets]);
 
   const isLoading =
-    isGHoneyBalanceLoading || isBHoneyPriceLoading || isBalanceOfAssetsLoading;
+    isGHoneyBalanceLoading || isBalanceOfAssetsLoading || isEarningsLoading;
 
   const { useWithdrawQueue } = usePollWithdrawQueue();
   const withdrawQueue = useWithdrawQueue();
 
-  // const {
-  //   isLoading: isRewardsLoading,
-  //   useBgtRewards,
-  //   refetch,
-  // } = usePollPerpsBgtRewards();
-  // const claimableBgtRewards = useBgtRewards();
-  // const [claimAmount, setClaimAmount] = useState<number | undefined>(0);
-
-  // const { account } = useBeraJs();
-  // const { write, ModalPortal } = useTxn({
-  //   message: "Claiming BGT",
-  //   actionType: TransactionActionType.CLAIMING_REWARDS,
-  //   onSuccess: () => {
-  //     void refetch();
-  //   },
-  // });
-
-  // const bgtRewardsBN = BigNumber(claimableBgtRewards ?? 0);
-  // let formattedBgt = "0.00";
-  // if (bgtRewardsBN.isFinite()) {
-  //   formattedBgt = bgtRewardsBN.lt(0.01)
-  //     ? "< 0.01"
-  //     : `${bgtRewardsBN.dp(4).toString()}`;
-  // }
-
   return (
     <div className="flex w-full flex-col gap-2">
-      {/* {ModalPortal} */}
       <BgtStationBanner receiptTokenAddress={bhoneyVaultContractAddress} />
       <div className="flex w-full flex-col gap-4 pt-2 sm:flex-row sm:gap-2">
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
@@ -122,7 +77,7 @@ export const RewardsWithdraw = () => {
             <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
               {
                 <FormattedNumber
-                  value={stakedHoney}
+                  value={balanceOfAssets}
                   compact={false}
                   compactThreshold={999}
                   visibleDecimals={2}

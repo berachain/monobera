@@ -196,7 +196,8 @@ const errorMsgMap: ErrorMessages = {
     },
     MAX_DEPOSIT: {
       keywords: ["0x3b8698ab"],
-      errorMSG: "Deposit amount exceeds the maximum deposit amount.",
+      errorMSG:
+        "The vault cannot currently support minting this much bHONEY right now. Please try an amount less than the current max deposit or come back later.",
     },
   },
 };
