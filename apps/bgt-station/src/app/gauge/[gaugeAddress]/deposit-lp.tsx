@@ -78,14 +78,15 @@ export const DepositLP = ({
 
       <ActionButton className="mt-4">
         {((allowance !== undefined && allowance?.formattedAllowance === "0") ||
-          (allowance?.allowance ?? 0n) < parseUnits(depositAmount, 18)) &&
+          (allowance?.allowance ?? 0n) <
+            parseUnits(depositAmount, lpToken.decimals)) &&
         depositAmount !== "" &&
         depositAmount !== "0" &&
         !exceeding ? (
           <ApproveButton
             token={lpToken}
             spender={gauge.vaultAddress}
-            amount={parseUnits(depositAmount, 18)}
+            amount={parseUnits(depositAmount, lpToken.decimals)}
           />
         ) : (
           <Button
@@ -96,7 +97,7 @@ export const DepositLP = ({
                 address: gauge.vaultAddress,
                 abi: BERA_VAULT_REWARDS_ABI,
                 functionName: "stake",
-                params: [parseUnits(depositAmount, 18)],
+                params: [parseUnits(depositAmount, lpToken.decimals)],
               })
             }
           >
