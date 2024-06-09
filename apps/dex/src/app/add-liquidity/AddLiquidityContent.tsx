@@ -116,23 +116,29 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
-    const parsedBaseCost = parseUnits(baseCost.toString(), PRESICION);
-    const parsedValue = parseUnits(value, PRESICION);
+    const parsedBaseCost = parseUnits(baseCost.toString(), quoteToken.decimals);
+    const parsedValue = parseUnits(value, quoteToken.decimals);
     const quoteAmount =
-      (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
+      (parsedBaseCost * parsedValue) / BigInt(10 ** quoteToken.decimals);
     updateTokenAmount(
       1,
-      quoteAmount === 0n ? "" : formatUnits(quoteAmount, 18),
+      quoteAmount === 0n ? "" : formatUnits(quoteAmount, quoteToken.decimals),
     );
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     updateTokenAmount(1, value);
-    const parsedQuoteCost = parseUnits(quoteCost.toString(), PRESICION);
-    const parsedValue = parseUnits(value, PRESICION);
+    const parsedQuoteCost = parseUnits(
+      quoteCost.toString(),
+      baseToken.decimals,
+    );
+    const parsedValue = parseUnits(value, baseToken.decimals);
     const baseAmount =
-      (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
-    updateTokenAmount(0, baseAmount === 0n ? "" : formatUnits(baseAmount, 18));
+      (parsedQuoteCost * parsedValue) / BigInt(10 ** baseToken.decimals);
+    updateTokenAmount(
+      0,
+      baseAmount === 0n ? "" : formatUnits(baseAmount, baseToken.decimals),
+    );
   };
 
   const slippage = useSlippage();
@@ -158,8 +164,13 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       baseToken.decimals,
     );
     const sI = BigInt(parsedLiq);
-    const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** 18);
-    const minAmountOut = (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+    // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** baseToken.decimals);
+    const s = parseUnits(
+      ((slippage ?? 0) + 0.001).toString(),
+      baseToken.decimals,
+    );
+    const minAmountOut =
+      (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** baseToken.decimals);
     return minAmountOut;
   }, [baseTokenInitialLiquidity, slippage]);
 
@@ -169,11 +180,18 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     }
     const parsedLiq = parseUnits(
       quoteTokenInitialLiquidity as string,
-      baseToken.decimals,
+      quoteToken.decimals,
     );
     const sI = BigInt(parsedLiq);
-    const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** 18);
-    const minAmountOut = (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+    // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** quoteToken.decimals);
+    const s = parseUnits(
+      ((slippage ?? 0) + 0.001).toString(),
+      quoteToken.decimals,
+    );
+
+    const minAmountOut =
+      (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** quoteToken.decimals);
+
     return minAmountOut;
   }, [quoteTokenInitialLiquidity, slippage]);
 
