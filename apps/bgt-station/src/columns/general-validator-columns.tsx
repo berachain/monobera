@@ -29,7 +29,11 @@ const VALIDATOR_COLUMN: ColumnDef<Validator> = {
   ),
   cell: ({ row }) => (
     <div className="flex items-center gap-1">
-      <ValidatorIcon address={row.original.id as Address} className="h-8 w-8" />
+      <ValidatorIcon
+        address={row.original.id as Address}
+        className="h-8 w-8"
+        imgOverride={row.original.metadata?.logoURI}
+      />
       {row.original.metadata?.name ?? truncateHash(row.original.id)}{" "}
     </div>
   ),
