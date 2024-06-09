@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useBgtApy, usePoolUserPosition, type IUserPool, type PoolV2 } from "@bera/berajs";
+import {
+  useBgtApy,
+  usePoolUserPosition,
+  type IUserPool,
+  type PoolV2,
+} from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -139,12 +144,17 @@ export const columns: ColumnDef<PoolV2>[] = [
         receiptTokenAddress: row.original?.shareAddress as Address,
         tvlInHoney: Number(row.original.tvlUsd),
       });
-    
+
       return (
         <div className="flex items-center justify-start text-sm text-warning-foreground">
-        <FormattedNumber value={bgtApr ?? 0} percent  compact showIsSmallerThanMin/>
-      </div>
-      )
+          <FormattedNumber
+            value={bgtApr ?? 0}
+            percent
+            compact
+            showIsSmallerThanMin
+          />
+        </div>
+      );
     },
     // sortingFn: (rowA, rowB) => {
     //   const a = rowA.original.bgtApy ?? 0;
@@ -251,7 +261,7 @@ export const my_columns: ColumnDef<IUserPool>[] = [
       </div>
     ),
   },
-  
+
   // {
   //   accessorKey: "bgtApy",
   //   header: ({ column }) => (
@@ -286,12 +296,17 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         receiptTokenAddress: row.original?.shareAddress as Address,
         tvlInHoney: Number(row.original.tvlUsd),
       });
-    
+
       return (
         <div className="flex items-center justify-start text-sm text-warning-foreground">
-        <FormattedNumber value={bgtApr ?? 0} percent  compact showIsSmallerThanMin/>
-      </div>
-      )
+          <FormattedNumber
+            value={bgtApr ?? 0}
+            percent
+            compact
+            showIsSmallerThanMin
+          />
+        </div>
+      );
     },
     // sortingFn: (rowA, rowB) => {
     //   const a = rowA.original.bgtApy ?? 0;

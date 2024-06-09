@@ -46,7 +46,8 @@ export default function Claim() {
               value={(bgtApr ?? 0) + feeApr}
               percent
               compact
-              showIsSmallerThanMin />
+              showIsSmallerThanMin
+            />
           )}
         </div>
       </div>

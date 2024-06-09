@@ -286,7 +286,6 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     tvlInHoney: Number(pool.tvlUsd),
   });
 
-
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
       return (
