@@ -181,7 +181,11 @@ export default function DepositWithdraw() {
             </ActionButton>
             {isMaxDepositExceeding && (
               <Alert variant="destructive" className="mt-2">
-                Deposit amount exceeds the maximum deposit amount.
+                {`Deposit exceeds current the maximum deposit amount${
+                  maxDeposit === 0 || maxDeposit
+                    ? ` of ${maxDeposit.toFixed(2)} Honey`
+                    : "."
+                }`}
               </Alert>
             )}
           </TabsContent>
