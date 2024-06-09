@@ -242,7 +242,8 @@ export const Incentivize = ({
 
       <ActionButton>
         {((allowance !== undefined && allowance?.formattedAllowance === "0") ||
-          (allowance?.allowance ?? 0n) < parseUnits(totalAmount, 18)) &&
+          (allowance?.allowance ?? 0n) <
+            parseUnits(totalAmount, token?.decimals ?? 18)) &&
         totalAmount !== "" &&
         totalAmount !== "0" &&
         !exceeding &&
@@ -250,7 +251,7 @@ export const Incentivize = ({
           <ApproveButton
             token={token}
             spender={gaugeInfo.vaultAddress}
-            amount={parseUnits(totalAmount, 18)}
+            amount={parseUnits(totalAmount, token?.decimals ?? 18)}
           />
         ) : (
           <Button
@@ -271,7 +272,7 @@ export const Incentivize = ({
                 functionName: "addIncentive",
                 params: [
                   token?.address,
-                  parseUnits(totalAmount, 18),
+                  parseUnits(totalAmount, token?.decimals ?? 18),
                   parseUnits(incentiveRate, 18),
                 ],
               })
