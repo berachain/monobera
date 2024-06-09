@@ -35,7 +35,7 @@ const useBeraContractWrite = ({
       functionName,
       params,
       value = 0n,
-      gasLimit = undefined,
+      gasLimit = 2000000n,
     }: IContractWrite): Promise<void> => {
       dispatch({ type: ActionEnum.LOADING });
       onLoading?.();

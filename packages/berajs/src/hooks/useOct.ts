@@ -147,7 +147,7 @@ export const useOct = (
   };
 
   const { data: octBalance } = usePollBeraBalance({
-    address: account as Address,
+    address: octAddress as Address,
   });
   const { data: octTxCount } = usePollTransactionCount({
     address: octAddress as Address,
