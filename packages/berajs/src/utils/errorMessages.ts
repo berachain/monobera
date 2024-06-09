@@ -194,6 +194,10 @@ const errorMsgMap: ErrorMessages = {
       errorMSG:
         "This position is currently in timeout. Please wait for the timeout to expire to execute.",
     },
+    MAX_DEPOSIT: {
+      keywords: ["0x3b8698ab"],
+      errorMSG: "Deposit amount exceeds the maximum deposit amount.",
+    },
   },
 };
 

@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { cloudinaryUrl } from "@bera/config";
-import { SimpleTable, useBaseTable } from "@bera/shared-ui";
+import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import {
   Select,
   SelectContent,
@@ -40,9 +40,15 @@ export default function LeaderBoard() {
 
   const leaderBoardData = useLeaderBoardData();
 
-  const table = useBaseTable({
+  const columns = useMemo(
+    () => getColumns(leaderboardType.toString()),
+    [leaderboardType, getColumns],
+  );
+
+  const table = useAsyncTable({
     data: leaderBoardData ?? [],
-    columns: getColumns(leaderboardType.toString()),
+    columns: columns,
+    fetchData: async () => {},
   });
 
   return (

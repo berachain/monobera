@@ -58,14 +58,14 @@ export default function TradingHistory({ markets }: { markets: IMarket[] }) {
       const newPaginationState =
         typeof updater === "function"
           ? updater({
-              pageIndex: (prev[prev.tabType].page ?? 1) - 1,
-              pageSize: prev[prev.tabType].perPage ?? 10,
+              pageIndex: (prev.history.page ?? 1) - 1,
+              pageSize: prev.history.perPage ?? 10,
             })
           : updater;
       return {
         ...prev,
-        [prev.tabType]: {
-          ...prev[prev.tabType],
+        history: {
+          ...prev.history,
           page: newPaginationState.pageIndex + 1,
           perPage: newPaginationState.pageSize,
         },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TransactionActionType,
   tradingAbi,
@@ -25,17 +25,22 @@ import { Input } from "@bera/ui/input";
 import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
 
-const TradeWalletSection = () => {
-  const { octPrivKey, octAddress, octBalance, octTxCount } = useOct();
+const TradeWalletSection = ({ refresh }: { refresh: () => void }) => {
+  const { isOctBalanceLow, octPrivKey, octAddress, octBalance, octTxCount } =
+    useOct();
   const [copied, setCopied] = useState(false);
   const { account } = useBeraJs();
 
-  const { isValueSendLoading, writeValueSend } = useOctTxn({
+  const { isValueSendLoading, writeValueSend, isValueSendSuccess } = useOctTxn({
     message: "Withdrawing All From One Click Trading Wallet",
   });
 
-  const isBalanceLessThanThreshold =
-    Number(octBalance?.formattedBalance ?? 0) < 0.1;
+  useEffect(() => {
+    if (isValueSendSuccess) {
+      refresh();
+    }
+  }, [isValueSendSuccess, refresh]);
+
   return (
     <div className={"relative rounded-md border border-border p-3"}>
       <p className="text-md pb-4 font-bold leading-normal">
@@ -67,7 +72,7 @@ const TradeWalletSection = () => {
           size={"sm"}
           className="w-full"
           variant={"secondary"}
-          disabled={isValueSendLoading || isBalanceLessThanThreshold}
+          disabled={isValueSendLoading || isOctBalanceLow}
           onClick={() => {
             writeValueSend({
               address: account as Address,
@@ -298,11 +303,14 @@ export function ManageOctDialog({
     isOctUnfunded,
     isOctBalanceLow,
     octAddress,
-    octBalance,
   } = useOct();
 
   const [fundAmount, setFundAmount] = useState<string | undefined>(undefined);
   const { account, isReady } = useBeraJs();
+
+  const { refresh: refreshOctBalance } = usePollBeraBalance({
+    address: octAddress as Address,
+  });
   const { data: beraBalanceData } = usePollBeraBalance({
     address: account as Address,
   });
@@ -323,12 +331,18 @@ export function ManageOctDialog({
     },
   });
 
-  const { isFundingLoading, fundWrite } = useTxn({
+  const { isFundingLoading, fundWrite, isFundingSuccess } = useTxn({
     message: "Funding One Click Trading Wallet",
   });
 
+  useEffect(() => {
+    if (isFundingSuccess) {
+      refreshOctBalance();
+      setShowFundSection(false);
+    }
+  }, [isFundingSuccess]);
+
   const [showFundSection, setShowFundSection] = useState(false);
-  const isBalanceLessThanThreshold = Number(octBalance ?? 0) < 0.1;
 
   function revokeDelegation() {
     revokeWrite({
@@ -354,7 +368,7 @@ export function ManageOctDialog({
         <div className="text-xl font-semibold leading-7">
           ⚡ One-Click Trading{" "}
         </div>
-        <TradeWalletSection />
+        <TradeWalletSection refresh={refreshOctBalance} />
         {isOctDelegated && !isOctBalanceLow && !isOctUnfunded && (
           <OneClickWalletEnabledSection />
         )}
@@ -369,14 +383,11 @@ export function ManageOctDialog({
             delegateWallet={delegateWallet}
           />
         )}
-        {((!isOctBalanceLow && !isOctUnfunded) ||
-          isBalanceLessThanThreshold) && (
-          <WalletFundedSection
-            isBalanceLessThanThreshold={isBalanceLessThanThreshold}
-            setShowFundSection={setShowFundSection}
-            showFundSection={showFundSection}
-          />
-        )}
+        <WalletFundedSection
+          isBalanceLessThanThreshold={isOctBalanceLow}
+          setShowFundSection={setShowFundSection}
+          showFundSection={showFundSection}
+        />
         {showFundSection && (
           <FundAccountSection
             fundAmount={fundAmount}
