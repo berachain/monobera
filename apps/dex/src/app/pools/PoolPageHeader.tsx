@@ -46,7 +46,7 @@ export default function PoolPageHeader({
             >
               Create a Pool
             </Button>
-            <Link href={`${docsUrl}/learn/bex/pools`} target="_blank">
+            <Link href={`${docsUrl}/learn/dapps/bex`} target="_blank">
               <Button
                 variant={"outline"}
                 onClick={() => {
