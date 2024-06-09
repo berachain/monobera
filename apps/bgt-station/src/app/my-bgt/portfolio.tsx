@@ -67,19 +67,19 @@ export default function Portfolio() {
             img={`${cloudinaryUrl}/bears/kj33rvgbemret3xrknv9`}
             title="How do I delegate BGT?"
             subtitle="Delegate like a pro with these helpful guides."
-            href={`${docsUrl}/learn/protocol/bgt-station#delegating-bgt`}
+            href={`${docsUrl}/learn/dapps/bgt-station`}
           />
           <Banner
             img={`${cloudinaryUrl}/bears/j7rciiglmcozlxryug4z`}
             title="What is a gauge weight?"
             subtitle="We’ll teach you what all this de-fi jargon means."
-            href={`${docsUrl}/learn/protocol/bgt-emissions#preface-validators-set-the-gauge-weights-for-each-pool`}
+            href={`${docsUrl}/learn/protocol/gauges'`}
           />
           <Banner
             img={`${cloudinaryUrl}/bears/zkyxcj5qhdmd75xgozkn`}
             title="How do I unbond BGT?"
             subtitle="Unbond with ease following our walkthrough."
-            href={`${docsUrl}/learn/protocol/bgt-station#unbonding-bgt`}
+            href={`${docsUrl}/learn/dapps/bgt-station`}
           />
         </div>
       ) : (

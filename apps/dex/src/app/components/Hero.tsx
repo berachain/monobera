@@ -74,7 +74,7 @@ export default function Hero() {
           <div
             className="flex min-h-8 w-fit items-center gap-1 rounded-2xl border border-border bg-muted px-2 py-1 text-base font-normal leading-normal text-secondary-foreground hover:cursor-pointer hover:text-foreground md:py-0"
             onClick={() =>
-              window.open(`${docsUrl}/learn/protocol/bgt-emissions`, "_blank")
+              window.open(`${docsUrl}/learn/protocol/gauges`, "_blank")
             }
           >
             🐝 Learn about BGT emissions{" "}
