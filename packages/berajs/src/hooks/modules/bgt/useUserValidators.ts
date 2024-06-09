@@ -4,10 +4,10 @@ import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 import { useBeraJs } from "~/contexts";
 import { UserValidator, Validator } from "~/types";
-import { usePollValidatorInfo } from "./usePollValidatorInfo";
 import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { bgtStakerSubgraphUrl } from "@bera/config";
+import { useUserActiveValidators } from "./useUserActiveValidators";
 
 /**
  *
@@ -18,14 +18,14 @@ export const useUserValidators = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType<UserValidator[] | undefined> => {
   const { account } = useBeraJs();
-  const { validatorInfoList } = usePollValidatorInfo();
-  const QUERY_KEY = ["useUserValidators", account, ...validatorInfoList];
+  const { data = [], isLoading, isValidating } = useUserActiveValidators();
+  const QUERY_KEY = ["useUserValidators", account, ...data];
   const swrResponse = useSWR<UserValidator[] | undefined>(
     QUERY_KEY,
     async () => {
-      if (!validatorInfoList.length) return undefined;
+      if (!data.length) return undefined;
       if (!account) {
-        return validatorInfoList.map((validator: Validator) => {
+        return data.map((validator: Validator) => {
           return {
             ...validator,
             userStaked: "0",
@@ -56,7 +56,7 @@ export const useUserValidators = (
           coinbase: string;
         }[] = userDeposited.data.userValidatorInformations;
 
-        return validatorInfoList.map((validator: Validator) => {
+        return data.map((validator: Validator) => {
           const userDeposited = userDepositedData.find(
             (data) =>
               data.coinbase.toLowerCase() === validator.coinbase.toLowerCase(),
