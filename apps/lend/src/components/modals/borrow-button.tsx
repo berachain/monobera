@@ -44,7 +44,11 @@ export default function BorrowBtn({
   const { captureException, track } = useAnalytics();
   const { write, isLoading, ModalPortal, isSuccess } = useTxn({
     message: `Borrowing ${
-      Number(amount) < 0.01 ? "<0.01" : Number(amount).toFixed(2)
+      amount
+        ? Number(amount) < 0.01
+          ? "<0.01"
+          : Number(amount).toFixed(2)
+        : ""
     } ${reserve?.symbol}`,
     onSuccess: () => {
       track(`borrow_${reserve?.symbol.toLowerCase()}`);
