@@ -29,7 +29,7 @@ export function TokenIconList({
     <div className={cn("ml-[5px] flex items-center", className)}>
       {newTokenList?.map((token: any) => (
         <TokenIcon
-          key={`${token.address}-${token.id??''}`}
+          key={`${token.address}-${token.id ?? ""}`}
           address={token.address}
           symbol={token.symbol}
           className="ml-[-5px]"
