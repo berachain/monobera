@@ -176,7 +176,7 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
 
           <PositionRow
             row={1}
-            positions={rows[1].reverse()}
+            positions={rows[1]?.reverse()}
             // @ts-ignore
             positionClassName={(positionIndex) =>
               // @ts-ignore

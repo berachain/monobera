@@ -16,8 +16,6 @@ export function LeverageSlider({
     const value = BigNumber(e.target.value);
     if (value.gt(maxLeverage)) {
       onValueChange?.(maxLeverage.toString());
-    } else if (value.lt(2)) {
-      onValueChange?.("2");
     } else {
       onValueChange?.(e.target.value);
     }
