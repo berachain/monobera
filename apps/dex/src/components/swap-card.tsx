@@ -433,7 +433,7 @@ export function SwapCard({
                       setFromAmount(amount);
                     }}
                     filteredTokenTags={["supply", "debt"]}
-                    filteredSymbols={["BGT"]}
+                    filteredSymbols={["BGT, aToken"]}
                     beraSafetyMargin={estimatedBeraFee}
                   />
                   <div className="relative">

@@ -28,7 +28,7 @@ export default function CreatePoolInput({
         selectable={selectable}
         filter={[bgtTokenAddress, nativeTokenAddress]}
         filteredTokenTags={["supply", "debt"]}
-        filteredSymbols={["BGT"]}
+        filteredSymbols={["BGT, aToken"]}
       />
     </li>
   );
