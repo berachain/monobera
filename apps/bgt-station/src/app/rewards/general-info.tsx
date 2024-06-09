@@ -10,17 +10,16 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Card, CardContent } from "@bera/ui/card";
 import { useClaimableIncetives } from "~/hooks/useClaimableIncentives";
-import { useTotalBgtRewards } from "~/hooks/useTotalBgtRewards";
 import { Skeleton } from "@bera/ui/skeleton";
 import { useClaimableFees } from "~/hooks/useClaimableFees";
 import {
   TransactionActionType,
   BGT_STAKER_ABI,
   useUserVaults,
-  multicall3Abi,
   useTokenHoneyPrice,
+  type UserVault,
 } from "@bera/berajs";
-import { beraTokenAddress, bgtStaker, multicallAddress } from "@bera/config";
+import { beraTokenAddress, bgtStaker } from "@bera/config";
 import { useState, useEffect } from "react";
 // import { useClaimAllBgtCalldata } from "~/hooks/useClaimAllBgtCalldata";
 
@@ -85,7 +84,6 @@ export const GeneralInfo = () => {
   // });
 
   // const claimAllBgtCalldata = useClaimAllBgtCalldata(userVaultInfo?.vaults.map((vault: any) => vault.vaultAddress) ?? [])
-
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
       {ModalPortal}
@@ -133,13 +131,14 @@ export const GeneralInfo = () => {
                 Gauges Earning you BGT:
               </div>
               {isDataReady &&
-                userVaultInfo?.vaults.map((gauge, index) => (
+                userVaultInfo?.vaults.map((gauge: UserVault, index: number) => (
                   <div
                     className="flex h-6 w-fit items-center gap-1 rounded-full border border-border bg-background px-2"
                     key={`gauge-${index}-${gauge}`}
                   >
                     <GaugeIcon
                       address={gauge.vaultAddress}
+                      overrideImage={gauge.logoURI}
                       className="h-4 w-4"
                     />
 

@@ -44,7 +44,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
             }}
             title={
               <>
-                <GaugeIcon address={gauge?.vaultAddress} size="xl" />
+                <GaugeIcon
+                  address={gauge?.vaultAddress}
+                  size="xl"
+                  overrideImage={gauge?.metadata?.logoURI}
+                />
                 {gauge?.metadata?.name ?? truncateHash(gaugeAddress)}
               </>
             }
