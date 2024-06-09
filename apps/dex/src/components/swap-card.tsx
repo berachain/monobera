@@ -17,6 +17,7 @@ import {
   beraTokenAddress,
   cloudinaryUrl,
   crocMultiSwapAddress,
+  honeyAddress,
   nativeTokenAddress,
 } from "@bera/config";
 import {
@@ -109,8 +110,8 @@ export function SwapCard({
     priceImpact,
     differenceUSD,
   } = useSwap({
-    inputCurrency,
-    outputCurrency,
+    inputCurrency: nativeTokenAddress,
+    outputCurrency: honeyAddress,
   });
 
   const { captureException, track } = useAnalytics();

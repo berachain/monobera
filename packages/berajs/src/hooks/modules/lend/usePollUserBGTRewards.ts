@@ -27,7 +27,6 @@ export const usePollLendUserBGTRewards = (options?: DefaultHookOptions) => {
             account: account,
             args: [account],
           });
-          console.log("result", result);
           return result;
         } catch (e) {
           console.log(e);
