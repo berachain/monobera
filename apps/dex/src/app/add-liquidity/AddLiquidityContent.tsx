@@ -114,10 +114,10 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
-    const parsedBaseCost = parseUnits(baseCost.toString(), PRESICION);
-    const parsedValue = parseUnits(value, PRESICION);
+    const parsedBaseCost = parseUnits(baseCost.toString(), quoteToken.decimals);
+    const parsedValue = parseUnits(value, quoteToken.decimals);
     const quoteAmount =
-      (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
+      (parsedBaseCost * parsedValue) / BigInt(10 ** quoteToken.decimals);
     updateTokenAmount(
       1,
       quoteAmount === 0n ? "" : formatUnits(quoteAmount, quoteToken.decimals),
@@ -126,10 +126,13 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     updateTokenAmount(1, value);
-    const parsedQuoteCost = parseUnits(quoteCost.toString(), PRESICION);
-    const parsedValue = parseUnits(value, PRESICION);
+    const parsedQuoteCost = parseUnits(
+      quoteCost.toString(),
+      baseToken.decimals,
+    );
+    const parsedValue = parseUnits(value, baseToken.decimals);
     const baseAmount =
-      (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
+      (parsedQuoteCost * parsedValue) / BigInt(10 ** baseToken.decimals);
     updateTokenAmount(
       0,
       baseAmount === 0n ? "" : formatUnits(baseAmount, baseToken.decimals),
