@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePoolUserPosition, type IUserPool, type PoolV2 } from "@bera/berajs";
+import {
+  useBgtApy,
+  usePoolUserPosition,
+  type IUserPool,
+  type PoolV2,
+} from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -17,6 +22,8 @@ import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "~/app/pools/fetchPools";
+import { peripheryDebtToken } from "@bera/config";
+import { Address } from "viem";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   return (
@@ -132,19 +139,31 @@ export const columns: ColumnDef<PoolV2>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center text-sm text-warning-foreground">
-        <FormattedNumber value={row.original.bgtApy ?? 0} percent />
-      </div>
-    ),
-    sortingFn: (rowA, rowB) => {
-      const a = rowA.original.bgtApy ?? 0;
-      const b = rowB.original.bgtApy ?? 0;
-      if (a < b) return -1;
-      if (a > b) return 1;
-      return 0;
+    cell: ({ row }) => {
+      const { data: bgtApr } = useBgtApy({
+        receiptTokenAddress: row.original?.shareAddress as Address,
+        tvlInHoney: Number(row.original.tvlUsd),
+      });
+
+      return (
+        <div className="flex items-center justify-start text-sm text-warning-foreground">
+          <FormattedNumber
+            value={bgtApr ?? 0}
+            percent
+            compact
+            showIsSmallerThanMin
+          />
+        </div>
+      );
     },
-    filterFn: (row, id, value) => value.includes(row.getValue(id)),
+    // sortingFn: (rowA, rowB) => {
+    //   const a = rowA.original.bgtApy ?? 0;
+    //   const b = rowB.original.bgtApy ?? 0;
+    //   if (a < b) return -1;
+    //   if (a > b) return 1;
+    //   return 0;
+    // },
+    // filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
   // {
   //   accessorKey: "totalApy",
@@ -242,8 +261,28 @@ export const my_columns: ColumnDef<IUserPool>[] = [
       </div>
     ),
   },
+
+  // {
+  //   accessorKey: "bgtApy",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="BGT APY"
+  //       tooltip={apyTooltipText()}
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Badge variant={"warning"} className="border-none px-2 py-1 font-normal">
+  //       <FormattedNumber value={"0"} symbol="BGT" />
+  //     </Badge>
+  //   ),
+
+  //   filterFn: (row, id, value) => value.includes(row.getValue(id)),
+  // },
   {
     accessorKey: "bgtApy",
+    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -252,13 +291,31 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         className="whitespace-nowrap"
       />
     ),
-    cell: ({ row }) => (
-      <Badge variant={"warning"} className="border-none px-2 py-1 font-normal">
-        <FormattedNumber value={"0"} symbol="BGT" />
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const { data: bgtApr } = useBgtApy({
+        receiptTokenAddress: row.original?.shareAddress as Address,
+        tvlInHoney: Number(row.original.tvlUsd),
+      });
 
-    filterFn: (row, id, value) => value.includes(row.getValue(id)),
+      return (
+        <div className="flex items-center justify-start text-sm text-warning-foreground">
+          <FormattedNumber
+            value={bgtApr ?? 0}
+            percent
+            compact
+            showIsSmallerThanMin
+          />
+        </div>
+      );
+    },
+    // sortingFn: (rowA, rowB) => {
+    //   const a = rowA.original.bgtApy ?? 0;
+    //   const b = rowB.original.bgtApy ?? 0;
+    //   if (a < b) return -1;
+    //   if (a > b) return 1;
+    //   return 0;
+    // },
+    // filterFn: (row, id, value) => value.includes(row.getValue(id)),
   },
   {
     accessorKey: "btns",
