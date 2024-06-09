@@ -82,7 +82,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         compact={false}
         compactThreshold={999_999_999}
         percent
-        value={row.original.bgtInflationCapture ?? 0}
+        value={row.original.bgtInflationCapture / 10000 ?? 0}
       />
     ),
     accessorKey: "bgtInflationCapture",
