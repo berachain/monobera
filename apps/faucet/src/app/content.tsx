@@ -20,7 +20,7 @@ import { TokenBadge } from "~/components/token-badge";
 export default function Content() {
   const [address, setAddress] = React.useState<string>("");
   const [alert, setAlert] = React.useState<
-    "success" | "destructive" | "error" | undefined
+    "success" | "destructive" | "error" | "payment" | undefined
   >(undefined);
   const [showAlet, setShowAlert] = React.useState<boolean>(false);
   const [inputError, setInputError] = React.useState<string | null>(null);
@@ -67,9 +67,14 @@ export default function Content() {
         </div>
       </div>
       <div className="flex flex-col gap-1">
-        <div className="h-7 text-sm font-medium">
+        <div className="text font-medium leading-7">
           Wallet Address <span className="text-destructive-foreground">*</span>
+          <div className="text-sm">
+            you have to have at least <b>0.05 ETH</b> on Etheruem Mainnet in
+            your wallet to be able to use the faucet.
+          </div>
         </div>
+
         <NonSSRWrapper>
           <div className="relative">
             <Input value={address} onChange={handleFaucetAddressChange} />
@@ -142,6 +147,19 @@ export default function Content() {
             We are currently experiencing high traffic, causing temporary
             unavailability of our service. Please try again in a few minutes. We
             apologize for any inconvenience and appreciate your patience.
+          </AlertDescription>
+        </Alert>
+      )}
+      {showAlet && alert === "payment" && (
+        <Alert variant={"destructive"}>
+          <AlertTitle>
+            {" "}
+            <Icons.XOctagon className="inline-block h-4 w-4" /> Insufficient Eth
+            balance
+          </AlertTitle>
+          <AlertDescription>
+            you have to have at least <b>0.05 ETH</b> on Etheruem Mainnet in
+            your wallet to be able to use the faucet.
           </AlertDescription>
         </Alert>
       )}
