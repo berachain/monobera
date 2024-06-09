@@ -432,8 +432,8 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setFromAmount(amount);
                     }}
-                    filteredTokenTags={["supply", "debt"]}
-                    filteredSymbols={["BGT", "aToken"]}
+                    filteredTokenTags={["supply", "debt", "aToken"]}
+                    filteredSymbols={["BGT"]}
                     beraSafetyMargin={estimatedBeraFee}
                   />
                   <div className="relative">
@@ -470,7 +470,7 @@ export function SwapCard({
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                     beraSafetyMargin={estimatedBeraFee}
-                    filteredTokenTags={["supply", "debt"]}
+                    filteredTokenTags={["supply", "debt", "aToken"]}
                     filteredSymbols={["BGT", "aToken"]}
                   />
                 </ul>
