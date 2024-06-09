@@ -504,7 +504,7 @@ export const useOctTxn = ({
     );
   };
   const memoizedModalPortal = useMemo(
-    () => (!isOctReady ? <ModalPortal /> : false),
+    () => <ModalPortal />,
     [isLoading, isSubmitting, isSuccess, isError, modalState],
   );
 

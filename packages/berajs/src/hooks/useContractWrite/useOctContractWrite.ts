@@ -75,6 +75,10 @@ const useOctContractWrite = (
 
           const payload = [account, data];
           // @ts-ignore
+          const gas = await contract.estimateGas.delegatedAction(...payload, {
+            gasLimit: 10000000n,
+            value: value,
+          });
           const transaction = await contract.delegatedAction(...payload, {
             gasLimit: 10000000n,
             value: value,
