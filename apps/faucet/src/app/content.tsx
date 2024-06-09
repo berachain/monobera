@@ -158,7 +158,7 @@ export default function Content() {
             balance
           </AlertTitle>
           <AlertDescription>
-            you have to have at least <b>0.05 ETH</b> on Ethereum Mainnet in
+            You have to have at least <b>0.05 ETH</b> on Ethereum Mainnet in
             your wallet to be able to use the faucet.
           </AlertDescription>
         </Alert>
