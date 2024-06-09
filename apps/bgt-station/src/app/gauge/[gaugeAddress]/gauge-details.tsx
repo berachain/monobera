@@ -63,6 +63,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 content: <>{truncateHash(gauge?.vaultAddress ?? "")}</>,
                 externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
               },
+              {
+                title: "Staking Contract",
+                content: <>{truncateHash(gauge?.stakingTokenAddress ?? "")}</>,
+                externalLink: `${blockExplorerUrl}/address/${gauge?.stakingTokenAddress}`,
+              }
             ]}
             className="border-b border-border pb-8"
           />
