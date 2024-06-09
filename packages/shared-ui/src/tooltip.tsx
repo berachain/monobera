@@ -36,10 +36,9 @@ export function Tooltip({
               {toolTipTrigger}
             </div>
           ) : (
-            <Button
-              variant="ghost"
+            <div
               className={cn(
-                "flex-inline h-5 w-5 rounded-full p-0 align-middle hover:bg-transparent",
+                "inline-flex h-5 w-5 rounded-full align-middle items-center text-muted-foreground hover:bg-transparent",
                 className,
               )}
               onMouseEnter={() => setTooltipOpen(true)}
@@ -47,7 +46,7 @@ export function Tooltip({
             >
               <Icons.tooltip className={cn(`h-${size} w-${size}`)} />
               <span className="sr-only">Tooltip</span>
-            </Button>
+            </div>
           )}
         </TooltipTrigger>
         <TooltipContent className="w-fit max-w-[96vw]">
