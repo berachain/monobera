@@ -130,7 +130,10 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     const parsedValue = parseUnits(value, PRESICION);
     const baseAmount =
       (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
-    updateTokenAmount(0, baseAmount === 0n ? "" : formatUnits(baseAmount, baseToken.decimals));
+    updateTokenAmount(
+      0,
+      baseAmount === 0n ? "" : formatUnits(baseAmount, baseToken.decimals),
+    );
   };
 
   const slippage = useSlippage();
@@ -157,8 +160,12 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     );
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** baseToken.decimals);
-    const s = parseUnits(((slippage ?? 0) + 0.001).toString(), baseToken.decimals);
-    const minAmountOut = (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** baseToken.decimals);
+    const s = parseUnits(
+      ((slippage ?? 0) + 0.001).toString(),
+      baseToken.decimals,
+    );
+    const minAmountOut =
+      (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** baseToken.decimals);
     return minAmountOut;
   }, [baseTokenInitialLiquidity, slippage]);
 
@@ -172,10 +179,14 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     );
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** quoteToken.decimals);
-    const s = parseUnits(((slippage ?? 0) + 0.001).toString(), quoteToken.decimals);
+    const s = parseUnits(
+      ((slippage ?? 0) + 0.001).toString(),
+      quoteToken.decimals,
+    );
 
-    const minAmountOut = (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** quoteToken.decimals);
-    
+    const minAmountOut =
+      (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** quoteToken.decimals);
+
     return minAmountOut;
   }, [quoteTokenInitialLiquidity, slippage]);
 
