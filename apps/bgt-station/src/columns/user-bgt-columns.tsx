@@ -1,18 +1,15 @@
 import React from "react";
 import {
-  ActionButton,
-  DataTableColumnHeader,
-  FormattedNumber,
-} from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
-import { type ColumnDef } from "@tanstack/react-table";
-import { Icons } from "@bera/ui/icons";
-import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
-import {
   BERA_VAULT_REWARDS_ABI,
-  IContractWrite,
+  type IContractWrite,
   useBeraJs,
 } from "@bera/berajs";
+import { DataTableColumnHeader, FormattedNumber } from "@bera/shared-ui";
+import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
+import { type ColumnDef } from "@tanstack/react-table";
+
+import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
 export const getUserBgtColumns = ({
   isLoading,
@@ -40,7 +37,7 @@ export const getUserBgtColumns = ({
         <DataTableColumnHeader
           column={column}
           title="Amount Deposited"
-          className="items-center text-center"
+          className="items-center whitespace-nowrap text-center"
         />
       ),
       cell: ({ row }) => (
@@ -51,7 +48,7 @@ export const getUserBgtColumns = ({
             showIsSmallerThanMin
             className="text-md font-medium"
           />
-          <span className="text-xs text-muted-foreground ml-1">
+          <span className="ml-1 text-xs text-muted-foreground">
             {row.original.name}
           </span>
         </>
@@ -64,11 +61,11 @@ export const getUserBgtColumns = ({
         <DataTableColumnHeader
           column={column}
           title="BGT Rewards"
-          className="items-center text-center"
+          className="items-center whitespace-nowrap text-center"
         />
       ),
       cell: ({ row }) => (
-        <div className="py-1 px-2 flex gap-1 rounded-full text-success-foreground bg-success-foreground bg-opacity-10 w-fit text-sm font-medium items-center">
+        <div className="flex w-fit items-center gap-1 rounded-full bg-success-foreground bg-opacity-10 px-2 py-1 text-sm font-medium text-success-foreground">
           <Icons.bgt className="h-6 w-6" />
           <FormattedNumber
             value={row.original.unclaimedBgt}

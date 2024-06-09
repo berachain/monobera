@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useState } from "react";
 import { usePollGauges, type Gauge } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
@@ -44,10 +45,10 @@ export default function GlobalGaugeWeightTable({
   );
   return (
     <DataTable
-      fetchData={fetchData}
-      enablePagination
       loading={isLoading}
       validating={isValidating}
+      fetchData={fetchData}
+      enablePagination
       columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
       data={myGauge ? [] : gaugeList ?? []}
       className="min-h-[200px] min-w-[1100px] shadow"

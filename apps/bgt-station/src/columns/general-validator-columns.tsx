@@ -42,7 +42,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader
       column={column}
       title="Voting Power"
-      className="min-w-[200px]"
+      className="min-w-[200px] whitespace-nowrap"
     />
   ),
   cell: ({ row }) => (
@@ -73,7 +73,7 @@ const APY_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
-      className="min-w-[150px]"
+      className="min-w-[150px] whitespace-nowrap"
       title="vApy"
       tooltip={bribeApyTooltipText()}
     />
@@ -105,11 +105,7 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
 
 const BRIBES_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
-    <DataTableColumnHeader
-      column={column}
-      title="Incentives"
-      className="w-[160px]"
-    />
+    <DataTableColumnHeader column={column} title="Incentives" />
   ),
   cell: ({ row }) => {
     return <BribesPopover incentives={row.original.activeIncentives} />;
@@ -144,7 +140,11 @@ const CLAIMABLE_BRIBES_COLUMN: ColumnDef<Validator> = {
 
 const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="User Staked" />
+    <DataTableColumnHeader
+      column={column}
+      title="User Staked"
+      className="whitespace-nowrap"
+    />
   ),
   cell: ({ row }) => {
     return (
@@ -158,12 +158,16 @@ const USER_STAKED_COLUMN: ColumnDef<UserValidator> = {
   accessorKey: "userStaked",
   sortingFn: (a, b) =>
     Number(a.original.userStaked) - Number(b.original.userStaked),
-  enableSorting: true,
+  enableSorting: false,
 };
 
 const USER_QUEUED_COLUMN: ColumnDef<UserValidator> = {
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="User Queued" />
+    <DataTableColumnHeader
+      column={column}
+      title="User Queued"
+      className="whitespace-nowrap"
+    />
   ),
   cell: ({ row }) => {
     return <FormattedNumber value={row.original.userQueued} symbol="BGT" />;
@@ -171,7 +175,7 @@ const USER_QUEUED_COLUMN: ColumnDef<UserValidator> = {
   accessorKey: "userQueued",
   sortingFn: (a, b) =>
     Number(a.original.userQueued) - Number(b.original.userQueued),
-  enableSorting: true,
+  enableSorting: false,
 };
 
 const ESTIMATED_BGT_GAUGE: ColumnDef<Validator> = {

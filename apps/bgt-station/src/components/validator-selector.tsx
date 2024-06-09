@@ -78,6 +78,7 @@ const ValidatorModal = ({
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [keyword, setKeyword] = useState("");
+  const [showDelegated, setShowDelegated] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -92,25 +93,43 @@ const ValidatorModal = ({
           <div className="text-lg font-semibold leading-7">
             Validator select
           </div>
-          {showSearch === true && (
-            <div className="flex justify-between">
-              <SearchInput
-                placeholder="Search by name or address"
-                className="w-full md:w-[400px]"
-                value={keyword}
-                onChange={(e: any) => {
-                  setKeyword(e.target.value);
-                  setIsTyping?.(true);
-                  if (typingTimer) clearTimeout(typingTimer);
-                  const newTimer = setTimeout(() => {
-                    setIsTyping(false);
-                  }, 1000);
-                  setTypingTimer(newTimer);
-                }}
-              />
-            </div>
-          )}
-          {unbond ? (
+
+          <div className="flex items-center justify-between">
+            <SearchInput
+              placeholder="Search by name or address"
+              className="w-full md:w-[400px]"
+              value={keyword}
+              onChange={(e: any) => {
+                setKeyword(e.target.value);
+                setIsTyping?.(true);
+                if (typingTimer) clearTimeout(typingTimer);
+                const newTimer = setTimeout(() => {
+                  setIsTyping(false);
+                }, 1000);
+                setTypingTimer(newTimer);
+              }}
+            />
+            {showDelegated ? (
+              <Button
+                className="w-fit whitespace-nowrap"
+                size="sm"
+                variant="outline"
+                onClick={() => setShowDelegated(false)}
+              >
+                Show All Validators
+              </Button>
+            ) : (
+              <Button
+                className="w-fit whitespace-nowrap"
+                size="sm"
+                onClick={() => setShowDelegated(true)}
+              >
+                Show Delegated Only
+              </Button>
+            )}
+          </div>
+
+          {unbond || showDelegated ? (
             <MyValidator
               keyword={keyword}
               onRowClick={(row: any) => {
