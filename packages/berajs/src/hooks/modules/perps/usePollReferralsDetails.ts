@@ -11,7 +11,7 @@ import POLLING from "~/enum/polling";
 export const usePollReferralsDetails = () => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
-  const method = "referrerDetails";
+  const method = "getReferrerDetails";
   const QUERY_KEY = [account, method];
   const { isLoading } = useSWR(
     QUERY_KEY,

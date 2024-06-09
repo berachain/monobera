@@ -10,7 +10,9 @@ export function DripToken({
   setShowAlert,
 }: {
   address: string;
-  setAlert: (alert: "success" | "destructive" | "error" | undefined) => void;
+  setAlert: (
+    alert: "success" | "destructive" | "error" | "payment" | undefined,
+  ) => void;
   setShowAlert: () => void;
 }) {
   const [token, setToken] = React.useState<string | null>(null);
