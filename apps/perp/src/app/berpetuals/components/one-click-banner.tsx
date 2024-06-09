@@ -21,7 +21,7 @@ enum BannerEnum {
 
 const BannerText = {
   [BannerEnum.ON]: "⚡️ Manage One-Click Trade Wallet",
-  [BannerEnum.OFF]: "⚡️ One Click Trade is disabled",
+  [BannerEnum.OFF]: "⚡️ Enable One-Click Trading",
   [BannerEnum.LOW_BALANCE]: "⚡️ Fund One-Click Trade Wallet",
   [BannerEnum.NOT_FUNDED]: "⚡️ Fund One-Click Trade Wallet",
   [BannerEnum.NOT_GENERATED]: "⚡️ Setup One-Click Trade Wallet",
