@@ -65,8 +65,8 @@ export const AllValidator = ({
         if (uVali) {
           return {
             ...validator,
-            userStaked: uVali.amountDeposited,
-            userQueued: uVali.amountQueued,
+            userStaked: uVali.userStaked,
+            userQueued: uVali.userQueued,
             latestBlock: uVali.latestBlock,
             latestBlockTime: uVali.latestBlockTime,
           };
