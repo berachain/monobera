@@ -12,6 +12,10 @@ import {
   type useContractWriteApi,
 } from "./types";
 
+const increaseByPercentage = (value: bigint, percentage: number) => {
+  return value + (value * BigInt(percentage) / BigInt(100));
+};
+
 const useBeraContractWrite = ({
   onSuccess,
   onError,
@@ -62,7 +66,7 @@ const useBeraContractWrite = ({
           const confirmationReceipt: any =
             await publicClient.waitForTransactionReceipt({
               hash: receipt,
-              pollingInterval: 5000,
+              pollingInterval: 2000,
               timeout: 120000,
               confirmations: 1,
             });
