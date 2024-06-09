@@ -432,7 +432,7 @@ export function SwapCard({
                       setSwapAmount(amount);
                       setFromAmount(amount);
                     }}
-                    filteredTokenTags={["supply", "debt"]}
+                    filteredTokenTags={["supply", "debt", "aToken"]}
                     filteredSymbols={["BGT"]}
                     beraSafetyMargin={estimatedBeraFee}
                   />
@@ -470,8 +470,8 @@ export function SwapCard({
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                     beraSafetyMargin={estimatedBeraFee}
-                    filteredTokenTags={["supply", "debt"]}
-                    filteredSymbols={["BGT"]}
+                    filteredTokenTags={["supply", "debt", "aToken"]}
+                    filteredSymbols={["BGT", "aToken"]}
                   />
                 </ul>
                 {!!priceImpact && priceImpact < -10 && !isWrap && (
