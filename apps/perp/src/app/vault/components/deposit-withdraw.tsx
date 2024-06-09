@@ -164,6 +164,7 @@ export default function DepositWithdraw() {
                       address: bhoneyVaultContractAddress,
                       abi: bTokenAbi,
                       functionName: "deposit",
+                      gasLimit: 1000000n,
                       params: [
                         parseUnits(
                           depositAmount === "" ? "0" : depositAmount,
@@ -226,6 +227,7 @@ export default function DepositWithdraw() {
                   withdrawWrite({
                     address: bhoneyVaultContractAddress,
                     abi: bTokenAbi,
+                    gasLimit: 1000000n,
                     functionName: "makeWithdrawRequest",
                     params: withdrawPayload,
                   })

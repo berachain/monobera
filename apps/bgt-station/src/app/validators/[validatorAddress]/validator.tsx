@@ -266,7 +266,6 @@ export default function Validator({
     0,
   );
 
-  console.log(validator);
   return (
     <div className="relative flex flex-col">
       <div className="flex flex-col gap-3">

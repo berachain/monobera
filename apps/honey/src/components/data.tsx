@@ -111,7 +111,7 @@ const ArcadeData = () => {
       </div>
       <Link
         className="mt-4 flex h-11 w-20 cursor-pointer items-center justify-center gap-2 rounded-2xl bg-yellow-900 px-3 py-2 text-xl text-yellow-50"
-        href={`${dexUrl}/pool`}
+        href={`${dexUrl}/pools`}
         target="_blank"
       >
         Add
