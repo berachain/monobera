@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { formatter, useBgtApy, usePollHoneyVaultBalance } from "@bera/berajs";
 import { bhoneyVaultContractAddress, cloudinaryUrl } from "@bera/config";
-import { Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { usePollFeesApr } from "~/hooks/usePollFeesApr";
@@ -42,7 +42,11 @@ export default function Claim() {
           isFeesAprLoading ? (
             <Skeleton className="h-[28px] w-[80px]" />
           ) : (
-            <p>{formatter.format((bgtApr ?? 0) + feeApr)}%</p>
+            <FormattedNumber
+              value={(bgtApr ?? 0) + feeApr}
+              percent
+              compact
+              showIsSmallerThanMin />
           )}
         </div>
       </div>
