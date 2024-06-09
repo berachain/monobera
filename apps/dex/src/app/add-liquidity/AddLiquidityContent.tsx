@@ -3,8 +3,10 @@
 import { useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
+  TXN_GAS_USED_ESTIMATES,
   TransactionActionType,
   bexAbi,
+  useGasData,
   usePollWalletBalances,
   useTokenHoneyPrice,
   type PoolV2,
@@ -231,6 +233,10 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
   );
 
+  const { estimatedBeraFee } = useGasData({
+    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
+  });
+
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
@@ -300,6 +306,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               }
               showExceeding={true}
               disabled={!poolPrice}
+              beraSafetyMargin={estimatedBeraFee}
             />
 
             <TokenInput
@@ -339,6 +346,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               }
               showExceeding={true}
               disabled={!poolPrice}
+              beraSafetyMargin={estimatedBeraFee}
             />
           </TokenList>
           <InfoBoxList>
