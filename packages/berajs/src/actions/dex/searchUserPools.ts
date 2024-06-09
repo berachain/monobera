@@ -193,18 +193,21 @@ export const searchUserPools = async ({
       const baseAmount = liq.times(sqrtPrice);
       const quoteAmount = liq.div(sqrtPrice);
 
+      const baseDecimals = pool.baseInfo.decimals;
+      const quoteDecimals = pool.quoteInfo.decimals;
+
       const formattedBaseAmount = baseAmount
-        .div(10 ** 18)
+        .div(10 ** baseDecimals)
         .toString()
         .includes("e")
         ? "0"
-        : baseAmount.div(10 ** 18).toString();
+        : baseAmount.div(10 ** baseDecimals).toString();
       const formattedQuoteAmount = quoteAmount
-        .div(10 ** 18)
+        .div(10 ** quoteDecimals)
         .toString()
         .includes("e")
         ? "0"
-        : quoteAmount.div(10 ** 18).toString();
+        : quoteAmount.div(10 ** quoteDecimals).toString();
 
       const estimatedHoneyValue =
         Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
