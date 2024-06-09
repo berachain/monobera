@@ -69,7 +69,6 @@ export function TokenList() {
         assets
           .filter(
             (token: BalanceToken) =>
-              token.address !== bgtTokenAddress &&
               token.tags?.includes("featured"),
           )
           .map((asset: BalanceToken) => (
