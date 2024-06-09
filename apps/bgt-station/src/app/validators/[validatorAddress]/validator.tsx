@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import {
   ActiveIncentive,
   CuttingBoardWeight,
@@ -179,7 +179,7 @@ export default function Validator({
     isLoading,
     isValidating,
   } = useSelectedValidator(validatorAddress);
-
+  if(!isLoading && !isValidating && !validator) return notFound();
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
