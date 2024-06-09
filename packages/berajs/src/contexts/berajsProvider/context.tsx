@@ -7,6 +7,7 @@ import React, {
   useState,
   type PropsWithChildren,
 } from "react";
+import { chainId } from "@bera/config";
 import { useAccount, useChains } from "wagmi";
 
 import { defaultBeraConfig } from "~/constants/defaultBeraConfig";
@@ -35,8 +36,10 @@ const BeraJsProvider: React.FC<
   useEffect(() => setIsMounted(true), []);
 
   const isWrongNetwork = useMemo(() => {
-    return !chains.some((c) => c.id === chain?.id);
-  }, [chains, chain?.id]);
+    // return !chains.some((c) => c.id === chainId);
+    return chain?.id !== chainId;
+  }, [chainId, chain?.id]);
+
   return (
     <BeraJsContext.Provider
       value={{
