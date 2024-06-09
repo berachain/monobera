@@ -1,6 +1,9 @@
 "use client";
 
+import { useMemo } from "react";
+import { notFound } from "next/navigation";
 import {
+  type Validator,
   truncateHash,
   useSelectedGauge,
   useSelectedGaugeValidators,
@@ -8,7 +11,7 @@ import {
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { Address } from "viem";
+import { Address, isAddress } from "viem";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
@@ -23,10 +26,13 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
   } = useSelectedGauge(gaugeAddress);
 
   const {
-    data: validators,
+    data: validators = [],
     isLoading: isValidatorsLoading,
     isValidating: isValidatorsValidating,
   } = useSelectedGaugeValidators(gaugeAddress);
+
+  if (!gaugeAddress || !isAddress(gaugeAddress)) return notFound();
+  if (!isGaugeLoading && !isGaugeValidating && !gauge) return notFound();
 
   return (
     <>
@@ -92,12 +98,12 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 columns={gauge_incentives_columns}
                 data={gauge?.activeIncentives ?? []}
                 className="max-h-[300px] min-w-[1000px] shadow"
-                onRowClick={(row: any) => {
+                onRowClick={(row: any) =>
                   window.open(
                     `/incentivize?gauge=${gaugeAddress}&token=${row.original.token.address}`,
                     "_self",
-                  );
-                }}
+                  )
+                }
               />
             </TabsContent>
             <TabsContent value="validators">
@@ -105,12 +111,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 columns={getGaugeValidatorColumns(gauge)}
                 loading={isValidatorsLoading}
                 validating={isValidatorsValidating}
-                data={validators ?? []}
+                data={validators}
                 className="min-w-[800px] shadow"
-                // enablePagination
-                onRowClick={(row: any) => {
-                  window.open(`/validators/${row.original.id}`, "_blank");
-                }}
+                onRowClick={(row: any) =>
+                  window.open(`/validators/${row.original.id}`, "_blank")
+                }
               />
             </TabsContent>
           </Tabs>
