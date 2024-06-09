@@ -87,3 +87,14 @@ export const getApyInfo = gql`
     }
   }
 `;
+
+export const GetStakingToken = gql`
+query MyQuery($stakingToken: String) {
+  vaults(where: { stakingToken: $stakingToken}) {
+    id
+    stakingToken {
+      id
+    }
+  }
+}
+`;

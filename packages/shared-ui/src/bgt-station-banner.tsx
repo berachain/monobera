@@ -5,12 +5,16 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import Link from "next/link";
 import { bgtUrl } from "@bera/config";
+import { useGaugeAddress } from "@bera/berajs";
 
 export const BgtStationBanner = ({
   receiptTokenAddress,
 }: {
   receiptTokenAddress: Address | undefined;
 }) => {
+  const { data } = useGaugeAddress(receiptTokenAddress);
+
+  if (!data) return <></>;
   return (
     <Card>
       <CardContent className="w-full flex flex-row justify-between items-center pt-4 p-4">
@@ -32,7 +36,7 @@ export const BgtStationBanner = ({
             BGT rewards
           </div>
         </div>
-        <Link href={`${bgtUrl}/gauge/${receiptTokenAddress}`} target="_blank">
+        <Link href={`${bgtUrl}/gauge/${data}`} target="_blank">
           <Button
             variant={"outline"}
             disabled={receiptTokenAddress === undefined}
