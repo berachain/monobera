@@ -1,20 +1,19 @@
 "use client";
 
-import { useMemo } from "react";
 import { notFound } from "next/navigation";
 import {
-  type Validator,
   truncateHash,
   useSelectedGauge,
   useSelectedGaugeValidators,
 } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
+import { bgtVaultBlackList, blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Address, isAddress } from "viem";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
+import { BgtStationBanner } from "./banner";
 import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
 
@@ -33,7 +32,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
 
   if (!gaugeAddress || !isAddress(gaugeAddress)) return notFound();
   if (!isGaugeLoading && !isGaugeValidating && !gauge) return notFound();
-
+  console.log("gauge", gauge);
   return (
     <>
       {gauge ? (
@@ -77,7 +76,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
             ]}
             className="border-b border-border pb-8"
           />
-          <MyGaugeDetails gauge={gauge} />
+          {gaugeAddress !== bgtVaultBlackList ? (
+            <MyGaugeDetails gauge={gauge} />
+          ) : (
+            <BgtStationBanner />
+          )}
 
           <Tabs defaultValue="incentives" className="flex flex-col gap-4">
             <div className="flex flex-col justify-between gap-4 md:flex-row">

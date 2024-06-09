@@ -33,7 +33,7 @@ export default function HowItWorks() {
             Deposit Collateral
           </h3>
           <p>
-            Deposit assets such as ETH, BTC, USDC, etc., to enhance the
+            Deposit assets such as ETH, BTC, etc., to enhance the
             platform&apos;s liquidity and increase your borrowing capacity.
           </p>
         </div>
