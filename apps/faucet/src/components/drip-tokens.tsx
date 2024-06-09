@@ -76,6 +76,8 @@ export function DripToken({
         setAlert("success");
       } else if (res.status === 429) {
         setAlert("destructive");
+      } else if (res.status === 402) {
+        setAlert("payment");
       } else {
         setAlert("error");
       }
