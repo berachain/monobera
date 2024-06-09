@@ -62,23 +62,23 @@ export const generatePnlColumns = (
     ),
     accessorKey: "assets",
     enableSorting: false,
-    enableColumnFilter: true,
-    meta: {
-      filter: (props: any) => {
-        return (
-          <DropdownFilter
-            {...props}
-            items={[
-              { label: "All", value: "" },
-              ...markets.map((market) => ({
-                label: market.name,
-                value: market.pair_index,
-              })),
-            ]}
-          />
-        );
-      },
-    },
+    // enableColumnFilter: true,
+    // meta: {
+    //   filter: (props: any) => {
+    //     return (
+    //       <DropdownFilter
+    //         {...props}
+    //         items={[
+    //           { label: "All", value: "" },
+    //           ...markets.map((market) => ({
+    //             label: market.name,
+    //             value: market.pair_index,
+    //           })),
+    //         ]}
+    //       />
+    //     );
+    //   },
+    // },
     minSize: 160,
   },
   {
