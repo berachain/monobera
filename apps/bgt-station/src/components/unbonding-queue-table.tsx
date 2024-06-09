@@ -49,6 +49,7 @@ export default function UnbondingQueueTable({
               <ValidatorIcon
                 address={queue.validatorAddress as Address}
                 className="h-6 w-6"
+                imgOverride={queue.validatorMetadata?.logoURI}
               />
               {truncateHash(queue.validatorAddress as Address)}
             </div>

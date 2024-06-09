@@ -25,6 +25,7 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { ba } from "node_modules/@bera/berajs/dist/chunk-YUACHPMR";
 import { type Address } from "viem";
 
 import {
@@ -279,7 +280,11 @@ export default function Validator({
         <div className="mt-2 flex w-full flex-col justify-between gap-6 border-b  border-border pb-6 lg:flex-row ">
           <div className="items-left w-full flex-col justify-evenly gap-4">
             <div className="flex w-full items-center justify-start gap-2 text-xl font-bold leading-[48px]">
-              <ValidatorIcon address={validator?.id} className="h-12 w-12" />
+              <ValidatorIcon
+                address={validator?.id}
+                className="h-12 w-12"
+                imgOverride={validator?.metadata?.logoURI}
+              />
               {isLoading ? (
                 <Skeleton className="h-[38px] w-[250px]" />
               ) : (

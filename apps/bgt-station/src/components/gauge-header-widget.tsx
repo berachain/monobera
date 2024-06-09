@@ -31,7 +31,10 @@ export const GaugeHeaderWidget = ({
           )}
         >
           <div className="text-md flex items-center gap-1 font-medium leading-6">
-            <GaugeIcon address={gauge.id} />
+            <GaugeIcon
+              address={gauge.id}
+              overrideImage={gauge.metadata?.logoURI}
+            />
             {gauge.metadata?.name ?? truncateHash(gauge.id)}
           </div>
           <div className="flex items-center gap-1 text-sm font-medium leading-5 ml-2">
