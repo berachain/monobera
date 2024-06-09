@@ -51,8 +51,6 @@ export const faucetUrl = process.env.NEXT_PUBLIC_FAUCET_URL as string;
 
 // External links
 export const docsUrl = process.env.NEXT_PUBLIC_DOCS_URL as string;
-export const perpsDocsUrl = process.env.NEXT_PUBLIC_PERPS_DOCS_URL as string;
-export const lendDocsUrl = process.env.NEXT_PUBLIC_LEND_DOCS_URL as string;
 export const careersUrl = process.env.NEXT_PUBLIC_CAREERS_URL as string;
 export const pressKit = process.env.NEXT_PUBLIC_PRESS_KIT as string;
 export const blogUrl = process.env.NEXT_PUBLIC_BERAERA_BLOG_URL as string;

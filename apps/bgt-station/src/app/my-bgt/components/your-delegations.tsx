@@ -28,7 +28,7 @@ export default function YourDelegations() {
           img={`${cloudinaryUrl}/bears/kj33rvgbemret3xrknv9`}
           title="How do I delegate BGT?"
           subtitle="Delegate like a pro with these helpful guides."
-          href={`${docsUrl}/getting-started/bgt-station-bgt.html#delegating-bgt`}
+          href={`${docsUrl}/learn/dapps/bgt-station`}
         />
       )}
     </div>

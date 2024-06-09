@@ -40,11 +40,7 @@ const BerachainInfo = () => {
         <Button
           variant="ghost"
           className="w-fit p-1"
-          onClick={() =>
-            window.open(
-              `${docsUrl}/learn/how-to-connect-a-wallet-with-berachain`,
-            )
-          }
+          onClick={() => window.open(`${docsUrl}/learn/connect-to-berachain`)}
         >
           <CardDescription>
             Kick off your journey with these helpful tips.{" "}
