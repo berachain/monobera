@@ -11,7 +11,7 @@ import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { getAddress } from "viem";
+import { getAddress, parseUnits } from "viem";
 
 import {
   BREAKPOINTS,
@@ -131,24 +131,37 @@ export function TokenInput({
   }
   const gasMaxTooltipHiddenStyles = hasMaxGasWarning ? {} : { hidden: true };
 
+  const isMaxEnabled = useMemo(() => {
+    try {
+      const balanceFloat = parseFloat(tokenBalance);
+      // ensure that the value can be parsed to bigint before allowing MAX, this case protects from errors for max on very small balances
+      parseUnits((balanceFloat - balanceFloat * 0.001).toString(), 18);
+      return !hasMaxGasWarning;
+    } catch {
+      return false;
+    }
+  }, [tokenBalance, beraSafetyMargin, selected?.address]);
+
   const handleMaxClick = () => {
     if (
       !setAmount ||
       !tokenBalance ||
       tokenBalance === "" ||
       tokenBalance === "0" ||
-      Number.isNaN(Number(tokenBalance))
+      Number.isNaN(Number(tokenBalance)) ||
+      !isMaxEnabled
     ) {
       return;
     }
 
+    const balanceFloat = parseFloat(tokenBalance);
     // ensure that we leave at a padded margin with the estimated gas price when attempting to trade MAX amount if we're trading in native bera token
     // for all other tokens we set the amount to the total balance of that token in the connected wallet
     const newAmount =
       selected?.address === nativeTokenAddress && beraSafetyMargin
         ? Math.max(parseFloat(tokenBalance) - beraSafetyMargin, 0).toString() ??
           ""
-        : tokenBalance.toString() ?? "";
+        : (balanceFloat - balanceFloat * 0.001).toString() ?? "";
     setAmount(newAmount);
   };
 
@@ -271,7 +284,7 @@ export function TokenInput({
                   className="text-xs text-muted-foreground"
                   showIsSmallerThanMin
                 />
-                {!hideMax && (
+                {!hideMax && isMaxEnabled && (
                   <span
                     className={`${
                       hasMaxGasWarning ? "cursor-not-allowed" : "cursor-pointer"
