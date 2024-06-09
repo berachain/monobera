@@ -43,7 +43,7 @@ export default function Claim() {
             <Skeleton className="h-[28px] w-[80px]" />
           ) : (
             <FormattedNumber
-              value={(bgtApr ?? 0) + feeApr}
+              value={parseFloat(bgtApr ?? "0") + parseFloat(feeApr)}
               percent
               compact
               showIsSmallerThanMin
