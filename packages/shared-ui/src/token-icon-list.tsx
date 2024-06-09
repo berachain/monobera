@@ -5,7 +5,7 @@ import { cn } from "@bera/ui";
 import { TokenIcon } from "./token-icon";
 
 interface ITokenIconList {
-  tokenList: { token: Token & { id?: string } }[];
+  tokenList: ({ token: Token & { id?: string } } | Token)[];
   size?: "3xl" | "2xl" | "xl" | "lg" | "md" | "sm" | "xs";
   showCount?: number;
   className?: string;
