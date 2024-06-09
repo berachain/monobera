@@ -17,16 +17,16 @@ import {
   ActionButton,
   ApproveButton,
   FormattedNumber,
+  GaugeIcon,
+  MarketIcon,
   PoolHeader,
-  TokenIconList,
   TokenInput,
   useTxn,
 } from "@bera/shared-ui";
+import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Address, parseUnits } from "viem";
-import { Alert } from "@bera/ui/alert";
 
 export const Incentivize = ({
   gauge,
@@ -37,7 +37,6 @@ export const Incentivize = ({
 }) => {
   //is valid pool address
   if (!gauge) return notFound();
-  const { isReady } = useBeraJs();
   const { gaugeDictionary, isLoading: isGaugeLoading } = usePollGauges();
   const gaugeInfo = gaugeDictionary?.[gauge];
   if (!gaugeInfo && !isGaugeLoading) return notFound();
@@ -105,8 +104,12 @@ export const Incentivize = ({
           <PoolHeader
             title={
               <>
-                <TokenIconList tokenList={[]} size="xl" />
-                {gaugeInfo?.metadata.name}
+                <GaugeIcon
+                  address={gauge}
+                  size="xl"
+                  overrideImage={gaugeInfo?.metadata?.logoURI ?? ""}
+                />
+                {gaugeInfo?.metadata?.name ?? truncateHash(gauge)}
               </>
             }
             subtitles={[
@@ -115,11 +118,14 @@ export const Incentivize = ({
                 content: (
                   <>
                     {" "}
-                    <Icons.bexFav className="h-4 w-4" />
-                    Bex
+                    <MarketIcon
+                      market={gaugeInfo?.metadata?.product}
+                      size={"md"}
+                    />
+                    {gaugeInfo?.metadata?.product ?? "OTHER"}
                   </>
                 ),
-                externalLink: "https://berachain.com",
+                externalLink: gaugeInfo?.metadata?.url ?? "",
               },
               {
                 title: "Pool Contract",
@@ -147,7 +153,7 @@ export const Incentivize = ({
       <div className="flex flex-col gap-2">
         <div className="text-sm font-medium leading-5">1. Pool Address</div>
         <input
-          className="rounded-md border border-border px-3 py-2 text-sm cursor-not-allowed	"
+          className="cursor-not-allowed rounded-md border border-border px-3 py-2 text-sm	"
           disabled
           placeholder={gauge}
         />

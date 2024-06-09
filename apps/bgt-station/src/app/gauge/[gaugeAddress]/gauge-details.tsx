@@ -8,12 +8,12 @@ import {
 import { blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { Address } from "viem";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
 import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
-import { Address } from "viem";
 
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
   const {
@@ -62,6 +62,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 title: "Pool Contract",
                 content: <>{truncateHash(gauge?.vaultAddress ?? "")}</>,
                 externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
+              },
+              {
+                title: "Staking Contract",
+                content: <>{truncateHash(gauge?.stakingTokenAddress ?? "")}</>,
+                externalLink: `${blockExplorerUrl}/address/${gauge?.stakingTokenAddress}`,
               },
             ]}
             className="border-b border-border pb-8"
