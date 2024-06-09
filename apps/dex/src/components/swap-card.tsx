@@ -182,9 +182,12 @@ export function SwapCard({
         tokenFrom: selectedFrom?.symbol,
         tokenTo: selectedTo?.symbol,
       });
-      captureException(e, {
-        event_id: "swap_token_failed",
-        data: { tokenFrom: selectedFrom?.symbol, tokenTo: selectedTo?.symbol },
+      captureException(new Error("swap_token_failed"), {
+        data: {
+          tokenFrom: selectedFrom?.symbol,
+          tokenTo: selectedTo?.symbol,
+          rawError: e,
+        },
       });
       setOpenPreview(false);
     },
@@ -223,13 +226,14 @@ export function SwapCard({
 
         { swapAmount },
       );
-      captureException(e, {
-        event_id:
-          wrapType === WRAP_TYPE.WRAP
-            ? "wrap_bera_failed"
-            : "unwrap_wbera_failed",
-        data: swapAmount,
-      });
+      captureException(
+        wrapType === WRAP_TYPE.WRAP
+          ? "wrap_bera_failed"
+          : "unwrap_wbera_failed",
+        {
+          data: { swapAmount, rawError: e },
+        },
+      );
     },
   });
 

@@ -108,7 +108,9 @@ export function CreatePoolPreview({
     },
     onError: (e: Error | undefined) => {
       track("create_pool_failed");
-      captureException(e);
+      captureException(new Error("create pool failed"), {
+        data: { rawError: e },
+      });
     },
     actionType: TransactionActionType.CREATE_POOL,
   });
