@@ -179,7 +179,7 @@ export default function Validator({
     isLoading,
     isValidating,
   } = useSelectedValidator(validatorAddress);
-  if(!isLoading && !isValidating && !validator) return notFound();
+  if (!isLoading && !isValidating && !validator) return notFound();
   const validatorDataItems: {
     title: string;
     value: React.ReactNode;
