@@ -27,7 +27,7 @@ export const BoostQueue = () => {
   const blockNumber = result?.data?.number;
 
   const queuedList = useMemo(() => {
-    return !data
+    return !data || !blockNumber || !data.length
       ? []
       : data
           .filter((validator: UserValidator) => {
