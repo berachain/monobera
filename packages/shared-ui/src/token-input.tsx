@@ -225,7 +225,7 @@ export function TokenInput({
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
-                {!!difference && Number.isFinite(difference) && (
+                {/* {!!difference && Number.isFinite(difference) && (
                   <TooltipCustom
                     anchor="left"
                     position="right"
@@ -247,7 +247,7 @@ export function TokenInput({
                       {`(${difference.toFixed(2)}%) `}
                     </p>
                   </TooltipCustom>
-                )}
+                )} */}
                 {safeNumberAmount !== 0 &&
                   !Number.isNaN(safeNumberAmount * price) && (
                     <FormattedNumber
