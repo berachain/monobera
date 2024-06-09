@@ -5,7 +5,7 @@ import { cn } from "@bera/ui";
 import { TokenIcon } from "./token-icon";
 
 interface ITokenIconList {
-  tokenList: Token[];
+  tokenList: { token: Token & { id?: string } }[];
   size?: "3xl" | "2xl" | "xl" | "lg" | "md" | "sm" | "xs";
   showCount?: number;
   className?: string;
@@ -27,9 +27,9 @@ export function TokenIconList({
 
   return (
     <div className={cn("ml-[5px] flex items-center", className)}>
-      {newTokenList?.map((token: Token) => (
+      {newTokenList?.map((token: any) => (
         <TokenIcon
-          key={token.address}
+          key={`${token.address}-${token.id??''}`}
           address={token.address}
           symbol={token.symbol}
           className="ml-[-5px]"

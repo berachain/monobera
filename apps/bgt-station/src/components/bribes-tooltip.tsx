@@ -208,7 +208,10 @@ export const BribesPopover = ({
             <div className="w-fit rounded-lg border p-1 hover:bg-muted">
               <TokenIconList
                 tokenList={
-                  incentives?.map((incentive) => incentive.token) ?? []
+                  incentives?.map((incentive) => ({
+                    ...incentive.token,
+                    id: incentive.id,
+                  })) ?? []
                 }
                 showCount={3}
                 size={"lg"}

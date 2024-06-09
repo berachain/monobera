@@ -16,7 +16,6 @@ import {
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { useSWRConfig } from "swr";
 import { formatEther, type Address } from "viem";
 
 export default function ValidatorCard({ validator }: { validator: any }) {

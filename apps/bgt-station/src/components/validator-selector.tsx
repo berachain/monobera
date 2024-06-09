@@ -39,6 +39,7 @@ export default function ValidatorSelector({
             <ValidatorIcon
               address={validValidator.id as Address}
               className="h-8 w-8"
+              imgOverride={validValidator.metadata?.logoURI}
             />
             {validValidator.metadata?.name ?? truncateHash(validValidator.id)}
             <Icons.chevronDown className="relative h-3 w-3" />
