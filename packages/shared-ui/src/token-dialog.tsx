@@ -388,7 +388,7 @@ const TokenDialogRow = ({
           <div className="ml-auto truncate text-muted-foreground">
             <FormattedNumber
               value={t?.formattedBalance ?? "0"}
-              visibleDecimals={4}
+              visibleDecimals={2}
               compact={false}
             />
           </div>

@@ -86,10 +86,10 @@ export function CreatePoolInitialLiquidity({
         Set initial liquidity & Initial Price
       </CardTitle>
       <div className="flex flex-col gap-0 mb-2">
-        <p className="text-md font-semibold">Set a Price for your Base Token</p>
+        <p className="text-md font-semibold">Set a Ratio for your Base Token</p>
         <p className="text-sm text-muted-foreground">
-          You will have to set a price for the base token to initialize the
-          pool.
+          You will have to set a ratio for the base token in terms of quote
+          token to initialize the pool.
         </p>
       </div>
       <div className="flex flex-col w-full gap-4">
