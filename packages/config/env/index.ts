@@ -141,6 +141,8 @@ export const pythContractAddress = process.env
   .NEXT_PUBLIC_PYTH_CONTRACT_ADDRESS as Address;
 export const peripheryDebtToken = process.env
   .NEXT_PUBLIC_PERIPHERY_DEBT_TOKEN_ADDRESS as Address;
+export const bgtVaultBlackList = process.env
+  .NEXT_PUBLIC_BGT_VAULT_BLACKLIST as Address;
 
 // TOKENS
 export const honeyTokenAddress = process.env
