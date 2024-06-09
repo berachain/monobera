@@ -189,11 +189,7 @@ export default function Validator({
       title: "APY",
       value: (
         <div className="text-xl font-semibold">
-          <FormattedNumber
-            value={(validator?.apy ?? 0) / 10000}
-            showIsSmallerThanMin
-          />
-          %
+          <FormattedNumber value={(validator?.apy ?? 0)/10000} showIsSmallerThanMin />%
         </div>
       ),
       tooltipText: apyTooltipText(),
