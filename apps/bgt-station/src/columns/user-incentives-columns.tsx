@@ -24,7 +24,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
           className="h-8 w-8"
           imgOverride={row.original.metadata?.logoURI}
         />
-        {row.original.metadata.name}{" "}
+        {row?.original?.metadata?.name}{" "}
       </div>
     ),
     accessorKey: "gauge",

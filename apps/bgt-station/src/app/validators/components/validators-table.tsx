@@ -26,7 +26,7 @@ export const CuttingBoardDisplay = ({
       onClick={(e) => e.stopPropagation()}
     >
       <GaugeIcon
-        address={cuttingBoard.receiverMetadata?.vaultAddress ?? ""}
+        address={cuttingBoard.receiverMetadata?.vaultAddress}
         overrideImage={cuttingBoard.receiverMetadata?.logoURI ?? ""}
       />
       <span className="max-w-[200px] truncate hover:underline">

@@ -25,7 +25,6 @@ import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
-import { ba } from "node_modules/@bera/berajs/dist/chunk-YUACHPMR";
 import { type Address } from "viem";
 
 import {
