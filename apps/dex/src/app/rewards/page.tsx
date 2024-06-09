@@ -1,8 +1,8 @@
 import { type Metadata } from "next";
-
-import { getMetaTitle } from "@bera/shared-ui";
-import { Rewards } from "./rewards";
+import { notFound } from "next/navigation";
+// import { Rewards } from "./rewards";
 import { dexName } from "@bera/config";
+import { getMetaTitle } from "@bera/shared-ui";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Rewards", dexName),
@@ -10,5 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <Rewards />;
+  // return <Rewards />;
+  notFound();
 }
