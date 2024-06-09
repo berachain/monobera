@@ -155,7 +155,7 @@ export const useOct = (
 
   const isOctUnfunded = octBalance === undefined || octBalance.balance === 0n;
   const isOctBalanceLow =
-    octBalance !== undefined && Number(octBalance.formattedBalance) < 0.1;
+    octBalance !== undefined && Number(octBalance.formattedBalance) < 1;
 
   return {
     isGenLoading: state.confirmState === "loading",

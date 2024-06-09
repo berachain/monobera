@@ -44,7 +44,7 @@ export const usePollBHoneyEpochs = () => {
           {
             abi: bTokenAbi,
             address: bhoneyVaultContractAddress,
-            functionName: "currentEpochEnd",
+            functionName: "epochLength",
             args: [],
           },
         ];
@@ -55,12 +55,12 @@ export const usePollBHoneyEpochs = () => {
 
         const currentEpoch = Number((result[0] as any).result);
         const currentEpochStart = Number((result[1] as any).result);
-        const currentEpochEnd = Number((result[2] as any).result);
+        const currentEpochLength = Number((result[2] as any).result);
 
         const epochs = {
           currentEpoch,
           currentEpochStart,
-          currentEpochEnd: currentEpochEnd,
+          currentEpochEnd: currentEpochStart + currentEpochLength,
         };
 
         return epochs;
