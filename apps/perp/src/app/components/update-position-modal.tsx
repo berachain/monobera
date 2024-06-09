@@ -115,7 +115,6 @@ export function UpdatePositionModal({
         abi: tradingAbi,
         functionName: "updateSl",
         params: [
-          openPosition.market.pair_index,
           openPosition.index,
           parseUnits(
             sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
