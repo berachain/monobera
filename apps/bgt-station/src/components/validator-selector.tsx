@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { truncateHash, useBeraJs, usePollValidatorInfo } from "@bera/berajs";
+import {
+  truncateHash,
+  useBeraJs,
+  usePollValidatorInfo,
+  useSelectedValidator,
+} from "@bera/berajs";
 import { SearchInput, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
@@ -23,9 +28,8 @@ export default function ValidatorSelector({
   showSearch?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
-  const { validatorInfoDictionary } = usePollValidatorInfo();
   //@ts-ignore
-  const validValidator = validatorInfoDictionary?.[validatorAddress];
+  const { data: validValidator } = useSelectedValidator(validatorAddress);
 
   return (
     <div>
