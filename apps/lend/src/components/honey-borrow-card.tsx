@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
+  useBgtApy,
   usePollBgtRewardsForAddress,
   usePollLendUserBGTRewards,
   usePollReservesDataList,
@@ -10,6 +11,7 @@ import {
 import {
   cloudinaryUrl,
   honeyTokenAddress,
+  peripheryDebtToken,
   vdHoneyTokenAddress,
 } from "@bera/config";
 import { FormattedNumber, TokenIcon, Tooltip } from "@bera/shared-ui";
@@ -26,12 +28,13 @@ import RepayBtn from "./modals/repay-button";
 export default function HoneyBorrowCard() {
   const { data: rewards, isLoading: isUserBGTRewardLoading } =
     usePollLendUserBGTRewards();
-  const { useBgtApr } = usePollBgtRewardsForAddress({
-    address: vdHoneyTokenAddress,
-  });
 
   const { totalBorrowed, getSelectedReserve } = usePollReservesDataList();
-  const bgtApr = useBgtApr(totalBorrowed);
+
+  const { data: bgtApr } = useBgtApy({
+    receiptTokenAddress: peripheryDebtToken,
+    tvlInHoney: totalBorrowed,
+  });
 
   const honeyReserve = getSelectedReserve(honeyTokenAddress);
 
