@@ -10,10 +10,8 @@ import {
   docsUrl,
   honeyName,
   honeyUrl,
-  lendDocsUrl,
   lendName,
   lendUrl,
-  perpsDocsUrl,
   perpsName,
   perpsUrl,
 } from "@bera/config";
@@ -70,7 +68,7 @@ const favList = [
     description:
       "Swap a variety of tokens effortlessly on our decentralized platform. Provide liquidity to pools and earn BGT rewards.",
     goto: dexUrl,
-    learnMore: `${docsUrl}/learn/bex`,
+    learnMore: `${docsUrl}/learn/dapps/bex`,
   },
   {
     icon: <Icons.honeyFav className="h-[52px] w-[52px]" />,
@@ -79,7 +77,7 @@ const favList = [
     description:
       "A stablecoin that's integral to the Berachain ecosystem. Utilize HONEY for seamless trading, ensuring value consistency.",
     goto: honeyUrl,
-    learnMore: `${docsUrl}/learn/protocol/honey-stablecoin`,
+    learnMore: `${docsUrl}/learn/dapps/honey`,
   },
   {
     icon: <Icons.bendFav className="h-[52px] w-[52px]" />,
@@ -88,7 +86,7 @@ const favList = [
     description:
       "Supply assets and unlock the potential to borrow HONEY. Earn BGT rewards while you supply and borrow.",
     goto: lendUrl,
-    learnMore: lendDocsUrl,
+    learnMore: `${docsUrl}/learn/dapps/bend`,
   },
   {
     icon: <Icons.berpsFav className="h-[52px] w-[52px]" />,
@@ -97,7 +95,7 @@ const favList = [
     description:
       "Experience the thrill of high leverage trading, tailored for both novices and seasoned traders. With an impressive 100x leverage.",
     goto: perpsUrl,
-    learnMore: perpsDocsUrl,
+    learnMore: `${docsUrl}/learn/dapps/berps`,
   },
   {
     icon: <Icons.bgtFav className="h-[52px] w-[52px]" />,
@@ -106,7 +104,7 @@ const favList = [
     description:
       "Engage directly in the governance of BGT, leverage BGT Station for innovative bribe mechanisms, enhancing participation.",
     goto: bgtUrl,
-    learnMore: `${docsUrl}/learn/protocol/bgt-station`,
+    learnMore: `${docsUrl}/learn/dapps/bgt-station`,
   },
   {
     icon: <Icons.berascanFav className="h-[52px] w-[52px]" />,
@@ -115,6 +113,6 @@ const favList = [
     description:
       "A complete guide to the Berachain Network. View all transactions and get detailed blockchain info with ease.",
     goto: blockExplorerUrl,
-    learnMore: `${docsUrl}/developers/beratrail-block-explorer`,
+    learnMore: `${blockExplorerUrl}`,
   },
 ];

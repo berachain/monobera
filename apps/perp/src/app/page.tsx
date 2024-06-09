@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { type Market } from "@/../../packages/proto/src";
-import { cloudinaryUrl, perpsDocsUrl, perpsName } from "@bera/config";
+import { cloudinaryUrl, docsUrl, perpsName } from "@bera/config";
 import { Documentation, Footer } from "@bera/shared-ui";
 import BigNumber from "bignumber.js";
 
@@ -86,7 +86,7 @@ export default async function Home() {
         <Markets showBtn markets={markets} />
         <Tutorial params={data.params} />
         <Documentation
-          docLink={perpsDocsUrl}
+          docLink={`${docsUrl}/learn/dapps/berps`}
           className="mx-auto w-full max-w-[1280px] px-8"
         />
       </div>
