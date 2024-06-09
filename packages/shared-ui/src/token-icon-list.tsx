@@ -1,8 +1,8 @@
-import React from "react";
-
-import { TokenIcon } from "./token-icon";
+import React, { useMemo } from "react";
 import { Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
+
+import { TokenIcon } from "./token-icon";
 
 interface ITokenIconList {
   tokenList: Token[];
@@ -18,13 +18,16 @@ export function TokenIconList({
   className,
 }: ITokenIconList) {
   const length = tokenList?.length;
-  if (showCount && showCount < length) {
-    tokenList = tokenList.slice(0, showCount);
-  }
+  const newTokenList = useMemo(() => {
+    if (showCount && showCount < length) {
+      return tokenList.slice(0, showCount);
+    }
+    return tokenList;
+  }, [tokenList, showCount]);
 
   return (
     <div className={cn("ml-[5px] flex items-center", className)}>
-      {tokenList?.map((token: Token) => (
+      {newTokenList?.map((token: Token) => (
         <TokenIcon
           key={token.address}
           address={token.address}

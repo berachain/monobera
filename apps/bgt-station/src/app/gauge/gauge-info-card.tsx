@@ -40,7 +40,7 @@ export default function GaugeInfoCard() {
               {globalData?.top3Vaults?.vaults?.map(
                 (gauge: any, index: number) => (
                   <GaugeIcon
-                    key={index}
+                    key={index + gauge.id}
                     address={gauge.id}
                     size="md"
                     overrideImage={gauge.metadata?.logoURI}
@@ -145,10 +145,14 @@ export default function GaugeInfoCard() {
             <Skeleton className="h-6 w-[100px]" />
           )}
           {!isLoading && globalData ? (
-            <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background px-2 py-1">
+            <div className="mt-1 flex w-fit items-center gap-1 rounded-full border border-border bg-background px-2 py-1 whitespace-nowrap">
               {globalData.top3Incentives?.activeIncentives?.map(
-                (incentive: ActiveIncentive) => (
-                  <TokenIcon address={incentive.token.address} size={"md"} />
+                (incentive: ActiveIncentive, index: number) => (
+                  <TokenIcon
+                    address={incentive.token.address}
+                    size={"md"}
+                    key={`${index}-${incentive.token.address}-TokenIcon`}
+                  />
                 ),
               )}
               {globalData.incentiveCount > 3 && (
