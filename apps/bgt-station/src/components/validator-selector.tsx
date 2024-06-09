@@ -114,24 +114,25 @@ const ValidatorModal = ({
                 setTypingTimer(newTimer);
               }}
             />
-            {showDelegated ? (
-              <Button
-                className="w-fit whitespace-nowrap"
-                size="sm"
-                variant="outline"
-                onClick={() => setShowDelegated(false)}
-              >
-                Show All Validators
-              </Button>
-            ) : (
-              <Button
-                className="w-fit whitespace-nowrap"
-                size="sm"
-                onClick={() => setShowDelegated(true)}
-              >
-                Show Delegated Only
-              </Button>
-            )}
+            {!unbond &&
+              (showDelegated ? (
+                <Button
+                  className="w-fit whitespace-nowrap"
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setShowDelegated(false)}
+                >
+                  Show All Validators
+                </Button>
+              ) : (
+                <Button
+                  className="w-fit whitespace-nowrap"
+                  size="sm"
+                  onClick={() => setShowDelegated(true)}
+                >
+                  Show Delegated Only
+                </Button>
+              ))}
           </div>
 
           {unbond || showDelegated ? (
