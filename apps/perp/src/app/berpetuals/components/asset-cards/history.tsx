@@ -9,7 +9,7 @@ import type { ICards, IMarketOrder } from "~/types/order-history";
 
 export const getHistoryListItems = (historyItems: IMarketOrder[]): ICards[] => {
   // const { marketPrices } = usePollPrices();
-  const cards = historyItems.map((item) => {
+  const cards = historyItems.map((item: any) => {
     const volume = formatFromBaseUnit(item.initial_pos_token ?? "0", 18).times(
       item.leverage ?? "0",
     );
@@ -104,7 +104,9 @@ export const getHistoryListItems = (historyItems: IMarketOrder[]): ICards[] => {
               {item.trade_open
                 ? "-"
                 : formatUsd(
-                    formatFromBaseUnit(item.price ?? "0", 10).toString(10),
+                    formatFromBaseUnit(item.close_price ?? "0", 10).toString(
+                      10,
+                    ),
                   )}
             </p>
           ),

@@ -3,14 +3,14 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import {
-  bTokenAbi,
-  TransactionActionType,
-  formatter,
-  useBeraJs,
+  // bTokenAbi,
+  // TransactionActionType,
+  // formatter,
+  // useBeraJs,
   usePollBHoneyBalance,
   usePollBHoneyPrice,
   usePollBalanceOfAssets,
-  usePollPerpsBgtRewards,
+  // usePollPerpsBgtRewards,
 } from "@bera/berajs";
 import { bhoneyVaultContractAddress } from "@bera/config";
 import {
@@ -57,34 +57,34 @@ export const RewardsWithdraw = () => {
   const { useWithdrawQueue } = usePollWithdrawQueue();
   const withdrawQueue = useWithdrawQueue();
 
-  const {
-    isLoading: isRewardsLoading,
-    useBgtRewards,
-    refetch,
-  } = usePollPerpsBgtRewards();
-  const claimableBgtRewards = useBgtRewards();
-  const [claimAmount, setClaimAmount] = useState<number | undefined>(0);
+  // const {
+  //   isLoading: isRewardsLoading,
+  //   useBgtRewards,
+  //   refetch,
+  // } = usePollPerpsBgtRewards();
+  // const claimableBgtRewards = useBgtRewards();
+  // const [claimAmount, setClaimAmount] = useState<number | undefined>(0);
 
-  const { account } = useBeraJs();
-  const { write, ModalPortal } = useTxn({
-    message: "Claiming BGT",
-    actionType: TransactionActionType.CLAIMING_REWARDS,
-    onSuccess: () => {
-      void refetch();
-    },
-  });
+  // const { account } = useBeraJs();
+  // const { write, ModalPortal } = useTxn({
+  //   message: "Claiming BGT",
+  //   actionType: TransactionActionType.CLAIMING_REWARDS,
+  //   onSuccess: () => {
+  //     void refetch();
+  //   },
+  // });
 
-  const bgtRewardsBN = BigNumber(claimableBgtRewards ?? 0);
-  let formattedBgt = "0.00";
-  if (bgtRewardsBN.isFinite()) {
-    formattedBgt = bgtRewardsBN.lt(0.01)
-      ? "< 0.01"
-      : `${bgtRewardsBN.dp(4).toString()}`;
-  }
+  // const bgtRewardsBN = BigNumber(claimableBgtRewards ?? 0);
+  // let formattedBgt = "0.00";
+  // if (bgtRewardsBN.isFinite()) {
+  //   formattedBgt = bgtRewardsBN.lt(0.01)
+  //     ? "< 0.01"
+  //     : `${bgtRewardsBN.dp(4).toString()}`;
+  // }
 
   return (
     <div className="flex w-full flex-col gap-2">
-      {ModalPortal}
+      {/* {ModalPortal} */}
       <BgtStationBanner receiptTokenAddress={bhoneyVaultContractAddress} />
       <div className="flex w-full flex-col gap-4 pt-2 sm:flex-row sm:gap-2">
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
