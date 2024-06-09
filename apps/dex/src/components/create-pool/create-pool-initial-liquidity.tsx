@@ -54,24 +54,27 @@ export function CreatePoolInitialLiquidity({
   const PRESICION = 18;
   const handleBaseAssetAmountChange = (value: string): void => {
     setBaseAmount(value);
-    const parsedBaseCost = parseUnits(baseCost.toString(), PRESICION);
-    const parsedValue = parseUnits(value, PRESICION);
+    const parsedBaseCost = parseUnits(baseCost.toString(), quoteToken?.decimals ?? 18);
+    const parsedValue = parseUnits(value, quoteToken?.decimals ?? 18);
     setIsBaseTokenInput(true);
     const quoteAmount =
-      (parsedBaseCost * parsedValue) / BigInt(10 ** PRESICION);
+      (parsedBaseCost * parsedValue) / BigInt(10 ** (quoteToken?.decimals ?? 18));
     setQuoteAmount(
-      quoteAmount === 0n ? "" : formatUnits(quoteAmount, PRESICION),
+      quoteAmount === 0n ? "" : formatUnits(quoteAmount, quoteToken?.decimals ?? 18),
     );
   };
 
   const handleQuoteAssetAmountChange = (value: string): void => {
     setQuoteAmount(value);
     setIsBaseTokenInput(false);
-    const parsedQuoteCost = parseUnits(quoteCost.toString(), PRESICION);
-    const parsedValue = parseUnits(value, PRESICION);
+    const parsedQuoteCost = parseUnits(
+      quoteCost.toString(),
+      baseToken?.decimals ?? 18,
+    );
+    const parsedValue = parseUnits(value, baseToken?.decimals ?? 18);
     const baseAmount =
-      (parsedQuoteCost * parsedValue) / BigInt(10 ** PRESICION);
-    setBaseAmount(baseAmount === 0n ? "" : formatUnits(baseAmount, PRESICION));
+      (parsedQuoteCost * parsedValue) / BigInt(10 ** (baseToken?.decimals ?? 18));
+    setBaseAmount(baseAmount === 0n ? "" : formatUnits(baseAmount, baseToken?.decimals ?? 18));
   };
 
   const isInputDisabled =
