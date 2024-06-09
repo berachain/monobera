@@ -96,6 +96,6 @@ export const getBgtApy = async ({
   const estimatedBgtPerYear = 852585;
   const honeyValueEstimatedBgtPerYear =
     estimatedBgtPerYear * parseFloat(beraHoneyPrice);
-  const apy = ((honeyValueEstimatedBgtPerYear / tvlInHoney) * 100).toString();
+  const apy = (honeyValueEstimatedBgtPerYear / tvlInHoney).toString();
   return apy;
 };

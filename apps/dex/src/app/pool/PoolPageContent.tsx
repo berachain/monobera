@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import {
   truncateHash,
   useBeraJs,
+  useBgtApy,
   usePoolHistoricalData,
   usePoolRecentProvisions,
   usePoolRecentSwaps,
@@ -39,7 +40,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { getAddress } from "viem";
+import { Address, getAddress } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import {
@@ -280,6 +281,11 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     combinedEvents,
   });
 
+  const { data: bgtApr } = useBgtApy({
+    receiptTokenAddress: pool.shareAddress as Address,
+    tvlInHoney: Number(pool.tvlUsd),
+  });
+
   const getLoadMoreButton = () => {
     if (selectedTab === Selection.AllTransactions) {
       return (
@@ -389,7 +395,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
           // },
           {
             title: "BGT APY",
-            content: <>{pool?.bgtApy?.toFixed(2)}%</>,
+            content: <FormattedNumber value={bgtApr ?? 0} percent colored />,
             color: "warning",
             tooltip: <ApyTooltip />,
           },
@@ -479,7 +485,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold text-warning-foreground">
-                <FormattedNumber value={0} percent colored />
+                <FormattedNumber value={bgtApr ?? 0} percent colored />
               </div>
             </Card>
           </div>
