@@ -80,6 +80,9 @@ export function PlaceOrder({
 
   if ((slippage ?? 0) < 0.3) {
     warning = "Slippage is set very low, your order may not be filled.";
+  } else if (!isPythConnected) {
+    warning =
+      "Prices are not connected. Unable to place an order without real-time price data.";
   } else {
     warning = undefined;
   }
