@@ -7,6 +7,7 @@ import {
   TransactionActionType,
   truncateHash,
   usePollAllowance,
+  usePollIncentivesInfo,
   useSelectedGauge,
   useTokenInformation,
   type Token,
@@ -25,7 +26,7 @@ import {
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
-import { Address, parseUnits } from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
 
 export const Incentivize = ({
   gauge,
@@ -69,6 +70,9 @@ export const Incentivize = ({
     spender: gaugeInfo?.vaultAddress ?? "0x",
     token: token,
   });
+
+  const { data: incentive, isLoading: isIncentiveLoading } =
+    usePollIncentivesInfo(token?.address ?? "0x", gauge ?? "0x");
 
   const {
     write,
@@ -204,7 +208,27 @@ export const Incentivize = ({
             />
           </div>
         )}
+        {incentive && (
+          <div className="text-right text-xs font-semibold text-muted-foreground">
+            Minimum Incentive Rate:{" "}
+            <FormattedNumber
+              value={formatUnits(
+                incentive?.minIncentiveRate,
+                token?.decimals ?? 18,
+              )}
+              compact
+              symbol={token?.symbol ?? ""}
+            />
+          </div>
+        )}
       </div>
+
+      {parseUnits(incentiveRate, token?.decimals ?? 18) <
+        (incentive?.minIncentiveRate ?? 0n) &&
+        incentiveRate !== "" &&
+        incentiveRate !== "0" && (
+          <Alert variant="destructive">Minimum incentive rate not meet</Alert>
+        )}
 
       {isInvalidInput && (
         <Alert variant="destructive">
@@ -265,7 +289,9 @@ export const Incentivize = ({
               totalAmount === "" ||
               incentiveRate === "0" ||
               incentiveRate === "" ||
-              exceeding
+              exceeding ||
+              isIncentiveLoading ||
+              !incentive
             }
             onClick={() =>
               write({
