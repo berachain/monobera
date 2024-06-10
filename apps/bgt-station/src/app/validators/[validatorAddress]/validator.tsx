@@ -222,7 +222,7 @@ export default function Validator({
       value: (
         <FormattedNumber
           className="text-xl font-semibold"
-          value={(validator?.commission ?? 0) / 10000}
+          value={validator?.commission ?? 0}
           showIsSmallerThanMin
           percent
         />
