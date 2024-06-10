@@ -34,7 +34,8 @@ const useMultipleTokenApprovalsWithSlippage = (
           );
           const sI = parseUnits(token?.amount as string, token?.decimals ?? 18);
           const s = parseUnits(
-            ((slippage ?? 0) + 0.001).toString() , (token?.decimals ?? 18),
+            ((slippage ?? 0) + 0.001).toString(),
+            token?.decimals ?? 18,
           );
           const maxAmountIn =
             (sI ?? 0n) +
