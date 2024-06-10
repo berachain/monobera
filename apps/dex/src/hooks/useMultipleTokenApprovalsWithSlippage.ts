@@ -33,9 +33,12 @@ const useMultipleTokenApprovalsWithSlippage = (
             (token: TokenInput) => token?.address === allowance.address,
           );
           const sI = parseUnits(token?.amount as string, token?.decimals ?? 18);
-          const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** 18);
+          const s = BigInt(
+            ((slippage ?? 0) + 0.001) * 10 ** (token?.decimals ?? 18),
+          );
           const maxAmountIn =
-            (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** 18);
+            (sI ?? 0n) +
+            ((sI ?? 0n) * s) / BigInt(100 * 10 ** (token?.decimals ?? 18));
 
           if (allowance.allowance === 0n || allowance.allowance < maxAmountIn) {
             return allowance;
@@ -44,7 +47,7 @@ const useMultipleTokenApprovalsWithSlippage = (
         .filter((token) => token !== undefined) as Token[];
       setNeedsApproval(needsApproval);
     }
-  }, [allowances]);
+  }, [allowances, slippage, tokenInput]);
 
   return {
     needsApproval,
