@@ -83,7 +83,7 @@ export const useUserVaults = (
         const item = result[index];
         const balanceItem = balanceResult[index];
         total += item.result as bigint;
-
+        
         if (item.status === "success") {
           return {
             ...vault,
@@ -91,7 +91,11 @@ export const useUserVaults = (
             balance: formatUnits(balanceItem.result as bigint, 18),
           };
         }
-        return vault;
+        return {
+          ...vault,
+          unclaimedBgt: "0",
+          balance: "0",
+        };
       });
 
       const sortedUserVaults = userVaults.sort((a: any, b: any) => {
