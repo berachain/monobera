@@ -112,8 +112,6 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     return getQuoteCost(poolPrice);
   }, [poolPrice]);
 
-  const PRESICION = 18;
-
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
     const parsedBaseCost = parseUnits(baseCost.toString(), quoteToken.decimals);
