@@ -252,7 +252,7 @@ export const Incentivize = ({
         token ? (
           <ApproveButton
             token={token}
-            spender={gaugeInfo?.vaultAddress??"0x"}
+            spender={gaugeInfo?.vaultAddress ?? "0x"}
             amount={parseUnits(totalAmount, token?.decimals ?? 18)}
           />
         ) : (
@@ -269,7 +269,7 @@ export const Incentivize = ({
             }
             onClick={() =>
               write({
-                address: gaugeInfo?.vaultAddress??"0x",
+                address: gaugeInfo?.vaultAddress ?? "0x",
                 abi: BERA_VAULT_REWARDS_ABI,
                 functionName: "addIncentive",
                 params: [
