@@ -69,7 +69,14 @@ const useBeraContractWrite = ({
               pollingInterval: 2000,
               timeout: 120000,
               confirmations: 1,
-            });
+            }).catch(async (e) => {
+              console.log('CAUGHT ERROR')
+              return await publicClient.waitForTransactionReceipt({
+                hash: receipt,
+                pollingInterval: 2000,
+                timeout: 120000,
+                confirmations: 1,
+            })});
           if (confirmationReceipt?.status === "success") {
             dispatch({ type: ActionEnum.SUCCESS });
             onSuccess?.(receipt);
