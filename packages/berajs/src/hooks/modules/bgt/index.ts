@@ -13,3 +13,4 @@ export { useSelectedValidator } from "./useSelectedValidator";
 export { useSelectedGauge } from "./useSelectedGauge";
 export { useSelectedGaugeValidators } from "./useSelectedGaugeValidators";
 export { useGaugeAddress } from "./useGaugeAddress";
+export { usePollIncentivesInfo } from "./usePollIncentivesInfo";
