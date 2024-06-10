@@ -74,7 +74,7 @@ export const useUserVaults = (
       }));
 
       const balanceResult = await publicClient.multicall({
-        contracts: calls,
+        contracts: balanceCalls,
         multicallAddress: multicallAddress,
       });
 

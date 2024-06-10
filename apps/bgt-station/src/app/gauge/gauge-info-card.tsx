@@ -19,6 +19,7 @@ import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBg
 
 export default function GaugeInfoCard() {
   const { data: globalData, isLoading } = usePollGlobalData();
+  console.log(globalData);
   return (
     <Card className="flex w-full flex-col overflow-hidden rounded-lg">
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
@@ -29,7 +30,7 @@ export default function GaugeInfoCard() {
           {!isLoading ? (
             <div className="inline-flex h-7 items-end gap-1">
               <span className="text-2xl font-semibold leading-6">
-                {globalData?.vaultCount}
+                {globalData?.top3Vaults?.total}
               </span>
             </div>
           ) : (
@@ -47,10 +48,10 @@ export default function GaugeInfoCard() {
                   />
                 ),
               )}
-              {globalData.vaultCount > 3 && (
+              {globalData?.top3Vaults?.total > 3 && (
                 <span className="text-sm leading-5 text-muted-foreground">
                   {" "}
-                  +{globalData.vaultCount - 3}
+                  +{globalData?.top3Vaults?.total - 3}
                 </span>
               )}
             </div>

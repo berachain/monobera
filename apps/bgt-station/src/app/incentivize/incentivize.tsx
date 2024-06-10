@@ -208,9 +208,7 @@ export const Incentivize = ({
             />
           </div>
         )}
-        {!token || isIncentiveLoading || !incentive ? (
-          <Skeleton className="h-8 w-full rounded-sm" />
-        ) : (
+        {incentive && (
           <div className="text-right text-xs font-semibold text-muted-foreground">
             Minimum Incentive Rate:{" "}
             <FormattedNumber
@@ -226,9 +224,11 @@ export const Incentivize = ({
       </div>
 
       {parseUnits(incentiveRate, token?.decimals ?? 18) <
-        (incentive?.minIncentiveRate ?? 0n) && (
-        <Alert variant="destructive">Minimum incentive rate not meet</Alert>
-      )}
+        (incentive?.minIncentiveRate ?? 0n) &&
+        incentiveRate !== "" &&
+        incentiveRate !== "0" && (
+          <Alert variant="destructive">Minimum incentive rate not meet</Alert>
+        )}
 
       {isInvalidInput && (
         <Alert variant="destructive">

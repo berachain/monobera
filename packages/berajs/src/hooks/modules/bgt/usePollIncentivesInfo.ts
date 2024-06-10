@@ -17,7 +17,7 @@ export const usePollIncentivesInfo = (
   options?: DefaultHookOptions,
 ): IusePollIncentivesInfo => {
   const publicClient = usePublicClient();
-  const QUERY_KEY = "usePollIncentivesInfo";
+  const QUERY_KEY = ["usePollIncentivesInfo", token, vault];
   const swrResponse = useSWR<IncentiveInfo | undefined, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => await getIncentivesInfo(publicClient, token, vault),

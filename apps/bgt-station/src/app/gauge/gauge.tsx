@@ -53,68 +53,72 @@ export default function Gauge() {
               My Gauges
             </TabsTrigger>
           </TabsList>
-
-          <div className="flex w-full items-center gap-3 md:w-fit">
-            <SearchInput
-              placeholder="Search..."
-              value={keywords}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setKeywords(e.target.value);
-                setIsTyping?.(true);
-                if (typingTimer) clearTimeout(typingTimer);
-                const newTimer = setTimeout(() => {
-                  setIsTyping(false);
-                }, 1000);
-                setTypingTimer(newTimer);
-              }}
-              // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              //   if (e.key === "Enter" && keywords) {
-              //     setKeywordList([...keywordList, keywords]);
-              //     setKeywords("");
-              //   }
-              // }}
-              className="w-full md:w-[300px]"
-            />
-            <TabsContent value="all-gauges">
-              <MarketSelector {...{ markets, setMarkets }} />
-            </TabsContent>
-          </div>
+          <TabsContent value="all-gauges">
+            <div className="flex w-full items-center gap-3 md:w-fit">
+              <SearchInput
+                placeholder="Search..."
+                value={keywords}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setKeywords(e.target.value);
+                  setIsTyping?.(true);
+                  if (typingTimer) clearTimeout(typingTimer);
+                  const newTimer = setTimeout(() => {
+                    setIsTyping(false);
+                  }, 1000);
+                  setTypingTimer(newTimer);
+                }}
+                // onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                //   if (e.key === "Enter" && keywords) {
+                //     setKeywordList([...keywordList, keywords]);
+                //     setKeywords("");
+                //   }
+                // }}
+                className="w-full md:w-[300px]"
+              />
+              <TabsContent value="all-gauges">
+                <MarketSelector {...{ markets, setMarkets }} />
+              </TabsContent>
+            </div>
+          </TabsContent>
         </div>
-        {(markets.length !== 0 || keywordList.length !== 0) && (
-          <div className="flex flex-wrap gap-2">
-            <div className="text-sm leading-6">Projects filtered by:</div>
-            {markets.map((filter, index) => (
-              <div
-                className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
-                key={`${index}-${filter}`}
-              >
-                {filter}
-                <Icons.xCircle
-                  className="h-3 w-3 cursor-pointer hover:opacity-80"
-                  onClick={() =>
-                    setMarkets(markets.filter((m) => m !== filter))
-                  }
-                />
-              </div>
-            ))}
-            {keywordList.map((keyW, index) => (
-              <div
-                className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
-                key={`${index}-${keyW}`}
-              >
-                {keyW}
-                <Icons.xCircle
-                  className="h-3 w-3 cursor-pointer hover:opacity-80"
-                  onClick={() => {
-                    setKeywordList(
-                      keywordList.filter((kw: string) => kw !== keyW),
-                    );
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
+        <TabsContent value="all-gauges">
+          {(markets.length !== 0 || keywordList.length !== 0) && (
+            <div className="flex flex-wrap gap-2">
+              <div className="text-sm leading-6">Projects filtered by:</div>
+              {markets.map((filter, index) => (
+                <div
+                  className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
+                  key={`${index}-${filter}`}
+                >
+                  {filter}
+                  <Icons.xCircle
+                    className="h-3 w-3 cursor-pointer hover:opacity-80"
+                    onClick={() =>
+                      setMarkets(markets.filter((m) => m !== filter))
+                    }
+                  />
+                </div>
+              ))}
+              {keywordList.map((keyW, index) => (
+                <div
+                  className="flex h-6 items-center gap-2 rounded-full bg-foreground pl-2 pr-1 text-sm capitalize text-background"
+                  key={`${index}-${keyW}`}
+                >
+                  {keyW}
+                  <Icons.xCircle
+                    className="h-3 w-3 cursor-pointer hover:opacity-80"
+                    onClick={() => {
+                      setKeywordList(
+                        keywordList.filter((kw: string) => kw !== keyW),
+                      );
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
         <TabsContent value="all-gauges">
           <GlobalGaugeWeightTable
             keywords={keywords}
