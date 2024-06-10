@@ -8,7 +8,7 @@ export const getBannerCount = (appName: string, pathname: string) => {
       Object.keys(appConfig).forEach((key) => {
         const banner = appConfig[key as keyof typeof appConfig];
         if (
-          banner.enabled &&
+          banner?.enabled &&
           (!banner.hrefs || banner.hrefs.includes(pathname))
         ) {
           activeBanners.push(key);
@@ -21,7 +21,7 @@ export const getBannerCount = (appName: string, pathname: string) => {
     Object.keys(globalConfig).forEach((key) => {
       const banner = globalConfig[key as keyof typeof globalConfig];
       if (
-        banner.enabled &&
+        banner?.enabled &&
         (!banner.hrefs || banner.hrefs.includes(pathname)) &&
         !activeBanners.includes(key)
       ) {
