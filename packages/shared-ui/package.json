@@ -25,10 +25,10 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@bera/berajs": "0.1.0",
-    "@bera/config": "0.1.0",
-    "@bera/ui": "0.1.0",
-    "@bera/wagmi": "0.1.0",
+    "@bera/berajs": "workspace:*",
+    "@bera/config": "workspace:*",
+    "@bera/ui": "workspace:*",
+    "@bera/wagmi": "workspace:*",
     "@dynamic-labs/sdk-react-core": "^2.1.1",
     "@metamask/jazzicon": "^2.0.0",
     "@types/react": "^18.2.0",

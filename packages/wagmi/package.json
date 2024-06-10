@@ -15,8 +15,8 @@
     "dev": "tsup src --watch"
   },
   "dependencies": {
-    "@bera/berajs": "0.1.0",
-    "@bera/config": "0.1.0",
+    "@bera/berajs": "workspace:*",
+    "@bera/config": "workspace:*",
     "@dynamic-labs/ethereum": "^2.1.1",
     "@dynamic-labs/sdk-react-core": "^2.1.1",
     "@dynamic-labs/wagmi-connector": "^2.1.1",
