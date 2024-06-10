@@ -19,14 +19,15 @@ Sentry.init({
   // in development and sample at a lower rate in production
   replaysSessionSampleRate: 0.1,
 
-  beforeSend: (event: any) => {
+  beforeSend: (event: Sentry.Event, hint: Sentry.EventHint) => {
     // Check if is ignored error
     const IGNORED_ERROR_MESSAGES: string[] = [
       "ResizeObserver loop completed with undelivered notifications.",
+      "You Rejected the transaction.",
     ];
-    const errorMessage =
-      event?.exception?.values?.[0] && (event.exception.values[0] as any).value;
+    const errorMessage = (hint.originalException as any)?.message;
     let isIgnoredError = false;
+
     if (errorMessage) {
       IGNORED_ERROR_MESSAGES.forEach((message) => {
         if (errorMessage.includes(message)) {
