@@ -61,7 +61,7 @@ importers:
   apps/berajs-docs:
     dependencies:
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/berajs
       '@types/react':
         specifier: latest
@@ -82,28 +82,28 @@ importers:
   apps/bgt-station:
     dependencies:
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/env
       '@bera/graphql':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/graphql
       '@bera/proto':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/proto
       '@bera/shared-ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/shared-ui
       '@bera/tailwind-config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/wagmi
       '@hookform/resolvers':
         specifier: ^3.2.0
@@ -194,28 +194,28 @@ importers:
   apps/dex:
     dependencies:
       '@bera/beracrocswap':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/beracrocswap
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/env
       '@bera/graphql':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/graphql
       '@bera/shared-ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/shared-ui
       '@bera/tailwind-config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/wagmi
       '@sentry/nextjs':
         specifier: ^7.103.0
@@ -297,19 +297,19 @@ importers:
   apps/faucet:
     dependencies:
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/env
       '@bera/shared-ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/shared-ui
       '@bera/tailwind-config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/wagmi
       '@rive-app/react-canvas':
         specifier: ^4.8.1
@@ -388,25 +388,25 @@ importers:
         specifier: ^3.8.8
         version: 3.10.4(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/env
       '@bera/graphql':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/graphql
       '@bera/shared-ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/shared-ui
       '@bera/tailwind-config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/wagmi
       '@rive-app/react-canvas':
         specifier: ^4.8.1
@@ -491,25 +491,25 @@ importers:
         specifier: ^3.8.8
         version: 3.10.4(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/env
       '@bera/graphql':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/graphql
       '@bera/shared-ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/shared-ui
       '@bera/tailwind-config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/wagmi
       '@sentry/nextjs':
         specifier: ^7.103.0
@@ -594,25 +594,25 @@ importers:
   apps/perp:
     dependencies:
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/env
       '@bera/proto':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/proto
       '@bera/shared-ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/shared-ui
       '@bera/tailwind-config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/wagmi
       '@pythnetwork/pyth-evm-js':
         specifier: ^1.39.0
@@ -709,22 +709,22 @@ importers:
   apps/validator-clue:
     dependencies:
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/env
       '@bera/shared-ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/shared-ui
       '@bera/tailwind-config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../../packages/wagmi
       '@sentry/nextjs':
         specifier: ^7.103.0
@@ -807,7 +807,7 @@ importers:
         version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     devDependencies:
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../config/env
       '@types/jest':
         specifier: ^27.4.0
@@ -846,13 +846,13 @@ importers:
   packages/berajs:
     dependencies:
       '@bera/beracrocswap':
-        specifier: ^0.1.0
+        specifier: workspace:*
         version: link:../beracrocswap
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../config/env
       '@bera/graphql':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../graphql
       '@dynamic-labs/sdk-react-core':
         specifier: ^2.1.1
@@ -955,7 +955,7 @@ importers:
         specifier: ^3.8.8
         version: 3.10.4(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../config/env
       graphql:
         specifier: ^16.8.1
@@ -1017,16 +1017,16 @@ importers:
         version: 1.1.1(react@18.2.0)
     devDependencies:
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../config/env
       '@bera/ui':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../ui
       '@bera/wagmi':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../wagmi
       '@dynamic-labs/sdk-react-core':
         specifier: ^2.1.1
@@ -1249,10 +1249,10 @@ importers:
   packages/wagmi:
     dependencies:
       '@bera/berajs':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../berajs
       '@bera/config':
-        specifier: 0.1.0
+        specifier: workspace:*
         version: link:../config/env
       '@dynamic-labs/ethereum':
         specifier: ^2.1.1
@@ -3033,6 +3033,7 @@ packages:
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -3040,6 +3041,7 @@ packages:
 
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@ianvs/prettier-plugin-sort-imports@3.7.2':
     resolution: {integrity: sha512-bVckKToJM8XV2wTOG1VpeXrSmfAG49esVrikbxeFbY51RJdNke9AdMANJtGuACB59uo+pGlz0wBdWFrRzWyO1A==}
