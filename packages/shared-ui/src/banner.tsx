@@ -79,7 +79,7 @@ export const CustomizedBanner = ({
       )}
     >
       <div className="flex items-center gap-2">
-        <Icons.clock8 className="h-4 w-4" />
+        <Icons.clock8 className="h-4 w-4 min-w-4 min-h-4" />
         {textComponent}
       </div>
     </header>
