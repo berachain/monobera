@@ -4,7 +4,7 @@
   "engines": {
     "node": ">=v18.16.0"
   },
-  "packageManager": "pnpm@8.3.1",
+  "packageManager": "pnpm@9.1.4",
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean && git clean -xdf node_modules",
@@ -56,6 +56,6 @@
     "yargs": "^17.7.2"
   },
   "resolutions": {
-    "rpc-websockets": "7.11.0"
+    "rpc-websockets": "^7.11.1"
   }
 }

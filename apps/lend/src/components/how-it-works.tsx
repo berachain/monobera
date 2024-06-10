@@ -24,7 +24,8 @@ export default function HowItWorks() {
         <div className="flex flex-col">
           <TokenIconList
             tokenList={[
-              { address: wbtcTokenAddress, symbol: "WBTC" } as Token,
+              //@ts-ignore
+              { address: wbtcTokenAddress, symbol: "WBTC" } as Token, //@ts-ignore
               { address: wethTokenAddress, symbol: "WETH" } as Token,
             ]}
             size="2xl"

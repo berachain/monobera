@@ -68,7 +68,9 @@ const Provider: React.FC<IBeraConfig> = ({
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             <DynamicWagmiConnector>
-              <BeraJsProvider>{children}</BeraJsProvider>
+              <BeraJsProvider configOverride={undefined}>
+                {children}
+              </BeraJsProvider>
             </DynamicWagmiConnector>
           </QueryClientProvider>
         </WagmiProvider>

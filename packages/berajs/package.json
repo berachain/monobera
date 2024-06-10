@@ -23,9 +23,9 @@
     "@bera/beracrocswap": "^0.1.0",
     "@bera/config": "0.1.0",
     "@bera/graphql": "0.1.0",
-    "@dynamic-labs/sdk-react-core": "^2.0.0-alpha.18",
+    "@dynamic-labs/sdk-react-core": "^2.1.1",
     "@tanstack/react-query": "^5.26.3",
-    "@wagmi/core": "^2.6.15",
+    "@wagmi/core": "^2.10.5",
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",
     "crypto-js": "^4.1.1",
@@ -34,8 +34,8 @@
     "sha3": "^2.1.4",
     "swr": "^2.2.5",
     "usehooks-ts": "^2.14.0",
-    "viem": "~2.7.22",
-    "wagmi": "^2.5.7"
+    "viem": "~2.13.7",
+    "wagmi": "^2.9.10"
   },
   "peerDependencies": {
     "react": "^18.2.0",
