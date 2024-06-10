@@ -1,4 +1,5 @@
 "use client";
+
 // @ts-nocheck
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@bera/ui";
@@ -6,7 +7,6 @@ import { Checkbox } from "@bera/ui/checkbox";
 import _ from "lodash";
 
 import "../../types/data-table.d.ts";
-
 import {
   Table,
   TableBody,
@@ -189,7 +189,7 @@ export function DataTable<TData, TValue>({
     return columns;
   }, [columns, enableSelection]);
 
-  const table = useReactTable({
+  const table = useReactTable<TData>({
     state: mergedState,
     data,
     columns: tableColumns,

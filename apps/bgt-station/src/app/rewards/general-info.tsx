@@ -1,3 +1,12 @@
+import { useEffect, useState } from "react";
+import {
+  BGT_STAKER_ABI,
+  TransactionActionType,
+  useTokenHoneyPrice,
+  useUserVaults,
+  type UserVault,
+} from "@bera/berajs";
+import { beraTokenAddress, bgtStaker } from "@bera/config";
 import {
   ActionButton,
   FormattedNumber,
@@ -7,20 +16,13 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
 import { Card, CardContent } from "@bera/ui/card";
-import { useClaimableIncetives } from "~/hooks/useClaimableIncentives";
+import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+
 import { useClaimableFees } from "~/hooks/useClaimableFees";
-import {
-  TransactionActionType,
-  BGT_STAKER_ABI,
-  useUserVaults,
-  useTokenHoneyPrice,
-  type UserVault,
-} from "@bera/berajs";
-import { beraTokenAddress, bgtStaker } from "@bera/config";
-import { useState, useEffect } from "react";
+import { useClaimableIncetives } from "~/hooks/useClaimableIncentives";
+
 // import { useClaimAllBgtCalldata } from "~/hooks/useClaimAllBgtCalldata";
 
 export const GeneralInfo = () => {
@@ -89,7 +91,7 @@ export const GeneralInfo = () => {
       {ModalPortal}
       {/* {ClaimAllBgtModalPortal} */}
       <Card className="relative w-full overflow-hidden rounded-md">
-        <CardContent className="p-4 flex h-full flex-col justify-between">
+        <CardContent className="flex h-full flex-col justify-between p-4">
           <div>
             <div className="text-xs leading-[14px] text-muted-foreground">
               Claimable BGT
@@ -109,7 +111,7 @@ export const GeneralInfo = () => {
                 <Skeleton className="h-8 w-24" />
               )}
             </div>
-            <div className="leading-4 text-muted-foreground mt-1">
+            <div className="mt-1 leading-4 text-muted-foreground">
               {isDataReady ? (
                 <>
                   <FormattedNumber
@@ -123,7 +125,7 @@ export const GeneralInfo = () => {
                   />
                 </>
               ) : (
-                <Skeleton className="w-16 h-4" />
+                <Skeleton className="h-4 w-16" />
               )}
             </div>
             <div className="relative z-10 mt-6 flex flex-col gap-1">
@@ -156,9 +158,9 @@ export const GeneralInfo = () => {
                 ))}
               {!isDataReady && (
                 <>
-                  <Skeleton className="w-32 h-4" />
-                  <Skeleton className="w-32 h-4" />
-                  <Skeleton className="w-32 h-4" />
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-32" />
                 </>
               )}
             </div>
@@ -176,7 +178,7 @@ export const GeneralInfo = () => {
                   //     params: [claimAllBgtCalldata],
                   //   });
                   // }}
-                  className="relative z-10 flex w-full gap-1 mt-4"
+                  className="relative z-10 mt-4 flex w-full gap-1"
                   disabled={true}
                 >
                   <Icons.bgt className="h-6 w-6" />
@@ -189,7 +191,7 @@ export const GeneralInfo = () => {
       </Card>
 
       <Card className="relative w-full overflow-hidden rounded-md">
-        <CardContent className="p-4 flex h-full flex-col justify-between">
+        <CardContent className="flex h-full flex-col justify-between p-4">
           <div>
             <div className="text-xs leading-[14px] text-muted-foreground">
               Claimable Incentives
@@ -209,11 +211,11 @@ export const GeneralInfo = () => {
               )}{" "}
               <TokenIconList size="xl" tokenList={[]} />
             </div>
-            <div className="leading-4 text-muted-foreground mt-1">
+            <div className="mt-1 leading-4 text-muted-foreground">
               {isDataReady ? (
                 <>{claimableIncentives?.tokenList.length ?? 0} Tokens</>
               ) : (
-                <Skeleton className="w-16 h-4" />
+                <Skeleton className="h-4 w-16" />
               )}
             </div>
             <div className="relative z-10 mt-6 flex flex-col gap-1">
@@ -236,9 +238,9 @@ export const GeneralInfo = () => {
               {/* ))} */}
               {!isDataReady && (
                 <>
-                  <Skeleton className="w-32 h-4" />
-                  <Skeleton className="w-32 h-4" />
-                  <Skeleton className="w-32 h-4" />
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-32" />
+                  <Skeleton className="h-4 w-32" />
                 </>
               )}
             </div>
@@ -248,7 +250,7 @@ export const GeneralInfo = () => {
               text={"Claiming incentives coming soon"}
               toolTipTrigger={
                 <Button
-                  className="relative z-10 flex w-full gap-1 mt-4"
+                  className="relative z-10 mt-4 flex w-full gap-1"
                   disabled={true}
                 >
                   Coming Soon
@@ -259,8 +261,8 @@ export const GeneralInfo = () => {
         </CardContent>
       </Card>
 
-      <Card className="relative flex w-full gap-4 flex-col justify-between overflow-hidden rounded-md border">
-        <CardContent className="flex flex-col justify-between h-full p-4">
+      <Card className="relative flex w-full flex-col justify-between gap-4 overflow-hidden rounded-md border">
+        <CardContent className="flex h-full flex-col justify-between p-4">
           <div>
             <div className="text-xs leading-[14px] text-muted-foreground">
               Claimable Fees
@@ -277,17 +279,17 @@ export const GeneralInfo = () => {
                   <Icons.honey className="h-6 w-6" />
                 </>
               ) : (
-                <Skeleton className="w-24 h-8" />
+                <Skeleton className="h-8 w-24" />
               )}
             </div>
-            <div className="leading-4 text-muted-foreground mt-1">
+            <div className="mt-1 leading-4 text-muted-foreground">
               {isDataReady ? (
                 <>
                   $
                   <FormattedNumber value={claimableFees} showIsSmallerThanMin />
                 </>
               ) : (
-                <Skeleton className="w-16 h-4" />
+                <Skeleton className="h-4 w-16" />
               )}
             </div>
           </div>
@@ -301,7 +303,7 @@ export const GeneralInfo = () => {
                   params: [],
                 });
               }}
-              className="relative z-10 flex w-full gap-1 mt-4"
+              className="relative z-10 mt-4 flex w-full gap-1"
               disabled={
                 parseFloat(claimableFees) === 0 ||
                 !claimableFees ||

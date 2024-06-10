@@ -1,3 +1,4 @@
+import React from "react";
 import dynamic from "next/dynamic";
 import {
   usePollValidatorInfo,
@@ -5,9 +6,9 @@ import {
   type Validator,
 } from "@bera/berajs";
 import type { ColumnDef } from "@tanstack/react-table";
+
 import { user_general_validator_columns } from "~/columns/general-validator-columns";
 import { TableLoading } from "./table-loading";
-import React from "react";
 
 const DataTable = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.DataTable),
