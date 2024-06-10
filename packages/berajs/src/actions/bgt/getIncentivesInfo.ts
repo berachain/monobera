@@ -12,7 +12,7 @@ export const getIncentivesInfo = async (
   publicClient: PublicClient | undefined,
   token: Address,
   vault: Address,
-): Promise<IncentiveInfo|undefined> => {
+): Promise<IncentiveInfo | undefined> => {
   if (!publicClient) throw new Error("Missing public client");
   if (!token) throw new Error("Missing token address");
   if (!vault) throw new Error("Missing vault address");

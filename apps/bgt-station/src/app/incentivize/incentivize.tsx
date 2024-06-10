@@ -71,7 +71,8 @@ export const Incentivize = ({
     token: token,
   });
 
-  const { data: incentive, isLoading: isIncentiveLoading } = usePollIcentivesInfo(token?.address ?? "0x", gauge ?? "0x");
+  const { data: incentive, isLoading: isIncentiveLoading } =
+    usePollIcentivesInfo(token?.address ?? "0x", gauge ?? "0x");
 
   const {
     write,
