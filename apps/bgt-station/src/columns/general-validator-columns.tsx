@@ -69,7 +69,7 @@ const COMMISSION_COLUMN: ColumnDef<Validator> = {
   cell: ({ row }) => {
     return (
       <FormattedNumber
-        value={(row.original.commission ?? 0) / 10000}
+        value={row.original.commission ?? 0}
         showIsSmallerThanMin
         percent
       />
