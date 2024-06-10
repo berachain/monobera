@@ -8,16 +8,16 @@ import {
 } from "~/actions/bgt/getIncentivesInfo";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
-export interface IUsePollIcentivesInfo
+export interface IusePollIncentivesInfo
   extends DefaultHookReturnType<IncentiveInfo | undefined> {}
 
-export const usePollIcentivesInfo = (
+export const usePollIncentivesInfo = (
   token: Address,
   vault: Address,
   options?: DefaultHookOptions,
-): IUsePollIcentivesInfo => {
+): IusePollIncentivesInfo => {
   const publicClient = usePublicClient();
-  const QUERY_KEY = "usePollIcentivesInfo";
+  const QUERY_KEY = "usePollIncentivesInfo";
   const swrResponse = useSWR<IncentiveInfo | undefined, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => await getIncentivesInfo(publicClient, token, vault),

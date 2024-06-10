@@ -7,7 +7,7 @@ import {
   TransactionActionType,
   truncateHash,
   usePollAllowance,
-  usePollIcentivesInfo,
+  usePollIncentivesInfo,
   useSelectedGauge,
   useTokenInformation,
   type Token,
@@ -72,7 +72,7 @@ export const Incentivize = ({
   });
 
   const { data: incentive, isLoading: isIncentiveLoading } =
-    usePollIcentivesInfo(token?.address ?? "0x", gauge ?? "0x");
+    usePollIncentivesInfo(token?.address ?? "0x", gauge ?? "0x");
 
   const {
     write,
@@ -212,7 +212,7 @@ export const Incentivize = ({
           <Skeleton className="h-8 w-full rounded-sm" />
         ) : (
           <div className="text-right text-xs font-semibold text-muted-foreground">
-            Minimun Incentive Rate:{" "}
+            Minimum Incentive Rate:{" "}
             <FormattedNumber
               value={formatUnits(
                 incentive?.minIncentiveRate,
