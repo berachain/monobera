@@ -41,9 +41,8 @@ export function RewardBtn({ poolAddress, ...props }: any) {
       track("claim_bgt_reward_failed", {
         claim_amount: Number(amount).toFixed(2),
       });
-      captureException(e, {
-        event_id: "claim_bgt_reward_failed",
-        data: { claim_amount: Number(amount).toFixed(2) },
+      captureException(new Error("claim_bgt_reward_failed"), {
+        data: { claim_amount: Number(amount).toFixed(2), rawError: e },
       });
     },
   });
