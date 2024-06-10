@@ -280,43 +280,44 @@ export const my_columns: ColumnDef<IUserPool>[] = [
 
   //   filterFn: (row, id, value) => value.includes(row.getValue(id)),
   // },
-  {
-    accessorKey: "bgtApy",
-    enableSorting: false,
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="BGT APY"
-        tooltip={apyTooltipText()}
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => {
-      const { data: bgtApr } = useBgtApy({
-        receiptTokenAddress: row.original?.shareAddress as Address,
-        tvlInHoney: Number(row.original.tvlUsd),
-      });
+  // {
+  //   accessorKey: "bgtApy",
+  //   enableSorting: false,
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="BGT APY"
+  //       tooltip={apyTooltipText()}
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     console.log({ row })
+  //     const { data: bgtApr } = useBgtApy({
+  //       receiptTokenAddress: row.original?.shareAddress as Address,
+  //       tvlInHoney: Number(row.original.tvlUsd),
+  //     });
 
-      return (
-        <div className="flex items-center justify-start text-sm text-warning-foreground">
-          <FormattedNumber
-            value={bgtApr ?? 0}
-            percent
-            compact
-            showIsSmallerThanMin
-          />
-        </div>
-      );
-    },
-    // sortingFn: (rowA, rowB) => {
-    //   const a = rowA.original.bgtApy ?? 0;
-    //   const b = rowB.original.bgtApy ?? 0;
-    //   if (a < b) return -1;
-    //   if (a > b) return 1;
-    //   return 0;
-    // },
-    // filterFn: (row, id, value) => value.includes(row.getValue(id)),
-  },
+  //     return (
+  //       <div className="flex items-center justify-start text-sm text-warning-foreground">
+  //         <FormattedNumber
+  //           value={bgtApr ?? 0}
+  //           percent
+  //           compact
+  //           showIsSmallerThanMin
+  //         />
+  //       </div>
+  //     );
+  //   },
+  // sortingFn: (rowA, rowB) => {
+  //   const a = rowA.original.bgtApy ?? 0;
+  //   const b = rowB.original.bgtApy ?? 0;
+  //   if (a < b) return -1;
+  //   if (a > b) return 1;
+  //   return 0;
+  // },
+  // filterFn: (row, id, value) => value.includes(row.getValue(id)),
+  // },
   {
     accessorKey: "btns",
     header: ({ column }) => (
