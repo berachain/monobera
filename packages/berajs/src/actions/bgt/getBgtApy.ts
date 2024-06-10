@@ -105,5 +105,5 @@ export const getBgtApy = async ({
   tvlInHoney,
   config,
 }: GetBgtApyArgs): Promise<string | undefined> => {
-   return "0";
+  return "0";
 };

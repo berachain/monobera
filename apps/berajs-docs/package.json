@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@types/react": "latest",
-    "@bera/berajs": "0.1.0",
+    "@bera/berajs": "workspace:*",
     "react": "latest",
     "react-dom": "latest",
     "typescript": "latest",
