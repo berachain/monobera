@@ -11,8 +11,10 @@ import {
 } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
+import { Icons } from "@bera/ui/icons";
 
 import { Epochs } from "./epochs";
+import { bhoneyVaultContractAddress, blockExplorerUrl } from "@bera/config";
 
 const StatCard = ({
   title,
@@ -21,7 +23,7 @@ const StatCard = ({
   isBHoney,
   isLoading,
 }: {
-  title: string;
+  title: string | JSX.Element;
   value: string | JSX.Element;
   isHoney?: boolean;
   isBHoney?: boolean;
@@ -29,7 +31,11 @@ const StatCard = ({
 }) => {
   return (
     <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border px-6 py-4">
-      <p className="text-sm font-medium text-muted-foreground">{title}</p>
+      {typeof title === "string" ? (
+        <p className="text-sm font-medium text-muted-foreground">{title}</p>
+      ) : (
+        title
+      )}
       {isLoading ? (
         <Skeleton className="h-[28px] w-1/2" />
       ) : (
@@ -83,6 +89,23 @@ export const BhoneyStats = () => {
   const honeyPrice = useHoneyPrice();
   const collateralization = useBHoneyCollateralization();
   const epoch = useBHoneyEpoch();
+
+  const bHoneyTitle = (
+    <div className="mt-2 flex flex-row gap-1">
+      <div
+        className="text-sm font-semibold hover:underline cursor-pointer"
+        onClick={() =>
+          window.open(
+            `${blockExplorerUrl}/address/${bhoneyVaultContractAddress}`,
+            "_blank",
+          )
+        }
+      >
+        bHONEY Price
+      </div>
+      <Icons.external className="mt-1 h-4 w-4" />
+    </div>
+  );
   return (
     <div className="grid w-full grid-cols-1 lg:grid-cols-3 lg:gap-4">
       <div className="col-span-2 mb-4 grid w-full grid-cols-1 grid-rows-2 gap-4 md:grid-cols-2 lg:mb-0">
@@ -99,7 +122,7 @@ export const BhoneyStats = () => {
           isHoney={true}
         />
         <StatCard
-          title={"bHONEY Price"}
+          title={bHoneyTitle}
           value={
             <FormattedNumber
               value={honeyPrice}

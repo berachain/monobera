@@ -32,32 +32,16 @@ const MarkPrice = ({ position }: { position: IOpenTrade }) => {
 export const PositionLiquidationPrice = ({
   position,
   className,
-  markets,
 }: {
   position: IOpenTrade;
   className?: string;
-  markets: IMarket[];
 }) => {
   const formattedPrice = formatFromBaseUnit(
     position.open_price ?? "0",
     10,
   ).toString(10);
 
-  const positionMarket = markets?.find(
-    (market) => Number(market.pair_index) === Number(position.pair_index),
-  );
-  const formattedBfLong = formatFromBaseUnit(
-    positionMarket?.pair_borrowing_fee?.bf_long ?? "0",
-    18,
-  ).toString(10);
-  const formattedBfShort = formatFromBaseUnit(
-    positionMarket?.pair_borrowing_fee?.bf_short ?? "0",
-    18,
-  ).toString(10);
-
   const liqPrice = useCalculateLiqPrice({
-    bfLong: formattedBfLong,
-    bfShort: formattedBfShort,
     orderType: position.buy === true ? "long" : "short",
     price: formattedPrice,
     leverage: position.leverage,
@@ -162,9 +146,7 @@ export const generatePositionColumns = (
     },
     {
       header: "Est. Liq. Price",
-      cell: ({ row }) => (
-        <PositionLiquidationPrice position={row.original} markets={markets} />
-      ),
+      cell: ({ row }) => <PositionLiquidationPrice position={row.original} />,
       accessorKey: "liq_price",
       enableSorting: false,
       minSize: 140,

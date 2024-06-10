@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 import { formatter, useBgtApy, usePollHoneyVaultBalance } from "@bera/berajs";
 import { bhoneyVaultContractAddress, cloudinaryUrl } from "@bera/config";
@@ -11,6 +12,7 @@ import { usePollFeesApr } from "~/hooks/usePollFeesApr";
 
 export default function Claim() {
   const { isLoading: isFeesAprLoading, useFeesApr } = usePollFeesApr();
+  const [init, setInit] = useState(false);
   let feeApr = useFeesApr();
   feeApr = feeApr ? Number(feeApr.slice(0, -1)) : 0;
 
@@ -21,11 +23,20 @@ export default function Claim() {
 
   const honeyLocked = useFormattedHoneyVaultBalance();
 
-  const { isLoading: isBgtRewardsLoading, data: bgtApr } = useBgtApy({
-    receiptTokenAddress: bhoneyVaultContractAddress,
-    tvlInHoney: honeyLocked,
-  });
+  const { isLoading: isBgtAprLoading, data: bgtApr } = useBgtApy(
+    {
+      receiptTokenAddress: bhoneyVaultContractAddress,
+      tvlInHoney: honeyLocked,
+    },
+    { opts: { keepPreviousData: true } },
+  );
 
+  useEffect(() => {
+    if (!init && isBgtAprLoading === false) {
+      setInit(true);
+    }
+  }, [init, bgtApr, honeyLocked]);
+  
   return (
     <div className="relative w-full overflow-hidden rounded-md border border-border bg-[#FEFCE8] px-10 py-8 dark:bg-[#231D14]">
       <Image
@@ -37,9 +48,7 @@ export default function Claim() {
       />
       <div className=" relative inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-warning-foreground bg-muted px-3 py-2">
         <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-warning-foreground">
-          {isHoneyVaultBalanceLoading ||
-          isBgtRewardsLoading ||
-          isFeesAprLoading ? (
+          {isHoneyVaultBalanceLoading || isFeesAprLoading || !init ? (
             <Skeleton className="h-[28px] w-[80px]" />
           ) : (
             <FormattedNumber

@@ -33,7 +33,8 @@ export const useBgtApy = (
     },
     {
       ...options,
-      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW * 2,
+      ...(options?.opts ?? {}),
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
     },
   );
   return {
