@@ -6,9 +6,8 @@ import {
   BERA_VAULT_REWARDS_ABI,
   TransactionActionType,
   truncateHash,
-  useBeraJs,
   usePollAllowance,
-  usePollGauges,
+  useSelectedGauge,
   useTokenInformation,
   type Token,
 } from "@bera/berajs";
@@ -37,9 +36,12 @@ export const Incentivize = ({
 }) => {
   //is valid pool address
   if (!gauge) return notFound();
-  const { gaugeDictionary, isLoading: isGaugeLoading } = usePollGauges();
-  const gaugeInfo = gaugeDictionary?.[gauge];
-  if (!gaugeInfo && !isGaugeLoading) return notFound();
+  const {
+    data: gaugeInfo,
+    isLoading: isGaugeLoading,
+    isValidating: isGaugeValidating,
+  } = useSelectedGauge(gauge);
+  if (!gauge && !isGaugeLoading && !isGaugeValidating) return notFound();
 
   const [token, setToken] = useState<Token | undefined>(undefined);
   const { data: tokenT, isLoading: isTokenLoading } = useTokenInformation({
@@ -64,7 +66,7 @@ export const Incentivize = ({
   }, [totalAmount, incentiveRate]);
 
   const { data: allowance } = usePollAllowance({
-    spender: gaugeInfo?.vaultAddress ?? "",
+    spender: gaugeInfo?.vaultAddress ?? "0x",
     token: token,
   });
 
@@ -250,7 +252,7 @@ export const Incentivize = ({
         token ? (
           <ApproveButton
             token={token}
-            spender={gaugeInfo.vaultAddress}
+            spender={gaugeInfo?.vaultAddress ?? "0x"}
             amount={parseUnits(totalAmount, token?.decimals ?? 18)}
           />
         ) : (
@@ -267,7 +269,7 @@ export const Incentivize = ({
             }
             onClick={() =>
               write({
-                address: gaugeInfo.vaultAddress,
+                address: gaugeInfo?.vaultAddress ?? "0x",
                 abi: BERA_VAULT_REWARDS_ABI,
                 functionName: "addIncentive",
                 params: [
