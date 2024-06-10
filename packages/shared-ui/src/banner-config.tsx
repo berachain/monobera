@@ -113,7 +113,7 @@ export const bannerConfig: BannerConfig = {
       bannerComponent: <NetworkCongestedBanner />,
     },
     [DappBannerType.CUSTOM]: {
-      enabled: true,
+      enabled: false,
       bannerComponent: (
         <CustomizedBanner
           className="text-xs md:text-sm px-2"
