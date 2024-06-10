@@ -31,10 +31,10 @@ import {
   usePythUpdateFeeFormatted,
 } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type OrderType } from "~/types/order-type";
-import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
-import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 
 export function PlaceOrder({
   form,
@@ -189,6 +189,8 @@ export function PlaceOrder({
     token: honey,
   });
 
+  const orderOpeningFees = formatFromBaseUnit(openingFee, 10);
+
   return (
     <div className="flex w-full flex-col gap-1 rounded-md border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
       {ModalPortal}
@@ -279,10 +281,12 @@ export function PlaceOrder({
         </div>
       </div>
       <div className="flex w-full justify-between">
-        <div>OPENING FEES</div>
-        <div className="text-foreground">
-          {formatFromBaseUnit(openingFee, 10).toString(10)}%{" "}
-          {/* <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" /> */}
+        <div>OPENING FEES {`(${orderOpeningFees.toString(10)}%)`}</div>
+        <div className="truncate text-foreground">
+          {formatUsd(
+            BigNumber(posSize).times(orderOpeningFees).div(100).toString(10),
+          )}{" "}
+          <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
         </div>
       </div>
       <div className="flex w-full justify-between">
@@ -291,7 +295,10 @@ export function PlaceOrder({
           {formatUsd(
             BigNumber(posSize)
               .minus(
-                BigNumber(posSize).times(formatFromBaseUnit(openingFee, 12)),
+                BigNumber(posSize)
+                  .times(orderOpeningFees)
+                  .div(100)
+                  .times(form.leverage ?? "1"),
               )
               .toString(10),
           )}{" "}
