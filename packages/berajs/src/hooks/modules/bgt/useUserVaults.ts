@@ -84,10 +84,6 @@ export const useUserVaults = (
         const balanceItem = balanceResult[index];
         total += item.result as bigint;
 
-        console.log({
-          item,
-          balanceItem,
-        })
         if (item.status === "success") {
           return {
             ...vault,
