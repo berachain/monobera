@@ -4,8 +4,11 @@ import { cn } from "@bera/ui";
 
 import { TokenIcon } from "./token-icon";
 
+interface NewToken extends Token {
+  id?: string;
+}
 interface ITokenIconList {
-  tokenList: ({ token: Token & { id?: string } } | Token)[];
+  tokenList: NewToken[];
   size?: "3xl" | "2xl" | "xl" | "lg" | "md" | "sm" | "xs";
   showCount?: number;
   className?: string;

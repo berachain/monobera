@@ -220,9 +220,12 @@ export default function Validator({
     {
       title: "Commission",
       value: (
-        <span className="text-xl font-semibold">
-          {validator?.commission ?? 0}%
-        </span>
+        <FormattedNumber
+          className="text-xl font-semibold"
+          value={(validator?.commission ?? 0) / 10000}
+          showIsSmallerThanMin
+          percent
+        />
       ),
       tooltipText: "Amount of validator rewards retained by this validator",
     },

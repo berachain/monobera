@@ -8,12 +8,18 @@ import {
   perpsName,
 } from "@bera/config";
 
-import { LaunchBanner, NetworkCongestedBanner, RPCBanner } from "./banner";
+import {
+  CustomizedBanner,
+  LaunchBanner,
+  NetworkCongestedBanner,
+  RPCBanner,
+} from "./banner";
 
 export interface DappBannerConfig {
   [DappBannerType.LAUNCH]: BannerProperty;
   [DappBannerType.RPC]: BannerProperty;
   [DappBannerType.SLOW]: BannerProperty;
+  [DappBannerType.CUSTOM]?: BannerProperty;
 }
 
 export interface BannerConfig {
@@ -30,6 +36,7 @@ export enum DappBannerType {
   LAUNCH = "LAUNCH",
   RPC = "RPC",
   SLOW = "SLOW",
+  CUSTOM = "CUSTOM",
 }
 
 export const bannerConfig: BannerConfig = {
@@ -104,6 +111,15 @@ export const bannerConfig: BannerConfig = {
     [DappBannerType.SLOW]: {
       enabled: false,
       bannerComponent: <NetworkCongestedBanner />,
+    },
+    [DappBannerType.CUSTOM]: {
+      enabled: false,
+      bannerComponent: (
+        <CustomizedBanner
+          className="text-xs md:text-sm px-2"
+          textComponent="System Maintenance: Our services will be temporarily unavailable, but we&apos;ll be back up shortly. Please wind down positions and deposits."
+        />
+      ),
     },
   },
   "BGT Station": {

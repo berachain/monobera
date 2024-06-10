@@ -67,7 +67,13 @@ const COMMISSION_COLUMN: ColumnDef<Validator> = {
     <DataTableColumnHeader column={column} title="Commission" />
   ),
   cell: ({ row }) => {
-    return <div className="text-center"> {row.original.commission ?? 0}%</div>;
+    return (
+      <FormattedNumber
+        value={(row.original.commission ?? 0) / 10000}
+        showIsSmallerThanMin
+        percent
+      />
+    );
   },
   accessorKey: "commission",
   enableSorting: true,

@@ -174,10 +174,11 @@ export const useTxn = ({
         });
         if (
           !error?.message.includes("User rejected the request.") &&
+          !error?.message.includes("You Rejected the transaction.") &&
           !error?.message.includes("insufficient funds")
         ) {
           // only capture the exception if the error is not related to user manual rejection or insufficient funds
-          captureException(error, {
+          captureException(new Error(error?.message), {
             data: { message, actionType },
           });
         }
@@ -355,10 +356,11 @@ export const useTxn = ({
       });
       if (
         !error?.message.includes("User rejected the request.") &&
+        !error?.message.includes("You Rejected the transaction.") &&
         !error?.message.includes("insufficient funds")
       ) {
         // only capture the exception if the error is not related to user manual rejection or insufficient funds
-        captureException(error, {
+        captureException(new Error(error?.message), {
           data: { message, actionType },
         });
       }

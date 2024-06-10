@@ -27,7 +27,7 @@ export default function AverageGaugeWeight() {
           img={`${cloudinaryUrl}/bears/j7rciiglmcozlxryug4z`}
           title="What is a gauge weight?"
           subtitle="We’ll teach you what all this de-fi jargon means."
-          href={`${docsUrl}/getting-started/bgt-station-bgt.html#unbonding-bgt`}
+          href={`${docsUrl}/learn/protocol/gauges`}
         />
       )}
     </div>

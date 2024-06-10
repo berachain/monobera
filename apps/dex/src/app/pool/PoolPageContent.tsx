@@ -63,8 +63,8 @@ const getTokenDisplay = (
       <div className="space-evenly flex flex-row items-center">
         <div className="flex items-center">
           <TokenIcon
-            address={(event as ISwaps).swapIn.address}
-            symbol={(event as ISwaps).swapIn.symbol}
+            address={(event as ISwaps).swapIn?.address ?? "0x"}
+            symbol={(event as ISwaps).swapIn?.symbol ?? ""}
           />
           <p className="ml-2">
             <FormattedNumber value={(event as ISwaps).swapInAmount} />
@@ -73,8 +73,8 @@ const getTokenDisplay = (
         <Icons.chevronRight className="mx-2" />
         <div className="flex items-center">
           <TokenIcon
-            address={(event as ISwaps).swapOut.address}
-            symbol={(event as ISwaps).swapOut.symbol}
+            address={(event as ISwaps).swapOut?.address ?? "0x"}
+            symbol={(event as ISwaps).swapOut?.symbol ?? ""}
           />
           <p className="ml-2">
             <FormattedNumber value={(event as ISwaps).swapOutAmount} />

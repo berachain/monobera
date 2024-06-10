@@ -21,7 +21,7 @@ export const MyValidator = ({
       ) {
         if (keyword === "") return true;
         if (validator.id.includes(keyword)) return true;
-        if (validator?.metadata?.name.includes(keyword)) return true;
+        if (validator.metadata?.name.includes(keyword)) return true;
       } else {
         return false;
       }

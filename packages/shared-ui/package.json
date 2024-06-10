@@ -25,11 +25,11 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@bera/berajs": "0.1.0",
-    "@bera/config": "0.1.0",
-    "@bera/ui": "0.1.0",
-    "@bera/wagmi": "0.1.0",
-    "@dynamic-labs/sdk-react-core": "^2.0.0-alpha.18",
+    "@bera/berajs": "workspace:*",
+    "@bera/config": "workspace:*",
+    "@bera/ui": "workspace:*",
+    "@bera/wagmi": "workspace:*",
+    "@dynamic-labs/sdk-react-core": "^2.1.1",
     "@metamask/jazzicon": "^2.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
@@ -42,6 +42,6 @@
     "react-hot-toast": "^2.4.1",
     "typescript": "^5.0.4",
     "usehooks-ts": "^2.14.0",
-    "viem": "~2.7.22"
+    "viem": "~2.13.7"
   }
 }
