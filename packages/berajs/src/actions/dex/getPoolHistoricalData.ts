@@ -1,4 +1,4 @@
-import { type PoolDayDataV2 } from "@bera/graphql";
+// import { type PoolDayDataV2 } from "@bera/graphql";
 
 import { BeraConfig } from "~/types";
 
@@ -32,7 +32,7 @@ interface PoolHistoryResponse_Info {
 
 export interface PoolHistoryResponse {
   info: PoolHistoryResponse_Info;
-  history: PoolDayDataV2[];
+  history: any[];
 }
 
 interface getPoolHistoricalDataProps {
