@@ -2,7 +2,8 @@
   "name": "monobera",
   "private": true,
   "engines": {
-    "node": ">=v18.16.0"
+    "node": ">=v18.16.0",
+    "pnpm": ">=9"
   },
   "packageManager": "pnpm@9.1.4",
   "scripts": {

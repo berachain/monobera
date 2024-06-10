@@ -1,5 +1,5 @@
 import React from "react";
-import { type Validator } from "@bera/berajs";
+import { truncateHash, type Validator } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -24,7 +24,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
           className="h-8 w-8"
           imgOverride={row.original.metadata?.logoURI}
         />
-        {row.original.metadata.name}{" "}
+        {row.original.metadata?.name ?? truncateHash(row.original.id)}{" "}
       </div>
     ),
     accessorKey: "gauge",

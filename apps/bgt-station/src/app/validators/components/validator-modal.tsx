@@ -30,7 +30,7 @@ export const AllValidatorModal = ({
   const filteredValidators = data?.filter((validator: Validator) => {
     return (
       validator.coinbase.toLowerCase().includes(keyword) ||
-      validator.metadata.name.toLowerCase().includes(keyword)
+      validator.metadata?.name.toLowerCase().includes(keyword)
     );
   });
 
