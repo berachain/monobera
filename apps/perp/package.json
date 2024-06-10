@@ -13,13 +13,13 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@bera/berajs": "0.1.0",
-    "@bera/config": "0.1.0",
-    "@bera/proto": "0.1.0",
-    "@bera/shared-ui": "0.1.0",
-    "@bera/tailwind-config": "0.1.0",
-    "@bera/ui": "0.1.0",
-    "@bera/wagmi": "0.1.0",
+    "@bera/berajs": "workspace:*",
+    "@bera/config": "workspace:*",
+    "@bera/proto": "workspace:*",
+    "@bera/shared-ui": "workspace:*",
+    "@bera/tailwind-config": "workspace:*",
+    "@bera/ui": "workspace:*",
+    "@bera/wagmi": "workspace:*",
     "@pythnetwork/pyth-evm-js": "^1.39.0",
     "@sentry/nextjs": "^7.103.0",
     "@t3-oss/env-nextjs": "^0.2.2",
@@ -40,7 +40,7 @@
     "swr-devtools": "^1.3.2",
     "tailwindcss-animate": "^1.0.5",
     "usehooks-ts": "^2.14.0",
-    "viem": "~2.7.22",
+    "viem": "~2.13.7",
     "zod": "^3.21.4"
   },
   "devDependencies": {

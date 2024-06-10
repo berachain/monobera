@@ -119,7 +119,7 @@ export const Incentivize = ({
                   <>
                     {" "}
                     <MarketIcon
-                      market={gaugeInfo?.metadata?.product}
+                      market={gaugeInfo?.metadata?.product ?? ""}
                       size={"md"}
                     />
                     {gaugeInfo?.metadata?.product ?? "OTHER"}
