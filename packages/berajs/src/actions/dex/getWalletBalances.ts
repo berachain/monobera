@@ -41,25 +41,26 @@ export const getWalletBalances = async ({
     throw new Error("Multicall address not found in config");
   }
   // const filteredTokenList = tokenList
-  const filteredTokenList = tokenList.filter(token => isAddress(token.address))
+  const filteredTokenList = tokenList.filter((token) =>
+    isAddress(token.address),
+  );
   if (account && filteredTokenList) {
-    const call: Call[] = filteredTokenList
-      .map((item: Token) => {
-        if (item.address === ADDRESS_ZERO) {
-          return {
-            address: config.contracts?.multicallAddress as Address,
-            abi: multicall3Abi,
-            functionName: "getEthBalance",
-            args: [account],
-          };
-        }
+    const call: Call[] = filteredTokenList.map((item: Token) => {
+      if (item.address === ADDRESS_ZERO) {
         return {
-          address: item.address as Address,
-          abi: erc20Abi,
-          functionName: "balanceOf",
+          address: config.contracts?.multicallAddress as Address,
+          abi: multicall3Abi,
+          functionName: "getEthBalance",
           args: [account],
         };
-      });
+      }
+      return {
+        address: item.address as Address,
+        abi: erc20Abi,
+        functionName: "balanceOf",
+        args: [account],
+      };
+    });
     try {
       const result = await publicClient.multicall({
         contracts: call,
