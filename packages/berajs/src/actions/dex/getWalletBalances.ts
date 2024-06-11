@@ -43,7 +43,7 @@ export const getWalletBalances = async ({
   if (account && tokenList) {
     const call: Call[] = [];
     tokenList.forEach((item: Token) => {
-      const _address = item.address?.toLowerCase?.()
+      const _address = item.address?.toLowerCase?.();
       if (!_address || !isAddress(_address)) return;
       if (_address === ADDRESS_ZERO) {
         call.push({
