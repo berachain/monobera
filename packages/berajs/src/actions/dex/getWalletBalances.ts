@@ -1,10 +1,4 @@
-import {
-  type Address,
-  type PublicClient,
-  erc20Abi,
-  formatUnits,
-  isAddress,
-} from "viem";
+import { type Address, type PublicClient, erc20Abi, formatUnits, isAddress } from "viem";
 
 import { multicall3Abi } from "~/abi";
 import { ADDRESS_ZERO } from "~/constants";
@@ -41,25 +35,22 @@ export const getWalletBalances = async ({
     throw new Error("Multicall address not found in config");
   }
   if (account && tokenList) {
-    const call: Call[] = [];
-    tokenList.forEach((item: Token) => {
-      const _address = item.address?.toLowerCase?.();
-      if (!_address || !isAddress(_address)) return;
-      if (_address === ADDRESS_ZERO) {
-        call.push({
+    const call: Call[] = tokenList.map((item: Token) => {
+      if (item.address === ADDRESS_ZERO) {
+        return {
           address: config.contracts?.multicallAddress as Address,
           abi: multicall3Abi,
           functionName: "getEthBalance",
           args: [account],
-        });
+        };
       }
-      call.push({
-        address: _address as Address,
+      return {
+        address: item.address as Address,
         abi: erc20Abi,
         functionName: "balanceOf",
         args: [account],
-      });
-    });
+      };
+    }).filter(callItem => isAddress(callItem.address));
     try {
       const result = await publicClient.multicall({
         contracts: call,
