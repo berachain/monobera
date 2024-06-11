@@ -43,8 +43,9 @@ export const getWalletBalances = async ({
   if (account && tokenList) {
     const call: Call[] = [];
     tokenList.forEach((item: Token) => {
-      if (!item.address || !isAddress(item.address)) return;
-      if (item.address === ADDRESS_ZERO) {
+      const _address = item.address?.toLowerCase?.()
+      if (!_address || !isAddress(_address)) return;
+      if (_address === ADDRESS_ZERO) {
         call.push({
           address: config.contracts?.multicallAddress as Address,
           abi: multicall3Abi,
@@ -53,7 +54,7 @@ export const getWalletBalances = async ({
         });
       }
       call.push({
-        address: item.address as Address,
+        address: _address as Address,
         abi: erc20Abi,
         functionName: "balanceOf",
         args: [account],
