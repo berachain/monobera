@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { usePollWalletBalances } from "@bera/berajs";
+import { honeyTokenAddress } from "@bera/config";
 import { type GlobalParams } from "@bera/proto/src";
 import { FormattedNumber, usePrevious } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -22,7 +23,6 @@ import { LeverageSlider } from "./leverage-slider";
 import { LongShortTab } from "./long-short-tab";
 import { PlaceOrder } from "./place-order";
 import { TPSL } from "./tpsl";
-import { honeyTokenAddress } from "@bera/config";
 
 interface ICreatePosition {
   market: IMarket;
@@ -184,8 +184,6 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   ]);
 
   const liqPrice = useCalculateLiqPrice({
-    bfLong: market?.pair_borrowing_fee?.bf_long ?? "0",
-    bfShort: market?.pair_borrowing_fee?.bf_short ?? "0",
     orderType: form.orderType,
     price: form.optionType === "market" ? price : form.limitPrice,
     leverage: form.leverage,
@@ -213,6 +211,10 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     const slBN = BigNumber(form.sl ?? "0");
     const minTP = form.optionType === "market" ? price : form.limitPrice ?? "0";
     const minSL = form.optionType === "market" ? price : form.limitPrice ?? "0";
+    const minLevPosHoney = formatFromBaseUnit(
+      market?.pair_fixed_fee?.min_lev_pos_honey ?? 0,
+      18,
+    );
 
     if (!form.amount) {
       setError("An amount/collateral must be set.");
@@ -229,14 +231,26 @@ export function CreatePosition({ market, params }: ICreatePosition) {
       setError("Take Profit must be set.");
     } else if (form.amount && safeAmountBN.lt(0)) {
       setError("Amount/Collateral must be positive.");
-    } else if (form.amount && safeAmountBN.lt(10)) {
-      setError("Minimum Amount/Collateral is 10 HONEY.");
     } else if (
       leverageBN.lt(2) ||
       leverageBN.gt(maxLeverage) ||
       !form.leverage
     ) {
       setError(`Leverage must be between 2x and ${maxLeverage}x.`);
+    } else if (
+      form.amount &&
+      safeAmountBN.times(leverageBN).lt(minLevPosHoney)
+    ) {
+      setError(
+        `Minimum Amount/Collateral is ${
+          !minLevPosHoney.isNaN()
+            ? minLevPosHoney
+                .div(leverageBN)
+                .dp(2, BigNumber.ROUND_UP)
+                .toString(10)
+            : "10"
+        } HONEY with ${form.leverage}x leverage.`,
+      );
     } else if (
       rawHoneyBalance &&
       rawHoneyBalanceBN.lt(formatToBaseUnit(safeAmount, 18) ?? 0)
@@ -454,8 +468,6 @@ export function CreatePosition({ market, params }: ICreatePosition) {
             price={price}
             pairIndex={market?.pair_index ?? "0"}
             openingFee={market?.pair_fixed_fee?.open_fee_p ?? "0"}
-            bfLong={market?.pair_borrowing_fee?.bf_long ?? "0"}
-            bfShort={market?.pair_borrowing_fee?.bf_short ?? "0"}
             liqPrice={liqPrice}
           />
         </div>

@@ -163,7 +163,7 @@ export default function Referrals() {
       <div>
         <div className="text-2xl font-semibold leading-8">Refer & Earn</div>
         <div className="text-sm text-muted-foreground">
-          Invite your friends to trade on berps and earn BGT/Honey
+          Invite your friends to trade on berps and earn Honey
         </div>
       </div>
       {/* Referral code link */}

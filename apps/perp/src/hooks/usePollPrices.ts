@@ -21,8 +21,8 @@ export const usePollPrices = () => {
       }, {});
     },
     {
-      refreshInterval: 2000,
-      dedupingInterval: 2000,
+      refreshInterval: 1000,
+      dedupingInterval: 1000,
     },
   );
 

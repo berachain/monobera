@@ -17,6 +17,7 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import { type IMarket } from "~/types/market";
+import { formatBorrowFee } from "~/utils/formatBorrowFee";
 
 interface IGeneralInfoBanner {
   market: IMarket;
@@ -51,18 +52,14 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
     market?.open_interest?.oi_short ?? "0",
     18,
   ).toString(10);
-  const formattedBorrowingL = formatFromBaseUnit(
-    market?.pair_borrowing_fee?.bf_long ?? "0",
-    18,
-  )
-    .dp(6)
-    .toString(10);
-  const formattedBorrowingS = formatFromBaseUnit(
-    market?.pair_borrowing_fee?.bf_short ?? "0",
-    18,
-  )
-    .dp(6)
-    .toString(10);
+  const formattedBorrowingL = formatBorrowFee(
+    market?.pair_borrowing_fee?.bf_long,
+    6,
+  );
+  let formattedBorrowingS = formatBorrowFee(
+    market?.pair_borrowing_fee?.bf_short,
+    6,
+  );
 
   return (
     <div className="m-2 flex h-[65px] w-[calc(100%-16px)] items-center justify-between rounded-md border border-border px-4">
@@ -132,7 +129,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
         <div className="hidden h-8 flex-shrink-0 border-l border-border px-2 text-xs 2xl:block">
           Borrow Fee (S)
           <div className="text-destructive-foreground">
-            {formattedBorrowingS}%
+            {formatBorrowFee(market?.pair_borrowing_fee?.bf_short, 6)}%
           </div>
         </div>
       </div>

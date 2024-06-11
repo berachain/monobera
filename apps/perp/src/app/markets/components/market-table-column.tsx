@@ -10,6 +10,7 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
+import { formatBorrowFee } from "~/utils/formatBorrowFee";
 
 const MarketPrice = ({ pairIndex }: { pairIndex: string }) => {
   const { marketPrices } = usePollPrices();
@@ -132,25 +133,14 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
   {
     header: "Borrow Fee",
     cell: ({ row }) => {
-      const formattedBorrowingL = formatFromBaseUnit(
-        row.original?.pair_borrowing_fee?.bf_long,
-        18,
-      )
-        .dp(4)
-        .toString(10);
-      const formattedBorrowingS = formatFromBaseUnit(
-        row.original?.pair_borrowing_fee?.bf_short,
-        18,
-      )
-        .dp(4)
-        .toString(10);
       return (
         <div>
           <div className="text-xs font-medium text-success-foreground">
-            {formattedBorrowingL}% (L)
+            {formatBorrowFee(row.original?.pair_borrowing_fee?.bf_long, 4)}% (L)
           </div>
           <div className="text-xs font-medium text-destructive-foreground">
-            {formattedBorrowingS}% (S)
+            {formatBorrowFee(row.original?.pair_borrowing_fee?.bf_short, 4)}%
+            (S)
           </div>
         </div>
       );

@@ -72,18 +72,7 @@ export function CloseOrderModal({
     10,
   ).toString(10);
 
-  const formattedBfLong = formatFromBaseUnit(
-    openOrder?.market.pair_borrowing_fee?.bf_long ?? "0",
-    18,
-  ).toString(10);
-  const formattedBfShort = formatFromBaseUnit(
-    openOrder?.market.pair_borrowing_fee?.bf_short ?? "0",
-    18,
-  ).toString(10);
-
   const liqPrice = useCalculateLiqPrice({
-    bfLong: formattedBfLong,
-    bfShort: formattedBfShort,
     orderType: openOrder?.buy === true ? "long" : "short",
     price: openPrice.toString(10),
     leverage: openOrder?.leverage,
