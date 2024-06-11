@@ -164,7 +164,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** baseToken.decimals);
     const s = parseUnits(
-      ((slippage ?? 0) + 0.001).toString(),
+      ((slippage ?? 0) + 0.01).toString(), // add a little more just to avoid infininte approval
       baseToken.decimals,
     );
     const minAmountOut =
@@ -183,7 +183,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** quoteToken.decimals);
     const s = parseUnits(
-      ((slippage ?? 0) + 0.001).toString(),
+      ((slippage ?? 0) + 0.01).toString(),
       quoteToken.decimals,
     );
 
@@ -251,6 +251,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const { estimatedBeraFee } = useGasData({
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
+  });
+
+  console.log({
+    maxBaseApprovalAmount,
+    maxQuoteApprovalAmount,
   });
 
   return (
