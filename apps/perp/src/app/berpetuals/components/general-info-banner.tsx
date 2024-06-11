@@ -56,7 +56,7 @@ export function GeneralInfoBanner({ market, priceChange }: IGeneralInfoBanner) {
     market?.pair_borrowing_fee?.bf_long,
     6,
   );
-  let formattedBorrowingS = formatBorrowFee(
+  const formattedBorrowingS = formatBorrowFee(
     market?.pair_borrowing_fee?.bf_short,
     6,
   );
