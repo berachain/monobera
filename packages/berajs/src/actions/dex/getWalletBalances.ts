@@ -40,7 +40,7 @@ export const getWalletBalances = async ({
   if (!config.contracts?.multicallAddress) {
     throw new Error("Multicall address not found in config");
   }
-  // const filteredTokenList = tokenList
+  
   const filteredTokenList = tokenList.filter((token) =>
     isAddress(token.address),
   );
