@@ -36,7 +36,7 @@ export default function Claim() {
       setInit(true);
     }
   }, [init, bgtApr, honeyLocked]);
-  
+
   return (
     <div className="relative w-full overflow-hidden rounded-md border border-border bg-[#FEFCE8] px-10 py-8 dark:bg-[#231D14]">
       <Image
