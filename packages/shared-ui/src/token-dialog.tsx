@@ -21,7 +21,7 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Balancer } from "react-wrap-balancer";
-import { Address, isAddress } from "viem";
+import { type Address, isAddress } from "viem";
 
 import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
