@@ -1,4 +1,10 @@
-import { type Address, type PublicClient, erc20Abi, formatUnits, isAddress } from "viem";
+import {
+  type Address,
+  type PublicClient,
+  erc20Abi,
+  formatUnits,
+  isAddress,
+} from "viem";
 
 import { multicall3Abi } from "~/abi";
 import { ADDRESS_ZERO } from "~/constants";
@@ -34,23 +40,26 @@ export const getWalletBalances = async ({
   if (!config.contracts?.multicallAddress) {
     throw new Error("Multicall address not found in config");
   }
-  if (account && tokenList) {
-    const call: Call[] = tokenList.map((item: Token) => {
-      if (item.address === ADDRESS_ZERO) {
+  // const filteredTokenList = tokenList
+  const filteredTokenList = tokenList.filter(token => isAddress(token.address))
+  if (account && filteredTokenList) {
+    const call: Call[] = filteredTokenList
+      .map((item: Token) => {
+        if (item.address === ADDRESS_ZERO) {
+          return {
+            address: config.contracts?.multicallAddress as Address,
+            abi: multicall3Abi,
+            functionName: "getEthBalance",
+            args: [account],
+          };
+        }
         return {
-          address: config.contracts?.multicallAddress as Address,
-          abi: multicall3Abi,
-          functionName: "getEthBalance",
+          address: item.address as Address,
+          abi: erc20Abi,
+          functionName: "balanceOf",
           args: [account],
         };
-      }
-      return {
-        address: item.address as Address,
-        abi: erc20Abi,
-        functionName: "balanceOf",
-        args: [account],
-      };
-    }).filter(callItem => isAddress(callItem.address));
+      });
     try {
       const result = await publicClient.multicall({
         contracts: call,
@@ -59,7 +68,7 @@ export const getWalletBalances = async ({
 
       const balances = await Promise.all(
         result.map(async (item: any, index: number) => {
-          const token = tokenList[index];
+          const token = filteredTokenList[index];
           if (item.error) {
             return { balance: 0n, formattedBalance: "0", ...token };
           }
