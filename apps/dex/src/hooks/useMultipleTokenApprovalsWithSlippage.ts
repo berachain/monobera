@@ -34,7 +34,7 @@ const useMultipleTokenApprovalsWithSlippage = (
           );
           const sI = parseUnits(token?.amount as string, token?.decimals ?? 18);
           const s = parseUnits(
-            ((slippage ?? 0) + 0.001).toString(),
+            (slippage ?? 0).toString(),
             token?.decimals ?? 18,
           );
           const maxAmountIn =
@@ -55,7 +55,6 @@ const useMultipleTokenApprovalsWithSlippage = (
     needsApprovalNoBera: needsApproval.filter(
       (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
     ),
-    slippage,
     refresh,
   };
 };
