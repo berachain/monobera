@@ -4,16 +4,12 @@ import BigNumber from "bignumber.js";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 
 interface ICalculateLiqPrice {
-  bfLong: string | undefined;
-  bfShort: string | undefined;
   orderType: string | undefined;
   price: string | undefined;
   leverage: string | undefined;
 }
 
 export const useCalculateLiqPrice = ({
-  bfLong,
-  bfShort,
   orderType,
   price,
   leverage,
@@ -22,17 +18,11 @@ export const useCalculateLiqPrice = ({
 
   useMemo(() => {
     try {
-      const formattedBorrowingL = formatFromBaseUnit(bfLong, 18);
-      const formattedBorrowingS = formatFromBaseUnit(bfShort, 18);
       const long = orderType === "long";
       const openPrice = BigNumber(price ?? "0");
 
       const liqPriceDistance = openPrice
-        .times(
-          BigNumber(90)
-            .minus(long ? formattedBorrowingL : formattedBorrowingS)
-            .div(100),
-        )
+        .times(BigNumber(90).div(100))
         .div(BigNumber(leverage ?? 2));
 
       const calculatedLiqPrice = long
@@ -46,7 +36,7 @@ export const useCalculateLiqPrice = ({
     } catch (e) {
       setLiqPrice(undefined);
     }
-  }, [bfLong, bfShort, orderType, price, leverage]);
+  }, [orderType, price, leverage]);
 
   return liqPrice;
 };
