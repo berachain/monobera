@@ -21,7 +21,7 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Balancer } from "react-wrap-balancer";
-import { Address, isAddress } from "viem";
+import { type Address, isAddress } from "viem";
 
 import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
@@ -53,7 +53,6 @@ export function TokenDialog({
 }: Props) {
   const [search, setSearch] = useState("");
   const [addTokenOpen, setAddTokenOpen] = useState(false);
-  const [error, setError] = useState<Error | undefined>(undefined);
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
   const { data: tokenData, addNewToken, removeToken } = useTokens();
@@ -72,12 +71,6 @@ export function TokenDialog({
     useTokenInformation({
       address: search as Address,
     });
-
-  useEffect(() => {
-    if (tokenInformationError) {
-      setError(tokenInformationError);
-    }
-  }, [tokenInformationError]);
 
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
@@ -117,7 +110,6 @@ export function TokenDialog({
   useEffect(() => {
     setManagingTokens(false);
     setSearch("");
-    setError(undefined);
   }, [open]);
 
   useEffect(() => {
@@ -154,21 +146,18 @@ export function TokenDialog({
     onSelectedToken(token);
     setOpen(false);
     setSearch("");
-    setError(undefined);
   };
 
   const onAddToken = (token: Token | undefined) => {
     addNewToken(token);
     onSelectedToken(token);
     setSearch("");
-    setError(undefined);
     setAddTokenOpen(false);
     setOpen(false);
   };
 
   const onAddTokenCancel = () => {
     setSearch("");
-    setError(undefined);
     setAddTokenOpen(false);
     setOpen(false);
   };
@@ -203,7 +192,6 @@ export function TokenDialog({
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
-                  setError(undefined);
                 }}
                 placeholder="Search by name, symbol or address"
               />
@@ -232,8 +220,7 @@ export function TokenDialog({
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             <div className="max-h-[min(600px,60vh)] overflow-y-auto">
-              {!error ? (
-                filteredTokens?.length ? (
+               {filteredTokens?.length ? (
                   filteredTokens
                     ?.filter((token) => !filter.includes(token?.address ?? ""))
                     .map((token, i) => (
@@ -257,15 +244,7 @@ export function TokenDialog({
                       You can add tokens by searching for their address.
                     </AlertDescription>
                   </Alert>
-                )
-              ) : (
-                <Alert variant={"destructive"}>
-                  <AlertTitle>Invalid address</AlertTitle>
-                  <AlertDescription>
-                    Try again with a valid token address.
-                  </AlertDescription>
-                </Alert>
-              )}
+                )}
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             {!customTokens && (
