@@ -2,7 +2,7 @@ import { useState } from "react";
 import { chainId, crocIndexerEndpoint, multicallAddress } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { PoolV2 } from "~/types";
+import type { PoolV2 } from "~/types";
 import { formatPoolData, getBeraLpAddress } from "~/utils";
 import { usePublicClient } from "wagmi";
 import { useBeraJs } from "~/contexts";
@@ -40,7 +40,6 @@ export const usePoolTable = (sorting: any) => {
         sortOrder,
         keyword,
         publicClient,
-        account,
       ],
       queryFn: async ({ pageParam = 1, queryKey }: any) => {
         try {
@@ -53,38 +52,9 @@ export const usePoolTable = (sorting: any) => {
           );
 
           const response = await res.json();
-          let data = response.data.pools.map((r: any) =>
+          const data = response.data.pools.map((r: any) =>
             formatPoolData(r),
           ) as PoolV2[];
-
-          if (account && publicClient && data) {
-            const call: Call[] = data.map((item: PoolV2) => ({
-              address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
-              abi: erc20Abi,
-              functionName: "balanceOf",
-              args: [account],
-            }));
-
-            const result = await publicClient.multicall({
-              contracts: call,
-              multicallAddress: multicallAddress,
-            });
-
-            data = data.map((item: PoolV2, index: number) => {
-              return {
-                ...item,
-                isDeposited:
-                  result[index].result &&
-                  result[index].status === "success" &&
-                  result[index].result !== 0n,
-              };
-            }) as PoolV2[];
-
-            return {
-              data,
-              totalCount: response.data.totalCount,
-            };
-          }
 
           return {
             data,
@@ -111,6 +81,31 @@ export const usePoolTable = (sorting: any) => {
     concatData = concatData.concat(page.data);
     totalCount = page.totalCount;
   });
+
+  if (account && publicClient && data) {
+    const call: Call[] = concatData.map((item: PoolV2) => ({
+      address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
+      abi: erc20Abi,
+      functionName: "balanceOf",
+      args: [account],
+    }));
+
+    publicClient.multicall({
+      contracts: call,
+      multicallAddress: multicallAddress,
+    }).then(result => {
+      concatData = concatData.map((item: PoolV2, index: number) => {
+        return {
+          ...item,
+          isDeposited:
+            result[index].result &&
+            result[index].status === "success" &&
+            result[index].result !== 0n,
+        };
+      }) as PoolV2[];
+    });
+
+  }
 
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
