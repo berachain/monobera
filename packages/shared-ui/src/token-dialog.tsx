@@ -220,31 +220,31 @@ export function TokenDialog({
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             <div className="max-h-[min(600px,60vh)] overflow-y-auto">
-               {filteredTokens?.length ? (
-                  filteredTokens
-                    ?.filter((token) => !filter.includes(token?.address ?? ""))
-                    .map((token, i) => (
-                      <TokenDialogRow
-                        key={`${token?.symbol}-${token?.name}-${token?.address}-${i}`}
-                        token={token}
-                        isTokenSelected={isTokenSelected(token)}
-                        focusedToken={focusedToken}
-                        addTokenOpen={addTokenOpen}
-                        setAddTokenOpen={onAddTokenCancel}
-                        onAddToken={onAddToken}
-                        onAddTokenCancel={onAddTokenCancel}
-                        onTokenSelect={onTokenSelect}
-                        pendingAddition={pendingAddition}
-                      />
-                    ))
-                ) : (
-                  <Alert variant={"info"}>
-                    <AlertTitle>Token not found</AlertTitle>
-                    <AlertDescription>
-                      You can add tokens by searching for their address.
-                    </AlertDescription>
-                  </Alert>
-                )}
+              {filteredTokens?.length ? (
+                filteredTokens
+                  ?.filter((token) => !filter.includes(token?.address ?? ""))
+                  .map((token, i) => (
+                    <TokenDialogRow
+                      key={`${token?.symbol}-${token?.name}-${token?.address}-${i}`}
+                      token={token}
+                      isTokenSelected={isTokenSelected(token)}
+                      focusedToken={focusedToken}
+                      addTokenOpen={addTokenOpen}
+                      setAddTokenOpen={onAddTokenCancel}
+                      onAddToken={onAddToken}
+                      onAddTokenCancel={onAddTokenCancel}
+                      onTokenSelect={onTokenSelect}
+                      pendingAddition={pendingAddition}
+                    />
+                  ))
+              ) : (
+                <Alert variant={"info"}>
+                  <AlertTitle>Token not found</AlertTitle>
+                  <AlertDescription>
+                    You can add tokens by searching for their address.
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
             <div className="h-px w-full border-x-0 border-b-0 border-t border-solid border-border" />
             {!customTokens && (
