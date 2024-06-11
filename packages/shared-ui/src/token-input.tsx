@@ -76,7 +76,7 @@ export function TokenInput({
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
     usePollWalletBalances();
   const token = useSelectedWalletBalance(
-    selected ? getAddress(selected?.address ?? "0x") ?? "0x" : "0x",
+    selected ? selected?.address: "0x",
   );
 
   let tokenBalance = token?.formattedBalance || "0";
