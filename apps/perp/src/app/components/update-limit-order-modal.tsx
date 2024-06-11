@@ -104,36 +104,11 @@ export function UpdateLimitOrderModal({
     [setTp, setSl],
   );
 
-  const formattedBfLong = formatFromBaseUnit(
-    openOrder?.market.pair_borrowing_fee?.bf_long ?? "0",
-    18,
-  ).toString(10);
-  const formattedBfShort = formatFromBaseUnit(
-    openOrder?.market.pair_borrowing_fee?.bf_short ?? "0",
-    18,
-  ).toString(10);
-
   const liqPrice = useCalculateLiqPrice({
-    bfLong: formattedBfLong,
-    bfShort: formattedBfShort,
     orderType: openOrder?.buy === true ? "long" : "short",
     price: formatFromBaseUnit(openOrder?.min_price ?? "0", 10).toString(10),
     leverage: openOrder?.leverage,
   });
-
-  // const payload = [
-  //   openOrder?.market.pair_index,
-  //   openOrder?.index,
-  //   parseUnits(`${executionPrice}`, 10),
-  //   ethersParseUnits(
-  //     tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
-  //     10,
-  //   ),
-  //   ethersParseUnits(
-  //     sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
-  //     10,
-  //   ),
-  // ];
 
   const handleUpdateLimitOrder = useCallback(async () => {
     if (openOrder === undefined) return;
