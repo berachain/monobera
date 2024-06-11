@@ -60,7 +60,9 @@ export const usePollWalletBalances = (
   const useSelectedWalletBalance = (
     address: string,
   ): BalanceToken | undefined => {
-    return swrResponse.data?.find((item: Token) => item.address.toLowerCase() === address.toLowerCase());
+    return swrResponse.data?.find(
+      (item: Token) => item.address.toLowerCase() === address.toLowerCase(),
+    );
   };
 
   const useSelectedTagWalletBalances = (

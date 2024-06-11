@@ -34,13 +34,7 @@ export const usePoolTable = (sorting: any) => {
 
   const { data, fetchNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery<any, any, { pages: any[] }>({
-      queryKey: [
-        "projects",
-        sortOption,
-        sortOrder,
-        keyword,
-        publicClient,
-      ],
+      queryKey: ["projects", sortOption, sortOrder, keyword, publicClient],
       queryFn: async ({ pageParam = 1, queryKey }: any) => {
         try {
           const res = await fetch(
@@ -90,21 +84,22 @@ export const usePoolTable = (sorting: any) => {
       args: [account],
     }));
 
-    publicClient.multicall({
-      contracts: call,
-      multicallAddress: multicallAddress,
-    }).then(result => {
-      concatData = concatData.map((item: PoolV2, index: number) => {
-        return {
-          ...item,
-          isDeposited:
-            result[index].result &&
-            result[index].status === "success" &&
-            result[index].result !== 0n,
-        };
-      }) as PoolV2[];
-    });
-
+    publicClient
+      .multicall({
+        contracts: call,
+        multicallAddress: multicallAddress,
+      })
+      .then((result) => {
+        concatData = concatData.map((item: PoolV2, index: number) => {
+          return {
+            ...item,
+            isDeposited:
+              result[index].result &&
+              result[index].status === "success" &&
+              result[index].result !== 0n,
+          };
+        }) as PoolV2[];
+      });
   }
 
   const handleEnter = (e: any) => {
