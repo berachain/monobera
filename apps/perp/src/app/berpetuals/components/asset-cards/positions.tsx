@@ -76,7 +76,6 @@ export const getMarketListItems = (
             <PositionLiquidationPrice
               position={item}
               className="text-xs font-medium leading-tight text-muted-foreground"
-              markets={markets}
             />
           ),
         },
