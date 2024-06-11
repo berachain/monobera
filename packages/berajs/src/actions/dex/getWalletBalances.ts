@@ -1,9 +1,9 @@
-import { Address, PublicClient, erc20Abi, formatUnits } from "viem";
+import { type Address, type PublicClient, erc20Abi, formatUnits, isAddress } from "viem";
 
 import { multicall3Abi } from "~/abi";
 import { ADDRESS_ZERO } from "~/constants";
-import { BeraConfig } from "../../types";
-import { BalanceToken, Token } from "../../types/dex";
+import type { BeraConfig } from "../../types";
+import type { BalanceToken, Token } from "../../types/dex";
 
 export interface GetWalletBalances {
   account: string | undefined;
@@ -35,21 +35,23 @@ export const getWalletBalances = async ({
     throw new Error("Multicall address not found in config");
   }
   if (account && tokenList) {
-    const call: Call[] = tokenList.map((item: Token) => {
+    const call: Call[] = []
+    tokenList.forEach((item: Token) => {
+      if(!item.address || !isAddress(item.address)) return;
       if (item.address === ADDRESS_ZERO) {
-        return {
+        call.push({
           address: config.contracts?.multicallAddress as Address,
           abi: multicall3Abi,
           functionName: "getEthBalance",
           args: [account],
-        };
+        });
       }
-      return {
+      call.push({
         address: item.address as Address,
         abi: erc20Abi,
         functionName: "balanceOf",
         args: [account],
-      };
+      });
     });
     try {
       const result = await publicClient.multicall({

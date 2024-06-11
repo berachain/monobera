@@ -139,7 +139,7 @@ export function SwapCard({
   // fetch user's native BERA balance
   const nativeTokenBalanceData = useSelectedWalletBalance(nativeTokenAddress);
   const nativeTokenBalance = nativeTokenBalanceData?.formattedBalance
-    ? parseFloat(nativeTokenBalanceData.formattedBalance)
+    ? Number.parseFloat(nativeTokenBalanceData.formattedBalance)
     : undefined;
   // show native gas warning if user is swapping more BERA than their balance minus the padded gas estimate, which is likely to fail or leave them unable to perform additional swaps
   const shouldShowNativeGasWarning =
@@ -149,8 +149,8 @@ export function SwapCard({
     nativeTokenBalance &&
     estimatedBeraFee &&
     nativeTokenBalance - estimatedBeraFee > 0 &&
-    parseFloat(fromAmount) < nativeTokenBalance &&
-    parseFloat(fromAmount) > nativeTokenBalance - estimatedBeraFee;
+    Number.parseFloat(fromAmount) < nativeTokenBalance &&
+    Number.parseFloat(fromAmount) > nativeTokenBalance - estimatedBeraFee;
 
   const shouldShowGasBalanceWarning =
     isConnected &&
@@ -569,7 +569,7 @@ export function SwapCard({
                       BERA left for gas, or you may be left with an insufficient
                       amount of BERA to perform additional transactions.
                       Consider reducing your swap amount below ${
-                        parseFloat(fromAmount) - estimatedBeraFee
+                        Number.parseFloat(fromAmount) - estimatedBeraFee
                       }.`}
                     </AlertDescription>
                   </Alert>
