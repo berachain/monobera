@@ -87,7 +87,7 @@ export function FormattedNumber({
   maxValue,
   className,
   prefixText = "",
-  showIsSmallerThanMin,
+  showIsSmallerThanMin = true,
   ...props
 }: {
   value: BigNumberValue;
