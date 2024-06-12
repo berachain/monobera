@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { chainId, crocIndexerEndpoint, multicallAddress } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
@@ -67,40 +67,52 @@ export const usePoolTable = (sorting: any) => {
       staleTime: 1000 * 60 * 5, // 5 mins
     });
 
-  let concatData: PoolV2[] = [];
-  let totalCount = undefined;
+    const [processedData, setProcessedData] = useState<PoolV2[]>([])
+    const [totalCount, setTotalCount] = useState<number | undefined>()
+    
 
-  data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
-    if (!page.data) return;
-    concatData = concatData.concat(page.data);
-    totalCount = page.totalCount;
-  });
-
-  if (account && publicClient && data) {
-    const call: Call[] = concatData.map((item: PoolV2) => ({
-      address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
-      abi: erc20Abi,
-      functionName: "balanceOf",
-      args: [account],
-    }));
-
-    publicClient
-      .multicall({
-        contracts: call,
-        multicallAddress: multicallAddress,
-      })
-      .then((result) => {
-        concatData = concatData.map((item: PoolV2, index: number) => {
-          return {
-            ...item,
-            isDeposited:
-              result[index].result &&
-              result[index].status === "success" &&
-              result[index].result !== 0n,
-          };
-        }) as PoolV2[];
+    useEffect(() => {
+      let concatData: PoolV2[] = [];
+    
+      data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
+        if (!page.data) return;
+        concatData = concatData.concat(page.data);
+        setTotalCount(page.totalCount);
       });
-  }
+
+      if (account && publicClient && data) {
+        
+        const call: Call[] = concatData.map((item: PoolV2) => ({
+          address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
+          abi: erc20Abi,
+          functionName: "balanceOf",
+          args: [account],
+        }));
+    
+        publicClient
+          .multicall({
+            contracts: call,
+            multicallAddress: multicallAddress,
+          })
+          .then((result) => {
+            
+            const newProcessedData = concatData.map((item: PoolV2, index: number) => {
+              return {
+                ...item,
+                isDeposited:
+                  result[index].result &&
+                  result[index].status === "success" &&
+                  result[index].result !== 0n,
+              };
+            }) as PoolV2[];
+            setProcessedData(newProcessedData)
+          });
+      } else {
+        setProcessedData(concatData)
+      }
+      
+    }, [data, account]);
+
 
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
@@ -108,10 +120,10 @@ export const usePoolTable = (sorting: any) => {
     }
   };
 
-  const isReachingEnd = totalCount ? concatData.length >= totalCount : true;
+  const isReachingEnd = totalCount ? processedData.length >= totalCount : true;
 
   return {
-    data: concatData,
+    data: processedData,
     totalCount,
     fetchNextPage,
     isReachingEnd,
