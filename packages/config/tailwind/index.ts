@@ -42,7 +42,7 @@ export default {
     },
     extend: {
       minHeight: {
-        minimun: "calc(100vh - 191px)",
+        minimum: "calc(100vh - 191px)",
         "screen-250": "calc(100vh - 214px)",
       },
       width: {
