@@ -303,7 +303,7 @@ export default function Validator({
                 <Skeleton className="h-[25px] w-[150px]" />
               ) : (
                 <span className="flex flex-row gap-1 text-foreground hover:underline">
-                  <Link href={`${blockExplorerUrl}/${validator?.id}`}>
+                  <Link href={`${blockExplorerUrl}/address/${validator?.id}`}>
                     {truncateHash(validator?.id ?? "")}
                   </Link>
                   <Icons.externalLink className="h-4 w-4 self-center" />
