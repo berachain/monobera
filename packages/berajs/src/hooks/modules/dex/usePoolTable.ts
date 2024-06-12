@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { chainId, crocIndexerEndpoint, multicallAddress } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
-import { PoolV2 } from "~/types";
+import type { PoolV2 } from "~/types";
 import { formatPoolData, getBeraLpAddress } from "~/utils";
 import { usePublicClient } from "wagmi";
 import { useBeraJs } from "~/contexts";
@@ -34,14 +34,7 @@ export const usePoolTable = (sorting: any) => {
 
   const { data, fetchNextPage, isFetching, isFetchingNextPage } =
     useInfiniteQuery<any, any, { pages: any[] }>({
-      queryKey: [
-        "projects",
-        sortOption,
-        sortOrder,
-        keyword,
-        publicClient,
-        account,
-      ],
+      queryKey: ["projects", sortOption, sortOrder, keyword, publicClient],
       queryFn: async ({ pageParam = 1, queryKey }: any) => {
         try {
           const res = await fetch(
@@ -53,38 +46,9 @@ export const usePoolTable = (sorting: any) => {
           );
 
           const response = await res.json();
-          let data = response.data.pools.map((r: any) =>
+          const data = response.data.pools.map((r: any) =>
             formatPoolData(r),
           ) as PoolV2[];
-
-          if (account && publicClient && data) {
-            const call: Call[] = data.map((item: PoolV2) => ({
-              address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
-              abi: erc20Abi,
-              functionName: "balanceOf",
-              args: [account],
-            }));
-
-            const result = await publicClient.multicall({
-              contracts: call,
-              multicallAddress: multicallAddress,
-            });
-
-            data = data.map((item: PoolV2, index: number) => {
-              return {
-                ...item,
-                isDeposited:
-                  result[index].result &&
-                  result[index].status === "success" &&
-                  result[index].result !== 0n,
-              };
-            }) as PoolV2[];
-
-            return {
-              data,
-              totalCount: response.data.totalCount,
-            };
-          }
 
           return {
             data,
@@ -103,14 +67,49 @@ export const usePoolTable = (sorting: any) => {
       staleTime: 1000 * 60 * 5, // 5 mins
     });
 
-  let concatData: PoolV2[] = [];
-  let totalCount = undefined;
+  const [processedData, setProcessedData] = useState<PoolV2[]>([]);
+  const [totalCount, setTotalCount] = useState<number | undefined>();
 
-  data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
-    if (!page.data) return;
-    concatData = concatData.concat(page.data);
-    totalCount = page.totalCount;
-  });
+  useEffect(() => {
+    let concatData: PoolV2[] = [];
+
+    data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
+      if (!page.data) return;
+      concatData = concatData.concat(page.data);
+      setTotalCount(page.totalCount);
+    });
+
+    if (account && publicClient && data) {
+      const call: Call[] = concatData.map((item: PoolV2) => ({
+        address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
+        abi: erc20Abi,
+        functionName: "balanceOf",
+        args: [account],
+      }));
+
+      publicClient
+        .multicall({
+          contracts: call,
+          multicallAddress: multicallAddress,
+        })
+        .then((result) => {
+          const newProcessedData = concatData.map(
+            (item: PoolV2, index: number) => {
+              return {
+                ...item,
+                isDeposited:
+                  result[index].result &&
+                  result[index].status === "success" &&
+                  result[index].result !== 0n,
+              };
+            },
+          ) as PoolV2[];
+          setProcessedData(newProcessedData);
+        });
+    } else {
+      setProcessedData(concatData);
+    }
+  }, [data, account]);
 
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
@@ -118,10 +117,10 @@ export const usePoolTable = (sorting: any) => {
     }
   };
 
-  const isReachingEnd = totalCount ? concatData.length >= totalCount : true;
+  const isReachingEnd = totalCount ? processedData.length >= totalCount : true;
 
   return {
-    data: concatData,
+    data: processedData,
     totalCount,
     fetchNextPage,
     isReachingEnd,
