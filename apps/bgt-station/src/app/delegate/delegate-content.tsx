@@ -40,7 +40,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
   } = useTxn({
     message: `Delegating ${Number(amount).toFixed(2)} BGT to Validator`,
     actionType: TransactionActionType.DELEGATE,
-    onSuccess: () => { 
+    onSuccess: () => {
       setAmount("");
       refresh();
       refreshActive();
