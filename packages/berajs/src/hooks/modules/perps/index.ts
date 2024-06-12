@@ -15,3 +15,4 @@ export * from "./usePollReferralsDetails";
 export * from "./usePollTraderReferral";
 export * from "./usePollPositionsLiqFeePrices";
 export * from "./usePollOrdersLiqFeePrices";
+export * from "./usePollLastDailySupply";

@@ -3,42 +3,11 @@
 import React from "react";
 import { useGasData } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
-
-// import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
-// import { formatEther } from 'viem'
-// enum ServerStatusEnuem {
-//   OPERATIONAL = "Operational",
-//   HALTED = "Service Halted",
-//   INTERRUPTION = "Service Interruption",
-// }
-
-// enum GasSpeedEnum {
-//   LOW = "🐢-Low",
-//   MARKET = "🦊-Market",
-//   FAST = "🏎️-Fast",
-//   APE = "🦧-Ape",
-// }
-
-// const getStatusColor = (status: ServerStatusEnuem) => {
-//   switch (status) {
-//     case ServerStatusEnuem.OPERATIONAL:
-//       return "bg-success-foreground";
-//     case ServerStatusEnuem.HALTED:
-//       return "bg-destructive-foreground";
-//     case ServerStatusEnuem.INTERRUPTION:
-//       return "bg-warning-foreground";
-//     default:
-//       return "bg-success-foreground";
-//   }
-// };
+import { BigNumber } from "bignumber.js";
 
 export function UpTimeStatus() {
-  // const status = ServerStatusEnuem.INTERRUPTION;
-  const { estimatedBeraFee } = useGasData();
-  // const [gasSpeed, setGasSpeed] = React.useState<GasSpeedEnum>(
-  //   GasSpeedEnum.FAST,
-  // );
-  // const [open, setOpen] = React.useState(false);
+  const { feesPerGasEstimate } = useGasData(); // 1 Bwei = 10^9 wei
+
   return (
     <div className="fixed bottom-0 flex w-full justify-between border-y border-border bg-background px-4 py-2">
       <div className="flex items-center gap-2">
@@ -47,36 +16,18 @@ export function UpTimeStatus() {
           {status}
         </div> */}
       </div>
-      <div className="flex cursor-pointer items-center gap-2 text-xs font-medium leading-3 text-muted-foreground">
-        <div className=" text-success-foreground">{`${estimatedBeraFee}`}</div>
-        <Icons.fuel className="h-4 w-4" />
-        Bwei
-      </div>
-      {/* <Popover open={open}>
-        <PopoverTrigger onClick={() => setOpen(true)}>
-          <div className="flex cursor-pointer items-center gap-2 text-xs font-medium leading-3 text-muted-foreground">
-            <div className=" text-success-foreground">
-              {gasData?.formatted.gasPrice}
-            </div>
-            <Icons.fuel className="h-4 w-4" />
-            {gasSpeed.split("-")[1]}
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className="w-[134px] p-0" forceMount>
-          {Array.from(Object.values(GasSpeedEnum)).map((item) => (
-            <div
-              key={item}
-              className="flex h-8 cursor-pointer items-center justify-center text-center text-sm font-medium leading-tight hover:bg-muted "
-              onClick={() => {
-                setGasSpeed(item as GasSpeedEnum);
-                setOpen(false);
-              }}
-            >
-              {item.replace("-", "   ")}
-            </div>
-          ))}
-        </PopoverContent>
-      </Popover> */}
+      {feesPerGasEstimate?.maxFeePerGas ? (
+        <div className="flex cursor-pointer items-center gap-2 text-xs font-medium leading-3 text-muted-foreground">
+          <div className=" text-success-foreground">{`${BigNumber(
+            feesPerGasEstimate?.maxFeePerGas.toString(10),
+          )
+            .div(10 ** 9)
+            .dp(4)
+            .toString(10)}`}</div>
+          <Icons.fuel className="h-4 w-4" />
+          Bwei
+        </div>
+      ) : null}
     </div>
   );
 }
