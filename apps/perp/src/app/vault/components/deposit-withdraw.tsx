@@ -1,12 +1,11 @@
-"use client";
-
 import { useMemo, useState } from "react";
 import {
-  bTokenAbi,
   TransactionActionType,
+  bTokenAbi,
   useBeraJs,
   usePollAllowance,
   usePollBHoneyPendingWithdraw,
+  usePollLastDailySupply,
   usePollMaxDeposit,
 } from "@bera/berajs";
 import { bhoneyVaultContractAddress, honeyAddress } from "@bera/config";
@@ -22,16 +21,27 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
+import { format } from "date-fns";
 import { parseUnits } from "ethers";
 
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 
-export default function DepositWithdraw() {
+interface DepositWithdrawProps {
+  actionType: "deposit" | "withdraw";
+  setActionType: (actionType: "deposit" | "withdraw") => void;
+}
+
+export default function DepositWithdraw({
+  actionType,
+  setActionType,
+}: DepositWithdrawProps) {
   const [depositAmount, setDepositAmount] = useState<string>("");
   const [withdrawAmount, setWithdrawAmount] = useState<string>("");
 
   const [isDepositExceeding, setIsDepositExceeding] = useState(false);
   const [isWithdrawExceeding, setIsWithdrawExceeding] = useState(false);
+
+  const { data: lastDailySupply } = usePollLastDailySupply();
 
   const {
     write: depositWrite,
@@ -88,16 +98,24 @@ export default function DepositWithdraw() {
   }, [maxDeposit, depositAmount]);
 
   return (
-    <div className="flex h-fit min-h-[400px] w-full flex-col justify-between rounded-lg border border-border px-4 py-6 md:flex-row">
+    <div className="flex h-full min-h-[400px] w-full flex-col justify-between rounded-lg border border-border px-4 py-6 md:flex-row">
       {DepositModalPortal}
       {WithdrawModalPortal}
       <div className="w-full flex-shrink-0">
-        <Tabs defaultValue="deposit" className="flex h-full flex-col">
+        <Tabs defaultValue={actionType} className="flex h-full flex-col">
           <TabsList className="mb-8 w-full">
-            <TabsTrigger value="deposit" className="w-full">
+            <TabsTrigger
+              value="deposit"
+              className="w-full"
+              onClick={() => setActionType("deposit")}
+            >
               Deposit
             </TabsTrigger>
-            <TabsTrigger value="withdraw" className="w-full">
+            <TabsTrigger
+              value="withdraw"
+              className="w-full"
+              onClick={() => setActionType("withdraw")}
+            >
               Withdraw
             </TabsTrigger>
           </TabsList>
@@ -132,8 +150,8 @@ export default function DepositWithdraw() {
                 before you deposit
               </AlertTitle>
               <AlertDescription>
-                There is a 1-3 EPOCH Wait period to withdraw your Honey Deposit
-                from the HONEY Vault.
+                There is a 1-3 Epoch wait period to withdraw your Honey from the
+                Vault.
               </AlertDescription>
             </Alert>
             <ActionButton>
@@ -181,10 +199,17 @@ export default function DepositWithdraw() {
             </ActionButton>
             {isMaxDepositExceeding && (
               <Alert variant="destructive" className="mt-2">
-                {`Deposit exceeds current the maximum deposit amount${
+                {`Your deposit exceeds the current maximum deposit${
                   maxDeposit === 0 || maxDeposit
-                    ? ` of ${maxDeposit.toFixed(2)} Honey`
+                    ? ` of ${maxDeposit.toFixed(2)} Honey.`
                     : "."
+                }${
+                  lastDailySupply
+                    ? ` The daily deposit limit will reset at ${format(
+                        new Date((Number(lastDailySupply) + 86400) * 1000),
+                        "MM/dd/yy, h:mma",
+                      )}.`
+                    : ""
                 }`}
               </Alert>
             )}
