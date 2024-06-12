@@ -6,6 +6,7 @@ import {
   tradingAbi,
   truncateHash,
   useBeraJs,
+  useGasData,
   useOct,
   usePollBeraBalance,
 } from "@bera/berajs";
@@ -24,12 +25,16 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
+import { BigNumber } from "bignumber.js";
+
+// Average gas amount for one transaction on perps
+const ESTIMATED_GAS_AMT_FOR_ONE_TXN = 1500000;
 
 const TradeWalletSection = ({ refresh }: { refresh: () => void }) => {
-  const { isOctBalanceLow, octPrivKey, octAddress, octBalance, octTxCount } =
-    useOct();
+  const { isOctBalanceLow, octPrivKey, octAddress, octBalance } = useOct();
   const [copied, setCopied] = useState(false);
   const { account } = useBeraJs();
+  const { feesPerGasEstimate } = useGasData();
 
   const { isValueSendLoading, writeValueSend, isValueSendSuccess } = useOctTxn({
     message: "Withdrawing All From One Click Trading Wallet",
@@ -40,6 +45,13 @@ const TradeWalletSection = ({ refresh }: { refresh: () => void }) => {
       refresh();
     }
   }, [isValueSendSuccess, refresh]);
+
+  const maxFeePerGas = feesPerGasEstimate?.maxFeePerGas?.toString();
+
+  const octTxnsLeft = BigNumber((octBalance?.balance ?? "0").toString())
+    .div(ESTIMATED_GAS_AMT_FOR_ONE_TXN * Number(maxFeePerGas ?? "1"))
+    .dp(0)
+    .toString(10);
 
   return (
     <div className={"relative rounded-md border border-border p-3"}>
@@ -62,9 +74,11 @@ const TradeWalletSection = ({ refresh }: { refresh: () => void }) => {
         <TokenIcon address={nativeTokenAddress} />
         <div className="text-sm font-semibold">
           {Number(octBalance?.formattedBalance ?? 0).toFixed(2)} BERA{" "}
-          <span className="text-xs font-medium text-success-foreground">
-            ~ {octTxCount} txns
-          </span>
+          {octTxnsLeft ? (
+            <span className="text-xs font-medium text-success-foreground truncate">
+              ~ {octTxnsLeft} txns left
+            </span>
+          ) : null}
         </div>
       </div>
       <div className="mt-3 flex flex-row gap-2">
