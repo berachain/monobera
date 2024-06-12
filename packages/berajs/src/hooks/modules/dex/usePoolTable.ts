@@ -67,36 +67,34 @@ export const usePoolTable = (sorting: any) => {
       staleTime: 1000 * 60 * 5, // 5 mins
     });
 
-    const [processedData, setProcessedData] = useState<PoolV2[]>([])
-    const [totalCount, setTotalCount] = useState<number | undefined>()
-    
+  const [processedData, setProcessedData] = useState<PoolV2[]>([]);
+  const [totalCount, setTotalCount] = useState<number | undefined>();
 
-    useEffect(() => {
-      let concatData: PoolV2[] = [];
-    
-      data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
-        if (!page.data) return;
-        concatData = concatData.concat(page.data);
-        setTotalCount(page.totalCount);
-      });
+  useEffect(() => {
+    let concatData: PoolV2[] = [];
 
-      if (account && publicClient && data) {
-        
-        const call: Call[] = concatData.map((item: PoolV2) => ({
-          address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
-          abi: erc20Abi,
-          functionName: "balanceOf",
-          args: [account],
-        }));
-    
-        publicClient
-          .multicall({
-            contracts: call,
-            multicallAddress: multicallAddress,
-          })
-          .then((result) => {
-            
-            const newProcessedData = concatData.map((item: PoolV2, index: number) => {
+    data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
+      if (!page.data) return;
+      concatData = concatData.concat(page.data);
+      setTotalCount(page.totalCount);
+    });
+
+    if (account && publicClient && data) {
+      const call: Call[] = concatData.map((item: PoolV2) => ({
+        address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
+        abi: erc20Abi,
+        functionName: "balanceOf",
+        args: [account],
+      }));
+
+      publicClient
+        .multicall({
+          contracts: call,
+          multicallAddress: multicallAddress,
+        })
+        .then((result) => {
+          const newProcessedData = concatData.map(
+            (item: PoolV2, index: number) => {
               return {
                 ...item,
                 isDeposited:
@@ -104,15 +102,14 @@ export const usePoolTable = (sorting: any) => {
                   result[index].status === "success" &&
                   result[index].result !== 0n,
               };
-            }) as PoolV2[];
-            setProcessedData(newProcessedData)
-          });
-      } else {
-        setProcessedData(concatData)
-      }
-      
-    }, [data, account]);
-
+            },
+          ) as PoolV2[];
+          setProcessedData(newProcessedData);
+        });
+    } else {
+      setProcessedData(concatData);
+    }
+  }, [data, account]);
 
   const handleEnter = (e: any) => {
     if (e.key === "Enter") {
