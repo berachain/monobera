@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   formatInputTokenValue,
+  truncateDecimal,
   useBeraJs,
   usePollWalletBalances,
   type Token,
@@ -11,15 +12,8 @@ import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
-import { getAddress } from "viem";
 
-import {
-  BREAKPOINTS,
-  FormattedNumber,
-  SelectToken,
-  TooltipCustom,
-  useBreakpoint,
-} from ".";
+import { FormattedNumber, SelectToken, TooltipCustom, useBreakpoint } from ".";
 import { getPriceImpactColorClass } from "./utils/textStyling";
 
 type Props = {
@@ -45,6 +39,7 @@ type Props = {
   filteredTokenTags?: string[];
   filteredSymbols?: string[];
   beraSafetyMargin?: number;
+  maxDecimal?: number;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -71,6 +66,7 @@ export function TokenInput({
   filteredTokenTags = [],
   filteredSymbols = [],
   beraSafetyMargin,
+  maxDecimal,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
@@ -78,6 +74,8 @@ export function TokenInput({
   const token = useSelectedWalletBalance(selected ? selected?.address : "0x");
 
   let tokenBalance = token?.formattedBalance || "0";
+
+  const _maxDecimal = maxDecimal ? maxDecimal : selected?.decimals ?? 18;
 
   if (balance !== undefined) {
     tokenBalance = balance;
@@ -121,7 +119,7 @@ export function TokenInput({
   if (
     selected?.address === nativeTokenAddress &&
     beraSafetyMargin &&
-    parseFloat(tokenBalance) - beraSafetyMargin < 0
+    Number.parseFloat(tokenBalance) - beraSafetyMargin < 0
   ) {
     hasMaxGasWarning = true;
   } else {
@@ -144,11 +142,19 @@ export function TokenInput({
     // for all other tokens we set the amount to the total balance of that token in the connected wallet
     const newAmount =
       selected?.address === nativeTokenAddress && beraSafetyMargin
-        ? Math.max(parseFloat(tokenBalance) - beraSafetyMargin, 0).toString() ??
-          ""
+        ? Math.max(
+            Number.parseFloat(tokenBalance) - beraSafetyMargin,
+            0,
+          ).toString() ?? ""
         : tokenBalance.toString() ?? "";
     setAmount(newAmount);
   };
+
+  useEffect(() => {
+    // truncate decimal on selected token change
+    if (!amount) return;
+    setAmount?.(truncateDecimal(amount, _maxDecimal).toString());
+  }, [selected]);
 
   return (
     <li className={"flex flex-col flex-wrap px-3 py-4"}>
@@ -211,7 +217,7 @@ export function TokenInput({
               const inputValue = e.target.value;
               const filteredValue = formatInputTokenValue(inputValue);
               const [_, decimalPart = ""] = filteredValue.split(".");
-              if (decimalPart.length > 18) return;
+              if (decimalPart.length > _maxDecimal) return;
               setAmount?.(filteredValue);
             }}
             allowMinus={false}
