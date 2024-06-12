@@ -1,5 +1,5 @@
 import React from "react";
-import { type Token } from "@bera/berajs";
+import type { Token } from "@bera/berajs";
 import { bgtTokenAddress, nativeTokenAddress } from "@bera/config";
 import { SelectToken } from "@bera/shared-ui";
 
@@ -27,7 +27,7 @@ export default function CreatePoolInput({
         selectedTokens={selectedTokens}
         selectable={selectable}
         filter={[bgtTokenAddress, nativeTokenAddress]}
-        filteredTokenTags={["supply", "debt", "aToken"]}
+        filteredTokenTags={["supply", "debt", "aToken", "rewardToken"]}
         filteredSymbols={["BGT"]}
       />
     </li>
