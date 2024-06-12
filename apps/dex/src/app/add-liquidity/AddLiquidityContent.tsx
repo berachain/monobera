@@ -164,7 +164,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** baseToken.decimals);
     const s = parseUnits(
-      ((slippage ?? 0) + 0.01).toString(), // add a little more just to avoid infininte approval
+      (slippage ?? 0).toString(), // add a little more just to avoid infininte approval
       baseToken.decimals,
     );
     const minAmountOut =
@@ -182,10 +182,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     );
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** quoteToken.decimals);
-    const s = parseUnits(
-      ((slippage ?? 0) + 0.01).toString(),
-      quoteToken.decimals,
-    );
+    const s = parseUnits((slippage ?? 0).toString(), quoteToken.decimals);
 
     const minAmountOut =
       (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** quoteToken.decimals);

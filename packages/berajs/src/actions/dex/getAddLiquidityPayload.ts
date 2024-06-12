@@ -66,8 +66,8 @@ export const getAddLiquidityPayload = async ({
   } = args;
   try {
     const priceLimits = {
-      min: poolPrice * (1 - (slippage ?? 1) / 100),
-      max: poolPrice * (1 + (slippage ?? 1) / 100),
+      min: poolPrice * (1 - ((slippage ?? 1) - 0.25) / 100),
+      max: poolPrice * (1 + ((slippage ?? 1) - 0.25) / 100),
     };
     const limits: PriceRange = [priceLimits.min, priceLimits.max];
 
