@@ -1,7 +1,7 @@
 import Image from "next/image";
 import {
-  bTokenAbi,
   TransactionActionType,
+  bTokenAbi,
   useBeraJs,
   usePollBHoneyEpochs,
 } from "@bera/berajs";
@@ -42,7 +42,21 @@ const CancelWithdraw = ({
 
   const isReady = epoch?.currentEpoch === Number(withdrawRequest.unlock_epoch);
   return (
-    <div className="flex w-full flex-row items-center gap-2">
+    <div className="flex w-full flex-row items-center justify-end gap-2">
+      <Button
+        size="sm"
+        disabled={isRedeemLoading || isEpochLoading || !isReady}
+        onClick={() =>
+          redeemWrite({
+            address: bhoneyVaultContractAddress,
+            abi: bTokenAbi,
+            functionName: "redeem",
+            params: [BigInt(withdrawRequest.shares), account, account],
+          })
+        }
+      >
+        Withdraw
+      </Button>
       <Button
         disabled={isCancelLoading}
         onClick={() =>
@@ -59,30 +73,14 @@ const CancelWithdraw = ({
         variant={"secondary"}
         size="sm"
       >
-        cancel
-      </Button>
-      <Button
-        size="sm"
-        disabled={isRedeemLoading || isEpochLoading || !isReady}
-        onClick={() =>
-          redeemWrite({
-            address: bhoneyVaultContractAddress,
-            abi: bTokenAbi,
-            functionName: "redeem",
-            params: [BigInt(withdrawRequest.shares), account, account],
-          })
-        }
-      >
-        withdraw
+        Cancel
       </Button>
     </div>
   );
 };
 export const withdrawQueueColumns: ColumnDef<HoneyWithdrawalRequest>[] = [
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
-    ),
+    header: "Amount",
     cell: ({ row }) => (
       <div className="flex flex-row items-center gap-2 text-sm font-semibold leading-7">
         {formatFromBaseUnit(row.original.shares ?? "0", 18).toString(10)}{" "}
@@ -98,9 +96,7 @@ export const withdrawQueueColumns: ColumnDef<HoneyWithdrawalRequest>[] = [
     enableSorting: false,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Unlock Epoch" />
-    ),
+    header: "Unlock Epoch",
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] flex-col gap-1">
@@ -110,6 +106,8 @@ export const withdrawQueueColumns: ColumnDef<HoneyWithdrawalRequest>[] = [
     },
     accessorKey: "unlock_epoch",
     enableSorting: true,
+    minSize: 160,
+    size: 160,
   },
 
   {
@@ -117,5 +115,7 @@ export const withdrawQueueColumns: ColumnDef<HoneyWithdrawalRequest>[] = [
     cell: ({ row }) => <CancelWithdraw withdrawRequest={row.original} />,
     accessorKey: "cancel",
     enableSorting: false,
+    minSize: 180,
+    size: 180,
   },
 ];

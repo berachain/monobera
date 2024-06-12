@@ -5,7 +5,7 @@ import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 import BigNumber from "bignumber.js";
 
-import { MAX_GAIN, MAX_STOP_LOSS } from "~/utils/constants";
+import { MAX_GAIN, MAX_STOP_LOSS, INITIAL_GAIN } from "~/utils/constants";
 import { getPriceFromPercent } from "~/utils/getPriceFromPercent";
 import {
   TPSL_LOSS_TOOLTIP_TEXT,
@@ -54,6 +54,9 @@ const InputSelect = ({
         onKeyDown={(e) =>
           (e.key === "-" || e.key === "e" || e.key === "E") &&
           e.preventDefault()
+        }
+        onFocus={(e: { target: { value: string } }) =>
+          onValueChange(e.target.value)
         }
         onChange={(e: { target: { value: string } }) =>
           onValueChange(e.target.value)
@@ -257,14 +260,14 @@ export function TPSL({
         if (initTpState && long && !isUpdate) {
           const newPriceBN = getPriceFromPercent(
             long,
-            MAX_GAIN,
+            INITIAL_GAIN,
             leverage,
             formattedPrice,
           );
           tpslOnChange(newPriceBN.toString(10), "tp");
           setTpslPercent((prev) => ({
             ...prev,
-            tpPercent: MAX_GAIN,
+            tpPercent: INITIAL_GAIN,
             stickyTp: true,
           }));
           setInitTpState(false);
