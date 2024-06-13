@@ -12,7 +12,7 @@ export const RewardsDepositsWrapper = () => {
   return (
     <>
       <DepositWithdraw actionType={actionType} setActionType={setActionType} />
-      <RewardsWithdraw actionType={actionType} setActionType={setActionType} />
+      <RewardsWithdraw actionType={actionType} />
     </>
   );
 };

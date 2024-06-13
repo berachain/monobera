@@ -10,7 +10,7 @@ import { useBeraJs } from "~/contexts";
 
 export const usePollBalanceOfAssets = () => {
   const publicClient = usePublicClient();
-  const method = "balanceOfAssets";
+  const method = "completeBalanceOfAssets";
   const { account } = useBeraJs();
   const QUERY_KEY = ["bhoney", method, account];
   const { isLoading } = useSWR(
@@ -25,7 +25,6 @@ export const usePollBalanceOfAssets = () => {
             functionName: method,
             args: [account],
           });
-
           return result;
         }
         return undefined;
