@@ -27,6 +27,7 @@ import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Address, formatUnits, parseUnits } from "viem";
+import BigNumber from "bignumber.js";
 
 export const Incentivize = ({
   gauge,
@@ -62,9 +63,10 @@ export const Incentivize = ({
       : [];
   }, [gaugeInfo]);
 
-  const amountOfProposals = useMemo(() => {
-    return Number(totalAmount) / Number(incentiveRate);
-  }, [totalAmount, incentiveRate]);
+  const amountOfProposals = useMemo(
+    () => BigNumber(totalAmount).div(incentiveRate, 18).toString(),
+    [totalAmount, incentiveRate],
+  );
 
   const { data: allowance } = usePollAllowance({
     spender: gaugeInfo?.vaultAddress ?? "0x",
@@ -301,7 +303,7 @@ export const Incentivize = ({
                 params: [
                   token?.address,
                   parseUnits(totalAmount, token?.decimals ?? 18),
-                  parseUnits(incentiveRate, 18),
+                  parseUnits(incentiveRate, token?.decimals ?? 18),
                 ],
               })
             }
