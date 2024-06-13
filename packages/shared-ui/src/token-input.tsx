@@ -151,12 +151,12 @@ export function TokenInput({
   };
 
   const handleTokenSelect = (token: Token | undefined) => {
-    if(amount) {
+    if (amount) {
       const _maxDecimal = maxDecimal ? maxDecimal : token?.decimals ?? 18;
       setAmount?.(truncateDecimal(amount, _maxDecimal).toString());
     }
-    onTokenSelection?.(token)
-  }
+    onTokenSelection?.(token);
+  };
 
   return (
     <li className={"flex flex-col flex-wrap px-3 py-4"}>
