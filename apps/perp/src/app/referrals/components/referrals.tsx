@@ -127,16 +127,14 @@ export default function Referrals() {
   const traderReferrer = useGetTraderReferrer();
   const userReferralData = useGetReferralsDetails();
   const referredHoney = useMemo(() => {
-    return formatFromBaseUnit(
-      userReferralData?.volumeReferredHoney ?? 0,
-      18,
-    ).toString(10);
+    return formatFromBaseUnit(userReferralData?.volumeReferredHoney ?? 0, 18)
+      .dp(4)
+      .toString(10);
   }, [userReferralData?.volumeReferredHoney]);
   const totalRewards = useMemo(() => {
-    return formatFromBaseUnit(
-      userReferralData?.totalRewardsValueHoney ?? 0,
-      18,
-    ).toString(10);
+    return formatFromBaseUnit(userReferralData?.totalRewardsValueHoney ?? 0, 18)
+      .dp(4)
+      .toString(10);
   }, [userReferralData?.totalRewardsValueHoney]);
 
   const handleButtonClick = useCallback(async () => {
