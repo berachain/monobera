@@ -1,16 +1,18 @@
 import { bhoneyVaultContractAddress } from "@bera/config";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatUnits, type Address } from "viem";
+import { formatUnits, type Address } from "viem";
 import { usePublicClient } from "wagmi";
 
+import { bTokenAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
 
 export const usePollBHoneyBalance = () => {
   const publicClient = usePublicClient();
   const { isConnected, account } = useBeraJs();
-  const QUERY_KEY = [account, isConnected, "bhoneyBalance"];
+  const method = "completeBalanceOf";
+  const QUERY_KEY = [account, isConnected, method];
   const { isLoading } = useSWR(
     QUERY_KEY,
     async () => {
@@ -20,8 +22,8 @@ export const usePollBHoneyBalance = () => {
         try {
           const result = await publicClient.readContract({
             address: bhoneyVaultContractAddress,
-            abi: erc20Abi,
-            functionName: "balanceOf",
+            abi: bTokenAbi,
+            functionName: method,
             args: [account as Address],
           });
           return result;

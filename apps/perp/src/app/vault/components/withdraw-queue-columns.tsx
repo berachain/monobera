@@ -7,7 +7,7 @@ import {
 } from "@bera/berajs";
 import { bhoneyVaultContractAddress } from "@bera/config";
 import { type HoneyWithdrawalRequest } from "@bera/proto/src";
-import { DataTableColumnHeader, useTxn } from "@bera/shared-ui";
+import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
 
