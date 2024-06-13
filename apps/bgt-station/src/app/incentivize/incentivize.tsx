@@ -63,8 +63,10 @@ export const Incentivize = ({
       : [];
   }, [gaugeInfo]);
 
-  const amountOfProposals = useMemo(() => BigNumber(totalAmount).div(incentiveRate, 18).toString()
-  , [totalAmount, incentiveRate]);
+  const amountOfProposals = useMemo(
+    () => BigNumber(totalAmount).div(incentiveRate, 18).toString(),
+    [totalAmount, incentiveRate],
+  );
 
   const { data: allowance } = usePollAllowance({
     spender: gaugeInfo?.vaultAddress ?? "0x",
