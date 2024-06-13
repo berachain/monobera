@@ -16,9 +16,15 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollVaultEarnings } from "~/hooks/usePollVaultEarnings";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdrawQueueColumns } from "./withdraw-queue-columns";
+import { type VaultWithdrawalRequest } from "@bera/proto/src";
 
 interface RewardsWithdrawProps {
   actionType: "deposit" | "withdraw";
+}
+
+export interface VaultWithdrawalQueue {
+  withdraw_requests: VaultWithdrawalRequest[];
+  owner: string;
 }
 
 export const RewardsWithdraw = ({ actionType }: RewardsWithdrawProps) => {
@@ -44,8 +50,14 @@ export const RewardsWithdraw = ({ actionType }: RewardsWithdrawProps) => {
   const isLoading =
     isGHoneyBalanceLoading || isBalanceOfAssetsLoading || isEarningsLoading;
 
-  const { useWithdrawQueue } = usePollWithdrawQueue();
-  const withdrawQueue = useWithdrawQueue();
+  const { data }: { data: VaultWithdrawalQueue } = usePollWithdrawQueue();
+  const withdrawQueue =
+    data?.withdraw_requests.reduce<VaultWithdrawalRequest[]>((acc, request) => {
+      if (request?.shares !== "0") {
+        acc.push(request);
+      }
+      return acc;
+    }, []) ?? [];
 
   const shares = withdrawQueue?.reduce((acc, curr) => {
     return acc + Number(curr.shares);

@@ -120,7 +120,7 @@ export default function DepositWithdraw({
             </TabsTrigger>
           </TabsList>
           <TabsContent value="deposit" className="flex flex-col gap-4">
-            <div className="flex gap-1 text-xl font-semibold leading-7">
+            <div className="flex gap-1 text-xl font-semibold leading-7 mb-2">
               <Icons.lock className="h-6 w-6 text-accent" />
               Deposit Honey
             </div>
@@ -129,7 +129,7 @@ export default function DepositWithdraw({
               each trade placed on the platform. bHONEY Accumulates these fees
               in real-time.
             </div>
-            <div>
+            <div className="my-2">
               <TokenList>
                 <TokenInput
                   selectable={false}
@@ -143,7 +143,7 @@ export default function DepositWithdraw({
                 />
               </TokenList>
             </div>
-            <Alert variant="warning" className="rounded-md">
+            <Alert variant="warning" className="rounded-md mb-4">
               <AlertTitle>
                 {" "}
                 <Icons.info className="inline-block h-4 w-4" /> Please read
