@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   formatInputTokenValue,
   truncateDecimal,
@@ -150,11 +150,13 @@ export function TokenInput({
     setAmount(newAmount);
   };
 
-  useEffect(() => {
-    // truncate decimal on selected token change
-    if (!amount) return;
-    setAmount?.(truncateDecimal(amount, _maxDecimal).toString());
-  }, [selected]);
+  const handleTokenSelect = (token: Token | undefined) => {
+    if(amount) {
+      const _maxDecimal = maxDecimal ? maxDecimal : token?.decimals ?? 18;
+      setAmount?.(truncateDecimal(amount, _maxDecimal).toString());
+    }
+    onTokenSelection?.(token)
+  }
 
   return (
     <li className={"flex flex-col flex-wrap px-3 py-4"}>
@@ -162,7 +164,7 @@ export function TokenInput({
         <div className="flex flex-row items-center gap-1">
           <SelectToken
             token={selected}
-            onTokenSelection={onTokenSelection}
+            onTokenSelection={handleTokenSelect}
             selectedTokens={selectedTokens}
             selectable={selectable}
             customTokenList={customTokenList}
