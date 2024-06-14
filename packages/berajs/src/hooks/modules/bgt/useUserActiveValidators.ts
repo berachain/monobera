@@ -17,7 +17,7 @@ export const useUserActiveValidators = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType<UserValidator[] | undefined> => {
   const { account } = useBeraJs();
-  const QUERY_KEY = ["useUserValidators", account];
+  const QUERY_KEY = ["useUserActiveValidators", account];
   const swrResponse = useSWR<UserValidator[] | undefined>(
     QUERY_KEY,
     async () => {
@@ -62,7 +62,7 @@ export const useUserActiveValidators = (
     },
     {
       ...options,
-      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW * 2,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
       keepPreviousData: true,
     },
   );
