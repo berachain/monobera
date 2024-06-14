@@ -36,6 +36,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
     actionType: TransactionActionType.UNBONDING,
     onSuccess: () => {
       refresh();
+      setAmount("");
     },
   });
 

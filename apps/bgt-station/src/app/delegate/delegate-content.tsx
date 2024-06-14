@@ -45,6 +45,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
       refresh();
       refreshActive();
       refreshBalance();
+      setAmount("");
     },
   });
   return (
