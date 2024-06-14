@@ -100,6 +100,10 @@ export const RewardsWithdraw = ({ actionType }: RewardsWithdrawProps) => {
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
           <p className="w-full text-sm font-medium text-muted-foreground">
             Est. Earnings
+            <Tooltip
+              className="mb-1 ml-2"
+              text="Estimated earnings = bHONEY balance (including cooldown amount) market value + total HONEY withdrawn - total HONEY deposited"
+            />
           </p>
           {isLoading ? (
             <Skeleton className="h-[28px] w-1/2" />
