@@ -37,6 +37,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
     onSuccess: () => {
       setAmount("");
       refresh();
+      setAmount("");
     },
   });
 

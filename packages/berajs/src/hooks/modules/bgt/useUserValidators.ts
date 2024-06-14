@@ -18,7 +18,12 @@ export const useUserValidators = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType<UserValidator[] | undefined> => {
   const { account } = useBeraJs();
-  const { data = [], isLoading, isValidating } = useUserActiveValidators();
+  const {
+    data = [],
+    refresh: refreshUserActive,
+    isLoading,
+    isValidating,
+  } = useUserActiveValidators();
   const QUERY_KEY = ["useUserValidators", account, ...data];
   const swrResponse = useSWR<UserValidator[] | undefined>(
     QUERY_KEY,
@@ -82,6 +87,9 @@ export const useUserValidators = (
   );
   return {
     ...swrResponse,
-    refresh: () => swrResponse?.mutate?.(),
+    refresh: () => {
+      refreshUserActive();
+      swrResponse?.mutate?.();
+    },
   };
 };
