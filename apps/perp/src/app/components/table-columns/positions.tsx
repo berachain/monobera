@@ -11,10 +11,10 @@ import { PositionTitle } from "~/app/components/position-title";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
-import type { IOpenTrade } from "~/types/order-history";
+import type { IOpenTradeCalculated } from "~/types/order-history";
 import { MarketTradePNL } from "../market-trade-pnl";
 
-const MarkPrice = ({ position }: { position: IOpenTrade }) => {
+const MarkPrice = ({ position }: { position: IOpenTradeCalculated }) => {
   const { marketPrices } = usePollPrices();
   const price = marketPrices[position?.market?.pair_index ?? ""] ?? "0";
 
@@ -33,7 +33,7 @@ export const PositionLiquidationPrice = ({
   position,
   className,
 }: {
-  position: IOpenTrade;
+  position: IOpenTradeCalculated;
   className?: string;
 }) => {
   const formattedPrice = formatFromBaseUnit(
@@ -62,10 +62,10 @@ export const PositionLiquidationPrice = ({
 
 export const generatePositionColumns = (
   markets: IMarket[],
-  setUpdateOpen: (state: boolean | IOpenTrade) => void,
-  setDeleteOpen: (state: boolean | IOpenTrade) => void,
+  setUpdateOpen: (state: boolean | IOpenTradeCalculated) => void,
+  setDeleteOpen: (state: boolean | IOpenTradeCalculated) => void,
 ) => {
-  const positionsColumns: ColumnDef<IOpenTrade>[] = [
+  const positionsColumns: ColumnDef<IOpenTradeCalculated>[] = [
     {
       header: "Market / Action",
       cell: ({ row }) => (
