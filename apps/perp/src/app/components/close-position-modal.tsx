@@ -14,7 +14,7 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import type { IOpenTrade } from "~/types/order-history";
+import type { IOpenTradeCalculated } from "~/types/order-history";
 import { MarketTradePNL } from "./market-trade-pnl";
 import {
   usePriceData,
@@ -32,7 +32,7 @@ export function ClosePositionModal({
 }: {
   trigger?: any;
   disabled?: boolean;
-  openPosition: IOpenTrade;
+  openPosition: IOpenTradeCalculated;
   className?: string;
   controlledOpen?: boolean;
   onOpenChange?: (state: boolean) => void;

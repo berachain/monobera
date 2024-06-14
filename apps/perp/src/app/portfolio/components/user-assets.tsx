@@ -18,7 +18,7 @@ import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import type { IMarket } from "~/types/market";
-import type { IOpenTrade } from "~/types/order-history";
+import type { IOpenTradeCalculated } from "~/types/order-history";
 import { FilterableTableState } from "~/types/table";
 import { TotalAmount } from "../../components/total-amount";
 
@@ -51,8 +51,12 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
     };
   });
 
-  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
-  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTradeCalculated>(
+    false,
+  );
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTradeCalculated>(
+    false,
+  );
 
   const handlePaginationChange = (updater: Updater<PaginationState>) => {
     setTableState((prev) => {
@@ -114,7 +118,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
   );
 
   const table = useAsyncTable({
-    data: (openPositions as IOpenTrade[]) ?? [],
+    data: (openPositions as IOpenTradeCalculated[]) ?? [],
     columns: markets
       ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
       : [],
@@ -165,12 +169,12 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
         </div>
       </div>
       <UpdatePositionModal
-        openPosition={updateOpen as IOpenTrade}
+        openPosition={updateOpen as IOpenTradeCalculated}
         controlledOpen={!!updateOpen}
         onOpenChange={setUpdateOpen}
       />
       <ClosePositionModal
-        openPosition={deleteOpen as IOpenTrade}
+        openPosition={deleteOpen as IOpenTradeCalculated}
         controlledOpen={!!deleteOpen}
         onOpenChange={setDeleteOpen}
       />

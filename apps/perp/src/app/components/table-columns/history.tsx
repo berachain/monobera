@@ -199,7 +199,9 @@ export const generateHistoryColumns = (
         <MarketTradePNL
           position={row.original}
           positionSize={row.original.initial_pos_token}
-          closePrice={row.original.trade_open ? undefined : row.original.price}
+          closePrice={
+            row.original.trade_open ? undefined : row.original.close_price
+          }
           hoverState={false}
         />
       );

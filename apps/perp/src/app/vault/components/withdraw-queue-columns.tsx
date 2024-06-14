@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   TransactionActionType,
@@ -6,19 +7,35 @@ import {
   usePollBHoneyEpochs,
 } from "@bera/berajs";
 import { bhoneyVaultContractAddress } from "@bera/config";
-import { type HoneyWithdrawalRequest } from "@bera/proto/src";
-import { useTxn } from "@bera/shared-ui";
+import { type VaultWithdrawalRequest } from "@bera/proto/src";
+import { ActionButton, TokenInput, TokenList, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@bera/ui/dialog";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 
 const CancelWithdraw = ({
   withdrawRequest,
 }: {
-  withdrawRequest: HoneyWithdrawalRequest;
+  withdrawRequest: VaultWithdrawalRequest;
 }) => {
+  const [open, setOpen] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState<string>("");
+
+  useEffect(() => {
+    if (!open) {
+      setWithdrawAmount("");
+    }
+  }, [open]);
+
+  const [isWithdrawExceeding, setIsWithdrawExceeding] = useState(false);
   const { refetch } = usePollWithdrawQueue();
   const { account } = useBeraJs();
   const { write: cancelWrite, isLoading: isCancelLoading } = useTxn({
@@ -26,6 +43,7 @@ const CancelWithdraw = ({
     actionType: TransactionActionType.CANCEL_WITHDRAW_REQUEST,
     onSuccess: () => {
       refetch();
+      setOpen(false);
     },
   });
 
@@ -42,7 +60,51 @@ const CancelWithdraw = ({
 
   const isReady = epoch?.currentEpoch === Number(withdrawRequest.unlock_epoch);
   return (
-    <div className="flex w-full flex-row items-center justify-end gap-2">
+    <div className="flex w-full flex-row items-center gap-2">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="overflow-y-hidden pb-6 focus:outline-none">
+          <DialogHeader>
+            <DialogTitle className="mb-3">Cancel Withdrawl Amount</DialogTitle>
+          </DialogHeader>
+          <TokenList>
+            <TokenInput
+              selectable={false}
+              balance={formatFromBaseUnit(withdrawRequest.shares, 18).toString(
+                10,
+              )}
+              selected={{
+                symbol: "bHONEY",
+                address: bhoneyVaultContractAddress,
+                decimals: 18,
+                name: "bHONEY",
+              }}
+              amount={withdrawAmount}
+              setAmount={setWithdrawAmount}
+              showExceeding={true}
+              onExceeding={(isExceeding) => setIsWithdrawExceeding(isExceeding)}
+            />
+          </TokenList>
+          <ActionButton>
+            <Button
+              disabled={!withdrawAmount || isWithdrawExceeding}
+              onClick={() =>
+                cancelWrite({
+                  address: bhoneyVaultContractAddress,
+                  abi: bTokenAbi,
+                  functionName: "cancelWithdrawRequest",
+                  params: [
+                    BigInt(formatToBaseUnit(withdrawAmount, 18).toString(10)),
+                    BigInt(withdrawRequest.unlock_epoch),
+                  ],
+                })
+              }
+              className="w-full"
+            >
+              Confirm
+            </Button>
+          </ActionButton>
+        </DialogContent>
+      </Dialog>
       <Button
         size="sm"
         disabled={isRedeemLoading || isEpochLoading || !isReady}
@@ -59,17 +121,7 @@ const CancelWithdraw = ({
       </Button>
       <Button
         disabled={isCancelLoading}
-        onClick={() =>
-          cancelWrite({
-            address: bhoneyVaultContractAddress,
-            abi: bTokenAbi,
-            functionName: "cancelWithdrawRequest",
-            params: [
-              BigInt(withdrawRequest.shares),
-              BigInt(withdrawRequest.unlock_epoch),
-            ],
-          })
-        }
+        onClick={() => setOpen(true)}
         variant={"secondary"}
         size="sm"
       >
@@ -78,7 +130,7 @@ const CancelWithdraw = ({
     </div>
   );
 };
-export const withdrawQueueColumns: ColumnDef<HoneyWithdrawalRequest>[] = [
+export const withdrawQueueColumns: ColumnDef<VaultWithdrawalRequest>[] = [
   {
     header: "Amount",
     cell: ({ row }) => (
