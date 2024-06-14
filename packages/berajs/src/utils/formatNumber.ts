@@ -12,3 +12,12 @@ export const getSafeNumber = (value: string | undefined): number => {
     ? Number.MAX_SAFE_INTEGER
     : Number(value) ?? 0;
 };
+
+export const truncateDecimal = (
+  value: string | number | undefined,
+  maxDecimal: number,
+): number => {
+  if (!value) return 0;
+  const [integerPart = "0", decimalPart = "0"] = `${value}`.split(".");
+  return Number(`${integerPart}.${decimalPart.substring(0, maxDecimal)}`);
+};
