@@ -135,7 +135,9 @@ export const withdrawQueueColumns: ColumnDef<VaultWithdrawalRequest>[] = [
     header: "Amount",
     cell: ({ row }) => (
       <div className="flex flex-row items-center gap-2 text-sm font-semibold leading-7">
-        {formatFromBaseUnit(row.original.shares ?? "0", 18).toString(10)}{" "}
+        {formatFromBaseUnit(row.original.shares ?? "0", 18)
+          .dp(2)
+          .toString(10)}{" "}
         <Image
           src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png"
           alt="Honey"
