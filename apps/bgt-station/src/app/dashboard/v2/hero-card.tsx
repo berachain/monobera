@@ -36,25 +36,25 @@ export const HeroCard: React.FC<HeroCardProps> = ({
 export const HeroCards: React.FC = () => {
   const cards: HeroCardProps[] = [
     {
-      image: `${cloudinaryUrl}/Station/Delegate_w7dgcg.jpg`,
+      image: `${cloudinaryUrl}/Station/ug8exzswd7l3acphln0g.jpg`,
       title: "Delegate",
       subtitle: "Delegate BGT to validators",
       link: "/delegate",
     },
     {
-      image: `${cloudinaryUrl}/Station/Market_np5wrh.jpg`,
-      title: "Gauge",
+      image: `${cloudinaryUrl}/Station/hqeqljkwii478qlegfma.jpg`,
+      title: "Gauges",
       subtitle: "View incentives and reward Gauges",
-      link: "/gauge",
+      link: "/gauges",
     },
     {
-      image: `${cloudinaryUrl}/Station/Rewards_c6gfjc.jpg`,
+      image: `${cloudinaryUrl}/Station/rgytgfadryf0gotnwkdi.jpg`,
       title: "Rewards",
       subtitle: "Claim incentives, fees and rewards",
       link: "/rewards",
     },
     {
-      image: `${cloudinaryUrl}/Station/Redeem_pxz4zj.jpg`,
+      image: `${cloudinaryUrl}/Station/xso57in9nkp0oa05pybj.jpg`,
       title: "Redeem",
       subtitle: "Reedeem BGT for BERA",
       link: "/redeem",

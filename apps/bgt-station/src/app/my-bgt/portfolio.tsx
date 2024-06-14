@@ -13,7 +13,7 @@ import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type Address } from "viem";
 
 import YellowCard from "~/components/yellow-card";
-import AverageGaugeWeight from "../gauge/average-gauge-weight";
+import AverageGaugeWeight from "../gauges/average-gauge-weight";
 import { Banner } from "./components/banner";
 import { ClaimBribesDialog } from "./components/claim-bribes-dialog";
 import YourDelegations from "./components/your-delegations";

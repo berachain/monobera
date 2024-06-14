@@ -32,9 +32,11 @@ export const HowToEarnCard: React.FC<HowToEarnCardProps> = ({
         >
           {title}
         </div>
-        <div className="font-bold italic text-muted-foreground">{subtitle}</div>
+        <div className="min-h-[3.5rem] font-bold italic text-muted-foreground">
+          {subtitle}
+        </div>
       </div>
-      <div className="flex flex-grow flex-col justify-self-end">
+      <div className="flex flex-grow translate-y-[-20%] flex-col justify-self-end">
         <img src={image} alt={title} className="h-[160px] object-contain" />
       </div>
     </div>
@@ -166,30 +168,30 @@ export const HowToEarn = () => {
   ];
   const step2Cards: HowToEarnCardProps[] = [
     {
-      image: `${cloudinaryUrl}/Station/5252352_q3bwdt.jpg`,
+      image: `${cloudinaryUrl}/Station/ktnyx2nwlhe7wfrdlcu6.jpg`,
       title: "Step 2",
       subtitle: "Receive receipt tokens",
     },
     {
-      image: `${cloudinaryUrl}/Station/yeyrlwag0mqbg9ratcys.jpg`,
+      image: `${cloudinaryUrl}/Station/hj1vaocabjjngsoyq3bx.jpg`,
       title: "Step 2",
       subtitle: "Receive receipt tokens",
     },
     {
-      image: `${cloudinaryUrl}/Station/d5nomljrhyjvg53ul4eu.jpg`,
+      image: `${cloudinaryUrl}/Station/fw7az7bckmttzdjmqf9d.jpg`,
       title: "Step 2",
       subtitle: "Receive receipt tokens",
     },
   ];
   const step3Cards: HowToEarnCardProps[] = [
     {
-      image: `${cloudinaryUrl}/Station/241414141_minavu.jpg`,
+      image: `${cloudinaryUrl}/Station/ukuiqbegdvxxouovyo6h.jpg`,
       title: "Step 3",
       subtitle: (
         <>
           Stake receipt tokens in{" "}
           <Link
-            href={"/gauge"}
+            href={"/gauges"}
             target="_blank"
             className="underline"
             rel="noreferrer"

@@ -2,7 +2,7 @@
 
 import { type Metadata } from "next";
 
-import Gauge from "../gauge/gauge";
+import Gauge from "../gauges/gauge";
 import { Explore } from "./v2/explore";
 import { Hero } from "./v2/hero-new";
 import { HowToEarn } from "./v2/how-to-earn-bgt";

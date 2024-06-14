@@ -36,6 +36,15 @@ const config = {
       "s3.amazonaws.com",
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/gauge",
+        destination: "/home",
+        permanent: false, // Set to false if you don't want the redirect to be cached permanently by browsers
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(
