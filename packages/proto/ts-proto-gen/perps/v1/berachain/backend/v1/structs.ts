@@ -127,6 +127,7 @@ export interface PairFixedFee {
   min_lev_pos_honey: string;
 }
 
+/** TODO: remove. */
 export interface HoneyWithdrawalRequest {
   created_by: string;
   owner: string;
@@ -141,6 +142,12 @@ export interface HoneyWithdrawalCancel {
   shares: string;
   epoch_created: string;
   unlock_epoch: string;
+}
+
+export interface VaultWithdrawalRequest {
+  owner: string;
+  unlock_epoch: string;
+  shares: string;
 }
 
 export interface OpenTrade {
@@ -165,8 +172,6 @@ export interface OpenTrade {
   /** (1e18) */
   open_fee: string;
   timestamp_open: string;
-  /** (1e18) */
-  liq_price: string;
 }
 
 export interface OpenLimitOrder {
@@ -226,7 +231,6 @@ export interface MarketOrder {
   leverage: string;
   tp: string;
   sl: string;
-  price: string;
   price_impact_p: string;
   percent_profit: string;
   pnl: string;
@@ -235,8 +239,8 @@ export interface MarketOrder {
   rollover_fee: string;
   funding_fee: string;
   closing_fee: string;
-  liq_price: string;
   close_type: string;
+  close_price: string;
 }
 
 export interface TradingSummary {
@@ -1440,6 +1444,95 @@ export const HoneyWithdrawalCancel = {
   },
 };
 
+function createBaseVaultWithdrawalRequest(): VaultWithdrawalRequest {
+  return { owner: "", unlock_epoch: "", shares: "" };
+}
+
+export const VaultWithdrawalRequest = {
+  encode(message: VaultWithdrawalRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.owner !== "") {
+      writer.uint32(10).string(message.owner);
+    }
+    if (message.unlock_epoch !== "") {
+      writer.uint32(18).string(message.unlock_epoch);
+    }
+    if (message.shares !== "") {
+      writer.uint32(26).string(message.shares);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): VaultWithdrawalRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVaultWithdrawalRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.owner = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.unlock_epoch = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.shares = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VaultWithdrawalRequest {
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      unlock_epoch: isSet(object.unlock_epoch) ? String(object.unlock_epoch) : "",
+      shares: isSet(object.shares) ? String(object.shares) : "",
+    };
+  },
+
+  toJSON(message: VaultWithdrawalRequest): unknown {
+    const obj: any = {};
+    if (message.owner !== "") {
+      obj.owner = message.owner;
+    }
+    if (message.unlock_epoch !== "") {
+      obj.unlock_epoch = message.unlock_epoch;
+    }
+    if (message.shares !== "") {
+      obj.shares = message.shares;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<VaultWithdrawalRequest>, I>>(base?: I): VaultWithdrawalRequest {
+    return VaultWithdrawalRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<VaultWithdrawalRequest>, I>>(object: I): VaultWithdrawalRequest {
+    const message = createBaseVaultWithdrawalRequest();
+    message.owner = object.owner ?? "";
+    message.unlock_epoch = object.unlock_epoch ?? "";
+    message.shares = object.shares ?? "";
+    return message;
+  },
+};
+
 function createBaseOpenTrade(): OpenTrade {
   return {
     trader: "",
@@ -1457,7 +1550,6 @@ function createBaseOpenTrade(): OpenTrade {
     closing_fee: "",
     open_fee: "",
     timestamp_open: "",
-    liq_price: "",
   };
 }
 
@@ -1507,9 +1599,6 @@ export const OpenTrade = {
     }
     if (message.timestamp_open !== "") {
       writer.uint32(122).string(message.timestamp_open);
-    }
-    if (message.liq_price !== "") {
-      writer.uint32(130).string(message.liq_price);
     }
     return writer;
   },
@@ -1626,13 +1715,6 @@ export const OpenTrade = {
 
           message.timestamp_open = reader.string();
           continue;
-        case 16:
-          if (tag !== 130) {
-            break;
-          }
-
-          message.liq_price = reader.string();
-          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1659,7 +1741,6 @@ export const OpenTrade = {
       closing_fee: isSet(object.closing_fee) ? String(object.closing_fee) : "",
       open_fee: isSet(object.open_fee) ? String(object.open_fee) : "",
       timestamp_open: isSet(object.timestamp_open) ? String(object.timestamp_open) : "",
-      liq_price: isSet(object.liq_price) ? String(object.liq_price) : "",
     };
   },
 
@@ -1710,9 +1791,6 @@ export const OpenTrade = {
     if (message.timestamp_open !== "") {
       obj.timestamp_open = message.timestamp_open;
     }
-    if (message.liq_price !== "") {
-      obj.liq_price = message.liq_price;
-    }
     return obj;
   },
 
@@ -1736,7 +1814,6 @@ export const OpenTrade = {
     message.closing_fee = object.closing_fee ?? "";
     message.open_fee = object.open_fee ?? "";
     message.timestamp_open = object.timestamp_open ?? "";
-    message.liq_price = object.liq_price ?? "";
     return message;
   },
 };
@@ -2047,7 +2124,7 @@ export const ClosedTrade = {
       writer.uint32(154).string(message.borrowing_fee);
     }
     if (message.open_fee !== "") {
-      writer.uint32(178).string(message.open_fee);
+      writer.uint32(162).string(message.open_fee);
     }
     return writer;
   },
@@ -2192,8 +2269,8 @@ export const ClosedTrade = {
 
           message.borrowing_fee = reader.string();
           continue;
-        case 22:
-          if (tag !== 178) {
+        case 20:
+          if (tag !== 162) {
             break;
           }
 
@@ -2342,7 +2419,6 @@ function createBaseMarketOrder(): MarketOrder {
     leverage: "",
     tp: "",
     sl: "",
-    price: "",
     price_impact_p: "",
     percent_profit: "",
     pnl: "",
@@ -2351,8 +2427,8 @@ function createBaseMarketOrder(): MarketOrder {
     rollover_fee: "",
     funding_fee: "",
     closing_fee: "",
-    liq_price: "",
     close_type: "",
+    close_price: "",
   };
 }
 
@@ -2397,38 +2473,35 @@ export const MarketOrder = {
     if (message.sl !== "") {
       writer.uint32(106).string(message.sl);
     }
-    if (message.price !== "") {
-      writer.uint32(114).string(message.price);
-    }
     if (message.price_impact_p !== "") {
-      writer.uint32(122).string(message.price_impact_p);
+      writer.uint32(114).string(message.price_impact_p);
     }
     if (message.percent_profit !== "") {
-      writer.uint32(130).string(message.percent_profit);
+      writer.uint32(122).string(message.percent_profit);
     }
     if (message.pnl !== "") {
-      writer.uint32(138).string(message.pnl);
+      writer.uint32(130).string(message.pnl);
     }
     if (message.open_fee !== "") {
-      writer.uint32(146).string(message.open_fee);
+      writer.uint32(138).string(message.open_fee);
     }
     if (message.borrowing_fee !== "") {
-      writer.uint32(154).string(message.borrowing_fee);
+      writer.uint32(146).string(message.borrowing_fee);
     }
     if (message.rollover_fee !== "") {
-      writer.uint32(162).string(message.rollover_fee);
+      writer.uint32(154).string(message.rollover_fee);
     }
     if (message.funding_fee !== "") {
-      writer.uint32(170).string(message.funding_fee);
+      writer.uint32(162).string(message.funding_fee);
     }
     if (message.closing_fee !== "") {
-      writer.uint32(178).string(message.closing_fee);
-    }
-    if (message.liq_price !== "") {
-      writer.uint32(186).string(message.liq_price);
+      writer.uint32(170).string(message.closing_fee);
     }
     if (message.close_type !== "") {
-      writer.uint32(194).string(message.close_type);
+      writer.uint32(178).string(message.close_type);
+    }
+    if (message.close_price !== "") {
+      writer.uint32(186).string(message.close_price);
     }
     return writer;
   },
@@ -2536,77 +2609,70 @@ export const MarketOrder = {
             break;
           }
 
-          message.price = reader.string();
+          message.price_impact_p = reader.string();
           continue;
         case 15:
           if (tag !== 122) {
             break;
           }
 
-          message.price_impact_p = reader.string();
+          message.percent_profit = reader.string();
           continue;
         case 16:
           if (tag !== 130) {
             break;
           }
 
-          message.percent_profit = reader.string();
+          message.pnl = reader.string();
           continue;
         case 17:
           if (tag !== 138) {
             break;
           }
 
-          message.pnl = reader.string();
+          message.open_fee = reader.string();
           continue;
         case 18:
           if (tag !== 146) {
             break;
           }
 
-          message.open_fee = reader.string();
+          message.borrowing_fee = reader.string();
           continue;
         case 19:
           if (tag !== 154) {
             break;
           }
 
-          message.borrowing_fee = reader.string();
+          message.rollover_fee = reader.string();
           continue;
         case 20:
           if (tag !== 162) {
             break;
           }
 
-          message.rollover_fee = reader.string();
+          message.funding_fee = reader.string();
           continue;
         case 21:
           if (tag !== 170) {
             break;
           }
 
-          message.funding_fee = reader.string();
+          message.closing_fee = reader.string();
           continue;
         case 22:
           if (tag !== 178) {
             break;
           }
 
-          message.closing_fee = reader.string();
+          message.close_type = reader.string();
           continue;
         case 23:
           if (tag !== 186) {
             break;
           }
 
-          message.liq_price = reader.string();
-          continue;
-        case 24:
-          if (tag !== 194) {
-            break;
-          }
-
-          message.close_type = reader.string();
+          message.close_price = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -2632,7 +2698,6 @@ export const MarketOrder = {
       leverage: isSet(object.leverage) ? String(object.leverage) : "",
       tp: isSet(object.tp) ? String(object.tp) : "",
       sl: isSet(object.sl) ? String(object.sl) : "",
-      price: isSet(object.price) ? String(object.price) : "",
       price_impact_p: isSet(object.price_impact_p) ? String(object.price_impact_p) : "",
       percent_profit: isSet(object.percent_profit) ? String(object.percent_profit) : "",
       pnl: isSet(object.pnl) ? String(object.pnl) : "",
@@ -2641,8 +2706,8 @@ export const MarketOrder = {
       rollover_fee: isSet(object.rollover_fee) ? String(object.rollover_fee) : "",
       funding_fee: isSet(object.funding_fee) ? String(object.funding_fee) : "",
       closing_fee: isSet(object.closing_fee) ? String(object.closing_fee) : "",
-      liq_price: isSet(object.liq_price) ? String(object.liq_price) : "",
       close_type: isSet(object.close_type) ? String(object.close_type) : "",
+      close_price: isSet(object.close_price) ? String(object.close_price) : "",
     };
   },
 
@@ -2687,9 +2752,6 @@ export const MarketOrder = {
     if (message.sl !== "") {
       obj.sl = message.sl;
     }
-    if (message.price !== "") {
-      obj.price = message.price;
-    }
     if (message.price_impact_p !== "") {
       obj.price_impact_p = message.price_impact_p;
     }
@@ -2714,11 +2776,11 @@ export const MarketOrder = {
     if (message.closing_fee !== "") {
       obj.closing_fee = message.closing_fee;
     }
-    if (message.liq_price !== "") {
-      obj.liq_price = message.liq_price;
-    }
     if (message.close_type !== "") {
       obj.close_type = message.close_type;
+    }
+    if (message.close_price !== "") {
+      obj.close_price = message.close_price;
     }
     return obj;
   },
@@ -2741,7 +2803,6 @@ export const MarketOrder = {
     message.leverage = object.leverage ?? "";
     message.tp = object.tp ?? "";
     message.sl = object.sl ?? "";
-    message.price = object.price ?? "";
     message.price_impact_p = object.price_impact_p ?? "";
     message.percent_profit = object.percent_profit ?? "";
     message.pnl = object.pnl ?? "";
@@ -2750,8 +2811,8 @@ export const MarketOrder = {
     message.rollover_fee = object.rollover_fee ?? "";
     message.funding_fee = object.funding_fee ?? "";
     message.closing_fee = object.closing_fee ?? "";
-    message.liq_price = object.liq_price ?? "";
     message.close_type = object.close_type ?? "";
+    message.close_price = object.close_price ?? "";
     return message;
   },
 };

@@ -8,7 +8,7 @@ import { TableContext } from "~/context/table-context";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type IMarket } from "~/types/market";
-import { ILimitOrder, IOpenTrade } from "~/types/order-history";
+import { ILimitOrder, IOpenTradeCalculated } from "~/types/order-history";
 import { type TableStateProps } from "~/types/table";
 import {
   type ChartingLibraryWidgetOptions,
@@ -50,7 +50,10 @@ export function OrderChart({
   const { data: openLimitOrdersData } = usePollOpenLimitOrders(tableState);
 
   const openPositions = useMemo(() => {
-    return generateMarketOrders(openPositionData, markets) as IOpenTrade[];
+    return generateMarketOrders(
+      openPositionData,
+      markets,
+    ) as IOpenTradeCalculated[];
   }, [openPositionData, markets]);
   const openOrders = useMemo(() => {
     return generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[];
@@ -63,7 +66,7 @@ export function OrderChart({
 
   const [positionOpenState, setPositionOpenState] = useState(false);
   const [orderOpenState, setOrderOpenState] = useState(false);
-  const [position, setPosition] = useState<IOpenTrade>();
+  const [position, setPosition] = useState<IOpenTradeCalculated>();
   const [order, setOrder] = useState<ILimitOrder>();
   const [chartReady, setChartReady] = useState(false);
 

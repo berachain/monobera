@@ -27,7 +27,7 @@ import type {
   IClosedTrade,
   ILimitOrder,
   IMarketOrder,
-  IOpenTrade,
+  IOpenTradeCalculated,
 } from "~/types/order-history";
 import { TotalAmount } from "../../components/total-amount";
 import { getAssetCardList } from "./asset-cards/getAssetCards";
@@ -41,8 +41,12 @@ export function OrderHistory({
   markets: IMarket[];
   size: "sm" | "md" | "lg";
 }) {
-  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
-  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTradeCalculated>(
+    false,
+  );
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTradeCalculated>(
+    false,
+  );
 
   const { tableState, setTableState } = useContext(TableContext);
   const { isConnected } = useBeraJs();
@@ -131,9 +135,14 @@ export function OrderHistory({
 
   // props generation
   const tableProps = useMemo(() => {
-    let data: (IOpenTrade | ILimitOrder | IMarketOrder | IClosedTrade)[] = [];
+    let data: (
+      | IOpenTradeCalculated
+      | ILimitOrder
+      | IMarketOrder
+      | IClosedTrade
+    )[] = [];
     let columns:
-      | ColumnDef<IOpenTrade>[]
+      | ColumnDef<IOpenTradeCalculated>[]
       | ColumnDef<ILimitOrder>[]
       | ColumnDef<IMarketOrder>[]
       | ColumnDef<IClosedTrade>[] = [];
@@ -169,7 +178,7 @@ export function OrderHistory({
         isValidating = isPositionsValidating;
         break;
       case "orders":
-        data = openMarketOrders;
+        data = openMarketOrders as ILimitOrder[];
         columns = markets ? generateOrdersColumns(markets) : [];
         totalPages = openOrdersPagination?.total_pages ?? 1;
         isLoading = isOpenOrdersLoading || !isConnected;
@@ -198,7 +207,7 @@ export function OrderHistory({
         isValidating = isMarketOrdersValidation;
         break;
       case "pnl":
-        data = closedMarketTrades;
+        data = closedMarketTrades as IClosedTrade[];
         columns = markets ? generatePnlColumns(markets) : [];
         totalPages = closedTradesPagination?.total_pages ?? 1;
         isLoading = isClosedTradesLoading || !isConnected;
@@ -244,7 +253,7 @@ export function OrderHistory({
 
   const assetCardItems = useMemo(() => {
     return getAssetCardList({
-      openPositionsItems: openMarketPositions as IOpenTrade[],
+      openPositionsItems: openMarketPositions as IOpenTradeCalculated[],
       openOrderItems: openMarketOrders as ILimitOrder[],
       marketOrdersItems: marketOrders as IMarketOrder[],
       closedTradesItems: closedMarketTrades as IClosedTrade[],
@@ -267,12 +276,12 @@ export function OrderHistory({
         tabType={tableState.tabType ?? "positions"}
       />
       <UpdatePositionModal
-        openPosition={updateOpen as IOpenTrade}
+        openPosition={updateOpen as IOpenTradeCalculated}
         controlledOpen={!!updateOpen}
         onOpenChange={setUpdateOpen}
       />
       <ClosePositionModal
-        openPosition={deleteOpen as IOpenTrade}
+        openPosition={deleteOpen as IOpenTradeCalculated}
         controlledOpen={!!deleteOpen}
         onOpenChange={setDeleteOpen}
       />
