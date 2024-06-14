@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import { usePollBHoneyBalance, usePollBalanceOfAssets } from "@bera/berajs";
+import { type VaultWithdrawalRequest } from "@bera/proto/src";
 import {
   FormattedNumber,
   SimpleTable,
@@ -16,7 +17,6 @@ import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { usePollVaultEarnings } from "~/hooks/usePollVaultEarnings";
 import { usePollWithdrawQueue } from "~/hooks/usePollWithdrawQueue";
 import { withdrawQueueColumns } from "./withdraw-queue-columns";
-import { type VaultWithdrawalRequest } from "@bera/proto/src";
 
 interface RewardsWithdrawProps {
   actionType: "deposit" | "withdraw";
@@ -124,7 +124,7 @@ export const RewardsWithdraw = ({ actionType }: RewardsWithdrawProps) => {
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-4 sm:flex-row sm:gap-4 mt-2">
+      <div className="mt-2 flex w-full flex-col gap-4 sm:flex-row sm:gap-4">
         <div className="flex w-full flex-col justify-between gap-1 rounded-md border border-border bg-muted px-6 py-4">
           <div className="text-sm font-medium text-muted-foreground">
             bHONEY Balance
@@ -167,7 +167,12 @@ export const RewardsWithdraw = ({ actionType }: RewardsWithdrawProps) => {
             <Skeleton className="h-[28px] w-1/2" />
           ) : (
             <div className="flex flex-row items-center gap-2 text-xl font-semibold leading-7">
-              {`${formatFromBaseUnit(shares ?? 0, 18).toString(10)}`}
+              <FormattedNumber
+                value={formatFromBaseUnit(shares ?? 0, 18).toString(10)}
+                compact={false}
+                compactThreshold={999}
+                visibleDecimals={2}
+              />
               <Image
                 src="https://raw.githubusercontent.com/berachain/default-token-list/main/src/assets/bhoney.png"
                 alt="Honey"
