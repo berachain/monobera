@@ -70,7 +70,7 @@ export default function Content() {
         <div className="text font-medium leading-7">
           Wallet Address <span className="text-destructive-foreground">*</span>
           <div className="text-sm">
-            You have to have at least <b>0.01 ETH</b> on Ethereum Mainnet in
+            You have to have at least <b>0.001 ETH</b> on Ethereum Mainnet in
             your wallet to be able to use the faucet.
           </div>
         </div>
@@ -158,7 +158,7 @@ export default function Content() {
             balance
           </AlertTitle>
           <AlertDescription>
-            You have to have at least <b>0.01 ETH</b> on Ethereum Mainnet in
+            You have to have at least <b>0.001 ETH</b> on Ethereum Mainnet in
             your wallet to be able to use the faucet.
           </AlertDescription>
         </Alert>
