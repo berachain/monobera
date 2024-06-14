@@ -216,11 +216,11 @@ export const HowToEarn = () => {
 
   return (
     <div>
-      <span className="leading-15 mb-6 flex flex-row items-center gap-2 text-4xl font-bold">
+      <div className="leading-15 mb-6 text-4xl font-bold">
         How to earn{" "}
-        <Icons.bgt className=" drop-shadow-[0_5px_5px_rgba(251,191,36,0.5)] md:h-10 md:w-10" />{" "}
+        <Icons.bgt className="inline-block drop-shadow-[0_5px_5px_rgba(251,191,36,0.5)] md:h-10 md:w-10" />{" "}
         BGT
-      </span>
+      </div>
       <div className="grid w-full  auto-rows-[215px] grid-cols-1 justify-between gap-4 lg:grid-cols-3">
         <FadeSlides
           currentSlide={currentSlide}

@@ -22,8 +22,8 @@ export const HeroCard: React.FC<HeroCardProps> = ({
       href={link}
       target="__blank"
     >
-      <div className="flex flex-grow flex-col items-center justify-center transition duration-300 group-hover:rotate-12">
-        <img src={image} alt={title} className=" w-full object-cover" />
+      <div className="flex max-h-[230px] flex-grow flex-col items-center justify-center transition duration-300 group-hover:rotate-12">
+        <img src={image} alt={title} className="h-full w-full object-contain" />
       </div>
       <div className="mb-8 flex h-1/5 flex-col items-center justify-center text-center transition duration-300 ease-in-out group-hover:translate-y-[-12%]">
         <h3 className="text-3xl font-semibold">{title}</h3>

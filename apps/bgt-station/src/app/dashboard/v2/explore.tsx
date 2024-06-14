@@ -124,10 +124,8 @@ export const Explore = () => {
       <p className=" leading-15 mb-6 gap-2 text-4xl font-bold">
         Explore the
         <br />
-        <span className="flex flex-row items-center gap-2">
-          <Icons.logo width={52} height={52} />
-          Berachain Ecosystem.
-        </span>
+        <Icons.logo className="inline-block" width={52} height={52} /> Berachain
+        Ecosystem.
       </p>
       <div className="grid w-full auto-rows-[116px] grid-cols-1 justify-around gap-4 lg:grid-cols-3">
         {cards.map((card, index) => (
