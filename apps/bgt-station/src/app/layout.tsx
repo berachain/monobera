@@ -2,9 +2,14 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
-import { IBM_Plex_Sans } from "next/font/google";
+import { IBM_Plex_Sans, Shadows_Into_Light } from "next/font/google";
 import Script from "next/script";
-import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
+import {
+  Footer,
+  Header,
+  TailwindIndicator,
+  TermOfUseModal,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -55,11 +60,12 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <div className="z-10 flex-1">
               <Header navItems={navItems} />
               <main
-                className="w-full pt-start"
+                className="container min-h-minimum w-full pb-16 pt-start"
                 style={{ paddingTop: `${150 + 50 * activeBanners}px` }}
               >
                 {props.children}
               </main>
+              <Footer />
             </div>
           </div>
           <TailwindIndicator />

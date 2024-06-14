@@ -1,4 +1,5 @@
 import { withSentryConfig } from "@sentry/nextjs";
+
 import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
@@ -34,15 +35,6 @@ const config = {
       "raw.githubusercontent.com",
       "s3.amazonaws.com",
     ],
-  },
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/gauge",
-        permanent: true, // Set to false if you don't want the redirect to be cached permanently by browsers
-      },
-    ];
   },
 };
 

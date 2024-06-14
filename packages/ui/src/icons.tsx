@@ -8,6 +8,7 @@ import {
   ArrowRight,
   ArrowUpDown,
   ArrowUpRight,
+  BadgePlus,
   Biohazard,
   CalendarClock,
   CandlestickChart,
@@ -95,15 +96,33 @@ import {
   X,
   XCircle,
   XOctagon,
-  BadgePlus,
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
 
+import { DappIcons } from "./dapp-icons";
 import { FavIcons } from "./fav-icons";
 import { WalletTxnIcons } from "./wallet-txn-icons";
 
 export type Icon = LucideIcon;
+
+const twitterX = (props: LucideProps) => {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M31.5017 1.92167H37.635L24.235 17.2383L40 38.0767H27.6567L17.99 25.4367L6.92667 38.0767H0.79L15.1233 21.6933L0 1.92334H12.6567L21.395 13.4767L31.5017 1.92167ZM29.35 34.4067H32.7483L10.81 5.4H7.16333L29.35 34.4067Z"
+        fill="#EBE9E7"
+      />
+    </svg>
+  );
+};
 
 export const Icons = {
   badgePlus: BadgePlus,
@@ -166,6 +185,7 @@ export const Icons = {
   help: HelpCircle,
   pizza: Pizza,
   twitter: Twitter,
+  twitterX: twitterX,
   check: Check,
   copy: Copy,
   copyDone: ClipboardCheck,
@@ -901,4 +921,5 @@ export const Icons = {
   ),
   ...WalletTxnIcons,
   ...FavIcons,
+  ...DappIcons,
 };
