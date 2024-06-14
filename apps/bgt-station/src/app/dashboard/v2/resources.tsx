@@ -17,9 +17,9 @@ export const Resources = () => {
           Dive Into The <br />
           Documentation.
         </div>
-        <div className="mb-4 max-w-[70%] text-muted-foreground">
-          Are you a fellow builder in the making? Check out our docs to start
-          building on BeraChain today.
+        <div className="mb-4 max-w-[70%] text-sm text-muted-foreground">
+          Are you a fellow builder in the making?
+          <br /> Check out our docs to start building on BeraChain today.
         </div>
         <Link
           href={docsUrl}
@@ -28,12 +28,9 @@ export const Resources = () => {
         >
           Read Docs
         </Link>
-        <div className="absolute bottom-[10%] right-0 z-[-1]">
+        <div className="absolute  right-0 z-[-1]">
           <img
             className=" w-full rounded-t-lg "
-            style={{
-              filter: "brightness(60%)",
-            }}
             src={`${cloudinaryUrl}/Station/Developer_Docs_xffp1c.png`}
             alt="bg-dark"
           />
@@ -44,7 +41,7 @@ export const Resources = () => {
           Join The <br />
           Community.
         </div>
-        <div className="mb-4 max-w-[70%] text-muted-foreground">
+        <div className="mb-4 max-w-[70%] text-sm text-muted-foreground">
           Eager to connect and learn with fellow enthusiasts? Explore and join
           our vibrant community.
         </div>
@@ -52,31 +49,28 @@ export const Resources = () => {
           <Link
             href={discord}
             target="__blank"
-            className="w-fit rounded-xs border-[1px] border-border bg-black p-2"
+            className="w-fit rounded-xs border-[1px] border-border bg-black p-3"
           >
-            <Icons.discord width={40} height={40} />
+            <Icons.discordSquare width={40} height={40} />
           </Link>
           <Link
             href={twitter}
             target="__blank"
-            className="w-fit rounded-xs border-[1px] border-border bg-black p-2"
+            className="w-fit rounded-xs border-[1px] border-border bg-black p-3"
           >
             <Icons.twitterX width={40} height={38} />
           </Link>
           <Link
             href={telegram}
             target="__blank"
-            className="w-fit rounded-xs border-[1px] border-border bg-black p-2"
+            className="w-fit rounded-xs border-[1px] border-border bg-black p-3"
           >
             <Icons.telegram width={40} height={40} />
           </Link>
         </div>
-        <div className="absolute bottom-[-5%] right-0 z-[-1]">
+        <div className="absolute right-0 z-[-1]">
           <img
             className=" w-full rounded-t-lg "
-            style={{
-              filter: "brightness(60%)",
-            }}
             src={`${cloudinaryUrl}/Station/Community_rvpwo5.png`}
             alt="bg-dark"
           />

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function DashBoard() {
   return (
-    <div className=" mx-auto flex max-w-[1096px] flex-col">
+    <div className=" mx-auto flex max-w-[1100px] flex-col">
       <div className="absolute left-0 right-0 z-[-1]">
         <svg
           width="100%"

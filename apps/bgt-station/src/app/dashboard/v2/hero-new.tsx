@@ -16,7 +16,7 @@ export const Hero = () => {
             for all your
             <span className="flex flex-row">
               BGT.
-              <Icons.bgt className="translate-x-[-30%] translate-y-[-20%] drop-shadow-[0_15px_15px_rgba(251,191,36,0.5)] md:h-16 md:w-16" />
+              <Icons.bgt className="absolute right-0 translate-x-[65%] translate-y-[-20%] drop-shadow-[0_15px_15px_rgba(251,191,36,0.5)] md:h-16 md:w-16" />
             </span>
           </span>
         </div>

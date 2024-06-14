@@ -33,7 +33,7 @@ export const ExploreCard: React.FC<ExploreCardProps> = ({
     <Link
       href={href}
       target="__blank"
-      className={`grid w-full cursor-pointer grid-cols-[minmax(110px,_1fr)_3fr] items-center justify-between gap-4 overflow-hidden rounded-xl border-[1px] border-border bg-transparent shadow-[0_10px_10px_0px_transparent] transition duration-300 hover:translate-y-[-1%] hover:scale-[1.02] hover:shadow-[${color}]`}
+      className={`grid w-full cursor-pointer grid-cols-[minmax(90px,_1fr)_3fr] items-center justify-between gap-4 overflow-hidden rounded-xl border-[1px] border-border bg-transparent shadow-[0_10px_10px_0px_transparent] transition duration-300 hover:translate-y-[-1%] hover:scale-[1.02] hover:shadow-[${color}]`}
     >
       <div
         className="flex h-full flex-col items-center justify-center"
@@ -71,7 +71,7 @@ export const Explore = () => {
       href: bgtUrl,
     },
     {
-      image: <Icons.HoneyPlain width={40} height={40} />,
+      image: <Icons.HoneyPlain width={44} height={44} />,
       title: "Honey",
       subtitle: "Mint or redeem Berachain’s native stablecoin",
       background:
@@ -79,7 +79,7 @@ export const Explore = () => {
       href: honeyUrl,
     },
     {
-      image: <Icons.BexPlain width={40} height={40} />,
+      image: <Icons.BexPlain width={44} height={44} />,
       title: "BEX",
       subtitle: "Swap Tokens and provide liquidity",
       background:
@@ -87,7 +87,7 @@ export const Explore = () => {
       href: dexUrl,
     },
     {
-      image: <Icons.FaucetPlain width={40} height={40} />,
+      image: <Icons.FaucetPlain width={44} height={44} />,
       title: "Faucet",
       subtitle: "Fund your testnet wallet with BERA tokens",
       background:
@@ -95,7 +95,7 @@ export const Explore = () => {
       href: faucetUrl,
     },
     {
-      image: <Icons.BeratailPlain width={40} height={40} />,
+      image: <Icons.BeratailPlain width={44} height={44} />,
       title: "Beratrails",
       subtitle: "Blockchain Explorer",
       background:
@@ -103,7 +103,7 @@ export const Explore = () => {
       href: blockExplorerUrl,
     },
     {
-      image: <Icons.BerpsPlain width={40} height={40} />,
+      image: <Icons.BerpsPlain width={44} height={44} />,
       title: "BERPS",
       subtitle: "Trade your favorite pairs",
       background:
@@ -111,7 +111,7 @@ export const Explore = () => {
       href: perpsUrl,
     },
     {
-      image: <Icons.BendPlain width={40} height={40} />,
+      image: <Icons.BendPlain width={44} height={44} />,
       title: "BEND",
       subtitle: "Supply assets and borrow honey",
       background:
