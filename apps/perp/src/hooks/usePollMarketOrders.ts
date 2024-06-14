@@ -20,7 +20,7 @@ export const usePollMarketOrders = (props: TableStateProps) => {
     async () => {
       if (account && queryString) {
         const res = await fetch(
-          `${perpsEndpoint}/v2/trading-history/traders/${account}${
+          `${perpsEndpoint}/trading-history/traders/${account}${
             queryString ? `?${queryString}` : ""
           }`,
         );
