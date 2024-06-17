@@ -1,11 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-
 import { formatter, useBgtApy, usePollHoneyVaultBalance } from "@bera/berajs";
 import { bhoneyVaultContractAddress, cloudinaryUrl } from "@bera/config";
-import { FormattedNumber, Tooltip } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip, WobbleCard } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { usePollFeesApr } from "~/hooks/usePollFeesApr";
@@ -38,15 +37,31 @@ export default function Claim() {
   }, [init, bgtApr, honeyLocked]);
 
   return (
-    <div className="relative w-full overflow-hidden rounded-md border border-border bg-[#FEFCE8] px-10 py-8 dark:bg-[#231D14]">
+    <div className="relative w-full overflow-hidden rounded-md border border-border bg-[#FEFCE8] px-0 py-0  dark:bg-[#231D14]">
       <Image
-        src={`${cloudinaryUrl}/BERPS/HoneyVaultBanner2_vhuynl`}
-        alt="honey-jar"
-        width={1080}
-        height={186}
-        className="absolute bottom-0 right-0 block h-[186px] object-cover"
+        src={`${cloudinaryUrl}/BERPS/vault_banner_dark_bg`}
+        alt="honey-jar-dark"
+        fill={true}
+        className="hidden h-auto w-full object-cover object-right dark:block"
       />
-      <div className=" relative inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-warning-foreground bg-muted px-3 py-2">
+      <Image
+        src={`${cloudinaryUrl}/BERPS/vault_banner_light_bg`}
+        alt="honey-jar-light"
+        fill={true}
+        className="h-auto w-full object-cover object-right dark:hidden"
+      />
+      <WobbleCard
+        className=""
+        containerClassName="bg-transparent w-full z-2 h-full absolute"
+      >
+        <Image
+          src={`${cloudinaryUrl}/BERPS/vault_banner_bear_final`}
+          alt="honey-jar-dark"
+          fill={true}
+          className="h-auto w-full object-cover object-right"
+        />
+      </WobbleCard>
+      <div className=" relative inline-flex h-[52px] w-fit items-center justify-center gap-1 rounded-md border border-warning-foreground bg-muted px-3 py-2 mt-8 ml-10 ">
         <div className="font-['IBM Plex Sans'] text-3xl font-semibold leading-9 text-warning-foreground">
           {isHoneyVaultBalanceLoading || isFeesAprLoading || !init ? (
             <Skeleton className="h-[28px] w-[80px]" />
@@ -60,7 +75,7 @@ export default function Claim() {
           )}
         </div>
       </div>
-      <div className=" relative mt-4 w-full text-sm text-muted-foreground">
+      <div className="relative mt-4 w-fit rounded-md border border-border bg-muted px-3 py-1 text-sm text-muted-foreground ml-10 mb-8">
         APY
         <Tooltip
           text={
@@ -72,7 +87,7 @@ export default function Claim() {
               algorithmic and subject to change.
             </>
           }
-          className="ml-1 mb-1"
+          className="mb-1 ml-1"
         />
       </div>
     </div>
