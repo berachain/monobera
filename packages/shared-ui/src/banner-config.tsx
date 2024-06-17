@@ -113,11 +113,18 @@ export const bannerConfig: BannerConfig = {
       bannerComponent: <NetworkCongestedBanner />,
     },
     [DappBannerType.CUSTOM]: {
-      enabled: false,
+      enabled: true,
+      hrefs: [
+        "/berpetuals",
+        "/berpetuals/ETH-USDC",
+        "/berpetuals/BTC-USDC",
+        "/berpetuals/TIA-USDC",
+        "/berpetuals/ATOM-USDC",
+      ],
       bannerComponent: (
         <CustomizedBanner
-          className="text-xs md:text-sm px-2"
-          textComponent="System Maintenance: Our services will be temporarily unavailable, but we&apos;ll be back up shortly. Please wind down positions and deposits."
+          className="px-2 text-xs md:text-sm"
+          textComponent="System Maintenance: Trading has been temporarily paused, but we'll be back up shortly."
         />
       ),
     },
