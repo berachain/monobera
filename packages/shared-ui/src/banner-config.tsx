@@ -113,7 +113,7 @@ export const bannerConfig: BannerConfig = {
       bannerComponent: <NetworkCongestedBanner />,
     },
     [DappBannerType.CUSTOM]: {
-      enabled: true,
+      enabled: false,
       hrefs: [
         "/berpetuals",
         "/berpetuals/ETH-USDC",
