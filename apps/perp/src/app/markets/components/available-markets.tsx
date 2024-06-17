@@ -9,7 +9,7 @@ import { marketTableColumn } from "./market-table-column";
 export default function AvailableMarket({ markets }: { markets: IMarket[] }) {
   const [search, searchInput] = useState<string | undefined>(undefined);
   const filteredMarkets = useMemo(() => {
-    return markets.filter((market) => {
+    return markets?.filter((market) => {
       if (search) {
         return (
           market.name.toLowerCase().includes(search.toLowerCase()) ||
