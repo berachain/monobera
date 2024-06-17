@@ -169,7 +169,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         Deposit
       </Button>
     ),
-    accessorKey: "incentives",
+    accessorKey: "deposit-lp",
     enableSorting: false,
   },
 ];
