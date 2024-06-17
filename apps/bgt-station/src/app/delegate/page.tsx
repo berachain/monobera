@@ -1,12 +1,12 @@
 import React from "react";
 import { type Metadata } from "next";
+import { bgtName } from "@bera/config";
+import { getMetaTitle } from "@bera/shared-ui";
 import { type Address } from "viem";
 
-import { getMetaTitle } from "@bera/shared-ui";
 import Delegate from "./delegate";
 import DemandBasedQueue from "./demand-based-queue";
 import { DelegateEnum } from "./types";
-import { bgtName } from "@bera/config";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Delegate", bgtName),
@@ -28,13 +28,8 @@ export default function Page({
   }
 
   return (
-    <div className="flex flex-col justify-center gap-8 xl:flex-row xl:gap-0">
-      <div className="w-full">
-        <Delegate
-          action={action}
-          validator={searchParams.validator as Address}
-        />
-      </div>
+    <div className="flex w-full flex-col justify-center gap-8 xl:flex-row xl:gap-0">
+      <Delegate action={action} validator={searchParams.validator as Address} />
     </div>
   );
 }
