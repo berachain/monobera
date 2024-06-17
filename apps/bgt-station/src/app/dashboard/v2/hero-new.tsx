@@ -10,7 +10,7 @@ export const Hero = () => {
           <Icons.bgtFav className="h-8 w-8" /> BGT Station
         </div>
         <div className="leading-15 relative w-fit text-center text-4xl font-bold md:text-7xl md:leading-[80px]">
-          One stop shop
+          One-stop shop
           <br />
           <span className="flex flex-row flex-wrap justify-center gap-3">
             for all your
