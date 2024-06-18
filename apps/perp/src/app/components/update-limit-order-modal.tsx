@@ -18,16 +18,16 @@ import { parseUnits as ethersParseUnits } from "ethers";
 import { parseUnits, type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { TableContext } from "~/context/table-context";
-import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
-import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
-import type { ILimitOrder } from "~/types/order-history";
-import { TPSL } from "../berpetuals/components/tpsl";
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import {
   usePriceData,
   usePythUpdateFeeFormatted,
 } from "~/context/price-context";
+import { TableContext } from "~/context/table-context";
+import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
+import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
+import type { ILimitOrder } from "~/types/order-history";
+import { TPSL } from "../berpetuals/components/tpsl";
 
 export function UpdateLimitOrderModal({
   trigger,
@@ -77,7 +77,7 @@ export function UpdateLimitOrderModal({
   const ticker = openOrder?.market?.name?.split("-")[0];
 
   const [executionPrice, setExecutionPrice] = useState<string>(formattedPrice);
-  const { isLoading, write } = useOctTxn({
+  const { isLoading, write, ModalPortal } = useOctTxn({
     message: "Updating Open Limit Order",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
@@ -135,6 +135,7 @@ export function UpdateLimitOrderModal({
 
   return (
     <div className={className}>
+      {ModalPortal}
       <div onClick={() => setOpen(true)} className="h-full w-full">
         {trigger}
       </div>
