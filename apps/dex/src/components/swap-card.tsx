@@ -471,8 +471,6 @@ export function SwapCard({
                     hideMax={true}
                     disabled={true}
                     setAmount={(amount) => {
-                      // setSwapKind(SwapKind.GIVEN_OUT);
-                      setSwapAmount(amount);
                       setToAmount(amount);
                     }}
                     difference={isWrap ? undefined : differenceUSD}
