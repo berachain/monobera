@@ -69,8 +69,8 @@ function CompactNumber({
 
   return (
     <>
-      {prefix}
-      {postfix}
+      <span>{prefix}</span>
+      <span>{postfix}</span>
     </>
   );
 }
@@ -144,28 +144,34 @@ export function FormattedNumber({
       {...props}
     >
       {prefixText && <span className="mr-0.5">{prefixText}</span>}
-      {isSmallerThanMin && showIsSmallerThanMin && (number < 0 ? ">-" : "<")}{" "}
+      {isSmallerThanMin && showIsSmallerThanMin && (
+        <span>{number < 0 ? ">-" : "<"} </span>
+      )}
       {/* {isNegative && "-"} */}
       {symbol?.toLowerCase() === "usd" && !percent && <span>$</span>}
       {isBiggerThanMax ? (
         number > maxValue ? (
-          "∞"
+          <span>{"∞"}</span>
         ) : (
-          "-∞"
+          <span>{"-∞"}</span>
         )
       ) : !forceCompact ? (
-        new Intl.NumberFormat("en-US", {
-          maximumFractionDigits: decimals,
-          minimumFractionDigits: decimals,
-        }).format(Math.abs(formattedNumber))
+        <span>
+          {new Intl.NumberFormat("en-US", {
+            maximumFractionDigits: decimals,
+            minimumFractionDigits: decimals,
+          }).format(Math.abs(formattedNumber))}
+        </span>
       ) : (
-        <CompactNumber
-          value={formattedNumber}
-          visibleDecimals={decimals}
-          roundDown={roundDown}
-          // this is not been used, copied from aave, but wanna keep it in case it get useful someday ;p
-          compactThreshold={compactThreshold}
-        />
+        <span>
+          <CompactNumber
+            value={formattedNumber}
+            visibleDecimals={decimals}
+            roundDown={roundDown}
+            // this is not been used, copied from aave, but wanna keep it in case it get useful someday ;p
+            compactThreshold={compactThreshold}
+          />
+        </span>
       )}
       {percent && <span className="ml-0.5">%</span>}
       {symbol?.toLowerCase() !== "usd" && typeof symbol !== "undefined" && (
