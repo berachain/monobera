@@ -16,7 +16,8 @@ export const isBeratoken = (token: Token | undefined) => {
 
 export const isBera = (token: Token | undefined) => {
   if (token === undefined) return false;
-  if (token.address.toLowerCase() === nativeTokenAddress.toLowerCase()) return true;
+  if (token.address.toLowerCase() === nativeTokenAddress.toLowerCase())
+    return true;
 
   return false;
 };

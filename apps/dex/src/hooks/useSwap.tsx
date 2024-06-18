@@ -50,7 +50,6 @@ export const useSwap = ({
 }: ISwap) => {
   const { data: tokenData, isLoading } = useTokens();
   const tokenDictionary = tokenData?.tokenDictionary ?? {};
-  console.log(inputCurrency)
   useEffect(() => {
     if (!isLoading && tokenDictionary) {
       const inputToken = tokenDictionary[inputCurrency];
