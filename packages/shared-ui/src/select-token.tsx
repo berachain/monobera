@@ -33,7 +33,7 @@ export function SelectToken({
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className={cn("w-fit max-w-[150px] shadow", className)}>
+    <div className={cn("w-fit max-w-[150px]", className)}>
       <Button
         className="flex h-10 w-full shrink-0 gap-1 border-border bg-background p-2 text-secondary-foreground shadow"
         variant={"outline"}
