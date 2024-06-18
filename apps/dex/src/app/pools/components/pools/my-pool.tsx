@@ -27,7 +27,11 @@ export default function MyPool({ keyword }: { keyword: string }) {
           message="You need to connect your wallet to see deposited pools and
         rewards"
         />
-      ) : userPools === undefined || userPools.length === 0 ? (
+      ) : isLoading && !hasLoaded ? (
+        <div className="flex w-full flex-col items-center justify-center gap-4">
+          <TableViewLoading />
+        </div>
+      ) : userPools === undefined || userPools?.length === 0 ? (
         <NotFoundBear title="You currently are not staked in any pools." />
       ) : (
         <div className="flex w-full flex-col items-center justify-center gap-4">
@@ -36,6 +40,7 @@ export default function MyPool({ keyword }: { keyword: string }) {
             columns={my_columns}
             title={`My Pools (${userPools?.length ?? "0"})`}
             onRowClick={(row: any) => {
+              if (!row?.original) return;
               window.open(getPoolUrl(row.original, true), "_self");
             }}
           />
