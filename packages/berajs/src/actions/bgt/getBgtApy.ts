@@ -71,7 +71,7 @@ export const getBgtApy = async ({
   if (!apyInfo) return "0";
 
   const globalRewardRate =
-    parseFloat(apyInfo.data.globalInfo.baseRate) +
+    parseFloat(apyInfo.data.globalInfo.baseRewardRate) +
     parseFloat(apyInfo.data.globalInfo.rewardRate);
 
   const totalBgtStaked = parseFloat(apyInfo.data.globalInfo.totalBgtStaked);
@@ -84,18 +84,21 @@ export const getBgtApy = async ({
 
   if (!selectedCuttingBoard) return "0";
 
-  // if (selectedCuttingBoard.amount === "0") return "0";
-  // const estimatedBgtPerBlock =
-  //   (parseFloat(selectedCuttingBoard.amount) / totalBgtStaked) *
-  //   globalRewardRate;
-  // const secondsInAYear = 60 * 60 * 24 * 365;
-  // const blocksPerSecond = 1 / blockTime;
-  // const blocksPerYear = secondsInAYear * blocksPerSecond;
+  if (selectedCuttingBoard.amount === "0") return "0";
 
-  // const estimatedBgtPerYear = estimatedBgtPerBlock * blocksPerYear;
-  const estimatedBgtPerYear = 852585;
+  const estimatedBgtPerBlock =
+    (parseFloat(selectedCuttingBoard.amount) / totalBgtStaked) *
+    globalRewardRate;
+
+  const secondsInAYear = 60 * 60 * 24 * 365;
+  const blocksPerSecond = 1 / blockTime;
+  const blocksPerYear = secondsInAYear * blocksPerSecond;
+
+  const estimatedBgtPerYear = estimatedBgtPerBlock * blocksPerYear;
+
   const honeyValueEstimatedBgtPerYear =
     estimatedBgtPerYear * parseFloat(beraHoneyPrice);
+
   const apy = (honeyValueEstimatedBgtPerYear / tvlInHoney).toString();
   return apy;
 };
