@@ -4,7 +4,7 @@ export enum POLLING {
   SLOW = 200000,
 }
 
-export const HOURLY = "1d";
+export const DAILY = "1d";
 export const WEEKLY = "7d";
 export const MONTHLY = "30d";
 export const QUARTERLY = "90d";
@@ -53,6 +53,39 @@ export const API_FILTERS = [
   "sortDir",
   "pairIndex",
   "filters",
+  "days",
+];
+
+export const LEADERBOARD_TRADING_FILTERS = [
+  "pair_index",
+  "volume",
+  "num_trades",
+  "liquidation",
+  "trader",
+  "trade_open",
+  "tp",
+  "sl",
+];
+
+export const LEADERBOARD_TABS = [
+  {
+    title: "💰 Most Profitable",
+    value: "SORT_BY_PNL",
+    header: "Realized Profit & Loss",
+    index: 1,
+  },
+  {
+    title: "🔥 Top Liquidations",
+    value: "SORT_BY_LIQUIDATION",
+    header: "Liquidations",
+    index: 2,
+  },
+  {
+    title: "📈 Most Volume",
+    value: "SORT_BY_VOLUME",
+    header: "Volume",
+    index: 3,
+  },
 ];
 
 export const PYTH_ABI = [
