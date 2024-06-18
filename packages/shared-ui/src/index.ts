@@ -48,6 +48,7 @@ export { TermsOfUse, PrivacyPolicy, TermOfUseModal } from "./terms-of-use";
 export { AccessDenyModal, AccessDeny } from "./access-deny";
 export { FormattedNumber } from "./formatted-number";
 export { PoolHeader } from "./pool-header";
+export { WobbleCard } from "./wobble-card";
 
 export { ValidatorIcon } from "./validator-icon";
 export { VaultIcon } from "./vault-icon";
