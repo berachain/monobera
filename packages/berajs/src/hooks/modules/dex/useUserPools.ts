@@ -33,11 +33,13 @@ export const useUserPools = (
     async () => {
       if (!account && !currentAccount) return;
       if (!publicClient) return;
-      return await searchUserPools({
-        args: { account: account ?? currentAccount!, keyword },
-        config,
-        publicClient,
-      });
+      return (
+        (await searchUserPools({
+          args: { account: account ?? currentAccount!, keyword },
+          config,
+          publicClient,
+        })) ?? null
+      );
     },
   );
 
