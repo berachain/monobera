@@ -135,7 +135,7 @@ function PositionRow({
         "--marquee-duration": duration,
       }}
     >
-      {positions.concat(positions).map((position, positionIndex) => (
+      {positions?.concat(positions).map((position, positionIndex) => (
         <Position
           key={positionIndex + row}
           aria-hidden={positionIndex >= positions.length}
@@ -199,7 +199,7 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
 
 function generateArrays(originalArray: any[], length: number) {
   const result = [];
-  for (let i = 0; i < originalArray.length; i++) {
+  for (let i = 0; i < (originalArray ?? []).length; i++) {
     const newArray = [];
     for (let j = 0; j < length; j++) {
       newArray.push(originalArray[(i + j) % originalArray.length]);

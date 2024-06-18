@@ -45,7 +45,7 @@ export default async function Home() {
   if (!data) {
     notFound();
   }
-  const markets: IMarket[] = data.markets.map((m: Market) => {
+  const markets: IMarket[] = data.markets?.map((m: Market) => {
     const historicalInfo = data.historicalSummary.find(
       (h: any) => h.pair_index.toString() === m.pair_index,
     );
@@ -70,7 +70,7 @@ export default async function Home() {
     );
   }, BigNumber(0));
 
-  const oi = oiLong.plus(oiShort).toString(10);
+  const oi = oiLong?.plus(oiShort).toString(10);
 
   const tradingSummary = {
     ...data.tradingSummary,
