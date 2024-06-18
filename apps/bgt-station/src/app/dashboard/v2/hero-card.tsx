@@ -56,7 +56,7 @@ export const HeroCards: React.FC = () => {
     {
       image: `${cloudinaryUrl}/Station/xso57in9nkp0oa05pybj.jpg`,
       title: "Redeem",
-      subtitle: "Reedeem BGT for BERA",
+      subtitle: "Redeem BGT for BERA",
       link: "/redeem",
     },
   ];

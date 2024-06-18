@@ -133,6 +133,40 @@ export const HowToEarn = () => {
         </>
       ),
     },
+    {
+      image: `${cloudinaryUrl}/Station/ukuiqbegdvxxouovyo6h.jpg`,
+      title: "Step 3",
+      subtitle: (
+        <>
+          Stake receipt tokens in{" "}
+          <Link
+            href={"/gauges"}
+            target="_blank"
+            className="underline"
+            rel="noreferrer"
+          >
+            Gauge Vault
+          </Link>
+        </>
+      ),
+    },
+    {
+      image: `${cloudinaryUrl}/Station/ukuiqbegdvxxouovyo6h.jpg`,
+      title: "Step 3",
+      subtitle: (
+        <>
+          Stake receipt tokens in{" "}
+          <Link
+            href={"/gauges"}
+            target="_blank"
+            className="underline"
+            rel="noreferrer"
+          >
+            Gauge Vault
+          </Link>
+        </>
+      ),
+    },
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -175,7 +209,11 @@ export const HowToEarn = () => {
         />
         <FadeSlides
           currentSlide={currentSlide}
-          slides={[<HowToEarnCard {...step3Cards[0]} />]}
+          slides={[
+            <HowToEarnCard {...step3Cards[0]} />,
+            <HowToEarnCard {...step3Cards[0]} />,
+            <HowToEarnCard {...step3Cards[0]} />,
+          ]}
         />
       </div>
     </div>
