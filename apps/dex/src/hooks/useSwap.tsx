@@ -3,8 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   TXN_GAS_USED_ESTIMATES,
-  multiswapAbi,
-  useBeraJs,
   useGasData,
   usePollAllowance,
   usePollCrocSwap,
@@ -12,7 +10,6 @@ import {
   useTokenHoneyPrice,
   useTokenInformation,
   useTokens,
-  wberaAbi,
   type Token,
 } from "@bera/berajs";
 import { getSwapPayload } from "@bera/berajs/actions";
@@ -23,14 +20,7 @@ import {
 } from "@bera/config";
 import { POLLING } from "@bera/shared-ui";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
-import {
-  formatEther,
-  formatGwei,
-  formatUnits,
-  parseUnits,
-  type Address,
-} from "viem";
-import { useGasPrice } from "wagmi";
+import { formatUnits, type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
 
@@ -54,47 +44,25 @@ export enum WRAP_TYPE {
   UNWRAP = "Unwrap",
 }
 
-export const useSwap = ({ inputCurrency, outputCurrency }: ISwap) => {
-  const { data: inputToken } = useTokenInformation({
-    address: inputCurrency,
-  });
-  const { data: outputToken } = useTokenInformation({
-    address: outputCurrency,
-  });
-
-  const { data: tokenData } = useTokens();
-
+export const useSwap = ({
+  inputCurrency = "0x",
+  outputCurrency = "0x",
+}: ISwap) => {
+  const { data: tokenData, isLoading } = useTokens();
+  const tokenDictionary = tokenData?.tokenDictionary ?? {};
   useEffect(() => {
-    if (inputCurrency && !inputToken) {
-      const token = tokenData?.tokenDictionary?.[inputCurrency];
+    if (!isLoading && tokenDictionary) {
+      const inputToken = tokenDictionary[inputCurrency];
+      if (inputToken) setSelectedFrom(inputToken);
+      const outputToken = tokenDictionary[outputCurrency];
+      if (outputToken) setSelectedTo(outputToken);
+    }
+  }, [isLoading, tokenData]);
 
-      if (token) {
-        setSelectedFrom(token);
-      }
-    }
-    if (outputCurrency && !outputToken) {
-      const token = tokenData?.tokenDictionary?.[outputCurrency];
-      if (token) {
-        setSelectedTo(token);
-      }
-    }
-  }, [tokenData?.tokenDictionary]);
-
-  useEffect(() => {
-    if (inputToken && !selectedFrom) {
-      setSelectedFrom(inputToken);
-      // addNewToken(inputToken);
-    }
-    if (outputToken && !selectedTo) {
-      setSelectedTo(outputToken);
-      // addNewToken(outputToken);
-    }
-  }, [inputToken, outputToken]);
-
-  const [selectedTo, setSelectedTo] = useState<Token | undefined>(outputToken);
+  const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
 
   const [selectedFrom, setSelectedFrom] = useState<Token | undefined>(
-    inputToken,
+    undefined,
   );
 
   const { data: tokenInPrice } = useTokenHoneyPrice({
