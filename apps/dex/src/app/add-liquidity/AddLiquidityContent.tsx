@@ -192,6 +192,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const handleAddLiquidity = useCallback(async () => {
     try {
+      setPreviewOpen(false);
       const addLiqPayload = await getAddLiquidityPayload({
         args: {
           slippage: slippage ?? 0,
@@ -371,15 +372,15 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               title={"Pool Price"}
               value={
                 poolPrice ? (
-                  <>
+                  <span>
                     <FormattedNumber
                       value={poolPrice}
                       symbol={baseToken.symbol}
                     />{" "}
                     = 1 {quoteToken?.symbol}
-                  </>
+                  </span>
                 ) : (
-                  "-"
+                  <span>{"-"}</span>
                 )
               }
             />
@@ -439,15 +440,15 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 title={"Pool Price"}
                 value={
                   poolPrice ? (
-                    <>
+                    <span>
                       <FormattedNumber
                         value={poolPrice}
                         symbol={baseToken.symbol}
                       />{" "}
                       = 1 {quoteToken?.symbol}
-                    </>
+                    </span>
                   ) : (
-                    "-"
+                    <span>{"-"}</span>
                   )
                 }
               />
@@ -473,9 +474,9 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                       ? maxBaseApprovalAmount
                       : maxQuoteApprovalAmount
                     : needsApproval[0]?.address.toLowerCase() ===
-                        baseToken.address.toLowerCase()
-                      ? maxBaseApprovalAmount
-                      : maxQuoteApprovalAmount
+                      baseToken.address.toLowerCase()
+                    ? maxBaseApprovalAmount
+                    : maxQuoteApprovalAmount
                 }
                 token={isNativeBera ? needsApprovalNoBera[0] : needsApproval[0]}
                 spender={crocDexAddress}

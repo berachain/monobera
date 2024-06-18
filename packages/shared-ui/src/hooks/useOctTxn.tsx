@@ -198,19 +198,11 @@ export const useOctTxn = ({
         if (!disableToast) {
           const toastId = `success-${identifier}`;
           toast.remove(`submission-${identifier}`);
-          toast.custom(
-            <SuccessToast
-              onClose={() => toast.remove(toastId)}
-              title={"Transaction Success"}
-              message="transaction successfully submitted"
-              hash={result}
-            />,
-            {
-              duration: DURATION,
-              id: toastId,
-              position: isMd ? "bottom-right" : "top-center",
-            },
-          );
+          toast.custom(<span />, {
+            duration: DURATION,
+            id: toastId,
+            position: isMd ? "bottom-right" : "top-center",
+          });
         }
         if (!disableModal) {
           closeModal("loadingModal");
