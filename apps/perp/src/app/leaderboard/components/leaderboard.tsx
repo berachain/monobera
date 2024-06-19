@@ -38,6 +38,7 @@ export interface LeaderBoardQuery {
   filters?: string | undefined;
   page: number;
   perPage: number;
+  wallet?: string;
 }
 
 export default function LeaderBoard() {
@@ -47,13 +48,14 @@ export default function LeaderBoard() {
     filters: undefined,
     page: 1,
     perPage: 10,
+    wallet: "",
   });
 
   const [isValidSearch, setIsValidSearch] = useState<boolean>(false);
   const [value, setValue] = useState("");
 
   const {
-    data: leaderBoardData,
+    data: leaderboardData,
     isLoading,
     isValidating,
   } = useLeaderboard(leaderboardQuery);
@@ -75,14 +77,14 @@ export default function LeaderBoard() {
         setIsValidSearch(true);
         setLeaderboardQuery((prev) => ({
           ...prev,
-          filters: `trader=${e.target.value}`,
+          wallet: e.target.value,
         }));
       } else {
         setIsValidSearch(false);
-        if (leaderboardQuery.filters) {
+        if (leaderboardQuery.wallet) {
           setLeaderboardQuery((prev) => ({
             ...prev,
-            filters: undefined,
+            wallet: "",
           }));
         }
       }
@@ -128,20 +130,24 @@ export default function LeaderBoard() {
   );
 
   const table = useAsyncTable({
-    data: leaderBoardData?.result ?? [],
+    data: leaderboardData?.result
+      ? Array.isArray(leaderboardData?.result)
+        ? leaderboardData?.result
+        : [leaderboardData?.result]
+      : [],
     columns: columns,
     fetchData: async () => {},
     enablePagination: true,
     additionalTableProps: {
       state: {
         pagination: {
-          pageIndex: (leaderBoardData?.pagination?.page ?? 1) - 1,
-          pageSize: leaderBoardData?.pagination?.per_page ?? 10,
+          pageIndex: (leaderboardData?.pagination?.page ?? 1) - 1,
+          pageSize: leaderboardData?.pagination?.per_page ?? 10,
         },
       },
       manualPagination: true,
       autoResetPageIndex: false,
-      pageCount: leaderBoardData?.pagination?.total_pages ?? 1,
+      pageCount: leaderboardData?.pagination?.total_pages ?? 1,
       onPaginationChange: handlePaginationChange,
       meta: {
         loading: isLoading,

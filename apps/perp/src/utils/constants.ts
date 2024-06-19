@@ -56,17 +56,6 @@ export const API_FILTERS = [
   "days",
 ];
 
-export const LEADERBOARD_TRADING_FILTERS = [
-  "pair_index",
-  "volume",
-  "num_trades",
-  "liquidation",
-  "trader",
-  "trade_open",
-  "tp",
-  "sl",
-];
-
 export const LEADERBOARD_TABS = [
   {
     title: "💰 Most Profitable",

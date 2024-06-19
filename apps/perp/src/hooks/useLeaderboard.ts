@@ -12,13 +12,15 @@ export const useLeaderboard = (props: FilterableLeaderboardTableState) => {
       )
       .map(([key, value]) => `${key}=${value}`)
       .join("&") ?? "";
-  const QUERY_KEY = ["leaderboard", queryString];
+  const QUERY_KEY = ["leaderboard", props.wallet, queryString];
   const { data, isLoading, isValidating, mutate } = useSWRImmutable(
     QUERY_KEY,
     async () => {
       if (queryString) {
         const res = await fetch(
-          `${perpsEndpoint}/trading-leaderboard?${queryString}`,
+          `${perpsEndpoint}/trading-leaderboard${
+            props.wallet ? `/traders/${props.wallet}` : ""
+          }?${queryString}`,
         );
         const data = await res.json();
         return data;
