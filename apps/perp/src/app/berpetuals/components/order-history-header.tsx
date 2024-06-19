@@ -106,31 +106,37 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
     return createCloseOrderPayload(openOrders, tableState.selection || {});
   }, [openOrders, tableState.selection]);
 
-  const { isLoading: isClosePositionsLoading, write: writePositionsClose } =
-    useOctTxn({
-      message: "Closing All Open Positions",
-      actionType: TransactionActionType.CANCEL_ALL_ORDERS,
-      onSuccess: () => {
-        refetchPositions();
-        refetchMarketHistory();
-        setTableState((prev) => ({
-          ...prev,
-          selection: {},
-        }));
-      },
-    });
-  const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
-    useOctTxn({
-      message: "Closing All Open Orders",
-      actionType: TransactionActionType.CANCEL_ALL_ORDERS,
-      onSuccess: () => {
-        refetchOrders();
-        setTableState((prev) => ({
-          ...prev,
-          selection: {},
-        }));
-      },
-    });
+  const {
+    isLoading: isClosePositionsLoading,
+    write: writePositionsClose,
+    ModalPortal: PositionsModal,
+  } = useOctTxn({
+    message: "Closing All Open Positions",
+    actionType: TransactionActionType.CANCEL_ALL_ORDERS,
+    onSuccess: () => {
+      refetchPositions();
+      refetchMarketHistory();
+      setTableState((prev) => ({
+        ...prev,
+        selection: {},
+      }));
+    },
+  });
+  const {
+    isLoading: isCloseLimitOrdersLoading,
+    write: writeOrdersClose,
+    ModalPortal: OrdersModal,
+  } = useOctTxn({
+    message: "Closing All Open Orders",
+    actionType: TransactionActionType.CANCEL_ALL_ORDERS,
+    onSuccess: () => {
+      refetchOrders();
+      setTableState((prev) => ({
+        ...prev,
+        selection: {},
+      }));
+    },
+  });
 
   const selectionSize = Object.keys(tableState.selection ?? {}).length;
 
@@ -157,6 +163,8 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
 
   return (
     <div>
+      {PositionsModal}
+      {OrdersModal}
       <div className="flex min-h-[64px] w-full flex-col items-center justify-between rounded-t-md bg-muted p-2 py-4 sm:flex-row sm:px-6">
         <div className="mr-2 flex flex-1 gap-3 text-foreground sm:gap-6">
           {headers.map((header, index) => (

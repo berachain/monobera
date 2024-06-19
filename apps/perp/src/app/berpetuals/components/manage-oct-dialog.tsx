@@ -23,9 +23,9 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { BigNumber } from "bignumber.js";
 import { parseUnits } from "ethers";
 import { parseEther, type Address } from "viem";
-import { BigNumber } from "bignumber.js";
 
 // Average gas amount for one transaction on perps
 const ESTIMATED_GAS_AMT_FOR_ONE_TXN = 1500000;
@@ -36,7 +36,12 @@ const TradeWalletSection = ({ refresh }: { refresh: () => void }) => {
   const { account } = useBeraJs();
   const { feesPerGasEstimate } = useGasData();
 
-  const { isValueSendLoading, writeValueSend, isValueSendSuccess } = useOctTxn({
+  const {
+    isValueSendLoading,
+    writeValueSend,
+    isValueSendSuccess,
+    ModalPortal,
+  } = useOctTxn({
     message: "Withdrawing All From One Click Trading Wallet",
   });
 
@@ -55,6 +60,7 @@ const TradeWalletSection = ({ refresh }: { refresh: () => void }) => {
 
   return (
     <div className={"relative rounded-md border border-border p-3"}>
+      {ModalPortal}
       <p className="text-md pb-4 font-bold leading-normal">
         Your 1-Click Trade Wallet
       </p>
@@ -75,7 +81,7 @@ const TradeWalletSection = ({ refresh }: { refresh: () => void }) => {
         <div className="text-sm font-semibold">
           {Number(octBalance?.formattedBalance ?? 0).toFixed(2)} BERA{" "}
           {octTxnsLeft ? (
-            <span className="text-xs font-medium text-success-foreground truncate">
+            <span className="truncate text-xs font-medium text-success-foreground">
               ~ {octTxnsLeft} txns left
             </span>
           ) : null}
