@@ -279,8 +279,9 @@ const TransactionRevertReasonMap: { [key: string]: string } = {
 
 export const getRevertReason = async (
   publicClient: PublicClient,
-  txHash: string,
+  txHash: string | undefined,
 ): Promise<string | undefined> => {
+  if (!txHash) return "Transaction reverted for unknown reason.";
   try {
     // Use public client to get ethers provider since wagmi doesn't have the capability to get revert reasons
     const ethersProvider = clientToProvider(publicClient);

@@ -103,7 +103,7 @@ const useOctContractWrite = (
         } else {
           const revertReason = await getRevertReason(
             publicClient,
-            confirmationReceipt.transactionHash,
+            confirmationReceipt?.transactionHash,
           );
           onError?.({
             message: revertReason ?? "Something went wrong. Please Try again",
