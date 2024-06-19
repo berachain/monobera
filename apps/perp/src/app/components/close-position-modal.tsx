@@ -67,7 +67,7 @@ export function ClosePositionModal({
 
   const ticker = openPosition?.market?.name?.split("-")[0];
 
-  const { isLoading, isSubmitting, write } = useOctTxn({
+  const { isLoading, isSubmitting, write, ModalPortal } = useOctTxn({
     message: `Closing ${openPosition?.market?.name} ${
       openPosition?.buy === true ? "Long" : "Short"
     } position`,
@@ -94,6 +94,7 @@ export function ClosePositionModal({
 
   return (
     <div className={className}>
+      {ModalPortal}
       <div
         onClick={() => !disabled && handleOpenChange(true)}
         className="h-full w-full"
