@@ -34,6 +34,6 @@ export const getBeraLpAddress = (base: string, quote: string) => {
     salt,
     initCodeHash,
   );
-  console.log("create2Address", create2Address);
+  // console.log("create2Address", create2Address);
   return create2Address;
 };
