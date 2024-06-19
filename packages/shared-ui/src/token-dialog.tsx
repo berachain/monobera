@@ -114,7 +114,7 @@ export function TokenDialog({
   useEffect(() => {
     if (!customTokens) {
       const filtered = tokenData?.tokenList?.filter(
-        (token:Token) =>
+        (token: Token) =>
           (token.name?.toLowerCase().includes(search.toLowerCase()) ||
             token.symbol?.toLowerCase().includes(search.toLowerCase()) ||
             token.address.toLowerCase().includes(search.toLowerCase())) &&
@@ -199,8 +199,8 @@ export function TokenDialog({
               {!customTokens && (
                 <div className="flex flex-wrap gap-2">
                   {tokenData?.featuredTokenList
-                    ?.filter((token:Token) => !filter.includes(token.address))
-                    ?.map((token:Token) => {
+                    ?.filter((token: Token) => !filter.includes(token.address))
+                    ?.map((token: Token) => {
                       return (
                         <TokenChip
                           key={token.address}
@@ -271,7 +271,7 @@ export function TokenDialog({
               ({tokenData?.customTokenList?.length ?? 0}) Custom tokens
             </div>
             <div>
-              {tokenData?.customTokenList?.map((token:Token) => {
+              {tokenData?.customTokenList?.map((token: Token) => {
                 return (
                   <div
                     className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"
