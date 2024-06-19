@@ -1,12 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useBgtApy,
-  usePoolUserPosition,
-  type IUserPool,
-  type PoolV2,
-} from "@bera/berajs";
+import { useBgtApy, type IUserPool, type PoolV2 } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -17,13 +12,12 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
+import { Address } from "viem";
 
 import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "~/app/pools/fetchPools";
-import { peripheryDebtToken } from "@bera/config";
-import { Address } from "viem";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   return (
@@ -231,7 +225,11 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         <span className="w-[180px] truncate text-left">
           {row.original?.poolName}
         </span>
-        <TokenIconList tokenList={row.original?.tokens} size="lg" />
+        <TokenIconList
+          tokenList={row.original?.tokens}
+          size="lg"
+          key={row.original.id}
+        />
         <Badge
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
