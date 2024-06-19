@@ -23,7 +23,9 @@ export const getBeraLpAddress = (base: string, quote: string) => {
   } else {
     q = quote;
   }
-
+  if (!b || !q) {
+    return undefined;
+  }
   const salt = ethers.utils.keccak256(
     ethers.utils.solidityPack(["address", "address"], [b, q]),
   );
