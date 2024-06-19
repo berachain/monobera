@@ -46,7 +46,7 @@ export const PoolSearch = ({
     isLoadingMore,
     isReachingEnd,
   } = usePoolTable(sorting);
-
+  
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;
     setSorting(newSort);
