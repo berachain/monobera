@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { getBeraLpAddress } from "@bera/beracrocswap";
 import { chainId, crocIndexerEndpoint, multicallAddress } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
-
-import type { PoolV2 } from "~/types";
-import { formatPoolData, getBeraLpAddress } from "~/utils";
-import { usePublicClient } from "wagmi";
-import { useBeraJs } from "~/contexts";
 import { erc20Abi } from "viem";
+import { usePublicClient } from "wagmi";
+
+import { useBeraJs } from "~/contexts";
+import type { PoolV2 } from "~/types";
+import { formatPoolData } from "~/utils";
 
 const DEFAULT_SIZE = 8;
 interface Call {
@@ -72,15 +73,19 @@ export const usePoolTable = (sorting: any) => {
 
   useEffect(() => {
     let concatData: PoolV2[] = [];
+    let responseTotalCount = 0;
 
     data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
       if (!page.data) return;
       concatData = concatData.concat(page.data);
-      setTotalCount(page.totalCount);
+      responseTotalCount = page.totalCount;
     });
 
     if (account && publicClient && data) {
-      const call: Call[] = concatData.map((item: PoolV2) => ({
+      const validData = concatData.filter(
+        (item: PoolV2) => item.base && item.quote,
+      );
+      const call: Call[] = validData.map((item: PoolV2) => ({
         address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
         abi: erc20Abi,
         functionName: "balanceOf",
@@ -93,7 +98,7 @@ export const usePoolTable = (sorting: any) => {
           multicallAddress: multicallAddress,
         })
         .then((result) => {
-          const newProcessedData = concatData.map(
+          const newProcessedData = validData.map(
             (item: PoolV2, index: number) => {
               return {
                 ...item,
@@ -104,9 +109,12 @@ export const usePoolTable = (sorting: any) => {
               };
             },
           ) as PoolV2[];
+          const numFilteredItems = concatData?.length - validData?.length ?? 0;
+          setTotalCount(responseTotalCount - numFilteredItems);
           setProcessedData(newProcessedData);
         });
     } else {
+      setTotalCount(responseTotalCount);
       setProcessedData(concatData);
     }
   }, [data, account]);
