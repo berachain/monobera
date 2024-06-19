@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useBeraJs } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
-import { DataTable, Tooltip } from "@bera/shared-ui";
+import { SimpleTable, Tooltip, useAsyncTable } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Icons } from "@bera/ui/icons";
@@ -17,11 +17,16 @@ import {
   SelectValue,
 } from "@bera/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { type TableState } from "@tanstack/react-table";
+import {
+  type PaginationState,
+  type TableState,
+  type Updater,
+} from "@tanstack/react-table";
 import moment from "moment";
 import { isAddress } from "viem";
 
-import { useLeaderboard } from "~/hooks/useLeaderboardCompetition";
+import { LEADERBOARD_TABS } from "~/utils/constants";
+import { useLeaderboardCompetition } from "~/hooks/useLeaderboardCompetition";
 import { useQualifiedAddress } from "~/hooks/useQualifiedAddress";
 import { getColumns } from "./leaderboard-columns";
 
@@ -54,90 +59,72 @@ const humanizeQualifications = (qualifications: string[]) => {
     }
 
     return (
-      <>
+      <div key={`${key}${value}`}>
         <span>{`${criterion} ${
           key === "volume" || key === "pnl" ? "$" : ""
         }${value} ${
           humanReadableKeys?.[key as keyof typeof humanReadableKeys] ?? ""
         }`}</span>{" "}
         <br />
-      </>
+      </div>
     );
   });
 
   // Remove the trailing comma and space
   humanizedQualifications.unshift(
-    <>
+    <div key="qualify">
       <span>To qualify:</span>
       <br />
-    </>,
+    </div>,
   );
   return humanizedQualifications;
 };
 
 export default function LeaderBoardCompetition() {
-  enum LeaderboardType {
-    PROFIT = 1,
-    LIQUIDATION = 2,
-    VOLUME = 3,
-  }
-
-  const [leaderboardType, setLeaderboardType] = useState<LeaderboardType>(
-    LeaderboardType.PROFIT,
-  );
+  const [leaderboardQuery, setLeaderboardQuery] = useState({
+    sortBy: LEADERBOARD_TABS[0].index,
+    page: 1,
+    perPage: 10,
+    wallet: "",
+  });
 
   const [value, setValue] = useState<string>("");
-  const [pageIndex, setPageIndex] = useState<number>(0);
   const [isValidSearch, setIsValidSearch] = useState<boolean>(false);
 
   const {
     isLoading,
     isValidating,
-    useLeaderBoardData,
-    useLeaderBoardPagination,
-    useLeaderBoardDetails,
-    refetch,
-  } = useLeaderboard({
-    sort: leaderboardType as any,
-    page: pageIndex + 1,
-    wallet: isValidSearch ? value : "",
-  });
+    leaderboardData,
+    leaderboardPagination: pagination,
+    leaderboardDetails,
+  } = useLeaderboardCompetition(leaderboardQuery);
+
+  // The competition details dont appear during searches
+  const [competitionDetails, setCompDetails] = useState(leaderboardDetails);
+
+  useEffect(() => {
+    if (leaderboardDetails && Object.keys(leaderboardDetails).length !== 0) {
+      setCompDetails(leaderboardDetails);
+    }
+  }, [leaderboardDetails]);
+
   const { isConnected, account } = useBeraJs();
   const { useIsQualifiedAddress } = useQualifiedAddress({
     wallet: account ?? "",
   });
-  const leaderBoardData = useLeaderBoardData();
-  const pagination = useLeaderBoardPagination();
-  const competitionDetails = useLeaderBoardDetails();
   const validAddress = useIsQualifiedAddress();
-  const [compDetails, setCompDetails] = useState(competitionDetails);
-
-  useEffect(() => {
-    if (competitionDetails && !Array.isArray(competitionDetails)) {
-      setCompDetails(competitionDetails);
-    }
-  }, [competitionDetails]);
-
-  const data = useMemo(() => {
-    if (leaderBoardData) {
-      return Array.isArray(leaderBoardData)
-        ? leaderBoardData
-        : [leaderBoardData];
-    }
-    return [];
-  }, [leaderBoardData]);
 
   const startTime = useMemo(() => {
-    return compDetails?.start_time !== undefined
-      ? Number(compDetails?.start_time)
+    return competitionDetails?.start_time !== undefined
+      ? Number(competitionDetails?.start_time)
       : 0;
-  }, [compDetails?.start_time]);
+  }, [competitionDetails?.start_time]);
 
   const endTime = useMemo(() => {
-    return compDetails?.end_time !== undefined
-      ? Number(compDetails?.end_time)
+    return competitionDetails?.end_time !== undefined
+      ? Number(competitionDetails?.end_time)
       : 0;
-  }, [compDetails?.end_time]);
+  }, [competitionDetails?.end_time]);
 
   const competitionState = useMemo(() => {
     return startTime > moment().unix()
@@ -147,10 +134,13 @@ export default function LeaderBoardCompetition() {
         : "ongoing";
   }, [startTime, endTime]);
 
-  const columns = useMemo(
-    () => getColumns(leaderboardType as any) ?? [],
-    [leaderboardType],
-  );
+  const columns = useMemo(() => {
+    return (
+      getColumns(
+        LEADERBOARD_TABS[Number(leaderboardQuery.sortBy) - 1].header,
+      ) ?? []
+    );
+  }, [leaderboardQuery]);
 
   const calculateDifferenceInDaysAndHours = useCallback(
     (unixTimestamp1: number, unixTimestamp2: number) => {
@@ -178,36 +168,93 @@ export default function LeaderBoardCompetition() {
         : "";
   }, [startTime, endTime, competitionState]);
 
-  useEffect(() => {
-    setPageIndex(0);
-  }, [leaderboardType]);
-
-  useEffect(() => {
-    refetch();
-  }, [pageIndex, isValidSearch]);
-
-  const pageCount = useMemo(() => {
-    return pagination?.total_pages;
-  }, [pagination]);
-
-  const fetchData = useCallback(
-    (state: TableState) => {
-      setPageIndex(state?.pagination?.pageIndex);
+  const handleTabChange = useCallback(
+    (evt: React.MouseEvent<HTMLElement>) => {
+      const tab = LEADERBOARD_TABS.find(
+        (tab) => tab.title === evt.currentTarget.textContent,
+      );
+      if (tab) {
+        setLeaderboardQuery((prev) => ({
+          ...prev,
+          sortBy: tab.index,
+          page: 1,
+        }));
+      }
     },
-    [setPageIndex],
+    [setLeaderboardQuery],
   );
 
   const handleSearchValueChange = useCallback(
     (e: any) => {
       if (isAddress(e.target.value)) {
         setIsValidSearch(true);
+        setLeaderboardQuery((prev) => ({
+          ...prev,
+          wallet: e.target.value,
+        }));
       } else {
         setIsValidSearch(false);
+        if (leaderboardQuery.wallet) {
+          setLeaderboardQuery((prev) => ({
+            ...prev,
+            wallet: "",
+          }));
+        }
       }
       setValue(e.target.value);
     },
     [value, setValue],
   );
+
+  const handlePaginationChange = useCallback(
+    (updater: Updater<PaginationState>) => {
+      setLeaderboardQuery((prev) => {
+        const newPaginationState =
+          typeof updater === "function"
+            ? updater({
+                pageIndex: (prev.page ?? 1) - 1,
+                pageSize: prev.perPage ?? 10,
+              })
+            : updater;
+        return {
+          ...prev,
+          page: newPaginationState.pageIndex + 1,
+          perPage: newPaginationState.pageSize,
+        };
+      });
+    },
+    [],
+  );
+
+  const table = useAsyncTable({
+    data: leaderboardData
+      ? Array.isArray(leaderboardData)
+        ? leaderboardData
+        : [leaderboardData]
+      : [],
+    columns: columns,
+    fetchData: async () => {},
+    enablePagination: true,
+    additionalTableProps: {
+      state: {
+        pagination: {
+          pageIndex: (pagination?.page ?? 1) - 1,
+          pageSize: pagination?.per_page ?? 10,
+        },
+      },
+      manualPagination: true,
+      manualSorting: true,
+      autoResetPageIndex: false,
+      pageCount: pagination?.total_pages ?? 1,
+      onPaginationChange: handlePaginationChange,
+      meta: {
+        loading: isLoading,
+        loadingText: "Loading...",
+        validating: isValidating,
+        selectVisibleRows: true,
+      },
+    },
+  });
 
   return (
     <div className="mx-auto mt-2 flex w-full flex-col gap-4">
@@ -261,11 +308,14 @@ export default function LeaderBoardCompetition() {
               }
               className="rounded-m mt-4 min-w-[105px] cursor-pointer justify-center px-2 py-1 font-medium sm:ml-4 sm:mt-1 sm:self-center"
             >
-              {compDetails?.qualifications && (
+              {competitionDetails?.qualifications && (
                 <Tooltip
+                  key="qualifications"
                   className="mr-1"
                   text={
-                    humanizeQualifications(compDetails?.qualifications) as any
+                    humanizeQualifications(
+                      competitionDetails?.qualifications,
+                    ) as any
                   }
                 />
               )}
@@ -312,35 +362,30 @@ export default function LeaderBoardCompetition() {
       {/* Tabs and Search */}
       <div className="flex w-full flex-col justify-between lg:flex-row ">
         <Tabs
-          defaultValue={leaderboardType as any}
+          defaultValue={leaderboardQuery.sortBy.toString()}
           className="mb-4 hidden w-full rounded-md border sm:block lg:mb-0"
         >
           <TabsList className="w-full bg-background">
-            <TabsTrigger
-              value={LeaderboardType.PROFIT as any}
-              className="w-full rounded-sm"
-              onClick={() => setLeaderboardType(LeaderboardType.PROFIT)}
-            >
-              💰 Most Profitable
-            </TabsTrigger>
-            <TabsTrigger
-              value={"liquidation"}
-              className="w-full rounded-sm"
-              onClick={() => setLeaderboardType(LeaderboardType.LIQUIDATION)}
-            >
-              🔥 Top Liquidations
-            </TabsTrigger>
-            <TabsTrigger
-              value={"volume"}
-              className="w-full rounded-sm"
-              onClick={() => setLeaderboardType(LeaderboardType.VOLUME)}
-            >
-              📈 Most Volume
-            </TabsTrigger>
+            {LEADERBOARD_TABS.map((tab, index) => (
+              <TabsTrigger
+                value={tab.index.toString()}
+                key={tab.index}
+                className="w-full rounded-sm"
+                onClick={handleTabChange}
+              >
+                {tab.title}
+              </TabsTrigger>
+            ))}
           </TabsList>
         </Tabs>
         <Select
-          onValueChange={(value: string) => setLeaderboardType(Number(value))}
+          onValueChange={(value: string) =>
+            setLeaderboardQuery((prev) => ({
+              ...prev,
+              sortBy: Number(value),
+              page: 1,
+            }))
+          }
         >
           <SelectTrigger
             className={
@@ -348,29 +393,20 @@ export default function LeaderBoardCompetition() {
             }
           >
             <SelectValue
-              placeholder="💰 Most Profitable"
-              defaultValue={LeaderboardType.PROFIT}
+              placeholder={LEADERBOARD_TABS[0].title}
+              defaultValue={LEADERBOARD_TABS[0].index.toString()}
             />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem
-              value={LeaderboardType.PROFIT as any}
-              className={"cursor-pointer  hover:bg-muted"}
-            >
-              💰 Most Profitable
-            </SelectItem>
-            <SelectItem
-              value={LeaderboardType.LIQUIDATION as any}
-              className={"cursor-pointer hover:bg-muted"}
-            >
-              🔥 Top Liquidations
-            </SelectItem>
-            <SelectItem
-              value={LeaderboardType.VOLUME as any}
-              className={"cursor-pointer hover:bg-muted"}
-            >
-              📈 Most Volume
-            </SelectItem>
+            {LEADERBOARD_TABS.map((tab) => (
+              <SelectItem
+                value={tab.index.toString()}
+                key={tab.index}
+                className={"cursor-pointer hover:bg-muted"}
+              >
+                {tab.title}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <div className="hidden w-full lg:flex" />
@@ -390,24 +426,7 @@ export default function LeaderBoardCompetition() {
         />
       </div>
       {/* Table */}
-      <div className="w-full ">
-        <DataTable
-          key={`${leaderboardType}-leaderboard`}
-          columns={columns}
-          data={data}
-          fetchData={fetchData}
-          className="w-full"
-          enablePagination
-          loading={isLoading || isValidating}
-          additionalTableProps={{
-            pageCount: pageCount,
-            manualFiltering: true,
-            manualSorting: true,
-            manualPagination: true,
-            autoResetPageIndex: isValidSearch,
-          }}
-        />
-      </div>
+      <SimpleTable table={table} flexTable className="w-full" />
     </div>
   );
 }

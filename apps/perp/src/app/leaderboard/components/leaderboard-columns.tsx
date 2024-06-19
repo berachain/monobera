@@ -1,14 +1,8 @@
 import { formatUsd, truncateHash } from "@bera/berajs";
-import { DataTableColumnHeader } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
-
-const tableTitle: Record<string, string> = {
-  "1": "Realized Profit & Loss",
-  "2": "Liquidations",
-  "3": "Volume",
-};
+import { LEADERBOARD_TABS } from "~/utils/constants";
 
 const positionToEmoji = (rank: string) => {
   switch (rank) {
@@ -23,7 +17,7 @@ const positionToEmoji = (rank: string) => {
   }
 };
 
-export const getColumns = (type: string) => {
+export const getColumns = (header: string, page?: number, perPage?: number) => {
   const leaderboardColumns: ColumnDef<{
     rank: string;
     trader: string;
@@ -36,7 +30,13 @@ export const getColumns = (type: string) => {
           <div className="text-xs">
             {row.original.rank
               ? positionToEmoji(row.original.rank)
-              : positionToEmoji((row.index + 1).toString())}
+              : positionToEmoji(
+                  (
+                    row.index +
+                    1 +
+                    ((page ?? 1) - 1) * (perPage ?? 10)
+                  ).toString(),
+                )}
           </div>
         );
       },
@@ -58,15 +58,9 @@ export const getColumns = (type: string) => {
       enableSorting: false,
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader
-          column={column}
-          title={tableTitle[type ?? ""] as string}
-          className="text-right"
-        />
-      ),
+      header: header,
       cell: ({ row }) => {
-        if (type === "pnl") {
+        if (header === LEADERBOARD_TABS[0].header) {
           return (
             <p
               className={cn(
@@ -80,14 +74,12 @@ export const getColumns = (type: string) => {
             </p>
           );
         }
-        return (
-          <p className="w-full text-right">{formatUsd(row.original.value)}</p>
-        );
+        return <p className="w-full">{formatUsd(row.original.value)}</p>;
       },
       accessorKey: "value",
       enableSorting: false,
-      minSize: 190,
-      size: 190,
+      minSize: 200,
+      size: 200,
     },
   ];
 
