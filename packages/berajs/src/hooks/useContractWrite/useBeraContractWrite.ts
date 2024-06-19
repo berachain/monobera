@@ -90,7 +90,7 @@ const useBeraContractWrite = ({
               confirmationReceipt?.transactionHash,
             );
             onError?.({
-              message: revertReason ?? "Something went wrong. Please Try again",
+              message: revertReason ?? "Something went wrong. Please try again",
               hash: receipt,
             });
           }
