@@ -167,7 +167,7 @@ export const useOctTxn = ({
             openModal("errorModal", {
               errorHash: error?.hash ?? "0x",
               errorMessage:
-                error?.message || "Something went wrong. Please try Again.",
+                error?.message || "Something went wrong. Please try again.",
             });
           }
         }
