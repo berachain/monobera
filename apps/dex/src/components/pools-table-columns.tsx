@@ -29,14 +29,14 @@ const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {Number(pool?.feeRate).toFixed(2)}%
+          <span>{Number(pool?.feeRate).toFixed(2)}%</span>
         </Badge>
         {pool.isDeposited && (
           <Badge
             variant="success"
             className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
           >
-            Provided Liquidity
+            <span>Provided Liquidity</span>
           </Badge>
         )}
       </div>

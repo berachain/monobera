@@ -8,7 +8,7 @@ import { usePrevious } from "../../../../hooks/usePrevious";
 import { BaseTableOptions, useBaseTable } from "./useBaseTable";
 
 interface AsyncTableOptions<TData> extends BaseTableOptions<TData> {
-  fetchData: (state: TableState) => Promise<void>;
+  fetchData: (state: TableState) => Promise<void> | void;
   stateChangeFetchInclusions?: Array<keyof TableState>;
 }
 
