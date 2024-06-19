@@ -71,7 +71,8 @@ export function TokenDialog({
     useTokenInformation({
       address: search as Address,
     });
-
+  console.log("tokenInformation", tokenInformation, tokenInformationError)
+  
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
