@@ -4,7 +4,7 @@ import { Contract, Wallet, providers } from "ethers";
 import { encodeFunctionData } from "viem";
 import { usePublicClient, useWriteContract } from "wagmi";
 
-import { getErrorMessage } from "~/utils/errorMessages";
+import { getErrorMessage, getRevertReason } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { tradingAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
@@ -101,7 +101,14 @@ const useOctContractWrite = (
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess?.(hash);
         } else {
-          onError?.({ message: "Transaction has failed", hash: hash });
+          const revertReason = await getRevertReason(
+            publicClient,
+            confirmationReceipt.transactionHash,
+          );
+          onError?.({
+            message: revertReason ?? "Something went wrong. Please Try again",
+            hash,
+          });
         }
       } catch (e: any) {
         // if (process.env.VERCEL_ENV !== "production") {
