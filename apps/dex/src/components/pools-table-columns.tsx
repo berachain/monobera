@@ -7,6 +7,7 @@ import {
   type IUserPool,
   type PoolV2,
 } from "@bera/berajs";
+import { peripheryDebtToken } from "@bera/config";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -17,13 +18,12 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
+import { Address } from "viem";
 
 import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "~/app/pools/fetchPools";
-import { peripheryDebtToken } from "@bera/config";
-import { Address } from "viem";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   return (
@@ -35,14 +35,14 @@ const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
         >
-          {Number(pool?.feeRate).toFixed(2)}%
+          <span>{Number(pool?.feeRate).toFixed(2)}%</span>
         </Badge>
         {pool.isDeposited && (
           <Badge
             variant="success"
             className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
           >
-            Provided Liquidity
+            <span>Provided Liquidity</span>
           </Badge>
         )}
       </div>
