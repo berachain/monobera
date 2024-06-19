@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from "react";
-import { jsonRpcUrl, perpsEndpoint } from "@bera/config";
+import { jsonRpcUrl } from "@bera/config";
 import { Contract, Wallet, providers } from "ethers";
 import { encodeFunctionData } from "viem";
 import { usePublicClient, useWriteContract } from "wagmi";
@@ -105,7 +105,16 @@ const useOctContractWrite = (
         }
       } catch (e: any) {
         // if (process.env.VERCEL_ENV !== "production") {
-        console.log(e);
+        console.log(
+          "Receieved Error: ",
+          e,
+          "\n",
+          "Error Message: ",
+          getErrorMessage(e),
+          "\n",
+          "Raw Error: ",
+          e.toString(),
+        );
         // }
         dispatch({ type: ActionEnum.ERROR });
         const finalMsg = getErrorMessage(e);
