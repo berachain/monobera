@@ -1,12 +1,14 @@
 import { useCallback, useReducer } from "react";
-import { jsonRpcUrl } from "@bera/config";
-import { Contract, Wallet, providers } from "ethers";
-import { encodeFunctionData } from "viem";
+import { Address, encodeFunctionData } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
 import { usePublicClient, useWriteContract } from "wagmi";
 
-import { getErrorMessage } from "~/utils/errorMessages";
+import {
+  getErrorMessage,
+  getCustomAppErrorMessages,
+} from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
-import { tradingAbi } from "~/abi";
+import { pythErrorsAbi, berpsErrorsAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import { BeraConfig } from "~/types";
 import { useOct } from "../useOct";
@@ -52,7 +54,7 @@ const useOctContractWrite = (
         if (!isOctReady) {
           const { request } = await publicClient.simulateContract({
             address: address,
-            abi: abi,
+            abi: [...abi, ...pythErrorsAbi, ...berpsErrorsAbi],
             functionName: functionName,
             args: params,
             value: value,
@@ -61,30 +63,26 @@ const useOctContractWrite = (
 
           hash = await writeContractAsync({ ...request, gas: 10000000n });
         } else if (isOctReady) {
-          const provider = new providers.JsonRpcProvider(jsonRpcUrl);
-
-          const ethersWallet = new Wallet(octPrivKey, provider);
-
-          const contract = new Contract(address, tradingAbi, ethersWallet);
-
           const data = encodeFunctionData({
-            abi: abi,
+            abi: [...abi, ...pythErrorsAbi, ...berpsErrorsAbi],
             functionName: functionName,
             args: params,
           });
 
-          const payload = [account, data];
-          // @ts-ignore
-          const gas = await contract.estimateGas.delegatedAction(...payload, {
-            gasLimit: 10000000n,
+          const delegatedActionArgs = [account, data];
+
+          const octAccount = privateKeyToAccount(octPrivKey as Address);
+
+          const { request } = await publicClient.simulateContract({
+            address: address,
+            abi: [...abi, ...pythErrorsAbi, ...berpsErrorsAbi],
+            functionName: "delegatedAction",
+            args: delegatedActionArgs as any[],
             value: value,
+            account: octAccount,
           });
-          const transaction = await contract.delegatedAction(...payload, {
-            gasLimit: 10000000n,
-            value: value,
-          });
-          const txResponse = await transaction.wait();
-          hash = txResponse?.transactionHash;
+
+          hash = await writeContractAsync({ ...request, gas: 10000000n });
         }
         dispatch({ type: ActionEnum.SUBMITTING });
 
@@ -101,10 +99,17 @@ const useOctContractWrite = (
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess?.(hash);
         } else {
+          console.log(
+            "Received Error: ",
+            confirmationReceipt?.status,
+            "\n",
+            "Hash: ",
+            hash,
+          );
+          dispatch({ type: ActionEnum.ERROR });
           onError?.({ message: "Transaction has failed", hash: hash });
         }
       } catch (e: any) {
-        // if (process.env.VERCEL_ENV !== "production") {
         console.log(
           "Receieved Error: ",
           e,
@@ -115,9 +120,11 @@ const useOctContractWrite = (
           "Raw Error: ",
           e.toString(),
         );
-        // }
         dispatch({ type: ActionEnum.ERROR });
-        const finalMsg = getErrorMessage(e);
+        let finalMsg = getCustomAppErrorMessages(e, "PERPS");
+        if (!finalMsg) {
+          finalMsg = getErrorMessage(e);
+        }
         onError?.({ message: finalMsg, hash: e?.transactionHash });
       }
     },
