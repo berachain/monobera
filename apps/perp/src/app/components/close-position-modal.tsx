@@ -68,7 +68,7 @@ export function ClosePositionModal({
   const ticker = openPosition?.market?.name?.split("-")[0];
 
   const { isLoading, isSubmitting, write, ModalPortal } = useOctTxn({
-    message: `Closing ${openPosition?.market?.name} ${
+    message: `Closing ${openPosition?.market?.name ?? ""} ${
       openPosition?.buy === true ? "Long" : "Short"
     } position`,
     actionType: TransactionActionType.CANCEL_ORDER,
