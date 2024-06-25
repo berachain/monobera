@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { notFound, useSearchParams } from "next/navigation";
 import { usePollReservesDataList, useTokens } from "@bera/berajs";
+import { honeyTokenAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
@@ -16,6 +18,8 @@ export default function IndividualMarketAnalytics({
 }: {
   address: Address;
 }) {
+  // if (address.toLowerCase() !== honeyTokenAddress.toLowerCase()) notFound();
+
   const { data: tokenData } = useTokens();
   const { getSelectedReserve } = usePollReservesDataList();
   const reserve = getSelectedReserve(address);
