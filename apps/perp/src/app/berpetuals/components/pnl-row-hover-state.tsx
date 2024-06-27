@@ -7,12 +7,14 @@ export function PnLRowHoverState({
   borrowFee,
   closeFee,
   openFee,
+  openTrade,
 }: {
   initialCollateral: string;
   pnlAfterFees: string;
   borrowFee: string;
   closeFee: string;
   openFee: string;
+  openTrade: boolean;
 }) {
   const pnl =
     Number(pnlAfterFees) +
@@ -23,7 +25,7 @@ export function PnLRowHoverState({
     <div className="p-2">
       <div className="flex">
         <span className="text-xs font-medium text-muted-foreground">
-          Est. PnL: Initial Collateral - Fees + PnL
+          {`${openTrade ? "Est. " : ""}PnL: Initial Collateral - Fees + PnL`}
         </span>
       </div>
       <div className="flex flex-row items-start justify-between gap-2 self-stretch">
@@ -87,7 +89,9 @@ export function PnLRowHoverState({
         </span>
       </div>
       <div className="flex flex-row items-start justify-between gap-2 self-stretch">
-        <span className="font-medium text-foreground">Close Fee</span>
+        <span className="font-medium text-foreground">{`${
+          openTrade ? "Est. " : ""
+        }Close Fee`}</span>
         <span className="font-medium text-foreground">
           <span
             className={cn(
