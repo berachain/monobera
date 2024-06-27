@@ -1,5 +1,9 @@
-import { useCallback, useContext, useMemo, type Dispatch } from "react";
-import { TransactionActionType, tradingAbi } from "@bera/berajs";
+import { useCallback, useMemo, type Dispatch } from "react";
+import {
+  TransactionActionType,
+  tradingAbi,
+  usePythUpdateFee,
+} from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { Button } from "@bera/ui/button";
@@ -7,10 +11,7 @@ import { encodeFunctionData, type Address } from "viem";
 
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import { createCloseOrderPayload } from "~/utils/generateCloseOrderPayload";
-import {
-  usePriceData,
-  usePythUpdateFeeFormatted,
-} from "~/context/price-context";
+import { usePriceData } from "~/context/price-context";
 import type {
   CloseOrderPayload,
   ILimitOrder,
@@ -35,8 +36,6 @@ export const CloseAllOrders = ({
   refetchOrders,
   refetchPositions,
 }: CloseAllOrdersProps) => {
-  const pythUpdateFee = usePythUpdateFeeFormatted();
-
   const prices = usePriceData();
 
   const closePositionsPayload = useMemo<CloseOrderPayload[]>(() => {
@@ -46,6 +45,21 @@ export const CloseAllOrders = ({
   const closeOrdersPayload = useMemo<CloseOrderPayload[]>(() => {
     return createCloseOrderPayload(orders, tableState.selection || {});
   }, [orders, tableState.selection]);
+
+  const openPositionsEncodedData = closePositionsPayload.reduce<string[]>(
+    (acc, pos) => {
+      return [
+        ...acc,
+        ...(generateEncodedPythPrices(prices, pos?.pairIndex.toString()) ?? []),
+      ];
+    },
+    [],
+  );
+
+  const { data: pythUpdateFee } = usePythUpdateFee(
+    openPositionsEncodedData,
+    closePositionsPayload.map((pos) => pos?.pairIndex.toString()).join(),
+  );
 
   const {
     isLoading: isClosePositionsLoading,
@@ -83,7 +97,6 @@ export const CloseAllOrders = ({
   const selectionSize = Object.keys(tableState.selection ?? {}).length;
 
   const handleCloseAllPositions = useCallback(() => {
-    // TODO: update this to use the new multicall function when contracts are updated
     const encodedData = closePositionsPayload.map((pos) => {
       return encodeFunctionData({
         abi: tradingAbi,
@@ -99,7 +112,7 @@ export const CloseAllOrders = ({
       abi: tradingAbi,
       functionName: "multicall",
       params: [true, encodedData],
-      value: pythUpdateFee * BigInt(closePositionsPayload.length),
+      value: pythUpdateFee,
     });
   }, [closePositionsPayload, prices, writePositionsClose]);
 
