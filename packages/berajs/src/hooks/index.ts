@@ -15,3 +15,4 @@ export * from "./usePollDenom";
 export * from "./useTokenHoneyPrice";
 export * from "./useTokenHoneyPrices";
 export * from "./usePollWalletBalances";
+export * from "./usePollEstimateFeesPerGas";
