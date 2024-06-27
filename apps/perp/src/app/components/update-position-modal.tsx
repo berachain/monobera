@@ -1,5 +1,10 @@
-import { useCallback, useEffect, useState, useContext } from "react";
-import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
+import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  TransactionActionType,
+  formatUsd,
+  tradingAbi,
+  usePythUpdateFee,
+} from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -9,18 +14,15 @@ import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
 import { type Address } from "viem";
 
-import { TableContext } from "~/context/table-context";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
+import { usePriceData } from "~/context/price-context";
+import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IOpenTradeCalculated } from "~/types/order-history";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import { TPSL } from "../berpetuals/components/tpsl";
 import { MarketTradePNL } from "./market-trade-pnl";
-import {
-  usePriceData,
-  usePythUpdateFeeFormatted,
-} from "~/context/price-context";
 
 export function UpdatePositionModal({
   trigger,
@@ -37,7 +39,10 @@ export function UpdatePositionModal({
   onOpenChange?: (state: boolean) => void;
 }) {
   const prices = usePriceData();
-  const pythUpdateFee = usePythUpdateFeeFormatted();
+  const { data: pythUpdateFee } = usePythUpdateFee(
+    generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
+    openPosition?.market?.pair_index,
+  );
   const [open, setOpen] = useState<boolean>(false);
   const [tp, setTp] = useState<string>(
     formatFromBaseUnit(openPosition?.tp, 10).toString(10),
@@ -81,7 +86,11 @@ export function UpdatePositionModal({
 
   const ticker = openPosition?.market?.name?.split("-")[0];
 
-  const { isLoading: isUpdateTPLoading, write: updateTpWrite } = useOctTxn({
+  const {
+    isLoading: isUpdateTPLoading,
+    write: updateTpWrite,
+    ModalPortal: UpdateTpModal,
+  } = useOctTxn({
     message: "Updating Take Profit Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
@@ -89,7 +98,11 @@ export function UpdatePositionModal({
     },
   });
 
-  const { isLoading: isUpdateSLLoading, write: updateSlWrite } = useOctTxn({
+  const {
+    isLoading: isUpdateSLLoading,
+    write: updateSlWrite,
+    ModalPortal: UpdateSlModal,
+  } = useOctTxn({
     message: "Updating Stop Loss Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
@@ -152,6 +165,8 @@ export function UpdatePositionModal({
 
   return (
     <div className={className}>
+      {UpdateTpModal}
+      {UpdateSlModal}
       <div onClick={() => handleOpenChange(true)} className="h-full w-full">
         {trigger}
       </div>

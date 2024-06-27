@@ -621,7 +621,7 @@ export function SwapCard({
                             {gasPriceLabel !== "-" && (
                               <Icons.fuel className="h-4 w-4" />
                             )}
-                            {gasPriceLabel}
+                            <span>{gasPriceLabel}</span>
                           </span>
                         </p>
                       </div>

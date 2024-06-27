@@ -54,8 +54,8 @@ export function CloseOrderModal({
 
   const ticker = openOrder?.market?.name?.split("-")[0];
 
-  const { isLoading, isSubmitting, write } = useOctTxn({
-    message: `Closing ${openOrder?.market?.name} ${
+  const { isLoading, isSubmitting, write, ModalPortal } = useOctTxn({
+    message: `Closing ${openOrder?.market?.name ?? ""} ${
       openOrder?.buy === true ? "Long" : "Short"
     } Limit Order`,
     actionType: TransactionActionType.CANCEL_ORDER,
@@ -89,6 +89,7 @@ export function CloseOrderModal({
 
   return (
     <div className={className}>
+      {ModalPortal}
       <div
         onClick={() => !disabled && handleOpenChange(true)}
         className="h-full w-full"
