@@ -9,8 +9,6 @@ import throttle from "lodash/throttle";
 
 import { PYTH_IDS } from "~/utils/constants";
 import { type PricesMap } from "~/types/prices";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import { usePythUpdateFee } from "@bera/berajs";
 
 type PriceContextType = {
   prices: { current: PricesMap };
@@ -18,7 +16,6 @@ type PriceContextType = {
   createConnection: () => void;
   closeConnection: () => void;
   events: { current: EventEmitter | null };
-  updateFee: bigint;
 };
 
 const PriceContext = React.createContext({
@@ -27,7 +24,6 @@ const PriceContext = React.createContext({
   createConnection: () => {},
   closeConnection: () => {},
   events: { current: null },
-  updateFee: 0n,
 } as PriceContextType);
 
 const normalizePythId = (id: string) => (id?.startsWith("0x") ? id : `0x${id}`);
@@ -39,11 +35,6 @@ const PriceContextProvider = ({ children }: any) => {
   const pythOffChainPrices = useRef<PricesMap>({});
   const connectionId = useRef<ReturnType<typeof setTimeout>>();
   const [wsConnected, setWsConnected] = useState(false);
-  let encodedPrices: string[] = [];
-  if (pythOffChainPrices.current !== undefined && wsConnected) {
-    encodedPrices = generateEncodedPythPrices(pythOffChainPrices, "1");
-  }
-  const { updateFee } = usePythUpdateFee(wsConnected, encodedPrices);
 
   const monitorConnection = useCallback(() => {
     if (connectionId.current) clearTimeout(connectionId.current);
@@ -120,7 +111,6 @@ const PriceContextProvider = ({ children }: any) => {
         source: "fetch",
       });
       pythOffChainPrices.current = { ...offChainPrices };
-      const encodedPrices = generateEncodedPythPrices(pythOffChainPrices, "1");
     } catch (error) {
       console.error(error);
     }
@@ -164,7 +154,6 @@ const PriceContextProvider = ({ children }: any) => {
         createConnection,
         closeConnection,
         events,
-        updateFee: updateFee ?? 0n,
       }}
     >
       {children}
@@ -207,22 +196,11 @@ const usePriceEvents = () => {
   return context.events;
 };
 
-const usePythUpdateFeeFormatted = () => {
-  const context = React.useContext(PriceContext);
-  if (context === undefined) {
-    throw new Error(
-      "usePythUpdateFeeFormatted must be used within a PriceProvider",
-    );
-  }
-  return context.updateFee;
-};
-
 export {
   PriceContextProvider,
   usePriceData,
   useIsPythConnected,
   restartPythConnection,
   usePriceEvents,
-  usePythUpdateFeeFormatted,
   PriceContext,
 };
