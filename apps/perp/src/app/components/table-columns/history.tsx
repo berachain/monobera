@@ -193,7 +193,14 @@ export const generateHistoryColumns = (
           18,
         ).times(row.original?.leverage ?? "0");
         const pnl = formatFromBaseUnit(row.original.pnl, 18);
-        return <PnlWithPercentage positionSize={positionSize} pnl={pnl} />;
+        return (
+          <MarketTradePNL
+            position={row.original}
+            positionSize={row.original?.position_size_honey}
+            calculatedPnl={pnl.toString(10)}
+            closePrice={row.original.close_price}
+          />
+        );
       }
       return (
         <MarketTradePNL
@@ -202,7 +209,6 @@ export const generateHistoryColumns = (
           closePrice={
             row.original.trade_open ? undefined : row.original.close_price
           }
-          hoverState={false}
         />
       );
     },
