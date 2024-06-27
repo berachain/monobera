@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useOct } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { useLocalStorage } from "usehooks-ts";
 
 import { FundModal } from "./fund-modal";
 import { ManageOctDialog } from "./manage-oct-dialog";
@@ -35,7 +34,7 @@ const getStatusColor = (status: BannerEnum) => {
     case BannerEnum.ON:
       return "bg-success text-success-foreground";
     case BannerEnum.LOW_BALANCE:
-      return "bg-destructive text-destructive-foreground";
+      return "bg-warning text-warning-foreground";
     case BannerEnum.NOT_FUNDED:
       return "bg-destructive text-destructive-foreground";
     case BannerEnum.NOT_GENERATED:
@@ -48,13 +47,8 @@ const getStatusColor = (status: BannerEnum) => {
 };
 
 export function OneClickBanner({ className }: { className?: string }) {
-  // const [on, setOn] = useState<boolean>(false);
   const [oneClickModalOpen, setOneClickModalOpen] = useState<boolean>(false);
   const [fundModalOpen, setFundModalOpen] = useState<boolean>(false);
-  const [isFirstTimeOct, setIsFirstTimeOct] = useLocalStorage(
-    "isFirstTimeOct",
-    true,
-  );
 
   const [octGenerateModalOpen, setOctGenerateModalOpen] =
     useState<boolean>(false);
@@ -66,21 +60,13 @@ export function OneClickBanner({ className }: { className?: string }) {
     isGenLoading,
     setOctEnabled,
     isOctEnabled: on,
-    isOctReady,
     isOctGenerated,
     isOctUnfunded,
     isOctBalanceLow,
     isOctDelegated,
   } = useOct();
 
-  const handleOctManageWalletModalOpen = (open: boolean) => {
-    setOctManageWalletModalOpen(open);
-    if (isOctReady) {
-      setIsFirstTimeOct(false);
-    }
-  };
-
-  const getStatus = () => {
+  const bannerStatus = useMemo(() => {
     let status;
     if (!on()) {
       status = BannerEnum.OFF;
@@ -96,35 +82,66 @@ export function OneClickBanner({ className }: { className?: string }) {
       status = BannerEnum.ON;
     }
     return status;
-  };
+  }, [isOctGenerated, isOctDelegated, isOctUnfunded, isOctBalanceLow, on]);
 
-  const handleBannerClick = () => {
-    const status = getStatus();
-    if (status === BannerEnum.NOT_GENERATED) {
+  const handleBannerClick = useCallback(() => {
+    if (bannerStatus === BannerEnum.NOT_GENERATED) {
       setOctGenerateModalOpen(true);
-    } else if (status === BannerEnum.OFF) {
+    } else if (bannerStatus === BannerEnum.OFF) {
       setOneClickModalOpen(true);
     } else if (
-      status === BannerEnum.NOT_DELEGATED ||
-      status === BannerEnum.LOW_BALANCE ||
-      status === BannerEnum.NOT_FUNDED ||
-      status === BannerEnum.ON
+      bannerStatus === BannerEnum.NOT_DELEGATED ||
+      bannerStatus === BannerEnum.LOW_BALANCE ||
+      bannerStatus === BannerEnum.NOT_FUNDED ||
+      bannerStatus === BannerEnum.ON
     ) {
       setOctManageWalletModalOpen(true);
     }
-  };
+  }, [
+    bannerStatus,
+    setOctGenerateModalOpen,
+    setOneClickModalOpen,
+    setOctManageWalletModalOpen,
+  ]);
+
+  const handleOctManageWalletModalOpen = useCallback(
+    (open: boolean) => {
+      setOctManageWalletModalOpen(open);
+    },
+    [setOctManageWalletModalOpen],
+  );
+
+  const handleGenerateModalOpen = useCallback(
+    (open: boolean) => {
+      setOctGenerateModalOpen(open);
+    },
+    [setOctGenerateModalOpen],
+  );
+
+  const handleGenerateKey = useCallback(() => {
+    setOctEnabled(true);
+    void generateKey().then(() => {
+      setOctGenerateModalOpen(false);
+      setOctManageWalletModalOpen(true);
+    });
+  }, [
+    setOctEnabled,
+    generateKey,
+    setOctGenerateModalOpen,
+    setOctManageWalletModalOpen,
+  ]);
 
   return (
     <div
       className={cn(
         "m-2 flex h-[63px] w-[calc(100%-16px)] flex-shrink-0 rounded-md border border-border lg:ml-0 lg:w-[250px]",
-        getStatusColor(getStatus()),
+        getStatusColor(bannerStatus),
         className,
       )}
     >
       <div className="h-full w-full" onClick={handleBannerClick}>
         <span className="flex h-full w-full cursor-pointer items-center justify-center p-3 text-center text-[14px] hover:underline">
-          {BannerText[getStatus()]}
+          {BannerText[bannerStatus]}
         </span>
       </div>
       {/* @ts-ignore */}
@@ -132,24 +149,17 @@ export function OneClickBanner({ className }: { className?: string }) {
         open={oneClickModalOpen}
         onOpenChange={setOneClickModalOpen}
         oneClick={on()}
-        modeSelect={(mode: boolean) => setOctEnabled(mode)}
+        modeSelect={handleGenerateModalOpen}
       />
       <ManageOctDialog
         open={octManageWalletModalOpen}
-        // @ts-ignore
-        isFirstTimeOct={isFirstTimeOct}
-        onOpenChange={(open) => handleOctManageWalletModalOpen(open)}
+        onOpenChange={handleOctManageWalletModalOpen}
       />
       <OctGenerateDialog
         open={octGenerateModalOpen}
         isLoading={isGenLoading}
-        onOpenChange={(open) => setOctGenerateModalOpen(open)}
-        onGenerate={() => {
-          void generateKey().then(() => {
-            setOctGenerateModalOpen(false);
-            setOctManageWalletModalOpen(true);
-          });
-        }}
+        onOpenChange={handleGenerateModalOpen}
+        onGenerate={handleGenerateKey}
       />
       <FundModal open={fundModalOpen} onOpenChange={setFundModalOpen} />
     </div>
