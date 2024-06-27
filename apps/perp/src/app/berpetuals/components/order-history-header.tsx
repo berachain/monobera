@@ -31,7 +31,7 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
 
   const {
     data: openPositionsData,
-    refresh: refetchPositions,
+    multiRefresh: refetchPositions,
     total: totalPositions,
   } = usePollOpenPositions(tableState);
 
@@ -42,11 +42,12 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
 
   const {
     data: openLimitOrdersData,
-    refresh: refetchOrders,
+    multiRefresh: refetchOrders,
     total: totalOpenOrders,
   } = usePollOpenLimitOrders(tableState);
 
-  const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
+  const { multiRefresh: refetchMarketHistory } =
+    usePollMarketOrders(tableState);
   const openOrders = useMemo(
     () => generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[],
     [openLimitOrdersData, markets],

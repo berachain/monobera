@@ -51,7 +51,7 @@ export function UpdateLimitOrderModal({
     formatFromBaseUnit(openOrder?.sl, 10).toString(10),
   );
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenLimitOrders(tableState);
+  const { multiRefresh: refetchOrders } = usePollOpenLimitOrders(tableState);
 
   const formattedPrice = formatFromBaseUnit(
     openOrder.min_price ?? "0",
@@ -81,7 +81,7 @@ export function UpdateLimitOrderModal({
     message: "Updating Open Limit Order",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchOrders();
       setOpen(false);
     },
   });

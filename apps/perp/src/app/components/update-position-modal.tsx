@@ -52,7 +52,7 @@ export function UpdatePositionModal({
     formatFromBaseUnit(openPosition?.sl, 10).toString(10),
   );
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenPositions(tableState);
+  const { multiRefresh: refetchPositions } = usePollOpenPositions(tableState);
 
   useEffect(() => {
     setTp(formatFromBaseUnit(openPosition?.tp, 10).toString(10));
@@ -94,7 +94,7 @@ export function UpdatePositionModal({
     message: "Updating Take Profit Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchPositions();
     },
   });
 
@@ -106,7 +106,7 @@ export function UpdatePositionModal({
     message: "Updating Stop Loss Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchPositions();
     },
   });
 
