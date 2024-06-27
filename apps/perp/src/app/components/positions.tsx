@@ -45,9 +45,12 @@ function Position({
   return (
     <figure
       className={cn(
-        "flex h-fit w-[162px] flex-shrink-0 items-center rounded-2xl border border-border bg-background p-4",
+        "flex h-fit w-[162px] flex-shrink-0 cursor-pointer items-center rounded-2xl border border-border bg-background p-4 transition-colors duration-200 ease-in-out hover:border-primary",
         className,
       )}
+      onClick={() => {
+        window.open(`/berpetuals/${name}`, "_self");
+      }}
       style={{ animationDelay }}
       {...props}
     >
@@ -157,37 +160,23 @@ function PositionGrid({ markets }: { markets: IMarket[] }) {
       className="relative flex flex-col gap-4 overflow-hidden "
     >
       {isInView ? (
-        <>
-          <PositionRow
-            row={0}
-            // @ts-ignore
-            positions={rows[0]}
-            positionClassName={(positionIndex) =>
-              cn(
-                // @ts-ignore
-                positionIndex >= rows[0].length && "md:hidden",
-
-                // @ts-ignore
-                positionIndex >= rows[0].length && "lg:hidden",
-              )
-            }
-            msPerPixel={10}
-          />
-
-          <PositionRow
-            row={1}
-            positions={rows[1]?.reverse()}
-            // @ts-ignore
-            positionClassName={(positionIndex) =>
+        <PositionRow
+          row={0}
+          // @ts-ignore
+          positions={rows[0]}
+          positionClassName={(positionIndex) =>
+            cn(
               // @ts-ignore
-              positionIndex >= rows[1].length && "lg:hidden"
-            }
-            msPerPixel={15}
-          />
-        </>
+              positionIndex >= rows[0].length && "md:hidden",
+
+              // @ts-ignore
+              positionIndex >= rows[0].length && "lg:hidden",
+            )
+          }
+          msPerPixel={10}
+        />
       ) : (
         <div className="relative flex flex-col gap-4 overflow-hidden">
-          <Skeleton className="h-[181px] w-full" />
           <Skeleton className="h-[181px] w-full" />
         </div>
       )}
