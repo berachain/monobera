@@ -60,6 +60,9 @@ export const generateEncodedPythPrices = (
   const priceMarketData = prices.current?.[pairIndex] as PriceFeed;
   const priceUSDUSDC = prices.current?.[USDC_USD_INDEX] as PriceFeed;
 
+  if (!priceMarketData || !priceUSDUSDC) {
+    return ["", ""];
+  }
   let encodedMarketData = priceMarketData.getVAA();
   let encodedUsdUsdcData = priceUSDUSDC.getVAA();
   if (perpsPythPricesMocked === "true") {
