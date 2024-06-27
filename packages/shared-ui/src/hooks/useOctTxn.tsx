@@ -95,7 +95,6 @@ export const useOctTxn = ({
 }: IUseTxn = {}): UseTxnApi => {
   const [identifier, setIdentifier] = useState("");
   const isMd = useMediaQuery("(min-width: 768px)");
-  const { isOctReady } = useOct();
 
   const [modalState, dispatch] = useReducer(modalReducer, initialState);
   const openModal = (modalName: ModalName, modalData: any) => {
