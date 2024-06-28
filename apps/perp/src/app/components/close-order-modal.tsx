@@ -32,7 +32,7 @@ export function CloseOrderModal({
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenLimitOrders(tableState);
+  const { multiRefresh: refetchOrders } = usePollOpenLimitOrders(tableState);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -60,7 +60,7 @@ export function CloseOrderModal({
     } Limit Order`,
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchOrders();
       handleOpenChange(false);
     },
   });

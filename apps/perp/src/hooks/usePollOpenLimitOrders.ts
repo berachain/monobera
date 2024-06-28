@@ -40,10 +40,17 @@ export const usePollOpenLimitOrders = (props: TableStateProps) => {
     },
   );
 
+  const refresh = () => void mutate(QUERY_KEY);
+
   return {
     isLoading,
     isValidating,
-    refresh: () => void mutate(QUERY_KEY),
+    refresh,
+    multiRefresh: () => {
+      refresh();
+      setTimeout(refresh, 2500);
+      setTimeout(refresh, 5000);
+    },
     data,
     pagination: data?.pagination ?? {},
     total: data?.total ?? 0,
