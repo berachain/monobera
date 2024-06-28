@@ -46,8 +46,9 @@ export function ClosePositionModal({
   );
   const [open, setOpen] = useState<boolean>(false);
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenPositions(tableState);
-  const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
+  const { multiRefresh: refetchPositions } = usePollOpenPositions(tableState);
+  const { multiRefresh: refetchMarketHistory } =
+    usePollMarketOrders(tableState);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -78,7 +79,7 @@ export function ClosePositionModal({
     } position`,
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchPositions();
       refetchMarketHistory();
       handleOpenChange(false);
     },
