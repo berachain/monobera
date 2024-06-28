@@ -5,7 +5,6 @@ import { usePublicClient, useWriteContract } from "wagmi";
 
 import {
   getErrorMessage,
-  getRevertReason,
   getCustomAppErrorMessages,
 } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -100,12 +99,16 @@ const useOctContractWrite = (
           dispatch({ type: ActionEnum.SUCCESS });
           onSuccess?.(hash);
         } else {
-          const revertReason = await getRevertReason(
-            publicClient,
-            confirmationReceipt?.transactionHash,
+          console.log(
+            "Received Error: ",
+            confirmationReceipt?.status,
+            "\n",
+            "Hash: ",
+            hash,
           );
+          dispatch({ type: ActionEnum.ERROR });
           onError?.({
-            message: revertReason ?? "Something went wrong. Please try again",
+            message: "Transaction reverted for unknown reason.",
             hash,
           });
         }
