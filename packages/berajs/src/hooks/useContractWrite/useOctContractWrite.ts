@@ -107,7 +107,10 @@ const useOctContractWrite = (
             hash,
           );
           dispatch({ type: ActionEnum.ERROR });
-          onError?.({ message: "Transaction has failed", hash: hash });
+          onError?.({
+            message: "Transaction reverted for unknown reason.",
+            hash,
+          });
         }
       } catch (e: any) {
         console.log(
