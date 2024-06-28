@@ -56,10 +56,11 @@ export function PlaceOrder({
   );
   const { tableState } = useContext(TableContext);
 
-  const { refresh: refreshPositions } = usePollOpenPositions(tableState);
-  const { refresh: refreshOpenLimitOrders } =
+  const { multiRefresh: refreshPositions } = usePollOpenPositions(tableState);
+  const { multiRefresh: refreshOpenLimitOrders } =
     usePollOpenLimitOrders(tableState);
-  const { refresh: refreshMarketHistory } = usePollMarketOrders(tableState);
+  const { multiRefresh: refreshMarketHistory } =
+    usePollMarketOrders(tableState);
   let warning = undefined;
 
   const slippage = useSlippage();

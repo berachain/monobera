@@ -36,13 +36,13 @@ const CancelWithdraw = ({
   }, [open]);
 
   const [isWithdrawExceeding, setIsWithdrawExceeding] = useState(false);
-  const { refetch } = usePollWithdrawQueue();
+  const { multiRefresh: refetchQueue } = usePollWithdrawQueue();
   const { account } = useBeraJs();
   const { write: cancelWrite, isLoading: isCancelLoading } = useTxn({
     message: "Cancel HONEY Withdraw Request",
     actionType: TransactionActionType.CANCEL_WITHDRAW_REQUEST,
     onSuccess: () => {
-      refetch();
+      refetchQueue();
       setOpen(false);
     },
   });
@@ -51,7 +51,7 @@ const CancelWithdraw = ({
     message: "Redeeming BHONEY",
     actionType: TransactionActionType.WITHDRAW_HONEY,
     onSuccess: () => {
-      refetch();
+      refetchQueue();
     },
   });
 
