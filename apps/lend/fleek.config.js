@@ -1,10 +1,10 @@
 /** @type {import('@fleek-platform/cli').FleekConfig} */
 module.exports = {
-  "sites": [
+  sites: [
     {
-      "slug": "full-laptop-old",
-      "distDir": "out",
-      "buildCommand": "npm run build"
-    }
-  ]
+      slug: "full-laptop-old",
+      distDir: "out",
+      buildCommand: "npm run build",
+    },
+  ],
 };
