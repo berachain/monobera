@@ -2,6 +2,7 @@
   "name": "@bera/lend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "build": "pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules out build",
