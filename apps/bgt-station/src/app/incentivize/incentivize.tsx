@@ -26,6 +26,7 @@ import {
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
+import BigNumber from "bignumber.js";
 import { Address, formatUnits, parseUnits } from "viem";
 
 export const Incentivize = ({
@@ -62,9 +63,10 @@ export const Incentivize = ({
       : [];
   }, [gaugeInfo]);
 
-  const amountOfProposals = useMemo(() => {
-    return Number(totalAmount) / Number(incentiveRate);
-  }, [totalAmount, incentiveRate]);
+  const amountOfProposals = useMemo(
+    () => BigNumber(totalAmount).div(incentiveRate, 18).toString(),
+    [totalAmount, incentiveRate],
+  );
 
   const { data: allowance } = usePollAllowance({
     spender: gaugeInfo?.vaultAddress ?? "0x",
@@ -240,29 +242,24 @@ export const Incentivize = ({
           Incentive Distribution
         </div>
         <hr />
-        <div className="flex justify-between text-muted-foreground">
-          <div className="flex flex-col gap-1 py-1">
-            <div className="text-sm font-medium leading-5">
-              Amount of Proposals
-            </div>
+        <div className="flex items-center justify-between gap-4 text-muted-foreground">
+          <div className="whitespace-nowrap py-1 text-sm font-medium leading-5">
+            Amount of Proposals
           </div>
-          <div className="flex flex-col items-end gap-1">
-            <div className="flex items-center gap-1 text-lg font-semibold leading-7">
-              <FormattedNumber
-                value={
-                  isInvalidInput ||
-                  totalAmount === "" ||
-                  incentiveRate === "" ||
-                  totalAmount === "0" ||
-                  incentiveRate === "0"
-                    ? 0
-                    : amountOfProposals
-                }
-                compact
-                showIsSmallerThanMin
-              />
-            </div>
-          </div>
+          <FormattedNumber
+            className="font-semibold leading-7 truncate"
+            value={
+              isInvalidInput ||
+              totalAmount === "" ||
+              incentiveRate === "" ||
+              totalAmount === "0" ||
+              incentiveRate === "0"
+                ? 0
+                : amountOfProposals
+            }
+            compact
+            showIsSmallerThanMin
+          />
         </div>
       </div>
 
@@ -301,7 +298,7 @@ export const Incentivize = ({
                 params: [
                   token?.address,
                   parseUnits(totalAmount, token?.decimals ?? 18),
-                  parseUnits(incentiveRate, 18),
+                  parseUnits(incentiveRate, token?.decimals ?? 18),
                 ],
               })
             }

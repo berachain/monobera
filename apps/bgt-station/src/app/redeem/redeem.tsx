@@ -29,7 +29,6 @@ export default function Redeem() {
     actionType: TransactionActionType.REDEEM_BERA,
     onSuccess: () => {
       refresh();
-      setRedeemAmount("");
     },
   });
 

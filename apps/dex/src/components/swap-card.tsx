@@ -471,8 +471,6 @@ export function SwapCard({
                     hideMax={true}
                     disabled={true}
                     setAmount={(amount) => {
-                      // setSwapKind(SwapKind.GIVEN_OUT);
-                      setSwapAmount(amount);
                       setToAmount(amount);
                     }}
                     difference={isWrap ? undefined : differenceUSD}
@@ -623,7 +621,7 @@ export function SwapCard({
                             {gasPriceLabel !== "-" && (
                               <Icons.fuel className="h-4 w-4" />
                             )}
-                            {gasPriceLabel}
+                            <span>{gasPriceLabel}</span>
                           </span>
                         </p>
                       </div>

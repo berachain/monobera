@@ -1,11 +1,10 @@
 import { useCallback, useReducer } from "react";
 import { usePublicClient, useWriteContract } from "wagmi";
 
-import { getErrorMessage } from "~/utils/errorMessages";
+import { getErrorMessage, getRevertReason } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
 import { useBeraJs } from "~/contexts";
 import { usePollTransactionCount } from "../usePollTransactionCount";
-import { TransactionFailedError } from "./error";
 import {
   type IContractWrite,
   type IUseContractWriteArgs,
@@ -26,7 +25,7 @@ const useBeraContractWrite = ({
 
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
-  const { account } = useBeraJs();
+  const { account, config } = useBeraJs();
 
   const { refresh } = usePollTransactionCount({
     address: account,
@@ -47,7 +46,6 @@ const useBeraContractWrite = ({
       if (!publicClient) return;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
-
         const { request } = await publicClient.simulateContract({
           address: address,
           abi: abi,
@@ -85,12 +83,13 @@ const useBeraContractWrite = ({
           } else {
             if (process.env.VERCEL_ENV !== "production")
               console.log(confirmationReceipt);
-            // TODO: Add error txn hash here (reverted txns broken on polaris anyways)
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const e = new TransactionFailedError();
+            const revertReason = await getRevertReason(
+              publicClient,
+              confirmationReceipt?.transactionHash,
+            );
             onError?.({
-              message:
-                getErrorMessage(e) ?? "Something went wrong. Please Try again",
+              message: revertReason ?? "Something went wrong. Please try again",
               hash: receipt,
             });
           }

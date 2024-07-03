@@ -1,5 +1,9 @@
 import { useCallback, useContext, useMemo } from "react";
-import { TransactionActionType, tradingAbi } from "@bera/berajs";
+import {
+  TransactionActionType,
+  tradingAbi,
+  usePythUpdateFee,
+} from "@bera/berajs";
 import { Tooltip } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -9,10 +13,7 @@ import { encodeFunctionData, type Address } from "viem";
 
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import { generateMarketOrders } from "~/utils/generateMarketOrders";
-import {
-  usePriceData,
-  usePythUpdateFeeFormatted,
-} from "~/context/price-context";
+import { usePriceData } from "~/context/price-context";
 import { TableContext, defaultTableState } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
@@ -30,7 +31,7 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
 
   const {
     data: openPositionsData,
-    refresh: refetchPositions,
+    multiRefresh: refetchPositions,
     total: totalPositions,
   } = usePollOpenPositions(tableState);
 
@@ -41,19 +42,33 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
 
   const {
     data: openLimitOrdersData,
-    refresh: refetchOrders,
+    multiRefresh: refetchOrders,
     total: totalOpenOrders,
   } = usePollOpenLimitOrders(tableState);
 
-  const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
+  const { multiRefresh: refetchMarketHistory } =
+    usePollMarketOrders(tableState);
   const openOrders = useMemo(
     () => generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[],
     [openLimitOrdersData, markets],
   );
 
-  const pythUpdateFee = usePythUpdateFeeFormatted();
-
   const prices = usePriceData();
+
+  const openPositionsEncodedData = openPositions.reduce<string[]>(
+    (acc, pos) => {
+      return [
+        ...acc,
+        ...(generateEncodedPythPrices(prices, pos?.pair_index) ?? []),
+      ];
+    },
+    [],
+  );
+
+  const { data: pythUpdateFee } = usePythUpdateFee(
+    openPositionsEncodedData,
+    openPositions.map((pos) => pos?.pair_index.toString()).join(),
+  );
 
   const headers = [
     {
@@ -106,36 +121,41 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
     return createCloseOrderPayload(openOrders, tableState.selection || {});
   }, [openOrders, tableState.selection]);
 
-  const { isLoading: isClosePositionsLoading, write: writePositionsClose } =
-    useOctTxn({
-      message: "Closing All Open Positions",
-      actionType: TransactionActionType.CANCEL_ALL_ORDERS,
-      onSuccess: () => {
-        refetchPositions();
-        refetchMarketHistory();
-        setTableState((prev) => ({
-          ...prev,
-          selection: {},
-        }));
-      },
-    });
-  const { isLoading: isCloseLimitOrdersLoading, write: writeOrdersClose } =
-    useOctTxn({
-      message: "Closing All Open Orders",
-      actionType: TransactionActionType.CANCEL_ALL_ORDERS,
-      onSuccess: () => {
-        refetchOrders();
-        setTableState((prev) => ({
-          ...prev,
-          selection: {},
-        }));
-      },
-    });
+  const {
+    isLoading: isClosePositionsLoading,
+    write: writePositionsClose,
+    ModalPortal: PositionsModal,
+  } = useOctTxn({
+    message: "Closing All Open Positions",
+    actionType: TransactionActionType.CANCEL_ALL_ORDERS,
+    onSuccess: () => {
+      refetchPositions();
+      refetchMarketHistory();
+      setTableState((prev) => ({
+        ...prev,
+        selection: {},
+      }));
+    },
+  });
+  const {
+    isLoading: isCloseLimitOrdersLoading,
+    write: writeOrdersClose,
+    ModalPortal: OrdersModal,
+  } = useOctTxn({
+    message: "Closing All Open Orders",
+    actionType: TransactionActionType.CANCEL_ALL_ORDERS,
+    onSuccess: () => {
+      refetchOrders();
+      setTableState((prev) => ({
+        ...prev,
+        selection: {},
+      }));
+    },
+  });
 
   const selectionSize = Object.keys(tableState.selection ?? {}).length;
 
   const handleCloseAllPositions = useCallback(() => {
-    // TODO: update this to use the new multicall function when contracts are updated
     const encodedData = closePositionsPayload.map((pos) => {
       return encodeFunctionData({
         abi: tradingAbi,
@@ -151,12 +171,14 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
       abi: tradingAbi,
       functionName: "multicall",
       params: [true, encodedData],
-      value: pythUpdateFee * BigInt(closePositionsPayload.length),
+      value: pythUpdateFee,
     });
   }, [closePositionsPayload, prices, writePositionsClose]);
 
   return (
     <div>
+      {PositionsModal}
+      {OrdersModal}
       <div className="flex min-h-[64px] w-full flex-col items-center justify-between rounded-t-md bg-muted p-2 py-4 sm:flex-row sm:px-6">
         <div className="mr-2 flex flex-1 gap-3 text-foreground sm:gap-6">
           {headers.map((header, index) => (
@@ -225,7 +247,7 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
                 isCloseLimitOrdersLoading || closeOrdersPayload?.length === 0
               }
               onClick={() => {
-                const encodedData = closeOrdersPayload.map((order) => {
+                const encodedOrdersData = closeOrdersPayload.map((order) => {
                   return encodeFunctionData({
                     abi: tradingAbi,
                     functionName: "cancelOpenLimitOrder",
@@ -237,7 +259,7 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
                     .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
                   abi: tradingAbi,
                   functionName: "multicall",
-                  params: [true, encodedData],
+                  params: [true, encodedOrdersData],
                 });
               }}
             >

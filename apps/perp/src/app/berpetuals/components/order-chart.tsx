@@ -1,5 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import { usePollPositionsLiqFeePrices } from "@bera/berajs";
+import type { OpenTrade } from "@bera/proto/src";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { generateMarketOrders } from "~/utils/generateMarketOrders";
@@ -8,7 +10,7 @@ import { TableContext } from "~/context/table-context";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { type IMarket } from "~/types/market";
-import { ILimitOrder, IOpenTrade } from "~/types/order-history";
+import { ILimitOrder, IOpenTradeCalculated } from "~/types/order-history";
 import { type TableStateProps } from "~/types/table";
 import {
   type ChartingLibraryWidgetOptions,
@@ -49,9 +51,35 @@ export function OrderChart({
   const { data: openPositionData } = usePollOpenPositions(tableState);
   const { data: openLimitOrdersData } = usePollOpenLimitOrders(tableState);
 
+  const { data: openPositionsLiqFeesData } = usePollPositionsLiqFeePrices(
+    openPositionData?.result
+      ? openPositionData.result.map((position: OpenTrade) =>
+          Number(position.index),
+        )
+      : [],
+  );
+
   const openPositions = useMemo(() => {
-    return generateMarketOrders(openPositionData, markets) as IOpenTrade[];
-  }, [openPositionData, markets]);
+    const positions = generateMarketOrders(openPositionData, markets);
+    return positions.map((position, index) => {
+      return {
+        ...position,
+        borrowing_fee:
+          Array.isArray(openPositionsLiqFeesData) &&
+          openPositionsLiqFeesData[1] &&
+          openPositionsLiqFeesData[1][index] !== undefined
+            ? openPositionsLiqFeesData[1][index].toString()
+            : "0",
+        liq_price:
+          Array.isArray(openPositionsLiqFeesData) &&
+          openPositionsLiqFeesData[0] &&
+          openPositionsLiqFeesData[0][index] !== undefined
+            ? openPositionsLiqFeesData[0][index].toString()
+            : "0",
+      };
+    }) as IOpenTradeCalculated[];
+  }, [openPositionData, markets, openPositionsLiqFeesData]);
+
   const openOrders = useMemo(() => {
     return generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[];
   }, [openLimitOrdersData, markets]);
@@ -63,7 +91,7 @@ export function OrderChart({
 
   const [positionOpenState, setPositionOpenState] = useState(false);
   const [orderOpenState, setOrderOpenState] = useState(false);
-  const [position, setPosition] = useState<IOpenTrade>();
+  const [position, setPosition] = useState<IOpenTradeCalculated>();
   const [order, setOrder] = useState<ILimitOrder>();
   const [chartReady, setChartReady] = useState(false);
 

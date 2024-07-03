@@ -192,6 +192,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const handleAddLiquidity = useCallback(async () => {
     try {
+      setPreviewOpen(false);
       const addLiqPayload = await getAddLiquidityPayload({
         args: {
           slippage: slippage ?? 0,
@@ -250,10 +251,21 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
 
-  console.log({
-    maxBaseApprovalAmount,
-    maxQuoteApprovalAmount,
-  });
+  const baseSelected = useMemo(() => {
+    return isBeratoken(baseToken)
+      ? isNativeBera
+        ? beraToken
+        : wBeraToken
+      : baseToken;
+  }, [baseToken, isNativeBera]);
+
+  const quoteSelected = useMemo(() => {
+    return isBeratoken(quoteToken)
+      ? isNativeBera
+        ? beraToken
+        : wBeraToken
+      : quoteToken;
+  }, [quoteToken, isNativeBera]);
 
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
@@ -291,13 +303,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
           <TokenList>
             <TokenInput
               key={baseToken.address}
-              selected={
-                isBeratoken(baseToken)
-                  ? isNativeBera
-                    ? beraToken
-                    : wBeraToken
-                  : baseToken
-              }
+              selected={baseSelected}
               selectable={
                 isBeratoken(baseToken) && beraToken && wBeraToken ? true : false
               }
@@ -329,13 +335,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
             <TokenInput
               key={quoteToken?.address}
-              selected={
-                isBeratoken(quoteToken)
-                  ? isNativeBera
-                    ? beraToken
-                    : wBeraToken
-                  : quoteToken
-              }
+              selected={quoteSelected}
               selectable={
                 isBeratoken(quoteToken) && beraToken && wBeraToken
                   ? true
@@ -372,15 +372,15 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
               title={"Pool Price"}
               value={
                 poolPrice ? (
-                  <>
+                  <span>
                     <FormattedNumber
                       value={poolPrice}
                       symbol={baseToken.symbol}
                     />{" "}
                     = 1 {quoteToken?.symbol}
-                  </>
+                  </span>
                 ) : (
-                  "-"
+                  <span>{"-"}</span>
                 )
               }
             />
@@ -440,15 +440,15 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 title={"Pool Price"}
                 value={
                   poolPrice ? (
-                    <>
+                    <span>
                       <FormattedNumber
                         value={poolPrice}
                         symbol={baseToken.symbol}
                       />{" "}
                       = 1 {quoteToken?.symbol}
-                    </>
+                    </span>
                   ) : (
-                    "-"
+                    <span>{"-"}</span>
                   )
                 }
               />

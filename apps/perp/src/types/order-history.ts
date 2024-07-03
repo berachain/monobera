@@ -11,6 +11,11 @@ export interface IOpenTrade extends OpenTrade {
   market: IMarket;
 }
 
+export interface IOpenTradeCalculated extends IOpenTrade {
+  liq_price: string;
+  borrowing_fee: string;
+}
+
 export interface ILimitOrder extends OpenLimitOrder {
   market: IMarket;
 }

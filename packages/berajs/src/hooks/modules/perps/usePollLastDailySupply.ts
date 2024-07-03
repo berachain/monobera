@@ -17,7 +17,6 @@ export const usePollLastDailySupply = () => {
         functionName: method,
         args: [],
       });
-      console.log("the result is", result);
       return result;
     } catch (e) {
       console.error(e);

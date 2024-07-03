@@ -32,7 +32,7 @@ export function CloseOrderModal({
 }) {
   const [open, setOpen] = useState<boolean>(false);
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenLimitOrders(tableState);
+  const { multiRefresh: refetchOrders } = usePollOpenLimitOrders(tableState);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -54,13 +54,13 @@ export function CloseOrderModal({
 
   const ticker = openOrder?.market?.name?.split("-")[0];
 
-  const { isLoading, isSubmitting, write } = useOctTxn({
-    message: `Closing ${openOrder?.market?.name} ${
+  const { isLoading, isSubmitting, write, ModalPortal } = useOctTxn({
+    message: `Closing ${openOrder?.market?.name ?? ""} ${
       openOrder?.buy === true ? "Long" : "Short"
     } Limit Order`,
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchOrders();
       handleOpenChange(false);
     },
   });
@@ -89,6 +89,7 @@ export function CloseOrderModal({
 
   return (
     <div className={className}>
+      {ModalPortal}
       <div
         onClick={() => !disabled && handleOpenChange(true)}
         className="h-full w-full"

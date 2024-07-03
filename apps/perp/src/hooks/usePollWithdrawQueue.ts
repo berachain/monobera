@@ -8,16 +8,15 @@ import { POLLING } from "~/utils/constants";
 
 export const usePollWithdrawQueue = () => {
   const { account } = useBeraJs();
-  const QUERY_KEY = ["honeywithdrawals", account];
+  const method = "vaultwithdrawals";
+  const QUERY_KEY = [method, account];
   const { mutate } = useSWRConfig();
-  const { isLoading } = useSWR(
+  const { data, isLoading } = useSWR(
     QUERY_KEY,
     async () => {
       if (account) {
         try {
-          const res = await fetch(
-            `${perpsEndpoint}/honeywithdrawals/${account}`,
-          );
+          const res = await fetch(`${perpsEndpoint}/${method}/${account}`);
           const data = await res.json();
           return data;
         } catch (e) {
@@ -31,27 +30,16 @@ export const usePollWithdrawQueue = () => {
     },
   );
 
-  const useWithdrawQueue = (): HoneyWithdrawalRequest[] | undefined => {
-    const { data } = useSWRImmutable<any | undefined>(QUERY_KEY);
-    if (data) {
-      const withdrawRequests: HoneyWithdrawalRequest[] = data.withdraw_requests;
-      const withdrawCancels: any[] = data.withdraw_cancels; // Assuming data structure, adjust as needed
-      return withdrawRequests.filter((withdrawRequest) => {
-        return !withdrawCancels.some((withdrawCancel) => {
-          return (
-            withdrawRequest.owner === withdrawCancel.owner &&
-            withdrawRequest.shares === withdrawCancel.shares &&
-            withdrawRequest.epoch_created === withdrawCancel.epoch_created &&
-            withdrawRequest.unlock_epoch === withdrawCancel.unlock_epoch
-          );
-        });
-      });
-    }
-    return data;
-  };
+  const refetch = () => void mutate(QUERY_KEY);
+
   return {
     isLoading,
-    refetch: () => void mutate(QUERY_KEY),
-    useWithdrawQueue,
+    refetch,
+    data,
+    multiRefresh: () => {
+      refetch();
+      setTimeout(refetch, 2500);
+      setTimeout(refetch, 5000);
+    },
   };
 };

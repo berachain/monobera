@@ -1,54 +1,54 @@
 import { perpsCompetitionId, perpsEndpoint } from "@bera/config";
-import { useSWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 
-export const useLeaderboard = ({
-  sort,
-  page,
-  wallet = "",
-}: {
-  sort: string;
-  page: number;
-  wallet: string;
-}) => {
-  const QUERY_KEY = ["leaderboard", sort, wallet, page];
-  const { mutate } = useSWRConfig();
-  const { isLoading, isValidating } = useSWRImmutable(QUERY_KEY, async () => {
-    const res = await fetch(
-      `${perpsEndpoint}/trading-comp-rankings${
-        wallet ? `/${wallet}` : ""
-      }?sort_by=${sort}&comp_id=${perpsCompetitionId}&page=${
-        page ?? 1
-      }&per_page=10`,
-    );
-    const data = await res.json();
-    return data;
-  });
+import { API_FILTERS, POLLING } from "~/utils/constants";
+import type { FilterableLeaderboardTableState } from "~/types/table";
 
-  const useLeaderBoardData = () => {
-    const { data } = useSWRImmutable(QUERY_KEY, { keepPreviousData: true });
-    const { result } = data || {};
-    return result;
-  };
-
-  const useLeaderBoardPagination = () => {
-    const { data } = useSWRImmutable(QUERY_KEY, { keepPreviousData: true });
-    const { pagination } = data || {};
-    return pagination;
-  };
-
-  const useLeaderBoardDetails = () => {
-    const { data } = useSWRImmutable(QUERY_KEY, { keepPreviousData: true });
-    const { details } = data || {};
-    return details;
-  };
+export const useLeaderboardCompetition = (
+  props: FilterableLeaderboardTableState,
+) => {
+  const queryString =
+    Object.entries(props ?? {})
+      .filter(
+        ([key, value]) => API_FILTERS.includes(key) && value !== undefined,
+      )
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&") ?? "";
+  const QUERY_KEY = [
+    "leaderboard",
+    props.wallet,
+    perpsCompetitionId,
+    queryString,
+  ];
+  const { data, isLoading, isValidating, mutate } = useSWRImmutable(
+    QUERY_KEY,
+    async () => {
+      if (perpsCompetitionId !== "default" && perpsCompetitionId) {
+        const res = await fetch(
+          `${perpsEndpoint}/trading-comp-rankings${
+            props.wallet ? `/${props.wallet}` : ""
+          }?comp_id=${perpsCompetitionId}${
+            queryString ? `&${queryString}` : ""
+          }`,
+        );
+        const data = await res.json();
+        return data;
+      }
+      return {};
+    },
+    {
+      keepPreviousData: true,
+      revalidateOnFocus: false,
+      refreshInterval: POLLING.SLOW,
+    },
+  );
 
   return {
     isLoading,
     isValidating,
     refetch: () => void mutate(QUERY_KEY),
-    useLeaderBoardData,
-    useLeaderBoardDetails,
-    useLeaderBoardPagination,
+    leaderboardData: data?.result || [],
+    leaderboardDetails: data?.details || {},
+    leaderboardPagination: data?.pagination || {},
   };
 };

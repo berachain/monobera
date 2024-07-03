@@ -116,8 +116,8 @@ export function TokenDialog({
     if (!customTokens) {
       const filtered = tokenData?.tokenList?.filter(
         (token) =>
-          (token.name.toLowerCase().includes(search.toLowerCase()) ||
-            token.symbol.toLowerCase().includes(search.toLowerCase()) ||
+          (token.name?.toLowerCase().includes(search.toLowerCase()) ||
+            token.symbol?.toLowerCase().includes(search.toLowerCase()) ||
             token.address.toLowerCase().includes(search.toLowerCase())) &&
           !hasFilteredTag(token.tags) &&
           !filteredSymbols.includes(token.symbol),

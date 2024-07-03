@@ -7,7 +7,11 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { useCalculatePnl } from "~/hooks/useCalculatePnl";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import type { IMarketOrder, IOpenTrade } from "~/types/order-history";
+import type {
+  IMarketOrder,
+  IOpenTrade,
+  IClosedTrade,
+} from "~/types/order-history";
 import { PnLRowHoverState } from "../berpetuals/components/pnl-row-hover-state";
 
 export const MarketTradePNL = ({
@@ -17,25 +21,42 @@ export const MarketTradePNL = ({
   wrapped,
   closePrice,
   hoverState = true,
+  calculatedPnl,
+  openFee,
+  closeFee,
+  borrowFee,
 }: {
-  position: IOpenTrade | IMarketOrder;
+  position: IOpenTrade | IMarketOrder | IClosedTrade;
   positionSize: string;
   className?: string;
   wrapped?: boolean;
   closePrice?: string;
   hoverState?: boolean;
+  calculatedPnl?: string;
+  openFee?: string;
+  closeFee?: string;
+  borrowFee?: string;
 }) => {
   const { marketPrices } = usePollPrices();
   let price = marketPrices[position?.market?.pair_index ?? ""] ?? "0";
 
+  const openTrade = !!(position as IMarketOrder)?.trade_open;
+
   if (closePrice) {
     price = formatFromBaseUnit(closePrice, 10).toString(10);
   }
-  const pnl = useCalculatePnl({
-    currentPrice: price,
-    openPosition: position,
-    positionSize: positionSize,
-  });
+
+  let pnl = "0";
+  if (calculatedPnl) {
+    pnl = calculatedPnl;
+  } else {
+    pnl =
+      useCalculatePnl({
+        currentPrice: price,
+        openPosition: position as IOpenTrade,
+        positionSize: positionSize,
+      }) ?? "0";
+  }
 
   const positionSizeBN = formatFromBaseUnit(positionSize ?? "0", 18);
   const percentage = useMemo(() => {
@@ -51,21 +72,24 @@ export const MarketTradePNL = ({
   const initialCollateral = formatFromBaseUnit(positionSize, 18)
     .plus(formatFromBaseUnit(position.open_fee || "0", 18))
     .toString(10);
-  const borrowFee = formatFromBaseUnit(
-    position.borrowing_fee || "0",
-    18,
-  ).toString(10);
-  const closeFee = position.closing_fee
-    ? formatFromBaseUnit(position.closing_fee || "0", 18).toString(10)
-    : formatFromBaseUnit(
-        position?.market?.pair_fixed_fee?.close_fee_p ?? "0",
-        12,
-      )
-        .times(positionSizeBN)
-        .times(position.leverage)
-        .toString(10);
+  const borrowFeeFormatted = borrowFee
+    ? borrowFee
+    : formatFromBaseUnit(position.borrowing_fee || "0", 18).toString(10);
+  const closeFeeFormatted = closeFee
+    ? closeFee
+    : position.closing_fee
+      ? formatFromBaseUnit(position.closing_fee || "0", 18).toString(10)
+      : formatFromBaseUnit(
+          position?.market?.pair_fixed_fee?.close_fee_p ?? "0",
+          12,
+        )
+          .times(positionSizeBN)
+          .times(position.leverage)
+          .toString(10);
 
-  const openFee = formatFromBaseUnit(position.open_fee || "0", 18).toString(10);
+  const openFeeFormatted = openFee
+    ? openFee
+    : formatFromBaseUnit(position.open_fee || "0", 18).toString(10);
 
   return (
     <div className={cn("", className)}>
@@ -91,9 +115,10 @@ export const MarketTradePNL = ({
                   <PnLRowHoverState
                     initialCollateral={initialCollateral}
                     pnlAfterFees={pnl}
-                    borrowFee={borrowFee}
-                    closeFee={closeFee}
-                    openFee={openFee}
+                    borrowFee={borrowFeeFormatted}
+                    closeFee={closeFeeFormatted}
+                    openFee={openFeeFormatted}
+                    openTrade={openTrade}
                   />
                 }
               />

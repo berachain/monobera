@@ -26,6 +26,7 @@ export function SwapCard() {
     payload,
     isReady,
     setSelectedFrom,
+    setSelectedTo,
     isLoading,
     write,
     selectedFrom,
@@ -125,6 +126,7 @@ export function SwapCard() {
                 showExceeding={false}
                 hideMax={true}
                 balance={toBalance?.formattedBalance}
+                onTokenSelection={setSelectedTo}
               />
             </ul>
             {!isReady ? (

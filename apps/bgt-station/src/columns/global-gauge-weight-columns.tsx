@@ -100,7 +100,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="ml-[5px] flex flex-row gap-1 items-center">
+      <div className="ml-[5px] flex flex-row items-center gap-1">
         {row.original.activeValidators.length > 3
           ? row.original.activeValidators
               .slice(0, 3)
@@ -109,7 +109,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
                   imgOverride={validator.logoURI}
                   address={validator.id}
                   key={index}
-                  className="cursor-pointer ml-[-5px]"
+                  className="ml-[-5px] cursor-pointer"
                   onClick={(e: React.MouseEvent<HTMLImageElement>) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -123,7 +123,7 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
                   imgOverride={validator.logoURI}
                   address={validator.id}
                   key={index}
-                  className="cursor-pointer ml-[-5px]"
+                  className="ml-[-5px] cursor-pointer"
                   onClick={(e: React.MouseEvent<HTMLImageElement>) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -151,23 +151,25 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     cell: ({ row }) => (
       <div className="flex w-full items-center justify-center gap-1">
         <BribesPopover incentives={row.original.activeIncentives} />
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
-            e.stopPropagation();
-            window.open(
-              `/incentivize?gauge=${row.original.vaultAddress}`,
-              "_self",
-            );
-          }}
-        >
-          Add
-        </Button>
       </div>
     ),
     accessorKey: "incentives",
+    enableSorting: false,
+  },
+  {
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Deposit LP"
+        className="whitespace-nowrap"
+      />
+    ),
+    cell: () => (
+      <Button size="sm" variant="ghost">
+        Deposit
+      </Button>
+    ),
+    accessorKey: "deposit-lp",
     enableSorting: false,
   },
 ];

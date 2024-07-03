@@ -1,10 +1,11 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   BGT_ABI,
   IContractWrite,
   TransactionActionType,
   UserValidator,
   truncateHash,
+  useBgtUnstakedBalance,
   useUserValidators,
 } from "@bera/berajs";
 import { bgtTokenAddress, blockTime } from "@bera/config";
@@ -23,6 +24,8 @@ import { useBlock } from "wagmi";
 export const HISTORY_BUFFER = 8192;
 export const BoostQueue = () => {
   const { data = [], refresh, isLoading } = useUserValidators();
+  const { refresh: refreshBalance } = useBgtUnstakedBalance();
+
   const result = useBlock();
   const blockNumber = result?.data?.number;
 
@@ -45,6 +48,10 @@ export const BoostQueue = () => {
           });
   }, [data, blockNumber]);
 
+  const [hasSubmittedTxn, setHasSubmittedTxn] = useState<
+    Record<number, boolean>
+  >({} as any);
+
   const {
     write: activateWrite,
     isLoading: isActivationLoading,
@@ -53,7 +60,11 @@ export const BoostQueue = () => {
     message: "Activating queued BGT to Validator",
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
-      setTimeout(refresh, 1000);
+      setTimeout(() => {
+        refresh();
+        refreshBalance();
+        setHasSubmittedTxn({} as any);
+      }, 7000);
     },
   });
 
@@ -65,34 +76,52 @@ export const BoostQueue = () => {
     message: "Cancelling queued BGT to Validator",
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
-      setTimeout(refresh, 1000);
+      setTimeout(() => {
+        refresh();
+        refreshBalance();
+        setHasSubmittedTxn({} as any);
+      }, 5000);
     },
   });
+
+  const handleTransaction = (
+    index: number,
+    isActivate: boolean,
+    props: IContractWrite,
+  ) => {
+    setHasSubmittedTxn({ ...hasSubmittedTxn, [index]: true } as any);
+    if (isActivate) {
+      activateWrite(props);
+    } else {
+      cancelWrite(props);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-3">
       {ActivateModalPortal}
       {CancelModalPortal}
       <div className="text-lg font-semibold leading-7">Delegation Queue</div>
-      {isLoading ? (
+      {!queuedList ? (
         <div>
           <Skeleton className="h-28 w-full rounded-md" />
           <Skeleton className="h-28 w-full rounded-md" />
         </div>
       ) : (
         <>
-          {queuedList?.map((validator: UserValidator) => (
+          {queuedList?.map((validator: UserValidator, index: number) => (
             <ConfirmationCard
               key={validator.id}
               userValidator={validator}
+              index={index}
+              hasSubmittedTxn={hasSubmittedTxn[index] ?? false}
               blocksLeft={
                 parseInt(validator.latestBlock) +
                 HISTORY_BUFFER -
                 Number(blockNumber)
               }
               isTxnLoading={isActivationLoading || isCancelLoading}
-              activateWrite={activateWrite}
-              cancelWrite={cancelWrite}
+              handleTransaction={handleTransaction}
             />
           ))}
           {!queuedList?.length && (
@@ -108,14 +137,20 @@ const ConfirmationCard = ({
   userValidator,
   blocksLeft,
   isTxnLoading,
-  activateWrite,
-  cancelWrite,
+  index,
+  hasSubmittedTxn,
+  handleTransaction,
 }: {
   userValidator: UserValidator;
   blocksLeft: number;
   isTxnLoading: boolean;
-  activateWrite: (props: IContractWrite) => void;
-  cancelWrite: (props: IContractWrite) => void;
+  index: number;
+  hasSubmittedTxn: boolean;
+  handleTransaction: (
+    index: number,
+    isActivate: boolean,
+    props: IContractWrite,
+  ) => void;
 }) => {
   const width = userValidator.canActivate
     ? 100
@@ -153,9 +188,11 @@ const ConfirmationCard = ({
         <div>
           <Button
             variant="ghost"
-            disabled={isTxnLoading || !userValidator.canActivate}
+            disabled={
+              isTxnLoading || !userValidator.canActivate || hasSubmittedTxn
+            }
             onClick={() =>
-              activateWrite({
+              handleTransaction(index, true, {
                 address: bgtTokenAddress,
                 abi: BGT_ABI,
                 functionName: "activateBoost",
@@ -167,9 +204,9 @@ const ConfirmationCard = ({
           </Button>
           <Button
             variant="ghost"
-            disabled={isTxnLoading}
+            disabled={isTxnLoading || hasSubmittedTxn}
             onClick={() =>
-              cancelWrite({
+              handleTransaction(index, false, {
                 address: bgtTokenAddress,
                 abi: BGT_ABI,
                 functionName: "cancelBoost",
