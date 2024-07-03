@@ -21,7 +21,7 @@ import {
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Balancer } from "react-wrap-balancer";
-import { type Address, isAddress } from "viem";
+import { isAddress, type Address } from "viem";
 
 import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
@@ -71,14 +71,13 @@ export function TokenDialog({
     useTokenInformation({
       address: search as Address,
     });
-
   const [filteredTokens, setFilteredTokens] = useState<
     (Token | undefined)[] | undefined
   >(
     customTokens !== undefined
       ? customTokens
       : tokenData?.tokenList?.filter(
-          (token) =>
+          (token: Token) =>
             !filter.includes(token.address) &&
             !hasFilteredTag(token.tags) &&
             !filteredSymbols.includes(token.symbol),
@@ -115,7 +114,7 @@ export function TokenDialog({
   useEffect(() => {
     if (!customTokens) {
       const filtered = tokenData?.tokenList?.filter(
-        (token) =>
+        (token: Token) =>
           (token.name?.toLowerCase().includes(search.toLowerCase()) ||
             token.symbol?.toLowerCase().includes(search.toLowerCase()) ||
             token.address.toLowerCase().includes(search.toLowerCase())) &&
@@ -200,8 +199,8 @@ export function TokenDialog({
               {!customTokens && (
                 <div className="flex flex-wrap gap-2">
                   {tokenData?.featuredTokenList
-                    ?.filter((token) => !filter.includes(token.address))
-                    ?.map((token) => {
+                    ?.filter((token: Token) => !filter.includes(token.address))
+                    ?.map((token: Token) => {
                       return (
                         <TokenChip
                           key={token.address}
@@ -272,7 +271,7 @@ export function TokenDialog({
               ({tokenData?.customTokenList?.length ?? 0}) Custom tokens
             </div>
             <div>
-              {tokenData?.customTokenList?.map((token) => {
+              {tokenData?.customTokenList?.map((token: Token) => {
                 return (
                   <div
                     className="flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-muted"

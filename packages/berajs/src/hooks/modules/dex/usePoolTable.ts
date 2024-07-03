@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getBeraLpAddress } from "@bera/beracrocswap";
 import { chainId, crocIndexerEndpoint, multicallAddress } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { erc20Abi } from "viem";
@@ -6,7 +7,7 @@ import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import type { PoolV2 } from "~/types";
-import { formatPoolData, getBeraLpAddress } from "~/utils";
+import { formatPoolData } from "~/utils";
 
 const DEFAULT_SIZE = 8;
 interface Call {
