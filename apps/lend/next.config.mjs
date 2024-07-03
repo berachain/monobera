@@ -6,9 +6,9 @@ const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
   transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/wagmi"],
-  // compiler: {
-  //   removeConsole: process.env.NODE_ENV === "production",
-  // },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   experimental: {
     esmExternals: "loose",
     webpackBuildWorker: true,
@@ -37,8 +37,7 @@ const config = {
     ],
     domains: ["res.cloudinary.com", "raw.githubusercontent.com"],
   },
-  // output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
-  output: "export",
+  output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
   trailingSlash: true,
 };
 
