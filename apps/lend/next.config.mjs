@@ -1,4 +1,5 @@
 import { withSentryConfig } from "@sentry/nextjs";
+
 import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
@@ -6,9 +7,9 @@ const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
   transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/wagmi"],
-  // compiler: {
-  //   removeConsole: process.env.NODE_ENV === "production",
-  // },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
   experimental: {
     esmExternals: "loose",
     webpackBuildWorker: true,
@@ -21,6 +22,7 @@ const config = {
     return config;
   },
   images: {
+    unoptimized: process.env.NEXT_PUBLIC_HOST === "ipfs" ? true : undefined,
     remotePatterns: [
       {
         protocol: "https",
@@ -31,6 +33,8 @@ const config = {
     ],
     domains: ["res.cloudinary.com", "raw.githubusercontent.com"],
   },
+  output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
+  trailingSlash: true,
 };
 
 export default withSentryConfig(
@@ -38,7 +42,6 @@ export default withSentryConfig(
   {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
-
     // Suppresses source map uploading logs during build
     silent: true,
     org: "berachain-dapps",

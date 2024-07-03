@@ -15,7 +15,7 @@ export type UseTokenInformationResponse = DefaultHookReturnType<
 >;
 
 export type useTokenInformationArgs = {
-  address: Address | undefined;
+  address: string | undefined;
 };
 export const useTokenInformation = (
   args: useTokenInformationArgs,
