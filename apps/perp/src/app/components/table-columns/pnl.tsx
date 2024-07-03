@@ -6,9 +6,9 @@ import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { PositionTitle } from "~/app/components/position-title";
-import type { IClosedTrade } from "~/types/order-history";
-import { PnlWithPercentage } from "../pnl-with-percentage";
 import { IMarket } from "~/types/market";
+import type { IClosedTrade } from "~/types/order-history";
+import { MarketTradePNL } from "../market-trade-pnl";
 
 export const generatePnlColumns = (
   markets: IMarket[],
@@ -139,11 +139,23 @@ export const generatePnlColumns = (
   {
     header: "PnL",
     cell: ({ row }) => {
-      const positionSize = BigNumber(row.original.volume).div(
-        row.original.leverage ?? "1",
-      );
+      const positionSize = BigNumber(row.original.volume)
+        .div(row.original.leverage ?? "1")
+        .plus(row.original.open_fee ?? "0")
+        .multipliedBy(new BigNumber(10).pow(18))
+        .toString(10);
       const pnl = BigNumber(row.original.pnl);
-      return <PnlWithPercentage positionSize={positionSize} pnl={pnl} />;
+      return (
+        <MarketTradePNL
+          position={row.original}
+          positionSize={positionSize}
+          calculatedPnl={pnl.toString(10)}
+          closePrice={row.original.close_price}
+          openFee={row.original.open_fee}
+          closeFee={row.original.closing_fee}
+          borrowFee={row.original.borrowing_fee}
+        />
+      );
     },
     accessorKey: "pnl",
     enableSorting: true,

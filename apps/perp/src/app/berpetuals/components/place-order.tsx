@@ -5,6 +5,7 @@ import {
   tradingAbi,
   useBeraJs,
   usePollAllowance,
+  usePythUpdateFee,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
@@ -25,11 +26,7 @@ import { parseUnits, type Address } from "viem";
 
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import {
-  useIsPythConnected,
-  usePriceData,
-  usePythUpdateFeeFormatted,
-} from "~/context/price-context";
+import { useIsPythConnected, usePriceData } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
@@ -53,13 +50,17 @@ export function PlaceOrder({
 }) {
   const prices = usePriceData();
   const isPythConnected = useIsPythConnected();
-  const pythUpdateFee = usePythUpdateFeeFormatted();
+  const { data: pythUpdateFee } = usePythUpdateFee(
+    generateEncodedPythPrices(prices, pairIndex),
+    pairIndex,
+  );
   const { tableState } = useContext(TableContext);
 
-  const { refresh: refreshPositions } = usePollOpenPositions(tableState);
-  const { refresh: refreshOpenLimitOrders } =
+  const { multiRefresh: refreshPositions } = usePollOpenPositions(tableState);
+  const { multiRefresh: refreshOpenLimitOrders } =
     usePollOpenLimitOrders(tableState);
-  const { refresh: refreshMarketHistory } = usePollMarketOrders(tableState);
+  const { multiRefresh: refreshMarketHistory } =
+    usePollMarketOrders(tableState);
   let warning = undefined;
 
   const slippage = useSlippage();
@@ -80,7 +81,7 @@ export function PlaceOrder({
     warning = "Slippage is set very low, your order may not be filled.";
   } else if (!isPythConnected) {
     warning =
-      "Prices are not connected. Unable to place an order without real-time price data.";
+      "Prices are not connected. Some placed orders may fail without real-time price data.";
   } else {
     warning = undefined;
   }
@@ -333,8 +334,7 @@ export function PlaceOrder({
               form.amount === "" ||
               safeAmount === "0" ||
               form.amount === undefined ||
-              form.tp === "" ||
-              !isPythConnected
+              form.tp === ""
             }
             onClick={handlePlaceOrder}
           >

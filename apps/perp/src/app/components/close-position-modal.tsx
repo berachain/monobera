@@ -1,5 +1,10 @@
-import { useEffect, useState, useContext, useCallback } from "react";
-import { tradingAbi, TransactionActionType, formatUsd } from "@bera/berajs";
+import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  TransactionActionType,
+  formatUsd,
+  tradingAbi,
+  usePythUpdateFee,
+} from "@bera/berajs";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -9,18 +14,15 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
-import { TableContext } from "~/context/table-context";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
+import { generateEncodedPythPrices } from "~/utils/formatPyth";
+import { usePriceData } from "~/context/price-context";
+import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
+import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IOpenTradeCalculated } from "~/types/order-history";
 import { MarketTradePNL } from "./market-trade-pnl";
-import {
-  usePriceData,
-  usePythUpdateFeeFormatted,
-} from "~/context/price-context";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
 
 export function ClosePositionModal({
   trigger,
@@ -38,11 +40,15 @@ export function ClosePositionModal({
   onOpenChange?: (state: boolean) => void;
 }) {
   const prices = usePriceData();
-  const pythUpdateFee = usePythUpdateFeeFormatted();
+  const { data: pythUpdateFee } = usePythUpdateFee(
+    generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
+    openPosition?.market?.pair_index,
+  );
   const [open, setOpen] = useState<boolean>(false);
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenPositions(tableState);
-  const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
+  const { multiRefresh: refetchPositions } = usePollOpenPositions(tableState);
+  const { multiRefresh: refetchMarketHistory } =
+    usePollMarketOrders(tableState);
 
   useEffect(() => {
     if (controlledOpen && controlledOpen !== open) {
@@ -73,7 +79,7 @@ export function ClosePositionModal({
     } position`,
     actionType: TransactionActionType.CANCEL_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchPositions();
       refetchMarketHistory();
       handleOpenChange(false);
     },

@@ -1,3 +1,8 @@
+import { ethers } from "ethers";
+import { PublicClient } from "viem";
+
+import { clientToProvider } from "~/hooks/useEthersProvider";
+
 interface ErrorType {
   keywords: string[];
   errorMSG: string;
@@ -36,7 +41,7 @@ const errorMsgMap: ErrorMessages = {
     },
     USER_REJECTION: {
       keywords: ["User denied transaction signature"],
-      errorMSG: "You Rejected the transaction.",
+      errorMSG: "You rejected the transaction.",
     },
   },
   LEND: {
@@ -221,4 +226,77 @@ export const getErrorMessage = (e: any) => {
     }
   }
   return errorMsgMap.GENERAL_ERROR;
+};
+
+// from CrocSwap-protocol https://github.com/berachain/CrocSwap-protocol/blob/31ea60687e07b64f482e6268a07d887fd5ad6d6a/etc/errors.json
+const TransactionRevertReasonMap: { [key: string]: string } = {
+  A: "Unauthorized",
+  B: "Insufficient base token",
+  BD: "Barrier burn down overflow",
+  C: "Oversized sqrt approx",
+  D: "Tick size below minimum increment",
+  DS: "Double spend msg val",
+  EC: "Insufficient ether sent",
+  G: "Overwriting a non-zero position on transfer",
+  I: "Tick below min",
+  J: "Pool not initialized",
+  K: "Settle flow below required qty",
+  L: "Max liquidity exceeded",
+  LT: "Must be bera variant LP token",
+  M: "Mezzanine bitmap broken",
+  MQ: "Max quote liquidity",
+  N: "Already initialized",
+  O: "Ticks out of order",
+  OD: "Odd lot size",
+  OR: "Off-grid partial burn",
+  Q: "Insufficient quote token",
+  PA: "Protocol authorization",
+  PI: "Pool not initialized",
+  PT: "No pool template at index",
+  PF: "Pool already initialized",
+  R: "Price outside tick range",
+  RB: "Swap Curve Boundary Crash",
+  S: "Mezzanine spill broken",
+  SL: "Swap output exceeds slippage",
+  ST: "Terminus spill broken",
+  T: "Price below max tick",
+  TF: "Transfer failed",
+  TD: "Token failed due to fee on transfer",
+  V: "Insufficient liquidity in level",
+  X: "Tick below max",
+  Y: "Lobby bitmap broken",
+  WB: "Must use wrapped native token",
+  Z: "Not authorized for pool",
+};
+
+export const getRevertReason = async (
+  publicClient: PublicClient,
+  txHash: string | undefined,
+): Promise<string | undefined> => {
+  if (!txHash) return "Transaction reverted for unknown reason.";
+  try {
+    // Use public client to get ethers provider since wagmi doesn't have the capability to get revert reasons
+    const ethersProvider = clientToProvider(publicClient);
+    // Get the transaction details
+    const tx = await ethersProvider?.getTransaction(txHash);
+    const response = await ethersProvider.call({
+      ...(tx as any),
+      maxFeePerGas: undefined,
+      maxPriorityFeePerGas: undefined,
+    });
+    // Decode the error data (for some reason it's always at index 138)
+    const reason = ethers.utils.toUtf8String(`0x${response.substring(138)}`);
+    // Clean & remove hidden UTF-8 characters
+    const cleanedReasonString = reason.replace(/[^\x20-\x7E]/g, "");
+    // Get the human readable mapping of error codes
+    return (
+      TransactionRevertReasonMap[cleanedReasonString] ??
+      "Transaction reverted for unknown reason."
+    );
+  } catch (error) {
+    console.error(
+      "Error fetching transaction or receipt revert reason: ",
+      error,
+    );
+  }
 };

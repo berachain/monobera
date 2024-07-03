@@ -30,9 +30,16 @@ export const usePollWithdrawQueue = () => {
     },
   );
 
+  const refetch = () => void mutate(QUERY_KEY);
+
   return {
     isLoading,
-    refetch: () => void mutate(QUERY_KEY),
+    refetch,
     data,
+    multiRefresh: () => {
+      refetch();
+      setTimeout(refetch, 2500);
+      setTimeout(refetch, 5000);
+    },
   };
 };

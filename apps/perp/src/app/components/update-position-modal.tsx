@@ -1,5 +1,10 @@
 import { useCallback, useContext, useEffect, useState } from "react";
-import { TransactionActionType, formatUsd, tradingAbi } from "@bera/berajs";
+import {
+  TransactionActionType,
+  formatUsd,
+  tradingAbi,
+  usePythUpdateFee,
+} from "@bera/berajs";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -11,10 +16,7 @@ import { type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import {
-  usePriceData,
-  usePythUpdateFeeFormatted,
-} from "~/context/price-context";
+import { usePriceData } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
@@ -37,7 +39,10 @@ export function UpdatePositionModal({
   onOpenChange?: (state: boolean) => void;
 }) {
   const prices = usePriceData();
-  const pythUpdateFee = usePythUpdateFeeFormatted();
+  const { data: pythUpdateFee } = usePythUpdateFee(
+    generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
+    openPosition?.market?.pair_index,
+  );
   const [open, setOpen] = useState<boolean>(false);
   const [tp, setTp] = useState<string>(
     formatFromBaseUnit(openPosition?.tp, 10).toString(10),
@@ -47,7 +52,7 @@ export function UpdatePositionModal({
     formatFromBaseUnit(openPosition?.sl, 10).toString(10),
   );
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenPositions(tableState);
+  const { multiRefresh: refetchPositions } = usePollOpenPositions(tableState);
 
   useEffect(() => {
     setTp(formatFromBaseUnit(openPosition?.tp, 10).toString(10));
@@ -89,7 +94,7 @@ export function UpdatePositionModal({
     message: "Updating Take Profit Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchPositions();
     },
   });
 
@@ -101,7 +106,7 @@ export function UpdatePositionModal({
     message: "Updating Stop Loss Price",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchPositions();
     },
   });
 
