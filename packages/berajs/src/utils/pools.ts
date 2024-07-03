@@ -9,7 +9,10 @@ export const formatPoolData = (result: any): PoolV2 => {
   const quoteInfo = result.info.quoteInfo;
 
   const getFormattedAmount = (value: number, decimals = 18) => {
-    return new BigNumber(value).div(10 ** decimals).toString();
+    return Math.max(
+      0,
+      parseFloat(`${new BigNumber(value).div(10 ** decimals).toString()}`),
+    ).toString();
   };
 
   // format tvl and get total
