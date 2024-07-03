@@ -1,5 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { decodeCrocPrice } from "@bera/beracrocswap";
+import { decodeCrocPrice, getBeraLpAddress } from "@bera/beracrocswap";
 import {
   chainId,
   crocIndexerEndpoint,
@@ -13,7 +13,7 @@ import { Address, PublicClient, erc20Abi, getAddress, toHex } from "viem";
 
 import { bexQueryAbi } from "~/abi";
 import { BeraConfig, IUserPool, IUserPosition, PoolV2 } from "~/types";
-import { formatSubgraphPoolData, getBeraLpAddress } from "~/utils";
+import { formatSubgraphPoolData } from "~/utils";
 
 export interface AmbientPosition {
   ambientLiq: string;
