@@ -8,6 +8,7 @@ interface NewToken extends Token {
   id?: string;
 }
 interface ITokenIconList {
+  key?: string;
   tokenList: NewToken[];
   size?: "3xl" | "2xl" | "xl" | "lg" | "md" | "sm" | "xs";
   showCount?: number;
@@ -15,6 +16,7 @@ interface ITokenIconList {
 }
 
 export function TokenIconList({
+  key = "",
   tokenList,
   showCount = 3,
   size = "lg",
@@ -32,7 +34,7 @@ export function TokenIconList({
     <div className={cn("ml-[5px] flex items-center", className)}>
       {newTokenList?.map((token: any) => (
         <TokenIcon
-          key={`${token.address}-${token.id ?? ""}`}
+          key={`${token.address}-${token.id ?? key}`}
           address={token.address}
           symbol={token.symbol}
           className="ml-[-5px]"

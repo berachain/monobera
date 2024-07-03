@@ -39,13 +39,19 @@ export const getTokenInformation = async ({
       ],
       multicallAddress: config.contracts?.multicallAddress,
     });
-
-    return {
+    const token = {
       address,
       decimals: result[0].result,
       name: result[1].result,
       symbol: result[2].result,
-    } as Token;
+    };
+    if (
+      typeof token.decimals !== "number" ||
+      typeof token.name !== "string" ||
+      typeof token.symbol !== "string"
+    )
+      throw new Error("Invalid ERC20 token");
+    return token as Token;
   } catch (e: any) {
     console.log(e);
     throw new Error("Error fetching token information");
