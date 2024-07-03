@@ -21,6 +21,7 @@ const config = {
     return config;
   },
   images: {
+    unoptimized: process.env.NEXT_PUBLIC_HOST === "ipfs" ? true : undefined,
     remotePatterns: [
       {
         protocol: "https",
