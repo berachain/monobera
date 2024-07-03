@@ -1,3 +1,4 @@
+import { perpsPricesBenchmark } from "@bera/config";
 import type {
   HistoryCallback,
   IDatafeedChartApi,
@@ -10,10 +11,10 @@ import type {
   SearchSymbolsCallback,
   SubscribeBarsCallback,
 } from "public/static/charting_library/charting_library";
-import { perpsPricesBenchmark } from "@bera/config";
+
 import { PricesListener } from "~/types/prices";
-import { formatPythPrice } from "./formatPyth";
 import { PYTH_IDS } from "./constants";
+import { formatPythPrice } from "./formatPyth";
 
 export type ChartBar = {
   high: number;
@@ -28,6 +29,8 @@ const latestChartBar: {
 } = {
   current: undefined,
 };
+
+const valuesToRemove = ["W", "1W", "M", "1M"];
 
 const splitBaseQuote = (symbolName: string) => {
   const split_data = symbolName.split(/[-/]/);
@@ -140,7 +143,14 @@ const DatafeedFactory = (
       fetch(`${perpsPricesBenchmark}/v1/shims/tradingview/config`).then(
         (response) => {
           response.json().then((configurationData) => {
-            setTimeout(() => callback(configurationData));
+            const configuration = {
+              ...configurationData,
+              supported_resolutions:
+                configurationData.supported_resolutions.filter(
+                  (item: string) => !valuesToRemove.includes(item),
+                ),
+            };
+            setTimeout(() => callback(configuration));
           });
         },
       );
@@ -174,9 +184,16 @@ const DatafeedFactory = (
         response
           .json()
           .then((symbolInfo) => {
-            onSymbolResolvedCallback(symbolInfo);
+            const symbol = {
+              ...symbolInfo,
+              has_weekly_and_monthly: false,
+              supported_resolutions: symbolInfo.supported_resolutions.filter(
+                (item: string) => !valuesToRemove.includes(item),
+              ),
+            };
+            onSymbolResolvedCallback(symbol);
           })
-          .catch((error) => {
+          .catch(() => {
             onResolveErrorCallback("Cannot resolve symbol");
             return;
           });
@@ -190,10 +207,14 @@ const DatafeedFactory = (
       onError: (err: string) => void,
     ) => {
       const { firstDataRequest } = periodParams;
+      let before = periodParams.from;
+      if ((periodParams.to - periodParams.from) / 86400 > 364) {
+        before = periodParams.to - 86400 * 364;
+      }
       fetch(
-        `${perpsPricesBenchmark}/v1/shims/tradingview/history?symbol=${symbolInfo.ticker}&from=${periodParams.from}&to=${periodParams.to}&resolution=${resolution}`,
+        `${perpsPricesBenchmark}/v1/shims/tradingview/history?symbol=${symbolInfo.ticker}&from=${before}&to=${periodParams.to}&resolution=${resolution}`,
       ).then((response) => {
-        response
+        return response
           .json()
           .then((data) => {
             if (data.t.length === 0) {
