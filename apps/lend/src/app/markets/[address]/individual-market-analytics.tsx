@@ -18,7 +18,7 @@ export default function IndividualMarketAnalytics({
 }: {
   address: Address;
 }) {
-  // if (address.toLowerCase() !== honeyTokenAddress.toLowerCase()) notFound();
+  if (address.toLowerCase() !== honeyTokenAddress.toLowerCase()) notFound();
 
   const { data: tokenData } = useTokens();
   const { getSelectedReserve } = usePollReservesDataList();

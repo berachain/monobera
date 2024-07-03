@@ -1,4 +1,5 @@
 import { withSentryConfig } from "@sentry/nextjs";
+
 import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
@@ -23,12 +24,6 @@ const config = {
   images: {
     unoptimized: process.env.NEXT_PUBLIC_HOST === "ipfs" ? true : undefined,
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        port: "",
-        pathname: "/duv0g402y/**",
-      },
       {
         protocol: "https",
         hostname: "s2.coinmarketcap.com",
