@@ -41,12 +41,19 @@ export const usePollOpenPositions = (props: TableStateProps) => {
     },
   );
 
+  const refresh = () => void mutate(QUERY_KEY);
+
   return {
     data: data ?? { result: [], pagination: {}, total: 0 },
     isLoading,
     isValidating,
     total: data?.total ?? 0,
     pagination: data?.pagination ?? {},
-    refresh: () => void mutate(QUERY_KEY),
+    refresh,
+    multiRefresh: () => {
+      refresh();
+      setTimeout(refresh, 2500);
+      setTimeout(refresh, 5000);
+    },
   };
 };

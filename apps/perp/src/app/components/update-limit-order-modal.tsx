@@ -19,10 +19,7 @@ import { parseUnits, type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import {
-  usePriceData,
-  usePythUpdateFeeFormatted,
-} from "~/context/price-context";
+import { usePriceData } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
@@ -41,7 +38,10 @@ export function UpdateLimitOrderModal({
   className?: string;
 }) {
   const prices = usePriceData();
-  const pythUpdateFee = usePythUpdateFeeFormatted();
+  const { data: pythUpdateFee } = usePythUpdateFee(
+    generateEncodedPythPrices(prices, openOrder?.market?.pair_index),
+    openOrder?.market?.pair_index,
+  );
   const [open, setOpen] = useState<boolean>(false);
   const prevOpen = usePrevious(open);
   const [tp, setTp] = useState<string>(
@@ -51,7 +51,7 @@ export function UpdateLimitOrderModal({
     formatFromBaseUnit(openOrder?.sl, 10).toString(10),
   );
   const { tableState } = useContext(TableContext);
-  const { refresh } = usePollOpenLimitOrders(tableState);
+  const { multiRefresh: refetchOrders } = usePollOpenLimitOrders(tableState);
 
   const formattedPrice = formatFromBaseUnit(
     openOrder.min_price ?? "0",
@@ -81,7 +81,7 @@ export function UpdateLimitOrderModal({
     message: "Updating Open Limit Order",
     actionType: TransactionActionType.EDIT_PERPS_ORDER,
     onSuccess: () => {
-      refresh();
+      refetchOrders();
       setOpen(false);
     },
   });
