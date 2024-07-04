@@ -13,5 +13,4 @@ packages:
   - apps/lend
   - apps/perp
   - apps/faucet
-  - apps/validator-clue
   - apps/berajs-docs
