@@ -6,6 +6,7 @@ import {
   useBeraJs,
   usePollAllowance,
   usePythUpdateFee,
+  usePollWalletBalances,
 } from "@bera/berajs";
 import { honeyAddress } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
@@ -61,6 +62,7 @@ export function PlaceOrder({
     usePollOpenLimitOrders(tableState);
   const { multiRefresh: refreshMarketHistory } =
     usePollMarketOrders(tableState);
+  const { refresh: refreshBalance } = usePollWalletBalances();
   let warning = undefined;
 
   const slippage = useSlippage();
@@ -106,6 +108,7 @@ export function PlaceOrder({
           ? `Placing Limit Long Order ${form.assets}`
           : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
+      refreshBalance();
       refreshPositions();
       refreshOpenLimitOrders();
       refreshMarketHistory();
