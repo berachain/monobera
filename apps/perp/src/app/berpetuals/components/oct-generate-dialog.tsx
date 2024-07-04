@@ -42,7 +42,7 @@ export function OctGenerateDialog({
               </div>
             </div>
             <div>
-              <li className="text-sm font-bold">Delegate:</li>
+              <li className="text-sm font-bold">Approve:</li>
               <div className="pb-6 text-sm font-normal leading-5 text-muted-foreground">
                 Grant your connected wallet permission to interact with trading
                 contracts through the 1-CT wallet.
