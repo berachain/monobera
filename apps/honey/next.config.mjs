@@ -22,6 +22,7 @@ const config = {
     return config;
   },
   images: {
+    unoptimized: process.env.NEXT_PUBLIC_HOST === "ipfs" ? true : undefined,
     remotePatterns: [
       {
         protocol: "https",
@@ -32,6 +33,8 @@ const config = {
     ],
     domains: ["res.cloudinary.com", "raw.githubusercontent.com"],
   },
+  output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
+  trailingSlash: true,
 };
 
 export default withSentryConfig(
