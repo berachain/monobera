@@ -18,10 +18,8 @@ export enum TXN_GAS_USED_ESTIMATES {
 const getGeneralGasEstimate = async (
   publicClient: ReturnType<typeof usePublicClient>,
   gasUsedOverride?: number,
-  setFeesPerGasEstimate?: (feesPerGasEstimate: FeeValues | undefined) => void,
 ) => {
   const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
-  setFeesPerGasEstimate?.(feesPerGasEstimate);
   const gas = gasUsedOverride
     ? BigInt(gasUsedOverride)
     : await publicClient?.estimateGas({
@@ -47,10 +45,8 @@ const getContractGasEstimate = async (
   publicClient: ReturnType<typeof usePublicClient>,
   contractArgs: any,
   gasUsedOverride?: number,
-  setFeesPerGasEstimate?: (feesPerGasEstimate: FeeValues | undefined) => void,
 ) => {
   const feesPerGasEstimate = await publicClient?.estimateFeesPerGas();
-  setFeesPerGasEstimate?.(feesPerGasEstimate);
   const gas = gasUsedOverride
     ? BigInt(gasUsedOverride)
     : await publicClient?.estimateContractGas({ ...(contractArgs as any) });
@@ -69,7 +65,6 @@ const getContractGasEstimate = async (
 
 interface UseGasDataReturnType {
   estimatedBeraFee: number | undefined;
-  feesPerGasEstimate: FeeValues | undefined;
 }
 
 /**
@@ -91,17 +86,9 @@ export const useGasData = ({
     number | undefined
   >();
 
-  const [feesPerGasEstimate, setFeesPerGasEstimate] = useState<
-    FeeValues | undefined
-  >();
-
   useEffect(() => {
     if (contractArgs === undefined) {
-      getGeneralGasEstimate(
-        publicClient,
-        gasUsedOverride,
-        setFeesPerGasEstimate,
-      )
+      getGeneralGasEstimate(publicClient, gasUsedOverride)
         .then((res: { estimatedTxFeeInBera: number } | undefined) => {
           if (!res) {
             throw new Error("failed to get general gas estimate");
@@ -111,12 +98,7 @@ export const useGasData = ({
         .catch();
       return;
     }
-    getContractGasEstimate(
-      publicClient,
-      contractArgs,
-      gasUsedOverride,
-      setFeesPerGasEstimate,
-    )
+    getContractGasEstimate(publicClient, contractArgs, gasUsedOverride)
       .then((res: { estimatedTxFeeInBera: number } | undefined) => {
         if (!res) {
           throw new Error("failed to get contract gas estimate");
@@ -136,5 +118,5 @@ export const useGasData = ({
       });
   }, [contractArgs]);
 
-  return { estimatedBeraFee, feesPerGasEstimate };
+  return { estimatedBeraFee };
 };
