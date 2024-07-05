@@ -5,6 +5,7 @@ import {
   tradingAbi,
   usePythUpdateFee,
 } from "@bera/berajs";
+import { tradingContractAddress } from "@bera/config";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -124,7 +125,7 @@ export function UpdatePositionModal({
   const handleSlUpdate = useCallback(() => {
     if (openPosition?.market?.pair_index && openPosition?.index) {
       updateSlWrite({
-        address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+        address: tradingContractAddress,
         abi: tradingAbi,
         functionName: "updateSl",
         params: [
@@ -149,7 +150,7 @@ export function UpdatePositionModal({
   const handleTpUpdate = useCallback(() => {
     if (openPosition?.market?.pair_index && openPosition?.index) {
       updateTpWrite({
-        address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+        address: tradingContractAddress,
         abi: tradingAbi,
         functionName: "updateTp",
         params: [
