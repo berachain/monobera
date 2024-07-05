@@ -131,6 +131,8 @@ export const perpsReferralsAddress = process.env
   .NEXT_PUBLIC_REFERRALS_CONTRACT_ADDRESS as Address;
 export const tradingContractAddress = process.env
   .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
+export const storageContractAddress = process.env
+  .NEXT_PUBLIC_STORAGE_CONTRACT_ADDRESS as Address;
 export const perpsBorrowingContractAddress = process.env
   .NEXT_PUBLIC_BORROWING_FEES_CONTRACT_ADDRESS as Address;
 export const bhoneyVaultContractAddress = process.env

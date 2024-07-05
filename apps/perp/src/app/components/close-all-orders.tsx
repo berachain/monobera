@@ -4,6 +4,7 @@ import {
   tradingAbi,
   usePythUpdateFee,
 } from "@bera/berajs";
+import { tradingContractAddress } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { Button } from "@bera/ui/button";
@@ -108,7 +109,7 @@ export const CloseAllOrders = ({
       });
     });
     writePositionsClose({
-      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "multicall",
       params: [true, encodedData],
@@ -125,7 +126,7 @@ export const CloseAllOrders = ({
       });
     });
     writeOrdersClose({
-      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "multicall",
       params: [true, encodedData],
