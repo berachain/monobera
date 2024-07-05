@@ -44,6 +44,19 @@ const config = {
       },
     ];
   },
+  headers: async () => {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(
