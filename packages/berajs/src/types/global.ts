@@ -17,6 +17,7 @@ export interface BeraConfig {
     dexSubgraph?: string;
     lendSubgraph?: string;
     bgtSubgraph?: string;
+    governanceSubgraph?: string;
   };
   contracts?: {
     multicallAddress?: Address;

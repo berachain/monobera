@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { usePollAllProposals } from "@bera/berajs";
+import { usePollAllProposals, type Proposal } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -35,11 +35,8 @@ export default function GovernanceByStatus({
   orderBy: OrderByEnumT;
 }) {
   const [keywords, setKeywords] = React.useState<string | null>(null);
-
-  const { data, isLoading } =
-    usePollAllProposals(
-      // mappedStatusEnum[proposalStatus],
-    );
+  const { data=[], isLoading } = usePollAllProposals(); // mappedStatusEnum[proposalStatus],
+  console.log("data", data, isLoading);
 
   const router = useRouter();
   return (
@@ -107,9 +104,9 @@ export default function GovernanceByStatus({
           setKeywords(e.target.value)
         }
       />
-      {/* <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {!isLoading &&
-          sortedProposalList?.map((proposal: Proposal, index: number) => (
+          data.map((proposal: Proposal, index: number) => (
             <ProposalCard
               proposal={proposal}
               key={`proposal${index}`}
@@ -124,7 +121,7 @@ export default function GovernanceByStatus({
             />
           ))}
       </div>
-      {((!isLoading && sortedProposalList.length === 0) || isLoading) && (
+      {!isLoading && data.length === 0 && (
         <div className="mx-auto w-fit">
           <Image
             src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
@@ -136,7 +133,7 @@ export default function GovernanceByStatus({
             No Proposals found.{" "}
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

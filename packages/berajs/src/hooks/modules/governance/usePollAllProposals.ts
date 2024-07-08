@@ -1,31 +1,24 @@
 import useSWR from "swr";
-
-import { type GetPoolRecentProvisionsResult } from "~/actions";
+import { getAllProposals } from "~/actions/governance";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
-import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
-
-// interface IUsePoolRecentProvisionsArgs {}
+import { DefaultHookOptions, DefaultHookReturnType, Proposal } from "~/types";
 
 export const usePollAllProposals = (
-  // {}: IUsePoolRecentProvisionsArgs,
+  args?: {
+    sortBy: string;
+  },
   options?: DefaultHookOptions,
-): DefaultHookReturnType<GetPoolRecentProvisionsResult | undefined> => {
+): DefaultHookReturnType<Proposal[] | undefined> => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = ["usePollAllProposals"];
-  const swrResponse = useSWR<
-    GetPoolRecentProvisionsResult | undefined,
-    any,
-    typeof QUERY_KEY
-  >(
+  const swrResponse = useSWR<Proposal[] | undefined, any, typeof QUERY_KEY>(
     QUERY_KEY,
-    async () => {
-      return Promise.all([]);
-    },
+    async () => await getAllProposals({ config }),
     {
       ...options?.opts,
-      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
 

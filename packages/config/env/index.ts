@@ -32,7 +32,8 @@ export const bgtSubgraphUrl = process.env
   .NEXT_PUBLIC_BGT_SUBGRAPH_URL as string;
 export const bgtStakerSubgraphUrl = process.env
   .NEXT_PUBLIC_BGT_STAKER_SUBGRAPH_URL as string;
-
+export const governanceSubgraphUrl = process.env
+  .NEXT_PUBLIC_GOVERNANCE_SUBGRAPH_URL as string;
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
 export const homepageName = process.env.NEXT_PUBLIC_HOMEPAGE_NAME as string;

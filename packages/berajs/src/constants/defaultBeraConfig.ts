@@ -21,6 +21,7 @@ import {
   bgtTokenAddress,
   marketListUrl,
   bgtSubgraphUrl,
+  governanceSubgraphUrl,
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -39,6 +40,7 @@ export const defaultBeraConfig: BeraConfig = {
     dexSubgraph: crocSubgraphEndpoint,
     lendSubgraph: lendSubgraphUrl,
     bgtSubgraph: bgtSubgraphUrl,
+    governanceSubgraph: governanceSubgraphUrl,
   },
   contracts: {
     multicallAddress: multicallAddress,
