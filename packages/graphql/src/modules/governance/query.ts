@@ -26,6 +26,11 @@ export const getProposals = gql`
           status
           originalId
           createdAt
+          creator {
+            name
+            picture
+            address
+          }
           voteStats {
             votesCount
             percent

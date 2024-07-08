@@ -1,8 +1,15 @@
+import { Address } from "viem";
+
 export type Proposal = {
   block: {
     timestamp: string;
   };
   createdAt: string;
+  creator: {
+    name: string;
+    picture: string | null;
+    address: Address;
+  };
   governor: {
     id: string;
     name: string;

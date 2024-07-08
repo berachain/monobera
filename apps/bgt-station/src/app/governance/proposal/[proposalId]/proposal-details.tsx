@@ -98,9 +98,9 @@ export default function ProposalDetails({
       void updateCollateralAddress();
   }, [jsonMsg, proposalType]);
   //handle proposal type
-  useEffect(() => {
-    setProposalType(getProposalType(proposal));
-  }, [proposal]);
+  // useEffect(() => {
+  //   setProposalType(getProposalType(proposal));
+  // }, [proposal]);
 
   return (
     <div className="pb-16">

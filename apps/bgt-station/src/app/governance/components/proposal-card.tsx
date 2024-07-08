@@ -1,110 +1,29 @@
 "use client";
 
 import React from "react";
-import { truncateHash } from "@bera/berajs";
+import { Proposal, truncateHash } from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
-import {
-  formatUnixTimestamp,
-  timeDifferenceFromNow,
-} from "@bera/shared-ui/src/utils/times";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Skeleton } from "@bera/ui/skeleton";
 import { getAddress } from "viem";
 
-import { StatusEnum, VoteColorMap, mappedStatusEnum } from "../types";
+import {
+  getBadgeColor,
+  getTimeText,
+  getTotalVoters,
+  getTotalVotes,
+  getVotesDataList,
+} from "../helper";
 import { ProgressBarChart } from "./progress-bar-chart";
+import { StatusEnum } from "../types";
 
 type ProposalCard = {
-  proposal: any;
+  proposal: Proposal;
   type?: string;
   onClick?: () => void;
   className?: string;
-};
-const getBadge = (proposalStatus: number) => {
-  switch (proposalStatus) {
-    case mappedStatusEnum[StatusEnum.ACTIVE]:
-      return (
-        <Badge
-          variant="info"
-          className="border-none px-2 py-1 text-xs capitalize"
-        >
-          {StatusEnum.ACTIVE}
-        </Badge>
-      );
-    case mappedStatusEnum[StatusEnum.IN_QUEUE]:
-      return (
-        <Badge variant="info" className="border-none px-2 py-1 text-xs">
-          In queue
-        </Badge>
-      );
-    case mappedStatusEnum[StatusEnum.PASSED]:
-      return (
-        <Badge
-          variant="success"
-          className="border-none px-2 py-1 text-xs capitalize"
-        >
-          {StatusEnum.PASSED}
-        </Badge>
-      );
-    case mappedStatusEnum[StatusEnum.REJECTED]:
-      return (
-        <Badge
-          variant="destructive"
-          className="border-none px-2 py-1 text-xs capitalize"
-        >
-          {StatusEnum.REJECTED}
-        </Badge>
-      );
-    default:
-      return "";
-  }
-};
-
-const getTimeText = (proposal: any) => {
-  switch (proposal.status) {
-    case mappedStatusEnum[StatusEnum.ACTIVE]:
-      return `Voting ends in ${timeDifferenceFromNow(
-        Number(proposal.votingEndTime),
-      )}`;
-    case mappedStatusEnum[StatusEnum.IN_QUEUE]:
-      return `Depositing ends in ${timeDifferenceFromNow(
-        Number(proposal.depositEndTime),
-      )}`;
-    case mappedStatusEnum[StatusEnum.PASSED]:
-      return `Submitted ${formatUnixTimestamp(Number(proposal.submitTime))}`;
-    case mappedStatusEnum[StatusEnum.REJECTED]:
-      return `Submitted ${formatUnixTimestamp(Number(proposal.submitTime))}`;
-    default:
-      return "";
-  }
-};
-
-const getDataList = (
-  globalAbstainPercentage: number,
-  globalNoPercentage: number,
-  globalYesPercentage: number,
-  globalVetoPercentage: number,
-) => {
-  return [
-    { color: VoteColorMap.yes, width: globalYesPercentage },
-    {
-      color: VoteColorMap.no,
-      width: globalYesPercentage + globalNoPercentage,
-    },
-    {
-      color: VoteColorMap.veto,
-      width: globalYesPercentage + globalNoPercentage + globalVetoPercentage,
-    },
-    {
-      color: VoteColorMap.abstain,
-      width:
-        globalYesPercentage +
-        globalNoPercentage +
-        globalVetoPercentage +
-        globalAbstainPercentage,
-    },
-  ];
 };
 
 export function ProposalCard({
@@ -113,76 +32,63 @@ export function ProposalCard({
   onClick,
   className,
 }: ProposalCard) {
-  const normalizedTally = undefined;
-
+  const title = (proposal.metadata.description.split("\n")[0] ?? "# ").slice(2);
+  const subTitle = proposal.metadata.description.split("\n")[1] ?? "";
   return (
     <div
       className={cn(
-        "relative rounded-[18px] border border-border bg-background p-8",
+        "relative flex flex-col gap-1 rounded-[18px] border border-border bg-background p-8",
         className,
       )}
       onClick={onClick}
     >
-      {/* {expedited && (
-        <div className="absolute right-8 top-8 flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
-          <Icons.timer className="relative h-4 w-4" />
-          <span className="hidden sm:inline ">Expedited</span>
-        </div>
-      )} */}
       <div className="flex h-fit flex-row flex-wrap items-center gap-1">
-        {getBadge(proposal.status)}
-        {type && (
-          <Badge
-            variant="warning"
-            className=" border-none font-medium capitalize"
-          >
-            {type.replaceAll("-", " ")}
-          </Badge>
-        )}
+        <Badge
+          variant={getBadgeColor(proposal.status as StatusEnum)}
+          className="border-none px-2 py-1 text-xs capitalize font-medium"
+        >
+          {proposal.status}
+        </Badge>
         <div className="text-xs font-medium leading-tight text-muted-foreground">
           {getTimeText(proposal)}
         </div>
       </div>
-      <div
-        className={"text-foregroundtext-2xl mt-1 font-semibold leading-tight"}
-      >
-        {proposal.title}
-      </div>
-      <div className="relative mt-4">
-        {proposal.status === mappedStatusEnum[StatusEnum.IN_QUEUE] && (
-          <div className="absolute right-0 text-xs font-medium leading-tight text-muted-foreground">
-            {}% of deposit filled
-          </div>
-        )}
-        <ProgressBarChart
-          // dataList={getDataList(
-          //   normalizedTally?.globalAbstainPercentage ?? 0,
-          //   normalizedTally?.globalNoPercentage ?? 0,
-          //   normalizedTally?.globalYesPercentage ?? 0,
-          //   normalizedTally?.globalVetoPercentage ?? 0,
-          // )}
-          dataList={[] as any}
-          labelList={
-            proposal.status === mappedStatusEnum[StatusEnum.IN_QUEUE]
-              ? []
-              : [
-                  { label: "Pass threshold", width: 30 },
-                  { label: "Quorum", width: 60 },
-                ]
-          }
-        />
-      </div>
-      {true && (
-        <div className="mt-[18px] flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2">
-            {" "}
-            <Identicon account={getAddress(proposal.proposer)} />
-            Submitted by {truncateHash(proposal.proposer, 6, 4)}
-          </div>
-          {/* show more accurate participation rate */}
-          <div>{(0).toFixed(8)}% participation rate</div>
+      <div>
+        <div
+          className={"width-full truncate text-2xl font-semibold leading-tight"}
+        >
+          {title}
         </div>
-      )}
+        <div className={"width-full line-clamp-2"}>{subTitle}</div>
+      </div>
+      <ProgressBarChart
+        className="mt-4"
+        dataList={getVotesDataList(proposal)}
+        labelList={[
+          { label: "Pass threshold", width: 30 },
+          { label: "Quorum", width: 60 },
+        ]}
+      />
+      <div className="mt-3 flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-2">
+          {" "}
+          <Identicon account={getAddress(proposal.creator.address)} />
+          Submitted by {truncateHash(proposal.creator.address, 6, 4)}
+        </div>
+        <div className=" text-sm font-bold">
+          <FormattedNumber
+            value={getTotalVoters(proposal)}
+            visibleDecimals={0}
+            className="text-info-foreground"
+          />{" "}
+          voters,{" "}
+          <FormattedNumber
+            value={getTotalVotes(proposal)}
+            className="text-warning-foreground"
+          />{" "}
+          votes
+        </div>
+      </div>
     </div>
   );
 }

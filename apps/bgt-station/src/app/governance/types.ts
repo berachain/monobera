@@ -1,16 +1,13 @@
 export enum StatusEnum {
+  Pending = "pending",
+  QUEUED = "queued",
   ACTIVE = "active",
-  IN_QUEUE = "in-queue",
-  PASSED = "passed",
-  REJECTED = "rejected",
+  CANCELED = "canceled",
+  SUCCEEDED = "succeeded",
+  DEFEATED = "defeated",
+  EXPIRED = "expired",
+  EXECUTED = "executed",
 }
-
-export const mappedStatusEnum = {
-  [StatusEnum.ACTIVE]: 2,
-  [StatusEnum.IN_QUEUE]: 1,
-  [StatusEnum.PASSED]: 3,
-  [StatusEnum.REJECTED]: 4,
-};
 
 export enum OrderByEnum {
   MOST_RECENT = "most-recent",

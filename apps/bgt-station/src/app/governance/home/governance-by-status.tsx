@@ -22,7 +22,6 @@ import { getProposalType } from "../helper";
 import {
   OrderByEnum,
   StatusEnum,
-  mappedStatusEnum,
   type OrderByEnum as OrderByEnumT,
   type StatusEnum as StatusEnumT,
 } from "../types";
@@ -49,7 +48,7 @@ export default function GovernanceByStatus({
         <Link href="/governance/create">
           <Button>Create proposal</Button>
         </Link>
-        {/* <Button variant="outline">Visit forums</Button> */}
+        <Button variant="outline">Visit forums</Button>
       </div>
       <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
         <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
@@ -112,12 +111,7 @@ export default function GovernanceByStatus({
               key={`proposal${index}`}
               className="hover:cursor-pointer"
               type={getProposalType(proposal)}
-              onClick={() =>
-                router.push(
-                  // replace this with real data
-                  `/governance/proposal/${Number(proposal.id)}`,
-                )
-              }
+              onClick={() => router.push(`/governance/proposal/${proposal.id}`)}
             />
           ))}
       </div>
