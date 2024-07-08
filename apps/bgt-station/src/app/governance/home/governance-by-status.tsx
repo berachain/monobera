@@ -36,9 +36,10 @@ export default function GovernanceByStatus({
 }) {
   const [keywords, setKeywords] = React.useState<string | null>(null);
 
-  const { data, isLoading } = usePollAllProposals(
-    // mappedStatusEnum[proposalStatus],
-  );
+  const { data, isLoading } =
+    usePollAllProposals(
+      // mappedStatusEnum[proposalStatus],
+    );
 
   const router = useRouter();
   return (
