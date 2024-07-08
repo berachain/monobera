@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { usePollAllProposals } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
@@ -35,42 +36,9 @@ export default function GovernanceByStatus({
 }) {
   const [keywords, setKeywords] = React.useState<string | null>(null);
 
-  // const getSum = (item: TallyResult) =>
-  //   Object.values(item).reduce(
-  //     (acc: number, curr: string) => acc + Number(curr),
-  //     0,
-  //   );
-
-  // const { useAllProposals, isLoading } = usePollAllProposals(
-  //   mappedStatusEnum[proposalStatus],
-  // );
-  // const data = useAllProposals();
-  // const sortedProposalList: Proposal[] = useMemo(
-  //   () =>
-  //     data
-  //       ?.filter((proposal: Proposal) => {
-  //         if (!keywords) return true;
-
-  //         return proposal.title.toLowerCase().includes(keywords.toLowerCase());
-  //       })
-  //       .sort((a: Proposal, b: Proposal) => {
-  //         switch (orderBy) {
-  //           case OrderByEnum.HIGHEST_PARTICIPATION:
-  //             return getSum(b.finalTallyResult) - getSum(a.finalTallyResult);
-  //           case OrderByEnum.LOWEST_PARTICIPATION:
-  //             return getSum(a.finalTallyResult) - getSum(b.finalTallyResult);
-  //           case OrderByEnum.MOST_RECENT:
-  //             return Number(b.submitTime - a.submitTime);
-  //           case OrderByEnum.NEWEST:
-  //             return Number(b.submitTime - a.submitTime);
-  //           case OrderByEnum.OLDEST:
-  //             return Number(a.submitTime - b.submitTime);
-  //           default:
-  //             return 0;
-  //         }
-  //       }),
-  //   [data, proposalStatus, orderBy, keywords],
-  // );
+  const { data, isLoading } = usePollAllProposals(
+    // mappedStatusEnum[proposalStatus],
+  );
 
   const router = useRouter();
   return (

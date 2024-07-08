@@ -1,0 +1,1 @@
+export { usePollAllProposals } from "./usePollAllProposals";
