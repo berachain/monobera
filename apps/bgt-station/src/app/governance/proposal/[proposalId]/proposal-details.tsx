@@ -7,6 +7,7 @@ import {
   TransactionActionType,
   truncateHash,
   usePollDenom,
+  usePollProposal,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
@@ -33,13 +34,13 @@ import { useProposalDetails } from "./useProposalDetails";
 export default function ProposalDetails({
   proposalId,
 }: {
-  proposalId: number;
+  proposalId: string;
 }) {
   // const { read, tokenInformation } = useTokenInformation({
   //   config: beraJsConfig,
   // });
-  const { getAddress } = usePollDenom();
-  const proposal: undefined = undefined;
+
+  const { data, isLoading } = usePollProposal(proposalId);
 
   const [proposalType, setProposalType] = useState<
     | "text-proposal"
@@ -67,36 +68,36 @@ export default function ProposalDetails({
   });
   const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
 
-  const votingPower = useMemo(() => {
-    if (userTotal && globalTotal) {
-      const ratio = userTotal / globalTotal;
-      // Convert to scientific notation if very small
-      if (ratio > 0 && ratio < 0.01) {
-        return parseFloat(ratio.toPrecision(2));
-      }
-      return ratio;
-    }
-    return 0;
-  }, [userTotal, globalTotal]);
+  // const votingPower = useMemo(() => {
+  //   if (userTotal && globalTotal) {
+  //     const ratio = userTotal / globalTotal;
+  //     // Convert to scientific notation if very small
+  //     if (ratio > 0 && ratio < 0.01) {
+  //       return parseFloat(ratio.toPrecision(2));
+  //     }
+  //     return ratio;
+  //   }
+  //   return 0;
+  // }, [userTotal, globalTotal]);
 
-  const jsonMsg = useMemo(() => {
-    if (proposal) {
-      return decodeGovMsg([] as any);
-    }
-    return {};
-  }, [proposal]);
+  // const jsonMsg = useMemo(() => {
+  //   if (proposal) {
+  //     return decodeGovMsg([] as any);
+  //   }
+  //   return {};
+  // }, [proposal]);
 
-  const [collateralAddress, setCollateralAddress] = useState("");
-  useEffect(() => {
-    const updateCollateralAddress = async () => {
-      const address = await getAddress(jsonMsg[0].params.psmDenoms[0].denom);
-      setCollateralAddress(address as string);
-      // void read({ address: address as Address });
-    };
+  // const [collateralAddress, setCollateralAddress] = useState("");
+  // useEffect(() => {
+  //   const updateCollateralAddress = async () => {
+  //     const address = await getAddress(jsonMsg[0].params.psmDenoms[0].denom);
+  //     setCollateralAddress(address as string);
+  //     // void read({ address: address as Address });
+  //   };
 
-    if (proposalType === "enable-collateral-for-honey" && jsonMsg)
-      void updateCollateralAddress();
-  }, [jsonMsg, proposalType]);
+  //   if (proposalType === "enable-collateral-for-honey" && jsonMsg)
+  //     void updateCollateralAddress();
+  // }, [jsonMsg, proposalType]);
   //handle proposal type
   // useEffect(() => {
   //   setProposalType(getProposalType(proposal));
@@ -105,7 +106,7 @@ export default function ProposalDetails({
   return (
     <div className="pb-16">
       {ModalPortal}
-      <div className="mx-auto h-fit w-full max-w-[830px]">
+      {/* <div className="mx-auto h-fit w-full max-w-[830px]">
         <div className="flex h-11 w-full justify-between hover:cursor-pointer">
           <Link
             href="/governance"
@@ -136,17 +137,11 @@ export default function ProposalDetails({
                 isVotingPowerLoading={true}
               />
             )}
-            {/* {proposal?.status ===
-              ProposalStatus.PROPOSAL_STATUS_DEPOSIT_PERIOD && <></>} */}
           </div>
         </div>
 
         <div className="mt-4 rounded-[18px] shadow">
-          {/* {true ? (
-            <Skeleton className="h-[235px] w-full rounded-[18px]" />
-          ) : (
-            proposal && <ProposalCard proposal={proposal} type={proposalType} />
-          )} */}
+          <ProposalCard proposal={proposal} type={proposalType} />
         </div>
 
         <div className="mt-4 flex gap-4">
@@ -261,7 +256,7 @@ export default function ProposalDetails({
           </div>
           <VoterTable votes={[] as any} isLoading={true} />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
