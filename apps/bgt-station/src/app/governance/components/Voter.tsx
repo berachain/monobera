@@ -7,7 +7,7 @@ export const VoteInfo = ({ voter }: { voter: Voter }) => {
   return (
     <div className="flex items-end gap-2 text-sm">
       <Avatar className="h-6 w-6">
-        <AvatarImage src={voter.picture??''} alt={voter.name} />
+        <AvatarImage src={voter.picture ?? ""} alt={voter.name} />
         <AvatarFallback>
           <Identicon account={getAddress(voter.address)} />
         </AvatarFallback>
