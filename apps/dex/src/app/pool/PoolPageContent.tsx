@@ -7,7 +7,6 @@ import {
   Token,
   truncateHash,
   useBeraJs,
-  useBgtApy,
   usePoolHistoricalData,
   usePoolRecentProvisions,
   usePoolRecentSwaps,
@@ -41,7 +40,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { Address, getAddress } from "viem";
+import { Address } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import {
@@ -364,13 +363,11 @@ export default function PoolPageContent({
 
   const { data: poolHistoryData, isLoading: isPoolHistoryLoading } =
     usePoolHistoricalData({
-      shareAddress: pool?.shareAddress,
+      poolId: pool?.id,
     });
 
-  const poolHistory = poolHistoryData?.history;
-  const timeCreated = poolHistoryData?.info?.timeCreate
-    ? new Date(parseInt(poolHistoryData?.info.timeCreate) * 1000)
-    : null;
+  const poolHistory = poolHistoryData;
+  const timeCreated = new Date(pool?.timeCreate ?? 0);
 
   const params = useSearchParams();
   const isMyPool = params.get("back") && params.get("back") === "my-pools";
@@ -383,10 +380,14 @@ export default function PoolPageContent({
           backTitle: isMyPool ? "My Pools" : "All Pools",
         }}
         title={
-          <>
-            <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
-            {pool?.poolName}
-          </>
+          isPoolLoading ? (
+            <Skeleton className="h-10 w-40" />
+          ) : (
+            <>
+              <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
+              {pool?.poolName}
+            </>
+          )
         }
         subtitles={[
           // {
@@ -396,7 +397,9 @@ export default function PoolPageContent({
           // },
           {
             title: "BGT APY",
-            content: (
+            content: isPoolLoading ? (
+              <Skeleton className="h-4 w-8" />
+            ) : (
               <FormattedNumber value={pool?.bgtApy ?? 0} percent colored />
             ),
             color: "warning",
@@ -404,12 +407,20 @@ export default function PoolPageContent({
           },
           {
             title: "Fee",
-            content: <>{pool?.feeRate.toFixed(2)}%</>,
+            content: isPoolLoading ? (
+              <Skeleton className="h-4 w-8" />
+            ) : (
+              <>{pool?.feeRate.toFixed(2)}%</>
+            ),
             color: "success",
           },
           {
             title: "Pool Contract",
-            content: <>{truncateHash(pool?.shareAddress ?? "")}</>,
+            content: isPoolLoading ? (
+              <Skeleton className="h-4 w-16" />
+            ) : (
+              <>{truncateHash(pool?.shareAddress ?? "")}</>
+            ),
             externalLink: `${blockExplorerUrl}/address/${pool?.shareAddress}`,
           },
         ]}
@@ -431,10 +442,14 @@ export default function PoolPageContent({
         }
       />
       <Separator />
-      <BgtStationBanner
-        receiptTokenAddress={pool?.shareAddress}
-        vaultAddress={pool?.vaultAddress}
-      />
+      {isPoolLoading ? (
+        <Skeleton className="h-16 w-full" />
+      ) : (
+        <BgtStationBanner
+          receiptTokenAddress={pool?.shareAddress}
+          vaultAddress={pool?.vaultAddress}
+        />
+      )}
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart

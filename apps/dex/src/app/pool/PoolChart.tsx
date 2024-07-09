@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { formatUsd, type PoolV2 } from "@bera/berajs";
-import { type PoolDayDataV2 } from "@bera/graphql";
 import { Dropdown, SSRSpinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { BigNumber } from "bignumber.js";
-import { startOfDay } from "date-fns";
-
-import { getSafeNumber } from "~/utils/getSafeNumber";
+import { PoolDayData } from "@bera/berajs/actions";
 
 const Options = {
   responsive: true,
@@ -169,10 +165,6 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
 
 //   return percentageDifference;
 // }
-const formatHoney = (amountInHoney: number) => {
-  const bnAmount = new BigNumber(amountInHoney.toString());
-  return getSafeNumber(bnAmount.div(10 ** 18).toString());
-};
 
 const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
   const currentTimestamp: number = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
@@ -202,7 +194,7 @@ export const PoolChart = ({
 }: {
   pool: PoolV2 | undefined;
   currentTvl: number | undefined;
-  historicalData: PoolDayDataV2[] | undefined;
+  historicalData: PoolDayData[] | undefined;
   isLoading: boolean;
   timeCreated?: Date | null;
 }) => {
@@ -233,8 +225,10 @@ export const PoolChart = ({
   let latestTvlSeen = 0;
   const completeDailyData: any[] = quarterlyDayStartTimes.map(
     (dayStartTimestamp: number, i) => {
-      const poolData: PoolDayDataV2 | undefined = historicalData?.find(
-        (data) => data.day === dayStartTimestamp,
+      console.log("dayStartTimestamp", dayStartTimestamp);
+      console.log("historicalData", historicalData);
+      const poolData: PoolDayData | undefined = historicalData?.find(
+        (data) => data.date === dayStartTimestamp,
       );
 
       if (!poolData) {
@@ -258,21 +252,21 @@ export const PoolChart = ({
       }
 
       const formattedPoolData = {
-        date: poolData.day,
+        date: poolData.date,
         volumeUsd: `${
-          formatHoney(poolData?.volume24HInHoney) < 0.01
+          parseFloat(poolData?.volumeUsd) < 0.01
             ? "0.009"
-            : formatHoney(poolData?.volume24HInHoney)
+            : parseFloat(poolData?.volumeUsd)
         }`,
         tvlUsd: `${
-          formatHoney(poolData?.tvlInHoney) < 0.01
+          parseFloat(poolData?.tvlUsd) < 0.01
             ? "0.009"
-            : formatHoney(poolData?.tvlInHoney)
+            : parseFloat(poolData?.tvlUsd)
         }`,
         feesUsd: `${
-          formatHoney(poolData?.fees24HInHoney) < 0.01
+          parseFloat(poolData?.feesUsd) < 0.01
             ? "0.009"
-            : formatHoney(poolData?.fees24HInHoney)
+            : parseFloat(poolData?.feesUsd)
         }`,
       };
 

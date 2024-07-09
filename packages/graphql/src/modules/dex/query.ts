@@ -570,3 +570,14 @@ query GetTokenInformation($ids: [String!]) {
   }
 }
 `;
+
+export const GetPoolDayDatas = gql`
+query PoolDayData($poolId: String) {
+  poolDayDatas(where: {pool: $poolId}, orderBy: date, orderDirection: desc) {
+    date
+    tvlUsd
+    volumeUsd
+    feesUsd
+  }
+}
+`;

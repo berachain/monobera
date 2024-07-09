@@ -1,13 +1,7 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { decodeCrocPrice } from "@bera/beracrocswap";
-import {
-  chainId,
-  crocQueryAddress,
-  multicallAddress,
-} from "@bera/config";
-import {
-  GetUserPools
-} from "@bera/graphql";
+import { chainId, crocQueryAddress, multicallAddress } from "@bera/config";
+import { GetUserPools } from "@bera/graphql";
 import BigNumber from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";
 import { Address, PublicClient, erc20Abi, getAddress, toHex } from "viem";
