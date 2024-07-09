@@ -200,8 +200,8 @@ export const PoolChart = ({
   isLoading,
   timeCreated,
 }: {
-  pool: PoolV2;
-  currentTvl: number;
+  pool: PoolV2 | undefined;
+  currentTvl: number | undefined;
   historicalData: PoolDayDataV2[] | undefined;
   isLoading: boolean;
   timeCreated?: Date | null;

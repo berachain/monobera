@@ -2,14 +2,12 @@
 
 "use client";
 
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
+import { notFound, useRouter } from "next/navigation";
 import {
   TransactionActionType,
   bexAbi,
   usePoolUserPosition,
-  useTokenHoneyPrice,
-  type PoolV2,
   type Token,
 } from "@bera/berajs";
 import { getWithdrawLiquidityPayload } from "@bera/berajs/actions";
@@ -36,15 +34,13 @@ import { usePublicClient } from "wagmi";
 import { SettingsPopover } from "~/components/settings-popover";
 import { getPoolUrl } from "../pools/fetchPools";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
-
-interface IWithdrawLiquidityContent {
-  pool: PoolV2;
-}
+import { useSelectedPool } from "~/hooks/useSelectedPool";
+import { Address } from "viem";
 
 interface ITokenSummary {
   title: string;
-  baseToken: Token;
-  quoteToken: Token;
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
   baseAmount: string;
   quoteAmount: string;
   isLoading: boolean;
@@ -57,6 +53,7 @@ const TokenSummary = ({
   quoteAmount,
   isLoading,
 }: ITokenSummary) => {
+  if (!baseToken || !quoteToken) return null; // TODO: loading state
   return (
     <div className="flex w-full flex-col items-center justify-center gap-3 rounded-lg bg-muted p-3">
       <p className="w-full text-left text-lg font-semibold">{title}</p>
@@ -83,8 +80,17 @@ const TokenSummary = ({
 };
 
 export default function WithdrawLiquidityContent({
-  pool,
-}: IWithdrawLiquidityContent) {
+  shareAddress,
+}: {
+  shareAddress: Address;
+}) {
+  const { data: pool, isLoading } = useSelectedPool(shareAddress);
+  useEffect(() => {
+    if (!pool && !isLoading) {
+      notFound();
+    }
+  }, [pool, isLoading]);
+
   const reset = () => {
     setPreviewOpen(false);
     setAmount(0);
@@ -97,8 +103,8 @@ export default function WithdrawLiquidityContent({
 
   const slippage = useSlippage();
 
-  const baseToken = pool.baseInfo;
-  const quoteToken = pool.quoteInfo;
+  const baseToken = pool?.baseInfo;
+  const quoteToken = pool?.quoteInfo;
 
   const {
     data: userPositionBreakdown,
@@ -113,7 +119,7 @@ export default function WithdrawLiquidityContent({
     const bnAmountWithdrawn = userPositionBreakdown.baseAmount
       .times(amount)
       .div(100);
-    return bnAmountWithdrawn.div(10 ** baseToken.decimals).toString();
+    return bnAmountWithdrawn.div(10 ** (baseToken?.decimals ?? 18)).toString();
   }, [userPositionBreakdown?.baseAmount, amount]);
 
   const quoteAmountWithdrawn = useMemo(() => {
@@ -123,28 +129,15 @@ export default function WithdrawLiquidityContent({
     const bnAmountWithdrawn = userPositionBreakdown.quoteAmount
       .times(amount)
       .div(100);
-    return bnAmountWithdrawn.div(10 ** quoteToken.decimals).toString();
+    return bnAmountWithdrawn.div(10 ** (quoteToken?.decimals ?? 18)).toString();
   }, [userPositionBreakdown?.quoteAmount, amount]);
 
-  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    tokenAddress: baseToken?.address,
-  });
-  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    tokenAddress: quoteToken?.address,
-  });
-
   const totalHoneyPrice = useMemo(() => {
-    if (!baseTokenHoneyPrice || !quoteTokenHoneyPrice) return 0;
     return (
-      Number(baseTokenHoneyPrice) * Number(baseAmountWithdrawn) +
-      Number(quoteTokenHoneyPrice) * Number(quoteAmountWithdrawn)
+      Number(baseToken?.usdValue ?? 0) * Number(baseAmountWithdrawn) +
+      Number(quoteToken?.usdValue ?? 0) * Number(quoteAmountWithdrawn)
     );
-  }, [
-    baseTokenHoneyPrice,
-    quoteTokenHoneyPrice,
-    baseAmountWithdrawn,
-    quoteAmountWithdrawn,
-  ]);
+  }, [baseToken, quoteToken, baseAmountWithdrawn, quoteAmountWithdrawn]);
 
   const { write, ModalPortal } = useTxn({
     message: `Withdraw liquidity from ${pool?.poolName}`,
@@ -164,7 +157,7 @@ export default function WithdrawLiquidityContent({
           poolPrice,
           baseToken,
           quoteToken,
-          poolIdx: pool.poolIdx,
+          poolIdx: pool?.poolIdx,
           percentRemoval: amount,
           seeds: userPositionBreakdown?.seeds.toString() ?? "0",
         },
@@ -271,7 +264,7 @@ export default function WithdrawLiquidityContent({
           </div>
           <InfoBoxList>
             <InfoBoxListItem
-              title={`Removing ${baseToken.symbol}`}
+              title={`Removing ${baseToken?.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
                   <FormattedNumber
@@ -279,15 +272,15 @@ export default function WithdrawLiquidityContent({
                     compact={false}
                   />
                   <TokenIcon
-                    address={baseToken.address}
+                    address={baseToken?.address}
                     size={"md"}
-                    symbol={baseToken.symbol}
+                    symbol={baseToken?.symbol}
                   />
                 </div>
               }
             />
             <InfoBoxListItem
-              title={`Removing ${quoteToken.symbol}`}
+              title={`Removing ${quoteToken?.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
                   <FormattedNumber
@@ -295,9 +288,9 @@ export default function WithdrawLiquidityContent({
                     compact={false}
                   />
                   <TokenIcon
-                    address={quoteToken.address}
+                    address={quoteToken?.address}
                     size={"md"}
-                    symbol={quoteToken.symbol}
+                    symbol={quoteToken?.symbol}
                   />
                 </div>
               }
@@ -309,9 +302,9 @@ export default function WithdrawLiquidityContent({
                   <>
                     <FormattedNumber
                       value={poolPrice}
-                      symbol={baseToken.symbol}
+                      symbol={baseToken?.symbol}
                     />{" "}
-                    = 1 {quoteToken.symbol}
+                    = 1 {quoteToken?.symbol}
                   </>
                 ) : (
                   "-"
@@ -346,16 +339,16 @@ export default function WithdrawLiquidityContent({
           >
             <TokenList className="divide-muted bg-muted">
               <PreviewToken
-                key={baseToken.address}
+                key={baseToken?.address}
                 token={baseToken}
                 value={Number(baseAmountWithdrawn)}
-                price={Number(baseTokenHoneyPrice ?? 0)}
+                price={Number(baseToken?.usdValue ?? 0)}
               />
               <PreviewToken
-                key={quoteToken.address}
+                key={quoteToken?.address}
                 token={quoteToken}
                 value={Number(quoteAmountWithdrawn)}
-                price={Number(quoteTokenHoneyPrice ?? 0)}
+                price={Number(quoteToken?.usdValue ?? 0)}
               />
             </TokenList>
             <InfoBoxList>
@@ -366,9 +359,9 @@ export default function WithdrawLiquidityContent({
                     <>
                       <FormattedNumber
                         value={poolPrice}
-                        symbol={baseToken.symbol}
+                        symbol={baseToken?.symbol}
                       />{" "}
-                      = 1 {quoteToken.symbol}
+                      = 1 {quoteToken?.symbol}
                     </>
                   ) : (
                     "-"

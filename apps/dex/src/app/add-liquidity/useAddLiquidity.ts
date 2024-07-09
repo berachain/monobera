@@ -33,7 +33,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     areAllInputsPopulated,
     areSomeInputsUnpopulated,
     areAllInputsEmpty,
-  } = useMultipleTokenInput(pool?.tokens ?? []);
+  } = useMultipleTokenInput(pool?.tokens ?? undefined);
 
   const {
     needsApproval,

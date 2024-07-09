@@ -28,33 +28,6 @@ export const getAllPools = gql`
   }
 `;
 
-export const getSelectedPool = gql`
-  query GetSelectedPool($id: String) {
-    pool(id: $id) {
-      id
-      pool: address
-      poolName: name
-      tokens: poolTokens {
-        denomWeight
-        amount
-        denom
-        address
-        symbol
-        decimals
-        latestPriceUsd {
-          id
-          price
-        }
-      }
-      swapFee
-      sharesDenom
-      sharesAddress
-      totalShares
-      tvlUsd
-    }
-  }
-`;
-
 export const getTypedLiquidityChanged = gql`
   query GetLiquidityChanged(
     $page: Int!
@@ -353,8 +326,8 @@ export const getRecentSwaps = gql`
       quoteFlow
       transactionHash
       time
-      baseAssetHoneyPrice
-      quoteAssetHoneyPrice
+      baseAssetUsdPrice
+      quoteAssetUsdPrice
     }
   }
 `;
@@ -373,8 +346,227 @@ export const getRecentProvisions = gql`
       changeType
       transactionHash
       time
-      baseAssetHoneyPrice
-      quoteAssetHoneyPrice
+      baseAssetUsdPrice
+      quoteAssetUsdPrice
     }
   }
+`;
+
+// NEW QUERIES
+
+export const getFilteredPools = gql`
+ query GetPoolList(
+    $keyword: String
+    $skip: Int!
+    $first: Int!
+    $order: String
+    $orderDirection: String
+  ) {
+    pools(where: {or: [
+        {baseInfo_: {name_contains_nocase: $keyword}},
+        {baseInfo_: {symbol_contains_nocase: $keyword}},
+        {baseInfo_: {address_contains: $keyword}},
+        {quoteInfo_: {name_contains_nocase: $keyword}},
+        {quoteInfo_: {symbol_contains_nocase: $keyword}},
+				{quoteInfo_: {address_contains: $keyword}},
+      	{shareAddress_: {address_contains: $keyword}}
+    ]},
+    orderBy: $order,
+    orderDirection: $orderDirection,
+    skip: $skip,
+    first: $first
+    ) {
+      id
+      poolIdx
+      base
+      quote
+      timeCreate
+      tvlUsd
+      baseAmount
+      quoteAmount
+      bgtApy
+      template {
+        feeRate
+      }
+      baseInfo {
+        id
+        address
+        symbol
+        name
+        decimals
+        usdValue
+        beraValue
+      }
+      quoteInfo {
+        id
+        address
+        symbol
+        name
+        decimals
+        usdValue
+        beraValue
+      }
+      shareAddress {
+        address
+      }
+      poolDayDatas(orderBy: date orderDirection: desc, first: 1) {
+        id
+        tvlUsd
+        volumeUsd
+        date
+      }
+      vault {
+        id
+        vaultAddress
+      }
+    }
+  }
+`;
+
+export const GetHomepageData = gql`
+query HomepageData($beraAddress: String) {
+  bexGlobalData(id: "global") {
+    tvlUsd
+  }
+  bexGlobalDayDatas(orderBy: date, orderDirection: desc, first: 1) {
+    volumeUsd
+  }
+  globalInfo(id: "global") {
+    totalBGTDistributed
+  }
+  tokenInformations(where: {address_contains: $beraAddress}) {
+    usdValue
+  }
+}
+`;
+
+export const GetUserPools = gql`
+query UserPools($user: String) {
+  userPools(id: $user) {
+    depositedPools {
+      pool {
+        id
+        poolIdx
+        base
+        quote
+        timeCreate
+        tvlUsd
+        baseAmount
+        quoteAmount
+        bgtApy
+        template {
+          feeRate
+        }
+        baseInfo {
+          id
+          address
+          symbol
+          name
+          decimals
+          usdValue
+          beraValue
+        }
+        quoteInfo {
+          id
+          address
+          symbol
+          name
+          decimals
+          usdValue
+          beraValue
+        }
+        shareAddress {
+          address
+        }
+        poolDayDatas(orderBy: date orderDirection: desc, first: 1) {
+        id
+        tvlUsd
+        volumeUsd
+        date
+      }
+        vault {
+          id
+          vaultAddress
+        }
+      }
+    }
+  }
+}
+`;
+export const getSelectedPool = gql`
+query GetPoolList($shareAddress: String) {
+  pools(where: {shareAddress_: {address_contains: $shareAddress}}) {
+    id
+    poolIdx
+    base
+    quote
+    timeCreate
+    tvlUsd
+    baseAmount
+    quoteAmount
+    bgtApy
+    template {
+      feeRate
+    }
+    baseInfo {
+      id
+      address
+      symbol
+      name
+      decimals
+      usdValue
+      beraValue
+    }
+    quoteInfo {
+      id
+      address
+      symbol
+      name
+      decimals
+      usdValue
+      beraValue
+    }
+    shareAddress {
+      address
+    }
+    poolDayDatas(orderBy: date, orderDirection: desc, first: 1) {
+      id
+      tvlUsd
+      volumeUsd
+      date
+    }
+    vault {
+      id
+      vaultAddress
+    }
+  }
+}
+`;
+
+export const GetTokenInformation = gql`
+query GetTokenInformation($id: String) {
+  tokenInformation(id: $id) {
+    id
+    address
+    symbol
+    name
+    decimals
+    usdValue
+    beraValue
+  }
+}
+`;
+
+export const GetTokenInformations = gql`
+query GetTokenInformation($ids: [String!]) {
+  tokenInformations(where: {address_in: $ids}) {
+    id
+    address
+    symbol
+    name
+    decimals
+    usdValue
+    beraValue
+  }
+}
 `;

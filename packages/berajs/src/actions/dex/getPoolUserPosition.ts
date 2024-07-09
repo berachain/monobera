@@ -11,7 +11,7 @@ import { getBeraLpAddress } from "~/utils";
 import { getTokenHoneyPrices } from "../honey";
 
 interface GetPoolUserPositionProps_Args {
-  pool: PoolV2;
+  pool: PoolV2 | undefined;
   account: `0x${string}`;
 }
 

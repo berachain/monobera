@@ -6,39 +6,18 @@ import {
   crocQueryAddress,
   multicallAddress,
 } from "@bera/config";
-import { getTokenHoneyPricesReq, searchFilteredPoolList } from "@bera/graphql";
+import {
+  GetUserPools,
+  getTokenHoneyPricesReq,
+  searchFilteredPoolList,
+} from "@bera/graphql";
 import BigNumber from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";
 import { Address, PublicClient, erc20Abi, getAddress, toHex } from "viem";
 
 import { bexQueryAbi } from "~/abi";
-import { BeraConfig, IUserPool, IUserPosition, PoolV2 } from "~/types";
-import { formatSubgraphPoolData, getBeraLpAddress } from "~/utils";
-
-export interface AmbientPosition {
-  ambientLiq: string;
-  aprContributedLiq: string;
-  aprDuration: number;
-  aprEst: number;
-  aprPostLiq: string;
-  askTick: number;
-  base: string;
-  bidTick: number;
-  chainId: string;
-  concLiq: number;
-  firstMintTx: string;
-  isBid: boolean;
-  lastMintTx: string;
-  latestUpdateTime: number;
-  liqRefreshTime: number;
-  poolIdx: number;
-  positionId: string;
-  positionType: string;
-  quote: string;
-  rewardLiq: number;
-  timeFirstMint: number;
-  user: string;
-}
+import { BeraConfig, IUserPool, PoolV2, IUserPosition } from "~/types";
+import { mapPoolToPoolV2 } from "~/utils";
 
 interface Call {
   abi: any[];
@@ -68,11 +47,6 @@ export const searchUserPools = async ({
       "getUserPools: missing config from params - config.subgraphs.dexSubgraph",
     );
   }
-  if (!config.endpoints?.dexIndexer) {
-    throw new Error(
-      "getUserPools: missing config from params - config.subgraphs.dexIndexer",
-    );
-  }
   const subgraphEndpoint = config.subgraphs?.dexSubgraph;
   const dexClient = new ApolloClient({
     uri: subgraphEndpoint,
@@ -80,43 +54,27 @@ export const searchUserPools = async ({
   });
 
   try {
-    const response = await fetch(
-      `${
-        config?.endpoints?.dexIndexer ?? crocIndexerEndpoint
-      }/user_positions?chainId=${hexChainId}&user=${account}`,
+    const response = await dexClient.query({
+      query: GetUserPools,
+      variables: {
+        user: account.toLowerCase(),
+      },
+    });
+
+    console.log(response);
+    const positions = response.data.userPools.depositedPools.map(
+      (depositedPool: any) => depositedPool.pool,
     );
-    const positions = await response.json();
 
     const baseTokenAddresses: string[] = [];
     const quoteTokenAddresses: string[] = [];
 
-    for (const pool of positions.data) {
+    for (const pool of positions) {
       baseTokenAddresses.push(pool.base);
       quoteTokenAddresses.push(pool.quote);
     }
 
-    const uniqueTokenAddresses = Array.from(
-      new Set([...baseTokenAddresses, ...quoteTokenAddresses]),
-    );
-
-    const tokenHoneyPricesResult = dexClient
-      .query({
-        query: getTokenHoneyPricesReq,
-        variables: {
-          id: uniqueTokenAddresses,
-        },
-      })
-      .then((res: any) => {
-        return res.data?.tokenHoneyPrices.reduce(
-          (allPrices: any, price: any) => ({
-            ...allPrices,
-            [getAddress(price.id)]: price.price,
-          }),
-          {},
-        );
-      });
-
-    const calls: Call[] = positions.data.map((pool: AmbientPosition) => {
+    const calls: Call[] = positions.map((pool: any) => {
       return {
         abi: bexQueryAbi,
         address: crocQueryAddress,
@@ -131,10 +89,10 @@ export const searchUserPools = async ({
       multicallAddress: multicallAddress,
     });
 
-    const balanceCalls: Call[] = positions.data.map((pool: AmbientPosition) => {
+    const balanceCalls: Call[] = positions.map((pool: any) => {
       return {
         abi: erc20Abi,
-        address: getBeraLpAddress(pool.base as Address, pool.quote as Address),
+        address: pool.shareAddress.address,
         functionName: "balanceOf",
         args: [account],
       };
@@ -145,44 +103,19 @@ export const searchUserPools = async ({
       multicallAddress: multicallAddress,
     });
 
-    // // get pool objects for pools user deposited for
-    const poolsResult = dexClient
-      .query({
-        query: searchFilteredPoolList,
-        variables: {
-          baseAssets: baseTokenAddresses,
-          quoteAssets: quoteTokenAddresses,
-          keyword,
-        },
-      })
-      .then((res: any) => {
-        if (res.error) {
-          console.log(res.error);
-          return undefined;
-        }
-        return res.data.pools;
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-
-    const [poolPrices, pools, tokenHoneyPrices, lpBalances] = await Promise.all(
-      [result, poolsResult, tokenHoneyPricesResult, balanceResult],
-    );
+    const [poolPrices, lpBalances] = await Promise.all([result, balanceResult]);
 
     const userPositions: IUserPool[] = [];
-    positions.data.forEach((position: AmbientPosition, i: number) => {
+
+    console.log("poolPrices", poolPrices);
+    console.log("lpBalances", lpBalances);
+
+    positions.forEach((position: any, i: number) => {
       const poolPrice = poolPrices[i]?.result;
-      const pool: PoolV2 | undefined = pools.find((p: PoolV2) => {
-        return (
-          p.base.toLowerCase() === position.base.toLowerCase() &&
-          p.quote.toLowerCase() === position.quote.toLowerCase()
-        );
-      });
-      if (!pool || !poolPrice) {
+      const pool: PoolV2 = mapPoolToPoolV2(position);
+      if (!poolPrice) {
         return;
       }
-      const formattedPool = formatSubgraphPoolData(pool);
       const decodedSpotPrice = decodeCrocPrice(
         EthersBigNumber.from(poolPrice.toString()),
       );
@@ -210,10 +143,10 @@ export const searchUserPools = async ({
         : quoteAmount.div(10 ** quoteDecimals).toString();
 
       const estimatedHoneyValue =
-        Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
-          Number(formattedBaseAmount) +
-        Number(tokenHoneyPrices[getAddress(pool.quote)] ?? 0) *
-          Number(formattedQuoteAmount);
+        parseFloat(pool.baseInfo.usdValue ?? "0") *
+          parseFloat(formattedBaseAmount) +
+        parseFloat(pool.quoteInfo.usdValue ?? "0") *
+          parseFloat(formattedQuoteAmount);
       const userPosition: IUserPosition = {
         baseAmount,
         quoteAmount,
@@ -224,7 +157,7 @@ export const searchUserPools = async ({
       };
 
       userPositions.push({
-        ...formattedPool,
+        ...pool,
         userPosition,
       });
     });

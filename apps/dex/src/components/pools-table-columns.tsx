@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useBgtApy,
-  usePoolUserPosition,
-  type IUserPool,
-  type PoolV2,
-} from "@bera/berajs";
-import { peripheryDebtToken } from "@bera/config";
+import { type IUserPool, type PoolV2 } from "@bera/berajs";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -18,7 +12,6 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Address } from "viem";
 
 import {
   getPoolAddLiquidityUrl,
@@ -66,7 +59,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "tvl",
+    accessorKey: "tvlUsd",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -84,6 +77,9 @@ export const columns: ColumnDef<PoolV2>[] = [
     ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
+    },
+    sortingFn: (rowA, rowB) => {
+      return 0;
     },
   },
   {
@@ -103,6 +99,7 @@ export const columns: ColumnDef<PoolV2>[] = [
         </div>
       </div>
     ),
+    enableSorting: false,
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
@@ -124,13 +121,13 @@ export const columns: ColumnDef<PoolV2>[] = [
         </div>
       </div>
     ),
+    enableSorting: false,
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
   },
   {
     accessorKey: "bgtApy",
-    enableSorting: false,
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -140,58 +137,24 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
-      const { data: bgtApr } = useBgtApy({
-        receiptTokenAddress: row.original?.shareAddress as Address,
-        tvlInHoney: Number(row.original.tvlUsd),
-      });
-
       return (
         <div className="flex items-center justify-start text-sm text-warning-foreground">
           <FormattedNumber
-            value={bgtApr ?? 0}
-            percent
+            value={row.original.bgtApy ?? 0}
             compact
             showIsSmallerThanMin
           />
+          %
         </div>
       );
     },
-    // sortingFn: (rowA, rowB) => {
-    //   const a = rowA.original.bgtApy ?? 0;
-    //   const b = rowB.original.bgtApy ?? 0;
-    //   if (a < b) return -1;
-    //   if (a > b) return 1;
-    //   return 0;
-    // },
-    // filterFn: (row, id, value) => value.includes(row.getValue(id)),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    sortingFn: (rowA, rowB) => {
+      return 0;
+    },
   },
-  // {
-  //   accessorKey: "totalApy",
-  //   enableSorting: false,
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title="APY"
-  //       tooltip={apyTooltipText()}
-  //       className="whitespace-nowrap"
-  //     />
-  //   ),
-  //   cell: ({ row }) => {
-  //     return (
-  //       <div className="flex items-center justify-center text-sm">
-  //         <FormattedNumber value={row.original.totalApy ?? 0} percent colored />
-  //       </div>
-  //     );
-  //   },
-  //   sortingFn: (rowA, rowB) => {
-  //     const a = rowA.original.totalApy ?? 0;
-  //     const b = rowB.original.totalApy ?? 0;
-  //     if (a < b) return -1;
-  //     if (a > b) return 1;
-  //     return 0;
-  //   },
-  //   filterFn: (row, id, value) => value.includes(row.getValue(id)),
-  // },
   {
     accessorKey: "btns",
     header: ({ column }) => (
@@ -261,63 +224,6 @@ export const my_columns: ColumnDef<IUserPool>[] = [
       </div>
     ),
   },
-
-  // {
-  //   accessorKey: "bgtApy",
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title="BGT APY"
-  //       tooltip={apyTooltipText()}
-  //       className="whitespace-nowrap"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Badge variant={"warning"} className="border-none px-2 py-1 font-normal">
-  //       <FormattedNumber value={"0"} symbol="BGT" />
-  //     </Badge>
-  //   ),
-
-  //   filterFn: (row, id, value) => value.includes(row.getValue(id)),
-  // },
-  // {
-  //   accessorKey: "bgtApy",
-  //   enableSorting: false,
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title="BGT APY"
-  //       tooltip={apyTooltipText()}
-  //       className="whitespace-nowrap"
-  //     />
-  //   ),
-  //   cell: ({ row }) => {
-  //     console.log({ row })
-  //     const { data: bgtApr } = useBgtApy({
-  //       receiptTokenAddress: row.original?.shareAddress as Address,
-  //       tvlInHoney: Number(row.original.tvlUsd),
-  //     });
-
-  //     return (
-  //       <div className="flex items-center justify-start text-sm text-warning-foreground">
-  //         <FormattedNumber
-  //           value={bgtApr ?? 0}
-  //           percent
-  //           compact
-  //           showIsSmallerThanMin
-  //         />
-  //       </div>
-  //     );
-  //   },
-  // sortingFn: (rowA, rowB) => {
-  //   const a = rowA.original.bgtApy ?? 0;
-  //   const b = rowB.original.bgtApy ?? 0;
-  //   if (a < b) return -1;
-  //   if (a > b) return 1;
-  //   return 0;
-  // },
-  // filterFn: (row, id, value) => value.includes(row.getValue(id)),
-  // },
   {
     accessorKey: "btns",
     header: ({ column }) => (

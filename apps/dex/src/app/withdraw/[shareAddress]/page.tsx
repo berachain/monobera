@@ -1,6 +1,5 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchPoolByAddress } from "@bera/berajs/utils";
 import { dexName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import { isAddress } from "viem";
@@ -25,14 +24,7 @@ export default async function Withdraw({
     if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    const pool = await fetchPoolByAddress({
-      shareAddress: params.shareAddress,
-    });
-
-    if (!pool) {
-      notFound();
-    }
-    return <WithdrawPageContent pool={pool} />;
+    return <WithdrawPageContent shareAddress={params.shareAddress} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();

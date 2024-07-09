@@ -1,4 +1,4 @@
-import { useReducer, type Reducer } from "react";
+import { useEffect, useReducer, type Reducer } from "react";
 import { type Token } from "@bera/berajs";
 
 export interface TokenInput extends Token {
@@ -11,20 +11,22 @@ interface IState {
 }
 
 // generic hook for handling state on multi token input
-const useMultipleTokenInput = (tokens: Token[]) => {
+const useMultipleTokenInput = (tokens: Token[] | undefined) => {
   const initialState: IState = {
-    tokens: tokens.map((token: Token) => {
-      return {
-        amount: "",
-        exceeding: false, // Initialize exceeding status to false
-        ...token,
-      };
-    }),
+    tokens:
+      tokens?.map((token: Token) => {
+        return {
+          amount: "",
+          exceeding: false, // Initialize exceeding status to false
+          ...token,
+        };
+      }) ?? [],
   };
 
   const actionTypes = {
     UPDATE_INPUT: "UPDATE_INPUT",
     UPDATE_EXCEEDING: "UPDATE_EXCEEDING", // New action type for updating exceeding status
+    RESET_TOKENS: "RESET_TOKENS",
   };
 
   // Reducer function
@@ -56,6 +58,11 @@ const useMultipleTokenInput = (tokens: Token[]) => {
             return token;
           }),
         };
+      case actionTypes.RESET_TOKENS:
+        return {
+          ...state,
+          tokens: action.payload.tokens,
+        };
       default:
         return state;
     }
@@ -65,6 +72,20 @@ const useMultipleTokenInput = (tokens: Token[]) => {
     reducer,
     initialState,
   );
+
+  useEffect(() => {
+    dispatch({
+      type: actionTypes.RESET_TOKENS,
+      payload: {
+        tokens:
+          tokens?.map((token: Token) => ({
+            amount: "",
+            exceeding: false,
+            ...token,
+          })) ?? [],
+      },
+    });
+  }, [tokens]);
 
   const updateTokenAmount = (tokenIndex: number, input: string) => {
     dispatch({

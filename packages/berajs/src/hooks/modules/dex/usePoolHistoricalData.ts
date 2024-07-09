@@ -5,7 +5,7 @@ import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 
 type UsePoolHistoricalDataArgs = {
-  shareAddress: string;
+  shareAddress: string | undefined;
 };
 export const usePoolHistoricalData = (
   { shareAddress }: UsePoolHistoricalDataArgs,
@@ -17,6 +17,7 @@ export const usePoolHistoricalData = (
   const swrResponse = useSWR<PoolHistoryResponse, any, any>(
     QUERY_KEY,
     async () => {
+      if (!shareAddress) return undefined;
       return await getPoolHistoricalData({ shareAddress, config });
     },
   );

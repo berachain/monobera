@@ -1,15 +1,14 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
+import { notFound, useRouter } from "next/navigation";
 import {
+  ADDRESS_ZERO,
   TXN_GAS_USED_ESTIMATES,
   TransactionActionType,
   bexAbi,
   useGasData,
   usePollWalletBalances,
-  useTokenHoneyPrice,
-  type PoolV2,
   type Token,
 } from "@bera/berajs";
 import { getAddLiquidityPayload } from "@bera/berajs/actions";
@@ -33,18 +32,28 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { formatUnits, parseUnits } from "viem";
+import { Address, formatUnits, parseUnits } from "viem";
 
 import { isBera, isBeratoken } from "~/utils/isBeraToken";
 import { SettingsPopover } from "~/components/settings-popover";
 import { getBaseCost, getPoolUrl, getQuoteCost } from "../pools/fetchPools";
 import { useAddLiquidity } from "./useAddLiquidity";
+import { useSelectedPool } from "~/hooks/useSelectedPool";
 
 interface IAddLiquidityContent {
-  pool: PoolV2;
+  shareAddress: Address;
 }
 
-export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
+export default function AddLiquidityContent({
+  shareAddress,
+}: IAddLiquidityContent) {
+  const { data: pool, isLoading } = useSelectedPool(shareAddress);
+  useEffect(() => {
+    if (!pool && !isLoading) {
+      notFound();
+    }
+  }, [pool, isLoading]);
+
   const router = useRouter();
   const {
     poolPrice,
@@ -76,27 +85,43 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
 
-  const baseToken = (
-    isBeratoken(tokenInputs[0])
+  const baseToken: Token | undefined = useMemo(() => {
+    if (!tokenInputs[0]) {
+      return undefined;
+    }
+    return isBeratoken(tokenInputs[0])
       ? isNativeBera
-        ? beraToken
-        : wBeraToken
-      : tokenInputs[0]
-  ) as Token;
-  const quoteToken = (
-    isBeratoken(tokenInputs[1])
-      ? isNativeBera
-        ? beraToken
-        : wBeraToken
-      : tokenInputs[1]
-  ) as Token;
+        ? {
+            ...tokenInputs[0],
+            symbol: "BERA",
+            address: ADDRESS_ZERO,
+          }
+        : {
+            ...tokenInputs[0],
+            symbol: "WBERA",
+            address: beraTokenAddress,
+          }
+      : tokenInputs[0];
+  }, [tokenInputs, isNativeBera]);
 
-  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    tokenAddress: baseToken?.address,
-  });
-  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    tokenAddress: quoteToken?.address,
-  });
+  const quoteToken: Token | undefined = useMemo(() => {
+    if (!tokenInputs[1]) {
+      return undefined;
+    }
+    return isBeratoken(tokenInputs[1])
+      ? isNativeBera
+        ? {
+            ...tokenInputs[1],
+            symbol: "BERA",
+            address: ADDRESS_ZERO,
+          }
+        : {
+            ...tokenInputs[1],
+            symbol: "WBERA",
+            address: beraTokenAddress,
+          }
+      : tokenInputs[1];
+  }, [tokenInputs, isNativeBera]);
 
   const baseCost = useMemo(() => {
     if (!poolPrice) {
@@ -114,13 +139,19 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
 
   const handleBaseAssetAmountChange = (value: string): void => {
     updateTokenAmount(0, value);
-    const parsedBaseCost = parseUnits(baseCost.toString(), quoteToken.decimals);
-    const parsedValue = parseUnits(value, quoteToken.decimals);
+    const parsedBaseCost = parseUnits(
+      baseCost.toString(),
+      quoteToken?.decimals ?? 18,
+    );
+    const parsedValue = parseUnits(value, quoteToken?.decimals ?? 18);
     const quoteAmount =
-      (parsedBaseCost * parsedValue) / BigInt(10 ** quoteToken.decimals);
+      (parsedBaseCost * parsedValue) /
+      BigInt(10 ** (quoteToken?.decimals ?? 18));
     updateTokenAmount(
       1,
-      quoteAmount === 0n ? "" : formatUnits(quoteAmount, quoteToken.decimals),
+      quoteAmount === 0n
+        ? ""
+        : formatUnits(quoteAmount, quoteToken?.decimals ?? 18),
     );
   };
 
@@ -128,14 +159,17 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     updateTokenAmount(1, value);
     const parsedQuoteCost = parseUnits(
       quoteCost.toString(),
-      baseToken.decimals,
+      baseToken?.decimals ?? 18,
     );
-    const parsedValue = parseUnits(value, baseToken.decimals);
+    const parsedValue = parseUnits(value, baseToken?.decimals ?? 18);
     const baseAmount =
-      (parsedQuoteCost * parsedValue) / BigInt(10 ** baseToken.decimals);
+      (parsedQuoteCost * parsedValue) /
+      BigInt(10 ** (baseToken?.decimals ?? 18));
     updateTokenAmount(
       0,
-      baseAmount === 0n ? "" : formatUnits(baseAmount, baseToken.decimals),
+      baseAmount === 0n
+        ? ""
+        : formatUnits(baseAmount, baseToken?.decimals ?? 18),
     );
   };
 
@@ -144,13 +178,13 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   const quoteTokenInitialLiquidity = tokenInputs[1]?.amount;
 
   const bnBaseAmount = parseUnits(
-    baseTokenInitialLiquidity as string,
-    baseToken.decimals,
+    baseTokenInitialLiquidity ?? "0",
+    baseToken?.decimals ?? 18,
   );
 
   const bnQuoteAmount = parseUnits(
-    quoteTokenInitialLiquidity as string,
-    quoteToken.decimals,
+    quoteTokenInitialLiquidity ?? "0",
+    quoteToken?.decimals ?? 18,
   );
 
   const maxBaseApprovalAmount = useMemo(() => {
@@ -159,16 +193,17 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     }
     const parsedLiq = parseUnits(
       baseTokenInitialLiquidity as string,
-      baseToken.decimals,
+      baseToken?.decimals ?? 18,
     );
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** baseToken.decimals);
     const s = parseUnits(
       (slippage ?? 0).toString(), // add a little more just to avoid infininte approval
-      baseToken.decimals,
+      baseToken?.decimals ?? 18,
     );
     const minAmountOut =
-      (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** baseToken.decimals);
+      (sI ?? 0n) +
+      ((sI ?? 0n) * s) / BigInt(100 * 10 ** (baseToken?.decimals ?? 18));
     return minAmountOut;
   }, [baseTokenInitialLiquidity, slippage]);
 
@@ -178,14 +213,18 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     }
     const parsedLiq = parseUnits(
       quoteTokenInitialLiquidity as string,
-      quoteToken.decimals,
+      quoteToken?.decimals ?? 18,
     );
     const sI = BigInt(parsedLiq);
     // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** quoteToken.decimals);
-    const s = parseUnits((slippage ?? 0).toString(), quoteToken.decimals);
+    const s = parseUnits(
+      (slippage ?? 0).toString(),
+      quoteToken?.decimals ?? 18,
+    );
 
     const minAmountOut =
-      (sI ?? 0n) + ((sI ?? 0n) * s) / BigInt(100 * 10 ** quoteToken.decimals);
+      (sI ?? 0n) +
+      ((sI ?? 0n) * s) / BigInt(100 * 10 ** (quoteToken?.decimals ?? 18));
 
     return minAmountOut;
   }, [quoteTokenInitialLiquidity, slippage]);
@@ -202,7 +241,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
           isAmountBaseDenominated: isBaseInput,
           baseAmount: bnBaseAmount,
           quoteAmount: bnQuoteAmount,
-          poolIdx: pool.poolIdx,
+          poolIdx: pool?.poolIdx ?? 0,
         },
       });
       if (!addLiqPayload || !addLiqPayload.payload) {
@@ -229,19 +268,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
   ]);
 
   const totalHoneyPrice = useMemo(() => {
-    if (!baseTokenHoneyPrice || !quoteTokenHoneyPrice) {
-      return 0;
-    }
     return (
-      Number(baseTokenHoneyPrice ?? 0) * Number(tokenInputs[0]?.amount || 0) +
-      Number(quoteTokenHoneyPrice ?? 0) * Number(tokenInputs[1]?.amount || 0)
+      Number(baseToken?.usdValue ?? 0) * Number(tokenInputs[0]?.amount || 0) +
+      Number(quoteToken?.usdValue ?? 0) * Number(tokenInputs[1]?.amount || 0)
     );
-  }, [
-    baseTokenHoneyPrice,
-    quoteTokenHoneyPrice,
-    tokenInputs[0]?.amount,
-    tokenInputs[1]?.amount,
-  ]);
+  }, [baseToken, quoteToken, tokenInputs[0]?.amount, tokenInputs[1]?.amount]);
 
   const needsApprovalNoBera = needsApproval.filter(
     (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
@@ -251,7 +282,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
 
-  const baseSelected = useMemo(() => {
+  const baseSelected: Token | undefined = useMemo(() => {
     return isBeratoken(baseToken)
       ? isNativeBera
         ? beraToken
@@ -259,7 +290,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
       : baseToken;
   }, [baseToken, isNativeBera]);
 
-  const quoteSelected = useMemo(() => {
+  const quoteSelected: Token | undefined = useMemo(() => {
     return isBeratoken(quoteToken)
       ? isNativeBera
         ? beraToken
@@ -302,7 +333,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
         <CardContent className="flex flex-col gap-4">
           <TokenList>
             <TokenInput
-              key={baseToken.address}
+              key={baseToken?.address}
               selected={baseSelected}
               selectable={
                 isBeratoken(baseToken) && beraToken && wBeraToken ? true : false
@@ -324,7 +355,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 setIsBaseInput(true);
                 handleBaseAssetAmountChange(amount);
               }}
-              price={Number(baseTokenHoneyPrice)}
+              price={Number(baseToken?.usdValue ?? "0")}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(0, exceeding)
               }
@@ -358,7 +389,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 setIsBaseInput(false);
                 handleQuoteAssetAmountChange(amount);
               }}
-              price={Number(quoteTokenHoneyPrice)}
+              price={Number(quoteToken?.usdValue ?? "0")}
               onExceeding={(exceeding: boolean) =>
                 updateTokenExceeding(1, exceeding)
               }
@@ -375,7 +406,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                   <span>
                     <FormattedNumber
                       value={poolPrice}
-                      symbol={baseToken.symbol}
+                      symbol={baseToken?.symbol ?? ""}
                     />{" "}
                     = 1 {quoteToken?.symbol}
                   </span>
@@ -421,7 +452,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     : tokenInputs[0]
                 }
                 value={tokenInputs[0]?.amount}
-                price={Number(baseTokenHoneyPrice ?? 0)}
+                price={Number(baseToken?.usdValue ?? 0)}
               />
               <PreviewToken
                 token={
@@ -432,7 +463,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     : tokenInputs[1]
                 }
                 value={tokenInputs[1]?.amount}
-                price={Number(quoteTokenHoneyPrice ?? 0)}
+                price={Number(quoteToken?.usdValue ?? 0)}
               />
             </TokenList>
             <InfoBoxList>
@@ -443,7 +474,7 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                     <span>
                       <FormattedNumber
                         value={poolPrice}
-                        symbol={baseToken.symbol}
+                        symbol={baseToken?.symbol ?? ""}
                       />{" "}
                       = 1 {quoteToken?.symbol}
                     </span>
@@ -470,11 +501,11 @@ export default function AddLiquidityContent({ pool }: IAddLiquidityContent) {
                 amount={
                   isNativeBera
                     ? needsApprovalNoBera[0]?.address.toLowerCase() ===
-                      baseToken.address.toLowerCase()
+                      baseToken?.address.toLowerCase()
                       ? maxBaseApprovalAmount
                       : maxQuoteApprovalAmount
                     : needsApproval[0]?.address.toLowerCase() ===
-                        baseToken.address.toLowerCase()
+                        baseToken?.address.toLowerCase()
                       ? maxBaseApprovalAmount
                       : maxQuoteApprovalAmount
                 }

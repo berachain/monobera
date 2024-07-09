@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePoolTable } from "@bera/berajs";
@@ -20,7 +20,7 @@ export const PoolSearch = ({
 }) => {
   const [sorting, setSorting] = useState<any>([
     {
-      id: "tvl",
+      id: "tvlUsd",
       desc: true,
     },
   ]);
@@ -68,6 +68,10 @@ export const PoolSearch = ({
 
   const router = useRouter();
 
+  const isLoading = useMemo(
+    () => isLoadingMore && (data.length === 0 || !data),
+    [isLoadingMore, data],
+  );
   return (
     <div
       className="w-full flex-col items-center justify-center"
@@ -92,7 +96,7 @@ export const PoolSearch = ({
             <Link href="/pools?pool=userPools">My pools</Link>
           </TabsTrigger>
         </TabsList>
-
+        {/* 
         <div className="flex w-fit flex-row items-center gap-2 lg:flex-row lg:items-center ">
           <SearchInput
             value={search}
@@ -116,7 +120,7 @@ export const PoolSearch = ({
             id="all-pool-search"
             className="w-full md:w-[400px]"
           />
-          {isTyping && (
+          {isTyping || (isLoadingMore && keyword !=="") && (
             <div role="status">
               <svg
                 aria-hidden="true"
@@ -137,14 +141,14 @@ export const PoolSearch = ({
               <span className="sr-only">Loading...</span>
             </div>
           )}
-        </div>
+        </div> */}
 
         <TabsContent value="allPools" className="text-center">
-          {isFirstLoading ? (
+          {isLoading ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <TableViewLoading />
             </div>
-          ) : data?.length ? (
+          ) : data?.length || data ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <DataTable
                 key={data.length}
@@ -162,17 +166,18 @@ export const PoolSearch = ({
           ) : (
             <NotFoundBear title="No Pools found." />
           )}
-
-          {!isFirstLoading && (
-            <Button
-              className="mt-8"
-              onClick={() => fetchNextPage()}
-              disabled={isLoadingMore || isReachingEnd}
-              variant="outline"
-            >
-              {isReachingEnd ? "No more pools" : "View More"}
-            </Button>
-          )}
+          <Button
+            className="mt-8"
+            onClick={() => fetchNextPage()}
+            disabled={isLoadingMore || isReachingEnd}
+            variant="outline"
+          >
+            {isLoadingMore
+              ? "Loading..."
+              : isReachingEnd
+                ? "No more pools"
+                : "View More"}
+          </Button>
         </TabsContent>
 
         <TabsContent value="userPools">

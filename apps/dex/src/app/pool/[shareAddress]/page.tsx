@@ -1,7 +1,6 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchPoolByAddress } from "@bera/berajs/utils";
 import { isAddress } from "viem";
 
 import PoolPageContent from "../PoolPageContent";
@@ -23,15 +22,7 @@ export default async function PoolPage({
     if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    // const pool = null;
-    const pool = await fetchPoolByAddress({
-      shareAddress: params.shareAddress,
-    });
-
-    if (!pool) {
-      notFound();
-    }
-    return <PoolPageContent pool={pool} />;
+    return <PoolPageContent shareAddress={params.shareAddress} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();
