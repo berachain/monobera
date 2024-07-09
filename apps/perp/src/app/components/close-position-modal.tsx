@@ -5,6 +5,7 @@ import {
   tradingAbi,
   usePythUpdateFee,
 } from "@bera/berajs";
+import { tradingContractAddress } from "@bera/config";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -87,7 +88,7 @@ export function ClosePositionModal({
 
   const handleClosePosition = useCallback(() => {
     write({
-      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "closeTradeMarket",
       params: [
