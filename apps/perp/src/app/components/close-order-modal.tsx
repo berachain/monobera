@@ -1,5 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { TransactionActionType, formatUsd, tradingAbi } from "@bera/berajs";
+import { tradingContractAddress } from "@bera/config";
 import { ActionButton } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -80,7 +81,7 @@ export function CloseOrderModal({
 
   const handleCancelLimitOrder = useCallback(async () => {
     write({
-      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "cancelOpenLimitOrder",
       params: [openOrder?.index],
