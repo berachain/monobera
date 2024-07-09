@@ -6,7 +6,7 @@ import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import type { PoolV2 } from "~/types";
-import { getBeraLpAddress, mapPoolsToPoolsV2 } from "~/utils";
+import { mapPoolsToPoolsV2 } from "~/utils";
 import { dexClient, getFilteredPools } from "@bera/graphql";
 
 const DEFAULT_SIZE = 8;

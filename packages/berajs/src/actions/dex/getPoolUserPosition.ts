@@ -1,4 +1,4 @@
-import { CrocPoolView } from "@bera/beracrocswap";
+import { CrocPoolView, getBeraLpAddress } from "@bera/beracrocswap";
 import { CrocContext, connectCroc } from "@bera/beracrocswap/dist/context";
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
 import BigNumber from "bignumber.js";
@@ -7,7 +7,6 @@ import { PublicClient, erc20Abi, getAddress } from "viem";
 import { clientToProvider } from "~/hooks/useEthersProvider";
 import { IUserPosition, PoolV2 } from "~/types";
 import { BeraConfig } from "~/types/global";
-import { getBeraLpAddress } from "~/utils";
 import { getTokenHoneyPrices } from "../honey";
 
 interface GetPoolUserPositionProps_Args {

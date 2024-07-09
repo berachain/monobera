@@ -194,7 +194,11 @@ export const my_columns: ColumnDef<IUserPool>[] = [
         <span className="w-[180px] truncate text-left">
           {row.original?.poolName}
         </span>
-        <TokenIconList tokenList={row.original?.tokens} size="lg" />
+        <TokenIconList
+          tokenList={row.original?.tokens}
+          size="lg"
+          key={row.original.id}
+        />
         <Badge
           variant={"secondary"}
           className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"

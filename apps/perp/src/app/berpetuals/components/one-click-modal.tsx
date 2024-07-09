@@ -37,8 +37,7 @@ export function OneClickModal({
             <SelectBtn selected={oneClickMode} />
           </div>
           <div className="mt-2 pr-11 text-sm leading-5">
-            Sign one approval txn and fund your wallet with at-least{" "}
-            <b>0.2 BERA</b>.
+            Sign one approval txn and fund your wallet with pre-funded BERA.
           </div>
           <div className="mt-6 flex items-center gap-1 text-sm font-semibold leading-tight">
             <Icons.checkCircle className="h-4 w-4 text-success-foreground" />{" "}

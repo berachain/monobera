@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
+import BigNumber from "bignumber.js";
 import lodash from "lodash";
 import { Keccak } from "sha3";
 import { mutate } from "swr";
@@ -14,6 +15,7 @@ import {
   initialState,
   reducer,
   useBeraJs,
+  usePollEstimateFeesPerGas,
   usePollBeraBalance,
   usePollTransactionCount,
 } from "..";
@@ -33,6 +35,9 @@ interface IUseOct {
 interface IUseOctOptions {
   beraConfigOverride?: BeraConfig;
 }
+
+// Average gas amount for one transaction on perps
+const ESTIMATED_GAS_AMT_FOR_ONE_TXN = 1500000;
 
 const hash = new Keccak(256);
 
@@ -58,6 +63,8 @@ export const useOct = (
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const { data: feesPerGasEstimate } = usePollEstimateFeesPerGas();
+
   const { account, config: beraConfig } = useBeraJs();
   const { signMessageAsync } = useSignMessage();
   const chains = useChains();
@@ -78,7 +85,6 @@ export const useOct = (
       hash.reset();
       dispatch({ type: ActionEnum.SUCCESS });
     } catch (e) {
-      0;
       console.log(e);
       setOctAddress("");
       setOctPrivKey("");
@@ -112,39 +118,41 @@ export const useOct = (
     }
   }, [account, octKeyMap, octMap]);
 
-  const setOctEnabled = (value: boolean) => {
-    if (account) {
-      const newMap = lodash.set(octMap, account, value);
-      setOctMap(newMap);
-    }
-  };
+  const setOctEnabled = useCallback(
+    (value: boolean) => {
+      if (account) {
+        const newMap = lodash.set(octMap, account, value);
+        setOctMap(newMap);
+      }
+    },
+    [account, octMap, setOctMap],
+  );
 
-  const isOctEnabled = () => {
+  const isOctEnabled = useCallback(() => {
     if (account) {
       return octMap[account] ?? false;
     }
     return false;
-  };
+  }, [account, octMap]);
 
-  const setOctKey = (key: string) => {
-    if (account) {
-      const newMap = lodash.set(octKeyMap, account, key);
-      setOctKeyMap(newMap);
-    }
-  };
+  const setOctKey = useCallback(
+    (key: string) => {
+      if (account) {
+        const newMap = lodash.set(octKeyMap, account, key);
+        setOctKeyMap(newMap);
+      }
+    },
+    [account, octKeyMap, setOctKeyMap],
+  );
 
-  const getOctKey = (): string | undefined => {
+  const getOctKey = useCallback(() => {
     if (account) {
       return octKeyMap[account] ?? undefined;
     }
     return undefined;
-  };
+  }, [account, octKeyMap]);
 
   const { data: isDelegated, refresh } = useIsDelegated();
-
-  const refetchDelegated = () => {
-    refresh();
-  };
 
   const { data: octBalance } = usePollBeraBalance({
     address: octAddress as Address,
@@ -154,18 +162,32 @@ export const useOct = (
   });
 
   const isOctUnfunded = octBalance === undefined || octBalance.balance === 0n;
-  const isOctBalanceLow =
-    octBalance !== undefined && Number(octBalance.formattedBalance) < 1;
+
+  const maxFeePerGas = feesPerGasEstimate?.maxFeePerGas?.toString();
+
+  const perpsGasAmt =
+    ESTIMATED_GAS_AMT_FOR_ONE_TXN * Number(maxFeePerGas ?? "1");
+
+  const octTxnsLeft = BigNumber((octBalance?.balance ?? "0").toString())
+    .div(perpsGasAmt)
+    .dp(0)
+    .toString(10);
+
+  const isOctBalanceLow = octBalance !== undefined && Number(octTxnsLeft) < 100;
 
   return {
     isGenLoading: state.confirmState === "loading",
     isGenSubmitting: state.confirmState === "submitting",
     isGenSuccess: state.confirmState === "success",
     isGenError: state.confirmState === "fail",
-    refetchDelegated,
+    refetchDelegated: () => {
+      refresh();
+    },
     isOctEnabled,
     setOctEnabled,
     isOctUnfunded,
+    octTxnsLeft,
+    perpsGasAmt,
     isOctBalanceLow,
     octBalance,
     isOctGenerated: getOctKey() !== undefined,

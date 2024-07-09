@@ -2,14 +2,11 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { decodeCrocPrice } from "@bera/beracrocswap";
 import {
   chainId,
-  crocIndexerEndpoint,
   crocQueryAddress,
   multicallAddress,
 } from "@bera/config";
 import {
-  GetUserPools,
-  getTokenHoneyPricesReq,
-  searchFilteredPoolList,
+  GetUserPools
 } from "@bera/graphql";
 import BigNumber from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";

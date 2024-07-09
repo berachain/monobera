@@ -97,6 +97,22 @@ export default function DepositWithdraw({
     return false;
   }, [maxDeposit, depositAmount]);
 
+  const maxDepositExceedingMessage = useMemo(() => {
+    if (isMaxDepositExceeding) {
+      if (
+        maxDeposit === 0 ||
+        BigNumber(maxDeposit ?? 0).isLessThan(0.01) ||
+        !maxDeposit
+      ) {
+        return "The daily deposit limit has been reached and deposits are not being accepted at this time.";
+      }
+      return `Your deposit exceeds the current daily maximum deposit limit of ${(
+        maxDeposit ?? 0
+      ).toFixed(2)} Honey.`;
+    }
+    return "";
+  }, [maxDeposit, depositAmount, isMaxDepositExceeding]);
+
   return (
     <div className="flex h-full min-h-[400px] w-full flex-col justify-between rounded-lg border border-border px-4 py-6 md:flex-row">
       {DepositModalPortal}
@@ -120,7 +136,7 @@ export default function DepositWithdraw({
             </TabsTrigger>
           </TabsList>
           <TabsContent value="deposit" className="flex flex-col gap-4">
-            <div className="flex gap-1 text-xl font-semibold leading-7 mb-2">
+            <div className="mb-2 flex gap-1 text-xl font-semibold leading-7">
               <Icons.lock className="h-6 w-6 text-accent" />
               Deposit Honey
             </div>
@@ -143,7 +159,7 @@ export default function DepositWithdraw({
                 />
               </TokenList>
             </div>
-            <Alert variant="warning" className="rounded-md mb-4">
+            <Alert variant="warning" className="mb-4 rounded-md">
               <AlertTitle>
                 {" "}
                 <Icons.info className="inline-block h-4 w-4" /> Please read
@@ -199,18 +215,15 @@ export default function DepositWithdraw({
             </ActionButton>
             {isMaxDepositExceeding && (
               <Alert variant="destructive" className="mt-2">
-                {`Your deposit exceeds the current maximum deposit${
-                  maxDeposit === 0 || maxDeposit
-                    ? ` of ${maxDeposit.toFixed(2)} Honey.`
-                    : "."
-                }${
+                {`${maxDepositExceedingMessage}${
                   lastDailySupply
-                    ? ` The daily deposit limit will reset at ${format(
+                    ? `The daily deposit limit will reset at ${format(
                         new Date((Number(lastDailySupply) + 86400) * 1000),
                         "MM/dd/yy, h:mma",
                       )}.`
                     : ""
-                }`}
+                }
+                `}
               </Alert>
             )}
           </TabsContent>
