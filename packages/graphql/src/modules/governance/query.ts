@@ -67,6 +67,21 @@ export const getProposal = gql`
   query ProposalDetails($input: ProposalInput!, $votesInput: VotesInput!) {
     proposal(input: $input) {
       id
+      onchainId
+      status
+      originalId
+      createdAt
+      creator {
+        name
+        picture
+        address
+      }
+      voteStats {
+        votesCount
+        percent
+        type
+        votersCount
+      }
       metadata {
         description
       }
@@ -148,6 +163,7 @@ export const getProposal = gql`
             address
             twitter
           }
+          amount
           reason
           type
           block {

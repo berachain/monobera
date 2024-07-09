@@ -1,17 +1,28 @@
 import useSWR from "swr";
+
 import { getProposalDetails } from "~/actions/governance/getProposalDetails";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
-import { DefaultHookOptions, DefaultHookReturnType, Proposal } from "~/types";
+import {
+  DefaultHookOptions,
+  DefaultHookReturnType,
+  Proposal,
+  Vote,
+} from "~/types";
+
+export interface UsePollProposalResponse extends DefaultHookReturnType<any> {
+  proposal: Proposal | undefined;
+  votes: Vote[];
+}
 
 export const usePollProposal = (
   proposalId: string,
   options?: DefaultHookOptions,
-): DefaultHookReturnType<Proposal[] | undefined> => {
+): UsePollProposalResponse => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
   const QUERY_KEY = ["usePollProposal", proposalId];
-  const swrResponse = useSWR<Proposal[] | undefined, any, typeof QUERY_KEY>(
+  const swrResponse = useSWR<any, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => await getProposalDetails({ proposalId, config }),
     {
@@ -19,6 +30,12 @@ export const usePollProposal = (
       refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
-
-  return { ...swrResponse, refresh: () => swrResponse?.mutate?.() };
+  const proposal = swrResponse.data?.proposal;
+  const votes = swrResponse.data?.votes.nodes ?? [];
+  return {
+    ...swrResponse,
+    proposal,
+    votes,
+    refresh: () => swrResponse?.mutate?.(),
+  };
 };

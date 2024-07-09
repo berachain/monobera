@@ -16,7 +16,7 @@ import {
 } from "./create/useCreateProposal";
 import { StatusEnum, VoteColorMap } from "./types";
 
-export function getProposalType(proposal: any | undefined) {
+export function getProposalType(proposal: Proposal) {
   // if (proposal) {
   //   if (proposal.messages.length === 0) {
   //     return "text-proposal";

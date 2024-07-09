@@ -110,7 +110,7 @@ export default function GovernanceByStatus({
               proposal={proposal}
               key={`proposal${index}`}
               className="hover:cursor-pointer"
-              type={getProposalType(proposal)}
+              // type={getProposalType(proposal)}
               onClick={() => router.push(`/governance/proposal/${proposal.id}`)}
             />
           ))}

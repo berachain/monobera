@@ -1,13 +1,11 @@
 "use client";
 
 import React from "react";
-import { Proposal, truncateHash } from "@bera/berajs";
+import { Proposal } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
-import Identicon from "@bera/shared-ui/src/identicon";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Skeleton } from "@bera/ui/skeleton";
-import { getAddress } from "viem";
 
 import {
   getBadgeColor,
@@ -16,22 +14,19 @@ import {
   getTotalVotes,
   getVotesDataList,
 } from "../helper";
-import { ProgressBarChart } from "./progress-bar-chart";
 import { StatusEnum } from "../types";
-
-type ProposalCard = {
-  proposal: Proposal;
-  type?: string;
-  onClick?: () => void;
-  className?: string;
-};
+import { VoteInfo } from "./Voter";
+import { ProgressBarChart } from "./progress-bar-chart";
 
 export function ProposalCard({
-  proposal,
-  type,
-  onClick,
   className,
-}: ProposalCard) {
+  proposal,
+  onClick,
+}: {
+  className?: string;
+  proposal: Proposal;
+  onClick?: () => void;
+}) {
   const title = (proposal.metadata.description.split("\n")[0] ?? "# ").slice(2);
   const subTitle = proposal.metadata.description.split("\n")[1] ?? "";
   return (
@@ -45,7 +40,7 @@ export function ProposalCard({
       <div className="flex h-fit flex-row flex-wrap items-center gap-1">
         <Badge
           variant={getBadgeColor(proposal.status as StatusEnum)}
-          className="border-none px-2 py-1 text-xs capitalize font-medium"
+          className="border-none px-2 py-1 text-xs font-medium capitalize"
         >
           {proposal.status}
         </Badge>
@@ -71,9 +66,8 @@ export function ProposalCard({
       />
       <div className="mt-3 flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
-          {" "}
-          <Identicon account={getAddress(proposal.creator.address)} />
-          Submitted by {truncateHash(proposal.creator.address, 6, 4)}
+          Submitted by
+          <VoteInfo voter={proposal.creator} />
         </div>
         <div className=" text-sm font-bold">
           <FormattedNumber

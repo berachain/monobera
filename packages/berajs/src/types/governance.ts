@@ -31,3 +31,18 @@ export type Proposal = {
     votesCount: string;
   }[];
 };
+
+export type Vote = {
+  block: { timestamp: string };
+  reason: string;
+  type: "for" | "against" | "abstain";
+  voter: Voter;
+  amount: string;
+};
+
+export type Voter = {
+  address: Address;
+  name: string;
+  picture: string | null;
+  twitter?: string;
+};

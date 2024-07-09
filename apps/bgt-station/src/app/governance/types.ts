@@ -53,12 +53,14 @@ export const VoteColorMap = {
   default: "#57534e",
 };
 
-export const voteTypes: VOTE_TYPE[] = ["yes", "no", "veto", "abstain"];
+export enum VoteEnum {
+  for = "yes",
+  against = "no",
+  abstain = "abstain",
+}
 
-export const voterTypes: VOTER_TYPE[] = ["validators", "users"];
+export const voteTypes: VOTE_TYPE[] = ["yes", "no", "abstain"];
 
-export type VOTE_TYPE = "yes" | "no" | "veto" | "abstain";
-
-export type VOTER_TYPE = "validators" | "users";
+export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";

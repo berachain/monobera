@@ -8,7 +8,7 @@ export const getProposalDetails = async ({
 }: {
   proposalId: string;
   config: BeraConfig;
-}): Promise<Proposal[]> => {
+}): Promise<any> => {
   try {
     if (!config.subgraphs?.governanceSubgraph) {
       throw new Error("governance subgraph uri is not found in config");
@@ -45,7 +45,7 @@ export const getProposalDetails = async ({
       }),
     });
     const data = await response.json();
-    return data.data.proposals.nodes;
+    return data.data;
   } catch (e) {
     console.log("getProposalDetails:", e);
     return [];

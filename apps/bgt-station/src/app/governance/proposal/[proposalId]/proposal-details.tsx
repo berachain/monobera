@@ -36,37 +36,19 @@ export default function ProposalDetails({
 }: {
   proposalId: string;
 }) {
-  // const { read, tokenInformation } = useTokenInformation({
-  //   config: beraJsConfig,
+  const { isLoading, proposal, votes } = usePollProposal(proposalId);
+
+  // console.log("data", isLoading, proposal);
+  console.log("votes", votes);
+  // const {
+  //   write,
+  //   ModalPortal,
+  //   isLoading: isTxnLoading,
+  // } = useTxn({
+  //   message: `Voting for proposal ${proposalId}`,
+  //   actionType: TransactionActionType.VOTE,
   // });
-
-  const { data, isLoading } = usePollProposal(proposalId);
-
-  const [proposalType, setProposalType] = useState<
-    | "text-proposal"
-    | "new-gauge-proposal"
-    | "enable-collateral-for-honey"
-    | "new-lend-market"
-    | undefined
-  >(undefined);
-
-  const globalTotal = undefined;
-  const userTotal = undefined;
-
-  const votes = undefined;
-  const normalizedTally = undefined;
-  const { open, setOpen, comment, setComment, selected, setSelected } =
-    useProposalDetails();
-
-  const {
-    write,
-    ModalPortal,
-    isLoading: isTxnLoading,
-  } = useTxn({
-    message: `Voting for proposal ${proposalId}`,
-    actionType: TransactionActionType.VOTE,
-  });
-  const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
+  // const payload = [BigInt(proposalId), Number(selected ?? 0), comment];
 
   // const votingPower = useMemo(() => {
   //   if (userTotal && globalTotal) {
@@ -105,18 +87,21 @@ export default function ProposalDetails({
 
   return (
     <div className="pb-16">
-      {ModalPortal}
-      {/* <div className="mx-auto h-fit w-full max-w-[830px]">
-        <div className="flex h-11 w-full justify-between hover:cursor-pointer">
-          <Link
-            href="/governance"
-            className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground"
-          >
-            <Icons.arrowLeft className="relative h-4 w-4" />
-            Governance
-          </Link>
-          <div className="flex items-center gap-3">
-            {true && (
+      {/* {ModalPortal} */}
+
+      {isLoading || !proposal || votes.length === 0 ? (
+        <>Loading</>
+      ) : (
+        <div className="mx-auto h-fit w-full max-w-[830px]">
+          <div className="flex h-11 w-full justify-between hover:cursor-pointer">
+            <Link
+              href="/governance"
+              className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground"
+            >
+              <Icons.arrowLeft className="relative h-4 w-4" />
+              Governance
+            </Link>
+            {/* <div className="flex items-center gap-3">
               <VoteDialog
                 open={open}
                 setOpen={setOpen}
@@ -136,15 +121,12 @@ export default function ProposalDetails({
                 isLoading={isTxnLoading}
                 isVotingPowerLoading={true}
               />
-            )}
+          </div> */}
           </div>
-        </div>
 
-        <div className="mt-4 rounded-[18px] shadow">
-          <ProposalCard proposal={proposal} type={proposalType} />
-        </div>
+          <ProposalCard proposal={proposal} className="mt-4 rounded-[18px]" />
 
-        <div className="mt-4 flex gap-4">
+          {/* <div className="mt-4 flex gap-4">
           <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
             <div className="text-2xl font-semibold leading-loose text-foreground">
               {normalizedTally !== undefined ? 0 : 0} BGT
@@ -160,9 +142,9 @@ export default function ProposalDetails({
             vetoPercentage={0}
             yesPercentage={0}
           />
-        </div>
+        </div> */}
 
-        {proposalType === "new-gauge-proposal" && (
+          {/* {proposalType === "new-gauge-proposal" && (
           <div className="mt-16">
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
               Gauge Details
@@ -187,9 +169,9 @@ export default function ProposalDetails({
               </div>
             </Card>
           </div>
-        )}
+        )} */}
 
-        {(proposalType === "enable-collateral-for-honey" ||
+          {/* {(proposalType === "enable-collateral-for-honey" ||
           proposalType === "new-lend-market") && (
           <div className="mt-16">
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
@@ -220,9 +202,9 @@ export default function ProposalDetails({
               </div>
             </Card>
           </div>
-        )}
+        )} */}
 
-        <div className="mt-16 flex h-fit w-full flex-col gap-8 sm:flex-row">
+          {/* <div className="mt-16 flex h-fit w-full flex-col gap-8 sm:flex-row">
           <div className="flex-1">
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
               Description
@@ -241,22 +223,23 @@ export default function ProposalDetails({
               </Card>
             </div>
           )}
-        </div>
+        </div> */}
 
-        <div className="mt-16">
+          {/* <div className="mt-16">
           <div className="h-7 text-lg font-semibold leading-7 text-foreground">
             Overview
           </div>
           <OverviewChart votes={[] as any} isLoading={true} />
-        </div>
+        </div> */}
 
-        <div className="mt-16 ">
-          <div className="mt-4 h-7 text-lg font-semibold leading-7 text-foreground">
-            Voters
+          <div className="mt-16 ">
+            <div className="mt-4 h-7 text-lg font-semibold leading-7 text-foreground">
+              Voters
+            </div>
+            <VoterTable votes={votes} isLoading={isLoading} />
           </div>
-          <VoterTable votes={[] as any} isLoading={true} />
         </div>
-      </div> */}
+      )}
     </div>
   );
 }
