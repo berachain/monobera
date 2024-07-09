@@ -1,38 +1,54 @@
 "use client";
 
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { usePollPositionsLiqFeePrices } from "@bera/berajs";
 import type { OpenTrade } from "@bera/proto/src";
-import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
+import { SimpleTable, useAsyncTable, usePrevious } from "@bera/shared-ui";
 import {
   TableState,
   type PaginationState,
+  type RowSelectionState,
   type Updater,
 } from "@tanstack/react-table";
 
 import { POSITIONS_SORTING_MAP } from "~/utils/constants";
 import { generateMarketOrders } from "~/utils/generateMarketOrders";
+import { CloseAllOrders } from "~/app/components/close-all-orders";
 import { ClosePositionModal } from "~/app/components/close-position-modal";
 import { generatePositionColumns } from "~/app/components/table-columns/positions";
 import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { TableContext } from "~/context/table-context";
+import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import type { IMarket } from "~/types/market";
-import type { IOpenTradeCalculated } from "~/types/order-history";
+import type { IOpenTrade, IOpenTradeCalculated } from "~/types/order-history";
 import { FilterableTableState } from "~/types/table";
 import { TotalAmount } from "../../components/total-amount";
 
 export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
   const { tableState, setTableState } = useContext(TableContext);
-  const { data, pagination, isLoading, isValidating } =
-    usePollOpenPositions(tableState);
+  const {
+    data,
+    pagination,
+    isLoading,
+    isValidating,
+    refresh: refetchPositions,
+  } = usePollOpenPositions(tableState);
   const { data: openPositionsLiqFeesData } = usePollPositionsLiqFeePrices(
     data?.result
       ? data.result.map((position: OpenTrade) => Number(position.index))
       : [],
   );
 
-  let openPositions = generateMarketOrders(data, markets);
+  const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
+
+  let openPositions = generateMarketOrders(data, markets) as IOpenTrade[];
   openPositions = openPositions.map((position, index) => {
     return {
       ...position,
@@ -58,6 +74,13 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
     false,
   );
 
+  const prevPositionLength = usePrevious(openPositions?.length ?? 0);
+  useEffect(() => {
+    if ((openPositions?.length ?? 0) !== prevPositionLength) {
+      setTableState((prev) => ({ ...prev, selection: {} }));
+    }
+  }, [tableState.tabType, openPositions, setTableState]);
+
   const handlePaginationChange = (updater: Updater<PaginationState>) => {
     setTableState((prev) => {
       const newPaginationState =
@@ -75,6 +98,14 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
           perPage: newPaginationState.pageSize,
         },
       };
+    });
+  };
+
+  const handleRowSelectionChange = (updater: Updater<RowSelectionState>) => {
+    setTableState((prev) => {
+      const newSelection =
+        typeof updater === "function" ? updater(prev.selection ?? {}) : updater;
+      return { ...prev, selection: { ...newSelection } };
     });
   };
 
@@ -124,9 +155,10 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
       : [],
     fetchData: fetchData,
     enablePagination: true,
-    enableRowSelection: false,
+    enableRowSelection: true,
     additionalTableProps: {
       state: {
+        rowSelection: tableState.selection,
         pagination: {
           pageIndex: (tableState.positions?.page ?? 1) - 1,
           pageSize: tableState.positions?.perPage ?? 10,
@@ -136,6 +168,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
       autoResetPageIndex: false,
       pageCount: pagination?.total_pages ?? 1,
       onPaginationChange: handlePaginationChange,
+      onRowSelectionChange: handleRowSelectionChange,
       meta: {
         loading: isLoading,
         loadingText: "Loading...",
@@ -158,14 +191,23 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
   );
 
   return (
-    <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 ">
-      <div className="flex w-full flex-col items-start justify-between gap-2 pl-2 md:flex-row">
+    <div className="mx-auto flex w-full max-w-[1200px] flex-col">
+      <div className="mb-4 flex w-full items-start justify-between gap-2 pl-2 md:flex-row">
         <div className="flex-shrink-0 text-2xl font-semibold leading-loose">
           Open Positions
           <div className="text-xs font-medium leading-tight text-muted-foreground">
             {" "}
             Breakdown of your Open Positions
           </div>
+        </div>
+        <div className="flex flex-grow-0 self-end">
+          <CloseAllOrders
+            tableState={tableState}
+            setTableState={setTableState}
+            orders={openPositions}
+            refetchMarketHistory={refetchMarketHistory}
+            refetchPositions={refetchPositions}
+          />
         </div>
       </div>
       <UpdatePositionModal
@@ -180,6 +222,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
       />
       <SimpleTable
         table={table}
+        showSelection={false}
         wrapperClassName="flex rounded-md"
         flexTable
         toolbarContent={totalAmount}
