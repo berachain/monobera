@@ -67,7 +67,6 @@ To run Bex for example, run `pnpm i && pnpm dev:dex`
 | `app/faucet`         | `Faucet` application code                      |
 | `app/ambassador`     | `Ambassador` application code                  |
 | `app/ecosystem`      | `Ecosystem` application code                   |
-| `app/validator-clue` | `Validator Clue` application code (deprecated) |
 
 #### Packages
 

@@ -5,9 +5,14 @@ import {
   tradingAbi,
   useBeraJs,
   usePollAllowance,
+  usePollWalletBalances,
   usePythUpdateFee,
 } from "@bera/berajs";
-import { honeyAddress } from "@bera/config";
+import {
+  honeyAddress,
+  tradingContractAddress,
+  storageContractAddress,
+} from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
 import {
   useOctTxn,
@@ -61,6 +66,7 @@ export function PlaceOrder({
     usePollOpenLimitOrders(tableState);
   const { multiRefresh: refreshMarketHistory } =
     usePollMarketOrders(tableState);
+  const { refresh: refreshBalance } = usePollWalletBalances();
   let warning = undefined;
 
   const slippage = useSlippage();
@@ -106,6 +112,7 @@ export function PlaceOrder({
           ? `Placing Limit Long Order ${form.assets}`
           : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
+      refreshBalance();
       refreshPositions();
       refreshOpenLimitOrders();
       refreshMarketHistory();
@@ -114,11 +121,6 @@ export function PlaceOrder({
 
   const { account } = useBeraJs();
 
-  const tradingContract = process.env
-    .NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address;
-
-  const storageContract = process.env
-    .NEXT_PUBLIC_STORAGE_CONTRACT_ADDRESS as Address;
   const posSize = useMemo(() => {
     const positionSize = BigNumber(safeAmount).times(
       BigNumber(form.leverage ?? "1"),
@@ -152,14 +154,14 @@ export function PlaceOrder({
     ];
 
     write({
-      address: tradingContract,
+      address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "openTrade",
       params: payload,
       value: pythUpdateFee,
     });
   }, [
-    tradingContract,
+    tradingContractAddress,
     tradingAbi,
     account,
     pythUpdateFee,
@@ -184,7 +186,7 @@ export function PlaceOrder({
   };
 
   const { data: allowance } = usePollAllowance({
-    spender: storageContract,
+    spender: storageContractAddress,
     token: honey,
   });
 
@@ -311,7 +313,7 @@ export function PlaceOrder({
         ) ? (
           <ApproveButton
             token={honey}
-            spender={storageContract}
+            spender={storageContractAddress}
             amount={parseUnits(safeAmount, 18)}
             disabled={
               isLoading ||
