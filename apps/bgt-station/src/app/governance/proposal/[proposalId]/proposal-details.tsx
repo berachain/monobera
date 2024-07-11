@@ -29,7 +29,6 @@ import { VoteCard } from "../../components/vote-card";
 import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
 import { getProposalType } from "../../helper";
-import { useProposalDetails } from "./useProposalDetails";
 
 export default function ProposalDetails({
   proposalId,
@@ -124,7 +123,7 @@ export default function ProposalDetails({
           </div> */}
           </div>
 
-          <ProposalCard proposal={proposal} className="mt-4 rounded-[18px]" />
+          <ProposalCard proposal={proposal} className="mt-4 rounded-[18px]" truncate={false}/>
 
           {/* <div className="mt-4 flex gap-4">
           <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
@@ -225,12 +224,12 @@ export default function ProposalDetails({
           )}
         </div> */}
 
-          {/* <div className="mt-16">
+          <div className="mt-16">
           <div className="h-7 text-lg font-semibold leading-7 text-foreground">
             Overview
           </div>
           <OverviewChart votes={[] as any} isLoading={true} />
-        </div> */}
+        </div>
 
           <div className="mt-16 ">
             <div className="mt-4 h-7 text-lg font-semibold leading-7 text-foreground">

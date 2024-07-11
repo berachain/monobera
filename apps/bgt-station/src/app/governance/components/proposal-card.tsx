@@ -19,16 +19,20 @@ import { VoteInfo } from "./Voter";
 import { ProgressBarChart } from "./progress-bar-chart";
 
 export function ProposalCard({
+  truncate = true,
   className,
   proposal,
   onClick,
 }: {
+  truncate?: boolean;
   className?: string;
   proposal: Proposal;
   onClick?: () => void;
 }) {
-  const title = (proposal.metadata.description.split("\n")[0] ?? "# ").slice(2);
-  const subTitle = proposal.metadata.description.split("\n")[1] ?? "";
+  const content = proposal.metadata.description.split("\n");
+  const title = (content[0] ?? "# ").slice(2);
+  const subTitle = content.slice(1).join("<br />");
+  console.log("subTitle", subTitle);
   return (
     <div
       className={cn(
@@ -50,11 +54,17 @@ export function ProposalCard({
       </div>
       <div>
         <div
-          className={"width-full truncate text-2xl font-semibold leading-tight"}
+          className={cn(
+            "width-full text-2xl font-semibold leading-tight",
+            truncate && "line-clamp-1",
+          )}
         >
           {title}
         </div>
-        <div className={"width-full line-clamp-2"}>{subTitle}</div>
+        <div
+          className={cn("width-full", truncate && "line-clamp-2")}
+          dangerouslySetInnerHTML={{ __html: subTitle }}
+        />
       </div>
       <ProgressBarChart
         className="mt-4"
