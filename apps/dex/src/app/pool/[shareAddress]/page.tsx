@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isAddress } from "viem";
+import { Address, isAddress } from "viem";
 
 import PoolPageContent from "../PoolPageContent";
 
@@ -11,7 +11,7 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export const revalidate = 5;
+export const dynamic = "force-dynamic";
 
 export default async function PoolPage({
   params,
@@ -22,7 +22,7 @@ export default async function PoolPage({
     if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    return <PoolPageContent shareAddress={params.shareAddress} />;
+    return <PoolPageContent shareAddress={params.shareAddress as Address} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();

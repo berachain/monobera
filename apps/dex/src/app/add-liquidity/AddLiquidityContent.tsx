@@ -39,6 +39,7 @@ import { SettingsPopover } from "~/components/settings-popover";
 import { getBaseCost, getPoolUrl, getQuoteCost } from "../pools/fetchPools";
 import { useAddLiquidity } from "./useAddLiquidity";
 import { useSelectedPool } from "~/hooks/useSelectedPool";
+import { Skeleton } from "@bera/ui/skeleton";
 
 interface IAddLiquidityContent {
   shareAddress: Address;
@@ -301,19 +302,27 @@ export default function AddLiquidityContent({
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
-      <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px]">
-        <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+      <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px] flex flex-col">
+        {isLoading ? (
+          <Skeleton className="h-8 w-40 self-center" />
+        ) : (
+          <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+        )}
         <div className="flex w-full flex-row items-center justify-center rounded-lg p-4">
-          {pool?.tokens?.map((token, i) => {
-            return (
-              <TokenIcon
-                symbol={token.symbol}
-                address={token.address}
-                className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
-                key={token.address}
-              />
-            );
-          })}
+          {isLoading ? (
+            <Skeleton className="h-12 w-24" />
+          ) : (
+            pool?.tokens?.map((token, i) => {
+              return (
+                <TokenIcon
+                  symbol={token.symbol}
+                  address={token.address}
+                  className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
+                  key={token.address}
+                />
+              );
+            })
+          )}
         </div>
         <div
           onClick={() => router.push(getPoolUrl(pool))}

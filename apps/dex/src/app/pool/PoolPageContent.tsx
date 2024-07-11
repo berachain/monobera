@@ -111,6 +111,7 @@ enum Selection {
 
 const TokenView = ({
   tokens,
+  isLoading,
 }: {
   tokens: {
     address: string;
@@ -118,42 +119,54 @@ const TokenView = ({
     value: string | number;
     valueUSD?: string | number;
   }[];
+  isLoading: boolean;
 }) => {
   return (
     <>
       <div className="mb-4 text-sm font-medium">Tokens</div>
       <div>
-        {tokens?.map((token, index) => {
-          return (
-            <div
-              className="flex h-8 items-center justify-between"
-              key={`token-list-${index}-${token.address}-${token.value}`}
-            >
+        {isLoading ? (
+          <div>
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full mt-2" />
+          </div>
+        ) : (
+          tokens?.map((token, index) => {
+            return (
               <div
-                className="group flex cursor-pointer gap-1"
-                onClick={() => {
-                  if (token.address) {
-                    window.open(`${blockExplorerUrl}/address/${token.address}`);
-                  }
-                }}
+                className="flex h-8 items-center justify-between"
+                key={`token-list-${index}-${token.address}-${token.value}`}
               >
-                <TokenIcon address={token.address} symbol={token.symbol} />
-                <div className="ml-1 font-medium uppercase group-hover:underline">
-                  {token.address === beraTokenAddress ? "wbera" : token.symbol}
+                <div
+                  className="group flex cursor-pointer gap-1"
+                  onClick={() => {
+                    if (token.address) {
+                      window.open(
+                        `${blockExplorerUrl}/address/${token.address}`,
+                      );
+                    }
+                  }}
+                >
+                  <TokenIcon address={token.address} symbol={token.symbol} />
+                  <div className="ml-1 font-medium uppercase group-hover:underline">
+                    {token.address === beraTokenAddress
+                      ? "wbera"
+                      : token.symbol}
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-2">
-                <div className="font-medium">
-                  <FormattedNumber value={token.value} />
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  <FormattedNumber value={token.valueUSD ?? 0} symbol="USD" />
+                <div className="flex gap-2">
+                  <div className="font-medium">
+                    <FormattedNumber value={token.value} />
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    <FormattedNumber value={token.valueUSD ?? 0} symbol="USD" />
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </>
   );
@@ -243,11 +256,12 @@ export default function PoolPageContent({
 }: { shareAddress: Address }) {
   const { data: pool, isLoading: isPoolLoading } =
     useSelectedPool(shareAddress);
-  useEffect(() => {
-    if (!pool && !isLoading) {
-      notFound();
-    }
-  }, [pool, isPoolLoading]);
+
+  // useEffect(() => {
+  //   if (!pool && !isLoading) {
+  //     notFound();
+  //   }
+  // }, [pool, isPoolLoading]);
 
   const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
     pool,
@@ -367,18 +381,11 @@ export default function PoolPageContent({
     });
 
   const poolHistory = poolHistoryData;
-  const timeCreated = new Date(pool?.timeCreate ?? 0);
-
-  const params = useSearchParams();
-  const isMyPool = params.get("back") && params.get("back") === "my-pools";
+  const timeCreated = pool?.timeCreate;
 
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader
-        back={{
-          backURL: isMyPool ? "/pools?pool=userPools" : "/pools",
-          backTitle: isMyPool ? "My Pools" : "All Pools",
-        }}
         title={
           isPoolLoading ? (
             <Skeleton className="h-10 w-40" />
@@ -507,10 +514,15 @@ export default function PoolPageContent({
             <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
               Pool Liquidity
               <div className="text-2xl">
-                <FormattedNumber value={pool?.tvlUsd ?? 0} symbol="USD" />
+                {isLoading || !pool?.tvlUsd ? (
+                  <Skeleton className="h-10 w-20" />
+                ) : (
+                  <FormattedNumber value={pool?.tvlUsd ?? 0} symbol="USD" />
+                )}
               </div>
             </div>
             <TokenView
+              isLoading={isPoolLoading}
               tokens={
                 !pool
                   ? []
@@ -565,6 +577,7 @@ export default function PoolPageContent({
                     </div>
                     <div className="mt-4 lg:mt-8">
                       <TokenView
+                        isLoading={isPositionBreakdownLoading}
                         tokens={
                           !pool
                             ? []

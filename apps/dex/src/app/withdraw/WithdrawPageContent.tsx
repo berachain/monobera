@@ -36,6 +36,7 @@ import { getPoolUrl } from "../pools/fetchPools";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
 import { useSelectedPool } from "~/hooks/useSelectedPool";
 import { Address } from "viem";
+import { Skeleton } from "@bera/ui/skeleton";
 
 interface ITokenSummary {
   title: string;
@@ -53,26 +54,28 @@ const TokenSummary = ({
   quoteAmount,
   isLoading,
 }: ITokenSummary) => {
-  if (!baseToken || !quoteToken) return null; // TODO: loading state
   return (
     <div className="flex w-full flex-col items-center justify-center gap-3 rounded-lg bg-muted p-3">
       <p className="w-full text-left text-lg font-semibold">{title}</p>
       <div className="flex w-full flex-row items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Pooled {baseToken.symbol}
+          Pooled {isLoading ? "..." : baseToken?.symbol}
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
           {isLoading ? "..." : baseAmount}{" "}
-          <TokenIcon address={baseToken.address} symbol={baseToken.symbol} />
+          <TokenIcon address={baseToken?.address} symbol={baseToken?.symbol} />
         </div>
       </div>
       <div className="flex w-full flex-row items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Pooled {quoteToken.symbol}
+          Pooled {isLoading ? "..." : quoteToken?.symbol}
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
           {isLoading ? "..." : quoteAmount}{" "}
-          <TokenIcon address={quoteToken.address} symbol={quoteToken.symbol} />
+          <TokenIcon
+            address={quoteToken?.address}
+            symbol={quoteToken?.symbol}
+          />
         </div>{" "}
       </div>
     </div>
@@ -191,19 +194,27 @@ export default function WithdrawLiquidityContent({
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
-      <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px]">
-        <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+      <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px] flex flex-col">
+        {isLoading ? (
+          <Skeleton className="h-8 w-40 self-center" />
+        ) : (
+          <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+        )}
         <div className="flex w-full flex-row items-center justify-center rounded-lg p-4">
-          {pool?.tokens?.map((token, i) => {
-            return (
-              <TokenIcon
-                address={token.address}
-                symbol={token.symbol}
-                className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
-                key={token.address}
-              />
-            );
-          })}
+          {isLoading ? (
+            <Skeleton className="h-12 w-24" />
+          ) : (
+            pool?.tokens?.map((token, i) => {
+              return (
+                <TokenIcon
+                  address={token.address}
+                  symbol={token.symbol}
+                  className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
+                  key={token.address}
+                />
+              );
+            })
+          )}
         </div>
         <div
           onClick={() => router.push(getPoolUrl(pool))}
@@ -264,7 +275,7 @@ export default function WithdrawLiquidityContent({
           </div>
           <InfoBoxList>
             <InfoBoxListItem
-              title={`Removing ${baseToken?.symbol}`}
+              title={`Removing ${isLoading ? "..." : baseToken?.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
                   <FormattedNumber
@@ -280,7 +291,7 @@ export default function WithdrawLiquidityContent({
               }
             />
             <InfoBoxListItem
-              title={`Removing ${quoteToken?.symbol}`}
+              title={`Removing ${isLoading ? "..." : quoteToken?.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
                   <FormattedNumber

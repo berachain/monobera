@@ -409,15 +409,14 @@ export const getFilteredPools = gql`
       shareAddress {
         address
       }
-      poolDayDatas(orderBy: date orderDirection: desc, first: 1) {
-        id
-        tvlUsd
-        volumeUsd
-        date
-      }
       vault {
         id
         vaultAddress
+      }
+      latestPoolDayData {
+        tvlUsd
+        feesUsd
+        volumeUsd
       }
     }
   }
@@ -478,12 +477,11 @@ query UserPools($user: String) {
         shareAddress {
           address
         }
-        poolDayDatas(orderBy: date orderDirection: desc, first: 1) {
-        id
-        tvlUsd
-        volumeUsd
-        date
-      }
+        latestPoolDayData {
+          tvlUsd
+          feesUsd
+          volumeUsd
+        }
         vault {
           id
           vaultAddress
@@ -493,6 +491,7 @@ query UserPools($user: String) {
   }
 }
 `;
+
 export const getSelectedPool = gql`
 query GetPoolList($shareAddress: String) {
   pools(where: {shareAddress_: {address_contains: $shareAddress}}) {
@@ -529,11 +528,10 @@ query GetPoolList($shareAddress: String) {
     shareAddress {
       address
     }
-    poolDayDatas(orderBy: date, orderDirection: desc, first: 1) {
-      id
+    latestPoolDayData {
       tvlUsd
+      feesUsd
       volumeUsd
-      date
     }
     vault {
       id
@@ -578,6 +576,14 @@ query PoolDayData($poolId: String) {
     tvlUsd
     volumeUsd
     feesUsd
+  }
+}
+`;
+
+export const GetPoolCount = gql`
+query PoolCount {
+  bexGlobalData(id: "global") {
+    poolCount
   }
 }
 `;

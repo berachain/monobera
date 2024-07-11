@@ -52,7 +52,6 @@ export const usePoolTable = (sorting: any) => {
           const data = mapPoolsToPoolsV2(res.data.pools);
           return {
             data,
-            totalCount: 100, // TODO: add the total count here
           };
         } catch (e) {
           console.error(e);
@@ -68,16 +67,13 @@ export const usePoolTable = (sorting: any) => {
     });
 
   const [processedData, setProcessedData] = useState<PoolV2[]>([]);
-  const [totalCount, setTotalCount] = useState<number | undefined>();
 
   useEffect(() => {
     let concatData: PoolV2[] = [];
-    let responseTotalCount = 0;
 
     data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
       if (!page.data) return;
       concatData = concatData.concat(page.data);
-      responseTotalCount = page.totalCount;
     });
 
     if (account && publicClient && data) {
@@ -108,12 +104,9 @@ export const usePoolTable = (sorting: any) => {
               };
             },
           ) as PoolV2[];
-          const numFilteredItems = concatData?.length - validData?.length ?? 0;
-          setTotalCount(responseTotalCount - numFilteredItems);
           setProcessedData(newProcessedData);
         });
     } else {
-      setTotalCount(responseTotalCount);
       setProcessedData(concatData);
     }
   }, [data, account]);
@@ -124,13 +117,9 @@ export const usePoolTable = (sorting: any) => {
     }
   };
 
-  const isReachingEnd = totalCount ? processedData.length >= totalCount : true;
-
   return {
     data: processedData,
-    totalCount,
     fetchNextPage,
-    isReachingEnd,
     search,
     setSearch,
     isLoadingMore: isFetching || isFetchingNextPage,

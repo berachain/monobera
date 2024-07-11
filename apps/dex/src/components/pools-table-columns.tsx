@@ -83,7 +83,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     },
   },
   {
-    accessorKey: "fees",
+    accessorKey: "latestPoolDayData__feesUsd",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -99,13 +99,13 @@ export const columns: ColumnDef<PoolV2>[] = [
         </div>
       </div>
     ),
-    enableSorting: false,
+    enableSorting: true,
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
   },
   {
-    accessorKey: "volume",
+    accessorKey: "latestPoolDayData__volumeUsd",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -121,7 +121,7 @@ export const columns: ColumnDef<PoolV2>[] = [
         </div>
       </div>
     ),
-    enableSorting: false,
+    enableSorting: true,
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },

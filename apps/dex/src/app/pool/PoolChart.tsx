@@ -62,13 +62,13 @@ const Options = {
           if (label) {
             label += ": ";
           }
-          if (context.parsed.y !== null && context.parsed.y >= 0.01) {
+          if (context.parsed.y !== null && Number(context.parsed.y) >= 0.01) {
             label += new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "USD",
             }).format(context.parsed.y);
           }
-          if (context.parsed.y !== null && context.parsed.y < 0.01) {
+          if (context.parsed.y !== null && Number(context.parsed.y) < 0.01) {
             label = "<$0.01";
           }
           return label;
@@ -174,16 +174,16 @@ const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
   return dayStartTimestamp;
 };
 
-function beginningOfDayTimestampGMT(date: Date): Date {
-  // Create a new date object for the target date at the beginning of the day (00:00:00) in GMT
-  const targetYear = date.getUTCFullYear();
-  const targetMonth = date.getUTCMonth();
-  const targetDay = date.getUTCDate();
-  const beginningOfDay = new Date(Date.UTC(targetYear, targetMonth, targetDay));
-  // Convert to Unix timestamp (in seconds)
-  const timestamp = Math.floor(beginningOfDay.getTime() / 1000);
-  return new Date(timestamp * 1000);
-}
+// function beginningOfDayTimestampGMT(date: Date): Date {
+//   // Create a new date object for the target date at the beginning of the day (00:00:00) in GMT
+//   const targetYear = date.getUTCFullYear();
+//   const targetMonth = date.getUTCMonth();
+//   const targetDay = date.getUTCDate();
+//   const beginningOfDay = new Date(Date.UTC(targetYear, targetMonth, targetDay));
+//   // Convert to Unix timestamp (in seconds)
+//   const timestamp = Math.floor(beginningOfDay.getTime() / 1000);
+//   return new Date(timestamp * 1000);
+// }
 
 export const PoolChart = ({
   pool,
@@ -196,17 +196,17 @@ export const PoolChart = ({
   currentTvl: number | undefined;
   historicalData: PoolDayData[] | undefined;
   isLoading: boolean;
-  timeCreated?: Date | null;
+  timeCreated?: number | undefined;
 }) => {
   const quarterlyDayStartTimes: number[] = [];
   for (let i = 0; i < 90; i++) {
     const dayStartTimestamp = getDayStartTimestampDaysAgo(i);
-    const startOfCreationDay =
-      timeCreated && beginningOfDayTimestampGMT(timeCreated!);
+    const startOfCreationDay = timeCreated;
+
     if (
       timeCreated &&
       startOfCreationDay &&
-      new Date(dayStartTimestamp * 1000) < startOfCreationDay
+      dayStartTimestamp < startOfCreationDay
     ) {
       break;
     }
@@ -225,8 +225,6 @@ export const PoolChart = ({
   let latestTvlSeen = 0;
   const completeDailyData: any[] = quarterlyDayStartTimes.map(
     (dayStartTimestamp: number, i) => {
-      console.log("dayStartTimestamp", dayStartTimestamp);
-      console.log("historicalData", historicalData);
       const poolData: PoolDayData | undefined = historicalData?.find(
         (data) => data.date === dayStartTimestamp,
       );
