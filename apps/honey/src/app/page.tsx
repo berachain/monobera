@@ -1,30 +1,34 @@
-import { type Metadata } from "next";
+"use client";
+
+import { Suspense, useEffect, useState } from "react";
 import Image from "next/image";
-import { cloudinaryUrl, honeyName } from "@bera/config";
+import { useSearchParams } from "next/navigation";
+import { cloudinaryUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 
-import { getMetaTitle } from "@bera/shared-ui";
 import Data from "~/components/data";
 import { HoneyChart } from "~/components/honey-chart";
 import HoneyPage from "~/components/honey-page";
 import HoneyTransactionsTable from "~/components/honey-transactions-table";
+import { LoadingBee } from "~/components/loadingBee";
 import ModeSwitch from "~/components/mode-switch";
 
-export const metadata: Metadata = {
-  title: getMetaTitle("Honey", honeyName),
-  description: "Mint & Redeem Honey",
-};
+export default function Page() {
+  return (
+    <Suspense fallback={<LoadingBee />}>
+      <Content />
+    </Suspense>
+  );
+}
 
-export const revalidate = 10;
-
-export default function Home({
-  searchParams: { mode },
-}: {
-  searchParams: {
-    mode: "arcade" | "pro";
-  };
-}) {
-  const arcade = mode === "arcade";
+const Content = () => {
+  const [arcade, setArcade] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const mode = searchParams.get("mode");
+    if (mode === "arcade") setArcade(true);
+    else setArcade(false);
+  }, [searchParams]);
   return (
     <div
       className={cn(
@@ -73,4 +77,4 @@ export default function Home({
       </div>
     </div>
   );
-}
+};
