@@ -34,6 +34,19 @@ const config = {
   },
   output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
   trailingSlash: true,
+  headers: async () => {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(

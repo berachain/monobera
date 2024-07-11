@@ -5,6 +5,7 @@ import {
   tradingAbi,
   usePythUpdateFee,
 } from "@bera/berajs";
+import { tradingContractAddress } from "@bera/config";
 import { usePrevious } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
@@ -113,7 +114,7 @@ export function UpdateLimitOrderModal({
   const handleUpdateLimitOrder = useCallback(async () => {
     if (openOrder === undefined) return;
     await write({
-      address: process.env.NEXT_PUBLIC_TRADING_CONTRACT_ADDRESS as Address,
+      address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "updateOpenLimitOrder",
       params: [
