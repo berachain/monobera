@@ -9,6 +9,11 @@ export enum StatusEnum {
   EXECUTED = "executed",
 }
 
+export enum ProposalEnum {
+  TEXT = "text",
+  FRIENDS_OF_CHEF = "friends-of-chef",
+}
+
 export enum OrderByEnum {
   MOST_RECENT = "most-recent",
   OLDEST = "oldest",
@@ -33,7 +38,6 @@ export type ParameterChangeLine = {
 export type ProposalVotes = {
   yes: number;
   no: number;
-  veto: number;
   abstain: number;
 };
 

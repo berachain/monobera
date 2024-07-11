@@ -128,6 +128,7 @@ const getData = (data: HoneyEntry[], arcade: boolean) => {
         borderRadius: 100,
         borderSkipped: false,
         maxBarThickness: 20,
+        minBarLength: 2,
       },
     ],
   };

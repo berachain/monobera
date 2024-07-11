@@ -140,6 +140,8 @@ export const getProposal = gql`
         id
         chainId
         slug
+        quorum
+        timelockId
         organization {
           metadata {
             description

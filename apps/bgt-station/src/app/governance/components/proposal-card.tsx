@@ -89,8 +89,9 @@ export function ProposalCard({
           <FormattedNumber
             value={getTotalVotes(proposal)}
             className="text-warning-foreground"
+            symbol="BGT"
           />{" "}
-          votes
+          voted
         </div>
       </div>
     </div>

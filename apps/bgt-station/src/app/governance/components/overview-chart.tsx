@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
-import { formatter, truncateHash } from "@bera/berajs";
-import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
+import { Vote, formatter } from "@bera/berajs";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card } from "@bera/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { formatEther } from "viem";
 
-import { VoteColorMap } from "../types";
+import { VoteColorMap, VoteEnum } from "../types";
+import { number } from "yargs";
 
 const Options = {
   responsive: true,
@@ -17,11 +18,6 @@ const Options = {
     y: {
       display: false,
     },
-    // xAxis: [
-    //   {
-    //     barThickness: 12,
-    //   },
-    // ],
   },
   plugins: {
     legend: {
@@ -31,7 +27,6 @@ const Options = {
       display: false,
       text: "Bera Chart",
     },
-
     tooltip: {
       displayColors: false,
       position: "nearest",
@@ -62,50 +57,60 @@ const Options = {
   },
 };
 
-const getChartData = (data: any[]) => {
+const getChartData = (data: Vote[]) => {
   return {
-    labels: data.map(
-      (da, _) =>
-        `${formatter.format(da.delegation)} BGT  ${truncateHash(da.voter)}`,
+    labels: data.map( //@ts-ignore
+      (da, _) => `${formatter.format(formatEther(BigInt(da.amount)))} BGT `,
     ),
     datasets: [
       {
-        data: data.map((d) => d.delegation),
+        data: data.map((d) => Number(d.amount)),
         labelColor: false,
-        backgroundColor: data.map((d) => (VoteColorMap as any)[d.option]),
-        borderColor: data.map((d) => (VoteColorMap as any)[d.option]),
+        backgroundColor: data.map(
+          (d) =>
+            VoteColorMap[
+              VoteEnum[
+                d.type as keyof typeof VoteEnum
+              ] as keyof typeof VoteColorMap
+            ],
+        ),
+        borderColor: data.map(
+          (d) =>
+            VoteColorMap[
+              VoteEnum[
+                d.type as keyof typeof VoteEnum
+              ] as keyof typeof VoteColorMap
+            ],
+        ),
         tension: 0.4,
-        borderRadius: 100,
+        borderRadius: 8,
         borderSkipped: false,
+        maxBarThickness: 20,
+        minBarLength: 2,
       },
     ],
   };
 };
 
-const voteTypes: Array<any> = ["all", "yes", "no", "veto", "abstain"];
+const voteTypes: Array<any> = ["all", "yes", "no", "abstain"];
 
-const helperMap = {
-  yes: VoteOption.VOTE_OPTION_YES,
-  no: VoteOption.VOTE_OPTION_NO,
-  veto: VoteOption.VOTE_OPTION_NO_WITH_VETO,
-  abstain: VoteOption.VOTE_OPTION_ABSTAIN,
-};
 export function OverviewChart({
   votes,
   isLoading,
 }: {
-  votes: any[];
+  votes: Vote[];
   isLoading: boolean;
 }) {
-  const [voteType, setVoteType] = React.useState<any>("all");
+  console.log(votes);
 
+  const [voteType, setVoteType] = React.useState<any>("all");
   const chartData = useMemo(
     () =>
       getChartData(
         votes?.filter((data) =>
           voteType === "all"
             ? true
-            : data.option === (helperMap as any)[voteType],
+            : VoteEnum[data.type as keyof typeof VoteEnum] === voteType,
         ),
       ),
     [voteType, votes],
@@ -129,10 +134,11 @@ export function OverviewChart({
       </Tabs>
 
       <div className="mt-[50px] h-[152px] w-full">
-        {!isLoading && (
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : (
           <BeraChart data={chartData} options={Options as any} type="bar" />
         )}
-        {isLoading && <p>Loading...</p>}
       </div>
     </Card>
   );

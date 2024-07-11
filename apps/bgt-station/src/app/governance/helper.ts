@@ -1,19 +1,6 @@
-import { Proposal, truncateHash } from "@bera/berajs";
-import Identicon from "@bera/shared-ui/src/identicon";
-import {
-  formatUnixTimestamp,
-  timeDifferenceFromNow,
-} from "@bera/shared-ui/src/utils/times";
-import { Badge } from "@bera/ui/badge";
-import BigNumber from "bignumber.js";
-import { getAddress } from "viem";
+import { Proposal } from "@bera/berajs";
+import { formatEther } from "viem";
 
-import { ProgressBarChart } from "./components/progress-bar-chart";
-import {
-  updateFriendsOfTheChefTypeUrl,
-  updateHoneyCollateralTypeUrl,
-  updateLendMarkeyTypeUrl,
-} from "./create/useCreateProposal";
 import { StatusEnum, VoteColorMap } from "./types";
 
 export function getProposalType(proposal: Proposal) {
@@ -81,9 +68,11 @@ export const getVotesDataList = (proposal: Proposal) => {
 };
 
 export const getTotalVotes = (proposal: Proposal) =>
-  proposal.voteStats.reduce(
-    (acc: BigNumber, curr: any) => acc.plus(BigNumber(curr.votesCount)),
-    BigNumber(0),
+  formatEther(
+    proposal.voteStats.reduce(
+      (acc: bigint, curr: any) => acc + BigInt(curr.votesCount),
+      0n,
+    ),
   );
 
 export const getTotalVoters = (proposal: Proposal) =>
