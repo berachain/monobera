@@ -1,26 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  GOVERNANCE_PRECOMPILE_ABI,
-  TransactionActionType,
-  truncateHash,
-  usePollDenom,
-  usePollProposal,
-} from "@bera/berajs";
-import {
-  beraTokenAddress,
-  blockExplorerUrl,
-  governanceAddress,
-} from "@bera/config";
-import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1beta1/gov";
-import { FormattedNumber, TokenIcon, Tooltip, useTxn } from "@bera/shared-ui";
-import { Badge } from "@bera/ui/badge";
+import { usePollProposal } from "@bera/berajs";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
-import { Address, decodeFunctionData } from "viem";
 
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
@@ -36,12 +20,11 @@ export default function ProposalDetails({
   proposalId: string;
 }) {
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
-  console.log(proposal);
   return (
     <div className="pb-16">
       {/* {ModalPortal} */}
 
-      {isLoading || !proposal || votes.length === 0 ? (
+      {isLoading || !proposal ? (
         <>Loading</>
       ) : (
         <div className="mx-auto h-fit w-full max-w-[830px]">
