@@ -59,7 +59,8 @@ const Options = {
 
 const getChartData = (data: Vote[]) => {
   return {
-    labels: data.map( //@ts-ignore
+    labels: data.map(
+      //@ts-ignore
       (da, _) => `${formatter.format(formatEther(BigInt(da.amount)))} BGT `,
     ),
     datasets: [
