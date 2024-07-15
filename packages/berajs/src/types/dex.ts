@@ -9,6 +9,8 @@ export type Token = {
   decimals: number;
   symbol: string;
   name: string;
+  usdValue?: string;
+  beraValue?: string;
 };
 
 export interface BalanceToken extends Token {
@@ -38,9 +40,9 @@ export interface AddLiquidityRequest {
 export interface WithdrawLiquidityRequest {
   slippage: number;
   poolPrice: number;
-  baseToken: Token;
-  quoteToken: Token;
-  poolIdx: number;
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
+  poolIdx: number | undefined;
   percentRemoval: number;
   seeds: string;
 }
@@ -56,22 +58,15 @@ export interface PoolV2 {
   poolName: string;
   tokens: Token[];
   tvlUsd: number;
-  volumeUsd: number;
   feeRate: number;
-  feesUsd: number;
-  baseFees: number;
-  quoteFees: number;
-  baseVolume: number;
-  quoteVolume: number;
   baseTokens: string;
   quoteTokens: string;
   volume24h: number;
   fees24h: number;
-  baseTokenHoneyTvl: number;
-  quoteTokenHoneyTvl: number;
   totalApy: number;
-  bgtApy: number;
+  bgtApy: string;
   shareAddress: string;
+  vaultAddress?: string;
   isDeposited?: boolean;
 }
 
@@ -96,9 +91,9 @@ export interface ISwaps {
   swapOutAmount: number;
   transactionHash: string;
   time: number;
-  estimatedHoneyValue?: number;
-  baseAssetHoneyPrice: string;
-  quoteAssetHoneyPrice: string;
+  estimatedUsdValue?: number;
+  baseAssetUsdPrice: string;
+  quoteAssetUsdPrice: string;
 }
 
 export interface IProvision {
@@ -108,9 +103,9 @@ export interface IProvision {
   changeType: "mint" | "burn";
   transactionHash: string;
   time: number;
-  estimatedHoneyValue?: number;
-  baseAssetHoneyPrice: string;
-  quoteAssetHoneyPrice: string;
+  estimatedUsdValue?: number;
+  baseAssetUsdPrice: string;
+  quoteAssetUsdPrice: string;
 }
 
 export interface IUserPool extends PoolV2 {

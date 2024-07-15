@@ -2,15 +2,14 @@ import { CrocPoolView, getBeraLpAddress } from "@bera/beracrocswap";
 import { CrocContext, connectCroc } from "@bera/beracrocswap/dist/context";
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
 import BigNumber from "bignumber.js";
-import { PublicClient, erc20Abi, getAddress } from "viem";
+import { PublicClient, erc20Abi } from "viem";
 
 import { clientToProvider } from "~/hooks/useEthersProvider";
 import { IUserPosition, PoolV2 } from "~/types";
 import { BeraConfig } from "~/types/global";
-import { getTokenHoneyPrices } from "../honey";
 
 interface GetPoolUserPositionProps_Args {
-  pool: PoolV2;
+  pool: PoolV2 | undefined;
   account: `0x${string}`;
 }
 
@@ -30,10 +29,8 @@ export const getPoolUserPosition = async ({
     return undefined;
   }
   try {
-    const prices = getTokenHoneyPrices({
-      tokenAddresses: [pool.base, pool.quote],
-      config,
-    });
+    const baseTokenPrice = pool.baseInfo.usdValue;
+    const quoteTokenPrice = pool.quoteInfo.usdValue;
 
     const lpBalanceCall = publicClient.readContract({
       address: getBeraLpAddress(pool.base, pool.quote) as any,
@@ -42,10 +39,7 @@ export const getPoolUserPosition = async ({
       args: [account],
     });
 
-    const [tokenHoneyPrices, lpBalance] = await Promise.all([
-      prices,
-      lpBalanceCall,
-    ]);
+    const [lpBalance] = await Promise.all([lpBalanceCall]);
 
     const provider = clientToProvider(publicClient);
     const crocContext: Promise<CrocContext> = connectCroc(provider);
@@ -89,22 +83,14 @@ export const getPoolUserPosition = async ({
       ? "0"
       : quoteAmount.div(10 ** quoteDecimals).toString();
 
-    const estimatedHoneyValue = tokenHoneyPrices
-      ? Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
-          Number(formattedBaseAmount) +
-        Number(tokenHoneyPrices[getAddress(pool.quote)] ?? 0) *
-          Number(formattedQuoteAmount)
-      : 0;
+    const estimatedHoneyValue =
+      Number(baseTokenPrice) * Number(formattedBaseAmount) +
+      Number(quoteTokenPrice) * Number(formattedQuoteAmount);
 
-    const baseHoneyValue = tokenHoneyPrices
-      ? Number(tokenHoneyPrices[getAddress(pool.base)] ?? 0) *
-        Number(formattedBaseAmount)
-      : 0;
+    const baseHoneyValue = Number(baseTokenPrice) * Number(formattedBaseAmount);
 
-    const quoteHoneyValue = tokenHoneyPrices
-      ? Number(tokenHoneyPrices[getAddress(pool.quote)] ?? 0) *
-        Number(formattedQuoteAmount)
-      : 0;
+    const quoteHoneyValue =
+      Number(quoteTokenPrice) * Number(formattedQuoteAmount);
 
     const userPosition: IUserPosition = {
       baseAmount,

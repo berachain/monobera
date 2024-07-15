@@ -1,21 +1,17 @@
+"use client";
 import { ReactNode } from "react";
-import Link from "next/link";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
+import { useRouter } from "next/navigation";
 
 export const PoolHeader = ({
-  back,
   title,
   subtitles,
   actions,
   center,
   className,
 }: {
-  back?: {
-    backURL: string;
-    backTitle: string;
-  };
   title: ReactNode;
   subtitles: {
     title: string;
@@ -28,6 +24,7 @@ export const PoolHeader = ({
   center?: boolean;
   className?: string;
 }) => {
+  const router = useRouter();
   return (
     <div
       className={cn(
@@ -41,18 +38,15 @@ export const PoolHeader = ({
           !center && "md:items-start",
         )}
       >
-        {back && (
-          <Link href={back.backURL} target="_self">
-            <Button
-              variant={"ghost"}
-              size="sm"
-              className="flex items-center gap-1"
-            >
-              <Icons.arrowLeft className="h-4 w-4" />
-              <div className="text-sm font-medium"> {back.backTitle}</div>
-            </Button>
-          </Link>
-        )}
+        <Button
+          variant={"ghost"}
+          size="sm"
+          className="flex items-center gap-1"
+          onClick={() => router.back()}
+        >
+          <Icons.arrowLeft className="h-4 w-4" />
+          <div className="text-sm font-medium">Go Back</div>
+        </Button>
         <span
           className={cn(
             "flex w-full justify-center gap-4 text-center text-2xl font-semibold md:text-left",

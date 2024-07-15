@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { formatUsd, type PoolV2 } from "@bera/berajs";
-import { type PoolDayDataV2 } from "@bera/graphql";
 import { Dropdown, SSRSpinner } from "@bera/shared-ui";
 import { BeraChart } from "@bera/ui/bera-chart";
 import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { BigNumber } from "bignumber.js";
-import { startOfDay } from "date-fns";
-
-import { getSafeNumber } from "~/utils/getSafeNumber";
+import { PoolDayData } from "@bera/berajs/actions";
 
 const Options = {
   responsive: true,
@@ -66,13 +62,13 @@ const Options = {
           if (label) {
             label += ": ";
           }
-          if (context.parsed.y !== null && context.parsed.y >= 0.01) {
+          if (context.parsed.y !== null && Number(context.parsed.y) >= 0.01) {
             label += new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "USD",
             }).format(context.parsed.y);
           }
-          if (context.parsed.y !== null && context.parsed.y < 0.01) {
+          if (context.parsed.y !== null && Number(context.parsed.y) < 0.01) {
             label = "<$0.01";
           }
           return label;
@@ -147,33 +143,6 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
   return barLineData;
 };
 
-// function calculatePercentageDifference(numbers: number[]): number {
-//   if (numbers.length < 2) {
-//     return 0; // Not enough numbers to calculate the difference
-//   }
-
-//   let firstNumberIndex = 0;
-//   while (firstNumberIndex < numbers.length && numbers[firstNumberIndex] === 0) {
-//     firstNumberIndex++;
-//   }
-
-//   if (firstNumberIndex >= numbers.length) {
-//     return 0; // All numbers are zero, cannot calculate percentage difference
-//   }
-
-//   const firstNumber = numbers[firstNumberIndex] as number;
-//   const lastNumber = numbers[numbers.length - 1] as number;
-
-//   const difference = lastNumber - firstNumber;
-//   const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
-
-//   return percentageDifference;
-// }
-const formatHoney = (amountInHoney: number) => {
-  const bnAmount = new BigNumber(amountInHoney.toString());
-  return getSafeNumber(bnAmount.div(10 ** 18).toString());
-};
-
 const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
   const currentTimestamp: number = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
   const timestampDaysAgo: number = currentTimestamp - daysAgo * 86400; // Subtract the specified number of days in seconds
@@ -182,17 +151,6 @@ const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
   return dayStartTimestamp;
 };
 
-function beginningOfDayTimestampGMT(date: Date): Date {
-  // Create a new date object for the target date at the beginning of the day (00:00:00) in GMT
-  const targetYear = date.getUTCFullYear();
-  const targetMonth = date.getUTCMonth();
-  const targetDay = date.getUTCDate();
-  const beginningOfDay = new Date(Date.UTC(targetYear, targetMonth, targetDay));
-  // Convert to Unix timestamp (in seconds)
-  const timestamp = Math.floor(beginningOfDay.getTime() / 1000);
-  return new Date(timestamp * 1000);
-}
-
 export const PoolChart = ({
   pool,
   currentTvl,
@@ -200,21 +158,21 @@ export const PoolChart = ({
   isLoading,
   timeCreated,
 }: {
-  pool: PoolV2;
-  currentTvl: number;
-  historicalData: PoolDayDataV2[] | undefined;
+  pool: PoolV2 | undefined;
+  currentTvl: number | undefined;
+  historicalData: PoolDayData[] | undefined;
   isLoading: boolean;
-  timeCreated?: Date | null;
+  timeCreated?: number | undefined;
 }) => {
   const quarterlyDayStartTimes: number[] = [];
   for (let i = 0; i < 90; i++) {
     const dayStartTimestamp = getDayStartTimestampDaysAgo(i);
-    const startOfCreationDay =
-      timeCreated && beginningOfDayTimestampGMT(timeCreated!);
+    const startOfCreationDay = timeCreated;
+
     if (
       timeCreated &&
       startOfCreationDay &&
-      new Date(dayStartTimestamp * 1000) < startOfCreationDay
+      dayStartTimestamp < startOfCreationDay
     ) {
       break;
     }
@@ -233,8 +191,8 @@ export const PoolChart = ({
   let latestTvlSeen = 0;
   const completeDailyData: any[] = quarterlyDayStartTimes.map(
     (dayStartTimestamp: number, i) => {
-      const poolData: PoolDayDataV2 | undefined = historicalData?.find(
-        (data) => data.day === dayStartTimestamp,
+      const poolData: PoolDayData | undefined = historicalData?.find(
+        (data) => data.date === dayStartTimestamp,
       );
 
       if (!poolData) {
@@ -258,21 +216,21 @@ export const PoolChart = ({
       }
 
       const formattedPoolData = {
-        date: poolData.day,
+        date: poolData.date,
         volumeUsd: `${
-          formatHoney(poolData?.volume24HInHoney) < 0.01
+          parseFloat(poolData?.volumeUsd) < 0.01
             ? "0.009"
-            : formatHoney(poolData?.volume24HInHoney)
+            : parseFloat(poolData?.volumeUsd)
         }`,
         tvlUsd: `${
-          formatHoney(poolData?.tvlInHoney) < 0.01
+          parseFloat(poolData?.tvlUsd) < 0.01
             ? "0.009"
-            : formatHoney(poolData?.tvlInHoney)
+            : parseFloat(poolData?.tvlUsd)
         }`,
         feesUsd: `${
-          formatHoney(poolData?.fees24HInHoney) < 0.01
+          parseFloat(poolData?.feesUsd) < 0.01
             ? "0.009"
-            : formatHoney(poolData?.fees24HInHoney)
+            : parseFloat(poolData?.feesUsd)
         }`,
       };
 

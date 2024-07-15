@@ -1,9 +1,8 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { fetchPoolByAddress } from "@bera/berajs/utils";
 import { dexName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
-import { isAddress } from "viem";
+import { Address, isAddress } from "viem";
 
 import AddLiquidityContent from "../AddLiquidityContent";
 
@@ -25,14 +24,10 @@ export default async function PoolPage({
     if (!isAddress(params.shareAddress)) {
       notFound();
     }
-    const pool = await fetchPoolByAddress({
-      shareAddress: params.shareAddress,
-    });
 
-    if (!pool) {
-      notFound();
-    }
-    return <AddLiquidityContent pool={pool} />;
+    return (
+      <AddLiquidityContent shareAddress={params.shareAddress as Address} />
+    );
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
     notFound();

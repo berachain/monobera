@@ -7,7 +7,7 @@ import { getPoolUserPosition } from "../../../actions";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 
 type IUsePoolUserPositionArgs = {
-  pool: PoolV2;
+  pool: PoolV2 | undefined;
 };
 
 /**
@@ -21,11 +21,11 @@ export const usePoolUserPosition = (
   const publicClient = usePublicClient();
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePoolUserPosition", account, pool.poolIdx];
+  const QUERY_KEY = ["usePoolUserPosition", account, pool?.poolIdx];
   const swrResponse = useSWR<IUserPosition | undefined, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => {
-      if (!account || !publicClient) return;
+      if (!account || !publicClient || !pool) return;
       return await getPoolUserPosition({
         args: {
           pool,
