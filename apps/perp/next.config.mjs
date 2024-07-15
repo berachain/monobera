@@ -35,19 +35,6 @@ const config = {
       "assets.coingecko.com",
     ],
   },
-  headers: async () => {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-        ],
-      },
-    ];
-  },
 };
 
 export default withSentryConfig(
