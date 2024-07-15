@@ -34,7 +34,7 @@ const config = {
       "raw.githubusercontent.com",
       "assets.coingecko.com",
     ],
-  }
+  },
 };
 
 export default withSentryConfig(
