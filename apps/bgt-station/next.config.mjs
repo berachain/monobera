@@ -43,20 +43,7 @@ const config = {
         permanent: true, // Set to false if you don't want the redirect to be cached permanently by browsers
       },
     ];
-  },
-  headers: async () => {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-        ],
-      },
-    ];
-  },
+  }
 };
 
 export default withSentryConfig(

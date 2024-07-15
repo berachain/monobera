@@ -36,19 +36,6 @@ const config = {
     ],
     domains: ["res.cloudinary.com", "raw.githubusercontent.com"],
   },
-  headers: async () => {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-        ],
-      },
-    ];
-  },
 };
 
 export default withSentryConfig(
