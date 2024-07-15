@@ -442,8 +442,8 @@ export default function PoolPageContent({
         <Skeleton className="h-16 w-full" />
       ) : (
         <BgtStationBanner
-          receiptTokenAddress={pool?.shareAddress}
-          vaultAddress={pool?.vaultAddress}
+          receiptTokenAddress={pool?.shareAddress as Address}
+          vaultAddress={pool?.vaultAddress as Address}
         />
       )}
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">

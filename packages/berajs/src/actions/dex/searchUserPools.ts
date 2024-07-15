@@ -52,7 +52,6 @@ export const searchUserPools = async ({
       },
     });
 
-    console.log(response);
     const positions = response.data.userPools.depositedPools.map(
       (depositedPool: any) => depositedPool.pool,
     );

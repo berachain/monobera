@@ -57,6 +57,8 @@ export default function AddLiquidityContent({
 
   const router = useRouter();
   const {
+    baseToken,
+    quoteToken,
     poolPrice,
     error,
     previewOpen,
@@ -85,44 +87,6 @@ export default function AddLiquidityContent({
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
-
-  const baseToken: Token | undefined = useMemo(() => {
-    if (!tokenInputs[0]) {
-      return undefined;
-    }
-    return isBeratoken(tokenInputs[0])
-      ? isNativeBera
-        ? {
-            ...tokenInputs[0],
-            symbol: "BERA",
-            address: ADDRESS_ZERO,
-          }
-        : {
-            ...tokenInputs[0],
-            symbol: "WBERA",
-            address: beraTokenAddress,
-          }
-      : tokenInputs[0];
-  }, [tokenInputs, isNativeBera]);
-
-  const quoteToken: Token | undefined = useMemo(() => {
-    if (!tokenInputs[1]) {
-      return undefined;
-    }
-    return isBeratoken(tokenInputs[1])
-      ? isNativeBera
-        ? {
-            ...tokenInputs[1],
-            symbol: "BERA",
-            address: ADDRESS_ZERO,
-          }
-        : {
-            ...tokenInputs[1],
-            symbol: "WBERA",
-            address: beraTokenAddress,
-          }
-      : tokenInputs[1];
-  }, [tokenInputs, isNativeBera]);
 
   const baseCost = useMemo(() => {
     if (!poolPrice) {
@@ -283,7 +247,7 @@ export default function AddLiquidityContent({
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
 
-  const baseSelected: Token | undefined = useMemo(() => {
+  const baseSelected: Token = useMemo(() => {
     return isBeratoken(baseToken)
       ? isNativeBera
         ? beraToken
@@ -291,7 +255,7 @@ export default function AddLiquidityContent({
       : baseToken;
   }, [baseToken, isNativeBera]);
 
-  const quoteSelected: Token | undefined = useMemo(() => {
+  const quoteSelected: Token = useMemo(() => {
     return isBeratoken(quoteToken)
       ? isNativeBera
         ? beraToken

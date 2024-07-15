@@ -8,6 +8,7 @@ import { useBeraJs } from "~/contexts";
 import type { PoolV2 } from "~/types";
 import { mapPoolsToPoolsV2 } from "~/utils";
 import { dexClient, getFilteredPools } from "@bera/graphql";
+import { useTotalPoolCount } from "./useTotalPoolCount";
 
 const DEFAULT_SIZE = 8;
 interface Call {
@@ -117,8 +118,15 @@ export const usePoolTable = (sorting: any) => {
     }
   };
 
+  const { data: poolCount } = useTotalPoolCount();
+
+  const isReachingEnd = poolCount
+    ? processedData.length >= parseFloat(poolCount)
+    : true;
+
   return {
     data: processedData,
+    poolCount,
     fetchNextPage,
     search,
     setSearch,
@@ -126,5 +134,6 @@ export const usePoolTable = (sorting: any) => {
     handleEnter,
     keyword,
     setKeyword,
+    isReachingEnd,
   };
 };

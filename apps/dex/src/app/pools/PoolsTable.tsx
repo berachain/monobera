@@ -44,11 +44,10 @@ export const PoolSearch = ({
     data,
     fetchNextPage,
     isLoadingMore,
+    isReachingEnd,
   } = usePoolTable(sorting);
 
   const { data: poolCount } = useTotalPoolCount();
-
-  const isReachingEnd = poolCount ? data.length >= parseFloat(poolCount) : true;
 
   const handleNewSort = (newSort: any) => {
     if (newSort === sorting) return;

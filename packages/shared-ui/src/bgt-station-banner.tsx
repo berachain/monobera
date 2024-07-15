@@ -14,12 +14,11 @@ export const BgtStationBanner = ({
   className,
   text,
 }: {
-  receiptTokenAddress: string | undefined;
-  vaultAddress: string | undefined;
+  receiptTokenAddress: Address | undefined;
+  vaultAddress: Address | undefined;
   className?: string;
   text?: string | JSX.Element;
 }) => {
-  console.log({ receiptTokenAddress, vaultAddress });
   if (!vaultAddress) return null;
   return (
     <Card className={className}>
