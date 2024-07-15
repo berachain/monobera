@@ -102,8 +102,6 @@ export function OverviewChart({
   votes: Vote[];
   isLoading: boolean;
 }) {
-  console.log(votes);
-
   const [voteType, setVoteType] = React.useState<any>("all");
   const chartData = useMemo(
     () =>

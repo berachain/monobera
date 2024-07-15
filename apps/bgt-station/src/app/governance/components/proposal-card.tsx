@@ -32,7 +32,6 @@ export function ProposalCard({
   const content = proposal.metadata.description.split("\n");
   const title = (content[0] ?? "# ").slice(2);
   const subTitle = content.slice(1).join("<br />");
-  console.log("subTitle", subTitle);
   return (
     <div
       className={cn(

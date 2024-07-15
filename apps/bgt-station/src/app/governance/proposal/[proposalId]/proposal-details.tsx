@@ -9,10 +9,10 @@ import { Icons } from "@bera/ui/icons";
 import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
-import { VoteDialog } from "../../components/vote-dialog";
 import { VoterTable } from "../../components/voter-table";
-import { getProposalType, getTotalVotes } from "../../helper";
+import { getTotalVotes } from "../../helper";
 import { Actions } from "./Actions";
+import { Status } from "./Status";
 
 export default function ProposalDetails({
   proposalId,
@@ -22,13 +22,11 @@ export default function ProposalDetails({
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
   return (
     <div className="pb-16">
-      {/* {ModalPortal} */}
-
       {isLoading || !proposal ? (
         <>Loading</>
       ) : (
         <div className="mx-auto h-fit w-full max-w-[830px]">
-          <div className="flex h-11 w-full justify-between hover:cursor-pointer">
+          <div className="flex h-11 w-full justify-between">
             <Link
               href="/governance"
               className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground"
@@ -36,27 +34,7 @@ export default function ProposalDetails({
               <Icons.arrowLeft className="relative h-4 w-4" />
               Governance
             </Link>
-            {/* <div className="flex items-center gap-3">
-              <VoteDialog
-                open={open}
-                setOpen={setOpen}
-                votingPower={votingPower}
-                comment={comment}
-                setComment={setComment}
-                selected={selected}
-                setSelected={setSelected}
-                onSubmit={() => {
-                  write({
-                    address: governanceAddress,
-                    abi: GOVERNANCE_PRECOMPILE_ABI,
-                    functionName: "vote",
-                    params: payload,
-                  });
-                }}
-                isLoading={isTxnLoading}
-                isVotingPowerLoading={true}
-              />
-          </div> */}
+            {proposal && <Status proposal={proposal as any} />}
           </div>
           <ProposalCard
             proposal={proposal}

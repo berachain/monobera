@@ -24,7 +24,7 @@ export function getProposalType(proposal: Proposal) {
 
 export const getBadgeColor = (proposalStatus: StatusEnum) => {
   switch (proposalStatus) {
-    case StatusEnum.Pending:
+    case StatusEnum.PENDING:
       return "default";
     case StatusEnum.ACTIVE:
     case StatusEnum.QUEUED:

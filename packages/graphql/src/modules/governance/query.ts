@@ -71,6 +71,18 @@ export const getProposal = gql`
       status
       originalId
       createdAt
+      events {
+      type
+      txHash
+    }
+      start {
+      ... on Block {
+        timestamp
+      }
+      ... on BlocklessTimestamp {
+        timestamp
+      }
+    }
       creator {
         name
         picture
