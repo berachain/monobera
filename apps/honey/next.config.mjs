@@ -34,7 +34,7 @@ const config = {
     domains: ["res.cloudinary.com", "raw.githubusercontent.com"],
   },
   output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
-  trailingSlash: true
+  trailingSlash: true,
 };
 
 export default withSentryConfig(
