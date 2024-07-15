@@ -43,7 +43,7 @@ const config = {
         permanent: true, // Set to false if you don't want the redirect to be cached permanently by browsers
       },
     ];
-  }
+  },
 };
 
 export default withSentryConfig(
