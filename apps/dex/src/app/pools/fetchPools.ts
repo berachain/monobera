@@ -1,16 +1,18 @@
-import { formatPoolData, type PoolV2 } from "@bera/berajs";
-import { chainId, crocIndexerEndpoint } from "@bera/config";
+import { type PoolV2 } from "@bera/berajs";
 import BigNumber from "bignumber.js";
 
-export const getPoolUrl = (pool: PoolV2, isMyPool = false) => {
+export const getPoolUrl = (pool: PoolV2 | undefined, isMyPool = false) => {
+  if (!pool) return "";
   return `/pool/${pool?.shareAddress}${isMyPool ? "?back=my-pools" : ""}`;
 };
 
-export const getPoolAddLiquidityUrl = (pool: PoolV2) => {
+export const getPoolAddLiquidityUrl = (pool: PoolV2 | undefined) => {
+  if (!pool) return "";
   return `/add-liquidity/${pool?.shareAddress}`;
 };
 
-export const getPoolWithdrawUrl = (pool: PoolV2) => {
+export const getPoolWithdrawUrl = (pool: PoolV2 | undefined) => {
+  if (!pool) return "";
   return `/withdraw/${pool?.shareAddress}`;
 };
 

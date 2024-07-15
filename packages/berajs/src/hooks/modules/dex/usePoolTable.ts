@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { getBeraLpAddress } from "@bera/beracrocswap";
-import { chainId, crocIndexerEndpoint, multicallAddress } from "@bera/config";
+import { multicallAddress } from "@bera/config";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { erc20Abi } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import type { PoolV2 } from "~/types";
-import { formatPoolData } from "~/utils";
+import { mapPoolsToPoolsV2 } from "~/utils";
+import { dexClient, getFilteredPools } from "@bera/graphql";
+import { useTotalPoolCount } from "./useTotalPoolCount";
 
 const DEFAULT_SIZE = 8;
 interface Call {
@@ -25,7 +26,7 @@ export const usePoolTable = (sorting: any) => {
   const sortOption =
     sorting[0] !== undefined && sorting[0].id !== undefined
       ? sorting[0].id
-      : "tvl";
+      : "tvlUsd";
   const sortOrder =
     sorting[0] !== undefined && sorting[0].desc !== undefined
       ? sorting[0].desc === true
@@ -38,22 +39,20 @@ export const usePoolTable = (sorting: any) => {
       queryKey: ["projects", sortOption, sortOrder, keyword, publicClient],
       queryFn: async ({ pageParam = 1, queryKey }: any) => {
         try {
-          const res = await fetch(
-            `${crocIndexerEndpoint}/v2/pool_stats?chainId=0x${chainId.toString(
-              16,
-            )}&sortBy=${queryKey[1]}.${
-              queryKey[2]
-            }&page=${pageParam}&size=${DEFAULT_SIZE}&keyword=${queryKey[3]}`,
-          );
+          const res = await dexClient.query({
+            query: getFilteredPools,
+            variables: {
+              keyword: queryKey[3],
+              skip: (pageParam - 1) * DEFAULT_SIZE,
+              first: DEFAULT_SIZE,
+              order: queryKey[1],
+              orderDirection: queryKey[2],
+            },
+          });
 
-          const response = await res.json();
-          const data = response.data.pools.map((r: any) =>
-            formatPoolData(r),
-          ) as PoolV2[];
-
+          const data = mapPoolsToPoolsV2(res.data.pools);
           return {
             data,
-            totalCount: response.data.totalCount,
           };
         } catch (e) {
           console.error(e);
@@ -69,16 +68,13 @@ export const usePoolTable = (sorting: any) => {
     });
 
   const [processedData, setProcessedData] = useState<PoolV2[]>([]);
-  const [totalCount, setTotalCount] = useState<number | undefined>();
 
   useEffect(() => {
     let concatData: PoolV2[] = [];
-    let responseTotalCount = 0;
 
     data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
       if (!page.data) return;
       concatData = concatData.concat(page.data);
-      responseTotalCount = page.totalCount;
     });
 
     if (account && publicClient && data) {
@@ -86,7 +82,7 @@ export const usePoolTable = (sorting: any) => {
         (item: PoolV2) => item.base && item.quote,
       );
       const call: Call[] = validData.map((item: PoolV2) => ({
-        address: getBeraLpAddress(item.base, item.quote) as `0x${string}`,
+        address: item.shareAddress as `0x${string}`,
         abi: erc20Abi,
         functionName: "balanceOf",
         args: [account],
@@ -109,12 +105,9 @@ export const usePoolTable = (sorting: any) => {
               };
             },
           ) as PoolV2[];
-          const numFilteredItems = concatData?.length - validData?.length ?? 0;
-          setTotalCount(responseTotalCount - numFilteredItems);
           setProcessedData(newProcessedData);
         });
     } else {
-      setTotalCount(responseTotalCount);
       setProcessedData(concatData);
     }
   }, [data, account]);
@@ -125,18 +118,22 @@ export const usePoolTable = (sorting: any) => {
     }
   };
 
-  const isReachingEnd = totalCount ? processedData.length >= totalCount : true;
+  const { data: poolCount } = useTotalPoolCount();
+
+  const isReachingEnd = poolCount
+    ? processedData.length >= parseFloat(poolCount)
+    : true;
 
   return {
     data: processedData,
-    totalCount,
+    poolCount,
     fetchNextPage,
-    isReachingEnd,
     search,
     setSearch,
     isLoadingMore: isFetching || isFetchingNextPage,
     handleEnter,
     keyword,
     setKeyword,
+    isReachingEnd,
   };
 };

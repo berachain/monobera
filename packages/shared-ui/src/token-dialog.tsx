@@ -89,6 +89,7 @@ export function TokenDialog({
       setFilteredTokens(customTokens);
     }
   }, [customTokens]);
+
   useEffect(() => {
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
@@ -132,7 +133,7 @@ export function TokenDialog({
   }, [search]); // Include 'filteredTokens' in the dependency array
 
   useEffect(() => {
-    if (tokenInformation) {
+    if (tokenInformation && search !== "") {
       setFilteredTokens([tokenInformation]);
     }
   }, [tokenInformation]);

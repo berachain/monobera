@@ -24,34 +24,3 @@ export interface SubgraphCoin {
   name: string;
   decimals: number;
 }
-export interface PoolDayData {
-  id: string;
-  tvlUsd: string;
-  date: number;
-  volumeUsd: string;
-  feesUsd: string;
-  latestTime: number;
-  baseTvl: number;
-  quoteTvl: number;
-  baseVolume: number;
-  quoteVolume: number;
-  baseFees: number;
-  quoteFees: number;
-  lastPriceSwap: number;
-  lastPriceLiq: number;
-  lastPriceIndic: number;
-  feeRate: number;
-  baseTvlInHoney: number;
-  quoteTvlInHoney: number;
-  baseFeesInHoney: number;
-  quoteFeesInHoney: number;
-  baseVolumeInHoney: number;
-  quoteVolumeInHoney: number;
-}
-
-export interface PoolDayDataV2 {
-  day: number;
-  volume24HInHoney: number;
-  tvlInHoney: number;
-  fees24HInHoney: number;
-}

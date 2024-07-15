@@ -45,6 +45,7 @@ export default async function Vault() {
         <BgtStationBanner
           className="mb-4"
           receiptTokenAddress={bhoneyVaultContractAddress}
+          vaultAddress={bhoneyVaultContractAddress}
           text={depositText}
         />
         <div className="flex flex-col gap-4 lg:flex-row ">

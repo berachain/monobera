@@ -26,6 +26,10 @@ export const getWithdrawLiquidityPayload = async ({
     seeds,
   } = args;
   try {
+    if (!baseToken || !quoteToken || !poolIdx || !percentRemoval || !seeds) {
+      console.error("Missing args");
+      return undefined;
+    }
     if (!publicClient) {
       console.error("No public client");
       return undefined;
