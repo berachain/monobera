@@ -143,29 +143,6 @@ const getData = (data: number[], timeFrame: TimeFrame, chart: Chart) => {
   return barLineData;
 };
 
-// function calculatePercentageDifference(numbers: number[]): number {
-//   if (numbers.length < 2) {
-//     return 0; // Not enough numbers to calculate the difference
-//   }
-
-//   let firstNumberIndex = 0;
-//   while (firstNumberIndex < numbers.length && numbers[firstNumberIndex] === 0) {
-//     firstNumberIndex++;
-//   }
-
-//   if (firstNumberIndex >= numbers.length) {
-//     return 0; // All numbers are zero, cannot calculate percentage difference
-//   }
-
-//   const firstNumber = numbers[firstNumberIndex] as number;
-//   const lastNumber = numbers[numbers.length - 1] as number;
-
-//   const difference = lastNumber - firstNumber;
-//   const percentageDifference = (difference / Math.abs(firstNumber)) * 100;
-
-//   return percentageDifference;
-// }
-
 const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
   const currentTimestamp: number = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
   const timestampDaysAgo: number = currentTimestamp - daysAgo * 86400; // Subtract the specified number of days in seconds
@@ -173,17 +150,6 @@ const getDayStartTimestampDaysAgo = (daysAgo: number): number => {
   const dayStartTimestamp: number = dayID * 86400; // Calculate dayStartTimestamp
   return dayStartTimestamp;
 };
-
-// function beginningOfDayTimestampGMT(date: Date): Date {
-//   // Create a new date object for the target date at the beginning of the day (00:00:00) in GMT
-//   const targetYear = date.getUTCFullYear();
-//   const targetMonth = date.getUTCMonth();
-//   const targetDay = date.getUTCDate();
-//   const beginningOfDay = new Date(Date.UTC(targetYear, targetMonth, targetDay));
-//   // Convert to Unix timestamp (in seconds)
-//   const timestamp = Math.floor(beginningOfDay.getTime() / 1000);
-//   return new Date(timestamp * 1000);
-// }
 
 export const PoolChart = ({
   pool,

@@ -257,12 +257,6 @@ export default function PoolPageContent({
   const { data: pool, isLoading: isPoolLoading } =
     useSelectedPool(shareAddress);
 
-  // useEffect(() => {
-  //   if (!pool && !isLoading) {
-  //     notFound();
-  //   }
-  // }, [pool, isPoolLoading]);
-
   const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
     pool,
   });
@@ -397,11 +391,6 @@ export default function PoolPageContent({
           )
         }
         subtitles={[
-          // {
-          //   title: "APY",
-          //   content: <>{pool?.totalApy?.toFixed(2)}%</>,
-          //   color: "success",
-          // },
           {
             title: "BGT APY",
             content: isPoolLoading ? (
