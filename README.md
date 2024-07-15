@@ -27,7 +27,6 @@ Monobera requires node 18+.
 | `pnpm build:bgt`         | Builds only the `BGT` and related packages.                                                              |
 | `pnpm build:lend`        | Builds only the `Bend` and related packages.                                                             |
 | `pnpm build:perp`        | Builds only the `Berps` and related packages.                                                            |
-| `pnpm build:faucet`      | Builds only the `Faucet` and related packages.                                                           |
 | `pnpm build:berajs-docs` | Builds only the `Berajs Docs` and related packages.                                                      |
 | `pnpm build:ambassador`  | Builds only the `Ambassador` and related packages.                                                       |
 | `pnpm build:ecosystem`   | Builds only the `Ecosystem` and related packages.                                                        |
@@ -38,7 +37,6 @@ Monobera requires node 18+.
 | `pnpm dev:bgt`           | Runs `BGT` Station and related packages in dev mode.                                                     |
 | `pnpm dev:lend`          | Runs `Bend` and related packages in dev mode.                                                            |
 | `pnpm dev:perp`          | Runs `Berps` and related packages in dev mode.                                                           |
-| `pnpm dev:faucet`        | Runs `Faucet` and related packages in dev mode.                                                          |
 | `pnpm dev:berajs-docs`   | Runs `Berajs Docs` and related packages in dev mode.                                                     |
 | `pnpm dev:ambassador`    | Runs `Ambassador` and related packages in dev mode.                                                      |
 | `pnpm dev:ecosystem`     | Runs `Ecosystem` and related packages in dev mode.                                                       |
@@ -64,7 +62,6 @@ To run Bex for example, run `pnpm i && pnpm dev:dex`
 | `app/bgt-station`    | `BGT Station` application code                 |
 | `app/lend`           | `Bend` application code                        |
 | `app/perp`           | `Berps` application code                       |
-| `app/faucet`         | `Faucet` application code                      |
 | `app/ambassador`     | `Ambassador` application code                  |
 | `app/ecosystem`      | `Ecosystem` application code                   |
 

@@ -207,15 +207,6 @@ export const crocIndexerEndpoint = process.env
 export const crocRouterEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;
 
-// Faucet
-export const faucetDripAmount = process.env
-  .NEXT_PUBLIC_FAUCET_DRIP_AMOUNT as string;
-export const faucetDripTimeGap = process.env
-  .NEXT_PUBLIC_FAUCET_DRIP_TIME_GAP as string;
-export const recaptchaSiteKey = process.env
-  .NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string;
-export const cloudflareKey = process.env.NEXT_PUBLIC_CLOUDFLARE_KEY as string;
-
 // Sentry && Mixpanel
 export const developmentAnalytics = process.env
   .NEXT_PUBLIC_DEVELOPMENT_ANALYTICS as string;
