@@ -2,14 +2,12 @@
 
 "use client";
 
-import { useCallback, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo } from "react";
+import { notFound, useRouter } from "next/navigation";
 import {
   TransactionActionType,
   bexAbi,
   usePoolUserPosition,
-  useTokenHoneyPrice,
-  type PoolV2,
   type Token,
 } from "@bera/berajs";
 import { getWithdrawLiquidityPayload } from "@bera/berajs/actions";
@@ -36,15 +34,14 @@ import { usePublicClient } from "wagmi";
 import { SettingsPopover } from "~/components/settings-popover";
 import { getPoolUrl } from "../pools/fetchPools";
 import { useWithdrawLiquidity } from "./useWithdrawLiquidity";
-
-interface IWithdrawLiquidityContent {
-  pool: PoolV2;
-}
+import { useSelectedPool } from "~/hooks/useSelectedPool";
+import { Address } from "viem";
+import { Skeleton } from "@bera/ui/skeleton";
 
 interface ITokenSummary {
   title: string;
-  baseToken: Token;
-  quoteToken: Token;
+  baseToken: Token | undefined;
+  quoteToken: Token | undefined;
   baseAmount: string;
   quoteAmount: string;
   isLoading: boolean;
@@ -62,20 +59,23 @@ const TokenSummary = ({
       <p className="w-full text-left text-lg font-semibold">{title}</p>
       <div className="flex w-full flex-row items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Pooled {baseToken.symbol}
+          Pooled {isLoading ? "..." : baseToken?.symbol}
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
           {isLoading ? "..." : baseAmount}{" "}
-          <TokenIcon address={baseToken.address} symbol={baseToken.symbol} />
+          <TokenIcon address={baseToken?.address} symbol={baseToken?.symbol} />
         </div>
       </div>
       <div className="flex w-full flex-row items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Pooled {quoteToken.symbol}
+          Pooled {isLoading ? "..." : quoteToken?.symbol}
         </p>
         <div className="flex flex-row items-center gap-1 font-medium">
           {isLoading ? "..." : quoteAmount}{" "}
-          <TokenIcon address={quoteToken.address} symbol={quoteToken.symbol} />
+          <TokenIcon
+            address={quoteToken?.address}
+            symbol={quoteToken?.symbol}
+          />
         </div>{" "}
       </div>
     </div>
@@ -83,8 +83,17 @@ const TokenSummary = ({
 };
 
 export default function WithdrawLiquidityContent({
-  pool,
-}: IWithdrawLiquidityContent) {
+  shareAddress,
+}: {
+  shareAddress: Address;
+}) {
+  const { data: pool, isLoading } = useSelectedPool(shareAddress);
+  useEffect(() => {
+    if (!pool && !isLoading) {
+      notFound();
+    }
+  }, [pool, isLoading]);
+
   const reset = () => {
     setPreviewOpen(false);
     setAmount(0);
@@ -97,8 +106,8 @@ export default function WithdrawLiquidityContent({
 
   const slippage = useSlippage();
 
-  const baseToken = pool.baseInfo;
-  const quoteToken = pool.quoteInfo;
+  const baseToken = pool?.baseInfo;
+  const quoteToken = pool?.quoteInfo;
 
   const {
     data: userPositionBreakdown,
@@ -113,7 +122,7 @@ export default function WithdrawLiquidityContent({
     const bnAmountWithdrawn = userPositionBreakdown.baseAmount
       .times(amount)
       .div(100);
-    return bnAmountWithdrawn.div(10 ** baseToken.decimals).toString();
+    return bnAmountWithdrawn.div(10 ** (baseToken?.decimals ?? 18)).toString();
   }, [userPositionBreakdown?.baseAmount, amount]);
 
   const quoteAmountWithdrawn = useMemo(() => {
@@ -123,28 +132,15 @@ export default function WithdrawLiquidityContent({
     const bnAmountWithdrawn = userPositionBreakdown.quoteAmount
       .times(amount)
       .div(100);
-    return bnAmountWithdrawn.div(10 ** quoteToken.decimals).toString();
+    return bnAmountWithdrawn.div(10 ** (quoteToken?.decimals ?? 18)).toString();
   }, [userPositionBreakdown?.quoteAmount, amount]);
 
-  const { data: baseTokenHoneyPrice } = useTokenHoneyPrice({
-    tokenAddress: baseToken?.address,
-  });
-  const { data: quoteTokenHoneyPrice } = useTokenHoneyPrice({
-    tokenAddress: quoteToken?.address,
-  });
-
   const totalHoneyPrice = useMemo(() => {
-    if (!baseTokenHoneyPrice || !quoteTokenHoneyPrice) return 0;
     return (
-      Number(baseTokenHoneyPrice) * Number(baseAmountWithdrawn) +
-      Number(quoteTokenHoneyPrice) * Number(quoteAmountWithdrawn)
+      Number(baseToken?.usdValue ?? 0) * Number(baseAmountWithdrawn) +
+      Number(quoteToken?.usdValue ?? 0) * Number(quoteAmountWithdrawn)
     );
-  }, [
-    baseTokenHoneyPrice,
-    quoteTokenHoneyPrice,
-    baseAmountWithdrawn,
-    quoteAmountWithdrawn,
-  ]);
+  }, [baseToken, quoteToken, baseAmountWithdrawn, quoteAmountWithdrawn]);
 
   const { write, ModalPortal } = useTxn({
     message: `Withdraw liquidity from ${pool?.poolName}`,
@@ -164,7 +160,7 @@ export default function WithdrawLiquidityContent({
           poolPrice,
           baseToken,
           quoteToken,
-          poolIdx: pool.poolIdx,
+          poolIdx: pool?.poolIdx,
           percentRemoval: amount,
           seeds: userPositionBreakdown?.seeds.toString() ?? "0",
         },
@@ -198,19 +194,27 @@ export default function WithdrawLiquidityContent({
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
-      <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px]">
-        <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+      <Card className="mx-6 w-full items-center bg-background p-4 sm:mx-0 sm:w-[480px] flex flex-col">
+        {isLoading ? (
+          <Skeleton className="h-8 w-40 self-center" />
+        ) : (
+          <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+        )}
         <div className="flex w-full flex-row items-center justify-center rounded-lg p-4">
-          {pool?.tokens?.map((token, i) => {
-            return (
-              <TokenIcon
-                address={token.address}
-                symbol={token.symbol}
-                className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
-                key={token.address}
-              />
-            );
-          })}
+          {isLoading ? (
+            <Skeleton className="h-12 w-24" />
+          ) : (
+            pool?.tokens?.map((token, i) => {
+              return (
+                <TokenIcon
+                  address={token.address}
+                  symbol={token.symbol}
+                  className={cn("h-12 w-12", i !== 0 && "ml-[-16px]")}
+                  key={token.address}
+                />
+              );
+            })
+          )}
         </div>
         <div
           onClick={() => router.push(getPoolUrl(pool))}
@@ -271,7 +275,7 @@ export default function WithdrawLiquidityContent({
           </div>
           <InfoBoxList>
             <InfoBoxListItem
-              title={`Removing ${baseToken.symbol}`}
+              title={`Removing ${isLoading ? "..." : baseToken?.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
                   <FormattedNumber
@@ -279,15 +283,15 @@ export default function WithdrawLiquidityContent({
                     compact={false}
                   />
                   <TokenIcon
-                    address={baseToken.address}
+                    address={baseToken?.address}
                     size={"md"}
-                    symbol={baseToken.symbol}
+                    symbol={baseToken?.symbol}
                   />
                 </div>
               }
             />
             <InfoBoxListItem
-              title={`Removing ${quoteToken.symbol}`}
+              title={`Removing ${isLoading ? "..." : quoteToken?.symbol}`}
               value={
                 <div className="flex flex-row items-center justify-end gap-1">
                   <FormattedNumber
@@ -295,9 +299,9 @@ export default function WithdrawLiquidityContent({
                     compact={false}
                   />
                   <TokenIcon
-                    address={quoteToken.address}
+                    address={quoteToken?.address}
                     size={"md"}
-                    symbol={quoteToken.symbol}
+                    symbol={quoteToken?.symbol}
                   />
                 </div>
               }
@@ -309,9 +313,9 @@ export default function WithdrawLiquidityContent({
                   <>
                     <FormattedNumber
                       value={poolPrice}
-                      symbol={baseToken.symbol}
+                      symbol={baseToken?.symbol}
                     />{" "}
-                    = 1 {quoteToken.symbol}
+                    = 1 {quoteToken?.symbol}
                   </>
                 ) : (
                   "-"
@@ -346,16 +350,16 @@ export default function WithdrawLiquidityContent({
           >
             <TokenList className="divide-muted bg-muted">
               <PreviewToken
-                key={baseToken.address}
+                key={baseToken?.address}
                 token={baseToken}
                 value={Number(baseAmountWithdrawn)}
-                price={Number(baseTokenHoneyPrice ?? 0)}
+                price={Number(baseToken?.usdValue ?? 0)}
               />
               <PreviewToken
-                key={quoteToken.address}
+                key={quoteToken?.address}
                 token={quoteToken}
                 value={Number(quoteAmountWithdrawn)}
-                price={Number(quoteTokenHoneyPrice ?? 0)}
+                price={Number(quoteToken?.usdValue ?? 0)}
               />
             </TokenList>
             <InfoBoxList>
@@ -366,9 +370,9 @@ export default function WithdrawLiquidityContent({
                     <>
                       <FormattedNumber
                         value={poolPrice}
-                        symbol={baseToken.symbol}
+                        symbol={baseToken?.symbol}
                       />{" "}
-                      = 1 {quoteToken.symbol}
+                      = 1 {quoteToken?.symbol}
                     </>
                   ) : (
                     "-"

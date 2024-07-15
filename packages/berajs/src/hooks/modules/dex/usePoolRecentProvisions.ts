@@ -9,7 +9,7 @@ import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType, PoolV2 } from "~/types";
 
 interface IUsePoolRecentProvisionsArgs {
-  pool: PoolV2;
+  pool: PoolV2 | undefined;
 }
 
 export const usePoolRecentProvisions = (
@@ -18,7 +18,7 @@ export const usePoolRecentProvisions = (
 ): DefaultHookReturnType<GetPoolRecentProvisionsResult | undefined> => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePoolRecentProvisions", pool.poolIdx];
+  const QUERY_KEY = ["usePoolRecentProvisions", pool?.shareAddress];
   const swrResponse = useSWR<
     GetPoolRecentProvisionsResult | undefined,
     any,
@@ -26,6 +26,7 @@ export const usePoolRecentProvisions = (
   >(
     QUERY_KEY,
     async () => {
+      if (!pool) return undefined;
       return await getPoolRecentProvisions({
         args: {
           pool,

@@ -10,16 +10,16 @@ import { Address } from "viem";
 
 export const BgtStationBanner = ({
   receiptTokenAddress,
+  vaultAddress,
   className,
   text,
 }: {
   receiptTokenAddress: Address | undefined;
+  vaultAddress: Address | undefined;
   className?: string;
   text?: string | JSX.Element;
 }) => {
-  const { data } = useGaugeAddress(receiptTokenAddress);
-
-  if (!data) return <></>;
+  if (!vaultAddress) return null;
   return (
     <Card className={className}>
       <CardContent className="flex w-full flex-row items-center justify-between p-4 pt-4">
@@ -46,7 +46,7 @@ export const BgtStationBanner = ({
             </div>
           </div>
         )}
-        <Link href={`${bgtUrl}/gauge/${data}`} target="_blank">
+        <Link href={`${bgtUrl}/gauge/${vaultAddress}`} target="_blank">
           <Button
             variant={"outline"}
             disabled={receiptTokenAddress === undefined}

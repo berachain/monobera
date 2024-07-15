@@ -1,17 +1,8 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  getGlobalDexStats,
-  type GetGlobalDexStatsResponse,
-} from "@bera/berajs/actions";
 import { dexName } from "@bera/config";
-import {
-  Documentation,
-  Footer,
-  getMetaTitle,
-  useAnalytics,
-} from "@bera/shared-ui";
+import { Documentation, Footer, getMetaTitle } from "@bera/shared-ui";
 
 import Data from "./components/Data";
 import Hero from "./components/Hero";
@@ -24,26 +15,18 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function Homepage() {
-  const { captureException } = useAnalytics();
-  const data = await getGlobalDexStats()
-    .then((res: GetGlobalDexStatsResponse) => res)
-    .catch((e: unknown) => {
-      captureException(e);
-    });
-
   try {
     return (
       <>
         <div className="container max-w-1280 pb-16">
           <Hero />
-          <Data tvl={data?.formattedTVL} volume={data?.formattedVolume24H} />
+          <Data />
           <Documentation className="my-24" />
         </div>
         <Footer />
       </>
     );
   } catch (e) {
-    captureException(e);
     notFound();
   }
 }

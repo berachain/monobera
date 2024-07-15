@@ -1,8 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useBeraJs, useTokens, type PoolV2 } from "@bera/berajs";
-import { crocDexAddress } from "@bera/config";
+import {
+  ADDRESS_ZERO,
+  Token,
+  useBeraJs,
+  useTokens,
+  type PoolV2,
+} from "@bera/berajs";
+import { beraTokenAddress, crocDexAddress } from "@bera/config";
 import { beraToken, wBeraToken } from "@bera/wagmi";
 import { type Address } from "viem";
 
@@ -33,7 +39,7 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     areAllInputsPopulated,
     areSomeInputsUnpopulated,
     areAllInputsEmpty,
-  } = useMultipleTokenInput(pool?.tokens ?? []);
+  } = useMultipleTokenInput(pool?.tokens ?? undefined);
 
   const {
     needsApproval,
@@ -84,7 +90,47 @@ export const useAddLiquidity = (pool: PoolV2 | undefined) => {
     areAllInputsEmpty,
   ]);
 
+  const baseToken: Token | undefined = useMemo(() => {
+    if (!tokenInputs[0]) {
+      return undefined;
+    }
+    return isBeratoken(tokenInputs[0])
+      ? isNativeBera
+        ? {
+            ...tokenInputs[0],
+            symbol: "BERA",
+            address: ADDRESS_ZERO,
+          }
+        : {
+            ...tokenInputs[0],
+            symbol: "WBERA",
+            address: beraTokenAddress,
+          }
+      : tokenInputs[0];
+  }, [tokenInputs, isNativeBera]);
+
+  const quoteToken: Token | undefined = useMemo(() => {
+    if (!tokenInputs[1]) {
+      return undefined;
+    }
+    return isBeratoken(tokenInputs[1])
+      ? isNativeBera
+        ? {
+            ...tokenInputs[1],
+            symbol: "BERA",
+            address: ADDRESS_ZERO,
+          }
+        : {
+            ...tokenInputs[1],
+            symbol: "WBERA",
+            address: beraTokenAddress,
+          }
+      : tokenInputs[1];
+  }, [tokenInputs, isNativeBera]);
+
   return {
+    baseToken,
+    quoteToken,
     poolPrice,
     beraToken,
     wBeraToken,

@@ -1,23 +1,24 @@
 import useSWR from "swr";
 
-import { PoolHistoryResponse, getPoolHistoricalData } from "~/actions";
+import { PoolDayData, getPoolHistoricalData } from "~/actions";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 
 type UsePoolHistoricalDataArgs = {
-  shareAddress: string;
+  poolId: string | undefined;
 };
 export const usePoolHistoricalData = (
-  { shareAddress }: UsePoolHistoricalDataArgs,
+  { poolId }: UsePoolHistoricalDataArgs,
   options?: DefaultHookOptions,
-): DefaultHookReturnType<PoolHistoryResponse> => {
+): DefaultHookReturnType<PoolDayData[] | undefined> => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["pool_history", shareAddress];
-  const swrResponse = useSWR<PoolHistoryResponse, any, any>(
+  const QUERY_KEY = ["pool_history", poolId];
+  const swrResponse = useSWR<PoolDayData[] | undefined, any, any>(
     QUERY_KEY,
     async () => {
-      return await getPoolHistoricalData({ shareAddress, config });
+      if (!poolId) return undefined;
+      return await getPoolHistoricalData({ poolId, config });
     },
   );
 

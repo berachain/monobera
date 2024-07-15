@@ -11,7 +11,7 @@ interface IGetPoolRecentSwapsProps {
 }
 
 interface ISwapWithHoneyValue extends ISwaps {
-  estimatedHoneyValue: number;
+  estimatedUsdValue: number;
   swapInAmount: number;
   swapOutAmount: number;
 }
@@ -66,7 +66,7 @@ export const getPoolRecentSwaps = async ({
       const numberBaseFlow = getSafeNumber(swap.baseFlow);
       const numberQuoteFlow = getSafeNumber(swap.quoteFlow);
 
-      let estimatedHoneyValue = 0;
+      let estimatedUsdValue = 0;
       let swapIn = undefined;
       let swapOut = undefined;
       let swapInAmount = 0;
@@ -82,12 +82,11 @@ export const getPoolRecentSwaps = async ({
           BigInt(swap.quoteFlow),
           pool.quoteInfo.decimals,
         );
-        estimatedHoneyValue =
-          parseFloat(formattedQuoteFlow) *
-            parseFloat(swap.quoteAssetHoneyPrice) +
+        estimatedUsdValue =
+          parseFloat(formattedQuoteFlow) * parseFloat(swap.quoteAssetUsdPrice) +
           parseFloat(formattedBaseFlow) *
             -1 *
-            parseFloat(swap.baseAssetHoneyPrice);
+            parseFloat(swap.baseAssetUsdPrice);
 
         swapIn = pool.quoteInfo;
         swapOut = pool.baseInfo;
@@ -103,11 +102,11 @@ export const getPoolRecentSwaps = async ({
           BigInt(swap.quoteFlow),
           pool.quoteInfo.decimals,
         );
-        estimatedHoneyValue =
-          parseFloat(formattedBaseFlow) * parseFloat(swap.baseAssetHoneyPrice) +
+        estimatedUsdValue =
+          parseFloat(formattedBaseFlow) * parseFloat(swap.baseAssetUsdPrice) +
           parseFloat(formattedQuoteFlow) *
             -1 *
-            parseFloat(swap.quoteAssetHoneyPrice);
+            parseFloat(swap.quoteAssetUsdPrice);
 
         swapIn = pool.baseInfo;
         swapOut = pool.quoteInfo;
@@ -116,7 +115,7 @@ export const getPoolRecentSwaps = async ({
       }
       return {
         ...swap,
-        estimatedHoneyValue,
+        estimatedUsdValue,
         swapIn: swapIn as Token,
         swapOut: swapOut as Token,
         swapInAmount,

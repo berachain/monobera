@@ -11,7 +11,7 @@ interface IGetPoolRecentProvisionsProps {
 }
 
 interface IProvisionWithHoneyValue extends IProvision {
-  estimatedHoneyValue: number;
+  estimatedUsdValue: number;
 }
 
 export type GetPoolRecentProvisionsResult = IProvisionWithHoneyValue[];
@@ -61,7 +61,7 @@ export const getPoolRecentProvisions = async ({
 
     const provisionsWithHoneyValue = provisions?.map(
       (provision: IProvision) => {
-        let estimatedHoneyValue = 0;
+        let estimatedUsdValue = 0;
         if (provision.changeType === "mint") {
           const formattedQuoteFlow = formatUnits(
             BigInt(provision.quoteFlow),
@@ -73,12 +73,12 @@ export const getPoolRecentProvisions = async ({
           );
           const estimatedBaseHoneyValue =
             parseFloat(formattedBaseFlow) *
-            parseFloat(provision.baseAssetHoneyPrice);
+            parseFloat(provision.baseAssetUsdPrice);
 
           const estimatedQuoteHoneyValue =
             parseFloat(formattedQuoteFlow) *
-            parseFloat(provision.quoteAssetHoneyPrice);
-          estimatedHoneyValue =
+            parseFloat(provision.quoteAssetUsdPrice);
+          estimatedUsdValue =
             estimatedBaseHoneyValue + estimatedQuoteHoneyValue;
         } else if (provision.changeType === "burn") {
           const formattedQuoteFlow = formatUnits(
@@ -92,18 +92,18 @@ export const getPoolRecentProvisions = async ({
           const estimatedBaseHoneyValue =
             parseFloat(formattedBaseFlow) *
             -1 *
-            parseFloat(provision.baseAssetHoneyPrice);
+            parseFloat(provision.baseAssetUsdPrice);
 
           const estimatedQuoteHoneyValue =
             parseFloat(formattedQuoteFlow) *
             -1 *
-            parseFloat(provision.quoteAssetHoneyPrice);
-          estimatedHoneyValue =
+            parseFloat(provision.quoteAssetUsdPrice);
+          estimatedUsdValue =
             estimatedBaseHoneyValue + estimatedQuoteHoneyValue;
         }
         return {
           ...provision,
-          estimatedHoneyValue,
+          estimatedUsdValue,
         };
       },
     );

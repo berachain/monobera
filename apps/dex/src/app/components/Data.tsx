@@ -8,6 +8,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { useBgtRewards } from "~/hooks/useBgtRewards";
+import { useHomePageData } from "~/hooks/useHomepageData";
 
 function DataCard({
   icon,
@@ -35,29 +36,19 @@ function DataCard({
   );
 }
 
-export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
-  const { data: beraPrice, isLoading: isHoneyPriceLoading } =
-    useTokenHoneyPrice({
-      tokenAddress: beraTokenAddress,
-    });
-
-  const { data: totalBgtRewards, isLoading: isBgtRewardsLoading } =
-    useBgtRewards();
-
-  const isDataReady = useMemo(() => {
-    return !(isHoneyPriceLoading && isBgtRewardsLoading);
-  }, [beraPrice]);
+export default function Data() {
+  const { data, isLoading } = useHomePageData();
 
   return (
     <section className="my-24 flex w-full flex-col items-center">
       <div className="grid w-full grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
         <DataCard
           title="Total Value Locked"
-          isLoading={!isDataReady}
+          isLoading={isLoading}
           value={
             <FormattedNumber
-              value={tvl ?? 0}
-              compact={false}
+              value={data?.tvlUsd ?? 0}
+              compact={true}
               compactThreshold={999_999_999_999}
               symbol="USD"
             />
@@ -66,11 +57,11 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         />
         <DataCard
           title="24H Volume"
-          isLoading={!isDataReady}
+          isLoading={isLoading}
           value={
             <FormattedNumber
-              value={volume ?? 0}
-              compact={false}
+              value={data?.volumeUsd ?? 0}
+              compact={true}
               compactThreshold={999_999_999_999}
               symbol="USD"
             />
@@ -79,11 +70,11 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         />
         <DataCard
           title="BGT Rewards"
-          isLoading={!isDataReady}
+          isLoading={isLoading}
           value={
             <FormattedNumber
-              value={Number.isNaN(totalBgtRewards) ? 0 : totalBgtRewards}
-              compact={false}
+              value={data?.totalBGTDistributed ?? 0}
+              compact={true}
               compactThreshold={999_999_999}
               symbol="BGT"
             />
@@ -92,10 +83,10 @@ export default function Data({ tvl, volume }: { tvl: any; volume: any }) {
         />
         <DataCard
           title="Bera Price"
-          isLoading={!isDataReady}
+          isLoading={isLoading}
           value={
             <FormattedNumber
-              value={beraPrice ?? 0}
+              value={data?.beraUsdValue ?? 0}
               compact={false}
               compactThreshold={999_999_999}
               symbol="USD"

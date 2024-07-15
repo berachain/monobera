@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import {
+  Token,
   truncateHash,
   useBeraJs,
-  useBgtApy,
   usePoolHistoricalData,
   usePoolRecentProvisions,
   usePoolRecentSwaps,
@@ -40,7 +40,7 @@ import {
   TableRow,
 } from "@bera/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { Address, getAddress } from "viem";
+import { Address } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
 import {
@@ -49,14 +49,11 @@ import {
 } from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
-
-interface IPoolPageContent {
-  pool: PoolV2;
-}
+import { useSelectedPool } from "~/hooks/useSelectedPool";
 
 const getTokenDisplay = (
   event: ISwapOrProvision | ISwaps | IProvision,
-  pool: PoolV2,
+  pool: PoolV2 | undefined,
 ) => {
   if ((event as IProvision).changeType === undefined) {
     return (
@@ -85,7 +82,7 @@ const getTokenDisplay = (
   }
   return (
     <div className="space-evenly flex flex-row items-center">
-      {pool.tokens.map((token, i) => {
+      {pool?.tokens.map((token: Token, i) => {
         return (
           <div className={cn("flex flex-row", i !== 0 && "ml-[-10px]")} key={i}>
             <TokenIcon address={token.address} symbol={token.symbol} />
@@ -114,6 +111,7 @@ enum Selection {
 
 const TokenView = ({
   tokens,
+  isLoading,
 }: {
   tokens: {
     address: string;
@@ -121,42 +119,54 @@ const TokenView = ({
     value: string | number;
     valueUSD?: string | number;
   }[];
+  isLoading: boolean;
 }) => {
   return (
     <>
       <div className="mb-4 text-sm font-medium">Tokens</div>
       <div>
-        {tokens?.map((token, index) => {
-          return (
-            <div
-              className="flex h-8 items-center justify-between"
-              key={`token-list-${index}-${token.address}-${token.value}`}
-            >
+        {isLoading ? (
+          <div>
+            <Skeleton className="h-8 w-full" />
+            <Skeleton className="h-8 w-full mt-2" />
+          </div>
+        ) : (
+          tokens?.map((token, index) => {
+            return (
               <div
-                className="group flex cursor-pointer gap-1"
-                onClick={() => {
-                  if (token.address) {
-                    window.open(`${blockExplorerUrl}/address/${token.address}`);
-                  }
-                }}
+                className="flex h-8 items-center justify-between"
+                key={`token-list-${index}-${token.address}-${token.value}`}
               >
-                <TokenIcon address={token.address} symbol={token.symbol} />
-                <div className="ml-1 font-medium uppercase group-hover:underline">
-                  {token.address === beraTokenAddress ? "wbera" : token.symbol}
+                <div
+                  className="group flex cursor-pointer gap-1"
+                  onClick={() => {
+                    if (token.address) {
+                      window.open(
+                        `${blockExplorerUrl}/address/${token.address}`,
+                      );
+                    }
+                  }}
+                >
+                  <TokenIcon address={token.address} symbol={token.symbol} />
+                  <div className="ml-1 font-medium uppercase group-hover:underline">
+                    {token.address === beraTokenAddress
+                      ? "wbera"
+                      : token.symbol}
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-2">
-                <div className="font-medium">
-                  <FormattedNumber value={token.value} />
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  <FormattedNumber value={token.valueUSD ?? 0} symbol="USD" />
+                <div className="flex gap-2">
+                  <div className="font-medium">
+                    <FormattedNumber value={token.value} />
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    <FormattedNumber value={token.valueUSD ?? 0} symbol="USD" />
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </>
   );
@@ -167,7 +177,7 @@ const EventTable = ({
   events,
   isLoading,
 }: {
-  pool: PoolV2;
+  pool: PoolV2 | undefined;
   events: (ISwapOrProvision[] | ISwaps[] | IProvision[]) | undefined;
   isLoading: boolean | undefined;
 }) => {
@@ -204,7 +214,7 @@ const EventTable = ({
                 <TableCell>{getAction(event)}</TableCell>
                 <TableCell>
                   <FormattedNumber
-                    value={event.estimatedHoneyValue ?? 0}
+                    value={event.estimatedUsdValue ?? 0}
                     symbol="USD"
                   />
                 </TableCell>
@@ -240,9 +250,12 @@ const EventTable = ({
 };
 
 type ISwapOrProvision = ISwaps | IProvision;
-export default function PoolPageContent({ pool }: IPoolPageContent) {
-  // const { useBgtReward } = usePollBgtRewards([pool?.pool]);
-  // const { data: bgtRewards } = useBgtReward(pool?.pool);
+
+export default function PoolPageContent({
+  shareAddress,
+}: { shareAddress: Address }) {
+  const { data: pool, isLoading: isPoolLoading } =
+    useSelectedPool(shareAddress);
 
   const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
     pool,
@@ -279,11 +292,6 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
     swaps,
     provisions,
     combinedEvents,
-  });
-
-  const { data: bgtApr } = useBgtApy({
-    receiptTokenAddress: pool.shareAddress as Address,
-    tvlInHoney: Number(pool.tvlUsd),
   });
 
   const getLoadMoreButton = () => {
@@ -363,50 +371,52 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
 
   const { data: poolHistoryData, isLoading: isPoolHistoryLoading } =
     usePoolHistoricalData({
-      shareAddress: pool.shareAddress,
+      poolId: pool?.id,
     });
 
-  const poolHistory = poolHistoryData?.history;
-  const timeCreated = poolHistoryData?.info?.timeCreate
-    ? new Date(parseInt(poolHistoryData?.info.timeCreate) * 1000)
-    : null;
-
-  const params = useSearchParams();
-  const isMyPool = params.get("back") && params.get("back") === "my-pools";
+  const poolHistory = poolHistoryData;
+  const timeCreated = pool?.timeCreate;
 
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader
-        back={{
-          backURL: isMyPool ? "/pools?pool=userPools" : "/pools",
-          backTitle: isMyPool ? "My Pools" : "All Pools",
-        }}
         title={
-          <>
-            <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
-            {pool?.poolName}
-          </>
+          isPoolLoading ? (
+            <Skeleton className="h-10 w-40" />
+          ) : (
+            <>
+              <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
+              {pool?.poolName}
+            </>
+          )
         }
         subtitles={[
-          // {
-          //   title: "APY",
-          //   content: <>{pool?.totalApy?.toFixed(2)}%</>,
-          //   color: "success",
-          // },
           {
             title: "BGT APY",
-            content: <FormattedNumber value={bgtApr ?? 0} percent colored />,
+            content: isPoolLoading ? (
+              <Skeleton className="h-4 w-8" />
+            ) : (
+              <FormattedNumber value={pool?.bgtApy ?? 0} percent colored />
+            ),
             color: "warning",
             tooltip: <ApyTooltip />,
           },
           {
             title: "Fee",
-            content: <>{pool.feeRate.toFixed(2)}%</>,
+            content: isPoolLoading ? (
+              <Skeleton className="h-4 w-8" />
+            ) : (
+              <>{pool?.feeRate.toFixed(2)}%</>
+            ),
             color: "success",
           },
           {
             title: "Pool Contract",
-            content: <>{truncateHash(pool?.shareAddress ?? "")}</>,
+            content: isPoolLoading ? (
+              <Skeleton className="h-4 w-16" />
+            ) : (
+              <>{truncateHash(pool?.shareAddress ?? "")}</>
+            ),
             externalLink: `${blockExplorerUrl}/address/${pool?.shareAddress}`,
           },
         ]}
@@ -428,21 +438,19 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
         }
       />
       <Separator />
-      <BgtStationBanner
-        receiptTokenAddress={
-          pool?.shareAddress ? getAddress(pool?.shareAddress) : undefined
-        }
-      />
+      {isPoolLoading ? (
+        <Skeleton className="h-16 w-full" />
+      ) : (
+        <BgtStationBanner
+          receiptTokenAddress={pool?.shareAddress as Address}
+          vaultAddress={pool?.vaultAddress as Address}
+        />
+      )}
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
           <PoolChart
             pool={pool}
-            currentTvl={
-              pool?.baseTokenHoneyTvl && pool?.quoteTokenHoneyTvl
-                ? Number(pool.baseTokenHoneyTvl) +
-                  Number(pool.quoteTokenHoneyTvl)
-                : 0
-            }
+            currentTvl={pool?.tvlUsd}
             historicalData={poolHistory}
             timeCreated={timeCreated}
             isLoading={isPoolHistoryLoading}
@@ -455,7 +463,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.tvlUsd} symbol="USD" />
+                <FormattedNumber value={pool?.tvlUsd ?? 0} symbol="USD" />
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -465,7 +473,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.volume24h} symbol="USD" />
+                <FormattedNumber value={pool?.volume24h ?? 0} symbol="USD" />
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -475,7 +483,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.fees24h} symbol="USD" />
+                <FormattedNumber value={pool?.fees24h ?? 0} symbol="USD" />
               </div>{" "}
             </Card>
             <Card className="px-4 py-2">
@@ -485,7 +493,7 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold text-warning-foreground">
-                <FormattedNumber value={bgtApr ?? 0} percent colored />
+                <FormattedNumber value={pool?.bgtApy ?? 0} percent colored />
               </div>
             </Card>
           </div>
@@ -495,24 +503,37 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
             <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
               Pool Liquidity
               <div className="text-2xl">
-                <FormattedNumber value={pool?.tvlUsd} symbol="USD" />
+                {isLoading || !pool?.tvlUsd ? (
+                  <Skeleton className="h-10 w-20" />
+                ) : (
+                  <FormattedNumber value={pool?.tvlUsd ?? 0} symbol="USD" />
+                )}
               </div>
             </div>
             <TokenView
-              tokens={[
-                {
-                  address: pool.baseInfo.address,
-                  symbol: pool.baseInfo.symbol,
-                  value: pool.baseTokens,
-                  valueUSD: pool.baseTokenHoneyTvl,
-                },
-                {
-                  address: pool.quoteInfo.address,
-                  symbol: pool.quoteInfo.symbol,
-                  value: pool.quoteTokens,
-                  valueUSD: pool.quoteTokenHoneyTvl,
-                },
-              ]}
+              isLoading={isPoolLoading}
+              tokens={
+                !pool
+                  ? []
+                  : [
+                      {
+                        address: pool.baseInfo.address,
+                        symbol: pool.baseInfo.symbol,
+                        value: pool.baseTokens,
+                        valueUSD:
+                          parseFloat(pool.baseTokens) *
+                          parseFloat(pool?.baseInfo?.usdValue ?? "0"),
+                      },
+                      {
+                        address: pool.quoteInfo.address,
+                        symbol: pool.quoteInfo.symbol,
+                        value: pool.quoteTokens,
+                        valueUSD:
+                          parseFloat(pool.quoteTokens) *
+                          parseFloat(pool?.quoteInfo?.usdValue ?? "0"),
+                      },
+                    ]
+              }
             />
           </Card>
           {isConnected &&
@@ -545,30 +566,37 @@ export default function PoolPageContent({ pool }: IPoolPageContent) {
                     </div>
                     <div className="mt-4 lg:mt-8">
                       <TokenView
-                        tokens={[
-                          {
-                            address: pool.baseInfo.address,
-                            symbol: pool.baseInfo.symbol,
-                            value:
-                              truncateFloat(
-                                userPositionBreakdown?.formattedBaseAmount,
-                                6,
-                              )?.toString() ?? "0",
-                            valueUSD:
-                              userPositionBreakdown?.baseHoneyValue ?? "0",
-                          },
-                          {
-                            address: pool.quoteInfo.address,
-                            symbol: pool.quoteInfo.symbol,
-                            value:
-                              truncateFloat(
-                                userPositionBreakdown?.formattedQuoteAmount,
-                                6,
-                              )?.toString() ?? "0",
-                            valueUSD:
-                              userPositionBreakdown?.quoteHoneyValue ?? "0",
-                          },
-                        ]}
+                        isLoading={isPositionBreakdownLoading}
+                        tokens={
+                          !pool
+                            ? []
+                            : [
+                                {
+                                  address: pool.baseInfo.address,
+                                  symbol: pool.baseInfo.symbol,
+                                  value:
+                                    truncateFloat(
+                                      userPositionBreakdown?.formattedBaseAmount,
+                                      6,
+                                    )?.toString() ?? "0",
+                                  valueUSD:
+                                    userPositionBreakdown?.baseHoneyValue ??
+                                    "0",
+                                },
+                                {
+                                  address: pool.quoteInfo.address,
+                                  symbol: pool.quoteInfo.symbol,
+                                  value:
+                                    truncateFloat(
+                                      userPositionBreakdown?.formattedQuoteAmount,
+                                      6,
+                                    )?.toString() ?? "0",
+                                  valueUSD:
+                                    userPositionBreakdown?.quoteHoneyValue ??
+                                    "0",
+                                },
+                              ]
+                        }
                       />
                     </div>
                   </div>

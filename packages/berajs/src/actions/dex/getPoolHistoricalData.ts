@@ -1,67 +1,35 @@
-// import { type PoolDayDataV2 } from "@bera/graphql";
-
+import { GetPoolDayDatas, dexClient } from "@bera/graphql";
 import { BeraConfig } from "~/types";
 
-interface PoolHistoryResponse_Info {
-  id?: string;
-  poolIdx?: string;
-  base?: string;
-  quote?: string;
-  timeCreate?: string;
-  baseInfo?: {
-    id?: string;
-    address?: string;
-    symbol?: string;
-    name?: string;
-    decimals?: number;
-  };
-  quoteInfo?: {
-    id?: string;
-    address?: string;
-    symbol?: string;
-    name?: string;
-    decimals?: number;
-  };
-  template?: {
-    feeRate?: number;
-  };
-  shareAddress?: {
-    address?: string;
-  };
-}
-
-export interface PoolHistoryResponse {
-  info: PoolHistoryResponse_Info;
-  history: any[];
-}
+export type PoolDayData = {
+  date: number;
+  tvlUsd: string;
+  volumeUsd: string;
+  feesUsd: string;
+};
 
 interface getPoolHistoricalDataProps {
-  shareAddress: string;
+  poolId: string;
   config: BeraConfig;
 }
 
-export const getPoolHistoricalData = ({
-  shareAddress,
+export const getPoolHistoricalData = async ({
+  poolId,
   config,
-}: getPoolHistoricalDataProps): Promise<PoolHistoryResponse> | undefined => {
-  if (!config.endpoints?.dexIndexer) {
+}: getPoolHistoricalDataProps): Promise<PoolDayData[] | undefined> => {
+  if (!config.subgraphs?.dexSubgraph) {
     throw new Error(
-      "getPoolHistoricalData: one or more required values missing from config prop: config.endpoints.dexIndexer",
+      "getPoolHistoricalData: one or more required values missing from config prop: config.endpoints.dexSubgraph",
     );
   }
-  if (!shareAddress) return undefined;
+  if (!poolId) return undefined;
 
-  return fetch(
-    `${config.endpoints.dexIndexer}/v2/pool_history/${shareAddress}?days=90`,
-  )
-    .then(async (res) => {
-      return res.json();
-    })
-    .then((data) => {
-      return data?.data;
-    })
-    .catch((e) => {
-      console.error("error occurred in getPoolHistoricalData:", e);
-      return undefined;
-    });
+  const res = await dexClient.query({
+    query: GetPoolDayDatas,
+    variables: {
+      poolId: poolId.toLowerCase(),
+    },
+  });
+
+  return res.data.poolDayDatas;
 };
