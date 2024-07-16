@@ -137,6 +137,8 @@ export const perpsBorrowingContractAddress = process.env
   .NEXT_PUBLIC_BORROWING_FEES_CONTRACT_ADDRESS as Address;
 export const bhoneyVaultContractAddress = process.env
   .NEXT_PUBLIC_BHONEY_VAULT_CONTRACT_ADDRESS as Address;
+export const bHoneyGaugeVaultContractAddress = process.env
+  .NEXT_PUBLIC_BHONEY_GAUGE_VAULT_CONTRACT_ADDRESS as Address;
 export const pythContractAddress = process.env
   .NEXT_PUBLIC_PYTH_CONTRACT_ADDRESS as Address;
 export const peripheryDebtToken = process.env
