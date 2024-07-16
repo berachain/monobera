@@ -53,8 +53,6 @@ export function TokenDialog({
   filteredSymbols = [],
 }: Props) {
   const [search, setSearch] = useState("");
-  // const [addTokenOpen, setAddTokenOpen] = useState(false);
-  // console.log("open", addTokenOpen)
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
   const { data: tokenData, addNewToken, removeToken } = useTokens();
@@ -151,11 +149,6 @@ export function TokenDialog({
     setSearch("");
     setOpen(false);
   };
-
-  // const onAddTokenCancel = () => {
-  //   setSearch("");
-  //   setOpen(false);
-  // };
 
   function isTokenSelected(token: Token | undefined): boolean {
     if (!token) return false;
