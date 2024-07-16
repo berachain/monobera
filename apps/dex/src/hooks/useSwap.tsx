@@ -98,10 +98,7 @@ export const useSwap = ({
       setSelectedTo(pendingOutputToken);
     }
     return;
-  }, [
-    pendingInputToken,
-    pendingOutputToken,
-  ]);
+  }, [pendingInputToken, pendingOutputToken]);
   const { data: inputTokenInfo } = useSubgraphTokenInformation({
     tokenAddress: selectedFrom?.address,
   });
