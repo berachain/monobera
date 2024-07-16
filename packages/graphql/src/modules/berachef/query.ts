@@ -89,12 +89,21 @@ export const getApyInfo = gql`
 `;
 
 export const GetStakingToken = gql`
-query MyQuery($stakingToken: String) {
-  vaults(where: { stakingToken: $stakingToken}) {
-    id
-    stakingToken {
+  query MyQuery($stakingToken: String) {
+    vaults(where: { stakingToken: $stakingToken }) {
       id
+      stakingToken {
+        id
+      }
     }
   }
-}
+`;
+
+export const GetFriendsOfTheChef = gql`
+  {
+    friendsOfTheChefs {
+      id
+      isFriend
+    }
+  }
 `;

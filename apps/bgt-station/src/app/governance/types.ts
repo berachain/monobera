@@ -19,7 +19,7 @@ export enum OrderByEnum {
 
 export enum ProposalTypeEnum {
   TEXT_PROPOSAL = "text-proposal",
-  GAUGE_PROPOSAL = "update-friends-of-chef",
+  FRIENDS_OF_CHEF = "updat-friends-of-chef",
 }
 
 export type ParameterChangeLine = {

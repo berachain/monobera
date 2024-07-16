@@ -18,6 +18,7 @@ import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 
 import { ProposalTypeEnum } from "../types";
+import { UpdateFriendsOfChef } from "./update-friends-of-chef";
 import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal() {
@@ -33,6 +34,7 @@ export default function NewProposal() {
     submitProposal,
     error,
     errorMsgs,
+    friendsOfChef,
   } = useCreateProposal();
 
   return (
@@ -104,6 +106,10 @@ export default function NewProposal() {
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
+
+        {proposalType === ProposalTypeEnum.FRIENDS_OF_CHEF && (
+          <UpdateFriendsOfChef />
+        )}
 
         <div>
           {errorMsgs.map((msg: string) => (
