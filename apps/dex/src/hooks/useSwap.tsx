@@ -9,6 +9,7 @@ import {
   usePollWalletBalances,
   useTokenHoneyPrice,
   useTokenInformation,
+  useSubgraphTokenInformation,
   useTokens,
   type Token,
 } from "@bera/berajs";
@@ -23,6 +24,7 @@ import { useSlippage } from "@bera/shared-ui/src/hooks";
 import { formatUnits, type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
+import { beraToken } from "@bera/wagmi";
 
 enum SwapKind {
   GIVEN_IN = 0,
@@ -31,8 +33,8 @@ enum SwapKind {
 
 // const QUOTING_TOKEN = honeyTokenAddress;
 interface ISwap {
-  inputCurrency?: Address | undefined;
-  outputCurrency?: Address | undefined;
+  inputCurrency?: string | undefined;
+  outputCurrency?: string | undefined;
 }
 function normalizeToRatio(num1: number, num2: number): string {
   const ratio = num2 / num1;
@@ -45,19 +47,15 @@ export enum WRAP_TYPE {
 }
 
 export const useSwap = ({
-  inputCurrency = "0x",
-  outputCurrency = "0x",
+  inputCurrency = undefined,
+  outputCurrency = undefined,
 }: ISwap) => {
-  const { data: tokenData, isLoading } = useTokens();
-  const tokenDictionary = tokenData?.tokenDictionary ?? {};
-  useEffect(() => {
-    if (!isLoading && tokenDictionary) {
-      const inputToken = tokenDictionary[inputCurrency];
-      if (inputToken) setSelectedFrom(inputToken);
-      const outputToken = tokenDictionary[outputCurrency];
-      if (outputToken) setSelectedTo(outputToken);
-    }
-  }, [isLoading, tokenData]);
+  const { data: pendingInputToken } = useTokenInformation({
+    address: inputCurrency,
+  });
+  const { data: pendingOutputToken } = useTokenInformation({
+    address: outputCurrency,
+  });
 
   const [selectedTo, setSelectedTo] = useState<Token | undefined>(undefined);
 
@@ -65,12 +63,58 @@ export const useSwap = ({
     undefined,
   );
 
-  const { data: tokenInPrice } = useTokenHoneyPrice({
+  const [inputAddTokenDialogOpen, setInputAddTokenDialogOpen] = useState(false);
+  const [outputAddTokenDialogOpen, setOutputAddTokenDialogOpen] =
+    useState(false);
+
+  const { data: tokenListData } = useTokens();
+
+  useMemo(() => {
+    if (!inputCurrency || !outputCurrency) return;
+    if (inputCurrency === outputCurrency) return;
+    if (!tokenListData) return;
+
+    const doesInputTokenExist = tokenListData?.tokenList?.some(
+      (t) => t.address.toLowerCase() === inputCurrency.toLowerCase(),
+    );
+    if (!doesInputTokenExist) {
+      setInputAddTokenDialogOpen(true);
+      return;
+    }
+    const doesOuputTokenExist = tokenListData?.tokenList?.some(
+      (t) => t.address.toLowerCase() === outputCurrency.toLowerCase(),
+    );
+    if (!doesOuputTokenExist) {
+      setOutputAddTokenDialogOpen(true);
+      return;
+    }
+    if (inputCurrency === nativeTokenAddress) {
+      setSelectedFrom(beraToken);
+    }
+    if (pendingInputToken && inputCurrency) {
+      setSelectedFrom(pendingInputToken);
+    }
+    if (pendingOutputToken && outputCurrency) {
+      setSelectedTo(pendingOutputToken);
+    }
+    return;
+  }, [
+    pendingInputToken,
+    pendingOutputToken,
+    inputCurrency,
+    outputCurrency,
+    tokenListData,
+  ]);
+
+  const { data: inputTokenInfo } = useSubgraphTokenInformation({
     tokenAddress: selectedFrom?.address,
   });
-  const { data: tokenOutPrice } = useTokenHoneyPrice({
+  const { data: outputTokenInfo } = useSubgraphTokenInformation({
     tokenAddress: selectedTo?.address,
   });
+
+  const tokenInPrice = inputTokenInfo?.usdValue;
+  const tokenOutPrice = outputTokenInfo?.usdValue;
 
   const [isWrap, setIsWrap] = useState(false);
 
@@ -299,6 +343,12 @@ export const useSwap = ({
     onSwitch,
     setIsTyping,
     refreshAllowance,
+    setInputAddTokenDialogOpen,
+    setOutputAddTokenDialogOpen,
+    pendingInputToken,
+    pendingOutputToken,
+    inputAddTokenDialogOpen,
+    outputAddTokenDialogOpen,
     swapAmount,
     payload: swapPayload?.payload,
     payloadValue: swapPayload?.value,

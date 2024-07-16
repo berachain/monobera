@@ -1,7 +1,6 @@
 import { type Metadata } from "next";
-import { dexName, honeyAddress } from "@bera/config";
+import { dexName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
-import { isAddress } from "viem";
 
 import { SwapContent } from "./swap";
 
@@ -18,10 +17,13 @@ export default function Swap({
     outputCurrency: string;
   };
 }) {
-  const { inputCurrency = honeyAddress, outputCurrency } = searchParams;
+  const { inputCurrency, outputCurrency } = searchParams;
   return (
     <div className="container">
-      <SwapContent />
+      <SwapContent
+        inutCurrency={inputCurrency}
+        outputCurrency={outputCurrency}
+      />
     </div>
   );
 }

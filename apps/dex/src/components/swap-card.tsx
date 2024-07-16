@@ -6,11 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   TXN_GAS_USED_ESTIMATES,
+  Token,
   TransactionActionType,
   multiswapAbi,
   useBeraJs,
   useGasData,
   usePollWalletBalances,
+  useTokens,
   wberaAbi,
 } from "@bera/berajs";
 import {
@@ -36,10 +38,11 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { parseUnits, type Address } from "viem";
+import { parseUnits } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
+import { AddTokenDialog } from "@bera/shared-ui/src/add-token-dialog";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
   loading: () => (
@@ -64,8 +67,8 @@ const Connect = dynamic(
 );
 
 interface ISwapCard {
-  inputCurrency?: Address | undefined;
-  outputCurrency?: Address | undefined;
+  inputCurrency?: string | undefined;
+  outputCurrency?: string | undefined;
   addTokensOnLoad?: boolean;
   isMainPage?: boolean;
   showBear?: boolean;
@@ -73,8 +76,8 @@ interface ISwapCard {
 }
 
 export function SwapCard({
-  inputCurrency,
-  outputCurrency,
+  inputCurrency = nativeTokenAddress,
+  outputCurrency = honeyAddress,
   showBear = true,
   isMainPage = false,
   className,
@@ -109,9 +112,15 @@ export function SwapCard({
     minAmountOut,
     priceImpact,
     differenceUSD,
+    setInputAddTokenDialogOpen,
+    setOutputAddTokenDialogOpen,
+    inputAddTokenDialogOpen,
+    outputAddTokenDialogOpen,
+    pendingInputToken,
+    pendingOutputToken,
   } = useSwap({
-    inputCurrency: nativeTokenAddress,
-    outputCurrency: honeyAddress,
+    inputCurrency: inputCurrency ? inputCurrency : nativeTokenAddress,
+    outputCurrency: outputCurrency ? outputCurrency : honeyAddress,
   });
 
   const { captureException, track } = useAnalytics();
@@ -386,11 +395,32 @@ export function SwapCard({
   const breakpoint = useBreakpoint();
 
   const priceImpactColorClass = getPriceImpactColorClass(priceImpact);
+  const { addNewToken } = useTokens();
 
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
       {WrapModalPortal}
+      <AddTokenDialog
+        token={pendingInputToken}
+        onAddToken={() => {
+          addNewToken(pendingInputToken as Token);
+          setSelectedFrom(pendingInputToken);
+          setInputAddTokenDialogOpen(false);
+        }}
+        open={inputAddTokenDialogOpen}
+        onOpenChange={setInputAddTokenDialogOpen}
+      />
+      <AddTokenDialog
+        token={pendingOutputToken}
+        onAddToken={() => {
+          addNewToken(pendingOutputToken as Token);
+          setSelectedTo(pendingOutputToken);
+          setOutputAddTokenDialogOpen(false);
+        }}
+        open={outputAddTokenDialogOpen}
+        onOpenChange={setOutputAddTokenDialogOpen}
+      />
       <div className="w-full">
         {showBear && (
           <Image
