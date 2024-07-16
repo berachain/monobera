@@ -69,7 +69,7 @@ export const useSwap = ({
 
   const { data: tokenListData } = useTokens();
 
-  useMemo(() => {
+  useEffect(() => {
     if (!inputCurrency || !outputCurrency) return;
     if (inputCurrency === outputCurrency) return;
     if (!tokenListData) return;
@@ -101,11 +101,7 @@ export const useSwap = ({
   }, [
     pendingInputToken,
     pendingOutputToken,
-    inputCurrency,
-    outputCurrency,
-    tokenListData,
   ]);
-
   const { data: inputTokenInfo } = useSubgraphTokenInformation({
     tokenAddress: selectedFrom?.address,
   });
