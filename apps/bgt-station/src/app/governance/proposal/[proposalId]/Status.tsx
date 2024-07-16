@@ -1,16 +1,14 @@
-import { useState } from "react";
 import { type Proposal } from "@bera/berajs";
-import { cn } from "@bera/ui";
 
 import { VoteDialog } from "../../components/vote-dialog";
 import { StatusEnum } from "../../types";
 
 export const Status = ({ proposal }: { proposal: Proposal }) => {
-  const status: StatusEnum = proposal.status;
-  console.log(proposal);
+  const status = proposal.status as StatusEnum;
   return (
     <div className="flex items-center gap-3 font-medium">
       {/* {ModalPortal} */}
+
       {status === StatusEnum.PENDING && (
         <div>Voting starts at {proposal.start.timestamp}</div>
       )}

@@ -9,11 +9,6 @@ export enum StatusEnum {
   EXECUTED = "executed",
 }
 
-export enum ProposalEnum {
-  TEXT = "text",
-  FRIENDS_OF_CHEF = "friends-of-chef",
-}
-
 export enum OrderByEnum {
   MOST_RECENT = "most-recent",
   OLDEST = "oldest",
@@ -24,9 +19,7 @@ export enum OrderByEnum {
 
 export enum ProposalTypeEnum {
   TEXT_PROPOSAL = "text-proposal",
-  GAUGE_PROPOSAL = "new-gauge-proposal",
-  // COLLATERAL_PROPOSAL = "new-collateral-proposal",
-  // MARKET_COLLATERAL_PROPOSAL = "new-market-proposal",
+  GAUGE_PROPOSAL = "update-friends-of-chef",
 }
 
 export type ParameterChangeLine = {

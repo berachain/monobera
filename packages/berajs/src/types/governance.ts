@@ -24,6 +24,9 @@ export type Proposal = {
   onchainId: string;
   originalId: string;
   status: string;
+  start: {
+    timestamp: string;
+  };
   voteStats: {
     percent: number;
     type: string;
