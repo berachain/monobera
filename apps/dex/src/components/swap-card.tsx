@@ -38,7 +38,7 @@ import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card, CardTitle } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { parseUnits } from "viem";
+import { isAddress, parseUnits } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
@@ -119,8 +119,16 @@ export function SwapCard({
     pendingInputToken,
     pendingOutputToken,
   } = useSwap({
-    inputCurrency: inputCurrency ? inputCurrency : nativeTokenAddress,
-    outputCurrency: outputCurrency ? outputCurrency : honeyAddress,
+    inputCurrency: inputCurrency
+      ? isAddress(inputCurrency)
+        ? inputCurrency
+        : nativeTokenAddress
+      : nativeTokenAddress,
+    outputCurrency: outputCurrency
+      ? isAddress(outputCurrency)
+        ? outputCurrency
+        : honeyAddress
+      : honeyAddress,
   });
 
   const { captureException, track } = useAnalytics();
