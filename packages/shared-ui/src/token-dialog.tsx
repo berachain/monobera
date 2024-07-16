@@ -314,7 +314,6 @@ const TokenDialogRow = ({
     return tokenData?.tokenList?.some((t) => t.address === token?.address);
   }, [tokenData?.customTokenList]);
   const [addTokenOpen, setAddTokenOpen] = useState(false);
-
   return (
     <div>
       <Button
@@ -324,6 +323,7 @@ const TokenDialogRow = ({
           isTokenSelected && "cursor-default opacity-50",
         )}
         onClick={() => {
+          if (addTokenOpen) return;
           if (isTokenSelected) return;
           if (!tokenExists) {
             setAddTokenOpen(true);
