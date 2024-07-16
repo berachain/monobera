@@ -1,6 +1,10 @@
 import React from "react";
 import type { Metadata } from "next";
-import { bhoneyVaultContractAddress, perpsName } from "@bera/config";
+import {
+  bhoneyVaultContractAddress,
+  bHoneyGaugeVaultContractAddress,
+  perpsName,
+} from "@bera/config";
 import { BgtStationBanner } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
@@ -45,7 +49,7 @@ export default async function Vault() {
         <BgtStationBanner
           className="mb-4"
           receiptTokenAddress={bhoneyVaultContractAddress}
-          vaultAddress={bhoneyVaultContractAddress}
+          vaultAddress={bHoneyGaugeVaultContractAddress}
           text={depositText}
         />
         <div className="flex flex-col gap-4 lg:flex-row ">
