@@ -68,10 +68,6 @@ export function ProposalCard({
       <ProgressBarChart
         className="mt-4"
         dataList={getVotesDataList(proposal)}
-        labelList={[
-          { label: "Pass threshold", width: 30 },
-          { label: "Quorum", width: 60 },
-        ]}
       />
       <div className="mt-3 flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">

@@ -17,6 +17,7 @@ export type Proposal = {
     timelockId: string;
     token: { decimals: number };
   };
+  executableCalls: ExecutableCalls[];
   id: string;
   metadata: {
     description: string;
@@ -48,4 +49,13 @@ export type Voter = {
   name: string;
   picture: string | null;
   twitter?: string;
+};
+
+export type ExecutableCalls = {
+  calldata: string;
+  offchaindata: any;
+  signature: string;
+  target: Address;
+  type: any;
+  value: string;
 };

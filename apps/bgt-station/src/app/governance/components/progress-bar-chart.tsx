@@ -10,12 +10,15 @@ interface ILabel {
 interface IProgressBarProps {
   className?: string;
   dataList: IProgressBar[];
-  labelList: ILabel[];
+  labelList?: ILabel[];
 }
 
 export function ProgressBarChart({
   dataList,
-  labelList,
+  labelList = [
+    { label: "Pass threshold", width: 50 },
+    { label: "Quorum", width: 100 },
+  ],
   className,
 }: IProgressBarProps) {
   return (

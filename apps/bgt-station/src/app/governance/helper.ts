@@ -1,4 +1,5 @@
 import { Proposal } from "@bera/berajs";
+import BigNumber from "bignumber.js";
 import { formatEther } from "viem";
 
 import { StatusEnum, VoteColorMap } from "./types";
@@ -51,18 +52,39 @@ export const getTimeText = (proposal: Proposal) => {
 
 export const getVotesDataList = (proposal: Proposal) => {
   const votes = proposal.voteStats;
-  const globalYesPercentage = votes[0].percent;
-  const globalNoPercentage = votes[1].percent;
-  const globalAbstainPercentage = votes[2].percent;
+  const quorum = proposal.governor.quorum;
+  const globalYesPercentage = BigNumber(votes[0].votesCount)
+    .div(BigNumber(quorum))
+    .times(100)
+    .toNumber();
+
+  const globalNoPercentage = BigNumber(votes[1].votesCount)
+    .div(BigNumber(quorum))
+    .times(100)
+    .toNumber();
+
+  const globalAbstainPercentage = BigNumber(votes[2].votesCount)
+    .div(BigNumber(quorum))
+    .times(100)
+    .toNumber();
   return [
-    { color: VoteColorMap.yes, width: globalYesPercentage },
+    {
+      color: VoteColorMap.yes,
+      width: globalYesPercentage > 100 ? 100 : globalYesPercentage,
+    },
     {
       color: VoteColorMap.no,
-      width: globalYesPercentage + globalNoPercentage,
+      width:
+        globalYesPercentage + globalNoPercentage > 100
+          ? 100
+          : globalYesPercentage + globalNoPercentage,
     },
     {
       color: VoteColorMap.abstain,
-      width: globalYesPercentage + globalNoPercentage + globalAbstainPercentage,
+      width:
+        globalYesPercentage + globalNoPercentage + globalAbstainPercentage > 100
+          ? 100
+          : globalYesPercentage + globalNoPercentage + globalAbstainPercentage,
     },
   ];
 };
