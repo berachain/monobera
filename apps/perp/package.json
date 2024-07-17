@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "pnpm with-env next build",
+    "copy-chart": "bash ./copy_charting_library_files.sh",
+    "build": "pnpm copy-chart && pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev -p 3004",
     "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
