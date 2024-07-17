@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "copy-chart": "bash ./copy_charting_library_files.sh",
     "build": "pnpm copy-chart && pnpm with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev -p 3004",
@@ -11,7 +10,8 @@
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start -p 3004",
     "check-types": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env --",
+    "copy-chart": "pnpm with-env node ./copy-charting-lib.js"
   },
   "dependencies": {
     "@bera/berajs": "workspace:*",
@@ -37,6 +37,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
+    "shelljs": "^0.8.5",
     "swr": "^2.2.5",
     "swr-devtools": "^1.3.2",
     "tailwindcss-animate": "^1.0.5",
