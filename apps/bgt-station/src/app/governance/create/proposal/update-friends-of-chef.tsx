@@ -18,8 +18,10 @@ import { Address, encodeAbiParameters, parseAbiParameters } from "viem";
 import { useCreateProposal } from "../useCreateProposal";
 
 export const UpdateFriendsOfChef = ({
+  title,
   description,
 }: {
+  title: string;
   description: string;
 }) => {
   const [open, setOpen] = useState(false);
@@ -29,11 +31,14 @@ export const UpdateFriendsOfChef = ({
   >(undefined);
 
   const { data, loading } = useQuery(GetFriendsOfTheChef);
-  const friendsOfChef = useMemo(() => {
-    return (data?.friendsOfTheChefs ?? []).filter((gauge: any) =>
-      gauge.id.toLowerCase().includes(keyword.toLowerCase()),
+
+  const Vaults = useMemo(() => {
+    return (data?.vaults ?? []).filter(
+      (vault: any) =>
+        vault.id.toLowerCase().includes(keyword.toLowerCase()) ||
+        vault.stakingToken.id.toLowerCase().includes(keyword.toLowerCase()),
     );
-  }, [keyword, data?.friendsOfTheChefs]);
+  }, [keyword, data]);
 
   const encodedData = gauge
     ? encodeAbiParameters(
@@ -46,13 +51,13 @@ export const UpdateFriendsOfChef = ({
     [beraChefAddress],
     [0],
     [encodedData],
-    description,
+    `#FRIENDS_OF_CHEF# ${title}\n${description}`,
   ]);
 
   return (
     <>
       <div className="flex flex-col gap-2">
-        <div className="text-sm font-semibold leading-tight">Gauge Address</div>
+        <div className="text-sm font-semibold leading-tight">Select Gauge</div>
         {loading ? (
           <Skeleton className="h-10 w-full" />
         ) : (
@@ -63,7 +68,9 @@ export const UpdateFriendsOfChef = ({
                 className="w-full"
                 onClick={() => setOpen(true)}
               >
-                {gauge ? truncateHash(gauge.id) : "Select a Gauge"}
+                {gauge
+                  ? `Staking Token Address: ${truncateHash(gauge.id)}`
+                  : "Select a Gauge"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -73,18 +80,30 @@ export const UpdateFriendsOfChef = ({
               <SearchInput
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
+                placeholder="Search by staking token address or gauge address"
               />
               <DropdownMenuSeparator />
-              {friendsOfChef.map((gauge: any) => (
+              {Vaults.map((vault: any) => (
                 <Button
                   variant="ghost"
                   className="w-full font-medium"
                   onClick={() => {
-                    setGauge(gauge);
+                    const gauge = data.friendsOfTheChefs.find(
+                      (friend: { id: Address; isFriend: boolean }) =>
+                        friend.id === vault.id,
+                    );
+                    if (!gauge) {
+                      setGauge({
+                        id: vault.stakingToken.id,
+                        isFriend: false,
+                      });
+                    } else {
+                      setGauge(gauge);
+                    }
                     setOpen(false);
                   }}
                 >
-                  {gauge.id}
+                  {vault.id}
                 </Button>
               ))}
             </DropdownMenuContent>
@@ -110,7 +129,12 @@ export const UpdateFriendsOfChef = ({
         </div>
       )}
       <ActionButton>
-        <Button type="submit" className="w-full" onClick={submitProposal}>
+        <Button
+          type="submit"
+          className="w-full"
+          onClick={submitProposal}
+          disabled={title.length === 0 || !gauge}
+        >
           Submit
         </Button>
       </ActionButton>

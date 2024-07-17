@@ -13,6 +13,7 @@ import {
   getTotalVoters,
   getTotalVotes,
   getVotesDataList,
+  parseString,
 } from "../helper";
 import { StatusEnum } from "../types";
 import { VoteInfo } from "./Voter";
@@ -29,9 +30,7 @@ export function ProposalCard({
   proposal: Proposal;
   onClick?: () => void;
 }) {
-  const content = proposal.metadata.description.split("\n");
-  const title = (content[0] ?? "# ").slice(2);
-  const subTitle = content.slice(1).join("<br />");
+  const body = parseString(proposal.metadata.description);
   return (
     <div
       className={cn(
@@ -47,6 +46,14 @@ export function ProposalCard({
         >
           {proposal.status}
         </Badge>
+        {body.type && (
+          <Badge
+            variant={"warning"}
+            className="border-none px-2 py-1 text-xs font-medium capitalize"
+          >
+            {body.type.replaceAll("_", " ")}
+          </Badge>
+        )}
         <div className="text-xs font-medium leading-tight text-muted-foreground">
           {getTimeText(proposal)}
         </div>
@@ -58,11 +65,11 @@ export function ProposalCard({
             truncate && "line-clamp-1",
           )}
         >
-          {title}
+          {body.title}
         </div>
         <div
           className={cn("width-full", truncate && "line-clamp-2")}
-          dangerouslySetInnerHTML={{ __html: subTitle }}
+          dangerouslySetInnerHTML={{ __html: body.content }}
         />
       </div>
       <ProgressBarChart

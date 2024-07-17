@@ -105,5 +105,12 @@ export const GetFriendsOfTheChef = gql`
       id
       isFriend
     }
+    vaults {
+      id
+      vaultAddress
+      stakingToken {
+        id
+      }
+    }
   }
 `;

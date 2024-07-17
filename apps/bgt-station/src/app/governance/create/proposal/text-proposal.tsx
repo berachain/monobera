@@ -4,17 +4,28 @@ import { Button } from "@bera/ui/button";
 
 import { useCreateProposal } from "../useCreateProposal";
 
-export const TextProposal = ({ description }: { description: string }) => {
+export const TextProposal = ({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) => {
   const { ModalPortal, submitProposal } = useCreateProposal([
     [governorAddress],
     [0],
     ["0x"],
-    description,
+    `# ${title}\n${description}`,
   ]);
   return (
     <div>
       <ActionButton>
-        <Button type="submit" className="w-full" onClick={submitProposal}>
+        <Button
+          type="submit"
+          className="w-full"
+          onClick={submitProposal}
+          disabled={title.length === 0}
+        >
           Submit
         </Button>
       </ActionButton>

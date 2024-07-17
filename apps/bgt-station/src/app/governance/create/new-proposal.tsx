@@ -101,11 +101,11 @@ export default function NewProposal() {
         </div>
 
         {proposalType === ProposalTypeEnum.TEXT_PROPOSAL && (
-          <TextProposal description={`# ${title}\n${description}`} />
+          <TextProposal title={title} description={description} />
         )}
 
         {proposalType === ProposalTypeEnum.FRIENDS_OF_CHEF && (
-          <UpdateFriendsOfChef description={`# ${title}\n${description}`} />
+          <UpdateFriendsOfChef title={title} description={description} />
         )}
       </Card>
     </div>

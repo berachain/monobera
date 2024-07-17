@@ -1,5 +1,5 @@
 import { Card } from "@bera/ui/card";
-import { ExecutableCalls } from "@bera/berajs";
+import { type ExecutableCalls } from "@bera/berajs";
 
 export const Actions = ({
   executableCalls,

@@ -102,3 +102,26 @@ export const getTotalVoters = (proposal: Proposal) =>
     (acc: number, curr: any) => acc + curr.votersCount,
     0,
   );
+
+export const parseString = (
+  s: string,
+): { type: string | null; title: string; content: string } => {
+  const pattern = /#(?:([\w]+)# )?(.+)\n([\s\S]*)/;
+  const match = s.match(pattern);
+
+  if (match) {
+    const type = match[1] || null;
+    const title = match[2];
+    const content = match[3].replace("\n", "<br />");
+    return {
+      type,
+      title,
+      content,
+    };
+  }
+  return {
+    type: null,
+    title: "",
+    content: "",
+  };
+};
