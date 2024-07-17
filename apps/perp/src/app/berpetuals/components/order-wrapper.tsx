@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { perpsTradingviewEnabled } from "@bera/config";
 import { type GlobalParams } from "@bera/proto/src";
 import {
   ResizableHandle,
@@ -9,9 +10,9 @@ import {
 } from "@bera/ui/resizable";
 
 import type { IMarket } from "~/types/market";
-import { OrderChart } from "../components/order-chart";
 import { OrderHistory } from "../components/order-history";
 import { CreatePosition } from "./create-position";
+import { LoadingContainer } from "./loading-container";
 
 const calcWidth = (width: number) => {
   if (width < 640) {
@@ -47,12 +48,50 @@ export default function OrderWrapper({
     };
   }, [size]);
 
+  const [OrderChart, setOrderChart] = useState<any>(null);
+  const [chartReady, setChartReady] = useState(false);
+  const [chartError, setChartError] = useState("");
+
+  useEffect(() => {
+    const loadOrderChart = async () => {
+      if (perpsTradingviewEnabled === "true") {
+        const module = await import("../components/order-chart");
+        setOrderChart(() => module.OrderChart);
+      } else {
+        setChartError("TradingView chart unavailable");
+      }
+    };
+
+    loadOrderChart();
+  }, []);
+
+  const tradingChart = useMemo(() => {
+    return (
+      <>
+        {OrderChart && (
+          <OrderChart
+            markets={markets}
+            marketName={defaultMarket?.name}
+            chartReady={chartReady}
+            setChartReady={setChartReady}
+            setChartError={setChartError}
+          />
+        )}
+        {chartError ? (
+          <div className="absolute left-0 top-0 h-full w-full content-center text-center">
+            {chartError}
+          </div>
+        ) : !chartReady ? (
+          <LoadingContainer />
+        ) : null}
+      </>
+    );
+  }, [OrderChart, chartError, chartReady, markets, defaultMarket?.name]);
+
   return (
     <>
-      <div className="mx-2 block h-[500px] rounded-md border border-border lg:hidden">
-        {size !== "lg" && (
-          <OrderChart markets={markets} marketName={defaultMarket?.name} />
-        )}
+      <div className="mx-2 block h-[500px] rounded-md border border-border lg:hidden relative">
+        {size !== "lg" && tradingChart}
       </div>
       <div className="flex h-full w-full flex-col lg:flex-row lg:overflow-auto">
         <CreatePosition market={defaultMarket} params={params} />
@@ -62,14 +101,8 @@ export default function OrderWrapper({
             direction="vertical"
           >
             <ResizablePanel>
-              <div className="mr-2 hidden h-[calc(100%-8px)] flex-shrink-0 rounded-md border border-border lg:block">
-                {size === "lg" && (
-                  <OrderChart
-                    key="lg"
-                    markets={markets}
-                    marketName={defaultMarket?.name}
-                  />
-                )}
+              <div className="mr-2 hidden h-[calc(100%-8px)] flex-shrink-0 rounded-md border border-border lg:block relative">
+                {size === "lg" && tradingChart}
               </div>
             </ResizablePanel>
             <ResizableHandle className="mx-2 mb-2 hidden !w-[calc(100%-24px)] lg:flex" />

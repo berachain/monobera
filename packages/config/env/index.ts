@@ -173,6 +173,8 @@ export const perpsPricesBenchmark = process.env
   .NEXT_PUBLIC_PERPS_PRICES_BENCHMARK_URL as string;
 export const perpsPythPricesMocked = process.env
   .NEXT_PUBLIC_PERPS_PYTH_PRICES_MOCKED as string;
+export const perpsTradingviewEnabled = process.env
+  .NEXT_PUBLIC_PERPS_TRADINGVIEW_ENABLED as string;
 
 // Validator clue
 export const validatorClueEndpoint = process.env
