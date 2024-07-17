@@ -1,11 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { cloudinaryUrl } from "@bera/config";
-import { ActionButton } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
+import { cloudinaryUrl, governorAddress } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import {
   DropdownMenu,
@@ -16,30 +14,20 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
-
 import { ProposalTypeEnum } from "../types";
-import { UpdateFriendsOfChef } from "./update-friends-of-chef";
+import { TextProposal } from "./proposal/text-proposal";
+import { UpdateFriendsOfChef } from "./proposal/update-friends-of-chef";
 import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal() {
-  const router = useRouter();
-  const {
-    title,
-    setTitle,
-    description,
-    setDescription,
-    ModalPortal,
-    proposalType,
-    setProposalType,
-    submitProposal,
-    error,
-    errorMsgs,
-    friendsOfChef,
-  } = useCreateProposal();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [proposalType, setProposalType] = useState<ProposalTypeEnum>(
+    ProposalTypeEnum.TEXT_PROPOSAL,
+  );
 
   return (
     <div className="mx-auto w-full max-w-[564px] pb-16">
-      {ModalPortal}
       <Image
         className="max-[600px]:mx-auto"
         src={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
@@ -95,6 +83,11 @@ export default function NewProposal() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          {title.length === 0 && (
+            <div className="text-sm text-destructive-foreground">
+              * Title is required
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
@@ -107,28 +100,13 @@ export default function NewProposal() {
           />
         </div>
 
-        {proposalType === ProposalTypeEnum.FRIENDS_OF_CHEF && (
-          <UpdateFriendsOfChef />
+        {proposalType === ProposalTypeEnum.TEXT_PROPOSAL && (
+          <TextProposal description={`# ${title}\n${description}`} />
         )}
 
-        <div>
-          {errorMsgs.map((msg: string) => (
-            <div key={msg} className="text-sm text-destructive-foreground">
-              * {msg}
-            </div>
-          ))}
-        </div>
-
-        <ActionButton>
-          <Button
-            type="submit"
-            className="w-full"
-            onClick={submitProposal}
-            disabled={error}
-          >
-            Submit
-          </Button>
-        </ActionButton>
+        {proposalType === ProposalTypeEnum.FRIENDS_OF_CHEF && (
+          <UpdateFriendsOfChef description={`# ${title}\n${description}`} />
+        )}
       </Card>
     </div>
   );

@@ -21,6 +21,7 @@ export const validatorEndpointUrl = process.env.NEXT_PUBLIC_VALIDATOR_ENDPOINT;
 export const awsUrl = process.env.NEXT_PUBLIC_AWS_URL as string;
 export const governanceUrl = process.env.NEXT_PUBLIC_GOVERNANCE_URL as string;
 export const governanceName = process.env.NEXT_PUBLIC_GOVERNANCE_NAME as string;
+
 // Subgraphs
 export const crocSubgraphEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_SUBGRAPH as Address;
@@ -34,6 +35,7 @@ export const bgtStakerSubgraphUrl = process.env
   .NEXT_PUBLIC_BGT_STAKER_SUBGRAPH_URL as string;
 export const governanceSubgraphUrl = process.env
   .NEXT_PUBLIC_GOVERNANCE_SUBGRAPH_URL as string;
+  
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
 export const homepageName = process.env.NEXT_PUBLIC_HOMEPAGE_NAME as string;
@@ -81,10 +83,8 @@ export const gasTokenName = process.env
 export const gasTokenDecimals = Number(
   process.env.NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS,
 );
-
 export const dynamicWalletKey = process.env
   .NEXT_PUBLIC_DYNAMIC_API_KEY as string;
-
 export const stakingToken = process.env.NEXT_PUBLIC_STAKING_TOKEN as string;
 export const bech32Prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
 export const governanceMinDeposit = Number(
@@ -105,8 +105,6 @@ export const governanceAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_ADDRESS as Address;
 export const bankAddress = process.env.NEXT_PUBLIC_BANK_ADDRESS as Address;
 export const epochsAddress = process.env.NEXT_PUBLIC_EPOCHS_ADDRESS as Address;
-export const berachefAddress = process.env
-  .NEXT_PUBLIC_BERACHEF_ADDRESS as Address;
 export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
 export const rewardsAddress = process.env
   .NEXT_PUBLIC_REWARDS_ADDRESS as Address;
@@ -198,7 +196,7 @@ export const governanceTokenAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TOKEN_ADDRESS as Address;
 export const governanceTimelockAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TIMELOCK_ADDRESS as string;
-
+export const beraChefAddress = process.env.NEXT_PUBLIC_BERA_CHEF_ADDRESS as Address
 // Crocswap
 export const crocDexAddress = process.env.NEXT_PUBLIC_RPC_CROC_DEX as Address;
 export const crocQueryAddress = process.env

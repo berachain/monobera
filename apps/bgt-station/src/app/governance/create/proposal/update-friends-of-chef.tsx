@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { truncateHash } from "@bera/berajs";
 import { GetFriendsOfTheChef } from "@bera/graphql";
-import { SearchInput } from "@bera/shared-ui";
+import { ActionButton, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -13,16 +13,31 @@ import {
 } from "@bera/ui/dropdown-menu";
 import { Skeleton } from "@bera/ui/skeleton";
 
-export const UpdateFriendsOfChef = () => {
+import { useCreateProposal } from "../useCreateProposal";
+import { beraChefAddress } from "@bera/config";
+
+export const UpdateFriendsOfChef = ({
+  description,
+}: {
+  description: string;
+}) => {
   const [open, setOpen] = useState(false);
-  const [gauge, setGauge] = useState<any | undefined>(undefined);
   const [keyword, setKeyword] = useState<string>("");
+  const [gauge, setGauge] = useState<any | undefined>(undefined);
+
   const { data, loading } = useQuery(GetFriendsOfTheChef);
   const friendsOfChef = useMemo(() => {
     return (data?.friendsOfTheChefs ?? []).filter((gauge: any) =>
       gauge.id.toLowerCase().includes(keyword.toLowerCase()),
     );
   }, [keyword, data?.friendsOfTheChefs]);
+
+  const { ModalPortal, submitProposal } = useCreateProposal([
+    [beraChefAddress],
+    [0],
+    ["0x"],
+    description,
+  ]);
 
   return (
     <>
@@ -67,7 +82,7 @@ export const UpdateFriendsOfChef = () => {
         )}
       </div>
       {gauge && (
-        <div className="flex flex-col gap-2 justify-center">
+        <div className="flex flex-col justify-center gap-2">
           <div className="text-sm font-semibold leading-tight">
             Update To Friends of the Chef:{" "}
             <span
@@ -84,6 +99,12 @@ export const UpdateFriendsOfChef = () => {
           </div>
         </div>
       )}
+      <ActionButton>
+        <Button type="submit" className="w-full" onClick={submitProposal}>
+          Submit
+        </Button>
+      </ActionButton>
+      {ModalPortal}
     </>
   );
 };
