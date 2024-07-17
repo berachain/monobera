@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { truncateHash } from "@bera/berajs";
+import { beraChefAddress } from "@bera/config";
 import { GetFriendsOfTheChef } from "@bera/graphql";
 import { ActionButton, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -12,9 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Skeleton } from "@bera/ui/skeleton";
+import { Address, encodeAbiParameters, parseAbiParameters } from "viem";
 
 import { useCreateProposal } from "../useCreateProposal";
-import { beraChefAddress } from "@bera/config";
 
 export const UpdateFriendsOfChef = ({
   description,
@@ -23,7 +24,9 @@ export const UpdateFriendsOfChef = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [keyword, setKeyword] = useState<string>("");
-  const [gauge, setGauge] = useState<any | undefined>(undefined);
+  const [gauge, setGauge] = useState<
+    { id: Address; isFriend: boolean } | undefined
+  >(undefined);
 
   const { data, loading } = useQuery(GetFriendsOfTheChef);
   const friendsOfChef = useMemo(() => {
@@ -32,10 +35,17 @@ export const UpdateFriendsOfChef = ({
     );
   }, [keyword, data?.friendsOfTheChefs]);
 
+  const encodedData = gauge
+    ? encodeAbiParameters(
+        parseAbiParameters("address receiver, bool isFriend"),
+        [gauge.id, !gauge.isFriend],
+      )
+    : "0x";
+
   const { ModalPortal, submitProposal } = useCreateProposal([
     [beraChefAddress],
     [0],
-    ["0x"],
+    [encodedData],
     description,
   ]);
 

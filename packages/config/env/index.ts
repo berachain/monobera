@@ -35,7 +35,7 @@ export const bgtStakerSubgraphUrl = process.env
   .NEXT_PUBLIC_BGT_STAKER_SUBGRAPH_URL as string;
 export const governanceSubgraphUrl = process.env
   .NEXT_PUBLIC_GOVERNANCE_SUBGRAPH_URL as string;
-  
+
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
 export const homepageName = process.env.NEXT_PUBLIC_HOMEPAGE_NAME as string;
@@ -196,7 +196,8 @@ export const governanceTokenAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TOKEN_ADDRESS as Address;
 export const governanceTimelockAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TIMELOCK_ADDRESS as string;
-export const beraChefAddress = process.env.NEXT_PUBLIC_BERA_CHEF_ADDRESS as Address
+export const beraChefAddress = process.env
+  .NEXT_PUBLIC_BERA_CHEF_ADDRESS as Address;
 // Crocswap
 export const crocDexAddress = process.env.NEXT_PUBLIC_RPC_CROC_DEX as Address;
 export const crocQueryAddress = process.env
