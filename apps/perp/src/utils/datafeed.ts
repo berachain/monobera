@@ -10,7 +10,7 @@ import type {
   ResolveCallback,
   SearchSymbolsCallback,
   SubscribeBarsCallback,
-} from "public/static/charting_library/charting_library";
+} from "~/types/charting-library";
 
 import { PricesListener } from "~/types/prices";
 import { PYTH_IDS } from "./constants";

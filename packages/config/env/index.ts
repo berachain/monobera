@@ -173,6 +173,8 @@ export const perpsPricesBenchmark = process.env
   .NEXT_PUBLIC_PERPS_PRICES_BENCHMARK_URL as string;
 export const perpsPythPricesMocked = process.env
   .NEXT_PUBLIC_PERPS_PYTH_PRICES_MOCKED as string;
+export const perpsTradingviewEnabled = process.env
+  .NEXT_PUBLIC_PERPS_TRADINGVIEW_ENABLED as string;
 
 // Validator clue
 export const validatorClueEndpoint = process.env
@@ -208,15 +210,6 @@ export const crocIndexerEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_INDEXER_ENDPOINT as Address;
 export const crocRouterEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;
-
-// Faucet
-export const faucetDripAmount = process.env
-  .NEXT_PUBLIC_FAUCET_DRIP_AMOUNT as string;
-export const faucetDripTimeGap = process.env
-  .NEXT_PUBLIC_FAUCET_DRIP_TIME_GAP as string;
-export const recaptchaSiteKey = process.env
-  .NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string;
-export const cloudflareKey = process.env.NEXT_PUBLIC_CLOUDFLARE_KEY as string;
 
 // Sentry && Mixpanel
 export const developmentAnalytics = process.env

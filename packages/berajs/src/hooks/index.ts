@@ -17,3 +17,4 @@ export * from "./useTokenHoneyPrices";
 export * from "./usePollWalletBalances";
 export * from "./usePollEstimateFeesPerGas";
 export * from "./useSubgraphTokenInformation";
+export * from "./useSubgraphTokenInformations";

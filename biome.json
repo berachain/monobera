@@ -16,7 +16,8 @@
       "ui/",
       ".vscode",
       "tsconfig.apps.base.json",
-      "out"
+      "out",
+      "**/types/*.d.ts"
     ]
   },
   "organizeImports": {

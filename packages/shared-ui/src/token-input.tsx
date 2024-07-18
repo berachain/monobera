@@ -13,7 +13,13 @@ import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 
-import { FormattedNumber, SelectToken, TooltipCustom, useBreakpoint } from ".";
+import {
+  BREAKPOINTS,
+  FormattedNumber,
+  SelectToken,
+  TooltipCustom,
+  useBreakpoint,
+} from ".";
 import { getPriceImpactColorClass } from "./utils/textStyling";
 
 type Props = {
@@ -231,7 +237,7 @@ export function TokenInput({
           <div className="flex flex-row gap-1">
             {!hidePrice && (
               <div className="flex flex-row gap-1 self-center p-0 text-xs text-muted-foreground">
-                {/* {!!difference && Number.isFinite(difference) && (
+                {!!difference && Number.isFinite(difference) && (
                   <TooltipCustom
                     anchor="left"
                     position="right"
@@ -253,7 +259,7 @@ export function TokenInput({
                       {`(${difference.toFixed(2)}%) `}
                     </p>
                   </TooltipCustom>
-                )} */}
+                )}
                 {safeNumberAmount !== 0 &&
                   !Number.isNaN(safeNumberAmount * price) && (
                     <FormattedNumber
