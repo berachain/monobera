@@ -1,12 +1,13 @@
+"use client";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePrevious } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
 import { useTheme } from "next-themes";
 
 import { DatafeedFactory, subscribeOffChainPrices } from "~/utils/datafeed";
 import { useIsPythConnected, usePriceEvents } from "~/context/price-context";
-import { PricesListener } from "~/types/prices";
 import {
-  widget,
   type ChartingLibraryWidgetOptions,
   type IChartingLibraryWidget,
   type IPositionLineAdapter,
@@ -15,7 +16,8 @@ import {
   type ResolutionString,
   type SubscribeBarsCallback,
   type TimeFrameItem,
-} from "../../../../../public/static/charting_library";
+} from "~/types/charting-library";
+import { PricesListener } from "~/types/prices";
 import { type OrderLine } from "../order-chart";
 import styles from "./index.module.css";
 
@@ -24,10 +26,29 @@ const TV_BACKGROUND_COLOR = {
   light: "#FAFAF9",
 };
 
+const TV_STYLES_OVERRIDE = {
+  "--tv-color-platform-background": "#110E09",
+  "--tv-color-pane-background": "transparent",
+  "--tv-color-pane-background-secondary": "#08080F",
+  "--tv-color-toolbar-button-background-hover": "#3A3A3A",
+  "--tv-color-toolbar-button-background-secondary-hover": "#3A3A3A",
+  "--tv-color-toolbar-button-background-expanded": "#484848",
+  "--tv-color-toolbar-tooltip-text": "#787878",
+  "--tv-color-toolbar-button-text": "#787878",
+  "--tv-color-toolbar-button-text-hover": "#787878",
+  "--tv-color-toolbar-button-text-active": "#787878",
+  "--tv-color-toolbar-button-text-active-hover": "#787878",
+  "--tv-color-item-active-text": "#787878",
+  "--tv-color-toolbar-toggle-button-background-active": "#2F2F48",
+  "--tv-color-toolbar-toggle-button-background-active-hover": "#535353",
+  "--tv-color-popup-background": "#1f1c19",
+};
+
 export type ChartProps = Partial<ChartingLibraryWidgetOptions> & {
   orderLines?: OrderLine[];
   chartReady: boolean;
   setChartReady: (ready: boolean) => void;
+  setChartError: (error: string) => void;
 };
 
 export const TVChartContainer = (props: ChartProps) => {
@@ -45,6 +66,29 @@ export const TVChartContainer = (props: ChartProps) => {
   const { theme: appTheme, systemTheme } = useTheme();
   const theme = (appTheme === "system" ? systemTheme : appTheme) || "dark";
   const prevTheme = usePrevious(theme);
+
+  const [widget, setWidget] = useState<any>(null);
+
+  useEffect(() => {
+    const loadWidget = async () => {
+      try {
+        const module = await import(
+          // @ts-ignore
+          "../../../../../public/static/charting_library"
+        );
+        // @ts-ignore
+        if (module?.widget === undefined) {
+          props.setChartError("Error loading TradingView chart");
+        }
+        // @ts-ignore
+        setWidget(() => module?.widget);
+      } catch (error) {
+        props.setChartError("Error loading TradingView chart");
+      }
+    };
+
+    loadWidget();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -197,7 +241,6 @@ export const TVChartContainer = (props: ChartProps) => {
       user_id: props.user_id,
       fullscreen: props.fullscreen,
       theme: theme as "light" | "dark",
-      custom_css_url: "./theme.css",
       autosize: props.autosize,
       height: 498,
       loading_screen: {
@@ -225,12 +268,18 @@ export const TVChartContainer = (props: ChartProps) => {
       toolbar_bg: backgroundColor,
     };
 
+    if (!widget) {
+      return;
+    }
     const tvWidget = new widget({ ...widgetOptions });
     tvWidgetRef.current = tvWidget;
 
     tvWidgetRef.current?.onChartReady(() => {
       widgetOptions.overrides &&
         tvWidgetRef.current?.applyOverrides(widgetOptions.overrides);
+      Object.entries(TV_STYLES_OVERRIDE).forEach(([property, value]) => {
+        tvWidget.setCSSCustomProperty(property, value);
+      });
       props.setChartReady(true);
     });
 
@@ -266,6 +315,7 @@ export const TVChartContainer = (props: ChartProps) => {
     theme,
     props.setChartReady,
     wsConnected,
+    widget,
   ]);
 
   useEffect(() => {
@@ -309,5 +359,10 @@ export const TVChartContainer = (props: ChartProps) => {
     [],
   );
 
-  return <div ref={chartContainerRef} className={styles.TVChartContainer} />;
+  return (
+    <div
+      ref={chartContainerRef}
+      className={cn(styles.TVChartContainer, !props.chartReady && "hidden")}
+    />
+  );
 };
