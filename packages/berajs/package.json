@@ -24,6 +24,7 @@
     "@bera/config": "workspace:*",
     "@bera/graphql": "workspace:*",
     "@dynamic-labs/sdk-react-core": "^2.2.0",
+    "@metamask/browser-passworder": "^5.0.0",
     "@tanstack/react-query": "^5.26.3",
     "@wagmi/core": "^2.10.5",
     "axios": "^1.6.8",
