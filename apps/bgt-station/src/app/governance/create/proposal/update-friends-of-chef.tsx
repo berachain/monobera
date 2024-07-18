@@ -42,10 +42,10 @@ export const UpdateFriendsOfChef = ({
   }, [keyword, data]);
 
   const encodedData = gauge
-    ? encodeAbiParameters(
-        parseAbiParameters(ProposalAbiEnum.FRIENDS_OF_CHEF),
-        [gauge.id, !gauge.isFriend],
-      )
+    ? encodeAbiParameters(parseAbiParameters(ProposalAbiEnum.FRIENDS_OF_CHEF), [
+        gauge.id,
+        !gauge.isFriend,
+      ])
     : "0x";
 
   const { ModalPortal, submitProposal } = useCreateProposal([
@@ -54,7 +54,7 @@ export const UpdateFriendsOfChef = ({
     [encodedData],
     `#${ProposalTypeEnum.FRIENDS_OF_CHEF}# ${title}\n${description}`,
   ]);
-  
+
   return (
     <>
       <div className="flex flex-col gap-2">

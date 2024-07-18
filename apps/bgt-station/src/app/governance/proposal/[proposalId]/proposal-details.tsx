@@ -62,7 +62,10 @@ export default function ProposalDetails({
             </div>
           </div>
 
-          <Actions executableCalls={proposal.executableCalls} type={parseString(proposal.metadata.description).type} />
+          <Actions
+            executableCalls={proposal.executableCalls}
+            type={parseString(proposal.metadata.description).type}
+          />
 
           <div>
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
