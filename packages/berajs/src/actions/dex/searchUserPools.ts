@@ -4,11 +4,21 @@ import { chainId, crocQueryAddress, multicallAddress } from "@bera/config";
 import { GetUserPools } from "@bera/graphql";
 import BigNumber from "bignumber.js";
 import { BigNumber as EthersBigNumber } from "ethers";
-import { Address, PublicClient, erc20Abi, getAddress, toHex } from "viem";
+import {
+  Address,
+  PublicClient,
+  erc20Abi,
+  formatUnits,
+  getAddress,
+  parseUnits,
+  toHex,
+} from "viem";
 
-import { bexQueryAbi } from "~/abi";
+import { BERA_VAULT_REWARDS_ABI, bexQueryAbi } from "~/abi";
+import { ADDRESS_ZERO } from "~/constants";
 import { BeraConfig, IUserPool, PoolV2, IUserPosition } from "~/types";
 import { mapPoolToPoolV2 } from "~/utils";
+import * as react_hook_form from "react-hook-form";
 
 interface Call {
   abi: any[];
@@ -64,7 +74,7 @@ export const searchUserPools = async ({
       quoteTokenAddresses.push(pool.quote);
     }
 
-    const calls: Call[] = positions.map((pool: any) => {
+    const priceCalls: Call[] = positions.map((pool: any) => {
       return {
         abi: bexQueryAbi,
         address: crocQueryAddress,
@@ -74,8 +84,8 @@ export const searchUserPools = async ({
     });
 
     // get price of all pools so that we can calculate estimated user postions
-    const result = publicClient.multicall({
-      contracts: calls,
+    const pricesResult = publicClient.multicall({
+      contracts: priceCalls,
       multicallAddress: multicallAddress,
     });
 
@@ -93,12 +103,41 @@ export const searchUserPools = async ({
       multicallAddress: multicallAddress,
     });
 
-    const [poolPrices, lpBalances] = await Promise.all([result, balanceResult]);
+    const vaultDepositedCalls: Call[] = positions.map((pool: any) => {
+      return {
+        abi: erc20Abi,
+        address: pool?.vault?.vaultAddress ?? ADDRESS_ZERO,
+        functionName: "balanceOf",
+        args: [account],
+      };
+    });
+
+    const vaultDepositedResult = publicClient.multicall({
+      contracts: vaultDepositedCalls,
+      multicallAddress: multicallAddress,
+    });
+
+    const vaultEarnedCalls: Call[] = positions.map((pool: any) => ({
+      address: pool?.vault?.vaultAddress ?? ADDRESS_ZERO,
+      abi: BERA_VAULT_REWARDS_ABI,
+      functionName: "earned",
+      args: [account],
+    }));
+
+    const vaultEarnedResult = publicClient.multicall({
+      contracts: vaultEarnedCalls,
+      multicallAddress: multicallAddress,
+    });
+
+    const [poolPrices, lpBalances, vaultBalances, vaultEarned] =
+      await Promise.all([
+        pricesResult,
+        balanceResult,
+        vaultDepositedResult,
+        vaultEarnedResult,
+      ]);
 
     const userPositions: IUserPool[] = [];
-
-    console.log("poolPrices", poolPrices);
-    console.log("lpBalances", lpBalances);
 
     positions.forEach((position: any, i: number) => {
       const poolPrice = poolPrices[i]?.result;
@@ -106,15 +145,11 @@ export const searchUserPools = async ({
       if (!poolPrice) {
         return;
       }
-      const decodedSpotPrice = decodeCrocPrice(
-        EthersBigNumber.from(poolPrice.toString()),
+
+      const { baseAmount, quoteAmount } = getBaseQuoteAmounts(
+        lpBalances[i]?.result as any,
+        poolPrice as any,
       );
-
-      const sqrtPrice = Math.sqrt(decodedSpotPrice);
-      const liq = new BigNumber((lpBalances[i]?.result as any).toString());
-
-      const baseAmount = liq.times(sqrtPrice);
-      const quoteAmount = liq.div(sqrtPrice);
 
       const baseDecimals = pool.baseInfo.decimals;
       const quoteDecimals = pool.quoteInfo.decimals;
@@ -137,12 +172,54 @@ export const searchUserPools = async ({
           parseFloat(formattedBaseAmount) +
         parseFloat(pool.quoteInfo.usdValue ?? "0") *
           parseFloat(formattedQuoteAmount);
+
+      const rawVaultBalance =
+        vaultBalances[i].result === undefined ||
+        vaultBalances[i]?.result?.toString() === "0x"
+          ? 0n
+          : (vaultBalances[i].result as unknown as bigint);
+
+      const {
+        baseAmount: depositedBaseAmount,
+        quoteAmount: depositedQuoteAmount,
+      } = getBaseQuoteAmounts(
+        (vaultBalances[i]?.result ?? 0n) as any,
+        poolPrice as any,
+      );
+
+      const formattedDepositedBaseAmount = depositedBaseAmount
+        .div(10 ** baseDecimals)
+        .toString()
+        .includes("e")
+        ? "0"
+        : depositedBaseAmount.div(10 ** baseDecimals).toString();
+
+      const formattedDepositedQuoteAmount = depositedQuoteAmount
+        .div(10 ** quoteDecimals)
+        .toString()
+        .includes("e")
+        ? "0"
+        : depositedQuoteAmount.div(10 ** quoteDecimals).toString();
+
+      const estimatedDepositedHoneyValue =
+        parseFloat(pool.baseInfo.usdValue ?? "0") *
+          parseFloat(formattedDepositedBaseAmount) +
+        parseFloat(pool.quoteInfo.usdValue ?? "0") *
+          parseFloat(formattedDepositedQuoteAmount);
+
+      const vaultBalance = formatUnits(rawVaultBalance, 18);
+
+      const bgtEarned = formatUnits((vaultEarned[i].result ?? 0n) as any, 18);
       const userPosition: IUserPosition = {
         baseAmount,
         quoteAmount,
         formattedBaseAmount,
         formattedQuoteAmount,
         estimatedHoneyValue,
+        vaultBalance: rawVaultBalance,
+        formattedVaultBalance: vaultBalance,
+        estimatedDepositedHoneyValue,
+        bgtEarned,
         seeds: BigInt(0),
       };
 
@@ -160,4 +237,20 @@ export const searchUserPools = async ({
     console.log(e);
     return undefined;
   }
+};
+
+export const getBaseQuoteAmounts = (seeds: bigint, price: bigint) => {
+  const decodedSpotPrice = decodeCrocPrice(
+    EthersBigNumber.from(price.toString()),
+  );
+  const sqrtPrice = Math.sqrt(decodedSpotPrice);
+
+  const liq = new BigNumber(seeds.toString());
+  const baseAmount = liq.times(sqrtPrice);
+  const quoteAmount = liq.div(sqrtPrice);
+
+  return {
+    baseAmount,
+    quoteAmount,
+  };
 };

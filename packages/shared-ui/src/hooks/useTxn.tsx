@@ -39,6 +39,8 @@ interface IUseTxn {
   actionType?: TransactionActionType;
   disableToast?: boolean;
   disableModal?: boolean;
+  CustomSuccessModal?: React.FC;
+  customSuccessModalProps?: any;
   onSuccess?: (hash: string) => void;
   onError?: (e?: Error) => void;
   onLoading?: () => void;
@@ -85,6 +87,8 @@ export const useTxn = ({
   actionType,
   disableToast = false,
   disableModal = false,
+  CustomSuccessModal,
+  customSuccessModalProps,
   onSuccess,
   onError,
   onLoading,
@@ -494,13 +498,21 @@ export const useTxn = ({
           message={message}
           hash={modalState.submissionModal?.submissionHash}
         />
-        <SuccessModal
-          title="Transaction Success"
-          onClose={() => closeModal("successModal")}
-          open={modalState.successModal?.isOpen ?? false}
-          message={message}
-          hash={modalState.successModal?.successHash}
-        />
+        {!CustomSuccessModal ? (
+          <SuccessModal
+            title="Transaction Success"
+            onClose={() => closeModal("successModal")}
+            open={modalState.successModal?.isOpen ?? false}
+            message={message}
+            hash={modalState.successModal?.successHash}
+          />
+        ) : (
+          <CustomSuccessModal
+            {...customSuccessModalProps}
+            onClose={() => closeModal("successModal")}
+            open={modalState.successModal?.isOpen ?? false}
+          />
+        )}
       </>
     );
   };

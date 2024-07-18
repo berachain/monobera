@@ -78,6 +78,10 @@ export interface IUserPosition {
   baseHoneyValue?: string;
   quoteHoneyValue?: string;
   estimatedHoneyValue: number;
+  vaultBalance?: bigint;
+  formattedVaultBalance?: string;
+  estimatedDepositedHoneyValue?: number;
+  bgtEarned?: string;
   seeds: bigint;
 }
 
