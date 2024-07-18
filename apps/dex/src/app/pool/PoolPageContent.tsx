@@ -396,7 +396,11 @@ export default function PoolPageContent({
             content: isPoolLoading ? (
               <Skeleton className="h-4 w-8" />
             ) : (
-              <FormattedNumber value={pool?.bgtApy ?? 0} percent colored />
+              <FormattedNumber
+                value={pool?.bgtApy ? parseFloat(pool.bgtApy) / 100 : 0}
+                colored
+                percent
+              />
             ),
             color: "warning",
             tooltip: <ApyTooltip />,
@@ -493,7 +497,11 @@ export default function PoolPageContent({
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold text-warning-foreground">
-                <FormattedNumber value={pool?.bgtApy ?? 0} percent colored />
+                <FormattedNumber
+                  value={pool?.bgtApy ? parseFloat(pool.bgtApy) / 100 : 0}
+                  colored
+                  percent
+                />
               </div>
             </Card>
           </div>

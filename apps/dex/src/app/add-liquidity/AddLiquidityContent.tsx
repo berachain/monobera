@@ -40,6 +40,7 @@ import { getBaseCost, getPoolUrl, getQuoteCost } from "../pools/fetchPools";
 import { useAddLiquidity } from "./useAddLiquidity";
 import { useSelectedPool } from "~/hooks/useSelectedPool";
 import { Skeleton } from "@bera/ui/skeleton";
+import { AddLiquiditySuccess } from "@bera/shared-ui/src/txn-modals";
 
 interface IAddLiquidityContent {
   shareAddress: Address;
@@ -84,6 +85,10 @@ export default function AddLiquidityContent({
     onSuccess: () => {
       reset();
       refresh();
+    },
+    CustomSuccessModal: AddLiquiditySuccess,
+    customSuccessModalProps: {
+      pool: pool,
     },
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });

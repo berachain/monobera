@@ -1,10 +1,13 @@
 import Image from "next/image";
-import { blockExplorerName, blockExplorerUrl } from "@bera/config";
+import { bgtUrl, blockExplorerName, blockExplorerUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import Balancer from "react-wrap-balancer";
 
 import { Spinner } from "./spinner";
+import { Icons } from "@bera/ui/icons";
+import { TokenIconList } from "./token-icon-list";
+import Link from "next/link";
 
 interface IModal {
   title: string;
@@ -161,5 +164,34 @@ export const LoadingModal = ({
       message={message}
       icon={<Spinner size={64} color="#f8b613" />}
     />
+  );
+};
+
+export const AddLiquiditySuccess = ({ onClose, open = false, pool }: any) => {
+  if (!pool) return undefined;
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="flex flex-col items-center justify-center gap-3 py-12 w-80">
+        <TokenIconList tokenList={pool.tokens} size="2xl" />
+        <span className="text-xl font-medium text-center">
+          Deposit your {pool.baseInfo.symbol}/{pool.quoteInfo.symbol} Receipt
+          Tokens
+        </span>
+        <span className="text-xs text-muted-foreground text-center my-2">
+          Deposit your receipt tokens in the gauge vault to start earning
+          <span className="inline-flex items-center">
+            <Icons.bgt className="h-3 w-3 mx-1" />
+          </span>
+          BGT Rewards
+        </span>
+        <Link
+          href={`${bgtUrl}/gauge/${pool.vaultAddress}`}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full"
+        >
+          <Button className="w-full">Deposit</Button>
+        </Link>
+      </DialogContent>
+    </Dialog>
   );
 };
