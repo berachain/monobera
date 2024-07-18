@@ -10,13 +10,11 @@ create_if_directory_does_not_exists() {
 
 BRANCH="master";
 
-REPOSITORY='https://github.com/tradingview/charting_library/'
-
-LATEST_HASH=$(git ls-remote $REPOSITORY $BRANCH | grep -Eo '^[[:alnum:]]+')
+LATEST_HASH=$(git ls-remote https://$CHARTING_ACCESS_TOKEN@github.com/tradingview/charting_library/ $BRANCH | grep -Eo '^[[:alnum:]]+')
 
 remove_if_directory_exists "$LATEST_HASH"
 
-git clone -q --depth 1 -b "$BRANCH" $REPOSITORY "$LATEST_HASH"
+git clone -q --depth 1 -b "$BRANCH" https://$CHARTING_ACCESS_TOKEN@github.com/tradingview/charting_library/ "$LATEST_HASH"
 
 create_if_directory_does_not_exists 'public'
 create_if_directory_does_not_exists 'public/static'
