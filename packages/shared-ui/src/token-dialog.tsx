@@ -27,6 +27,7 @@ import { FormattedNumber } from "./formatted-number";
 import { SearchInput } from "./search-input";
 import { TokenChip } from "./token-chip";
 import { TokenIcon } from "./token-icon";
+import { AddTokenDialog } from "./add-token-dialog";
 
 type Props = {
   open: boolean;
@@ -52,7 +53,6 @@ export function TokenDialog({
   filteredSymbols = [],
 }: Props) {
   const [search, setSearch] = useState("");
-  const [addTokenOpen, setAddTokenOpen] = useState(false);
   const [pendingAddition, setPendingAddition] = useState<boolean>(false);
   const [managingTokens, setManagingTokens] = useState<boolean>(false);
   const { data: tokenData, addNewToken, removeToken } = useTokens();
@@ -89,7 +89,6 @@ export function TokenDialog({
       setFilteredTokens(customTokens);
     }
   }, [customTokens]);
-
   useEffect(() => {
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
@@ -133,16 +132,12 @@ export function TokenDialog({
   }, [search]); // Include 'filteredTokens' in the dependency array
 
   useEffect(() => {
-    if (tokenInformation && search !== "") {
+    if (tokenInformation) {
       setFilteredTokens([tokenInformation]);
     }
   }, [tokenInformation]);
 
   const onTokenSelect = (token: Token | undefined) => {
-    if (!token?.default && !customTokens) {
-      setAddTokenOpen(true);
-      return;
-    }
     onSelectedToken(token);
     setOpen(false);
     setSearch("");
@@ -152,13 +147,6 @@ export function TokenDialog({
     addNewToken(token);
     onSelectedToken(token);
     setSearch("");
-    setAddTokenOpen(false);
-    setOpen(false);
-  };
-
-  const onAddTokenCancel = () => {
-    setSearch("");
-    setAddTokenOpen(false);
     setOpen(false);
   };
 
@@ -172,7 +160,6 @@ export function TokenDialog({
   const handleOpenChange = () => {
     if (open) {
       setSearch("");
-      setAddTokenOpen(false);
       setOpen(false);
     } else {
       setOpen(true);
@@ -229,10 +216,7 @@ export function TokenDialog({
                       token={token}
                       isTokenSelected={isTokenSelected(token)}
                       focusedToken={focusedToken}
-                      addTokenOpen={addTokenOpen}
-                      setAddTokenOpen={onAddTokenCancel}
                       onAddToken={onAddToken}
-                      onAddTokenCancel={onAddTokenCancel}
                       onTokenSelect={onTokenSelect}
                       pendingAddition={pendingAddition}
                     />
@@ -310,10 +294,7 @@ type RowProps = {
   token: Token | undefined;
   isTokenSelected: boolean;
   focusedToken: Token | undefined;
-  addTokenOpen: boolean;
-  setAddTokenOpen: (addTokenOpen: boolean) => void;
   onAddToken: (token: Token | undefined) => void;
-  onAddTokenCancel: () => void;
   onTokenSelect: (token: Token | undefined) => void;
   pendingAddition: boolean;
 };
@@ -321,8 +302,6 @@ const TokenDialogRow = ({
   token,
   isTokenSelected,
   focusedToken,
-  addTokenOpen,
-  setAddTokenOpen,
   onAddToken,
   onTokenSelect,
   pendingAddition,
@@ -330,6 +309,11 @@ const TokenDialogRow = ({
   const { isConnected } = useBeraJs();
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const t = useSelectedWalletBalance(token?.address ?? "0x");
+  const { data: tokenData } = useTokens();
+  const tokenExists = useMemo(() => {
+    return tokenData?.tokenList?.some((t) => t.address === token?.address);
+  }, [tokenData?.customTokenList]);
+  const [addTokenOpen, setAddTokenOpen] = useState(false);
   return (
     <div>
       <Button
@@ -339,7 +323,13 @@ const TokenDialogRow = ({
           isTokenSelected && "cursor-default opacity-50",
         )}
         onClick={() => {
-          !isTokenSelected && onTokenSelect(token);
+          if (addTokenOpen) return;
+          if (isTokenSelected) return;
+          if (!tokenExists) {
+            setAddTokenOpen(true);
+          } else {
+            onTokenSelect(token);
+          }
         }}
       >
         <div className="relative">
@@ -372,34 +362,12 @@ const TokenDialogRow = ({
             />
           </div>
         )}
-        <Dialog open={addTokenOpen} onOpenChange={setAddTokenOpen}>
-          <DialogContent className="flex max-h-[100vh] flex-col items-center justify-center gap-3 px-4  md:w-[350px]">
-            <Icons.tooltip
-              style={{ height: "64px", width: "64px", color: "#DC2626" }}
-            />
-            <p className="text-lg font-semibold">Import token</p>
-            <Balancer className="text-center text-xs font-medium text-muted-foreground">
-              {`This token doesn't appear on the active token list(s). Anyone can
-            create a token, including creating fake versions of existing tokens
-            that claim to represent projects`}
-            </Balancer>
-            <div className="flex w-full flex-col items-center gap-2 rounded-lg bg-muted p-2">
-              <TokenIcon address={token?.address ?? ""} />
-              <h4 className="text-sm font-semibold">{token?.name}</h4>
-              <Balancer className="text-xs font-normal text-muted-foreground">
-                {token?.address}
-              </Balancer>
-              <Badge variant="destructive" className="w-fit gap-1">
-                <Icons.tooltip className="h-4 w-4" />
-                Unknown source
-              </Badge>
-            </div>
-
-            <Button onClick={() => onAddToken(token)} className="w-full">
-              Import
-            </Button>
-          </DialogContent>
-        </Dialog>
+        <AddTokenDialog
+          token={token}
+          onAddToken={onAddToken}
+          open={addTokenOpen}
+          onOpenChange={setAddTokenOpen}
+        />
       </Button>
     </div>
   );
