@@ -9,16 +9,15 @@ import { CloseOrderModal } from "~/app/components/close-order-modal";
 import { TableContext } from "~/context/table-context";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
-import { type IMarket } from "~/types/market";
-import { ILimitOrder, IOpenTradeCalculated } from "~/types/order-history";
-import { type TableStateProps } from "~/types/table";
 import {
   type ChartingLibraryWidgetOptions,
   type ResolutionString,
-} from "../../../../public/static/charting_library/charting_library";
+} from "~/types/charting-library";
+import { type IMarket } from "~/types/market";
+import { ILimitOrder, IOpenTradeCalculated } from "~/types/order-history";
+import { type TableStateProps } from "~/types/table";
 import { ClosePositionModal } from "../../components/close-position-modal";
 import type { ChartProps } from "./TVChartContainer";
-import { LoadingContainer } from "./loading-container";
 
 export type OrderLine = {
   type: string;
@@ -43,9 +42,15 @@ const TVChartContainer = dynamic(
 export function OrderChart({
   markets,
   marketName,
+  chartReady,
+  setChartError,
+  setChartReady,
 }: {
   markets: IMarket[];
   marketName: string;
+  chartReady: boolean;
+  setChartError: (error: string) => void;
+  setChartReady: (ready: boolean) => void;
 }) {
   const { tableState, setTableState } = useContext(TableContext);
   const { data: openPositionData } = usePollOpenPositions(tableState);
@@ -84,16 +89,10 @@ export function OrderChart({
     return generateMarketOrders(openLimitOrdersData, markets) as ILimitOrder[];
   }, [openLimitOrdersData, markets]);
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   const [positionOpenState, setPositionOpenState] = useState(false);
   const [orderOpenState, setOrderOpenState] = useState(false);
   const [position, setPosition] = useState<IOpenTradeCalculated>();
   const [order, setOrder] = useState<ILimitOrder>();
-  const [chartReady, setChartReady] = useState(false);
 
   const defaultWidgetProps: Partial<ChartingLibraryWidgetOptions> = {
     symbol: marketName ?? "Not Found",
@@ -209,8 +208,8 @@ export function OrderChart({
   }, [tableState.tabType, humanizedOrders, humanizedPositions]);
 
   return (
-    <div className="grid h-full w-full">
-      <div className="h-full w-full" style={{ gridArea: "1 / 1" }}>
+    <div className="grid h-full w-full rounded-md">
+      <div className="h-full w-full rounded-md" style={{ gridArea: "1 / 1" }}>
         {position && (
           <ClosePositionModal
             controlledOpen={positionOpenState}
@@ -230,11 +229,9 @@ export function OrderChart({
           orderLines={orderLines}
           chartReady={chartReady}
           setChartReady={setChartReady}
+          setChartError={setChartError}
         />
       </div>
-      {!(chartReady && isMounted) && (
-        <LoadingContainer style={{ gridArea: "1 / 1" }} />
-      )}
     </div>
   );
 }
