@@ -57,21 +57,9 @@ export const encodeWarmPath = (
     limitHigh: BigNumber,
     useSurplus: number,
     poolIdx: number,
+    shareAddress: string | undefined
   ) => {
     let abiCoder = new ethers.utils.AbiCoder()
-    console.log([
-      callCode,
-      baseAddress,
-      quoteAddress,
-      poolIdx,
-      lowerTick,
-      upperTick,
-      qty,
-      limitLow,
-      limitHigh,
-      useSurplus,
-      getBeraLpAddress(baseAddress, quoteAddress),
-    ])
     return abiCoder.encode([
         "uint8", // Type call
         "address", // Base
@@ -95,7 +83,7 @@ export const encodeWarmPath = (
       limitLow,
       limitHigh,
       useSurplus,
-      getBeraLpAddress(baseAddress, quoteAddress),
+      shareAddress ?? getBeraLpAddress(baseAddress, quoteAddress),
     ]);
   }
 

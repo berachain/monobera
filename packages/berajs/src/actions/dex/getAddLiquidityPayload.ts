@@ -63,6 +63,7 @@ export const getAddLiquidityPayload = async ({
     baseAmount,
     quoteAmount,
     poolIdx,
+    shareAddress,
   } = args;
   try {
     const priceLimits = {
@@ -110,6 +111,7 @@ export const getAddLiquidityPayload = async ({
       transformedLimits[1],
       0,
       poolIdx,
+      shareAddress,
     );
 
     return {
