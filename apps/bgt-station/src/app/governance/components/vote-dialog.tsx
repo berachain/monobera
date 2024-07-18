@@ -39,7 +39,7 @@ export function VoteDialog({
     write({
       address: governorAddress,
       abi: GOVERNANCE_ABI,
-      functionName: "propose",
+      functionName: "castVote",
       params: [proposalId, selected],
     });
 

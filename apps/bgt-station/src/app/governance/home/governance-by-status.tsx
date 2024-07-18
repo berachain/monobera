@@ -26,13 +26,7 @@ import {
   type StatusEnum as StatusEnumT,
 } from "../types";
 
-export default function GovernanceByStatus({
-  proposalStatus,
-  orderBy,
-}: {
-  proposalStatus: StatusEnumT;
-  orderBy: OrderByEnumT;
-}) {
+export default function GovernanceByStatus() {
   const [keywords, setKeywords] = React.useState<string | null>(null);
   const { data = [], isLoading } = usePollAllProposals();
 
@@ -50,7 +44,7 @@ export default function GovernanceByStatus({
         <Button variant="outline">Visit forums</Button>
       </div>
       <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
-        <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
+        {/* <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
           <TabsList className="w-full sm:w-fit">
             {Object.values(StatusEnum).map((status) => (
               <TabsTrigger
@@ -67,10 +61,10 @@ export default function GovernanceByStatus({
               </TabsTrigger>
             ))}
           </TabsList>
-        </Tabs>
+        </Tabs> */}
         <div className="flex items-center gap-2 text-sm font-medium leading-[14px] text-stone-500">
           Order by
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-md border border-border bg-background p-2 text-sm font-medium capitalize leading-[14px] text-foreground hover:cursor-pointer">
                 {orderBy.replaceAll("-", " ")}
@@ -93,7 +87,7 @@ export default function GovernanceByStatus({
                 </DropdownMenuCheckboxItem>
               ))}
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </div>
       <SearchInput
