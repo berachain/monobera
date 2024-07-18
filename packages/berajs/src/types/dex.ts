@@ -35,6 +35,7 @@ export interface AddLiquidityRequest {
   baseAmount: bigint;
   quoteAmount: bigint;
   poolIdx: number;
+  shareAddress?: string;
 }
 
 export interface WithdrawLiquidityRequest {
@@ -45,6 +46,7 @@ export interface WithdrawLiquidityRequest {
   poolIdx: number | undefined;
   percentRemoval: number;
   seeds: string;
+  shareAddress?: string;
 }
 
 export interface PoolV2 {

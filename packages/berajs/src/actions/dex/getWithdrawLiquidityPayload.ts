@@ -24,6 +24,7 @@ export const getWithdrawLiquidityPayload = async ({
     poolIdx,
     percentRemoval,
     seeds,
+    shareAddress,
   } = args;
   try {
     if (!baseToken || !quoteToken || !poolIdx || !percentRemoval || !seeds) {
@@ -63,6 +64,7 @@ export const getWithdrawLiquidityPayload = async ({
       poolIdx,
       liquidityToBurn,
       limits,
+      shareAddress,
     );
     calldata = response?.calldata ?? "";
 
