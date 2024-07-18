@@ -42,7 +42,7 @@ export const usePoolTable = (sorting: any) => {
           const res = await dexClient.query({
             query: getFilteredPools,
             variables: {
-              keyword: queryKey[3],
+              keyword: queryKey[3].toLowerCase(),
               skip: (pageParam - 1) * DEFAULT_SIZE,
               first: DEFAULT_SIZE,
               order: queryKey[1],
