@@ -19,7 +19,11 @@ export enum OrderByEnum {
 
 export enum ProposalTypeEnum {
   TEXT_PROPOSAL = "text-proposal",
-  FRIENDS_OF_CHEF = "updat-friends-of-chef",
+  FRIENDS_OF_CHEF = "update-friends-of-chef",
+}
+
+export enum ProposalAbiEnum {
+  FRIENDS_OF_CHEF = "address receiver, bool isFriend",
 }
 
 export type ParameterChangeLine = {

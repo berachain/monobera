@@ -1,8 +1,13 @@
 import { Proposal } from "@bera/berajs";
 import BigNumber from "bignumber.js";
-import { formatEther } from "viem";
+import { decodeAbiParameters, formatEther, parseAbiParameters } from "viem";
 
-import { StatusEnum, VoteColorMap } from "./types";
+import {
+  ProposalAbiEnum,
+  ProposalTypeEnum,
+  StatusEnum,
+  VoteColorMap,
+} from "./types";
 
 export function getProposalType(proposal: Proposal) {
   // if (proposal) {
@@ -106,7 +111,7 @@ export const getTotalVoters = (proposal: Proposal) =>
 export const parseString = (
   s: string,
 ): { type: string | null; title: string; content: string } => {
-  const pattern = /#(?:([\w]+)# )?(.+)\n([\s\S]*)/;
+  const pattern = /#(?:([\w-]+)# )?(.+)\n([\s\S]*)/;
   const match = s.match(pattern);
 
   if (match) {
@@ -123,5 +128,25 @@ export const parseString = (
     type: null,
     title: "",
     content: "",
+  };
+};
+
+export const decodeProposalCalldata = (
+  type: string | null,
+  calldata: string,
+) => {
+  if (type === ProposalTypeEnum.FRIENDS_OF_CHEF) {
+    const values = decodeAbiParameters(
+      parseAbiParameters(ProposalAbiEnum.FRIENDS_OF_CHEF),
+      calldata as `0x${string}`,
+    );
+    return {
+      function: `updateFriendsOfTheChef(${ProposalAbiEnum.FRIENDS_OF_CHEF})`,
+      params: values,
+    };
+  }
+  return {
+    function: null,
+    params: null,
   };
 };

@@ -16,6 +16,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { Address, encodeAbiParameters, parseAbiParameters } from "viem";
 
 import { useCreateProposal } from "../useCreateProposal";
+import { ProposalAbiEnum, ProposalTypeEnum } from "../../types";
 
 export const UpdateFriendsOfChef = ({
   title,
@@ -42,7 +43,7 @@ export const UpdateFriendsOfChef = ({
 
   const encodedData = gauge
     ? encodeAbiParameters(
-        parseAbiParameters("address receiver, bool isFriend"),
+        parseAbiParameters(ProposalAbiEnum.FRIENDS_OF_CHEF),
         [gauge.id, !gauge.isFriend],
       )
     : "0x";
@@ -51,9 +52,9 @@ export const UpdateFriendsOfChef = ({
     [beraChefAddress],
     [0],
     [encodedData],
-    `#FRIENDS_OF_CHEF# ${title}\n${description}`,
+    `#${ProposalTypeEnum.FRIENDS_OF_CHEF}# ${title}\n${description}`,
   ]);
-
+  
   return (
     <>
       <div className="flex flex-col gap-2">

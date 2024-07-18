@@ -10,7 +10,7 @@ import { OverviewChart } from "../../components/overview-chart";
 import { ProposalCard } from "../../components/proposal-card";
 import { VoteCard } from "../../components/vote-card";
 import { VoterTable } from "../../components/voter-table";
-import { getTotalVotes } from "../../helper";
+import { getTotalVotes, parseString } from "../../helper";
 import { Actions } from "./Actions";
 import { Status } from "./Status";
 
@@ -62,7 +62,7 @@ export default function ProposalDetails({
             </div>
           </div>
 
-          <Actions executableCalls={proposal.executableCalls} />
+          <Actions executableCalls={proposal.executableCalls} type={parseString(proposal.metadata.description).type} />
 
           <div>
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">

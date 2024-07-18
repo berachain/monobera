@@ -17,7 +17,6 @@ import { TextArea } from "@bera/ui/text-area";
 import { ProposalTypeEnum } from "../types";
 import { TextProposal } from "./proposal/text-proposal";
 import { UpdateFriendsOfChef } from "./proposal/update-friends-of-chef";
-import { useCreateProposal } from "./useCreateProposal";
 
 export default function NewProposal() {
   const [title, setTitle] = useState("");
