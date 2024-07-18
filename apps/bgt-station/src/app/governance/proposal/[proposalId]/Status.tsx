@@ -10,7 +10,6 @@ export const Status = ({ proposal }: { proposal: Proposal }) => {
   const status = proposal.status as StatusEnum;
   const date = new Date(proposal.start.timestamp);
   const time = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-  
   return (
     <div className="flex items-center gap-3 font-medium">
       {status === StatusEnum.PENDING && <div>Voting starts at {time}</div>}
