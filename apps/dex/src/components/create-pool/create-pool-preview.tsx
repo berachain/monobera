@@ -169,6 +169,7 @@ export function CreatePoolPreview({
         transformedLimits[1],
         0,
         Number(poolId),
+        undefined, // undefined because we dont know the shareAddress
       );
 
       const multiPathArgs = [2, 3, initPoolInfo.calldata, 128, mintCalldata];
