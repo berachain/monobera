@@ -4,7 +4,12 @@ import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { Header, TailwindIndicator, TermOfUseModal } from "@bera/shared-ui";
+import {
+  Header,
+  TailwindIndicator,
+  TermOfUseModal,
+  getBannerCount,
+} from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
@@ -12,6 +17,8 @@ import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
+import { bgtName } from "@bera/config";
+import { usePathname } from "next/navigation";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -24,8 +31,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
     "FIRST_TIME_USER",
     true,
   );
-  // TODO: Replace with actual banner count when fixed
-  const activeBanners = 0;
+
+  const pathName = usePathname();
+  const activeBanners = getBannerCount(bgtName, pathName);
 
   return (
     <html lang="en" className="bg-background">
@@ -53,7 +61,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
             </div>
             <div className="z-10 flex-1">
-              <Header navItems={navItems} />
+              <Header navItems={navItems} appName={bgtName} />
               <main
                 className="w-full pt-start"
                 style={{ paddingTop: `${150 + 50 * activeBanners}px` }}
