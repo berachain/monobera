@@ -163,6 +163,7 @@ export default function WithdrawLiquidityContent({
           poolIdx: pool?.poolIdx,
           percentRemoval: amount,
           seeds: userPositionBreakdown?.seeds.toString() ?? "0",
+          shareAddress: pool?.shareAddress,
         },
         publicClient: client,
       });
