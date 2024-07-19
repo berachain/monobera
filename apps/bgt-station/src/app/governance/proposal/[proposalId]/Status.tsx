@@ -1,10 +1,16 @@
-import { usePollWalletBalances, type Proposal } from "@bera/berajs";
+import { usePollWalletBalances, type Proposal, type Vote } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 
 import { VoteDialog } from "../../components/vote-dialog";
 import { StatusEnum } from "../../types";
 
-export const Status = ({ proposal }: { proposal: Proposal }) => {
+export const Status = ({
+  proposal,
+  userVote,
+}: {
+  proposal: Proposal;
+  userVote: Vote | false | undefined;
+}) => {
   const { useSelectedWalletBalance } = usePollWalletBalances();
   const bgt = useSelectedWalletBalance(bgtTokenAddress);
   const status = proposal.status as StatusEnum;
@@ -18,6 +24,7 @@ export const Status = ({ proposal }: { proposal: Proposal }) => {
         <VoteDialog
           votingPower={bgt?.formattedBalance}
           proposalId={proposal.onchainId}
+          disable={userVote ? true : false}
         />
       )}
       {status === StatusEnum.CANCELED && <div>Canceled</div>}
@@ -33,6 +40,7 @@ export const Status = ({ proposal }: { proposal: Proposal }) => {
       {status === StatusEnum.EXECUTED && (
         <div className="text-success-foreground">Executed</div>
       )}
+      {userVote && <div>{userVote.type}</div>}
     </div>
   );
 };

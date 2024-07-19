@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { cloudinaryUrl, governorAddress } from "@bera/config";
+import { cloudinaryUrl } from "@bera/config";
 import { Card } from "@bera/ui/card";
 import {
   DropdownMenu,
@@ -14,6 +14,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
+
 import { ProposalTypeEnum } from "../types";
 import { TextProposal } from "./proposal/text-proposal";
 import { UpdateFriendsOfChef } from "./proposal/update-friends-of-chef";

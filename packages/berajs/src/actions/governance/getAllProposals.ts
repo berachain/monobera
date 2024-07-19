@@ -15,7 +15,7 @@ export const getAllProposals = async ({
     const variables = {
       input: {
         filters: {
-          organizationId: "2353392782418118594",
+          organizationId: "",
         },
         sort: {
           sortBy: "id",
@@ -31,8 +31,7 @@ export const getAllProposals = async ({
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "Api-Key":
-          "751c3bf1ebd98e89c5bc0fd3354add5adf7b7db18d2269c7968f6325453f01c1",
+        "Api-Key": process.env.TALLY_API_KEY as string,
       },
       body: JSON.stringify({
         query: getProposals.loc?.source.body,

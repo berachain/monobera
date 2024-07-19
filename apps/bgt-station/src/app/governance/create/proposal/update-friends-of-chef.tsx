@@ -15,8 +15,8 @@ import {
 import { Skeleton } from "@bera/ui/skeleton";
 import { Address, encodeAbiParameters, parseAbiParameters } from "viem";
 
-import { useCreateProposal } from "../useCreateProposal";
 import { ProposalAbiEnum, ProposalTypeEnum } from "../../types";
+import { useCreateProposal } from "../useCreateProposal";
 
 export const UpdateFriendsOfChef = ({
   title,

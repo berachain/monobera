@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePollProposal } from "@bera/berajs";
+import { Vote, useBeraJs, usePollProposal } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -13,13 +13,18 @@ import { VoterTable } from "../../components/voter-table";
 import { getTotalVotes, parseString } from "../../helper";
 import { Actions } from "./Actions";
 import { Status } from "./Status";
+import "@bera/graphql";
 
 export default function ProposalDetails({
   proposalId,
 }: {
   proposalId: string;
 }) {
+  const { account, isReady } = useBeraJs();
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
+  const userVote =
+    isReady && votes.find((vote: Vote) => vote.voter.address === account);
+
   return (
     <div className="pb-16">
       {isLoading || !proposal ? (
@@ -34,7 +39,9 @@ export default function ProposalDetails({
               <Icons.arrowLeft className="relative h-4 w-4" />
               Governance
             </Link>
-            {proposal && <Status proposal={proposal as any} />}
+            {proposal && (
+              <Status proposal={proposal as any} userVote={userVote} />
+            )}
           </div>
 
           <div>

@@ -21,9 +21,11 @@ import {
 export function VoteDialog({
   votingPower,
   proposalId,
+  disable,
 }: {
   votingPower: string | undefined;
   proposalId: string;
+  disable?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   // 0 = Against, 1 = For, 2 = Abstain
@@ -53,8 +55,9 @@ export function VoteDialog({
               onClick={() => {
                 setOpen(true);
               }}
+              disabled={disable}
             >
-              Vote
+              {disable ? "Voted" : "Vote"}
             </Button>
           </ActionButton>
         </DialogTrigger>

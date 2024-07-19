@@ -6,28 +6,28 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { usePollAllProposals, type Proposal } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
-import { SearchInput } from "@bera/shared-ui";
+// import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
-import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+// import {
+//   DropdownMenu,
+//   DropdownMenuCheckboxItem,
+//   DropdownMenuContent,
+//   DropdownMenuTrigger,
+// } from "@bera/ui/dropdown-menu";
+// import { Icons } from "@bera/ui/icons";
+// import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { ProposalCard } from "../components/proposal-card";
-import { getProposalType } from "../helper";
-import {
-  OrderByEnum,
-  StatusEnum,
-  type OrderByEnum as OrderByEnumT,
-  type StatusEnum as StatusEnumT,
-} from "../types";
+// import { getProposalType } from "../helper";
+// import {
+//   OrderByEnum,
+//   StatusEnum,
+//   type OrderByEnum as OrderByEnumT,
+//   type StatusEnum as StatusEnumT,
+// } from "../types";
 
 export default function GovernanceByStatus() {
-  const [keywords, setKeywords] = React.useState<string | null>(null);
+  // const [keywords, setKeywords] = React.useState<string | null>(null);
   const { data = [], isLoading } = usePollAllProposals();
 
   const router = useRouter();
@@ -43,8 +43,9 @@ export default function GovernanceByStatus() {
         </Link>
         <Button variant="outline">Visit forums</Button>
       </div>
-      <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
-        {/* <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
+
+      {/* <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
+        <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
           <TabsList className="w-full sm:w-fit">
             {Object.values(StatusEnum).map((status) => (
               <TabsTrigger
@@ -61,10 +62,10 @@ export default function GovernanceByStatus() {
               </TabsTrigger>
             ))}
           </TabsList>
-        </Tabs> */}
+        </Tabs>
         <div className="flex items-center gap-2 text-sm font-medium leading-[14px] text-stone-500">
           Order by
-          {/* <DropdownMenu>
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-md border border-border bg-background p-2 text-sm font-medium capitalize leading-[14px] text-foreground hover:cursor-pointer">
                 {orderBy.replaceAll("-", " ")}
@@ -87,15 +88,16 @@ export default function GovernanceByStatus() {
                 </DropdownMenuCheckboxItem>
               ))}
             </DropdownMenuContent>
-          </DropdownMenu> */}
+          </DropdownMenu>
         </div>
-      </div>
-      <SearchInput
+      </div> */}
+
+      {/* <SearchInput
         placeholder="Search proposals"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setKeywords(e.target.value)
         }
-      />
+      /> */}
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {!isLoading &&
           data.map((proposal: Proposal, index: number) => (

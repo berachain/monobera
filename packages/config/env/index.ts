@@ -198,6 +198,9 @@ export const governanceTimelockAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TIMELOCK_ADDRESS as string;
 export const beraChefAddress = process.env
   .NEXT_PUBLIC_BERA_CHEF_ADDRESS as Address;
+export const governanceOrganizationId = process.env
+  .NEXT_PUBLIC_GOVERNANCE_ORGANIZATION_ID as string;
+
 // Crocswap
 export const crocDexAddress = process.env.NEXT_PUBLIC_RPC_CROC_DEX as Address;
 export const crocQueryAddress = process.env
