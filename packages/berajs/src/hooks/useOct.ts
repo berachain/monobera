@@ -1,22 +1,21 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
+import passworder from "@metamask/browser-passworder";
 import BigNumber from "bignumber.js";
 import lodash from "lodash";
 import { Keccak } from "sha3";
-import { mutate } from "swr";
 import { useLocalStorage } from "usehooks-ts";
 import { createWalletClient, http, type Address } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { useChains, useSignMessage } from "wagmi";
 
-import { decrypt, encrypt } from "~/utils/encoder";
 import {
   ActionEnum,
   BeraConfig,
   initialState,
   reducer,
   useBeraJs,
-  usePollEstimateFeesPerGas,
   usePollBeraBalance,
+  usePollEstimateFeesPerGas,
   usePollTransactionCount,
 } from "..";
 import { useIsDelegated } from "./modules/perps";
@@ -41,7 +40,6 @@ const ESTIMATED_GAS_AMT_FOR_ONE_TXN = 1500000;
 
 const hash = new Keccak(256);
 
-const KEY = "deezNuts";
 export const useOct = (
   { onSuccess, onError, onLoading }: IUseOct = {},
   options?: IUseOctOptions,
@@ -78,12 +76,13 @@ export const useOct = (
 
       hash.update(signedData);
       const privKey = hash.digest().toString("hex");
-      const encodedString = encrypt(privKey, KEY);
-
-      setOctKey(encodedString);
-
-      hash.reset();
-      dispatch({ type: ActionEnum.SUCCESS });
+      passworder
+        .encrypt(process.env.PERPS_OCT_KEY ?? "", privKey)
+        .then((blob) => {
+          setOctKey(blob);
+          hash.reset();
+          dispatch({ type: ActionEnum.SUCCESS });
+        });
     } catch (e) {
       console.log(e);
       setOctAddress("");
@@ -100,16 +99,23 @@ export const useOct = (
       if (!octKey) {
         return;
       }
-      const decodedString = decrypt(octKey, KEY);
-      const account = privateKeyToAccount(decodedString);
-      const client = createWalletClient({
-        account,
-        chain: chains[0],
-        transport: http(),
-      });
-      setOctAccount(client);
-      setOctAddress(account.address);
-      setOctPrivKey(decodedString);
+      passworder.decrypt(process.env.PERPS_OCT_KEY ?? "", octKey).then(
+        (res) => {
+          const decodedString = res;
+          const account = privateKeyToAccount(`0x${decodedString}`);
+          const client = createWalletClient({
+            account,
+            chain: chains[0],
+            transport: http(),
+          });
+          setOctAccount(client);
+          setOctAddress(account.address);
+          setOctPrivKey(`0x${decodedString}`);
+        },
+        (err) => {
+          console.error("Error decrypting private wallet", err);
+        },
+      );
     } catch (e) {
       console.log(e);
       setOctAddress("");
@@ -136,7 +142,7 @@ export const useOct = (
   }, [account, octMap]);
 
   const setOctKey = useCallback(
-    (key: string) => {
+    (key: any) => {
       if (account) {
         const newMap = lodash.set(octKeyMap, account, key);
         setOctKeyMap(newMap);
