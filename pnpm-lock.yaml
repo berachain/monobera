@@ -678,6 +678,9 @@ importers:
       '@dynamic-labs/sdk-react-core':
         specifier: ^2.2.0
         version: 2.2.0(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)(viem@2.13.7(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))
+      '@metamask/browser-passworder':
+        specifier: ^5.0.0
+        version: 5.0.0
       '@tanstack/react-query':
         specifier: ^5.26.3
         version: 5.40.1(react@18.2.0)
@@ -3274,6 +3277,10 @@ packages:
     resolution: {integrity: sha512-j0II91OCm4ld+l5QVgXXMQGxVVcAWIQJakYWi1dv5pefDHASJyCYER2TsdH7Alf958GoFSM7ugukWyvDq/UY4A==}
     peerDependencies:
       rollup: '>=2'
+
+  '@metamask/browser-passworder@5.0.0':
+    resolution: {integrity: sha512-L90OlWgugmL1RNgmL7SErAvh+LuPlLzWGL4m2qGrJ+vEkvRZlQXwWZx70rBnfH08GjyViVwSaRZgk0oozLlNTw==}
+    engines: {node: ^16.20 || ^18.16 || >=20}
 
   '@metamask/eth-json-rpc-provider@1.0.1':
     resolution: {integrity: sha512-whiUMPlAOrVGmX8aKYVPvlKyG4CpQXiNNyt74vE1xb5sPvmx5oA7B/kOi/JdBvhGQq97U1/AVdXEdk2zkP8qyA==}
@@ -14079,6 +14086,12 @@ snapshots:
       rollup: 4.18.0
       source-map: 0.7.4
       vfile: 6.0.1
+    transitivePeerDependencies:
+      - supports-color
+
+  '@metamask/browser-passworder@5.0.0':
+    dependencies:
+      '@metamask/utils': 8.5.0
     transitivePeerDependencies:
       - supports-color
 
