@@ -212,6 +212,7 @@ export default function AddLiquidityContent({
           baseAmount: bnBaseAmount,
           quoteAmount: bnQuoteAmount,
           poolIdx: pool?.poolIdx ?? 0,
+          shareAddress: pool?.shareAddress,
         },
       });
       if (!addLiqPayload || !addLiqPayload.payload) {
