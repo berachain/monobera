@@ -112,7 +112,7 @@ export const decodeProposalCalldata = (
   calldata: string,
 ) => {
   if (type === ProposalTypeEnum.FRIENDS_OF_CHEF) {
-    const { functionName, args=[] } = decodeFunctionData({
+    const { functionName, args = [] } = decodeFunctionData({
       abi: BERA_CHEF_ABI,
       data: calldata as `0x${string}`,
     });
