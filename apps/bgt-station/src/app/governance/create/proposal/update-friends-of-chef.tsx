@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { truncateHash } from "@bera/berajs";
+import { BERA_CHEF_ABI, truncateHash } from "@bera/berajs";
 import { beraChefAddress } from "@bera/config";
 import { GetFriendsOfTheChef } from "@bera/graphql";
 import { ActionButton, SearchInput } from "@bera/shared-ui";
@@ -13,9 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
 import { Skeleton } from "@bera/ui/skeleton";
-import { Address, encodeAbiParameters, parseAbiParameters } from "viem";
+import { Address, encodeFunctionData } from "viem";
 
-import { ProposalAbiEnum, ProposalTypeEnum } from "../../types";
+import { ProposalTypeEnum } from "../../types";
 import { useCreateProposal } from "../useCreateProposal";
 
 export const UpdateFriendsOfChef = ({
@@ -42,10 +42,11 @@ export const UpdateFriendsOfChef = ({
   }, [keyword, data]);
 
   const encodedData = gauge
-    ? encodeAbiParameters(parseAbiParameters(ProposalAbiEnum.FRIENDS_OF_CHEF), [
-        gauge.id,
-        !gauge.isFriend,
-      ])
+    ? encodeFunctionData({
+        abi: BERA_CHEF_ABI,
+        functionName: "updateFriendsOfTheChef",
+        args: [gauge.id, !gauge.isFriend],
+      })
     : "0x";
 
   const { ModalPortal, submitProposal } = useCreateProposal([

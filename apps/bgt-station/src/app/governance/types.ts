@@ -22,10 +22,6 @@ export enum ProposalTypeEnum {
   FRIENDS_OF_CHEF = "update-friends-of-chef",
 }
 
-export enum ProposalAbiEnum {
-  FRIENDS_OF_CHEF = "address receiver, bool isFriend",
-}
-
 export type ParameterChangeLine = {
   subspace: string;
   key: string;

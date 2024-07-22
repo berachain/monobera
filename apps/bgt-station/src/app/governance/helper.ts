@@ -1,32 +1,8 @@
-import { Proposal } from "@bera/berajs";
+import { BERA_CHEF_ABI, Proposal } from "@bera/berajs";
 import BigNumber from "bignumber.js";
-import { decodeAbiParameters, formatEther, parseAbiParameters } from "viem";
+import { decodeFunctionData, formatEther } from "viem";
 
-import {
-  ProposalAbiEnum,
-  ProposalTypeEnum,
-  StatusEnum,
-  VoteColorMap,
-} from "./types";
-
-export function getProposalType(proposal: Proposal) {
-  // if (proposal) {
-  //   if (proposal.messages.length === 0) {
-  //     return "text-proposal";
-  //   }
-  //   if (proposal.messages[0]?.typeURL === updateFriendsOfTheChefTypeUrl) {
-  //     return "new-gauge-proposal";
-  //   }
-  //   if (proposal.messages[0]?.typeURL === updateHoneyCollateralTypeUrl) {
-  //     return "enable-collateral-for-honey";
-  //   }
-  //   if (proposal.messages[0]?.typeURL === updateLendMarkeyTypeUrl) {
-  //     return "new-lend-market";
-  //   }
-  //   return "text-proposal";
-  // }
-  return "text-proposal";
-}
+import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 
 export const getBadgeColor = (proposalStatus: StatusEnum) => {
   switch (proposalStatus) {
@@ -136,13 +112,14 @@ export const decodeProposalCalldata = (
   calldata: string,
 ) => {
   if (type === ProposalTypeEnum.FRIENDS_OF_CHEF) {
-    const values = decodeAbiParameters(
-      parseAbiParameters(ProposalAbiEnum.FRIENDS_OF_CHEF),
-      calldata as `0x${string}`,
-    );
+    const { functionName, args=[] } = decodeFunctionData({
+      abi: BERA_CHEF_ABI,
+      data: calldata as `0x${string}`,
+    });
+
     return {
-      function: `updateFriendsOfTheChef(${ProposalAbiEnum.FRIENDS_OF_CHEF})`,
-      params: values,
+      function: functionName,
+      params: args,
     };
   }
   return {
