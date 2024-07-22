@@ -13,7 +13,7 @@ export function generateMetadata({ params }: any): Metadata {
   };
 }
 
-export default function Page({ params }: { params: { proposalId: number } }) {
+export default function Page({ params }: { params: { proposalId: string } }) {
   if (!params.proposalId) {
     return notFound();
   }

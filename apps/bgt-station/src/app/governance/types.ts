@@ -1,16 +1,13 @@
 export enum StatusEnum {
+  PENDING = "pending",
+  QUEUED = "queued",
   ACTIVE = "active",
-  IN_QUEUE = "in-queue",
-  PASSED = "passed",
-  REJECTED = "rejected",
+  CANCELED = "canceled",
+  SUCCEEDED = "succeeded",
+  DEFEATED = "defeated",
+  EXPIRED = "expired",
+  EXECUTED = "executed",
 }
-
-export const mappedStatusEnum = {
-  [StatusEnum.ACTIVE]: 2,
-  [StatusEnum.IN_QUEUE]: 1,
-  [StatusEnum.PASSED]: 3,
-  [StatusEnum.REJECTED]: 4,
-};
 
 export enum OrderByEnum {
   MOST_RECENT = "most-recent",
@@ -22,9 +19,11 @@ export enum OrderByEnum {
 
 export enum ProposalTypeEnum {
   TEXT_PROPOSAL = "text-proposal",
-  GAUGE_PROPOSAL = "new-gauge-proposal",
-  // COLLATERAL_PROPOSAL = "new-collateral-proposal",
-  // MARKET_COLLATERAL_PROPOSAL = "new-market-proposal",
+  FRIENDS_OF_CHEF = "update-friends-of-chef",
+}
+
+export enum ProposalAbiEnum {
+  FRIENDS_OF_CHEF = "address receiver, bool isFriend",
 }
 
 export type ParameterChangeLine = {
@@ -36,7 +35,6 @@ export type ParameterChangeLine = {
 export type ProposalVotes = {
   yes: number;
   no: number;
-  veto: number;
   abstain: number;
 };
 
@@ -56,12 +54,14 @@ export const VoteColorMap = {
   default: "#57534e",
 };
 
-export const voteTypes: VOTE_TYPE[] = ["yes", "no", "veto", "abstain"];
+export enum VoteEnum {
+  for = "yes",
+  against = "no",
+  abstain = "abstain",
+}
 
-export const voterTypes: VOTER_TYPE[] = ["validators", "users"];
+export const voteTypes: VOTE_TYPE[] = ["yes", "no", "abstain"];
 
-export type VOTE_TYPE = "yes" | "no" | "veto" | "abstain";
-
-export type VOTER_TYPE = "validators" | "users";
+export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";

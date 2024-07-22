@@ -23,3 +23,4 @@ export * from "./bgtStaker";
 export * from "./borrowingAbi";
 export * from "./berpsErrorsAbi";
 export * from "./pythErrorsAbi";
+export * from "./beraChef";

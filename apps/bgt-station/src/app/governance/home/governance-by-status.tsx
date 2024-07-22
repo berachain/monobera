@@ -1,76 +1,34 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { usePollAllProposals, type Proposal } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
-import { SearchInput } from "@bera/shared-ui";
+// import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
-import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+// import {
+//   DropdownMenu,
+//   DropdownMenuCheckboxItem,
+//   DropdownMenuContent,
+//   DropdownMenuTrigger,
+// } from "@bera/ui/dropdown-menu";
+// import { Icons } from "@bera/ui/icons";
+// import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { ProposalCard } from "../components/proposal-card";
-import { getProposalType } from "../helper";
-import {
-  OrderByEnum,
-  StatusEnum,
-  mappedStatusEnum,
-  type OrderByEnum as OrderByEnumT,
-  type StatusEnum as StatusEnumT,
-} from "../types";
+// import { getProposalType } from "../helper";
+// import {
+//   OrderByEnum,
+//   StatusEnum,
+//   type OrderByEnum as OrderByEnumT,
+//   type StatusEnum as StatusEnumT,
+// } from "../types";
 
-export default function GovernanceByStatus({
-  proposalStatus,
-  orderBy,
-}: {
-  proposalStatus: StatusEnumT;
-  orderBy: OrderByEnumT;
-}) {
-  const [keywords, setKeywords] = React.useState<string | null>(null);
-
-  // const getSum = (item: TallyResult) =>
-  //   Object.values(item).reduce(
-  //     (acc: number, curr: string) => acc + Number(curr),
-  //     0,
-  //   );
-
-  // const { useAllProposals, isLoading } = usePollAllProposals(
-  //   mappedStatusEnum[proposalStatus],
-  // );
-  // const data = useAllProposals();
-  // const sortedProposalList: Proposal[] = useMemo(
-  //   () =>
-  //     data
-  //       ?.filter((proposal: Proposal) => {
-  //         if (!keywords) return true;
-
-  //         return proposal.title.toLowerCase().includes(keywords.toLowerCase());
-  //       })
-  //       .sort((a: Proposal, b: Proposal) => {
-  //         switch (orderBy) {
-  //           case OrderByEnum.HIGHEST_PARTICIPATION:
-  //             return getSum(b.finalTallyResult) - getSum(a.finalTallyResult);
-  //           case OrderByEnum.LOWEST_PARTICIPATION:
-  //             return getSum(a.finalTallyResult) - getSum(b.finalTallyResult);
-  //           case OrderByEnum.MOST_RECENT:
-  //             return Number(b.submitTime - a.submitTime);
-  //           case OrderByEnum.NEWEST:
-  //             return Number(b.submitTime - a.submitTime);
-  //           case OrderByEnum.OLDEST:
-  //             return Number(a.submitTime - b.submitTime);
-  //           default:
-  //             return 0;
-  //         }
-  //       }),
-  //   [data, proposalStatus, orderBy, keywords],
-  // );
+export default function GovernanceByStatus() {
+  // const [keywords, setKeywords] = React.useState<string | null>(null);
+  const { data = [], isLoading } = usePollAllProposals();
 
   const router = useRouter();
   return (
@@ -83,9 +41,10 @@ export default function GovernanceByStatus({
         <Link href="/governance/create">
           <Button>Create proposal</Button>
         </Link>
-        {/* <Button variant="outline">Visit forums</Button> */}
+        <Button variant="outline">Visit forums</Button>
       </div>
-      <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
+
+      {/* <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
         <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
           <TabsList className="w-full sm:w-fit">
             {Object.values(StatusEnum).map((status) => (
@@ -131,31 +90,27 @@ export default function GovernanceByStatus({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </div>
-      <SearchInput
+      </div> */}
+
+      {/* <SearchInput
         placeholder="Search proposals"
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setKeywords(e.target.value)
         }
-      />
-      {/* <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      /> */}
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {!isLoading &&
-          sortedProposalList?.map((proposal: Proposal, index: number) => (
+          data.map((proposal: Proposal, index: number) => (
             <ProposalCard
               proposal={proposal}
               key={`proposal${index}`}
               className="hover:cursor-pointer"
-              type={getProposalType(proposal)}
-              onClick={() =>
-                router.push(
-                  // replace this with real data
-                  `/governance/proposal/${Number(proposal.id)}`,
-                )
-              }
+              // type={getProposalType(proposal)}
+              onClick={() => router.push(`/governance/proposal/${proposal.id}`)}
             />
           ))}
       </div>
-      {((!isLoading && sortedProposalList.length === 0) || isLoading) && (
+      {!isLoading && data.length === 0 && (
         <div className="mx-auto w-fit">
           <Image
             src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
@@ -167,7 +122,7 @@ export default function GovernanceByStatus({
             No Proposals found.{" "}
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 }

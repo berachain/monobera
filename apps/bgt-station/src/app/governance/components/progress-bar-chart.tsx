@@ -8,13 +8,21 @@ interface ILabel {
   width: number;
 }
 interface IProgressBarProps {
+  className?: string;
   dataList: IProgressBar[];
-  labelList: ILabel[];
+  labelList?: ILabel[];
 }
 
-export function ProgressBarChart({ dataList, labelList }: IProgressBarProps) {
+export function ProgressBarChart({
+  dataList,
+  labelList = [
+    { label: "Pass threshold", width: 50 },
+    { label: "Quorum", width: 100 },
+  ],
+  className,
+}: IProgressBarProps) {
   return (
-    <div>
+    <div className={className}>
       <div className="relative h-[25px]">
         {labelList.map((data) => (
           <>
