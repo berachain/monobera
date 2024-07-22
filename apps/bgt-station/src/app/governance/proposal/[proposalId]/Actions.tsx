@@ -28,7 +28,7 @@ export const Actions = ({
                 <div className=" whitespace-pre-line">{content.function}</div>
                 <br />
                 <div className="font-medium text-foreground">Params:</div>
-                <div className=" whitespace-pre-line">
+                <div className="whitespace-pre-line">
                   {content.params.toLocaleString()}
                 </div>
                 <br />
