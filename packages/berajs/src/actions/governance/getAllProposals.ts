@@ -1,3 +1,4 @@
+import { governanceOrganizationId } from "@bera/config";
 import { getProposals } from "@bera/graphql";
 
 import { BeraConfig, Proposal } from "~/types";
@@ -15,14 +16,14 @@ export const getAllProposals = async ({
     const variables = {
       input: {
         filters: {
-          organizationId: "",
+          organizationId: governanceOrganizationId,
         },
         sort: {
           sortBy: "id",
           isDescending: true,
         },
         page: {
-          limit: 10,
+          limit: 100,
         },
       },
     };
@@ -31,7 +32,7 @@ export const getAllProposals = async ({
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        "Api-Key": process.env.TALLY_API_KEY as string,
+        "Api-Key": process.env.NEXT_PUBLIC_TALLY_API_KEY as string,
       },
       body: JSON.stringify({
         query: getProposals.loc?.source.body,
