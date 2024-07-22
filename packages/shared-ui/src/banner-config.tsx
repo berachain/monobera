@@ -131,7 +131,7 @@ export const bannerConfig: BannerConfig = {
   },
   "BGT Station": {
     [DappBannerType.LAUNCH]: {
-      enabled: true,
+      enabled: false,
       bannerComponent: <LaunchBanner appName={bgtName} />,
     },
     [DappBannerType.RPC]: {
