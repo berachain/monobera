@@ -94,7 +94,10 @@ export function Footer() {
       <div className="container max-w-1280 pb-8 pt-16 sm:pt-24 lg:pt-32">
         <div className="xl:grid xl:grid-cols-4 xl:gap-8">
           <div className="col-span-2 space-y-8">
-            <Icons.logo className="h-10 w-auto" />
+            <div className="flex gap-4 text-2xl font-bold">
+              <Icons.logo className="h-8 w-auto" />
+              Berachain
+            </div>
             <p className="text-sm leading-6 text-secondary-foreground">
               Berachain is a high-performance EVM-compatible blockchain built on
               Proof-of-Liquidity consensus. Proof-of-Liquidity is a novel
