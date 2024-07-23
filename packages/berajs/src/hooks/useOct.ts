@@ -61,6 +61,8 @@ export const useOct = (
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const [octError, setOctError] = useState<boolean>(false);
+
   const { data: feesPerGasEstimate } = usePollEstimateFeesPerGas();
 
   const { account, config: beraConfig } = useBeraJs();
@@ -82,16 +84,18 @@ export const useOct = (
           setOctKey(blob);
           hash.reset();
           dispatch({ type: ActionEnum.SUCCESS });
+          setOctError(false);
         });
     } catch (e) {
       console.log(e);
       setOctAddress("");
       setOctPrivKey("");
       setOctAccount(undefined);
+      setOctError(true);
       dispatch({ type: ActionEnum.ERROR });
       onError?.();
     }
-  }, [onSuccess, onError, onLoading, account]);
+  }, [onSuccess, onError, onLoading, account, setOctError]);
 
   useEffect(() => {
     try {
@@ -114,6 +118,12 @@ export const useOct = (
         },
         (err) => {
           console.error("Error decrypting private wallet", err);
+          setOctAddress("");
+          setOctPrivKey("");
+          setOctAccount(undefined);
+          setOctError(true);
+          dispatch({ type: ActionEnum.ERROR });
+          onError?.();
         },
       );
     } catch (e) {
@@ -121,6 +131,9 @@ export const useOct = (
       setOctAddress("");
       setOctPrivKey("");
       setOctAccount(undefined);
+      setOctError(true);
+      dispatch({ type: ActionEnum.ERROR });
+      onError?.();
     }
   }, [account, octKeyMap, octMap]);
 
@@ -136,10 +149,10 @@ export const useOct = (
 
   const isOctEnabled = useCallback(() => {
     if (account) {
-      return octMap[account] ?? false;
+      return (octMap[account] && !octError) ?? false;
     }
     return false;
-  }, [account, octMap]);
+  }, [account, octMap, octError]);
 
   const setOctKey = useCallback(
     (key: any) => {

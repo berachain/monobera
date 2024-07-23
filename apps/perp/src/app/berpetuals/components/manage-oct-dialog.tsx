@@ -21,6 +21,7 @@ import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
+import { Skeleton } from "@bera/ui/skeleton";
 import { parseEther, type Address } from "viem";
 
 export interface TokenBalance {
@@ -53,68 +54,77 @@ const TradeWalletSection = ({
       <p className="text-md pb-4 font-bold leading-normal">
         Your One-Click Trade Wallet
       </p>
-      <div className="mt-2 flex flex-row gap-2">
-        <Identicon account={octAddress} size={24} />
-        <div
-          className="cursor-pointer text-sm font-semibold hover:underline"
-          onClick={() =>
-            window.open(`${blockExplorerUrl}/address/${octAddress}`, "_blank")
-          }
-        >
-          {truncateHash(octAddress)}
-        </div>
-        <Icons.external
-          className="h-4 w-4 cursor-pointer"
-          onClick={() =>
-            window.open(`${blockExplorerUrl}/address/${octAddress}`, "_blank")
-          }
-        />
-        <Button
-          size={"sm"}
-          className="ml-auto"
-          variant={"secondary"}
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(octPrivKey);
-              setCopied(true);
-            } catch (error) {
-              console.error(error);
-            } finally {
-              setTimeout(() => setCopied(false), 1000);
+      {octAddress ? (
+        <div className="mt-2 flex flex-row gap-2">
+          <Identicon account={octAddress} size={24} />
+          <div
+            className="cursor-pointer text-sm font-semibold hover:underline"
+            onClick={() =>
+              window.open(`${blockExplorerUrl}/address/${octAddress}`, "_blank")
             }
-          }}
-        >
-          {copied ? (
-            <Icons.check className="h-[18px] w-4 text-positive" />
-          ) : (
-            <span className="h-[18px]">Copy Private Key</span>
-          )}
-        </Button>
-      </div>
-      <div className="mt-2 flex flex-row gap-2">
-        <TokenIcon address={nativeTokenAddress} />
-        <div className="text-sm font-semibold">
-          {`${
-            formattedBalance < 0.01 && !isOctUnfunded
-              ? "< 0.01"
-              : formattedBalance.toFixed(2)
-          } BERA `}
-          {octTxnsLeft ? (
-            <span
-              className={cn(
-                "truncate text-xs font-medium",
-                isOctUnfunded
-                  ? "text-destructive-foreground"
-                  : isOctBalanceLow
-                    ? "text-warning-foreground"
-                    : "text-success-foreground",
-              )}
-            >
-              ~ {octTxnsLeft} txns left
-            </span>
-          ) : null}
+          >
+            {truncateHash(octAddress)}
+          </div>
+          <Icons.external
+            className="h-4 w-4 cursor-pointer"
+            onClick={() =>
+              window.open(`${blockExplorerUrl}/address/${octAddress}`, "_blank")
+            }
+          />
+          <Button
+            size={"sm"}
+            className="ml-auto"
+            variant={"secondary"}
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(octPrivKey);
+                setCopied(true);
+              } catch (error) {
+                console.error(error);
+              } finally {
+                setTimeout(() => setCopied(false), 1000);
+              }
+            }}
+          >
+            {copied ? (
+              <Icons.check className="h-[18px] w-4 text-positive" />
+            ) : (
+              <span className="h-[18px]">Copy Private Key</span>
+            )}
+          </Button>
         </div>
-      </div>
+      ) : (
+        <Skeleton className="mt-2 flex h-8" />
+      )}
+
+      {octAddress ? (
+        <div className="mt-2 flex flex-row gap-2">
+          <TokenIcon address={nativeTokenAddress} />
+          <div className="text-sm font-semibold">
+            {`${
+              formattedBalance < 0.01 && !isOctUnfunded
+                ? "< 0.01"
+                : formattedBalance.toFixed(2)
+            } BERA `}
+            {octTxnsLeft ? (
+              <span
+                className={cn(
+                  "truncate text-xs font-medium",
+                  isOctUnfunded
+                    ? "text-destructive-foreground"
+                    : isOctBalanceLow
+                      ? "text-warning-foreground"
+                      : "text-success-foreground",
+                )}
+              >
+                ~ {octTxnsLeft} txns left
+              </span>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        <Skeleton className="mt-2 flex h-8" />
+      )}
     </div>
   );
 };
