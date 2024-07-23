@@ -7,6 +7,7 @@ packages:
   - packages/proto
   - packages/ui
   - packages/shared-ui
+  - apps/hub
   - apps/dex
   - apps/bgt-station
   - apps/honey
