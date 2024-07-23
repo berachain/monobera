@@ -38,13 +38,6 @@ export const navItems = [
     title: "Explore",
     children: [
       {
-        href: dexUrl,
-        type: "external",
-        title: dexName,
-        blurb: "Swap tokens and provide liquidity",
-        icon: <Icons.bexFav className="h-8 w-8" />,
-      },
-      {
         href: honeyUrl,
         type: "external",
         title: honeyName,
