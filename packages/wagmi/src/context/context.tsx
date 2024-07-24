@@ -7,6 +7,7 @@ import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import {
   DynamicContextProvider,
   EvmNetwork,
+  SortWallets,
 } from "@dynamic-labs/sdk-react-core";
 import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
@@ -62,6 +63,7 @@ const Provider: React.FC<IBeraConfig> = ({
           environmentId: dynamicWalletKey,
           walletConnectors: [EthereumWalletConnectors],
           overrides: { evmNetworks: [defaultBeraNetworkConfig.evmNetwork] },
+          walletsFilter: SortWallets(["metamask", "binance"]),
         }}
         theme={theme ?? "auto"}
       >
