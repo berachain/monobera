@@ -2,7 +2,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
-const config = {
+export const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
   transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/wagmi"],
