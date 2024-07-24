@@ -63,7 +63,7 @@ export default function UserGaugeWeightTable({
         loading={isUserVaultInfoLoading}
         onRowClick={(row: any) =>
           window.open(
-            `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
+            `/vaults/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
             "_self",
           )
         }

@@ -51,7 +51,7 @@ export default function GlobalGaugeWeightTable({
       enablePagination
       columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
       data={myGauge ? [] : gaugeList ?? []}
-      className="min-h-[200px] min-w-[1100px] shadow"
+      className="min-h-[200px] min-w-[800px] shadow w-full"
       additionalTableProps={{
         initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
         pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
@@ -60,7 +60,7 @@ export default function GlobalGaugeWeightTable({
       }}
       onRowClick={(row: any) =>
         window.open(
-          `/gauge/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
+          `/vaults/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
           "_self",
         )
       }

@@ -33,13 +33,13 @@ export default function MarketSelector({
         className="w-[250px] border border-border bg-background p-0"
         onMouseLeave={() => setTimeout(() => setOpen(false), 100)}
       >
-        <SearchInput
+        {/* <SearchInput
           placeholder="Search..."
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             console.log(e.target.value)
           }
           className="rounded-none border-none"
-        />
+        /> */}
         <DropdownMenuSeparator className="my-0" />
         <div className="max-h-[200px] overflow-auto p-1">
           {marketList.map((market: Market, index: number) => (

@@ -65,7 +65,7 @@ export const getUserBgtColumns = ({
         />
       ),
       cell: ({ row }) => (
-        <div className="flex w-fit items-center gap-1 rounded-full bg-success-foreground bg-opacity-10 px-2 py-1 text-sm font-medium text-success-foreground">
+        <div className="flex w-fit items-center gap-1 rounded-full bg-success bg-opacity-10 px-2 py-1 text-sm font-medium text-success-foreground">
           <Icons.bgt className="h-6 w-6" />
           <FormattedNumber
             value={row.original.unclaimedBgt}

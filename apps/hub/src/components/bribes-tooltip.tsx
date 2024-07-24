@@ -199,13 +199,13 @@ export const BribesPopover = ({
   return (
     <>
       {!incentives || incentives?.length === 0 ? (
-        <div className="w-fit rounded-lg border px-2 py-1 text-xs hover:bg-muted">
+        <div className="w-fit rounded-lg px-2 py-1 text-xs hover:bg-muted">
           No Incentives
         </div>
       ) : (
         <Tooltip
           toolTipTrigger={
-            <div className="w-fit rounded-lg border p-1 hover:bg-muted">
+            <div className="w-fit rounded-lg p-1 hover:bg-muted">
               <TokenIconList
                 tokenList={
                   incentives?.map((incentive) => ({
