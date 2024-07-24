@@ -285,8 +285,8 @@ export const searchFilteredPoolList = gql`
 `;
 
 export const getCrocSelectedPool = gql`
-  query GetPoolList($baseAsset: Bytes!, $quoteAsset: Bytes!) {
-    pools(where: { base: $baseAsset, quote: $quoteAsset }) {
+  query GetPoolList($baseAsset: Bytes!, $quoteAsset: Bytes!, $poolIdx: String!) {
+    pools(where: { base: $baseAsset, quote: $quoteAsset, poolIdx: $poolIdx }) {
       id
       poolIdx
       base

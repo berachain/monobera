@@ -15,6 +15,7 @@ type Props = {
   selectable: boolean;
   filter?: Address[];
   className?: string;
+  btnClassName?: string;
   filteredTokenTags?: string[];
   filteredSymbols?: string[];
 };
@@ -27,6 +28,7 @@ export function SelectToken({
   selectable,
   filter = [],
   className = "",
+  btnClassName = "",
   filteredTokenTags = [],
   filteredSymbols = [],
 }: Props) {
@@ -35,18 +37,20 @@ export function SelectToken({
   return (
     <div className={cn("w-fit max-w-[150px]", className)}>
       <Button
-        className="flex h-10 w-full shrink-0 gap-1 border-border bg-background p-2 text-secondary-foreground shadow"
+        className={cn(
+          "flex h-10 w-full shrink-0 gap-1 border-border bg-background p-2 text-secondary-foreground shadow",
+          btnClassName,
+        )}
         variant={"outline"}
         onClick={() => selectable && setOpen(true)}
       >
         {token ? (
-          <>
+          <div className="justify-start flex flex-row gap-1 items-center">
             <TokenIcon address={token.address} />
             <span className="w-fit max-w-[140px] overflow-hidden truncate">
               {token?.symbol}{" "}
             </span>
-            {selectable && <Icons.chevronDown className="h-4 w-4" />}
-          </>
+          </div>
         ) : (
           <p
             className="flex flex-row items-center whitespace-nowrap px-1 text-base font-medium"
@@ -54,9 +58,10 @@ export function SelectToken({
           >
             {" "}
             Select <span className="ml-1 hidden md:inline"> a token</span>
-            <Icons.chevronDown className="ml-1 h-4 w-4" />{" "}
+            {/* <Icons.chevronDown className="ml-1 h-4 w-4" />{" "} */}
           </p>
         )}
+        {selectable && <Icons.chevronDown className="h-4 w-4" />}
       </Button>
 
       {selectable && (

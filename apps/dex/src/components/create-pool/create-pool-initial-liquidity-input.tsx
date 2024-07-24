@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import {
   useBeraJs,
   usePollWalletBalances,
-  useTokenHoneyPrice,
+  useSubgraphTokenInformation,
   type Token,
 } from "@bera/berajs";
 import { formatUsd } from "@bera/berajs/utils";
@@ -34,7 +34,7 @@ export default function CreatePoolInitialLiquidityInput({
 
   const { isConnected } = useBeraJs();
 
-  const { data: tokenHoneyPrice } = useTokenHoneyPrice({
+  const { data: tokenHoneyPrice } = useSubgraphTokenInformation({
     tokenAddress: token?.address,
   });
 
@@ -100,7 +100,8 @@ export default function CreatePoolInitialLiquidityInput({
                 {tokenAmount !== "0" &&
                   tokenAmount !== "" &&
                   formatUsd(
-                    getSafeNumber(tokenAmount) * Number(tokenHoneyPrice ?? 0),
+                    getSafeNumber(tokenAmount) *
+                      Number(tokenHoneyPrice?.usdValue ?? 0),
                   )}
               </p>
             </div>

@@ -64,7 +64,7 @@ const useCreatePool = ({
         .filter((token) => token !== undefined) as Token[];
       setNeedsApproval(needsApproval);
     }
-  }, [allowances]);
+  }, [allowances, baseAmount, quoteAmount]);
 
   return {
     needsApproval,

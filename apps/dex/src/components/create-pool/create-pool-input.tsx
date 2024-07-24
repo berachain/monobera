@@ -20,16 +20,16 @@ export default function CreatePoolInput({
     onTokenSelection(token);
   };
   return (
-    <li className={"flex flex-row items-center justify-between gap-1 p-4"}>
-      <SelectToken
-        token={token}
-        onTokenSelection={handleTokenSelection}
-        selectedTokens={selectedTokens}
-        selectable={selectable}
-        filter={[bgtTokenAddress, nativeTokenAddress]}
-        filteredTokenTags={["debt", "aToken", "rewardToken", "aHONEY"]}
-        filteredSymbols={["BGT"]}
-      />
-    </li>
+    <SelectToken
+      token={token}
+      onTokenSelection={handleTokenSelection}
+      selectedTokens={selectedTokens}
+      selectable={selectable}
+      filter={[bgtTokenAddress, nativeTokenAddress]}
+      filteredTokenTags={["debt", "aToken", "rewardToken", "aHONEY"]}
+      filteredSymbols={["BGT"]}
+      className="w-full max-w-full"
+      btnClassName="rounded-sm justify-between p-6"
+    />
   );
 }

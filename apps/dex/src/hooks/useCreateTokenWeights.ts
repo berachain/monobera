@@ -29,15 +29,13 @@ export enum Steps {
 }
 
 export enum POOLID {
-  FIVE_BPS = "36000",
-  THIRTY_BPS = "36001",
-  HUNDRED_BPS = "36002",
+  AMBIENT = "36000",
+  STABLE = "36001",
 }
 
 export const SWAPFEE = {
-  [POOLID.FIVE_BPS]: 0.05,
-  [POOLID.THIRTY_BPS]: 0.3,
-  [POOLID.HUNDRED_BPS]: 1,
+  [POOLID.AMBIENT]: 0.3,
+  [POOLID.STABLE]: 0.01,
 };
 
 /**
@@ -50,11 +48,12 @@ const useCreateTokenWeights = () => {
 
   const [poolName, setPoolName] = useState<string>("");
 
-  const [poolId, setPoolId] = useState<POOLID>(POOLID.FIVE_BPS);
+  const [poolId, setPoolId] = useState<POOLID>(POOLID.AMBIENT);
 
   const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 
   const [initialPrice, setInitialPrice] = useState<string>("");
+  const [isPriceBase, setIsPriceBase] = useState<boolean>(true);
   const { useSelectedWalletBalance } = usePollWalletBalances();
 
   const [isBaseTokenInput, setIsBaseTokenInput] = useState<boolean>(true);
@@ -126,6 +125,15 @@ const useCreateTokenWeights = () => {
     }
   }, [baseToken, quoteToken, baseAmount, quoteAmount, step]);
 
+  const quoteBasedInitialPrice = useMemo(() => {
+    if (poolId === POOLID.STABLE) {
+      return "1";
+    }
+    return isPriceBase
+      ? initialPrice
+      : (1 / getSafeNumber(initialPrice)).toString();
+  }, [initialPrice, isPriceBase, poolId]);
+
   return {
     error,
     poolName,
@@ -139,6 +147,9 @@ const useCreateTokenWeights = () => {
     baseAmount,
     quoteAmount,
     poolId,
+    isPriceBase,
+    quoteBasedInitialPrice,
+    setIsPriceBase,
     setPoolId,
     setBaseAmount,
     setQuoteAmount,
