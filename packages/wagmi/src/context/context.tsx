@@ -3,7 +3,7 @@
 import React, { createContext, type PropsWithChildren } from "react";
 import { BeraJsProvider } from "@bera/berajs";
 import { dynamicWalletKey } from "@bera/config";
-import { EthereumWalletConnectors,  } from "@dynamic-labs/ethereum";
+import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import {
   DynamicContextProvider,
   EvmNetwork,
@@ -52,8 +52,8 @@ const Provider: React.FC<IBeraConfig> = ({
         ? "auto"
         : nextTheme
       : darkTheme
-      ? "dark"
-      : "light";
+        ? "dark"
+        : "light";
 
   return (
     <BeraWagmi.Provider value={{ networkConfig: defaultBeraNetworkConfig }}>
@@ -63,10 +63,7 @@ const Provider: React.FC<IBeraConfig> = ({
           environmentId: dynamicWalletKey,
           walletConnectors: [EthereumWalletConnectors],
           overrides: { evmNetworks: [defaultBeraNetworkConfig.evmNetwork] },
-          walletsFilter: SortWallets([
-            'metamask',
-            'binance',
-          ]),
+          walletsFilter: SortWallets(["metamask", "binance"]),
         }}
         theme={theme ?? "auto"}
       >
