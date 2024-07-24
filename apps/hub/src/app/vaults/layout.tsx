@@ -1,10 +1,12 @@
-import { Footer, FooterSM } from "@bera/shared-ui/src/footer";
+"use client";
+
+import { ApolloProvider } from "@apollo/client";
+import { bgtClient } from "@bera/graphql";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <section>
-      <div className="container min-h-minimum pb-16">{children}</div>
-      <Footer />
-    </section>
+    <ApolloProvider client={bgtClient}>
+      <section className="container">{children}</section>
+    </ApolloProvider>
   );
 }

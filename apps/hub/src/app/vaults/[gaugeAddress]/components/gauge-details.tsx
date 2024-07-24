@@ -14,7 +14,7 @@ import { Address, isAddress } from "viem";
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
 import { BgtStationBanner } from "./banner";
-import Loading from "./loading";
+import Loading from "../loading";
 import { MyGaugeDetails } from "./my-gauge-details";
 
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {

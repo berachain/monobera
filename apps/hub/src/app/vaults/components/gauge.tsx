@@ -4,7 +4,7 @@ import React from "react";
 import { usePollGlobalData } from "@bera/berajs";
 
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
-import GaugeTables from "./components/gauge-tables";
+import GaugeTables from "./gauge-tables";
 import GaugeInfoCard from "./gauge-info-card";
 
 export default function Gauge() {

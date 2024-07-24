@@ -7,7 +7,7 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import ValidatorsTable from "./components/validators-table";
+import ValidatorsTable from "./validators-table";
 
 export default function Validators() {
   const { data, isLoading } = usePollGlobalData();

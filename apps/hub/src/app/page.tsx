@@ -1,12 +1,5 @@
-import { Footer } from "@bera/shared-ui";
-
-import DashBoard from "./dashboard/dashboard";
+import DashBoard from "./dashboard/components/dashboard";
 
 export default function Page() {
-  return (
-    <>
-      <DashBoard />
-      <Footer />
-    </>
-  );
+  return <DashBoard />;
 }

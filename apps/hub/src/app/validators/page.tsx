@@ -1,7 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { getMetaTitle } from "@bera/shared-ui";
-import Validators from "./validators";
+import Validators from "./components/validators";
 import { bgtName } from "@bera/config";
 
 export const metadata: Metadata = {

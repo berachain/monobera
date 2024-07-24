@@ -1,8 +1,8 @@
 import { type Metadata } from "next";
-
-import { getMetaTitle } from "@bera/shared-ui";
-import DashBoard from "./dashboard";
 import { bgtName } from "@bera/config";
+import { getMetaTitle } from "@bera/shared-ui";
+
+import DashBoard from "./components/dashboard";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Dashboard", bgtName),

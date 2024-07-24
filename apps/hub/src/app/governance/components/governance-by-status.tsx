@@ -17,7 +17,7 @@ import { Button } from "@bera/ui/button";
 // import { Icons } from "@bera/ui/icons";
 // import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { ProposalCard } from "../components/proposal-card";
+import { ProposalCard } from "./proposal-card";
 // import {
 //   OrderByEnum,
 //   StatusEnum,

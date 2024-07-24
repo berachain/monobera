@@ -1,5 +1,5 @@
 "use client";
-import { Hero } from "./components/hero-new";
+import { Hero } from "./hero-new";
 
 export default function DashBoard() {
   return (

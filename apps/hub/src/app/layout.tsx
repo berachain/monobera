@@ -3,8 +3,11 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
+import { bgtName } from "@bera/config";
 import {
+  Footer,
   Header,
   TailwindIndicator,
   TermOfUseModal,
@@ -17,8 +20,6 @@ import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
-import { bgtName } from "@bera/config";
-import { usePathname } from "next/navigation";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -69,6 +70,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
                 {props.children}
               </main>
             </div>
+            <Footer />
           </div>
           <TailwindIndicator />
           <Analytics />

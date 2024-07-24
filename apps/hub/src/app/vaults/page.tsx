@@ -1,6 +1,6 @@
 import React from "react";
 
-import Gauge from "./gauge";
+import Gauge from "./components/gauge";
 
 export default function Page() {
   return <Gauge />;
