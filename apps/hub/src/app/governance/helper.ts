@@ -102,7 +102,7 @@ export const parseString = (
   }
   return {
     type: null,
-    title: "",
+    title: s,
     content: "",
   };
 };

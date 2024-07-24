@@ -137,9 +137,9 @@ export default function GlobalGaugeWeightChart({
   );
 
   return (
-    <div className="flex w-full shrink-0 flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] lg:items-stretch">
-      <div className="text-sm leading-5 text-muted-foreground">
-        Gauge Weight
+    <div className="flex w-full shrink-0 flex-col gap-10 rounded-lg border border-border p-6 lg:w-[300px] lg:items-stretch">
+      <div className="text-center text-sm font-medium leading-5 text-muted-foreground">
+        Rewards Weight
       </div>
 
       {isLoading ? (
@@ -165,13 +165,16 @@ export default function GlobalGaugeWeightChart({
             type="doughnut"
           />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
-            <div className="text-xs leading-3 text-muted-foreground">
+            <div className="text-xs font-medium uppercase leading-5 tracking-wide text-muted-foreground mb-1">
               Total Staked BGT
             </div>
-            <div className="text-lg font-bold leading-7">
-              <FormattedNumber value={totalAmountStaked} compact />
-            </div>
-            {showTotal && (
+            <FormattedNumber
+              value={totalAmountStaked}
+              compact
+              className="text-lg font-bold leading-6"
+            />
+
+            {/* {showTotal && (
               <div className="whitespace-nowrap text-xs leading-5 text-warning-foreground">
                 <FormattedNumber
                   value={globalAmountStaked}
@@ -180,7 +183,7 @@ export default function GlobalGaugeWeightChart({
                 />{" "}
                 Circulating
               </div>
-            )}
+            )} */}
           </div>
 
           <div

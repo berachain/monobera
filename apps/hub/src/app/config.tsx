@@ -34,6 +34,10 @@ export const navItems = [
     title: "Validators",
   },
   {
+    href: "/governance",
+    title: "Governance",
+  },
+  {
     href: "#",
     title: "Explore",
     children: [
