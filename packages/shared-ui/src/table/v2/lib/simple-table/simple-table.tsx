@@ -24,6 +24,7 @@ export type SimpleTableProps<TData> = TableBodyProps<TData> & {
   showSelection?: boolean;
   mutedBackgroundOnHead?: boolean;
   minWidth?: number;
+  variant?: string;
 };
 
 export function SimpleTable<TData>({
@@ -38,6 +39,7 @@ export function SimpleTable<TData>({
   showSelection = true,
   mutedBackgroundOnHead = true,
   onRowClick,
+  variant = "",
   ...props
 }: SimpleTableProps<TData>) {
   const minWidth =
@@ -49,8 +51,9 @@ export function SimpleTable<TData>({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col overflow-auto rounded-md border border-border",
+        "flex h-full w-full flex-col overflow-auto ",
         wrapperClassName,
+        variant !== "ghost" && "border border-border rounded-md "
       )}
     >
       <ReactTable flexTable={flexTable} className={className}>
@@ -68,6 +71,7 @@ export function SimpleTable<TData>({
           flexTable={flexTable}
           tableBodyRef={tableBodyRef}
           backgroundColor={mutedBackgroundOnHead ? "muted" : "none"}
+          variant={variant}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableHeaderGroup key={headerGroup.id} flexTable={flexTable}>
@@ -77,6 +81,7 @@ export function SimpleTable<TData>({
                   flexTable={flexTable}
                   key={header.id}
                   header={header}
+                  variant={variant}
                   dynamicFlex={dynamicFlex}
                   className={header.column.columnDef.meta?.className}
                 />

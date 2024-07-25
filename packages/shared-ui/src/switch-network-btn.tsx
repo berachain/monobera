@@ -4,7 +4,7 @@ import { Button } from "@bera/ui/button";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useChainId } from "@bera/berajs";
 
-export const SwicthNetworkBtn = ({ className }: { className?: string }) => {
+export const SwitchNetworkBtn = ({ className }: { className?: string }) => {
   const { walletConnector } = useDynamicContext();
   const chainId = useChainId();
   const [switching, setSwitching] = useState(false);

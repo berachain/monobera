@@ -22,6 +22,7 @@ export interface TableHeaderProps<TData, TValue> {
    * Show borders on the table header
    */
   showBorders?: boolean;
+  variant?: string;
 }
 
 export function TableHeader<TData, TValue>({
@@ -30,6 +31,7 @@ export function TableHeader<TData, TValue>({
   flexTable,
   dynamicFlex,
   showBorders = true,
+  variant,
 }: TableHeaderProps<TData, TValue>) {
   if (header.isPlaceholder) {
     return <td colSpan={header.colSpan} />;
@@ -56,10 +58,9 @@ export function TableHeader<TData, TValue>({
                     ? "100%"
                     : header.column.columnDef.size,
                 minWidth: header.column.columnDef.minSize,
-                borderRight:
-                  !showBorders || header.column.getIsLastColumn()
-                    ? undefined
-                    : "1px solid hsla(0, 2%, 68%, 0.1)",
+                borderRight: header.column.getIsLastColumn() || variant === "ghost"
+                  ? undefined
+                  : "1px solid hsla(0, 2%, 68%, 0.1)",
               }
             : {
                 width: header.column.columnDef.size,
@@ -68,10 +69,9 @@ export function TableHeader<TData, TValue>({
                 maxWidth: header.column.getIsLastColumn()
                   ? undefined
                   : header.column.columnDef.size,
-                borderRight:
-                  !showBorders || header.column.getIsLastColumn()
-                    ? undefined
-                    : "1px solid hsla(0, 2%, 68%, 0.1)",
+                borderRight: header.column.getIsLastColumn() || variant === "ghost"
+                  ? undefined
+                  : "1px solid hsla(0, 2%, 68%, 0.1)",
               }
           : {}
       }

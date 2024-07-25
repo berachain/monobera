@@ -18,8 +18,10 @@ import { WalletBalanceInUs } from "./wallet-balance-in-us";
 
 export default function ConnectedWalletPopover({
   isHoney = false,
+  isPopover = true
 }: {
   isHoney?: boolean;
+  isPopover?: boolean;
 }) {
   const [openPopover, setOpenPopover] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
@@ -149,9 +151,10 @@ export default function ConnectedWalletPopover({
         <Popover open={openPopover} onOpenChange={setOpenPopover}>
           <PopoverTrigger asChild>
             <Button
-              className="flex w-fit flex-row items-center justify-center border-border bg-background text-sm font-medium leading-normal text-muted-foreground"
-              onClick={() => setOpenPopover(true)}
+              className="flex w-fit flex-row items-center justify-center border-border bg-background text-sm font-medium leading-normal text-muted-foreground disabled:opacity-1"
+              onClick={() => isPopover && setOpenPopover(true)}
               variant="outline"
+              disabled={!isPopover}
             >
               <Identicon account={account ?? ""} className="mr-2 flex" />
               {truncateHash(account ?? "0x", 6)}
@@ -167,9 +170,10 @@ export default function ConnectedWalletPopover({
       </div>
       <div className="block sm:hidden">
         <Button
-          className="flex w-fit flex-row items-center justify-center border-border bg-background text-sm font-medium leading-normal text-muted-foreground"
-          onClick={() => setOpenModal(true)}
+          className="flex w-fit flex-row items-center justify-center border-border bg-background text-sm font-medium leading-normal text-muted-foreground disabled:opacity-1"
+          onClick={() => isPopover && setOpenModal(true)}
           variant="outline"
+          disabled={!isPopover}
         >
           <Identicon account={account ?? ""} className="mr-2 flex" />
           {truncateHash(account ?? "0x", 6)}
