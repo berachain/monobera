@@ -112,7 +112,7 @@ export const HowToEarn = () => {
             className="underline"
             rel="noreferrer"
           >
-             Rewards Vaults
+            Rewards Vaults
           </Link>
         </>
       ),
