@@ -17,6 +17,7 @@ export interface TableHeaderProps<TData, TValue> {
   className?: string;
   flexTable?: boolean;
   dynamicFlex?: boolean;
+  variant?: string;
 }
 
 export function TableHeader<TData, TValue>({
@@ -24,6 +25,7 @@ export function TableHeader<TData, TValue>({
   className,
   flexTable,
   dynamicFlex,
+  variant,
 }: TableHeaderProps<TData, TValue>) {
   if (header.isPlaceholder) {
     return <td colSpan={header.colSpan} />;
@@ -50,7 +52,7 @@ export function TableHeader<TData, TValue>({
                     ? "100%"
                     : header.column.columnDef.size,
                 minWidth: header.column.columnDef.minSize,
-                borderRight: header.column.getIsLastColumn()
+                borderRight: header.column.getIsLastColumn() || variant === "ghost"
                   ? undefined
                   : "1px solid hsla(0, 2%, 68%, 0.1)",
               }
@@ -61,7 +63,7 @@ export function TableHeader<TData, TValue>({
                 maxWidth: header.column.getIsLastColumn()
                   ? undefined
                   : header.column.columnDef.size,
-                borderRight: header.column.getIsLastColumn()
+                borderRight: header.column.getIsLastColumn() || variant === "ghost"
                   ? undefined
                   : "1px solid hsla(0, 2%, 68%, 0.1)",
               }

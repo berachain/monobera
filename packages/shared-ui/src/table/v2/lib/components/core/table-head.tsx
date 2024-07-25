@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, type PropsWithChildren } from "react";
+import React, { useEffect, useState, type PropsWithChildren } from "react";
 import { cn } from "@bera/ui";
 import { TableHeader as TableHeadComponent } from "@bera/ui/table";
 
@@ -9,6 +9,7 @@ type TableHeadProps = PropsWithChildren<{
   style?: React.CSSProperties;
   flexTable?: boolean;
   tableBodyRef?: React.RefObject<HTMLTableSectionElement | null>;
+  variant?: string;
 }>;
 
 export const TableHead: React.FC<TableHeadProps> = ({
@@ -17,6 +18,7 @@ export const TableHead: React.FC<TableHeadProps> = ({
   style,
   flexTable,
   children,
+  variant,
 }) => {
   const [hasVerticalScrollbar, setHasVerticalScrollbar] = useState(false);
 
@@ -46,8 +48,9 @@ export const TableHead: React.FC<TableHeadProps> = ({
       style={style}
       className={cn(
         flexTable ? "flex" : "table-header-group",
-        "relative w-full bg-muted",
+        "relative w-full ",
         hasVerticalScrollbar ? "pr-2" : "",
+        variant !== "ghost" && "bg-muted",
         className,
       )}
     >

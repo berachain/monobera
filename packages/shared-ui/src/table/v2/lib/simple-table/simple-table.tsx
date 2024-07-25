@@ -22,6 +22,7 @@ export type SimpleTableProps<TData> = TableBodyProps<TData> & {
   toolbarContent?: React.ReactNode;
   showToolbar?: boolean;
   showSelection?: boolean;
+  variant?: string;
 };
 
 export function SimpleTable<TData>({
@@ -35,6 +36,7 @@ export function SimpleTable<TData>({
   showToolbar = true,
   showSelection = true,
   onRowClick,
+  variant = ""
 }: SimpleTableProps<TData>) {
   const minWidth = flexTable ? table.getTotalSize() : "auto";
   const tableBodyRef = React.useRef<HTMLTableSectionElement>(null);
@@ -44,8 +46,9 @@ export function SimpleTable<TData>({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col overflow-auto rounded-md border border-border",
+        "flex h-full w-full flex-col overflow-auto ",
         wrapperClassName,
+        variant !== "ghost" && "border border-border rounded-md "
       )}
     >
       <ReactTable flexTable={flexTable} className={className}>
@@ -62,6 +65,7 @@ export function SimpleTable<TData>({
           style={{ minWidth }}
           flexTable={flexTable}
           tableBodyRef={tableBodyRef}
+          variant={variant}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableHeaderGroup key={headerGroup.id} flexTable={flexTable}>
@@ -70,6 +74,7 @@ export function SimpleTable<TData>({
                   flexTable={flexTable}
                   key={header.id}
                   header={header}
+                  variant={variant}
                   dynamicFlex={dynamicFlex}
                 />
               ))}

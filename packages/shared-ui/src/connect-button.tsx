@@ -7,7 +7,7 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
 import ConnectedWalletPopover from "./connected-wallet-popover";
-import { SwicthNetworkBtn } from "./switch-network-btn";
+import { SwitchNetworkBtn } from "./switch-network-btn";
 
 const DynamicConnectButton = dynamic(
   () =>
@@ -29,10 +29,12 @@ export const ConnectButton = ({
   className,
   isNavItem = false,
   isHoney = false,
+  isPopover = true
 }: {
   className?: string;
   isNavItem?: boolean;
   isHoney?: boolean;
+  isPopover?: boolean;
 }) => {
   const { isConnected, isWrongNetwork, isReady } = useBeraJs();
   return (
@@ -53,9 +55,9 @@ export const ConnectButton = ({
         </DynamicConnectButton>
       )}
       {isWrongNetwork && isConnected && (
-        <SwicthNetworkBtn className={className} />
+        <SwitchNetworkBtn className={className} />
       )}
-      {isReady && <ConnectedWalletPopover isHoney={isHoney} />}
+      {isReady && <ConnectedWalletPopover isPopover={isPopover} isHoney={isHoney} />}
     </>
   );
 };
