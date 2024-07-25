@@ -219,10 +219,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div
-      className={cn(
-        "flex h-full w-full flex-col overflow-auto bg-background",
-        embedded ? "" : "rounded-md border border-border",
-      )}
+      className={cn("flex h-full w-full flex-col overflow-auto bg-background")}
     >
       <div
         className={cn(
@@ -239,10 +236,7 @@ export function DataTable<TData, TValue>({
               </TableCaption>
             )}
             <TableHeader
-              className={cn(
-                "relative bg-muted",
-                stickyHeaders && "sticky top-0",
-              )}
+              className={cn("relative", stickyHeaders && "sticky top-0")}
             >
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -302,7 +296,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {enablePagination && (
-        <div className="flex border-t p-2 text-primary-foreground">
+        <div className="flex p-2 text-primary-foreground">
           <div className="flex justify-center overflow-hidden">
             {additionalActions?.map((action, index) => (
               <div key={index} className="inline-flex gap-2.5">
@@ -316,54 +310,47 @@ export function DataTable<TData, TValue>({
                 <Spinner size={16} color="white" />
               </p>
             )}
-            <div className="inline-flex h-9 items-center justify-start rounded-md border py-3">
-              <div className="flex items-center justify-center gap-2.5 border-r px-2 py-2">
-                <button
-                  type="button"
-                  onClick={() => table.setPageIndex(0)}
-                  disabled={!table.getCanPreviousPage()}
-                  className="font-['IBM Plex Sans'] w-8 select-none text-xs leading-tight text-foreground disabled:opacity-50"
-                >
-                  First
-                </button>
+            <div className="flex h-9 items-center gap-1 py-3">
+              <button
+                type="button"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
+              >
+                First
+              </button>
+              <button
+                type="button"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
+              >
+                «
+              </button>
+
+              <div className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50">
+                {`${table.getState().pagination.pageIndex + 1} of ${
+                  table.getPageCount() || 1
+                }`}
               </div>
-              <div className="flex w-8 items-center justify-center border-r p-1">
-                <button
-                  type="button"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  className="relative select-none text-foreground disabled:opacity-50"
-                >
-                  &lt;
-                </button>
-              </div>
-              <div className="flex flex-shrink-0 items-center justify-center gap-2.5 p-1">
-                <div className="font-['IBM Plex Sans'] p-2 text-xs leading-tight text-foreground">
-                  {`${table.getState().pagination.pageIndex + 1} of ${
-                    table.getPageCount() || 1
-                  }`}
-                </div>
-              </div>
-              <div className="flex w-8 items-center justify-center border-l p-1">
-                <button
-                  type="button"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                  className="relative select-none text-foreground disabled:opacity-50	"
-                >
-                  &gt;
-                </button>
-              </div>
-              <div className="flex items-center justify-center gap-2.5 border-l px-2 py-2">
-                <button
-                  type="button"
-                  disabled={!table.getCanNextPage()}
-                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                  className="font-['IBM Plex Sans'] w-8 select-none text-xs leading-tight text-foreground disabled:opacity-50"
-                >
-                  Last
-                </button>
-              </div>
+
+              <button
+                type="button"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
+              >
+                »
+              </button>
+
+              <button
+                type="button"
+                disabled={!table.getCanNextPage()}
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
+              >
+                Last
+              </button>
             </div>
           </div>
         </div>
