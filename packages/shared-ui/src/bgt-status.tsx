@@ -114,7 +114,6 @@ export function BGTStatusDetails() {
             key={index}
           >
             <div className="flex items-center gap-4">
-            
               <div className="font-medium">
                 <div className="flex-1 text-sm font-medium leading-6">
                   <FormattedNumber value={item.amoumt} symbol={"BGT"} />
