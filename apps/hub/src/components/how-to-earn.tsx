@@ -18,7 +18,7 @@ export const HowToEarnCard: React.FC<HowToEarnCardProps> = ({
   return (
     <div className="flex h-full w-full grid-cols-1 flex-col justify-between overflow-hidden rounded-xl border-[1px] border-border bg-transparent px-4 py-3">
       <div className="flex flex-col gap-1">
-        <div className="font-bold text-xl text-muted-foreground">{title}</div>
+        <div className="text-xl font-bold text-muted-foreground">{title}</div>
         <div className="font-bold text-muted-foreground">{subtitle}</div>
       </div>
       <div className="flex flex-grow translate-y-[10px] flex-col justify-self-end">
@@ -107,12 +107,12 @@ export const HowToEarn = () => {
         <>
           Stake receipt tokens in{" "}
           <Link
-            href={"/gauges"}
-            target="_blank"
+            href={"/vaults"}
+            target="_self"
             className="underline"
             rel="noreferrer"
           >
-            Gauge Vault
+             Rewards Vaults
           </Link>
         </>
       ),

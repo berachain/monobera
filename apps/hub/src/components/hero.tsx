@@ -8,7 +8,8 @@ export const Hero = () => {
       </div>
      */}
       <div className="flex w-fit items-center gap-2 p-4 text-5xl font-bold">
-        <Icons.bgtFav className="h-8 w-8" /> Bera{" "}
+        {/* <Icons.bgtFav className="h-8 w-8" />  */}
+        Bera{" "}
         <span className="rounded-xs bg-orange-400 px-1 text-background">
           hub
         </span>
