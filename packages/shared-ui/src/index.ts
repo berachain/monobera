@@ -54,7 +54,7 @@ export { ValidatorIcon } from "./validator-icon";
 export { VaultIcon } from "./vault-icon";
 export { GaugeIcon } from "./gauge-icon";
 export { MarketIcon } from "./market-icon";
-
+export { FadeSlides } from "./fade-slides";
 export { useTxn } from "./hooks";
 export * from "./table";
 export * from "./apyTooltip";
