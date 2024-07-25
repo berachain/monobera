@@ -8,6 +8,7 @@ import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import ValidatorsTable from "./components/validators-table";
+import { ValidatorPortalStatus } from "./components/validator-portal-status";
 
 export default function Validators() {
   const { data, isLoading } = usePollGlobalData();
@@ -95,6 +96,7 @@ export default function Validators() {
         ))}
       </div>
       <ValidatorsTable />
+      <ValidatorPortalStatus isLoading={isLoading} />
     </div>
   );
 }

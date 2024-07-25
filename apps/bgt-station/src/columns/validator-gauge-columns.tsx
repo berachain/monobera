@@ -56,8 +56,8 @@ export const getValidatorGaugeColumns = (validator: Validator) => {
       cell: ({ row }) => {
         const cuttingBoard = validator.cuttingBoard.weights.find(
           (cb) =>
-            cb.receiver.toLowerCase() ===
-            row.original.vaultAddress.toLowerCase(),
+            cb.receiver?.toLowerCase() ===
+            row.original.vaultAddress?.toLowerCase(),
         );
         if (!cuttingBoard)
           return (
