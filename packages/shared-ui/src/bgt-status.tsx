@@ -17,7 +17,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 
 // import { formatEther } from "viem";
 
-import { BGTIcon } from "./bgt-icon";
 import { FormattedNumber } from "./formatted-number";
 
 export function BGTStatusBtn() {
@@ -115,7 +114,6 @@ export function BGTStatusDetails() {
             key={index}
           >
             <div className="flex items-center gap-4">
-              <BGTIcon bg={item.background} stroke={item.stroke} size="32" />
               <div className="font-medium">
                 <div className="flex-1 text-sm font-medium leading-6">
                   <FormattedNumber value={item.amoumt} symbol={"BGT"} />

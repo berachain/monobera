@@ -74,6 +74,7 @@ export default {
         backgroundSecondary: "hsl(var(--background-secondary) / <alpha-value>)",
         foreground: "hsl(var(--foreground) / <alpha-value>)",
         foregroundSecondary: "hsl(var(--foreground-secondary) / <alpha-value>)",
+        foregroundTertiary: "hsl(var(--foreground-tertiary) / <alpha-value>)",
         popover: {
           DEFAULT: "hsl(var(--popover) / <alpha-value>)",
           foreground: "hsl(var(--popover-foreground) / <alpha-value>)",
