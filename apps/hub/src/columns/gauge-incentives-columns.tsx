@@ -7,7 +7,7 @@ import {
 } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { type ColumnDef } from "@tanstack/react-table";
-import { ActiveIncentiveWithVault } from "~/app/validators/[validatorAddress]/components/validator";
+import { type ActiveIncentiveWithVault } from "~/types/validators";
 import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
 export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [

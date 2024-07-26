@@ -8,7 +8,7 @@ import {
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { user_general_validator_columns } from "~/columns/general-validator-columns";
-import { TableLoading } from "./table-loading";
+import { TableLoading } from "../table-loading";
 
 const DataTable = dynamic(
   () => import("@bera/shared-ui").then((mod) => mod.DataTable),

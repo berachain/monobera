@@ -11,6 +11,7 @@
     "tailwindcss": "^3.3.2"
   },
   "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "tailwindcss-animate": "^1.0.5"
   }
 }
