@@ -39,7 +39,7 @@ export const ValidatorPortalStatus = () => {
           )}
           <ActionButton className="mt-6 w-fit">
             <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-              Connected as {truncateHash(account??"0x")}
+              Connected as {truncateHash(account ?? "0x")}
             </div>
           </ActionButton>
         </div>
