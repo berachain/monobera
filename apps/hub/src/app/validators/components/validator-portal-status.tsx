@@ -1,72 +1,67 @@
-import React, { useCallback, useMemo } from "react";
-import { useBeraJs } from "@bera/berajs";
-import { ConnectButton } from "@bera/shared-ui";
+import React from "react";
+import { truncateHash, useBeraJs, useSelectedValidator } from "@bera/berajs";
+import { ActionButton } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
-import { useRouter } from "next/navigation";
 
-export const ValidatorPortalStatus = ({
-  isLoading,
-}: {
-  isLoading: boolean;
-}) => {
-  const { isReady, isConnected, isWrongNetwork } = useBeraJs();
-  const router = useRouter();
-
-  // TODO: Add a check for isValidatorWallet
-  const isValidatorWallet = true;
-
-  const handleOpenValidatorPortal = useCallback(() => {
-    const validatorUrl = "0xC5b889a28950e7F8c1F279f758d8a0ab1C89cC38"; // TODO: Add the correct validator URL
-    router.push(`/validators/${validatorUrl}`);
-  }, []);
+export const ValidatorPortalStatus = () => {
+  const { account, isReady } = useBeraJs();
+  const { data: validator } = useSelectedValidator(account ?? "0x");
+  if (validator) return <></>;
 
   return (
-    <div className="mt-12 flex flex-col rounded-md border border-border p-6 text-left">
-      <div className="text-sm font-medium leading-[14px] text-muted-foreground">
-        VALIDATOR PORTAL
-      </div>
-      {!isLoading ? (
+    <div className="flex w-full gap-6">
+      <div className="flex flex-1 flex-col rounded-md border border-border p-6 text-left">
+        <div className="text-sm font-medium leading-[14px] text-muted-foreground">
+          VALIDATOR PORTAL
+        </div>
+
         <div>
           <div className="semi-bolder  text-2xl font-semibold leading-loose text-foreground">
-            {isValidatorWallet ? (
-              <div
-                className="flex cursor-pointer items-center"
-                onClick={handleOpenValidatorPortal}
-              >
+            {isReady ? (
+              "This wallet is not associated with a validator"
+            ) : (
+              <div className="flex cursor-pointer items-center">
                 Manage your validator
                 <Icons.arrowRight className="ml-2 cursor-pointer" />
               </div>
-            ) : (
-              "This wallet is not associated with a validator"
             )}
           </div>
-          {isValidatorWallet ? (
-            <div className="text-sm font-semibold leading-loose text-muted-foreground">
-              View your validator's analytics and configure your settings.
-            </div>
-          ) : isConnected ? (
-            <div className="text-sm font-semibold leading-loose text-muted-foreground">
+          {isReady ? (
+            <div className="text-sm font-semibold leading-5 text-muted-foreground">
               Reconnect with a validator wallet to view analytics and configure
               your settings.
             </div>
           ) : (
-            <div className="text-sm font-semibold leading-loose text-muted-foreground">
+            <div className="text-sm font-semibold leading-5 text-muted-foreground">
               Connect with your validator wallet to view your analytics and
               configure your settings.
             </div>
           )}
-          <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-            {isValidatorWallet && (
-              <Icons.checkCircle className="h-6 w-6 text-positive" />
-            )}
-            {isConnected && !isWrongNetwork && <div>Connected as </div>}
-            <ConnectButton className="max-w-[300px]" />
+          <ActionButton className="mt-6 w-fit">
+            <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+              Connected as {truncateHash(account??"0x")}
+            </div>
+          </ActionButton>
+        </div>
+      </div>
+
+      <div className="relative flex flex-1 flex-col rounded-md border border-border p-6 text-left">
+        <div className="text-sm font-medium leading-[14px] text-muted-foreground">
+          SETUP
+        </div>
+
+        <div className="semi-bolder  text-2xl font-semibold leading-loose text-foreground">
+          <div className="flex cursor-pointer items-center">
+            Setup your own Validator
+            <Icons.arrowRight className="ml-2 cursor-pointer" />
           </div>
         </div>
-      ) : (
-        <Skeleton className="mt-4 h-[80px] w-[300px]" />
-      )}
+
+        <div className="text-sm font-semibold leading-5 text-muted-foreground">
+          Get started in setting up your own validator
+        </div>
+        <span className="absolute right-14 text-8xl">🛠️</span>
+      </div>
     </div>
   );
 };
