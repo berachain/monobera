@@ -99,13 +99,13 @@ const WithdrawModalContent = ({
       max: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
       account,
     }).payload;
-
+    
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>
       <div className="rounded-md border border-border bg-input">
         <TokenInput
-          selected={{ ...token, symbol: token.symbol }}
+          selected={token}
           amount={amount}
           balance={userBalance}
           showExceeding={true}
