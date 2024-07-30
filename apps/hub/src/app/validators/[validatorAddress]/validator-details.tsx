@@ -43,7 +43,7 @@ export default function ValidatorDetails({
         tooltipText: apyTooltipText(),
       },
       {
-        title: "Voting Power",
+        title: "BGT delegated",
         value: (
           <span className="text-xl font-semibold">
             <FormattedNumber

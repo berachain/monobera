@@ -43,7 +43,7 @@ export const VoterColumns: ColumnDef<Vote>[] = [
     size: 160,
   },
   {
-    header: "Voting power",
+    header: "BGT delegated",
     cell: ({ row }) => (
       <FormattedNumber
         value={formatEther(BigInt(row.original.amount))}
