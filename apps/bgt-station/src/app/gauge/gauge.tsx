@@ -43,14 +43,14 @@ export default function Gauge() {
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <TabsList className="w-full md:w-fit">
             <TabsTrigger value="all-gauges" className="w-full md:w-fit">
-              All Gauges
+              All Vaults
             </TabsTrigger>
             <TabsTrigger
               value="my-gauges"
               className="w-full md:w-fit"
               disabled={!isReady}
             >
-              My Gauges
+              My Vaults
             </TabsTrigger>
           </TabsList>
           <TabsContent value="all-gauges">

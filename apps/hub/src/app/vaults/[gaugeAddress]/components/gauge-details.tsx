@@ -64,7 +64,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 externalLink: gauge?.metadata?.url ?? "",
               },
               {
-                title: "Pool Contract",
+                title: "Reward Vault",
                 content: <>{truncateHash(gauge?.vaultAddress ?? "")}</>,
                 externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
               },

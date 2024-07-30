@@ -21,7 +21,7 @@ export const getUserBgtColumns = ({
   const user_bgt_columns: ColumnDef<any>[] = [
     {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Gauge" />
+        <DataTableColumnHeader column={column} title="Reward Vaults" />
       ),
       cell: ({ row }) => (
         <GaugeHeaderWidget

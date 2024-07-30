@@ -136,7 +136,7 @@ export const Incentivize = ({
                 externalLink: gaugeInfo?.metadata?.url ?? "",
               },
               {
-                title: "Pool Contract",
+                title: "Reward Vault",
                 content: <>{truncateHash(gaugeInfo?.vaultAddress ?? "")}</>,
                 externalLink: `${blockExplorerUrl}/address/${
                   gaugeInfo?.vaultAddress ?? ""

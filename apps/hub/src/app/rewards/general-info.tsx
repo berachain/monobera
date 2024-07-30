@@ -130,7 +130,7 @@ export const GeneralInfo = () => {
             </div>
             <div className="relative z-10 mt-6 flex flex-col gap-1">
               <div className="text-xs leading-5 text-muted-foreground">
-                Gauges Earning you BGT:
+                Reward Vaults:
               </div>
               {isDataReady &&
                 userVaultInfo?.vaults.map((gauge: UserVault, index: number) => (
