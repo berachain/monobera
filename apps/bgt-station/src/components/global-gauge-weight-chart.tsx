@@ -139,7 +139,7 @@ export default function GlobalGaugeWeightChart({
   return (
     <div className="flex w-full shrink-0 flex-col gap-4 rounded-lg border border-border bg-muted p-6 lg:w-[300px] lg:items-stretch">
       <div className="text-sm leading-5 text-muted-foreground">
-        Gauge Weight
+        Rewards Distribution
       </div>
 
       {isLoading ? (

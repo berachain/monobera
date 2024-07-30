@@ -59,7 +59,7 @@ export const user_incentives_columns: ColumnDef<Validator>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Most Weighted Gauges" />
+      <DataTableColumnHeader column={column} title="Most Weighted Vault" />
     ),
     cell: ({ row }) => (
       <div className="flex items-center gap-1">

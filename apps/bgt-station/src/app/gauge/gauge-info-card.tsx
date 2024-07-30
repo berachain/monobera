@@ -24,7 +24,7 @@ export default function GaugeInfoCard() {
       <div className="grid grid-cols-1 bg-muted sm:grid-cols-[auto_auto_auto]">
         <div className="flex flex-col justify-center border-b border-border p-4">
           <div className="text-xs leading-5 text-muted-foreground">
-            Active Gauges Vaults
+            Active Reward Vaults
           </div>
           {!isLoading ? (
             <div className="inline-flex h-7 items-end gap-1">

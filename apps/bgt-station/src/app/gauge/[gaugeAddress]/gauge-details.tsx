@@ -32,7 +32,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
 
   if (!gaugeAddress || !isAddress(gaugeAddress)) return notFound();
   if (!isGaugeLoading && !isGaugeValidating && !gauge) return notFound();
-  console.log("gauge", gauge);
+
   return (
     <>
       {gauge ? (
@@ -64,14 +64,14 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 externalLink: gauge?.metadata?.url ?? "",
               },
               {
-                title: "Pool Contract",
+                title: "Staking Token",
                 content: <>{truncateHash(gauge?.vaultAddress ?? "")}</>,
-                externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
+                externalLink: `${blockExplorerUrl}/address/${gauge?.stakingTokenAddress}`,
               },
               {
-                title: "Staking Contract",
+                title: "Reward Vault",
                 content: <>{truncateHash(gauge?.stakingTokenAddress ?? "")}</>,
-                externalLink: `${blockExplorerUrl}/address/${gauge?.stakingTokenAddress}`,
+                externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
               },
             ]}
             className="border-b border-border pb-8"
