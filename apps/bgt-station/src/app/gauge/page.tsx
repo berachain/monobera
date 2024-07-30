@@ -7,7 +7,7 @@ import { Footer, getMetaTitle } from "@bera/shared-ui";
 import DashBoard from "../dashboard/dashboard";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Gauge", bgtName),
+  title: getMetaTitle("Vaults", bgtName),
   description: "Rewards",
 };
 

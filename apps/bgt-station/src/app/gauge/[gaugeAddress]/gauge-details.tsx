@@ -32,7 +32,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
 
   if (!gaugeAddress || !isAddress(gaugeAddress)) return notFound();
   if (!isGaugeLoading && !isGaugeValidating && !gauge) return notFound();
-  console.log("gauge", gauge);
+
   return (
     <>
       {gauge ? (

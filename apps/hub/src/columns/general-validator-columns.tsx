@@ -99,7 +99,7 @@ const APY_COLUMN: ColumnDef<Validator> = {
 
 const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Most Weighted Gauge" />
+    <DataTableColumnHeader column={column} title="Most Weighted Vault" />
   ),
   cell: ({ row }) => {
     const cuttingBoards: CuttingBoardWeight[] =
