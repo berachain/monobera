@@ -99,7 +99,7 @@ const WithdrawModalContent = ({
       max: BigNumber(userBalance ?? "0").eq(BigNumber(amount ?? "0")),
       account,
     }).payload;
-    
+
   return (
     <div className="flex flex-col gap-6">
       <div className="text-lg font-semibold leading-7">Withdraw</div>
