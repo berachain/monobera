@@ -63,7 +63,7 @@ export default function ValidatorDetails({
 
         <div className="mt-4 flex justify-between text-sm font-medium leading-[14px]">
           <div>
-          BGT delegated{' '}
+            BGT delegated{" "}
             <Tooltip text="Represents the influence in network governance based on amount delegated to this validator" />
           </div>
           <div className="text-muted-foreground">{votingPower}</div>
