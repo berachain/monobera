@@ -86,10 +86,12 @@ export default function AddLiquidityContent({
       reset();
       refresh();
     },
-    CustomSuccessModal: AddLiquiditySuccess,
-    customSuccessModalProps: {
-      pool: pool,
-    },
+    CustomSuccessModal: pool?.vaultAddress ? AddLiquiditySuccess : undefined,
+    customSuccessModalProps: pool?.vaultAddress
+      ? {
+          pool: pool,
+        }
+      : undefined,
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
 

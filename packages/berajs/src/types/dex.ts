@@ -84,7 +84,7 @@ export interface IUserPosition {
   formattedVaultBalance?: string;
   estimatedDepositedHoneyValue?: number;
   bgtEarned?: string;
-  seeds: bigint;
+  seeds: BigNumber;
 }
 
 export interface ISwaps {

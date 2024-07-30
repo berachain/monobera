@@ -9,6 +9,7 @@ import {
   ADDRESS_ZERO,
   BERA_VAULT_REWARDS_ABI,
   useBeraJs,
+  POOLID,
 } from "@bera/berajs";
 import {
   DataTableColumnHeader,
@@ -38,6 +39,14 @@ const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
         >
           <span>{Number(pool?.feeRate).toFixed(2)}%</span>
         </Badge>
+        {pool.poolIdx === POOLID.STABLE && (
+          <Badge
+            variant={"secondary"}
+            className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
+          >
+            <span>Stable</span>
+          </Badge>
+        )}
         {pool.isDeposited && (
           <Badge
             variant="success"

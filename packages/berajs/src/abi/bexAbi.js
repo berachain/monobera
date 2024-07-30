@@ -1,6 +1,12 @@
 export const bexAbi = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "address",
+        name: "initialWbera",
+        type: "address",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -159,7 +165,7 @@ export const bexAbi = [
     outputs: [
       {
         internalType: "int128",
-        name: "baseQuote",
+        name: "baseFlow",
         type: "int128",
       },
       {
@@ -262,5 +268,22 @@ export const bexAbi = [
     ],
     stateMutability: "payable",
     type: "function",
+  },
+  {
+    inputs: [],
+    name: "wbera",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    stateMutability: "payable",
+    type: "receive",
   },
 ];

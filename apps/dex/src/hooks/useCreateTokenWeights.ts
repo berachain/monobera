@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePollWalletBalances, type Token } from "@bera/berajs";
+import { POOLID, usePollWalletBalances, type Token } from "@bera/berajs";
 
 import { getSafeNumber } from "~/utils/getSafeNumber";
 import { isBeratoken } from "~/utils/isBeraToken";
@@ -28,11 +28,6 @@ export enum Steps {
   CREATE_POOL_PREVIEW = 3,
 }
 
-export enum POOLID {
-  AMBIENT = "36000",
-  STABLE = "36001",
-}
-
 export const SWAPFEE = {
   [POOLID.AMBIENT]: 0.3,
   [POOLID.STABLE]: 0.01,
@@ -48,7 +43,7 @@ const useCreateTokenWeights = () => {
 
   const [poolName, setPoolName] = useState<string>("");
 
-  const [poolId, setPoolId] = useState<POOLID>(POOLID.AMBIENT);
+  const [poolId, setPoolId] = useState<number>(POOLID.AMBIENT);
 
   const [step, setStep] = useState<Steps>(Steps.SET_TOKEN_WEIGHTS);
 

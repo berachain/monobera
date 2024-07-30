@@ -4,6 +4,7 @@ import {
   bexAbi,
   encodeCrocPrice,
   getSafeNumber,
+  POOLID,
   Token,
   TransactionActionType,
 } from "@bera/berajs";
@@ -32,7 +33,7 @@ import {
 } from "viem";
 import CreatePoolInitialLiquidityInput from "~/components/create-pool/create-pool-initial-liquidity-input";
 import CreatePoolInput from "~/components/create-pool/create-pool-input";
-import useCreateTokenWeights, { POOLID } from "~/hooks/useCreateTokenWeights";
+import useCreateTokenWeights from "~/hooks/useCreateTokenWeights";
 import { getBaseCost, getQuoteCost } from "../fetchPools";
 import useCreatePool from "~/hooks/useCreatePool";
 import {
@@ -103,6 +104,12 @@ export default function CreatePageContent() {
     setBaseAmount("");
     setQuoteAmount("");
   }, [initialPrice, isPriceBase]);
+
+  useEffect(() => {
+    setBaseAmount("");
+    setQuoteAmount("");
+    setInitialPrice("");
+  }, [poolId]);
 
   const baseCost = useMemo(() => {
     if (poolId === POOLID.STABLE) {
@@ -270,7 +277,13 @@ export default function CreatePageContent() {
       const mintCalldata = await encodeWarmPath(
         baseToken?.address as string,
         quoteToken?.address as string,
-        isBaseTokenInput ? 31 : 32,
+        Number(poolId) === POOLID.STABLE
+          ? isBaseTokenInput
+            ? 11
+            : 12
+          : isBaseTokenInput
+            ? 31
+            : 32,
         0,
         0,
         ((bnLiquidity - initialLiquidityAmount) * BigInt(999)) / BigInt(1000),
@@ -334,7 +347,7 @@ export default function CreatePageContent() {
         variant={"ghost"}
         size="sm"
         className="flex items-center gap-1 self-start"
-        onClick={() => router.back()}
+        onClick={() => router.push("/pools")}
       >
         <Icons.arrowLeft className="h-4 w-4" />
         <div className="text-sm font-medium">All Pools</div>
@@ -499,21 +512,36 @@ export default function CreatePageContent() {
             </Alert>
           )}
 
-          {needsApproval.length > 0 ? (
-            <ApproveButton
-              amount={parseUnits(
-                baseToken?.address === needsApproval[0]?.address
-                  ? baseAmount
-                  : quoteAmount,
-                needsApproval[0]?.decimals ?? 18,
-              )}
-              token={needsApproval[0]}
-              spender={crocDexAddress}
-              onApproval={() => refreshAllowances()}
-            />
+          {needsApproval.length > 0 &&
+          baseAmount !== "" &&
+          baseAmount !== "0" &&
+          quoteAmount !== "" &&
+          quoteAmount !== "0" ? (
+            <ActionButton>
+              <ApproveButton
+                amount={parseUnits(
+                  baseToken?.address === needsApproval[0]?.address
+                    ? baseAmount
+                    : quoteAmount,
+                  needsApproval[0]?.decimals ?? 18,
+                )}
+                token={needsApproval[0]}
+                spender={crocDexAddress}
+                onApproval={() => refreshAllowances()}
+              />
+            </ActionButton>
           ) : (
             <ActionButton>
-              <Button className="w-full" onClick={() => handleCreatePool()}>
+              <Button
+                disabled={
+                  baseAmount === "" ||
+                  baseAmount === "0" ||
+                  quoteAmount === "" ||
+                  quoteAmount === "0"
+                }
+                className="w-full"
+                onClick={() => handleCreatePool()}
+              >
                 Create Pool
               </Button>
             </ActionButton>
