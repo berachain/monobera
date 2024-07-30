@@ -84,7 +84,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
           )}
 
           <Tabs defaultValue="incentives" className="flex flex-col gap-4">
-            <div className="flex justify-between gap-4 items-center">
+            <div className="flex flex-col justify-between gap-4 md:flex-row items-center">
               <TabsList className="w-full md:w-fit">
                 <TabsTrigger value="incentives" className="w-full md:w-fit">
                   Incentives
@@ -94,7 +94,10 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="incentives">
-                <Link href={`/incentivize?gauge=${gaugeAddress}`} className="text-sm underline font-semibold">
+                <Link
+                  href={`/incentivize?gauge=${gaugeAddress}`}
+                  className="text-sm underline font-semibold"
+                >
                   Add Incentives
                 </Link>
               </TabsContent>
