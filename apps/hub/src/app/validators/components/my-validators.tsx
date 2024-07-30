@@ -9,7 +9,7 @@ export const MyValidator = ({
   keyword,
   onRowClick,
 }: {
-  keyword: any;
+  keyword?: any;
   onRowClick: any;
 }) => {
   const { data = [], isLoading, isValidating } = useUserActiveValidators();

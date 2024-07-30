@@ -51,10 +51,10 @@ export default function ValidatorsTable() {
   }, [typingTimer]);
 
   return (
-    <div className="mt-16">
+    <div>
       <Tabs defaultValue="all-validators">
         <div className="mb-6 flex w-full flex-col justify-between gap-6 sm:flex-row">
-          <TabsList>
+          <TabsList variant="ghost">
             <TabsTrigger
               value="all-validators"
               onClick={() => setKeyword("")}

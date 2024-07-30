@@ -1,15 +1,10 @@
-"use client";
-
-import React from "react";
 import { usePollGlobalData } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import ValidatorsTable from "./validators-table";
-
-export default function Validators() {
+export const ValidatorGlobalInfo = () => {
   const { data, isLoading } = usePollGlobalData();
   const generalInfo = [
     {
@@ -73,28 +68,25 @@ export default function Validators() {
     },
   ];
   return (
-    <div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {generalInfo.map((info, index) => (
-          <Card
-            className="relative h-[150px] border-border bg-muted p-6 text-left"
-            key={info.text + index}
-          >
-            <div className="text-xs font-medium leading-[14px] text-muted-foreground">
-              {info.text}
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {generalInfo.map((info, index) => (
+        <Card
+          className="relative h-[150px] border-border bg-muted p-6 text-left"
+          key={info.text + index}
+        >
+          <div className="text-xs font-medium leading-[14px] text-muted-foreground">
+            {info.text}
+          </div>
+          {isLoading ? (
+            <Skeleton className="mt-4 h-[45px] w-[120px]" />
+          ) : (
+            <div className="mt-4 text-2xl font-semibold leading-loose text-foreground">
+              {info.amount}
             </div>
-            {isLoading ? (
-              <Skeleton className="mt-4 h-[45px] w-[120px]" />
-            ) : (
-              <div className="mt-4 text-2xl font-semibold leading-loose text-foreground">
-                {info.amount}
-              </div>
-            )}
-            {info.img}
-          </Card>
-        ))}
-      </div>
-      <ValidatorsTable />
+          )}
+          {info.img}
+        </Card>
+      ))}
     </div>
   );
-}
+};
