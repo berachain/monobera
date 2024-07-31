@@ -6,7 +6,7 @@ import { useBeraJs, useUserValidators } from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type Address } from "viem";
 
-import { BoostQueue } from "./boost-queue";
+import { BoostQueue } from "../validators/components/boost-queue";
 import { DelegateContent } from "./delegate-content";
 import { DelegateEnum } from "./types";
 import { UnDelegateContent } from "./undelegate-content";

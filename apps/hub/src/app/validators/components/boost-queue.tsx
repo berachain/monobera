@@ -101,14 +101,14 @@ export const BoostQueue = () => {
     <div className="flex flex-col gap-3">
       {ActivateModalPortal}
       {CancelModalPortal}
-      <div className="text-lg font-semibold leading-7">Delegation Queue</div>
-      {!queuedList ? (
+      <div className="text-lg font-semibold leading-7 ">Delegation Queue</div>
+      {!queuedList || isLoading ? (
         <div>
           <Skeleton className="h-28 w-full rounded-md" />
           <Skeleton className="h-28 w-full rounded-md" />
         </div>
       ) : (
-        <>
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           {queuedList?.map((validator: UserValidator, index: number) => (
             <ConfirmationCard
               key={validator.id}
@@ -127,7 +127,7 @@ export const BoostQueue = () => {
           {!queuedList?.length && (
             <div className="text-muted-foreground">No validators in queue</div>
           )}
-        </>
+        </div>
       )}
     </div>
   );
