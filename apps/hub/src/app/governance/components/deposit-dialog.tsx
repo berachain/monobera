@@ -50,9 +50,7 @@ export function VoteDialog({
         </DialogHeader>
         <div className="flex w-full items-center justify-center">
           <p className="text-3xl font-semibold">{votingPower}</p>
-          <p className="text-sm font-medium">
-            Voting Power <Tooltip text={"your voting power"} />
-          </p>
+          <p className="text-sm font-medium">BGT delegated</p>
         </div>
 
         <div className="flex w-full flex-col items-center justify-center">
