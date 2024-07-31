@@ -18,3 +18,4 @@ export * from "./usePollWalletBalances";
 export * from "./usePollEstimateFeesPerGas";
 export * from "./useSubgraphTokenInformation";
 export * from "./useSubgraphTokenInformations";
+export * from "./useValidatorList";
