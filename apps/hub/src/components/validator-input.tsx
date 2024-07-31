@@ -57,7 +57,9 @@ export default function ValidatorInput({
         <ValidatorSelector
           validatorAddress={validatorAddress}
           onSelectValidator={(address) =>
-            router.push(`/delegate?action=${action}&validator=${address}`)
+            router.push(`/delegate?action=${action}&validator=${address}`, {
+              scroll: false,
+            })
           }
           showDelegated={showDelegated}
           filter={filter}
