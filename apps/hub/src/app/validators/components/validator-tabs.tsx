@@ -1,26 +1,15 @@
-import { useSelectedValidator } from "@bera/berajs";
+import { useBeraJs, type Validator } from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { type Address } from "viem";
 
+import { ValidatorOverview } from "../[validatorAddress]/components/validator-overview";
+import { ValidatorPolData } from "../[validatorAddress]/components/validator-pol-data";
 import { ValidatorAnalytics } from "./validator-analytics";
 import { ValidatorConfiguration } from "./validator-configuration";
 import { ValidatorEvents } from "./validator-events";
-import { ValidatorOverview } from "./validator-overview";
-import { ValidatorPolData } from "./validator-pol-data";
 
-export const ValidatorTabs = ({
-  validatorAddress,
-}: {
-  validatorAddress: Address;
-}) => {
-  const {
-    data: validator,
-    isLoading,
-    isValidating,
-  } = useSelectedValidator(validatorAddress);
-
-  // TODO: Add a check for isValidatorWallet
-  const isValidatorWallet = true;
+export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
+  const { account } = useBeraJs();
+  const isValidatorWallet = account === validator.coinbase;
 
   return (
     <Tabs className="mt-4" defaultValue="overview">
@@ -34,23 +23,17 @@ export const ValidatorTabs = ({
       </TabsList>
 
       <TabsContent value="overview">
-        <div>
-          {validator && (
-            <ValidatorOverview validatorAddress={validatorAddress} />
-          )}
-          {validator && (
-            <ValidatorPolData validatorAddress={validatorAddress} />
-          )}
-        </div>
+        <ValidatorOverview validator={validator} />
+        <ValidatorPolData validator={validator} />
       </TabsContent>
       <TabsContent value="configuration">
-        <ValidatorConfiguration validatorAddress={validatorAddress} />
+        <ValidatorConfiguration validatorAddress={validator.coinbase} />
       </TabsContent>
       <TabsContent value="analytics">
-        <ValidatorAnalytics validatorAddress={validatorAddress} />
+        <ValidatorAnalytics validatorAddress={validator.coinbase} />
       </TabsContent>
       <TabsContent value="events">
-        <ValidatorEvents validatorAddress={validatorAddress} />
+        <ValidatorEvents validatorAddress={validator.coinbase} />
       </TabsContent>
     </Tabs>
   );

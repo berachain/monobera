@@ -1,18 +1,10 @@
-import { useMemo } from "react";
-import {
-  ActiveIncentive,
-  usePollGauges,
-  useSelectedValidator,
-  type Validator,
-} from "@bera/berajs";
+import { ActiveIncentive, usePollGauges, type Validator } from "@bera/berajs";
 import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { type Address } from "viem";
 
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import { validator_gauge_columns } from "~/columns/gauge-incentives-columns";
 import { getValidatorGaugeColumns } from "~/columns/validator-gauge-columns";
-import { useValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 import { type ActiveIncentiveWithVault } from "~/types/validators";
 
 export const getActiveIncentivesArray = (
@@ -33,17 +25,7 @@ export const getActiveIncentivesArray = (
     };
   }) as ActiveIncentiveWithVault[];
 };
-export const ValidatorPolData = ({
-  validatorAddress,
-}: {
-  validatorAddress: Address;
-}) => {
-  const {
-    data: validator,
-    isLoading,
-    isValidating,
-  } = useSelectedValidator(validatorAddress);
-
+export const ValidatorPolData = ({ validator }: { validator: Validator }) => {
   const {
     gaugeList,
     isLoading: isGaugeListLoading,
@@ -74,9 +56,9 @@ export const ValidatorPolData = ({
     additionalTableProps: {
       manualSorting: false,
       meta: {
-        loading: isLoading,
+        // loading: isLoading,
         loadingText: "Loading...",
-        validating: isValidating,
+        // validating: isValidating,
       },
     },
   });
@@ -115,7 +97,7 @@ export const ValidatorPolData = ({
         gaugeWeights={validator?.cuttingBoard.weights}
         totalAmountStaked={validator?.amountStaked ?? "0"}
         globalAmountStaked={"10000000"}
-        isLoading={isLoading}
+        isLoading={false}
         showTotal={false}
       />
     </div>

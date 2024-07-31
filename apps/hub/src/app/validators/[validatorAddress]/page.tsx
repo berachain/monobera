@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 
 import { getMetaTitle } from "@bera/shared-ui";
-import Validator from "./validator";
+import Validator from "./components/validator";
 import { bgtName } from "@bera/config";
 import { notFound } from "next/navigation";
 import { isAddress } from "viem";
