@@ -19,7 +19,7 @@ export default function GovernanceByStatus() {
       </div>
 
       <div>
-      <ProposalsList />
+        <ProposalsList />
       </div>
     </div>
   );
