@@ -18,7 +18,9 @@ export default function GovernanceByStatus() {
         <Button variant="outline">Visit forums</Button>
       </div>
 
+      <div>
       <ProposalsList />
+      </div>
     </div>
   );
 }
