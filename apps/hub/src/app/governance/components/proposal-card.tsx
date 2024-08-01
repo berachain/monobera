@@ -1,100 +1,87 @@
 "use client";
 
 import React from "react";
-import { Proposal } from "@bera/berajs";
-import { FormattedNumber } from "@bera/shared-ui";
+import { type Proposal } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Skeleton } from "@bera/ui/skeleton";
+import { formatEther } from "viem";
 
 import {
   getBadgeColor,
+  getThemeColor,
   getTimeText,
   getTotalVoters,
   getTotalVotes,
   getVotesDataList,
   parseString,
 } from "../helper";
-import { StatusEnum } from "../types";
+import { ProposalTypeEnum, StatusEnum } from "../types";
 import { VoteInfo } from "./Voter";
 import { ProgressBarChart } from "./progress-bar-chart";
+import { QuorumStatus } from "./quorum-status";
 
 export function ProposalCard({
   truncate = true,
   className,
   proposal,
-  onClick,
+  ...props
 }: {
   truncate?: boolean;
   className?: string;
   proposal: Proposal;
-  onClick?: () => void;
 }) {
   const body = parseString(proposal.metadata.description);
+  const themeColor = getThemeColor(body.type as ProposalTypeEnum);
   return (
     <div
       className={cn(
-        "relative flex flex-col gap-1 rounded-[18px] border border-border bg-background p-8",
+        "relative flex h-40 items-center justify-between gap-3 overflow-hidden rounded-md border border-border lg:h-[116px]",
         className,
       )}
-      onClick={onClick}
+      {...props}
     >
-      <div className="flex h-fit flex-row flex-wrap items-center gap-1">
-        <Badge
-          variant={getBadgeColor(proposal.status as StatusEnum)}
-          className="border-none px-2 py-1 text-xs font-medium capitalize"
-        >
-          {proposal.status}
-        </Badge>
-        {body.type && (
-          <Badge
-            variant={"warning"}
-            className="border-none px-2 py-1 text-xs font-medium capitalize"
-          >
-            {body.type.replaceAll("_", " ")}
-          </Badge>
-        )}
-        <div className="text-xs font-medium leading-tight text-muted-foreground">
-          {getTimeText(proposal)}
-        </div>
-      </div>
-      <div>
+      <div className={cn("absolute left-0 h-full w-1", `bg-${themeColor}`)} />
+
+      <div className="flex-1 p-4">
         <div
           className={cn(
-            "width-full text-2xl font-semibold leading-tight",
+            "text-xs font-semibold capitalize leading-4",
+            `text-${themeColor}`,
+          )}
+        >
+          {body.type ? body.type.replaceAll("-", " ") : "Text"}
+        </div>
+        <div
+          className={cn(
+            "mt-1 font-semibold leading-6",
             truncate && "line-clamp-1",
           )}
         >
           {body.title}
         </div>
-        <div
-          className={cn("width-full", truncate && "line-clamp-2")}
-          dangerouslySetInnerHTML={{ __html: body.content }}
-        />
+
+        <div className="mt-4 leading-6 text-xs font-medium text-muted-foreground">
+          <Badge
+            variant={getBadgeColor(proposal.status as StatusEnum)}
+            className="mr-3 rounded-xs px-2 py-0.5 text-xs font-semibold capitalize"
+          >
+            {proposal.status}
+          </Badge>
+          {getTimeText(proposal)}
+        </div>
       </div>
-      <ProgressBarChart
-        className="mt-4"
-        dataList={getVotesDataList(proposal)}
-      />
-      <div className="mt-3 flex flex-col-reverse gap-2 text-xs font-medium leading-tight text-muted-foreground sm:h-6 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-2">
-          Submitted by
-          <VoteInfo voter={proposal.creator} />
-        </div>
-        <div className=" text-sm font-bold">
-          <FormattedNumber
-            value={getTotalVoters(proposal)}
-            visibleDecimals={0}
-            className="text-info-foreground"
-          />{" "}
-          voters,{" "}
-          <FormattedNumber
-            value={getTotalVotes(proposal)}
-            className="text-warning-foreground"
-            symbol="BGT"
-          />{" "}
-          voted
-        </div>
+
+      <div className="flex flex-col gap-8 px-8 lg:flex-row xl:gap-16 xl:px-16">
+        <QuorumStatus
+          delegatesVotesCount={getTotalVotes(proposal)}
+          quorum={formatEther(BigInt(proposal.governor.quorum))}
+        />
+
+        <ProgressBarChart
+          dataList={getVotesDataList(proposal)}
+          className="w-52"
+        />
       </div>
     </div>
   );

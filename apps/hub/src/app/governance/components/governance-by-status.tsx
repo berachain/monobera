@@ -1,35 +1,10 @@
-"use client";
-
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { usePollAllProposals, type Proposal } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
-// import { SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuCheckboxItem,
-//   DropdownMenuContent,
-//   DropdownMenuTrigger,
-// } from "@bera/ui/dropdown-menu";
-// import { Icons } from "@bera/ui/icons";
-// import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { ProposalCard } from "./proposal-card";
-// import {
-//   OrderByEnum,
-//   StatusEnum,
-//   type OrderByEnum as OrderByEnumT,
-//   type StatusEnum as StatusEnumT,
-// } from "../types";
+import { ProposalsList } from "./proposals-list";
 
 export default function GovernanceByStatus() {
-  // const [keywords, setKeywords] = React.useState<string | null>(null);
-  const { data = [], isLoading } = usePollAllProposals();
-
-  const router = useRouter();
   return (
     <div>
       <div className="text-forergound text-center text-3xl font-bold leading-9 sm:text-5xl sm:leading-[48px]">
@@ -43,84 +18,7 @@ export default function GovernanceByStatus() {
         <Button variant="outline">Visit forums</Button>
       </div>
 
-      {/* <div className="flex flex-col-reverse items-center justify-between gap-4 py-4 sm:flex-row">
-        <Tabs defaultValue={proposalStatus} className="w-full sm:w-fit">
-          <TabsList className="w-full sm:w-fit">
-            {Object.values(StatusEnum).map((status) => (
-              <TabsTrigger
-                value={status}
-                key={status}
-                className="flex-1 capitalize hover:text-foreground"
-                onClick={() =>
-                  router.push(
-                    `/governance?proposalStatus=${status}&orderBy=${orderBy}`,
-                  )
-                }
-              >
-                {status.replaceAll("-", " ")}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-        <div className="flex items-center gap-2 text-sm font-medium leading-[14px] text-stone-500">
-          Order by
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <div className="flex h-[30px] w-fit items-center justify-center gap-1 rounded-md border border-border bg-background p-2 text-sm font-medium capitalize leading-[14px] text-foreground hover:cursor-pointer">
-                {orderBy.replaceAll("-", " ")}
-                <Icons.chevronDown className="relative h-3 w-3 text-foreground" />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              {Object.values(OrderByEnum).map((order) => (
-                <DropdownMenuCheckboxItem
-                  className="hover:text-foreground"
-                  checked={order === orderBy}
-                  key={order}
-                  onClick={() =>
-                    router.push(
-                      `/governance?proposalStatus=${proposalStatus}&orderBy=${order}`,
-                    )
-                  }
-                >
-                  {order.replaceAll("-", " ")}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div> */}
-
-      {/* <SearchInput
-        placeholder="Search proposals"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setKeywords(e.target.value)
-        }
-      /> */}
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {!isLoading &&
-          data.map((proposal: Proposal, index: number) => (
-            <ProposalCard
-              proposal={proposal}
-              key={`proposal${index}`}
-              className="hover:cursor-pointer"
-              onClick={() => router.push(`/governance/proposal/${proposal.id}`)}
-            />
-          ))}
-      </div>
-      {!isLoading && data.length === 0 && (
-        <div className="mx-auto w-fit">
-          <Image
-            src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
-            alt="not found bear"
-            width={345.35}
-            height={200}
-          />
-          <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
-            No Proposals found.{" "}
-          </div>
-        </div>
-      )}
+      <ProposalsList />
     </div>
   );
 }
