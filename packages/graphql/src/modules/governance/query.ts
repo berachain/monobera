@@ -46,6 +46,7 @@ export const getProposals = gql`
           governor {
             id
             quorum
+            delegatesVotesCount
             name
             timelockId
             token {
