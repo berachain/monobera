@@ -41,7 +41,7 @@ export default function ValidatorCard({ validator }: { validator: any }) {
     {
       title: (
         <div className="flex flex-row items-center gap-1">
-          Voting power{" "}
+          BGT delegated
           <Tooltip text="Represents the influence in network governance based on amount delegated to this validator" />
         </div>
       ),

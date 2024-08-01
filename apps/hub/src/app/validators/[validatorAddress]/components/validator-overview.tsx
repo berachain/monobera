@@ -1,18 +1,14 @@
-import {
-  useSelectedValidator,
-  useTokenHoneyPrices,
-  type Token,
-} from "@bera/berajs";
+import { Validator, useTokenHoneyPrices, type Token } from "@bera/berajs";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
 import { type ActiveIncentiveWithVault } from "~/types/validators";
+import Uptime from "../../components/charts/validator-uptime";
 import { getActiveIncentivesArray } from "./validator-pol-data";
-import Uptime from "./charts/validator-uptime";
+import { UserDelegation } from "./user-delegation";
 
 export const ValidatorDataCard = ({
   title,
@@ -36,17 +32,7 @@ export const ValidatorDataCard = ({
   );
 };
 
-export const ValidatorOverview = ({
-  validatorAddress,
-}: {
-  validatorAddress: Address;
-}) => {
-  const {
-    data: validator,
-    isLoading,
-    isValidating,
-  } = useSelectedValidator(validatorAddress);
-
+export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   const activeIncentivesArray: ActiveIncentiveWithVault[] =
     getActiveIncentivesArray(validator);
 
@@ -80,41 +66,32 @@ export const ValidatorOverview = ({
   );
 
   return (
-    <div className="flex flex-col mt-2 gap-2">
-      <div className="text-muted-foreground text-sm justify-end flex">
-        {/* TODO */}
-        {"Binary Version: V9.41"}
-      </div>
-      <div className=" grid w-full grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-2 md:gap-x-4 xl:grid-cols-4">
-        <ValidatorDataCard
-          className="h-[130px]"
-          title="Validator Ranking"
-          value={
-            isLoading ? (
-              <Skeleton className="h-[130px] w-[150px]" />
-            ) : (
+    <div className="grid xl:grid-cols-2 grid-cols-1 gap-4">
+      <div className="mt-2 flex flex-col gap-2">
+        <div className="flex justify-end text-sm text-muted-foreground">
+          {"Binary Version: V9.41"}
+        </div>
+        <div className="grid w-full grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-2 md:gap-x-4">
+          <ValidatorDataCard
+            className="h-[130px]"
+            title="Validator Ranking"
+            value={
               <div className="flex flex-col items-start gap-1">
                 <div className="relative flex w-full flex-row justify-between">
-                  {/* TODO */}
                   <span className="text-2xl font-semibold">{"1 of 119"}</span>
                   <Icons.logo className="absolute right-0 h-16 w-16 self-center text-muted" />
                 </div>
 
                 <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
-                  {/* TODO */}
                   {"+14 from last month"}
                 </span>
               </div>
-            )
-          }
-        />
-        <ValidatorDataCard
-          className="h-[130px]"
-          title="Block Signing"
-          value={
-            isLoading ? (
-              <Skeleton className="h-[130px] w-[150px]" />
-            ) : (
+            }
+          />
+          <ValidatorDataCard
+            className="h-[130px]"
+            title="Block Signing"
+            value={
               <div className="flex flex-col items-start gap-1">
                 <div className="relative flex w-full flex-row justify-between">
                   {/* TODO */}
@@ -127,20 +104,16 @@ export const ValidatorOverview = ({
                   {"Signed: 10,000,127 / 10,000,023,399"}
                 </span>
               </div>
-            )
-          }
-        />
-        <ValidatorDataCard
-          className="h-[130px]"
-          title="Avg Reward Rate (Per Block Proposal)"
-          value={
-            isLoading ? (
-              <Skeleton className="h-[130px] w-[150px]" />
-            ) : (
+            }
+          />
+          <ValidatorDataCard
+            className="h-[130px]"
+            title="Avg Reward Rate (Per Block Proposal)"
+            value={
               <div className="flex flex-col items-start gap-1">
                 <div className="relative flex w-full flex-row gap-1">
                   <FormattedNumber
-                    value={validator?.rewardRate ?? 0}
+                    value={validator.rewardRate ?? 0}
                     className="text-2xl font-semibold"
                   />
                   <Icons.bgt className="h-6 w-6 self-center" />
@@ -151,16 +124,12 @@ export const ValidatorOverview = ({
                   {"+2.5% from last month"}
                 </span>
               </div>
-            )
-          }
-        />
-        <ValidatorDataCard
-          className="h-[130px]"
-          title="Est. Return per BGT"
-          value={
-            isLoading ? (
-              <Skeleton className="h-[130px] w-[100px]" />
-            ) : (
+            }
+          />
+          <ValidatorDataCard
+            className="h-[130px]"
+            title="Est. Return per BGT"
+            value={
               <div className="flex flex-row gap-1 text-2xl font-semibold">
                 $
                 <FormattedNumber
@@ -170,11 +139,12 @@ export const ValidatorOverview = ({
                 />
                 <Icons.honey className="h-6 w-6 self-center" />
               </div>
-            )
-          }
-        />
+            }
+          />
+        </div>
+        <Uptime address={validator.id} />
       </div>
-      <Uptime address={validatorAddress} />
+      <UserDelegation />
     </div>
   );
 };

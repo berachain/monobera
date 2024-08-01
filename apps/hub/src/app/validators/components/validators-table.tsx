@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getAddress } from "viem";
 
 import { AllValidator } from "./all-validator";
+import { BoostQueue } from "./boost-queue";
 import { MyValidator } from "./my-validators";
 
 export const CuttingBoardDisplay = ({
@@ -69,6 +70,9 @@ export default function ValidatorsTable() {
               disabled={!isReady}
             >
               My Validators
+            </TabsTrigger>
+            <TabsTrigger value="queued" className="w-full" disabled={!isReady}>
+              Delegation Queue
             </TabsTrigger>
           </TabsList>
           <TabsContent value="all-validators">
@@ -136,6 +140,9 @@ export default function ValidatorsTable() {
               router.push(`/validators/${row.original.coinbase}`)
             }
           />
+        </TabsContent>
+        <TabsContent value="queued">
+          <BoostQueue />
         </TabsContent>
       </Tabs>
     </div>
