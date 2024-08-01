@@ -53,9 +53,10 @@ export default function ValidatorSelector({
   }, [isValidValidator, validatorInfo]);
 
   const isLoading =
-    isValidValidator === undefined ||
-    isValidValidatorLoading ||
-    isValidatorListLoading;
+    validatorAddress !== "0x" &&
+    (isValidValidator === undefined ||
+      isValidValidatorLoading ||
+      isValidatorListLoading);
   return (
     <div>
       <Button

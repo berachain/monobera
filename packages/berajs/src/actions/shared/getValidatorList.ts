@@ -13,7 +13,7 @@ export interface GetValidators {
 /**
  * fetch and format the token list
  */
-function tokenListToDict(list: ValidatorList[]): {
+function validatorListToDict(list: ValidatorList[]): {
   [key: string]: ValidatorList;
 } {
   return list.reduce((acc, item) => {
@@ -29,7 +29,7 @@ export const getValidators = async ({
   if (!config.endpoints?.validatorList) {
     return {
       validatorList: [],
-      validatorDictionary: tokenListToDict([]),
+      validatorDictionary: validatorListToDict([]),
     };
   }
   try {
@@ -53,7 +53,7 @@ export const getValidators = async ({
 
     return {
       validatorList: uniqueList,
-      validatorDictionary: tokenListToDict(list),
+      validatorDictionary: validatorListToDict(list),
     };
   } catch (error) {
     console.error("Error fetching validator list", error);
