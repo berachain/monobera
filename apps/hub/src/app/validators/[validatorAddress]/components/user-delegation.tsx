@@ -10,7 +10,7 @@ import { DelegateModal } from "./delegate-modal";
 import { UnbondModal } from "./unbond-modal";
 
 export const UserDelegation = ({ validator }: { validator: Address }) => {
-  // U SHOULD USE SUBGRAOG VALID HERE 
+  // U SHOULD USE SUBGRAOG VALID HERE
   const { getSelectedUserValidator, isLoading } = useUserActiveValidators();
   const userValidator = getSelectedUserValidator(validator);
   const userStaked = userValidator?.userStaked;
