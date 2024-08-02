@@ -39,6 +39,16 @@ export type UserValidator = Validator & {
   canActivate?: boolean;
 };
 
+export type SubgraphUserValidator = {
+  amountQueued: string;
+  amountDeposited: string;
+  latestBlock: string;
+  latestBlockTime: string;
+  user: string;
+  coinbase: string;
+  canActivate?: boolean;
+};
+
 export type CuttingBoardWeight = {
   amount: number;
   owner: Address;
@@ -94,4 +104,13 @@ export type Gauge = {
   vaultWhitelist: {
     whitelistedTokens: { isWhiteListed: boolean; token: Token }[];
   };
+};
+
+export type ValidatorList = {
+  id: string;
+  logoURI: string;
+  name: string;
+  website: string;
+  description: string;
+  twitter: string;
 };

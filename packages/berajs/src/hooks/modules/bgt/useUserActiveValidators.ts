@@ -8,11 +8,6 @@ import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { bgtEndpointUrl, bgtStakerSubgraphUrl } from "@bera/config";
 
-/**
- *
- * @returns the current honey price of a given token
- */
-
 export const useUserActiveValidators = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType<UserValidator[] | undefined> => {

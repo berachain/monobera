@@ -2,7 +2,11 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useBeraJs, useUserValidators } from "@bera/berajs";
+import {
+  useBeraJs,
+  useUserValidators,
+  useUserValidatorsSubgraph,
+} from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { type Address } from "viem";
 
@@ -20,7 +24,7 @@ export default function Delegate({
 }) {
   const { isReady } = useBeraJs();
   const router = useRouter();
-  const { data } = useUserValidators();
+  const { data } = useUserValidatorsSubgraph();
 
   return (
     <div className="mx-auto flex w-full max-w-[600px] flex-col gap-6 sm:container sm:px-0 md:px-8 lg:w-[600px]">

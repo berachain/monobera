@@ -31,3 +31,11 @@ export const GetUserValidatorInformation = gql`
   }
   }
 `;
+
+export const GetValidValidator = gql`
+query GetValidValidator($address: String!) {
+  validator(id: $address) {
+    coinbase
+  }
+}
+`;
