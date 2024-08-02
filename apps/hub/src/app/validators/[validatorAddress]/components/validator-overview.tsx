@@ -1,4 +1,4 @@
-import { Validator, useTokenHoneyPrices, type Token } from "@bera/berajs";
+import { useTokenHoneyPrices, type Token, type Validator } from "@bera/berajs";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Card } from "@bera/ui/card";
@@ -7,8 +7,8 @@ import { type Address } from "viem";
 
 import { type ActiveIncentiveWithVault } from "~/types/validators";
 import Uptime from "../../components/charts/validator-uptime";
-import { getActiveIncentivesArray } from "./validator-pol-data";
 import { UserDelegation } from "./user-delegation";
+import { getActiveIncentivesArray } from "./validator-pol-data";
 
 export const ValidatorDataCard = ({
   title,
@@ -66,7 +66,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   );
 
   return (
-    <div className="grid xl:grid-cols-2 grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
       <div className="mt-2 flex flex-col gap-2">
         <div className="flex justify-end text-sm text-muted-foreground">
           {"Binary Version: V9.41"}
@@ -144,7 +144,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
         </div>
         <Uptime address={validator.id} />
       </div>
-      <UserDelegation />
+      <UserDelegation validator={validator.id} />
     </div>
   );
 };

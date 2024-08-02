@@ -17,7 +17,7 @@ import BigNumber from "bignumber.js";
 import { Address, parseUnits } from "viem";
 
 import ValidatorInput from "~/components/validator-input";
-import { DelegateEnum, ImageMapEnum } from "./types";
+import { DelegateEnum, ImageMapEnum } from "../types";
 
 export const DelegateContent = ({ validator }: { validator?: Address }) => {
   const { isReady } = useBeraJs();
@@ -49,9 +49,9 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     },
   });
   return (
-    <div>
+    <>
       {ModalPortal}
-      <Card className="mt-4 flex flex-col gap-3 p-6">
+      <div className="mt-4 flex flex-col gap-3">
         <div className="text-lg font-semibold capitalize leading-7 text-foreground">
           Delegate
         </div>
@@ -80,6 +80,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
           validatorAddress={validator}
           showSearch={true}
           showDelegated={false}
+          unselectable
         />
 
         {isReady && exceeding && (
@@ -105,7 +106,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
             Queue Boost
           </Button>
         </ActionButton>
-      </Card>
-    </div>
+      </div>
+    </>
   );
 };
