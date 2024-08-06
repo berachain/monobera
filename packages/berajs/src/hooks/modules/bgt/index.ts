@@ -16,3 +16,4 @@ export { useGaugeAddress } from "./useGaugeAddress";
 export { usePollIncentivesInfo } from "./usePollIncentivesInfo";
 export { useUserValidatorsSubgraph } from "./useUserValidatorsSubgraph";
 export { useValidValidator } from "./useValidValidator";
+export { useClaimableFees } from "./useClaimableFees";
