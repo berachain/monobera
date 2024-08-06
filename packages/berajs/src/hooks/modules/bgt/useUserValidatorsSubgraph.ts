@@ -51,6 +51,7 @@ export const useUserValidatorsSubgraph = (
       keepPreviousData: true,
     },
   );
+
   return {
     ...swrResponse,
     refresh: () => {
