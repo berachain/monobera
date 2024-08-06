@@ -3,23 +3,26 @@ import Image from "next/image";
 import {
   BGT_ABI,
   TransactionActionType,
+  UserValidator,
   useBeraJs,
   useUserActiveValidators,
-  useUserValidators,
 } from "@bera/berajs";
-import { bgtTokenAddress, stakingAddress } from "@bera/config";
+import { bgtTokenAddress } from "@bera/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Card } from "@bera/ui/card";
-import { Skeleton } from "@bera/ui/skeleton";
 import { useTheme } from "next-themes";
-import { Address, parseUnits } from "viem";
+import { parseUnits } from "viem";
 
 import ValidatorInput from "~/components/validator-input";
-import { DelegateEnum, ImageMapEnum } from "./types";
+import { DelegateEnum, ImageMapEnum } from "../types";
 
-export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
+export const UnDelegateContent = ({
+  userValidator,
+}: {
+  userValidator: UserValidator;
+}) => {
   const { isConnected } = useBeraJs();
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
@@ -40,7 +43,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
   });
 
   const selectedValidator = data?.find(
-    (v) => v.id.toLowerCase() === validator?.toLowerCase(),
+    (v) => v.id.toLowerCase() === userValidator.id.toLowerCase(),
   );
 
   const bgtDelegated = selectedValidator ? selectedValidator.userStaked : "0";
@@ -48,7 +51,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
   return (
     <div>
       {UnBondModalPortal}
-      <Card className="mt-4 flex flex-col gap-3 p-6">
+      <div className="flex flex-col gap-3">
         <div className="text-lg font-semibold capitalize leading-7 text-foreground">
           Unbond
         </div>
@@ -74,9 +77,10 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
           action={DelegateEnum.UNBOND}
           amount={amount}
           onAmountChange={setAmount}
-          validatorAddress={validator}
+          validatorAddress={userValidator.id}
           showDelegated
           showSearch={false}
+          unselectable
         />
 
         {isConnected && Number(amount) > Number(bgtDelegated) && (
@@ -87,7 +91,7 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
           <Button
             className="w-full"
             disabled={
-              !validator || // no validator selected
+              !userValidator || // no validator selected
               isUnbondLoading || // unbond action processing
               Number(amount) > Number(bgtDelegated) ||
               !amount ||
@@ -98,14 +102,14 @@ export const UnDelegateContent = ({ validator }: { validator?: Address }) => {
                 address: bgtTokenAddress,
                 abi: BGT_ABI,
                 functionName: "dropBoost",
-                params: [validator, parseUnits(amount ?? "0", 18)],
+                params: [userValidator.id, parseUnits(amount ?? "0", 18)],
               })
             }
           >
             Unbond
           </Button>
         </ActionButton>
-      </Card>
+      </div>
     </div>
   );
 };

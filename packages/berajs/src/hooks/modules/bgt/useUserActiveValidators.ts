@@ -1,16 +1,23 @@
-import useSWR from "swr";
-
-import POLLING from "~/enum/polling";
-import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
-import { useBeraJs } from "~/contexts";
-import { UserValidator, Validator } from "~/types";
-import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { bgtEndpointUrl, bgtStakerSubgraphUrl } from "@bera/config";
+import { GetUserValidatorInformation } from "@bera/graphql";
+import useSWR from "swr";
+
+import { useBeraJs } from "~/contexts";
+import POLLING from "~/enum/polling";
+import { UserValidator, Validator } from "~/types";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
+
+export interface UseUserActiveValidatorsResponse
+  extends DefaultHookReturnType<UserValidator[] | undefined> {
+  getSelectedUserValidator: (
+    validatorAddress: string,
+  ) => UserValidator | undefined;
+}
 
 export const useUserActiveValidators = (
   options?: DefaultHookOptions,
-): DefaultHookReturnType<UserValidator[] | undefined> => {
+): UseUserActiveValidatorsResponse => {
   const { account } = useBeraJs();
   const QUERY_KEY = ["useUserActiveValidators", account];
   const swrResponse = useSWR<UserValidator[] | undefined>(
@@ -61,8 +68,16 @@ export const useUserActiveValidators = (
       keepPreviousData: true,
     },
   );
+  const getSelectedUserValidator = (validatorAddress: string) => {
+    const valiList = swrResponse.data;
+    return valiList?.find(
+      (validator) =>
+        validator.coinbase.toLowerCase() === validatorAddress.toLowerCase(),
+    );
+  };
   return {
     ...swrResponse,
+    getSelectedUserValidator,
     refresh: () => swrResponse?.mutate?.(),
   };
 };

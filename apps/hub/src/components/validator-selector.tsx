@@ -4,10 +4,10 @@ import {
   useBeraJs,
   usePollValidatorInfo,
   useSelectedValidator,
-  useValidatorList,
   useValidValidator,
+  useValidatorList,
 } from "@bera/berajs";
-import { SearchInput, SSRSpinner, ValidatorIcon } from "@bera/shared-ui";
+import { SSRSpinner, SearchInput, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -20,12 +20,14 @@ export default function ValidatorSelector({
   validatorAddress = "0x",
   onSelectValidator,
   showDelegated = false,
+  unselectable = false,
   filter,
   showSearch,
 }: {
   validatorAddress?: Address;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
+  unselectable?: boolean;
   filter?: Address[];
   showSearch?: boolean;
 }) {
@@ -62,7 +64,7 @@ export default function ValidatorSelector({
       <Button
         variant="outline"
         className="ml-3 min-w-[148px] whitespace-nowrap border-border bg-background shadow"
-        onClick={() => setOpen(true)}
+        onClick={() => !unselectable && setOpen(true)}
         disabled={isLoading}
       >
         {isValidValidator ? (
@@ -76,7 +78,7 @@ export default function ValidatorSelector({
             <Icons.chevronDown className="relative h-3 w-3" />
           </div>
         ) : isLoading ? (
-          <div className="w-full flex flex-row gap-2 items-center">
+          <div className="flex w-full flex-row items-center gap-2">
             <SSRSpinner />
             Loading...
           </div>

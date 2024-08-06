@@ -13,14 +13,16 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "viem";
 
-import { DelegateEnum } from "../app/delegate/types";
+import { DelegateEnum } from "../app/validators/[validatorAddress]/types";
 import ValidatorSelector from "./validator-selector";
 
 export default function ValidatorInput({
   action = DelegateEnum.DELEGATE,
   amount,
+  unselectable,
   onAmountChange,
   validatorAddress,
+  onSelectValidator,
   disabled = false,
   showDelegated, //when this is true, the validator list will only show the validators user delegated
   filter,
@@ -29,8 +31,10 @@ export default function ValidatorInput({
 {
   action: DelegateEnum;
   amount: string | undefined;
+  unselectable?: boolean;
   onAmountChange: (amount: string | undefined) => void;
   validatorAddress: Address | undefined;
+  onSelectValidator?: (address: Address) => void;
   disabled?: boolean;
   showDelegated?: boolean;
   filter?: Address[];
@@ -57,13 +61,12 @@ export default function ValidatorInput({
         <ValidatorSelector
           validatorAddress={validatorAddress}
           onSelectValidator={(address) =>
-            router.push(`/delegate?action=${action}&validator=${address}`, {
-              scroll: false,
-            })
+            onSelectValidator?.(address as `0x${string}`)
           }
           showDelegated={showDelegated}
           filter={filter}
           showSearch={showSearch}
+          unselectable={unselectable}
         />
         <Input
           type="number-enhanced"

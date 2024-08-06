@@ -18,8 +18,9 @@ export default function Validator({
     isLoading,
     isValidating,
   } = useSelectedValidator(validatorAddress);
+
   if (!isLoading && !isValidating && !validator) return notFound();
-  console.log("validator", validator);
+
   return (
     <>
       {validator ? (
