@@ -31,7 +31,7 @@ export default function ValidatorCard({
     },
     {
       amount: `${formattedBGTRewards.toString()} BGT`,
-      text: "Voting power",
+      text: "BGT delegated",
     },
     {
       amount: `${validator.commission.commissionRates.rate}%`,

@@ -416,7 +416,7 @@ export default function PoolPageContent({
             color: "success",
           },
           {
-            title: "Pool Contract",
+            title: "Receipt Token",
             content: isPoolLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (

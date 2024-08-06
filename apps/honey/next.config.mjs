@@ -2,7 +2,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
-const config = {
+export const config = {
   crossOrigin: "anonymous",
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],

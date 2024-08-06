@@ -45,7 +45,7 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
   header: ({ column }) => (
     <DataTableColumnHeader
       column={column}
-      title="Voting Power"
+      title="BGT delegated"
       className="min-w-[200px] whitespace-nowrap"
     />
   ),

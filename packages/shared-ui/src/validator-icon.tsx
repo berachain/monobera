@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Icons } from "@bera/ui/icons";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Address } from "viem";
+import { useValidatorList } from "@bera/berajs";
 
 const IconVariants = cva(
   "aspect-square flex items-center justify-center rounded-full text-foreground bg-background border border-border",
@@ -42,12 +43,13 @@ export const ValidatorIcon = ({
   size,
   ...props
 }: IconProps) => {
-  const { validatorInfoDictionary = {} } = usePollValidatorInfo();
+  const { data } = useValidatorList();
   const img = useMemo(
     // @ts-ignore
-    () => validatorInfoDictionary[address]?.metadata?.logoURI ?? "",
-    [address],
+    () => data?.validatorDictionary[address.toLowerCase()]?.logoURI ?? "",
+    [address, data],
   );
+
   return (
     <Avatar className={cn(IconVariants({ size }), className)} {...props}>
       <AvatarImage

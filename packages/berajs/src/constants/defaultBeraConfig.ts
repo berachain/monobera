@@ -31,6 +31,7 @@ export const defaultBeraConfig: BeraConfig = {
     dexRouter: crocRouterEndpoint,
     dexIndexer: crocIndexerEndpoint,
     tokenList: tokenListUrl,
+    validatorList: validatorListUrl,
     marketList: marketListUrl,
     validatorInfo: validatorListUrl,
     bgtEndpoint: bgtEndpointUrl,

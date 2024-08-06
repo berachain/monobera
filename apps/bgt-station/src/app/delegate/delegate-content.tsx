@@ -41,9 +41,11 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     message: `Delegating ${Number(amount).toFixed(2)} BGT to Validator`,
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
-      refresh();
-      refreshActive();
-      refreshBalance();
+      setTimeout(() => {
+        refresh();
+        refreshActive();
+        refreshBalance();
+      }, 5000);
     },
   });
   return (

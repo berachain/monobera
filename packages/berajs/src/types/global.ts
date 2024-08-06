@@ -8,6 +8,7 @@ export interface BeraConfig {
     dexRouter?: string;
     dexIndexer?: string;
     tokenList?: string;
+    validatorList?: string;
     marketList?: string;
     validatorInfo?: string;
     bgtEndpoint?: string;

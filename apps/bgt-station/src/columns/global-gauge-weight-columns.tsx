@@ -15,7 +15,7 @@ import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Gauge Vaults" />
+      <DataTableColumnHeader column={column} title="Reward Vaults" />
     ),
     cell: ({ row }) => (
       <GaugeHeaderWidget

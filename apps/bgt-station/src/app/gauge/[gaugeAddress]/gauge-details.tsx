@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   truncateHash,
@@ -32,7 +33,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
 
   if (!gaugeAddress || !isAddress(gaugeAddress)) return notFound();
   if (!isGaugeLoading && !isGaugeValidating && !gauge) return notFound();
-  console.log("gauge", gauge);
+
   return (
     <>
       {gauge ? (
@@ -64,14 +65,14 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 externalLink: gauge?.metadata?.url ?? "",
               },
               {
-                title: "Pool Contract",
-                content: <>{truncateHash(gauge?.vaultAddress ?? "")}</>,
-                externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
-              },
-              {
-                title: "Staking Contract",
+                title: "Staking Token",
                 content: <>{truncateHash(gauge?.stakingTokenAddress ?? "")}</>,
                 externalLink: `${blockExplorerUrl}/address/${gauge?.stakingTokenAddress}`,
+              },
+              {
+                title: "Reward Vault",
+                content: <>{truncateHash(gauge?.vaultAddress ?? "")}</>,
+                externalLink: `${blockExplorerUrl}/address/${gauge?.vaultAddress}`,
               },
             ]}
             className="border-b border-border pb-8"
@@ -83,7 +84,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
           )}
 
           <Tabs defaultValue="incentives" className="flex flex-col gap-4">
-            <div className="flex flex-col justify-between gap-4 md:flex-row">
+            <div className="flex flex-col justify-between gap-4 md:flex-row items-center">
               <TabsList className="w-full md:w-fit">
                 <TabsTrigger value="incentives" className="w-full md:w-fit">
                   Incentives
@@ -92,6 +93,14 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                   Validators
                 </TabsTrigger>
               </TabsList>
+              <TabsContent value="incentives">
+                <Link
+                  href={`/incentivize?gauge=${gaugeAddress}`}
+                  className="text-sm underline font-semibold"
+                >
+                  Add Incentives
+                </Link>
+              </TabsContent>
             </div>
 
             <TabsContent value="incentives">

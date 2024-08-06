@@ -14,22 +14,29 @@ interface RTProps {
   className?: string;
   columns: Columns;
   data: any[];
+  emptyMessage?: string;
   rowOnClick?: (row: any) => void;
 }
-export function RT({ columns, data, rowOnClick, className }: RTProps) {
+export default function RT({
+  columns,
+  data,
+  rowOnClick,
+  emptyMessage = "No data found.",
+  className,
+}: RTProps) {
   // allows for multi-column sorting
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data }, useSortBy);
+    useTable({ columns: columns ?? [], data: data ?? [] }, useSortBy);
 
   return (
-    <Card className="overflow-x-scroll">
+    <Card className="w-full overflow-x-scroll">
       <table {...getTableProps()} className={cn("w-full", className)}>
         <thead>
           {headerGroups.map((headerGroup: any) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
               key={`headerGroup${headerGroup.id}`}
-              className="flex justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
+              className="flex w-full justify-between rounded-tl-[18px] rounded-tr-[18px] border border-l-0 border-r-0 border-t-0 border-b-border bg-muted px-8 py-3"
             >
               {headerGroup.headers.map((column: any) => (
                 <th
@@ -44,15 +51,15 @@ export function RT({ columns, data, rowOnClick, className }: RTProps) {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row: any, index: number) => {
+          {rows?.map((row: any, index: number) => {
             prepareRow(row);
             return (
               <tr
                 {...row.getRowProps()}
                 key={`tableGroup rows${row.id}`}
-                className={`flex justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 hover:cursor-pointer hover:bg-muted border-b-border${
+                className={`flex w-full justify-between border border-l-0 border-r-0 border-t-0 bg-background px-8 py-4 hover:cursor-pointer hover:bg-muted border-b-border${
                   index === rows.length - 1
-                    ? "rounded-18 rounded border-0 "
+                    ? "rounded rounded-md border-0 "
                     : ""
                 }`}
                 onClick={() => rowOnClick?.(row)}
@@ -69,6 +76,11 @@ export function RT({ columns, data, rowOnClick, className }: RTProps) {
               </tr>
             );
           })}
+          {rows.length === 0 && (
+            <p className="my-4 w-full self-center text-center text-lg font-semibold text-muted-foreground">
+              {emptyMessage}
+            </p>
+          )}
         </tbody>
       </table>
     </Card>

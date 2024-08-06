@@ -1,4 +1,4 @@
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
@@ -18,6 +18,7 @@ export const useUserValidators = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType<UserValidator[] | undefined> => {
   const { account } = useBeraJs();
+  const { mutate } = useSWRConfig();
   const {
     data = [],
     refresh: refreshUserActive,
@@ -81,7 +82,7 @@ export const useUserValidators = (
     },
     {
       ...options,
-      refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW * 2,
+      refreshInterval: options?.opts?.refreshInterval ?? POLLING.FAST * 2,
       keepPreviousData: true,
     },
   );
@@ -89,7 +90,7 @@ export const useUserValidators = (
     ...swrResponse,
     refresh: () => {
       refreshUserActive();
-      swrResponse?.mutate?.();
+      mutate(QUERY_KEY);
     },
   };
 };

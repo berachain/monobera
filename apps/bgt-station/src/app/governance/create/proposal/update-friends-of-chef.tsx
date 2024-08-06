@@ -59,7 +59,7 @@ export const UpdateFriendsOfChef = ({
   return (
     <>
       <div className="flex flex-col gap-2">
-        <div className="text-sm font-semibold leading-tight">Select Gauge</div>
+        <div className="text-sm font-semibold leading-tight">Select Vault</div>
         {loading ? (
           <Skeleton className="h-10 w-full" />
         ) : (
@@ -72,7 +72,7 @@ export const UpdateFriendsOfChef = ({
               >
                 {gauge
                   ? `Staking Token Address: ${truncateHash(gauge.id)}`
-                  : "Select a Gauge"}
+                  : "Select a Vault"}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent

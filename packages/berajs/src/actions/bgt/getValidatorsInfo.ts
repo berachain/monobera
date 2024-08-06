@@ -5,7 +5,7 @@ import { BeraConfig, Validator } from "../../types";
 export interface GetValidatorsInfo {
   counts: number;
   validatorInfoList: Validator[];
-  validatorInfoDictionary: { [key: Address]: Validator };
+  validatorInfoDictionary: { [key: string]: Validator };
 }
 
 export interface ValidatorFilter {
@@ -41,8 +41,8 @@ export const getValidatorsInfo = async (
       counts: temp.total ?? 0,
       validatorInfoList: temp.validators ?? [],
       validatorInfoDictionary: (temp.validators ?? []).reduce(
-        (acc: { [key: Address]: Validator }, item: Validator) => {
-          acc[item.id] = item;
+        (acc: { [key: string]: Validator }, item: Validator) => {
+          acc[item.id.toLowerCase()] = item;
           return acc;
         },
         {},
