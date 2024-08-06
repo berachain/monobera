@@ -3,10 +3,8 @@ import useSWR from "swr";
 import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 import { useBeraJs } from "~/contexts";
-import { UserValidator, Validator, Vault } from "~/types";
-import { GetUserValidatorInformation } from "@bera/graphql";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { bgtEndpointUrl, bgtSubgraphUrl, multicallAddress } from "@bera/config";
+import { Vault } from "~/types";
+import { bgtEndpointUrl, multicallAddress } from "@bera/config";
 import { Address, formatUnits } from "viem";
 import { BERA_VAULT_REWARDS_ABI } from "~/abi";
 import { usePublicClient } from "wagmi";
@@ -33,6 +31,7 @@ export const useUserVaults = (
   | {
       totalBgtRewards: string;
       vaults: UserVault[];
+      claimAllCalldata: any;
     }
   | undefined
 > => {
@@ -43,6 +42,7 @@ export const useUserVaults = (
     | {
         totalBgtRewards: string;
         vaults: UserVault[];
+        claimAllCalldata: any;
       }
     | undefined
   >(
@@ -107,6 +107,7 @@ export const useUserVaults = (
       return {
         totalBgtRewards: formatUnits(total, 18),
         vaults: sortedUserVaults as UserVault[],
+        claimAllCalldata: "",
       };
     },
     {

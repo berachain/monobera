@@ -3,7 +3,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { faucetUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 
@@ -11,6 +10,8 @@ import BannerManager from "./banner-manager";
 import { ConnectButton } from "./connect-button";
 import { MainNav } from "./main-nav";
 import { MobileDropdown } from "./mobile-nav";
+import { BGTStatusBtn } from "./bgt-status";
+import { useBeraJs } from "@bera/berajs";
 
 const ThemeToggleMobile = dynamic(
   () => import("./theme-toggle-mobile").then((mod) => mod.ThemeToggleMobile),
@@ -35,6 +36,8 @@ export function Header({
   hideTheme?: boolean;
   appName?: string;
 }) {
+  const { isReady } = useBeraJs();
+
   return (
     <nav
       className={cn(
@@ -52,14 +55,15 @@ export function Header({
         </div>
 
         <div className="flex h-full items-center gap-2 xl:gap-2">
-          {/* {!hideTheme && <ThemeToggleMobile />}
-          <Link
+          {/* {!hideTheme && <ThemeToggleMobile />} */}
+          {/* <Link
             className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-md sm:flex"
             href={faucetUrl ?? ""}
             target="_blank"
           >
             <Icons.faucetFav className="h-10 w-10 hover:opacity-80" />
           </Link> */}
+          {isReady && <BGTStatusBtn />}
           {!hideConnectBtn && (
             <ConnectButton isNavItem={true} isHoney={isHoney} />
           )}

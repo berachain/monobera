@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@bera/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
-import { BGTStatusDetails, TotalBGT } from "./bgt-status";
+import { BGTStatusDetails } from "./bgt-status";
 import { History } from "./history";
 import Identicon from "./identicon";
 import { Setting } from "./settings";
@@ -86,12 +86,7 @@ export default function ConnectedWalletPopover({
               </Button>
             </div>
           </div>
-
-          {tab === "bgt" ? (
-            <TotalBGT className="text-center" />
-          ) : (
-            <WalletBalanceInUs />
-          )}
+          <WalletBalanceInUs />
           <Tabs
             defaultValue="tokens"
             className="flex flex-1 flex-col gap-4 overflow-y-hidden"
