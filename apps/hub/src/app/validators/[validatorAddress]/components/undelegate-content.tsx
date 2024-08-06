@@ -2,18 +2,19 @@ import React from "react";
 import Image from "next/image";
 import {
   BGT_ABI,
+  SubgraphUserValidator,
   TransactionActionType,
   UserValidator,
   useBeraJs,
   useUserActiveValidators,
+  useUserValidatorsSubgraph,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card } from "@bera/ui/card";
 import { useTheme } from "next-themes";
-import { parseUnits } from "viem";
+import { Address, parseUnits } from "viem";
 
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "../types";
@@ -21,14 +22,14 @@ import { DelegateEnum, ImageMapEnum } from "../types";
 export const UnDelegateContent = ({
   userValidator,
 }: {
-  userValidator: UserValidator;
+  userValidator: SubgraphUserValidator;
 }) => {
   const { isConnected } = useBeraJs();
   const { theme, systemTheme } = useTheme();
   const t = theme === "system" ? systemTheme : theme;
 
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
-  const { data, refresh } = useUserActiveValidators();
+  const { data, refresh } = useUserValidatorsSubgraph();
 
   const {
     write: unbondWrite,
@@ -43,10 +44,12 @@ export const UnDelegateContent = ({
   });
 
   const selectedValidator = data?.find(
-    (v) => v.id.toLowerCase() === userValidator.id.toLowerCase(),
+    (v) => v.coinbase.toLowerCase() === userValidator.coinbase.toLowerCase(),
   );
 
-  const bgtDelegated = selectedValidator ? selectedValidator.userStaked : "0";
+  const bgtDelegated = selectedValidator
+    ? selectedValidator.amountDeposited
+    : "0";
 
   return (
     <div>
@@ -77,7 +80,7 @@ export const UnDelegateContent = ({
           action={DelegateEnum.UNBOND}
           amount={amount}
           onAmountChange={setAmount}
-          validatorAddress={userValidator.id}
+          validatorAddress={userValidator.coinbase as Address}
           showDelegated
           showSearch={false}
           unselectable
@@ -102,7 +105,7 @@ export const UnDelegateContent = ({
                 address: bgtTokenAddress,
                 abi: BGT_ABI,
                 functionName: "dropBoost",
-                params: [userValidator.id, parseUnits(amount ?? "0", 18)],
+                params: [userValidator.coinbase, parseUnits(amount ?? "0", 18)],
               })
             }
           >
