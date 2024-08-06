@@ -75,7 +75,9 @@ export default function ValidatorSelector({
               imgOverride={selectedValidatorInfo?.logoURI}
             />
             {selectedValidatorInfo?.name ?? truncateHash(validatorAddress)}
-            <Icons.chevronDown className="relative h-3 w-3" />
+            {!unselectable && (
+              <Icons.chevronDown className="relative h-3 w-3" />
+            )}
           </div>
         ) : isLoading ? (
           <div className="flex w-full flex-row items-center gap-2">
@@ -85,7 +87,9 @@ export default function ValidatorSelector({
         ) : (
           <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
             Select Validator
-            <Icons.chevronDown className="relative h-3 w-3" />
+            {!unselectable && (
+              <Icons.chevronDown className="relative h-3 w-3" />
+            )}
           </div>
         )}
       </Button>
