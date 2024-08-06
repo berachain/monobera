@@ -4,9 +4,6 @@ import React from "react";
 import { Tooltip } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import { Skeleton } from "@bera/ui/skeleton";
-
-import UnbondingQueueTable from "~/components/unbonding-queue-table";
 import { DelegateEnum } from "./types";
 
 export default function DemandBasedQueue({ action }: { action: DelegateEnum }) {

@@ -1,29 +1,27 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   BGT_ABI,
   IContractWrite,
+  SubgraphUserValidator,
   TransactionActionType,
-  UserValidator,
   truncateHash,
   useBgtUnstakedBalance,
-  useUserValidators,
+  usePollValidatorInfo,
+  useUserValidatorsSubgraph,
+  useValidatorList,
 } from "@bera/berajs";
 import { bgtTokenAddress, blockTime } from "@bera/config";
-import {
-  FormattedNumber,
-  ValidatorIcon,
-  timeDifferenceFromNow,
-  useTxn,
-} from "@bera/shared-ui";
+import { FormattedNumber, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
-import { parseUnits } from "viem";
+import { Address, parseUnits } from "viem";
 import { useBlock } from "wagmi";
 
 export const HISTORY_BUFFER = 8192;
+
 export const BoostQueue = () => {
-  const { data = [], refresh, isLoading } = useUserValidators();
+  const { data = [], refresh, isLoading } = useUserValidatorsSubgraph();
   const { refresh: refreshBalance } = useBgtUnstakedBalance();
 
   const result = useBlock();
@@ -33,10 +31,10 @@ export const BoostQueue = () => {
     return !data || !blockNumber || !data.length
       ? []
       : data
-          .filter((validator: UserValidator) => {
-            return parseFloat(validator.userQueued) !== 0;
+          .filter((validator: SubgraphUserValidator) => {
+            return parseFloat(validator.amountQueued) !== 0;
           })
-          .map((validator: UserValidator) => {
+          .map((validator: SubgraphUserValidator) => {
             return {
               ...validator,
               canActivate:
@@ -64,7 +62,7 @@ export const BoostQueue = () => {
         refresh();
         refreshBalance();
         setHasSubmittedTxn({} as any);
-      }, 7000);
+      }, 5000);
     },
   });
 
@@ -109,21 +107,23 @@ export const BoostQueue = () => {
         </div>
       ) : (
         <>
-          {queuedList?.map((validator: UserValidator, index: number) => (
-            <ConfirmationCard
-              key={validator.id}
-              userValidator={validator}
-              index={index}
-              hasSubmittedTxn={hasSubmittedTxn[index] ?? false}
-              blocksLeft={
-                parseInt(validator.latestBlock) +
-                HISTORY_BUFFER -
-                Number(blockNumber)
-              }
-              isTxnLoading={isActivationLoading || isCancelLoading}
-              handleTransaction={handleTransaction}
-            />
-          ))}
+          {queuedList?.map(
+            (validator: SubgraphUserValidator, index: number) => (
+              <ConfirmationCard
+                key={validator.coinbase}
+                userValidator={validator}
+                index={index}
+                hasSubmittedTxn={hasSubmittedTxn[index] ?? false}
+                blocksLeft={
+                  parseInt(validator.latestBlock) +
+                  HISTORY_BUFFER -
+                  Number(blockNumber)
+                }
+                isTxnLoading={isActivationLoading || isCancelLoading}
+                handleTransaction={handleTransaction}
+              />
+            ),
+          )}
           {!queuedList?.length && (
             <div className="text-muted-foreground">No validators in queue</div>
           )}
@@ -141,7 +141,7 @@ const ConfirmationCard = ({
   hasSubmittedTxn,
   handleTransaction,
 }: {
-  userValidator: UserValidator;
+  userValidator: SubgraphUserValidator;
   blocksLeft: number;
   isTxnLoading: boolean;
   index: number;
@@ -162,24 +162,32 @@ const ConfirmationCard = ({
   const timeText = (
     <span className=" text-info-foreground">{blocksLeft} blocks remaining</span>
   );
+
+  const { data } = useValidatorList();
+
+  const coinbase = userValidator.coinbase;
+  const validatorInfo = data?.validatorDictionary
+    ? data.validatorDictionary[coinbase]
+    : undefined;
+  console.log(validatorInfo, data);
   return (
     <div className="w-full rounded-md border border-border p-4">
       <div className="flex w-full justify-between">
         <div className="font-medium">
           <div className="flex items-center gap-2">
             <ValidatorIcon
-              address={userValidator.id}
+              address={userValidator.coinbase as Address}
               className="h-8 w-8"
-              imgOverride={userValidator.metadata?.logoURI}
+              // imgOverride={userValidator.metadata?.logoURI}
             />
             <div>
-              {userValidator.metadata?.name ?? truncateHash(userValidator.id)}
+              {validatorInfo?.name ?? truncateHash(userValidator.coinbase)}
             </div>
           </div>
           <div className="ml-8 text-muted-foreground ">
             <FormattedNumber
               showIsSmallerThanMin
-              value={userValidator.userQueued}
+              value={userValidator.amountQueued}
               compact
             />{" "}
             BGT
@@ -212,7 +220,7 @@ const ConfirmationCard = ({
                 functionName: "cancelBoost",
                 params: [
                   userValidator.coinbase,
-                  parseUnits(userValidator.userQueued, 18),
+                  parseUnits(userValidator.amountQueued, 18),
                 ],
               })
             }

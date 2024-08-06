@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   truncateHash,
   useBeraJs,
   usePollValidatorInfo,
   useSelectedValidator,
+  useValidValidator,
+  useValidatorList,
 } from "@bera/berajs";
-import { SearchInput, ValidatorIcon } from "@bera/shared-ui";
+import { SSRSpinner, SearchInput, ValidatorIcon } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -18,35 +20,67 @@ export default function ValidatorSelector({
   validatorAddress = "0x",
   onSelectValidator,
   showDelegated = false,
+  unselectable = false,
   filter,
   showSearch,
 }: {
   validatorAddress?: Address;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
+  unselectable?: boolean;
   filter?: Address[];
   showSearch?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   //@ts-ignore
-  const { data: validValidator } = useSelectedValidator(validatorAddress);
 
+  const { data: isValidValidator, isLoading: isValidValidatorLoading } =
+    useValidValidator(validatorAddress, {
+      opts: {
+        refreshInterval: 0,
+      },
+    });
+
+  const { data: validatorInfo, isLoading: isValidatorListLoading } =
+    useValidatorList({
+      opts: {
+        refreshInterval: 0,
+      },
+    });
+
+  const selectedValidatorInfo = useMemo(() => {
+    return validatorInfo?.validatorDictionary
+      ? validatorInfo?.validatorDictionary[validatorAddress.toLowerCase()]
+      : undefined;
+  }, [isValidValidator, validatorInfo]);
+
+  const isLoading =
+    validatorAddress !== "0x" &&
+    (isValidValidator === undefined ||
+      isValidValidatorLoading ||
+      isValidatorListLoading);
   return (
     <div>
       <Button
         variant="outline"
         className="ml-3 min-w-[148px] whitespace-nowrap border-border bg-background shadow"
-        onClick={() => setOpen(true)}
+        onClick={() => !unselectable && setOpen(true)}
+        disabled={isLoading}
       >
-        {validValidator ? (
+        {isValidValidator ? (
           <div className="flex items-center gap-2 text-base font-medium leading-normal">
             <ValidatorIcon
-              address={validValidator.id as Address}
+              address={validatorAddress}
               className="h-8 w-8"
-              imgOverride={validValidator.metadata?.logoURI}
+              imgOverride={selectedValidatorInfo?.logoURI}
             />
-            {validValidator.metadata?.name ?? truncateHash(validValidator.id)}
+            {selectedValidatorInfo?.name ?? truncateHash(validatorAddress)}
             <Icons.chevronDown className="relative h-3 w-3" />
+          </div>
+        ) : isLoading ? (
+          <div className="flex w-full flex-row items-center gap-2">
+            <SSRSpinner />
+            Loading...
           </div>
         ) : (
           <div className="flex items-center gap-2 text-sm font-medium leading-normal sm:text-base">
