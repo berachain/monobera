@@ -369,7 +369,7 @@ export const getUserPoolColumns = (
                 </Button>
               ) : (
                 <Link
-                  href={`vaults/${row.original.vaultAddress}`}
+                  href={`/vaults/${row.original.vaultAddress}`}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Button variant={"outline"} size="sm">
