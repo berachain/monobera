@@ -46,6 +46,7 @@ type Props = {
   filteredSymbols?: string[];
   beraSafetyMargin?: number;
   maxDecimal?: number;
+  className?: string;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -73,6 +74,7 @@ export function TokenInput({
   filteredSymbols = [],
   beraSafetyMargin,
   maxDecimal,
+  className,
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
@@ -165,7 +167,7 @@ export function TokenInput({
   };
 
   return (
-    <li className={"flex flex-col flex-wrap px-3 py-4"}>
+    <li className={cn("flex flex-col flex-wrap px-3 py-4", className)}>
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center gap-1">
           <SelectToken

@@ -1,32 +1,46 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
+import { cn } from "@bera/ui";
+import { Button } from "@bera/ui/button";
+import Link from "next/link";
 import { SwapCard } from "~/components/swap-card";
-
-const DynamicBerachainInfo = dynamic(
-  () => import("~/components/berachain-info"),
-  {
-    ssr: false,
-  },
-);
 
 export const SwapContent = ({
   inutCurrency,
   outputCurrency,
+  isRedeem,
 }: {
   inutCurrency: string | undefined;
   outputCurrency: string | undefined;
+  isRedeem: boolean;
 }) => {
   return (
     <div className="mx-auto flex min-w-[320px] flex-col items-center justify-center gap-4 md:w-[500px]">
-      <DynamicBerachainInfo />
       <div className="w-full ">
+        <div className="mb-4">
+          <Link href={"/swap"}>
+            <Button
+              className={cn("rounded-full", isRedeem && "bg-transparent")}
+              size="md"
+              variant={!isRedeem ? "primary" : "secondary"}
+            >
+              Swap
+            </Button>
+          </Link>
+          <Link href={"/redeem"}>
+            <Button
+              className={cn("rounded-full ml-2", !isRedeem && "bg-transparent")}
+              size="md"
+              variant={isRedeem ? "primary" : "secondary"}
+            >
+              Redeem
+            </Button>
+          </Link>
+        </div>
         <SwapCard
           inputCurrency={inutCurrency}
           outputCurrency={outputCurrency}
-          showBear={false}
-          className="drop-shadow-[0px_4px_32px_#23232314] dark:drop-shadow-[0px_4px_32px_#CFB69714]"
+          isRedeem={isRedeem}
         />
       </div>
     </div>

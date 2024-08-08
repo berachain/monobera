@@ -55,6 +55,8 @@ const Provider: React.FC<IBeraConfig> = ({
         ? "dark"
         : "light";
 
+  const walletConnectPreferredChains: `eip155:${number}`[] = ["eip155:1"];
+
   return (
     <BeraWagmi.Provider value={{ networkConfig: defaultBeraNetworkConfig }}>
       <DynamicContextProvider
@@ -64,6 +66,7 @@ const Provider: React.FC<IBeraConfig> = ({
           walletConnectors: [EthereumWalletConnectors],
           overrides: { evmNetworks: [defaultBeraNetworkConfig.evmNetwork] },
           walletsFilter: SortWallets(["metamask", "binance"]),
+          walletConnectPreferredChains: walletConnectPreferredChains,
         }}
         theme={theme ?? "auto"}
       >

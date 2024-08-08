@@ -7,7 +7,6 @@ import {
   usePollAllowance,
   usePollCrocSwap,
   usePollWalletBalances,
-  useTokenHoneyPrice,
   useTokenInformation,
   useSubgraphTokenInformation,
   useTokens,
@@ -35,6 +34,7 @@ enum SwapKind {
 interface ISwap {
   inputCurrency?: string | undefined;
   outputCurrency?: string | undefined;
+  isRedeem: boolean;
 }
 function normalizeToRatio(num1: number, num2: number): string {
   const ratio = num2 / num1;
@@ -49,6 +49,7 @@ export enum WRAP_TYPE {
 export const useSwap = ({
   inputCurrency = undefined,
   outputCurrency = undefined,
+  isRedeem,
 }: ISwap) => {
   const { data: pendingInputToken } = useTokenInformation({
     address: inputCurrency,
@@ -90,6 +91,9 @@ export const useSwap = ({
     }
     if (inputCurrency === nativeTokenAddress) {
       setSelectedFrom(beraToken);
+    }
+    if (outputCurrency === nativeTokenAddress) {
+      setSelectedTo(beraToken);
     }
     if (pendingInputToken && inputCurrency) {
       setSelectedFrom(pendingInputToken);
@@ -213,7 +217,7 @@ export const useSwap = ({
 
   // populate field of calculated swap amount
   useEffect(() => {
-    if (isWrap) return;
+    if (isWrap || isRedeem) return;
     if (!swapInfo?.batchSwapSteps?.length) {
       setToAmount(swapInfo?.formattedReturnAmount);
     }
@@ -253,6 +257,10 @@ export const useSwap = ({
       setExchangeRate(undefined);
     }
   }, [swapInfo, selectedFrom, selectedTo, fromAmount, toAmount]);
+
+  useEffect(() => {
+    setExchangeRate(undefined);
+  }, [selectedFrom, selectedTo]);
 
   const { data: allowance, refresh: refreshAllowance } = usePollAllowance({
     spender: crocMultiSwapAddress,
@@ -311,14 +319,14 @@ export const useSwap = ({
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
 
-  const beraInUsd = useTokenHoneyPrice({
+  const { data: beraInfo } = useSubgraphTokenInformation({
     tokenAddress: nativeTokenAddress,
   });
 
   // Format and output final gas price
   const beraGasPriceToUSD = (priceInBera?: number) => {
-    return beraInUsd.data && priceInBera
-      ? parseFloat(beraInUsd.data) * priceInBera
+    return beraInfo && priceInBera
+      ? parseFloat(beraInfo?.usdValue ?? "0") * priceInBera
       : null;
   };
 
