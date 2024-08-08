@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { usePollAllProposals, type Proposal } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
+import { Skeleton } from "@bera/ui/skeleton";
 
 import { ProposalCard } from "./proposal-card";
 
@@ -20,6 +21,15 @@ export const ProposalsList = () => {
               }}
             />
           ))}
+        {isLoading && (
+          <>
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+          </>
+        )}
       </div>
 
       {!isLoading && data.length === 0 && (
