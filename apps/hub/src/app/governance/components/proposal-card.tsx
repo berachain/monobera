@@ -34,7 +34,7 @@ export function ProposalCard({
 }) {
   const body = parseString(proposal.metadata.description);
   const themeColor = getThemeColor(body.type as ProposalTypeEnum);
-  console.log("proposal", proposal);
+
   return (
     <div
       className={cn(
@@ -84,7 +84,7 @@ export function ProposalCard({
 
       <div
         className={cn(
-          "flex flex-col items-center gap-8 px-8 lg:flex-row xl:gap-16 xl:px-16",
+          "hidden sm:flex flex-col items-start xl:items-center gap-2 px-8 xl:flex-row xl:gap-16 xl:px-16",
           details && "items-start gap-0 lg:flex-col xl:gap-0",
         )}
       >
