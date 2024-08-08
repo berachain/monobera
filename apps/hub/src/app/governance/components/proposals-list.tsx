@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { type Proposal, usePollAllProposals } from "@bera/berajs";
+import { usePollAllProposals, type Proposal } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
 
 import { ProposalCard } from "./proposal-card";

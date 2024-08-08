@@ -11,7 +11,6 @@ import {
   getBadgeColor,
   getThemeColor,
   getTimeText,
-  getTotalVoters,
   getTotalVotes,
   getVotesDataList,
   parseString,
@@ -22,21 +21,25 @@ import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
 
 export function ProposalCard({
+  details = false,
   truncate = true,
   className,
   proposal,
   ...props
 }: {
+  details?: boolean;
   truncate?: boolean;
   className?: string;
   proposal: Proposal;
 }) {
   const body = parseString(proposal.metadata.description);
   const themeColor = getThemeColor(body.type as ProposalTypeEnum);
+  console.log("proposal", proposal);
   return (
     <div
       className={cn(
         "relative flex h-40 items-center justify-between gap-3 overflow-hidden rounded-md border border-border lg:h-[116px]",
+        details && "h-fit lg:h-60",
         className,
       )}
       {...props}
@@ -61,7 +64,7 @@ export function ProposalCard({
           {body.title}
         </div>
 
-        <div className="mt-4 leading-6 text-xs font-medium text-muted-foreground">
+        <div className="mt-4 text-xs font-medium leading-6 text-muted-foreground">
           <Badge
             variant={getBadgeColor(proposal.status as StatusEnum)}
             className="mr-3 rounded-xs px-2 py-0.5 text-xs font-semibold capitalize"
@@ -70,14 +73,35 @@ export function ProposalCard({
           </Badge>
           {getTimeText(proposal)}
         </div>
+
+        {details && (
+          <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mt-2">
+            Submitted by
+            <VoteInfo voter={proposal.creator} />
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-col gap-8 px-8 lg:flex-row xl:gap-16 xl:px-16">
+      <div
+        className={cn(
+          "flex flex-col items-center gap-8 px-8 lg:flex-row xl:gap-16 xl:px-16",
+          details && "items-start gap-0 lg:flex-col xl:gap-0",
+        )}
+      >
+        {details && (
+          <div className="text-sm font-bold uppercase text-muted-foreground">
+            quorum
+          </div>
+        )}
         <QuorumStatus
           delegatesVotesCount={getTotalVotes(proposal)}
           quorum={formatEther(BigInt(proposal.governor.quorum))}
         />
-
+        {details && (
+          <div className="mt-4 text-sm font-bold uppercase text-muted-foreground">
+            votes
+          </div>
+        )}
         <ProgressBarChart
           dataList={getVotesDataList(proposal)}
           className="w-52"
