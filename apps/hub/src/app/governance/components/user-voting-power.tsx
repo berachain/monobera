@@ -1,21 +1,13 @@
-import {
-  truncateHash,
-  useBeraJs,
-  usePollUserDelegates,
-  usePollWalletBalances,
-} from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { truncateHash, useBeraJs, usePollUserDelegates } from "@bera/berajs";
 import { ActionButton, FormattedNumber } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
-import { Button } from "@bera/ui/button";
+import { Skeleton } from "@bera/ui/skeleton";
+
+import { DelegateModal } from "./delegate-modal";
 
 export const UserVotingPower = () => {
   const { isReady, account } = useBeraJs();
-  const { useSelectedWalletBalance } = usePollWalletBalances();
-  const bgtBalance = useSelectedWalletBalance(bgtTokenAddress);
   const { data } = usePollUserDelegates();
-
-  console.log("usePollUserDelegates", data);
 
   return (
     <div className="flex h-fit w-full flex-col gap-6 rounded-sm border border-border p-4 lg:w-[300px]">
@@ -29,30 +21,38 @@ export const UserVotingPower = () => {
       ) : (
         <>
           <div className="flex items-center gap-2 text-sm font-medium">
-            <Identicon account={account!} className="" size={24} />
+            <Identicon account={account!} size={24} />
             {truncateHash(account ?? "0x", 6)}
           </div>
           <div className="text-sm font-semibold">
             <div className="text-muted-foreground">Total Voting Power</div>
-            <FormattedNumber value={data?.currentVotes ?? 0} symbol="BGT" />
+            {data?.currentVotes ? (
+              <FormattedNumber value={data?.currentVotes ?? 0} symbol="BGT" />
+            ) : (
+              <Skeleton className="h-6 w-full" />
+            )}
           </div>
           <div className="text-sm font-semibold">
             <div className="text-muted-foreground">Delegated to</div>
-            <div className="flex items-center gap-2 text-sm font-medium">
-              <Identicon
-                account={data?.delegate ?? "0x"}
-                className=""
-                size={24}
-              />
-              {data?.delegate === account
-                ? "My Self"
-                : truncateHash(data?.delegate ?? "0x")}
-            </div>
+            {data?.delegate ? (
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <Identicon account={data?.delegate as string} size={24} />
+                {data?.delegate === account
+                  ? "My Self"
+                  : truncateHash(data?.delegate)}
+              </div>
+            ) : (
+              <Skeleton className="h-6 w-full" />
+            )}
           </div>
         </>
       )}
       <ActionButton>
-        <Button className="w-full">Update Delegation</Button>
+        {data?.delegate ? (
+          <DelegateModal delegated={data?.delegate as `0x${string}`} />
+        ) : (
+          <Skeleton className="h-11 w-full" />
+        )}
       </ActionButton>
     </div>
   );
