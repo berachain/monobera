@@ -63,7 +63,7 @@ const Provider: React.FC<IBeraConfig> = ({
           environmentId: dynamicWalletKey,
           walletConnectors: [EthereumWalletConnectors],
           overrides: { evmNetworks: [defaultBeraNetworkConfig.evmNetwork] },
-          walletsFilter: SortWallets(["metamask", "binance"])
+          walletsFilter: SortWallets(["metamask", "binance"]),
         }}
         theme={theme ?? "auto"}
       >
