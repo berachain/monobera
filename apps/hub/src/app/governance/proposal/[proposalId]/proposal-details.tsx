@@ -14,6 +14,7 @@ import { getTotalVotes, parseString } from "../../helper";
 import { Actions } from "./Actions";
 import { Status } from "./Status";
 import "@bera/graphql";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 export default function ProposalDetails({
   proposalId,
@@ -24,7 +25,7 @@ export default function ProposalDetails({
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
-
+  const body = parseString(proposal?.metadata.description ?? "");
   return (
     <div className="pb-16">
       {isLoading || !proposal ? (
@@ -45,13 +46,9 @@ export default function ProposalDetails({
           </div>
 
           <div>
-            <ProposalCard
-              proposal={proposal}
-              className="rounded-[18px]"
-              truncate={false}
-            />
-            <div className="mt-4 flex gap-4">
-              <Card className="hidden w-full flex-col items-center justify-center p-6 sm:flex">
+            <ProposalCard proposal={proposal} truncate={false} details />
+            <div className="mt-4 flex md:flex-row flex-col gap-4">
+              <Card className="w-full flex-col items-center justify-center p-6 flex">
                 <FormattedNumber
                   value={getTotalVotes(proposal)}
                   className="text-2xl font-semibold leading-loose text-foreground"
@@ -69,10 +66,28 @@ export default function ProposalDetails({
             </div>
           </div>
 
-          <Actions
-            executableCalls={proposal.executableCalls}
-            type={parseString(proposal.metadata.description).type}
-          />
+          <Tabs defaultValue="description">
+            <TabsList variant="ghost" className="mb-4">
+              <TabsTrigger value="description" key="description">
+                Description
+              </TabsTrigger>
+              <TabsTrigger value="code" key="code">
+                Executable Code
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="description">
+              <div className="border border-border p-4 rounded-md">
+                <div dangerouslySetInnerHTML={{ __html: body.content }} />
+              </div>
+            </TabsContent>
+            <TabsContent value="code">
+              <Actions
+                executableCalls={proposal.executableCalls}
+                type={parseString(proposal.metadata.description).type}
+              />
+            </TabsContent>
+          </Tabs>
 
           <div>
             <div className="h-7 text-lg font-semibold leading-7 text-foreground">
