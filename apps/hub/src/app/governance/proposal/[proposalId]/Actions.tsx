@@ -12,15 +12,12 @@ export const Actions = ({
 }) => {
   return (
     <div className="flex-1">
-      <div className="h-7 text-lg font-semibold leading-7 text-foreground">
-        Actions
-      </div>
       {executableCalls.map((executableCall, index) => {
         const content = decodeProposalCalldata(type, executableCall.calldata);
         return (
           <Card
             key={`${executableCall.target}-${index}`}
-            className="mt-1 h-full max-h-[376px] break-words bg-muted p-4 text-sm font-normal leading-normal text-muted-foreground"
+            className="mt-1 h-full break-words p-4 text-sm font-normal leading-normal text-muted-foreground"
           >
             {content.function && (
               <>

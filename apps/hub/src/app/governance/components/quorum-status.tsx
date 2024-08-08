@@ -15,7 +15,7 @@ export const QuorumStatus = ({
     .toNumber();
   return (
     <div className="flex h-4 w-[170px] gap-2 text-xs font-medium">
-      <div className=" whitespace-nowrap">
+      <div className="whitespace-nowrap">
         <FormattedNumber value={delegatesVotesCount} visibleDecimals={1} /> of{" "}
         <FormattedNumber value={quorum} visibleDecimals={1} />
       </div>
