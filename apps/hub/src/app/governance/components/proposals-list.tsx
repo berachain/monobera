@@ -7,10 +7,10 @@ import { ProposalCard } from "./proposal-card";
 export const ProposalsList = () => {
   const { data = [], isLoading } = usePollAllProposals();
   return (
-    <div>
-      <div className="flex flex-col gap-3">
+    <div className="w-full">
+      <div className="flex flex-col gap-4">
         {!isLoading &&
-          data.map((proposal: Proposal, index: number) => (
+          data.map((proposal: Proposal) => (
             <ProposalCard
               proposal={proposal}
               key={`proposal-${proposal.id}`}

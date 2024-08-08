@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@bera/ui/button";
 
 import { ProposalsList } from "./proposals-list";
+import { UserVotingPower } from "./user-voting-power";
 
 export default function GovernanceByStatus() {
   return (
@@ -18,8 +19,9 @@ export default function GovernanceByStatus() {
         <Button variant="outline">Visit forums</Button>
       </div>
 
-      <div>
+      <div className="flex gap-4 lg:flex-row flex-col-reverse">
         <ProposalsList />
+        <UserVotingPower />
       </div>
     </div>
   );
