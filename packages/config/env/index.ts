@@ -101,8 +101,6 @@ export const erc20ModuleAddress = process.env
   .NEXT_PUBLIC_ERC20_MODULE_ADDRESS as Address;
 export const stakingAddress = process.env
   .NEXT_PUBLIC_STAKING_ADDRESS as Address;
-export const governanceAddress = process.env
-  .NEXT_PUBLIC_GOVERNANCE_ADDRESS as Address;
 export const bankAddress = process.env.NEXT_PUBLIC_BANK_ADDRESS as Address;
 export const epochsAddress = process.env.NEXT_PUBLIC_EPOCHS_ADDRESS as Address;
 export const honeyAddress = process.env.NEXT_PUBLIC_HONEY_ADDRESS as Address;
