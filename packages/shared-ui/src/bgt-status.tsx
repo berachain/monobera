@@ -8,7 +8,7 @@ import {
   useClaimableFees,
   useSubgraphTokenInformation,
 } from "@bera/berajs";
-import { beraTokenAddress } from "@bera/config";
+import { beraTokenAddress, bgtUrl } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 import { FormattedNumber } from "./formatted-number";
 import Link from "next/link";
@@ -117,7 +117,7 @@ export function BGTStatusDetails() {
       <Button className="w-full" disabled>
         Coming Soon
       </Button>
-      <Link href={"/rewards"}>
+      <Link href={`${bgtUrl}/rewards`}>
         <Button className="w-full mt-[-8px]" variant={"ghost"}>
           View Breakdown
         </Button>
