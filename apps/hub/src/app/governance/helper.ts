@@ -25,6 +25,17 @@ export const getBadgeColor = (proposalStatus: StatusEnum) => {
   }
 };
 
+export const getThemeColor = (ProposalType: ProposalTypeEnum) => {
+  switch (ProposalType) {
+    case ProposalTypeEnum.TEXT_PROPOSAL:
+      return "foreground";
+    case ProposalTypeEnum.FRIENDS_OF_CHEF:
+      return "info-foreground";
+    default:
+      return "foreground";
+  }
+};
+
 export const getTimeText = (proposal: Proposal) => {
   return `Created at ${proposal.createdAt
     .replaceAll("T", " ")
@@ -52,6 +63,7 @@ export const getVotesDataList = (proposal: Proposal) => {
     {
       color: VoteColorMap.yes,
       width: globalYesPercentage > 100 ? 100 : globalYesPercentage,
+      votesCount: votes[0].votesCount,
     },
     {
       color: VoteColorMap.no,
@@ -59,6 +71,7 @@ export const getVotesDataList = (proposal: Proposal) => {
         globalYesPercentage + globalNoPercentage > 100
           ? 100
           : globalYesPercentage + globalNoPercentage,
+      votesCount: votes[1].votesCount,
     },
     {
       color: VoteColorMap.abstain,
@@ -66,6 +79,7 @@ export const getVotesDataList = (proposal: Proposal) => {
         globalYesPercentage + globalNoPercentage + globalAbstainPercentage > 100
           ? 100
           : globalYesPercentage + globalNoPercentage + globalAbstainPercentage,
+      votesCount: votes[2].votesCount,
     },
   ];
 };

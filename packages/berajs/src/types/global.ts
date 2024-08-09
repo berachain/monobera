@@ -59,3 +59,13 @@ export interface AllowanceToken extends Token {
   allowance: bigint;
   formattedAllowance: string;
 }
+
+export type GaugeMetadata = {
+  receiptTokenAddress: Address;
+  vaultAddress: Address;
+  name: string;
+  logoURI?: string;
+  product: string;
+  url?: string;
+  support?: boolean;
+};

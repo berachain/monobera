@@ -1,50 +1,47 @@
+import { FormattedNumber } from "@bera/shared-ui";
+import { cn } from "@bera/ui";
+import { formatEther } from "viem";
+
 interface IProgressBar {
   color: string;
   width: number; // 1 = 0.01  50 = 50%
+  votesCount: string;
 }
 
-interface ILabel {
-  label: string;
-  width: number;
-}
 interface IProgressBarProps {
   className?: string;
   dataList: IProgressBar[];
-  labelList?: ILabel[];
 }
 
 export function ProgressBarChart({
   dataList,
-  labelList = [
-    { label: "Pass threshold", width: 50 },
-    { label: "Quorum", width: 100 },
-  ],
   className,
+  ...props
 }: IProgressBarProps) {
   return (
-    <div className={className}>
-      <div className="relative h-[25px]">
-        {labelList.map((data) => (
-          <>
-            <div
-              key={(data.width, data.label)}
-              className={
-                "absolute top-0 text-xs font-medium capitalize leading-tight text-muted-foreground"
-              }
-              style={{
-                left: `${data.width}%`,
-                transform: "translateX(-50%)",
-              }}
-            >
-              {data.label}
-            </div>
-            <div
-              className="border-l-1 absolute top-[14px] h-[8px] border border-muted-foreground"
-              key={(data.width, data.label, "bar")}
-              style={{ left: `${data.width}%` }}
-            />
-          </>
-        ))}
+    <div {...props} className={cn("flex flex-col gap-1", className)}>
+      <div className="relative flex h-4 justify-between text-xs font-bold">
+        {Number(dataList[0].votesCount) > 0 && (
+          <FormattedNumber
+            value={formatEther(BigInt(dataList[0].votesCount))}
+            className="absolute left-0 text-success-foreground"
+            visibleDecimals={1}
+          />
+        )}
+        {Number(dataList[1].votesCount) > 0 && (
+          <FormattedNumber
+            value={formatEther(BigInt(dataList[1].votesCount))}
+            className="absolute right-0 text-destructive-foreground"
+            visibleDecimals={1}
+          />
+        )}
+        {Number(dataList[2].votesCount) > 0 && (
+          <FormattedNumber
+            value={formatEther(BigInt(dataList[2].votesCount))}
+            className="absolute left-[50%] -translate-x-[50%] transform text-muted-foreground"
+            visibleDecimals={1}
+          />
+        )}
       </div>
       <div className="relative">
         <div className="h-2 w-full rounded-full bg-secondary-foreground" />

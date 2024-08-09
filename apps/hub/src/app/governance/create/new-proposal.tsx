@@ -36,15 +36,15 @@ export default function NewProposal() {
         height={174}
       />
       <Card className="flex flex-col justify-start gap-8 p-6">
-        <div className="relative text-lg font-semibold leading-7 text-foreground">
-          New proposal
+        <div className="relative text-3xl font-semibold leading-7 text-foreground">
+          Creating a New Proposal
           <Link href="/governance">
             <Icons.close className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer" />
           </Link>
         </div>
         <div className="inline-flex flex-col justify-start gap-2">
           <div className="text-sm font-semibold leading-tight">
-            Select a Proposal Type
+            Proposal Type
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
