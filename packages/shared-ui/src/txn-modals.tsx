@@ -185,7 +185,7 @@ export const AddLiquiditySuccess = ({ onClose, open = false, pool }: any) => {
           BGT Rewards
         </span>
         <Link
-          href={`${bgtUrl}/gauge/${pool.vaultAddress}`}
+          href={`/vaults/${pool.vaultAddress}`}
           onClick={(e) => e.stopPropagation()}
           className="w-full"
         >

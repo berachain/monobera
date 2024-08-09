@@ -567,6 +567,45 @@ export const bexQueryAbi = [
         type: "uint256",
       },
     ],
+    name: "queryPoolAmbientTokens",
+    outputs: [
+      {
+        internalType: "uint128",
+        name: "liq",
+        type: "uint128",
+      },
+      {
+        internalType: "uint128",
+        name: "baseQty",
+        type: "uint128",
+      },
+      {
+        internalType: "uint128",
+        name: "quoteQty",
+        type: "uint128",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "base",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "quote",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "poolIdx",
+        type: "uint256",
+      },
+    ],
     name: "queryPoolParams",
     outputs: [
       {
@@ -605,6 +644,16 @@ export const bexQueryAbi = [
             internalType: "uint8",
             name: "oracleFlags_",
             type: "uint8",
+          },
+          {
+            internalType: "uint128",
+            name: "priceFloor_",
+            type: "uint128",
+          },
+          {
+            internalType: "uint128",
+            name: "priceCeiling_",
+            type: "uint128",
           },
         ],
         internalType: "struct PoolSpecs.Pool",
@@ -661,6 +710,16 @@ export const bexQueryAbi = [
             internalType: "uint8",
             name: "oracleFlags_",
             type: "uint8",
+          },
+          {
+            internalType: "uint128",
+            name: "priceFloor_",
+            type: "uint128",
+          },
+          {
+            internalType: "uint128",
+            name: "priceCeiling_",
+            type: "uint128",
           },
         ],
         internalType: "struct PoolSpecs.Pool",

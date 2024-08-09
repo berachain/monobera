@@ -51,6 +51,7 @@ export default async function Vault() {
           receiptTokenAddress={bhoneyVaultContractAddress}
           vaultAddress={bHoneyGaugeVaultContractAddress}
           text={depositText}
+          isBex={false}
         />
         <div className="flex flex-col gap-4 lg:flex-row ">
           <RewardsDepositsWrapper />

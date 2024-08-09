@@ -260,7 +260,8 @@ export function SwapCard({
       !exceedingBalance &&
       !isWrap &&
       !isRouteLoading &&
-      swapInfo?.batchSwapSteps.length !== 0
+      swapInfo?.batchSwapSteps.length !== 0 &&
+      !swapInfo?.error
     ) {
       return (
         <ApproveButton
@@ -506,7 +507,13 @@ export function SwapCard({
                     setAmount={(amount) => {
                       setToAmount(amount);
                     }}
-                    difference={isWrap ? undefined : differenceUSD}
+                    difference={
+                      isWrap
+                        ? undefined
+                        : swapInfo?.error
+                          ? undefined
+                          : differenceUSD
+                    }
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap}
                     beraSafetyMargin={estimatedBeraFee}
@@ -563,11 +570,11 @@ export function SwapCard({
                 ) : (
                   false
                 )}
-                {error !== undefined && (
+                {swapInfo?.error !== undefined && (
                   <Alert variant="destructive">
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription className="text-xs">
-                      An error has occured.
+                      {swapInfo.error}
                     </AlertDescription>
                   </Alert>
                 )}

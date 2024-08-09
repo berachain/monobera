@@ -399,6 +399,9 @@ importers:
 
   apps/hub:
     dependencies:
+      '@bera/beracrocswap':
+        specifier: workspace:*
+        version: link:../../packages/beracrocswap
       '@bera/berajs':
         specifier: workspace:*
         version: link:../../packages/berajs

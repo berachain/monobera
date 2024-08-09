@@ -220,7 +220,7 @@ export const searchUserPools = async ({
         formattedVaultBalance: vaultBalance,
         estimatedDepositedHoneyValue,
         bgtEarned,
-        seeds: BigInt(0),
+        seeds: new BigNumber(0),
       };
 
       userPositions.push({

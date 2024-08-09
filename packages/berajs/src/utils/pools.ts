@@ -168,7 +168,7 @@ export function mapPoolToPoolV2(pool: any): PoolV2 {
     baseInfo: pool.baseInfo,
     quoteInfo: pool.quoteInfo,
     timeCreate: pool.timeCreate,
-    poolIdx: pool.poolIdx,
+    poolIdx: Number(pool.poolIdx),
     poolName: `${pool.baseInfo.symbol}-${pool.quoteInfo.symbol}`, // Assuming poolName is a combination of base and quote symbols
     tokens: [pool.baseInfo, pool.quoteInfo],
     tvlUsd: pool.tvlUsd,

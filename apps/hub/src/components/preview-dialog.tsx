@@ -1,14 +1,12 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { type Token } from "@bera/berajs";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@bera/ui/accordion";
+import { formatUsd, type SwapInfoV3, type Token } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
+import { Spinner, TokenIcon } from "@bera/shared-ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card, CardContent, CardHeader } from "@bera/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -17,159 +15,214 @@ import {
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-import { useToast } from "@bera/ui/use-toast";
 import { useReadLocalStorage } from "usehooks-ts";
 
 import { LOCAL_STORAGE_KEYS } from "~/utils/constants";
 
 type Props = {
-  fromToken: Token | undefined;
-  toToken: Token | undefined;
-  fromAmount: number;
-  toAmount: number;
+  swapInfo: SwapInfoV3 | undefined;
+  priceImpact: number | undefined;
+  exchangeRate: string | undefined;
+  tokenIn: Token | undefined;
+  tokenOut: Token | undefined;
+  tokenInPrice: string | undefined;
+  tokenOutPrice: string | undefined;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  write: () => void;
+  isLoading: boolean;
+  disabled: boolean;
+  minAmountOut: string;
 };
 
-export default function PreviewDialog({
-  fromToken,
-  toToken,
-  fromAmount,
-  toAmount,
-}: Props) {
-  const slippage = useReadLocalStorage<number>(
-    LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE,
+const PreviewToken = ({
+  token,
+  title,
+  amount,
+  price,
+}: {
+  token: Token | undefined;
+  title: string;
+  amount: string;
+  price: string;
+}) => {
+  return (
+    <div className="flex flex-col">
+      <p className="text-sm font-medium text-muted-foreground">{title}</p>
+      <div className="flex w-full items-center justify-between">
+        <h4 className="text-xl font-semibold ">{amount}</h4>
+        <div
+          key={token?.address}
+          className={
+            "flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-sm font-medium leading-tight"
+          }
+        >
+          <TokenIcon address={token?.address ?? ""} symbol={token?.symbol} />
+          {token?.symbol}
+        </div>
+      </div>
+      <p className="text-xs font-medium text-muted-foreground">
+        {formatUsd(Number(price) * Number(amount))}
+      </p>
+    </div>
   );
-  const [open, setOpen] = React.useState(false);
-  const [approved, setApproved] = React.useState(false);
-  const { toast } = useToast();
+};
+
+const PRICE_CHANGE_THRESHOLD = 5 / 100; // 5% price change
+
+export default function PreviewDialog({
+  swapInfo,
+  exchangeRate,
+  tokenIn,
+  tokenOut,
+  tokenInPrice,
+  tokenOutPrice,
+  isLoading,
+  open,
+  disabled,
+  minAmountOut,
+  setOpen,
+  write,
+}: Props) {
+  const [initialSwapInfo, setInitialSwapInfo] = useState<
+    SwapInfoV3 | undefined
+  >(undefined);
+
+  const [priceChangeWarning, setPriceChangeWarning] = useState<
+    boolean | undefined
+  >(undefined);
+
+  const slippageType = useReadLocalStorage(
+    LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE_TYPE,
+  );
+
+  const slippageValue = useReadLocalStorage(
+    LOCAL_STORAGE_KEYS.SLIPPAGE_TOLERANCE_VALUE,
+  );
+
+  useEffect(() => {
+    const upperBound =
+      (1 + PRICE_CHANGE_THRESHOLD) *
+      Number(initialSwapInfo?.formattedReturnAmount);
+    const lowerBound =
+      (1 - PRICE_CHANGE_THRESHOLD) *
+      Number(initialSwapInfo?.formattedReturnAmount);
+
+    const isNewSwapGTSlippage =
+      upperBound < Number(swapInfo?.formattedReturnAmount);
+    const isNewSwapLTSlippage =
+      lowerBound > Number(swapInfo?.formattedReturnAmount);
+
+    if (
+      initialSwapInfo !== undefined &&
+      (isNewSwapGTSlippage || isNewSwapLTSlippage)
+    ) {
+      setPriceChangeWarning(true);
+    } else {
+      setPriceChangeWarning(false);
+    }
+  }, [swapInfo, slippageValue, slippageType, initialSwapInfo]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          size="lg"
-          disabled={fromAmount === 0 && toAmount === 0}
-          onClick={() => setOpen(true)}
+          disabled={disabled}
+          onClick={() => {
+            setOpen(true);
+            setInitialSwapInfo(swapInfo);
+          }}
+          className="w-full gap-1"
         >
-          Preview
+          Preview <Icons.arrowRight className="h-3 w-3" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:w-fit">
         <DialogHeader>
-          <DialogTitle>Preview swap</DialogTitle>
+          <DialogTitle className="mb-3">Preview swap</DialogTitle>
+          <Image
+            alt="preview"
+            src={`${cloudinaryUrl}/placeholder/preview-swap-img_ucrnla`}
+            className="self-center"
+            width={525}
+            height={150}
+          />
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <Card className="border border-border">
-            <CardHeader className="rounded-t-sm border-b border-y-border p-3 text-sm text-foreground">
-              Effective price: 1 {fromToken?.symbol} = 0.5 {toToken?.symbol}
-            </CardHeader>
-            <CardContent className="border-border p-3">
-              <div className="relative -mx-3 grid grid-cols-1 divide-y divide-border">
-                <div className="flex items-center justify-start gap-2 px-3 pb-3">
-                  <Image
-                    width={36}
-                    height={36}
-                    src={`/icons/${fromToken?.symbol.toLowerCase()}.jpg}`}
-                    alt={fromToken?.name ?? "token-img"}
-                    className="rounded-full"
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">
-                      {fromAmount} {fromToken?.symbol}
-                    </span>
-                    <span className="text-xs font-medium text-backgroundSecondary">
-                      $420,69.42
-                    </span>
-                  </div>
-                </div>
-                <div className="absolute right-4 top-[calc(50%-16px)] border-none bg-card">
-                  <Icons.arrowDown className="h-8 w-8 rounded-full border border-border bg-card p-1" />
-                </div>
-                <div className="flex items-center justify-start gap-2 px-3 pt-3">
-                  <Image
-                    width={36}
-                    height={36}
-                    src={`/icons/${toToken?.symbol.toLowerCase()}.jpg}`}
-                    alt={toToken?.name ?? "token-img"}
-                    className="rounded-full"
-                  />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">
-                      {toAmount} {toToken?.symbol}
-                    </span>
-                    <span className="text-xs font-medium text-backgroundSecondary">
-                      $69,420.69
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <PreviewToken
+          token={tokenIn}
+          title={"You pay"}
+          amount={swapInfo?.formattedAmountIn ?? "0"}
+          price={tokenInPrice ?? "0"}
+        />
+        {/* TODO: add slippage calculation */}
+        <PreviewToken
+          token={tokenOut}
+          title={"You receive"}
+          amount={swapInfo?.formattedReturnAmount ?? "0"}
+          price={tokenOutPrice ?? "0"}
+        />
+        <div className="flex w-full flex-col gap-2 rounded-lg bg-muted p-3">
+          <div className="flex w-full flex-row justify-between">
+            <p className="text-sm font-medium text-muted-foreground">
+              Exchange rate
+            </p>
+            <p className="whitespace-nowrap text-right text-sm font-medium">
+              {exchangeRate}
+            </p>
+          </div>
+          <div className="flex w-full flex-row justify-between gap-1">
+            <p className="text-sm font-medium text-muted-foreground ">
+              Min. received
+            </p>
+            <div className="flex justify-center space-x-1">
+              <p className="overflow-hidden text-ellipsis whitespace-nowrap text-right text-sm font-medium ">
+                {minAmountOut}
+              </p>
+              <p className="whitespace-nowrap text-right text-sm font-medium  ">
+                {tokenOut?.symbol}
+              </p>
+            </div>
+          </div>
         </div>
-        <div>
-          <Card className="border border-border">
-            <Tabs defaultValue="tokens" className="">
-              <CardHeader className="flex flex-row items-center justify-between rounded-t-sm border-b border-y-border p-3 text-base font-medium text-foreground">
-                Swap from ETH details
-                <TabsList className="p-0">
-                  <TabsTrigger value="tokens">Tokens</TabsTrigger>
-                  <TabsTrigger value="usd">USD</TabsTrigger>
-                </TabsList>
-              </CardHeader>
-              <CardContent className="border-border px-3 pb-4 pt-1">
-                <TabsContent value="tokens">
-                  <p className="flex justify-between text-sm font-medium text-foreground">
-                    Total expected after fees
-                    <span className="text-right">420.69 {toToken?.symbol}</span>
-                  </p>
-                  <p className="flex justify-between text-sm text-foreground">
-                    The least you’ll get at {slippage}% slippage
-                    <span className="text-right">420.69 {toToken?.symbol}</span>
-                  </p>
-                </TabsContent>
-                <TabsContent value="usd">
-                  <p className="flex justify-between text-sm font-medium text-foreground">
-                    Total expected after fees
-                    <span className="text-right">$420.69 USD</span>
-                  </p>
-                  <p className="flex justify-between text-sm text-foreground">
-                    The least you’ll get at {slippage}% slippage
-                    <span className="text-right">$420.69 USD</span>
-                  </p>
-                </TabsContent>
-              </CardContent>
-            </Tabs>
-          </Card>
-        </div>
-        <Button
-          onClick={() => {
-            if (!approved) {
-              setApproved(true);
-            } else {
-              toast({
-                title: "Congratulations",
-                description: "You played yourself",
-                duration: 2000,
-              });
-              setOpen(false);
-            }
-          }}
-        >
-          {approved ? "Confirm" : "Approve"} swap
-        </Button>
-        <Accordion
-          type="single"
-          collapsible
-          className="rounded-sm border border-primary"
-        >
-          <AccordionItem value="item-1">
-            <AccordionTrigger className="p-4 text-foreground">
-              Swap route
-            </AccordionTrigger>
-            <AccordionContent className="px-4">
-              You&apos;re getting rugged. You&apos;re getting rugged.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        {priceChangeWarning && (
+          <Alert
+            variant="destructive"
+            className="my-4 items-center justify-center"
+          >
+            <AlertTitle>
+              {" "}
+              <Icons.tooltip className="mt-[-4px] inline h-4 w-4" /> Price
+              Change
+            </AlertTitle>
+            <AlertDescription>
+              The swap price has changed by more than 5%.
+            </AlertDescription>
+          </Alert>
+        )}
+        {!priceChangeWarning && (
+          <Button
+            disabled={isLoading}
+            onClick={() => {
+              write();
+            }}
+          >
+            {isLoading ? (
+              <p className="flex flex-row gap-2">
+                Loading <Spinner size={16} color="white" />
+              </p>
+            ) : (
+              "Swap"
+            )}
+          </Button>
+        )}
+        {priceChangeWarning && (
+          <Button
+            variant="destructive"
+            onClick={() => setInitialSwapInfo(swapInfo)}
+          >
+            Accept Price Change <Icons.arrowRight className="h-3 w-3" />
+          </Button>
+        )}
       </DialogContent>
     </Dialog>
   );

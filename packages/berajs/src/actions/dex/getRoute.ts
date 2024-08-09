@@ -29,6 +29,7 @@ export const getRoute = async ({
     tokenOut,
     predictedAmountOut: 0n,
     formattedPredictedAmountOut: "0",
+    error: undefined,
   };
   try {
     if (!config.endpoints?.dexRouter) {
@@ -70,6 +71,7 @@ export const getRoute = async ({
       value,
       predictedAmountOut: 0n,
       formattedPredictedAmountOut: "0",
+      error: undefined,
     };
 
     return swapInfo;

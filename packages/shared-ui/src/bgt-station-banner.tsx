@@ -13,11 +13,13 @@ export const BgtStationBanner = ({
   vaultAddress,
   className,
   text,
+  isBex = true,
 }: {
   receiptTokenAddress: Address | undefined;
   vaultAddress: Address | undefined;
   className?: string;
   text?: string | JSX.Element;
+  isBex?: boolean;
 }) => {
   if (!vaultAddress) return null;
   return (
@@ -46,14 +48,25 @@ export const BgtStationBanner = ({
             </div>
           </div>
         )}
-        <Link href={`${bgtUrl}/gauge/${vaultAddress}`} target="_blank">
-          <Button
-            variant={"outline"}
-            disabled={receiptTokenAddress === undefined}
-          >
-            Deposit
-          </Button>
-        </Link>
+        {isBex ? (
+          <Link href={`/vaults/${vaultAddress}`}>
+            <Button
+              variant={"outline"}
+              disabled={receiptTokenAddress === undefined}
+            >
+              Deposit
+            </Button>
+          </Link>
+        ) : (
+          <Link href={`${bgtUrl}/vaults/${vaultAddress}`} target="_blank">
+            <Button
+              variant={"outline"}
+              disabled={receiptTokenAddress === undefined}
+            >
+              Deposit
+            </Button>
+          </Link>
+        )}
       </CardContent>
     </Card>
   );

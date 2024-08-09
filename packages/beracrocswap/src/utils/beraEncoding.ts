@@ -83,7 +83,7 @@ export const encodeWarmPath = (
       limitLow,
       limitHigh,
       useSurplus,
-      shareAddress ?? getBeraLpAddress(baseAddress, quoteAddress),
+      shareAddress ?? getBeraLpAddress(baseAddress, quoteAddress, poolIdx === 36003),
     ]);
   }
 

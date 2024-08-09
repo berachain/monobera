@@ -1,8 +1,11 @@
-import { CrocPoolView, getBeraLpAddress } from "@bera/beracrocswap";
+import { CrocPoolView, QUERY_ABI } from "@bera/beracrocswap";
 import { CrocContext, connectCroc } from "@bera/beracrocswap/dist/context";
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
+import { crocQueryAddress } from "@bera/config";
 import BigNumber from "bignumber.js";
-import { PublicClient, erc20Abi } from "viem";
+import { Address, PublicClient, erc20Abi } from "viem";
+import { bexQueryAbi } from "~/abi";
+import { POOLID } from "~/constants";
 
 import { clientToProvider } from "~/hooks/useEthersProvider";
 import { IUserPosition, PoolV2 } from "~/types";
@@ -29,68 +32,134 @@ export const getPoolUserPosition = async ({
     return undefined;
   }
   try {
-    const baseTokenPrice = pool.baseInfo.usdValue;
-    const quoteTokenPrice = pool.quoteInfo.usdValue;
+    const baseInfo = pool.baseInfo;
+    const quoteInfo = pool.quoteInfo;
 
-    const lpBalanceCall = publicClient.readContract({
-      address: getBeraLpAddress(pool.base, pool.quote) as any,
-      abi: erc20Abi,
-      functionName: "balanceOf",
-      args: [account],
-    });
+    let formattedBaseAmount = "0";
+    let formattedQuoteAmount = "0";
 
-    const [lpBalance] = await Promise.all([lpBalanceCall]);
+    let baseAmount = new BigNumber(0);
+    let quoteAmount = new BigNumber(0);
 
-    const provider = clientToProvider(publicClient);
-    const crocContext: Promise<CrocContext> = connectCroc(provider);
-    const baseCrocToken = new CrocTokenView(
-      crocContext,
-      pool.baseInfo.address,
-      pool.baseInfo.decimals,
-    );
-    const quoteCrocToken = new CrocTokenView(
-      crocContext,
-      pool.quoteInfo.address,
-      pool.quoteInfo.decimals,
-    );
-    const crocPool: CrocPoolView = new CrocPoolView(
-      quoteCrocToken,
-      baseCrocToken,
-      crocContext,
-    );
+    let seeds = new BigNumber(0);
 
-    const spotPrice = await crocPool.spotPricePoolIdx(pool.poolIdx);
+    if (pool.poolIdx === POOLID.STABLE) {
+      const queryRangePosition = await publicClient.readContract({
+        address: crocQueryAddress,
+        abi: bexQueryAbi,
+        functionName: "queryRangeTokens",
+        args: [
+          account,
+          baseInfo.address,
+          quoteInfo.address,
+          pool.poolIdx,
+          -20n,
+          20n,
+        ],
+      });
 
-    const sqrtPrice = new BigNumber(Math.sqrt(spotPrice));
+      console.log("queryRangePosition", queryRangePosition);
+      const provider = clientToProvider(publicClient);
+      const crocContext: Promise<CrocContext> = connectCroc(provider);
+      const baseCrocToken = new CrocTokenView(
+        crocContext,
+        pool.baseInfo.address,
+        pool.baseInfo.decimals,
+      );
+      const quoteCrocToken = new CrocTokenView(
+        crocContext,
+        pool.quoteInfo.address,
+        pool.quoteInfo.decimals,
+      );
+      const crocPool: CrocPoolView = new CrocPoolView(
+        quoteCrocToken,
+        baseCrocToken,
+        crocContext,
+      );
 
-    const liq = new BigNumber(lpBalance.toString());
+      const spotPrice = await crocPool.spotPricePoolIdx(pool.poolIdx);
 
-    const baseAmount = liq.times(sqrtPrice);
-    const quoteAmount = liq.div(sqrtPrice);
+      const sqrtPrice = new BigNumber(Math.sqrt(spotPrice));
 
-    const baseDecimals = pool.baseInfo.decimals;
-    const quoteDecimals = pool.quoteInfo.decimals;
-    const formattedBaseAmount = baseAmount
-      .div(10 ** baseDecimals)
-      .toString()
-      .includes("e")
-      ? "0"
-      : baseAmount.div(10 ** baseDecimals).toString();
-    const formattedQuoteAmount = quoteAmount
-      .div(10 ** quoteDecimals)
-      .toString()
-      .includes("e")
-      ? "0"
-      : quoteAmount.div(10 ** quoteDecimals).toString();
+      seeds = new BigNumber((queryRangePosition as string).toString());
+
+      baseAmount = seeds.times(sqrtPrice);
+      quoteAmount = seeds.div(sqrtPrice);
+
+      const baseDecimals = pool.baseInfo.decimals;
+      const quoteDecimals = pool.quoteInfo.decimals;
+      formattedBaseAmount = baseAmount
+        .div(10 ** baseDecimals)
+        .toString()
+        .includes("e")
+        ? "0"
+        : baseAmount.div(10 ** baseDecimals).toString();
+      formattedQuoteAmount = quoteAmount
+        .div(10 ** quoteDecimals)
+        .toString()
+        .includes("e")
+        ? "0"
+        : quoteAmount.div(10 ** quoteDecimals).toString();
+    } else {
+      const lpBalance = await publicClient.readContract({
+        address: pool.shareAddress as Address,
+        abi: erc20Abi,
+        functionName: "balanceOf",
+        args: [account],
+      });
+
+      const provider = clientToProvider(publicClient);
+      const crocContext: Promise<CrocContext> = connectCroc(provider);
+      const baseCrocToken = new CrocTokenView(
+        crocContext,
+        pool.baseInfo.address,
+        pool.baseInfo.decimals,
+      );
+      const quoteCrocToken = new CrocTokenView(
+        crocContext,
+        pool.quoteInfo.address,
+        pool.quoteInfo.decimals,
+      );
+      const crocPool: CrocPoolView = new CrocPoolView(
+        quoteCrocToken,
+        baseCrocToken,
+        crocContext,
+      );
+
+      const spotPrice = await crocPool.spotPricePoolIdx(pool.poolIdx);
+
+      const sqrtPrice = new BigNumber(Math.sqrt(spotPrice));
+
+      const liq = new BigNumber(lpBalance.toString());
+
+      baseAmount = liq.times(sqrtPrice);
+      quoteAmount = liq.div(sqrtPrice);
+
+      const baseDecimals = pool.baseInfo.decimals;
+      const quoteDecimals = pool.quoteInfo.decimals;
+      formattedBaseAmount = baseAmount
+        .div(10 ** baseDecimals)
+        .toString()
+        .includes("e")
+        ? "0"
+        : baseAmount.div(10 ** baseDecimals).toString();
+      formattedQuoteAmount = quoteAmount
+        .div(10 ** quoteDecimals)
+        .toString()
+        .includes("e")
+        ? "0"
+        : quoteAmount.div(10 ** quoteDecimals).toString();
+    }
 
     const estimatedHoneyValue =
-      Number(baseTokenPrice) * Number(formattedBaseAmount) +
-      Number(quoteTokenPrice) * Number(formattedQuoteAmount);
+      Number(baseInfo.usdValue) * Number(formattedBaseAmount) +
+      Number(quoteInfo.usdValue) * Number(formattedQuoteAmount);
 
-    const baseHoneyValue = Number(baseTokenPrice) * Number(formattedBaseAmount);
+    const baseHoneyValue =
+      Number(baseInfo.usdValue) * Number(formattedBaseAmount);
 
     const quoteHoneyValue =
-      Number(quoteTokenPrice) * Number(formattedQuoteAmount);
+      Number(quoteInfo.usdValue) * Number(formattedQuoteAmount);
 
     const userPosition: IUserPosition = {
       baseAmount,
@@ -100,7 +169,7 @@ export const getPoolUserPosition = async ({
       estimatedHoneyValue,
       baseHoneyValue: baseHoneyValue.toString(),
       quoteHoneyValue: quoteHoneyValue.toString(),
-      seeds: lpBalance,
+      seeds,
     };
     return {
       ...userPosition,

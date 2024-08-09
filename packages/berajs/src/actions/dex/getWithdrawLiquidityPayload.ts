@@ -27,7 +27,14 @@ export const getWithdrawLiquidityPayload = async ({
     shareAddress,
   } = args;
   try {
-    if (!baseToken || !quoteToken || !poolIdx || !percentRemoval || !seeds) {
+    if (
+      !baseToken ||
+      !quoteToken ||
+      !poolIdx ||
+      !percentRemoval ||
+      !seeds ||
+      !shareAddress
+    ) {
       console.error("Missing args");
       return undefined;
     }

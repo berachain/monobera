@@ -74,6 +74,12 @@ export const getSwap = async ({
         tokenOutDecimals,
       );
 
+      if (amountOut > 34028236692093846346337460743176821n) {
+        return {
+          ...swapInfo,
+          error: "Swap amount is resulting in underflow",
+        };
+      }
       return {
         ...swapInfo,
         returnAmount: amountOut,
@@ -83,7 +89,10 @@ export const getSwap = async ({
       };
     } catch (e) {
       console.error("Failed to get swap info", e);
-      return swapInfo;
+      return {
+        ...swapInfo,
+        error: e,
+      };
     }
   }
 
