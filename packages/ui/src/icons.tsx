@@ -69,6 +69,7 @@ import {
   PenSquare,
   PieChart,
   Pizza,
+  Droplet,
   Play,
   Plus,
   PlusCircle,
@@ -207,6 +208,7 @@ export const Icons = {
   moveRight: MoveRight,
   refreshccw: RefreshCcw,
   biohazard: Biohazard,
+  droplet: Droplet,
   vault: (props: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
