@@ -23,6 +23,7 @@ export default function Swap({
       <SwapContent
         inutCurrency={inputCurrency}
         outputCurrency={outputCurrency}
+        isRedeem={false}
       />
     </div>
   );

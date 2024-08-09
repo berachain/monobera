@@ -21,7 +21,7 @@ export function BGTStatusBtn() {
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
-            className="w-[110px] flex flex-row text-sm line-clamp-1"
+            className="w-[110px] flex flex-row text-sm line-clamp-1 whitespace-nowrap"
           >
             ✨ Rewards
           </Button>
@@ -65,7 +65,6 @@ export function BGTStatusDetails() {
     );
   }, [userVaultInfo, beraInfo]);
 
-  console.log(totalBgtRewardValue + parseFloat(claimableFees ?? "0"));
   return (
     <div className="flex flex-col gap-4">
       <div>

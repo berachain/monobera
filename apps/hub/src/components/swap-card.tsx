@@ -2,22 +2,20 @@
 
 import React, { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import Link from "next/link";
 import {
-  TXN_GAS_USED_ESTIMATES,
+  BGT_ABI,
   Token,
   TransactionActionType,
   multiswapAbi,
   useBeraJs,
-  useGasData,
+  useBgtUnstakedBalance,
   usePollWalletBalances,
   useTokens,
   wberaAbi,
 } from "@bera/berajs";
 import {
   beraTokenAddress,
-  cloudinaryUrl,
+  bgtTokenAddress,
   crocMultiSwapAddress,
   honeyAddress,
   nativeTokenAddress,
@@ -43,6 +41,8 @@ import { isAddress, parseUnits } from "viem";
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
 import { SettingsPopover } from "./settings-popover";
 import { AddTokenDialog } from "@bera/shared-ui/src/add-token-dialog";
+import { SwapCardHeader } from "./swap-card-header";
+import { SwapCardInfo } from "./swap-card-info";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
   loading: () => (
@@ -69,17 +69,15 @@ const Connect = dynamic(
 interface ISwapCard {
   inputCurrency?: string | undefined;
   outputCurrency?: string | undefined;
+  isRedeem: boolean;
   addTokensOnLoad?: boolean;
-  isMainPage?: boolean;
-  showBear?: boolean;
   className?: string;
 }
 
 export function SwapCard({
   inputCurrency = nativeTokenAddress,
   outputCurrency = honeyAddress,
-  showBear = true,
-  isMainPage = false,
+  isRedeem,
   className,
 }: ISwapCard) {
   const {
@@ -129,8 +127,10 @@ export function SwapCard({
         ? outputCurrency
         : honeyAddress
       : honeyAddress,
+    isRedeem: isRedeem,
   });
 
+  const { account } = useBeraJs();
   const { captureException, track } = useAnalytics();
 
   const {
@@ -254,7 +254,53 @@ export function SwapCard({
     },
   });
 
+  const { data: bgtBalance, refresh: refreshBalance } = useBgtUnstakedBalance();
+  const bgtFormattedBalance = bgtBalance ? bgtBalance.toString() : "0";
+
+  const {
+    write: redeemWrite,
+    isLoading: isRedeemLoading,
+    ModalPortal: RedeemModalPortal,
+  } = useTxn({
+    message: "Redeeming BGT for BERA",
+    actionType: TransactionActionType.REDEEM_BGT,
+    onSuccess: () => {
+      refreshBalance();
+      setFromAmount("");
+      setToAmount("");
+    },
+  });
+
   const getSwapButton = () => {
+    if (isRedeem) {
+      return (
+        <Button
+          className="w-full"
+          disabled={
+            fromAmount === "" ||
+            fromAmount === "0" ||
+            hasInsufficientBalanceError ||
+            isRedeemLoading
+          }
+          onClick={() => {
+            redeemWrite({
+              address: bgtTokenAddress,
+              abi: BGT_ABI,
+              functionName: "redeem",
+              params: [
+                account,
+                parseUnits(
+                  fromAmount === "" || !fromAmount ? "0" : fromAmount,
+                  18,
+                ),
+              ],
+            });
+          }}
+        >
+          Redeem
+        </Button>
+      );
+    }
     if (
       (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
       !exceedingBalance &&
@@ -403,13 +449,13 @@ export function SwapCard({
   ]);
   const breakpoint = useBreakpoint();
 
-  const priceImpactColorClass = getPriceImpactColorClass(priceImpact);
   const { addNewToken } = useTokens();
 
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
       {ModalPortal}
       {WrapModalPortal}
+      {RedeemModalPortal}
       <AddTokenDialog
         token={pendingInputToken}
         onAddToken={() => {
@@ -431,35 +477,17 @@ export function SwapCard({
         onOpenChange={setOutputAddTokenDialogOpen}
       />
       <div className="w-full">
-        {showBear && (
-          <Image
-            src={`${cloudinaryUrl}/bears/qsmspkwyjoeh1cwb6fz7`}
-            className="mx-auto self-start md:mx-0"
-            alt="bidness"
-            width={150}
-            height={200}
-          />
-        )}
-        <div className="flex w-full flex-col gap-4 md:flex-row">
-          <Card className="w-full rounded-2xl px-6 py-8">
-            <CardTitle
-              className={cn(
-                "center flex items-center justify-between px-2",
-                isMainPage ? "pointer-events-none" : "",
-              )}
-            >
-              Swap <SettingsPopover />
-            </CardTitle>
-            <div className="mt-3">
-              <div className="border-1 flex flex-col gap-4 border-border">
+        <div className="flex w-full flex-col gap-4">
+          <Card className="w-full border-none">
+            <SwapCardHeader isRedeem={isRedeem} />
+            <div className="mt-3 border-border border rounded-lg p-4">
+              <div className="flex flex-col gap-1">
                 <ul
-                  className={cn(
-                    "divide-y divide-border rounded-2xl border",
-                    isMainPage ? "pointer-events-none" : "",
-                  )}
+                  className={cn("divide-y divide-border-y rounded-2xl")}
                   role="list"
                 >
                   <TokenInput
+                    className="px-0"
                     selected={selectedFrom}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedFrom}
@@ -472,31 +500,41 @@ export function SwapCard({
                     }
                     setAmount={(amount) => {
                       // setSwapKind(SwapKind.GIVEN_IN);
-                      setSwapAmount(amount);
-                      setFromAmount(amount);
+                      if (isRedeem) {
+                        setFromAmount(amount);
+                        setToAmount(amount);
+                      } else {
+                        setSwapAmount(amount);
+                        setFromAmount(amount);
+                      }
                     }}
                     filteredTokenTags={["debt", "aToken", "rewardToken"]}
                     filteredSymbols={["BGT"]}
                     beraSafetyMargin={estimatedBeraFee}
+                    balance={isRedeem ? bgtFormattedBalance : undefined}
+                    selectable={!isRedeem}
                   />
-                  <div className="relative">
+                  <div className="relative px-8">
                     <div
-                      className="absolute inset-0 flex w-full items-center justify-center"
+                      className="absolute inset-0 flex w-full items-center justify-center px-8"
                       aria-hidden="true"
                     >
-                      <Button
-                        type="button"
-                        variant={"outline"}
-                        onClick={() => {
-                          onSwitch();
-                        }}
-                        className="z-10 inline-flex h-6 w-6 items-center rounded-sm border-border bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
-                      >
-                        <Icons.swap className="h-3 w-3 md:h-6 md:w-6" />
-                      </Button>
+                      {!isRedeem && (
+                        <Button
+                          type="button"
+                          variant={"outline"}
+                          onClick={() => {
+                            onSwitch();
+                          }}
+                          className="z-10 inline-flex h-6 w-6 items-center rounded-sm border-border bg-background p-0.5 text-sm font-semibold text-muted-foreground md:h-8 md:w-8 md:p-1"
+                        >
+                          <Icons.swap className="h-3 w-3 md:h-6 md:w-6" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                   <TokenInput
+                    className="px-0"
                     selected={selectedTo}
                     selectedTokens={[selectedFrom, selectedTo]}
                     onTokenSelection={setSelectedTo}
@@ -515,7 +553,7 @@ export function SwapCard({
                           : differenceUSD
                     }
                     showExceeding={false}
-                    isActionLoading={isRouteLoading && !isWrap}
+                    isActionLoading={isRouteLoading && !isWrap && !isRedeem}
                     beraSafetyMargin={estimatedBeraFee}
                     filteredTokenTags={[
                       "supply",
@@ -524,6 +562,7 @@ export function SwapCard({
                       "rewardToken",
                     ]}
                     filteredSymbols={["BGT", "aToken"]}
+                    selectable={!isRedeem}
                   />
                 </ul>
                 {!!priceImpact && priceImpact < -10 && !isWrap && (
@@ -624,64 +663,28 @@ export function SwapCard({
                 ) : (
                   false
                 )}
-
-                <div className="flex flex-col gap-2">
-                  {!isWrap ? (
-                    <div className="flex w-full flex-col gap-1 rounded-lg bg-muted p-3">
-                      {!!priceImpact && priceImpact < -5 && (
-                        <div className="flex w-full flex-row justify-between">
-                          <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                            Price Impact
-                          </p>
-                          <p
-                            className={`whitespace-nowrap text-right text-xs font-medium sm:text-sm ${
-                              priceImpactColorClass ?? ""
-                            }`}
-                          >
-                            {priceImpact
-                              ? `~${Math.abs(priceImpact).toFixed(2)}%`
-                              : "-"}
-                          </p>
-                        </div>
-                      )}
-                      <div className="flex w-full flex-row justify-between">
-                        <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                          Exchange rate
-                        </p>
-                        <p className="whitespace-nowrap text-right text-xs font-medium sm:text-sm">
-                          {exchangeRate ?? "-"}
-                        </p>
-                      </div>
-                      <div className="flex w-full flex-row justify-between">
-                        <p className="text-xs font-medium text-muted-foreground sm:text-sm">
-                          Network fee
-                        </p>
-                        <p className="cursor-help whitespace-nowrap text-right text-xs font-medium sm:text-sm ">
-                          <span className="flex flex-row items-center gap-1">
-                            {gasPriceLabel !== "-" && (
-                              <Icons.fuel className="h-4 w-4" />
-                            )}
-                            <span>{gasPriceLabel}</span>
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    false
-                  )}
-                </div>
-                {isMainPage ? (
-                  <Link href="/swap" className="w-full">
-                    <Button className="flex w-full gap-1">
-                      Enter App <Icons.arrowRight className="block h-5 w-5" />
-                    </Button>
-                  </Link>
-                ) : (
-                  <ActionButton>{getSwapButton()}</ActionButton>
+                {!isWrap && !isRedeem && (
+                  <SwapCardInfo
+                    priceImpact={priceImpact}
+                    exchangeRate={exchangeRate}
+                    gasPrice={gasPriceLabel}
+                  />
                 )}
+                <ActionButton>{getSwapButton()}</ActionButton>
               </div>
             </div>
           </Card>
+          {isRedeem && (
+            <Alert variant="default">
+              <AlertTitle>
+                {" "}
+                <Icons.tooltip className="mt-[-4px] inline h-4 w-4" /> Heads up!
+              </AlertTitle>
+              <AlertDescription className="text-xs">
+                Redeeming your BGT into BERA is an irreversible action.
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
       </div>
     </div>
