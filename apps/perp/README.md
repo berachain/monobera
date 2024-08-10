@@ -4,7 +4,7 @@ Perps (Berps) is the primary perpetual futures market on Berachain
 
 #### Commands 
 
-Make sure to install and build packages from root of the project before running this from `apps/perp`
+Make sure to install and build packages from the root of the project before running this from `apps/perp`
 
 Monobera requires node 18+
 
