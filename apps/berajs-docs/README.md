@@ -4,7 +4,7 @@ Berajs Docs is the home for `packages/berajs` documentation
 
 #### Commands 
 
-Make sure to install and build packages from root of the project before running this from `apps/berajs-docs`
+Make sure to install and build packages from the root of the project before running this from `apps/berajs-docs`
 
 Monobera requires node 18+
 
