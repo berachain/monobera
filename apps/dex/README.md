@@ -4,7 +4,7 @@ Dex (BEX) is the primary swap on Berachain
 
 #### Commands 
 
-Make sure to install and build packages from root of the project before running this from `apps/dex`
+Make sure to install and build packages from the root of the project before running this from `apps/dex`
 
 Monobera requires node 18+
 
