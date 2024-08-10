@@ -80,7 +80,7 @@ To run Bex for example, run `pnpm i && pnpm dev:dex`
 
 #### Environments
 
-All Berachain dapps are built to be single chain applications.
+All Berachain dApps are built to be single-chain applications.
 | Environment Variables | Environment |
 | --------------------- | ---------------------------------------------------------------------------------------------- |
 | `.env.devnet` | Environment variables for running the application against our Devnet. Subject to change often |
