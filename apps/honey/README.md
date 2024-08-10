@@ -4,7 +4,7 @@ Honey is used as an interface for the Honey token on Berachain
 
 #### Commands 
 
-Make sure to install and build packages from root of the project before running this from `apps/honey`
+Make sure to install and build packages from the root of the project before running this from `apps/honey`
 
 Monobera requires node 18+
 
