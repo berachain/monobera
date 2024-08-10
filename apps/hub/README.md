@@ -1,10 +1,10 @@
 ### BGT Station
 
-BGT Station is a dApp for staking, and managing incentives for Berachain
+BGT Station is a dApp for staking and managing incentives for Berachain
 
 #### Commands 
 
-Make sure to install and build packages from root of the project before running this from `apps/bgt-station`
+Make sure to install and build packages from the root of the project before running this from `apps/bgt-station`
 
 Monobera requires node 18+
 
