@@ -5,11 +5,11 @@ import { TimeFrame, getTime, type TimeFrame as TimeFrameT } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { GetHistoryDayRates, GetHistoryHourRates } from "@bera/graphql";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { fillAPYDataByDay, fillAPYDataByHour } from "~/utils/graph-utils";
-import { Card } from "@bera/ui/card";
 import DonutChart from "~/components/donut-chart";
 import LineChart from "~/components/line-chart";
 
@@ -136,8 +136,14 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
                 <div className="font-semibold leading-7 md:text-xl">
                   <FormattedNumber
                     value={
-                      Number(reserveData?.totalLiquidity) *
-                      Number(1 - reserveData?.borrowUsageRatio)
+                      Number(reserveData?.totalDebt) >=
+                      Number(reserveData?.borrowCap)
+                        ? 0
+                        : Number(reserveData?.totalLiquidity) *
+                          Number(
+                            reserveData?.formattedPriceInMarketReferenceCurrency,
+                          ) *
+                          Number(1 - reserveData?.borrowUsageRatio)
                     }
                   />
                 </div>
@@ -148,11 +154,14 @@ export default function TotalBorrowed({ reserveData }: { reserveData: any }) {
                 <div className="text-xs font-medium leading-tight text-muted-foreground">
                   <FormattedNumber
                     value={
-                      Number(reserveData?.totalLiquidity) *
-                      Number(
-                        reserveData?.formattedPriceInMarketReferenceCurrency,
-                      ) *
-                      Number(1 - reserveData?.borrowUsageRatio)
+                      Number(reserveData?.totalDebt) >=
+                      Number(reserveData?.borrowCap)
+                        ? 0
+                        : Number(reserveData?.totalLiquidity) *
+                          Number(
+                            reserveData?.formattedPriceInMarketReferenceCurrency,
+                          ) *
+                          Number(1 - reserveData?.borrowUsageRatio)
                     }
                     symbol="USD"
                   />
