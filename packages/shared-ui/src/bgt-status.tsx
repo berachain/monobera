@@ -21,7 +21,7 @@ export function BGTStatusBtn() {
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
-            className="w-[110px] flex flex-row text-sm line-clamp-1 whitespace-nowrap"
+            className="flex flex-row text-sm whitespace-nowrap"
           >
             ✨ Rewards
           </Button>
