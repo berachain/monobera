@@ -54,17 +54,6 @@ export default function HoneyBorrowCard() {
     .plus(BigNumber(vdHoneyBalance?.formattedBalance ?? 0))
     .toString();
 
-  const availableToBorrow = Math.max(
-    Number(honeyReserve?.borrowCap) - Number(honeyReserve?.totalDebt),
-    0,
-  );
-
-  const borrowAmount = BigNumber(availableToBorrow).gt(
-    BigNumber(honeyBorrowAllowance),
-  )
-    ? honeyBorrowAllowance
-    : availableToBorrow;
-
   return (
     <div className="relative rounded-md border border-accent bg-gradient-to-br from-stone-50 via-amber-50 to-orange-100 px-4 py-3 dark:from-[#1A1608] dark:via-[#201E09] dark:to-[#312A09] ">
       <div className="flex flex-col gap-4 py-4 sm:px-3">
@@ -138,7 +127,6 @@ export default function HoneyBorrowCard() {
           <BorrowBtn
             honeyBorrowAllowance={honeyBorrowAllowance}
             reserve={honeyReserve}
-            disabled={Number(borrowAmount) === 0}
             variant="outline"
             className="w-full flex-1 border border-yellow-900 bg-background bg-opacity-20 py-2 text-lg font-semibold leading-7 text-yellow-900 backdrop-blur-2xl hover:bg-yellow-900 hover:text-white hover:opacity-90 dark:border-yellow-600 dark:text-yellow-600 dark:hover:bg-yellow-600 dark:hover:text-white"
           />

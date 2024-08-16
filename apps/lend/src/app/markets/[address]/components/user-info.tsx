@@ -37,20 +37,21 @@ export default function UserInfo() {
     userAccountData?.availableBorrowsBase ?? 0n,
     baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8,
   );
-
   const borrowPower = BigNumber(borrowBase)
     .div(BigNumber(tokenPrice))
-    .times(0.999)
+    .times(0.99)
     .toFixed(reserve?.decimals ?? 18);
 
-  const availableToBorrow = Math.max(
-    Number(reserve?.borrowCap) - Number(reserve?.totalDebt),
-    0,
-  );
+  const availableLiquidity = reserve
+    ? BigNumber(reserve.totalLiquidity)
+        .times(BigNumber(reserve.formattedPriceInMarketReferenceCurrency))
+        .times(BigNumber(1 - Number(reserve.borrowUsageRatio)))
+        .toFixed(baseCurrencyData?.marketReferenceCurrencyDecimals ?? 8)
+    : "0";
 
-  const borrowAmount = BigNumber(availableToBorrow).gt(BigNumber(borrowPower))
-    ? borrowPower
-    : availableToBorrow;
+  const borrowAmout = BigNumber(borrowPower).gt(BigNumber(availableLiquidity))
+    ? availableLiquidity
+    : borrowPower;
 
   return (
     <div className="w-full flex-shrink-0 xl:w-[378px]">
@@ -145,8 +146,8 @@ export default function UserInfo() {
               </div>
               <div className="mt-[-2px] leading-7 text-muted-foreground">
                 <b>
-                  {!Number.isNaN(borrowAmount) ? (
-                    <FormattedNumber value={borrowAmount} />
+                  {!Number.isNaN(borrowAmout) ? (
+                    <FormattedNumber value={borrowAmout} />
                   ) : (
                     <Skeleton className="inline-block h-7 w-20" />
                   )}
@@ -161,7 +162,7 @@ export default function UserInfo() {
                 <FormattedNumber
                   value={
                     Number(reserve?.formattedPriceInMarketReferenceCurrency) *
-                    Number(borrowAmount)
+                    Number(borrowAmout)
                   }
                   symbol="USD"
                 />
@@ -172,7 +173,7 @@ export default function UserInfo() {
                 <BorrowBtn
                   reserve={reserve}
                   honeyBorrowAllowance={borrowPower}
-                  disabled={Number(borrowAmount) === 0}
+                  disabled={borrowAmout === "0"}
                 />
               ) : (
                 <Skeleton className="h-9 w-20" />
