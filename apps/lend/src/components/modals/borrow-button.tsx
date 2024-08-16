@@ -286,10 +286,10 @@ const BorrowModalContent = ({
         {borrowCapReached
           ? "Global Borrow Cap Reached"
           : noAvailableLiquidity
-          ? "No Available Liquidity"
-          : !amount
-          ? "Enter Amount"
-          : "Borrow"}
+            ? "No Available Liquidity"
+            : !amount
+              ? "Enter Amount"
+              : "Borrow"}
       </Button>
     </div>
   );
