@@ -18,6 +18,7 @@ import {
   useTxn,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
@@ -27,7 +28,7 @@ import { formatUnits } from "viem";
 import { getLTVColor } from "~/utils/get-ltv-color";
 
 export default function BorrowBtn({
-  honeyBorrowAllowance,
+  honeyBorrowAllowance, // user honey borrow allowance
   reserve,
   disabled = false,
   variant = "primary",
@@ -69,6 +70,7 @@ export default function BorrowBtn({
 
   useEffect(() => setOpen(false), [isSuccess]);
   useEffect(() => setAmount(undefined), [open]);
+
   return (
     <>
       {ModalPortal}
@@ -118,10 +120,23 @@ const BorrowModalContent = ({
     reserve.decimals,
   );
 
+  const borrowCapReached = BigNumber(reserve?.borrowCap).lte(
+    BigNumber(reserve?.totalDebt),
+  );
+  const noAvailableLiquidity = BigNumber(availableLiquidity).lte(0);
+
+  const availableToBorrow = Math.max(
+    Math.min(
+      Number(reserve?.borrowCap) - Number(reserve?.totalDebt),
+      Number(availableLiquidity),
+    ),
+    0,
+  );
+
   const borrowAmout = BigNumber(honeyBorrowAllowance as `${number}`).gt(
-    BigNumber(availableLiquidity as `${number}`),
+    BigNumber(availableToBorrow),
   )
-    ? availableLiquidity
+    ? availableToBorrow.toString()
     : honeyBorrowAllowance;
 
   const currentHealthFactor = formatUnits(
@@ -227,9 +242,36 @@ const BorrowModalContent = ({
         </div>
       </div>
 
+      {borrowCapReached && (
+        <Alert>
+          <AlertTitle className="flex gap-1 text-destructive-foreground">
+            <Icons.info className="h-4 w-4" />
+            Global Borrow Cap Reached
+          </AlertTitle>
+          <AlertDescription className="text-foreground">
+            1B Of 1B HONEY has been borrowed from the pool.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {noAvailableLiquidity && (
+        <Alert>
+          <AlertTitle className="flex gap-1 text-destructive-foreground">
+            <Icons.info className="h-4 w-4" />
+            No Available Liquidity
+          </AlertTitle>
+          <AlertDescription>
+            The pool has no available liquidity to borrow from.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <Button
         disabled={
-          !amount || Number(amount) <= 0 || Number(amount) > Number(borrowAmout)
+          !amount ||
+          Number(amount) <= 0 ||
+          Number(amount) > Number(borrowAmout) ||
+          availableToBorrow <= 0
         }
         onClick={() => {
           write({
@@ -241,7 +283,13 @@ const BorrowModalContent = ({
           });
         }}
       >
-        {!amount ? "Enter Amount" : "Borrow"}
+        {borrowCapReached
+          ? "Global Borrow Cap Reached"
+          : noAvailableLiquidity
+            ? "No Available Liquidity"
+            : !amount
+              ? "Enter Amount"
+              : "Borrow"}
       </Button>
     </div>
   );

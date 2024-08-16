@@ -45,7 +45,7 @@ export default function HoneyBorrowCard() {
   );
   const honeyBorrowAllowance = BigNumber(borrowAllowanceUSD)
     .div(honeyReserve?.formattedPriceInMarketReferenceCurrency ?? "0")
-    .times(0.99)
+    .times(0.999)
     .toFixed(18);
 
   const { useSelectedWalletBalance } = usePollWalletBalances();
