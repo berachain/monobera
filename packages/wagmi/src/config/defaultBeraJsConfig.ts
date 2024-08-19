@@ -70,6 +70,11 @@ export const wagmiConfig = createConfig({
   chains: [defaultBeraNetworkConfig.chain],
   multiInjectedProviderDiscovery: false,
   ssr: false,
+  batch: {
+    multicall: {
+      wait: 10,
+    },
+  },
   transports: {
     [defaultBeraNetworkConfig.chain.id]: http(
       defaultBeraNetworkConfig.chain.rpcUrls.default.http[0] || "",
