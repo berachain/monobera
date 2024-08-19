@@ -96,7 +96,7 @@ export default function HoneyBorrowCard() {
             </div>
             <div className="text-xl font-semibold leading-7 text-warning-foreground">
               <FormattedNumber
-                value={-(honeyReserve?.variableBorrowAPY ?? 0)}
+                value={honeyReserve?.variableBorrowAPY ?? 0}
                 percent
               />
             </div>
