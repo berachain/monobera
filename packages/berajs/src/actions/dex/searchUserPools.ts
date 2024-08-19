@@ -230,8 +230,9 @@ export const searchUserPools = async ({
     });
     return userPositions.filter(
       (p: IUserPool) =>
-        p.userPosition?.formattedBaseAmount !== "0" &&
-        p.userPosition?.formattedQuoteAmount !== "0",
+        (p.userPosition?.formattedBaseAmount !== "0" &&
+          p.userPosition?.formattedQuoteAmount !== "0") ||
+        p.userPosition?.formattedVaultBalance !== "0",
     ) as IUserPool[];
   } catch (e) {
     console.log(e);

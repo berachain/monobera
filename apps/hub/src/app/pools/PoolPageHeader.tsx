@@ -12,15 +12,13 @@ export default function PoolPageHeader({
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-center gap-8">
       {/* Large Screen */}
-      <div className="">
-        <Image
-          src={`${cloudinaryUrl}/DEX/raqbge7ojm9k2w8ouznn.png`}
-          alt="Large Screen Image"
-          width={1200}
-          height={600}
-          className="w-full h-auto  object-cover"
-        />
-      </div>
+      <Image
+        src={`${cloudinaryUrl}/DEX/raqbge7ojm9k2w8ouznn.png`}
+        alt="Large Screen Image"
+        width={1200}
+        height={600}
+        className="w-full h-auto  object-cover"
+      />
 
       {/* Tablet Screen
       <div className="hidden md:block lg:hidden">

@@ -30,19 +30,18 @@ import {
   useBreakpoint,
   useTxn,
 } from "@bera/shared-ui";
-import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card, CardTitle } from "@bera/ui/card";
+import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { isAddress, parseUnits } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
-import { SettingsPopover } from "./settings-popover";
 import { AddTokenDialog } from "@bera/shared-ui/src/add-token-dialog";
 import { SwapCardHeader } from "./swap-card-header";
 import { SwapCardInfo } from "./swap-card-info";
+import { SwapRoute } from "./swap-route";
 
 const DynamicPreview = dynamic(() => import("./preview-dialog"), {
   loading: () => (
@@ -670,6 +669,16 @@ export function SwapCard({
                     gasPrice={gasPriceLabel}
                   />
                 )}
+                {swapInfo?.batchSwapSteps &&
+                  swapInfo?.batchSwapSteps.length > 0 &&
+                  selectedFrom &&
+                  selectedTo && (
+                    <SwapRoute
+                      swapInfo={swapInfo}
+                      tokenIn={selectedFrom}
+                      tokenOut={selectedTo}
+                    />
+                  )}
                 <ActionButton>{getSwapButton()}</ActionButton>
               </div>
             </div>

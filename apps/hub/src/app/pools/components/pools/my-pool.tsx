@@ -17,6 +17,10 @@ export default function MyPool({ keyword }: { keyword: string }) {
       id: "estimatedHoneyValue",
       desc: true,
     },
+    {
+      id: "estimatedDepositedHoneyValue",
+      desc: true,
+    },
   ]);
 
   const handleNewSort = (newSort: any) => {
@@ -50,7 +54,6 @@ export default function MyPool({ keyword }: { keyword: string }) {
           <DataTable
             data={userPools}
             columns={getUserPoolColumns(refresh)}
-            title={`My Pools (${userPools?.length ?? "0"})`}
             onRowClick={(row: any) => {
               if (!row?.original) return;
               window.open(getPoolUrl(row.original, true), "_self");

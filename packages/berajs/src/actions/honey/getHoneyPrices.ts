@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { getTokenHoneyPricesReq } from "@bera/graphql";
+import { GetTokenInformations } from "@bera/graphql";
 import { getAddress } from "viem";
 
-import { BeraConfig } from "~/types";
+import { BeraConfig, Token } from "~/types";
 import { handleNativeBera } from "~/utils";
 
 interface FetchHoneyPricesArgs {
@@ -38,15 +38,15 @@ export const getTokenHoneyPrices = async ({
   );
   try {
     const res = await dexClient.query({
-      query: getTokenHoneyPricesReq,
+      query: GetTokenInformations,
       variables: {
         id: swappedAddresses,
       },
     });
-    return res.data?.tokenHoneyPrices.reduce(
-      (allPrices: any, price: any) => ({
+    return res.data?.tokenInformations.reduce(
+      (allPrices: any, tokenInformation: Token) => ({
         ...allPrices,
-        [getAddress(price.id)]: price.price,
+        [getAddress(tokenInformation.address)]: tokenInformation.usdValue,
       }),
       {},
     ) as TokenHoneyPrices;

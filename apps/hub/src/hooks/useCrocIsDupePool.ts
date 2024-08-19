@@ -1,7 +1,7 @@
 import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { type Token } from "@bera/berajs";
-import { dexClient, getCrocSelectedPool } from "@bera/graphql";
+import { dexClient, getCrocSelectedPoolOLD } from "@bera/graphql";
 import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
 
 export const useCrocIsDupePool = ({
@@ -22,13 +22,32 @@ export const useCrocIsDupePool = ({
       return undefined;
     }
     try {
+      // const poolResult = dexClient
+      //   .query({
+      //     query: getCrocSelectedPoolNEW,
+      //     variables: {
+      //       baseAsset: crocPool.baseToken.tokenAddr,
+      //       quoteAsset: crocPool.quoteToken.tokenAddr,
+      //       poolIdx: poolIdx.toString(),
+      //     },
+      //   })
+      //   .then((result: any) => {
+      //     console.log(result);
+      //     return result.data.pools.length > 0;
+      //   })
+      //   .catch((e: any) => {
+      //     console.log(e);
+      //     return false;
+      //   });
+
+      // console.log(poolResult);
+      // return poolResult;
       const poolResult = dexClient
         .query({
-          query: getCrocSelectedPool,
+          query: getCrocSelectedPoolOLD,
           variables: {
             baseAsset: crocPool.baseToken.tokenAddr,
             quoteAsset: crocPool.quoteToken.tokenAddr,
-            poolIdx: poolIdx,
           },
         })
         .then((result: any) => {
@@ -38,7 +57,6 @@ export const useCrocIsDupePool = ({
           console.log(e);
           return false;
         });
-
       return poolResult;
     } catch (e) {
       console.log(e);

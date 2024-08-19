@@ -227,24 +227,7 @@ export const getUserPoolColumns = (
           title={"Pool Composition"}
         />
       ),
-      cell: ({ row }) => (
-        <div className="flex flex-col items-start gap-2">
-          <span className="w-[180px] truncate text-left">
-            {row.original?.poolName}
-          </span>
-          <TokenIconList
-            tokenList={row.original?.tokens}
-            size="lg"
-            key={row.original.id}
-          />
-          <Badge
-            variant={"secondary"}
-            className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
-          >
-            {Number(row.original?.feeRate).toFixed(2)}%
-          </Badge>
-        </div>
-      ),
+      cell: ({ row }) => <PoolSummary pool={row.original} />,
       enableSorting: false,
       enableHiding: false,
     },

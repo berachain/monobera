@@ -2,58 +2,44 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { usePoolTable } from "@bera/berajs";
+import { useRouter, useSearchParams } from "next/navigation";
+import { usePoolTable, useTotalPoolCount } from "@bera/berajs";
 import { DataTable, NotFoundBear, SearchInput } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { columns } from "~/components/pools-table-columns";
 import MyPool from "./components/pools/my-pool";
-import TableViewLoading from "./components/pools/table-view-loading";
 import { getPoolUrl } from "./fetchPools";
-import { useTotalPoolCount } from "~/hooks/useTotalPoolCount";
 import { Icons } from "@bera/ui/icons";
+import { DataTableLoading } from "@bera/shared-ui/src/table/legacy/data-table";
 
 export const PoolSearch = ({
   poolType,
 }: {
   poolType: "allPools" | "userPools";
 }) => {
-  const [sorting, setSorting] = useState<any>([
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+  const pageSize = searchParams.get("pageSize");
+  const sort = searchParams.get("sort");
+  const direction = searchParams.get("direction");
+
+  const sorting = [
     {
-      id: "tvlUsd",
-      desc: true,
+      id: sort === null ? "tvlUsd" : sort,
+      desc: direction === null ? true : direction === "desc" ? true : false,
     },
-  ]);
+  ];
 
-  const [isFirstLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 250);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const {
-    search,
-    keyword,
-    setKeyword,
-    setSearch,
-    data,
-    fetchNextPage,
-    isLoadingMore,
-    isReachingEnd,
-  } = usePoolTable(sorting);
+  const { search, keyword, setKeyword, setSearch, data, isLoadingMore } =
+    usePoolTable(
+      sorting,
+      parseFloat(page ?? "1"),
+      parseFloat(pageSize ?? "10"),
+    );
 
   const { data: poolCount } = useTotalPoolCount();
-
-  const handleNewSort = (newSort: any) => {
-    if (newSort === sorting) return;
-    setSorting(newSort);
-  };
 
   const [isTyping, setIsTyping] = useState(false);
 
@@ -75,14 +61,15 @@ export const PoolSearch = ({
     () => isLoadingMore && (data.length === 0 || !data),
     [isLoadingMore, data],
   );
+
   return (
     <div
       className="w-full flex-row items-center justify-center max-w-[1020px]"
       id="poolstable"
     >
       <Tabs className="flex flex-col gap-4" value={poolType}>
-        <div className="flex flex-col lg:flex-row w-full justify-between  items-start lg:items-center">
-          <TabsList className="w-fit" variant="ghost">
+        <div className="flex flex-col lg:flex-row w-full justify-between  items-start lg:items-center gap-2">
+          <TabsList className="w-full  p-0 justify-start" variant="ghost">
             <TabsTrigger
               value="allPools"
               className="w-full sm:w-fit"
@@ -101,8 +88,8 @@ export const PoolSearch = ({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="allPools" className="text-center">
-            <div className="flex w-fit flex-row items-center gap-2 lg:flex-row lg:items-center ">
+          <TabsContent value="allPools" className="text-center w-full">
+            <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
               <SearchInput
                 value={search}
                 onChange={(e) => {
@@ -124,12 +111,13 @@ export const PoolSearch = ({
                 }}
                 isLoading={isTyping || (isLoadingMore && keyword !== "")}
                 id="all-pool-search"
-                className="w-full md:w-[400px]"
+                className="w-full sm:w-[400px]"
               />
               <Button
                 size="md"
                 variant="secondary"
-                className="bg-transparent w-fit whitespace-nowrap flex flex-row items-center h-[40px] gap-1"
+                className="bg-transparent w-fit sm:w-fit whitespace-nowrap flex flex-row items-center h-[40px] gap-1"
+                onClick={() => router.push("/pools/create")}
               >
                 <Icons.droplet className="h-4 w-4" />
                 Create new pool
@@ -141,7 +129,10 @@ export const PoolSearch = ({
         <TabsContent value="allPools" className="text-center mt-4">
           {isLoading ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
-              <TableViewLoading />
+              <DataTableLoading
+                columns={columns.length}
+                rowCount={parseFloat(pageSize ?? "10")}
+              />
             </div>
           ) : data?.length || data ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
@@ -149,28 +140,19 @@ export const PoolSearch = ({
                 key={data.length}
                 data={data ?? []}
                 columns={columns}
-                // title={`All Pools (${poolCount ?? data?.length ?? "0"})`}
                 className="min-w-[1000px]"
                 onRowClick={(row: any) => router.push(getPoolUrl(row.original))}
-                onCustomSortingChange={(a: any) => handleNewSort(a)}
                 additionalTableProps={{ state: { sorting } }}
+                enablePagination
+                totalCount={parseFloat(poolCount ?? "0")}
+                page={parseFloat(page ?? "1")}
+                pageSize={parseFloat(pageSize ?? "10")}
+                useQueryParamSearch
               />
             </div>
           ) : (
             <NotFoundBear title="No Pools found." />
           )}
-          <Button
-            className="mt-8"
-            onClick={() => fetchNextPage()}
-            disabled={isLoadingMore || isReachingEnd}
-            variant="outline"
-          >
-            {isLoadingMore
-              ? "Loading..."
-              : isReachingEnd
-                ? "No more pools"
-                : "View More"}
-          </Button>
         </TabsContent>
 
         <TabsContent value="userPools">
