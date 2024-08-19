@@ -9,6 +9,8 @@ import {
   gasTokenSymbol,
   jsonRpcUrl,
   publicJsonRpcUrl,
+  multicallAddress,
+  multicallCreationBlock,
 } from "@bera/config";
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
@@ -23,6 +25,13 @@ const BeraChain: Chain = {
     decimals: gasTokenDecimals,
     name: gasTokenName,
     symbol: gasTokenSymbol,
+  },
+
+  contracts: {
+    multicall3: {
+      address: multicallAddress,
+      blockCreated: multicallCreationBlock,
+    },
   },
   blockExplorers: {
     etherscan: {
@@ -71,6 +80,9 @@ export const wagmiConfig = createConfig({
   multiInjectedProviderDiscovery: false,
   ssr: false,
   batch: {
+    /**
+     * @see https://viem.sh/docs/clients/public#batchmulticallwait-optional
+     */
     multicall: {
       wait: 10,
     },
