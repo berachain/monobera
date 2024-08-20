@@ -327,18 +327,20 @@ export function CreatePosition({ market, params }: ICreatePosition) {
           onValueChange={(value) => setOptionType(value)}
           className="m-4"
         >
-          <TabsList className="w-full rounded-sm">
+          <TabsList variant="outline" className="w-full rounded-sm">
             <TabsTrigger
               value={"market"}
               key={"market"}
-              className="w-full rounded-sm"
+              variant="outline"
+              className="w-full rounded-l-sm"
             >
               Market
             </TabsTrigger>
             <TabsTrigger
               value={"limit"}
               key={"limit"}
-              className="w-full rounded-sm"
+              variant="outline"
+              className="w-full rounded-r-sm"
             >
               Limit
             </TabsTrigger>
