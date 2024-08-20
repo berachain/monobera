@@ -410,7 +410,7 @@ export const getFilteredPoolsBySymbol = gql`
       tvlUsd
       baseAmount
       quoteAmount
-      bgtApy
+      wtv
       template {
         feeRate
       }
@@ -469,7 +469,7 @@ export const getFilteredPoolsByAddress = gql`
       tvlUsd
       baseAmount
       quoteAmount
-      bgtApy
+      wtv
       template {
         feeRate
       }
@@ -532,7 +532,7 @@ query UserPools($user: String) {
         tvlUsd
         baseAmount
         quoteAmount
-        bgtApy
+        wtv
         template {
           feeRate
         }
@@ -583,7 +583,7 @@ query GetPoolList($shareAddress: String) {
     tvlUsd
     baseAmount
     quoteAmount
-    bgtApy
+    wtv
     template {
       feeRate
     }
@@ -675,6 +675,17 @@ query PoolHistory($poolId: String) {
     pool {
       id
     }
+  }
+}
+`;
+
+export const GetWeeklyBgtInflation = gql`
+query BgtInflation($wbera: String) {
+  globalIncentivesUsages(interval: "day", first: 7) {
+    bgtDistributed
+  }
+  tokenInformation(id: $wbera) {
+    usdValue
   }
 }
 `;

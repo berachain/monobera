@@ -10,6 +10,7 @@ import {
   BERA_VAULT_REWARDS_ABI,
   useBeraJs,
   POOLID,
+  useBgtInflation,
 } from "@bera/berajs";
 import {
   DataTableColumnHeader,
@@ -25,6 +26,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import { beraTokenAddress } from "@bera/config";
 import { Address } from "viem";
+import { calculateApy } from "~/utils/calculateApy";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   return (
@@ -39,7 +41,7 @@ const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
           <span className="w-fit max-w-[180px] truncate text-left font-semibold text-sm">
             {pool?.poolName}
           </span>
-          {pool.bgtApy !== "0" && (
+          {pool.wtv !== "0" && (
             <Icons.bgt className="h-6 w-6 p-1 border border-border rounded-sm self-start" />
           )}
         </div>
@@ -86,6 +88,8 @@ export const columns: ColumnDef<PoolV2>[] = [
     cell: ({ row }) => <PoolSummary pool={row.original} />,
     enableSorting: false,
     enableHiding: false,
+    maxSize: 250,
+    minSize: 250,
   },
   {
     accessorKey: "tvlUsd",
@@ -156,7 +160,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     },
   },
   {
-    accessorKey: "bgtApy",
+    accessorKey: "wtv",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -166,20 +170,24 @@ export const columns: ColumnDef<PoolV2>[] = [
       />
     ),
     cell: ({ row }) => {
+      const { data: bgtInflation } = useBgtInflation();
       return (
         <div
           className={`flex items-center justify-start text-sm ${
-            row.original.bgtApy === "0"
+            row.original.wtv === "0"
               ? "text-muted-foreground"
               : "text-warning-foreground"
           }`}
         >
           <FormattedNumber
-            value={row.original.bgtApy ?? 0}
+            value={calculateApy(
+              row.original.wtv ?? "0",
+              bgtInflation?.usdPerYear ?? 0,
+            )}
+            percent
             compact
             showIsSmallerThanMin
           />
-          %
         </div>
       );
     },
@@ -318,8 +326,8 @@ export const getUserPoolColumns = (
                   </span>
                   <div className="flex flex-row items-center text-success-foreground">
                     <Icons.bgt className="w-4 h-4 mr-1" />
-                    <FormattedNumber value={row.original.bgtApy ?? 0} compact />
-                    % APY
+                    <FormattedNumber value={row.original.wtv ?? 0} compact />%
+                    APY
                   </div>
                 </div>
               )
