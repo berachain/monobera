@@ -1,15 +1,26 @@
-import React from "react";
 import { type Metadata } from "next";
-
+import {
+  beraTokenAddress,
+  bgtTokenAddress,
+  dexName,
+  nativeTokenAddress,
+} from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
-import Redeem from "./redeem";
-import { bgtName } from "@bera/config";
+import { SwapContent } from "../swap/swap";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Redeem", bgtName),
-  description: "Redeem your BGT for BERA",
+  title: getMetaTitle("Redeem", dexName),
+  description: "Swap tokens on Berachain",
 };
 
-export default function Page() {
-  return <Redeem />;
+export default function Swap() {
+  return (
+    <div className="container">
+      <SwapContent
+        inutCurrency={bgtTokenAddress}
+        outputCurrency={nativeTokenAddress}
+        isRedeem={true}
+      />
+    </div>
+  );
 }

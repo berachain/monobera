@@ -23,6 +23,7 @@ export interface SwapInfoV3 {
   value?: bigint;
   predictedAmountOut: bigint;
   formattedPredictedAmountOut: string;
+  error: any;
 }
 
 export interface ICrocSwapStep {
@@ -62,6 +63,7 @@ export const usePollCrocSwap = (
             priceImpactPercentage: 0,
             predictedAmountOut: 0n,
             formattedPredictedAmountOut: "0",
+            error: undefined,
           };
         }
         return getSwap({
@@ -77,7 +79,7 @@ export const usePollCrocSwap = (
         });
       } catch (e) {
         // TODO: throws so many errors but this is good 4 debug
-        console.error(e);
+        console.log(e);
         return {
           batchSwapSteps: [],
           formattedSwapAmount: amount ? amount.toString() : "0",
@@ -89,6 +91,7 @@ export const usePollCrocSwap = (
           tokenOut,
           predictedAmountOut: 0n,
           formattedPredictedAmountOut: "0",
+          error: e,
         };
       }
     },

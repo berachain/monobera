@@ -8,8 +8,8 @@ packages:
   - packages/ui
   - packages/shared-ui
   - apps/hub
-  - apps/dex
-  - apps/bgt-station
+  # - apps/dex
+  # - apps/bgt-station
   - apps/honey
   - apps/lend
   - apps/perp

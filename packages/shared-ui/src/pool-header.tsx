@@ -11,6 +11,7 @@ export const PoolHeader = ({
   actions,
   center,
   className,
+  backHref,
 }: {
   title: ReactNode;
   subtitles: {
@@ -23,6 +24,7 @@ export const PoolHeader = ({
   actions?: ReactNode;
   center?: boolean;
   className?: string;
+  backHref?: string;
 }) => {
   const router = useRouter();
   return (
@@ -42,7 +44,7 @@ export const PoolHeader = ({
           variant={"ghost"}
           size="sm"
           className="flex items-center gap-1"
-          onClick={() => router.back()}
+          onClick={() => (backHref ? router.push(backHref) : router.back())}
         >
           <Icons.arrowLeft className="h-4 w-4" />
           <div className="text-sm font-medium">Go Back</div>
