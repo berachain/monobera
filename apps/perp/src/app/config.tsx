@@ -16,9 +16,11 @@ import {
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
+import { DEFAULT_MARKET } from "~/utils/constants";
+
 export const navItems = [
   {
-    href: "/berpetuals",
+    href: `/berpetuals/${DEFAULT_MARKET}`,
     title: "Berpetuals",
   },
   {

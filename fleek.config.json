@@ -1,0 +1,9 @@
+{
+  "sites": [
+    {
+      "slug": "many-rose-broad",
+      "distDir": "apps/perp/out",
+      "buildCommand": "pnpm run build:perp"
+    }
+  ]
+}

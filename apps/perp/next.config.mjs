@@ -1,4 +1,5 @@
 import { withSentryConfig } from "@sentry/nextjs";
+
 import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
@@ -21,6 +22,7 @@ const config = {
     return config;
   },
   images: {
+    unoptimized: process.env.NEXT_PUBLIC_HOST === "ipfs" ? true : undefined,
     remotePatterns: [
       {
         protocol: "https",
@@ -35,6 +37,8 @@ const config = {
       "assets.coingecko.com",
     ],
   },
+  trailingSlash: true,
+  output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
 };
 
 export default withSentryConfig(
