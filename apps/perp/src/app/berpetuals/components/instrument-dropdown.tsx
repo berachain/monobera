@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { formatUsd } from "@bera/berajs";
+import { usePathname, useRouter } from "next/navigation";
+import { formatUsd, formatter } from "@bera/berajs";
 import { perpsName } from "@bera/config";
-import { SearchInput, getBannerCount } from "@bera/shared-ui";
+import { SimpleTable, getBannerCount, useBaseTable } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import {
   DropdownMenu,
@@ -15,8 +15,14 @@ import {
 } from "@bera/ui/dropdown-menu";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
+import { ColumnDef } from "@tanstack/react-table";
 
+import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
+import {
+  MarketPrice,
+  MarketPriceChange,
+} from "~/app/markets/components/market-table-column";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import { type IMarket } from "~/types/market";
 
@@ -27,19 +33,19 @@ interface InstrumentProps {
 }
 
 const DYNAMIC_DROPDOWN_MOBILE_HEIGHTS: { [key: number]: string } = {
-  0: "h-[calc(100vh-256px)]",
-  1: "h-[calc(100vh-304px)]",
-  2: "h-[calc(100vh-352px)]",
-  3: "h-[calc(100vh-400px)]",
-  4: "h-[calc(100vh-448px)]",
+  0: "max-h-[calc(100vh-256px)]",
+  1: "max-h-[calc(100vh-304px)]",
+  2: "max-h-[calc(100vh-352px)]",
+  3: "max-h-[calc(100vh-400px)]",
+  4: "max-h-[calc(100vh-448px)]",
 };
 
 const DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS: { [key: number]: string } = {
-  0: "lg:h-[calc(100vh-194px)]",
-  1: "lg:h-[calc(100vh-242px)]",
-  2: "lg:h-[calc(100vh-290px)]",
-  3: "lg:h-[calc(100vh-338px)]",
-  4: "lg:h-[calc(100vh-386px)]",
+  0: "lg:max-h-[calc(100vh-194px)]",
+  1: "lg:max-h-[calc(100vh-242px)]",
+  2: "lg:max-h-[calc(100vh-290px)]",
+  3: "lg:max-h-[calc(100vh-338px)]",
+  4: "lg:max-h-[calc(100vh-386px)]",
 };
 
 const MarketPriceOverview = ({
@@ -83,46 +89,154 @@ const MarketPriceOverview = ({
   );
 };
 
+export const marketTableColumn: ColumnDef<IMarket>[] = [
+  {
+    header: "Market",
+    cell: ({ row }) => (
+      <div>
+        <div className="flex items-center gap-2">
+          <Image
+            src={row.original?.imageUri ?? ""}
+            alt={"selectedMarket"}
+            width={24}
+            height={24}
+            className="rounded-full"
+          />{" "}
+          <div>
+            <div className="mt-1 text-sm font-semibold leading-tight text-foreground">
+              {row.original?.name}
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+    size: 150,
+    minSize: 130,
+    accessorKey: "market",
+    enableSorting: false,
+  },
+  {
+    header: "Price",
+    cell: ({ row }) => <MarketPrice pairIndex={row.original.pair_index} />,
+    accessorKey: "index_price",
+    enableSorting: false,
+    size: 150,
+    minSize: 130,
+  },
+  {
+    header: "24H",
+    cell: ({ row }) => {
+      return (
+        <MarketPriceChange
+          showAbsolutePrice={false}
+          pairIndex={row.original.pair_index}
+          dailyHistoricPrice={Number(row.original.dailyHistoricPrice)}
+        />
+      );
+    },
+    accessorKey: "dailyHistoricPrice",
+    enableSorting: false,
+    size: 150,
+    minSize: 130,
+  },
+  {
+    header: "Open Interest",
+    cell: ({ row }) => {
+      const formattedOIL = formatFromBaseUnit(
+        row.original?.open_interest?.oi_long ?? "0",
+        18,
+      ).toString(10);
+
+      const formattedOIS = formatFromBaseUnit(
+        row.original?.open_interest?.oi_short ?? "0",
+        18,
+      ).toString(10);
+
+      return (
+        <div>
+          <div className="text-sm font-medium ">
+            ${formatter.format(Number(formattedOIL) + Number(formattedOIS))}
+          </div>
+        </div>
+      );
+    },
+    accessorKey: "open_interest",
+    enableSorting: false,
+    size: 150,
+    minSize: 130,
+  },
+  {
+    header: "Volume",
+    cell: ({ row }) => (
+      <div className=" pr-4 font-medium">
+        ${formatter.format(row.original.dailyVolume ?? 0)}
+      </div>
+    ),
+    accessorKey: "dailyVolume",
+    enableSorting: false,
+    size: 150,
+    minSize: 130,
+  },
+];
+
 export function InstrumentDropdown({
   markets,
   selectedMarket,
   priceChange,
 }: InstrumentProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const pathName = usePathname();
+  const router = useRouter();
   const activeBanners = getBannerCount(perpsName, pathName);
+
+  const marketsWithHistoricPrice = useMemo(() => {
+    return markets?.map((market) => {
+      const historicPrice = priceChange[Number(market.pair_index)];
+      return {
+        ...market,
+        dailyHistoricPrice: historicPrice,
+      };
+    });
+  }, [markets, priceChange]);
+
+  const table = useBaseTable({
+    data: marketsWithHistoricPrice,
+    columns: marketTableColumn,
+  });
+
+  const handleRowClick = (row: any) => {
+    router.push(`/berpetuals/${row.original.name}`);
+  };
 
   return (
     <DropdownMenu
       onOpenChange={(open) => {
         setDropdownOpen(open);
-        setSearchValue("");
       }}
     >
+      {dropdownOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-background bg-opacity-75 blur-sm"
+          onClick={() => setDropdownOpen(false)}
+        />
+      )}
       <DropdownMenuTrigger
         className={cn(
-          "flex h-[63px] w-full cursor-pointer items-center justify-between rounded-md px-8 py-4 hover:bg-muted",
+          "relative z-50 flex h-[63px] w-full cursor-pointer items-center justify-between rounded-md px-8 py-4 hover:bg-muted",
           dropdownOpen && "bg-muted",
         )}
       >
         <div className="flex items-center gap-2 font-semibold leading-7">
-          {dropdownOpen ? (
-            <span>Choose Market</span>
-          ) : (
-            <>
-              <Image
-                src={selectedMarket?.imageUri ?? ""}
-                alt={"selectedMarket"}
-                width={24}
-                height={24}
-                className="rounded-full"
-              />
-              {selectedMarket?.name}
-            </>
-          )}
+          <Image
+            src={selectedMarket?.imageUri ?? ""}
+            alt={"selectedMarket"}
+            width={24}
+            height={24}
+            className="rounded-full"
+          />
+          {selectedMarket?.name}
         </div>
-        <div className="text-xs font-medium text-muted-foreground select-none">
+        <div className="select-none text-xs font-medium text-muted-foreground">
           {!dropdownOpen ? (
             <span className="select-none">
               All Markets <Icons.chevronDown className="inline-block h-3 w-3" />
@@ -134,53 +248,17 @@ export function InstrumentDropdown({
           )}
         </div>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent
-        className={`mx-2 my-1 flex w-[calc(100vw-16px)] flex-col rounded-md border border-border bg-background p-0 lg:w-[400px] ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
+        className={`mx-2 my-1 p-0  ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
       >
-        <div className="w-full bg-muted px-4 py-2 ">
-          <SearchInput
-            className="w-full border-none bg-muted"
-            placeholder="Search Markets"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-          />
-        </div>
-        <div className="flex w-full flex-col gap-1 overflow-y-auto border-t border-border pt-1">
-          {[...markets].reduce<React.ReactNode[]>((acc, market, index) => {
-            if (market.name.toLowerCase().includes(searchValue.toLowerCase())) {
-              const link = (
-                <Link
-                  href={`/berpetuals/${market.name}`}
-                  key={market.name}
-                  className="px-1 pb-1 shadow-[0_24px_3px_-24px_rgba(255,255,255,0.3)]"
-                >
-                  <div
-                    key={index}
-                    onChange={(e) => e.preventDefault()}
-                    className="flex h-[60px] w-full  flex-row items-center justify-between px-4 hover:bg-muted"
-                  >
-                    <div className="flex items-center gap-2 font-medium">
-                      <Image
-                        src={market.imageUri ?? ""}
-                        alt={"selectedMarket"}
-                        width={24}
-                        height={24}
-                        className="rounded-full"
-                      />
-                      <span>{market.name}</span>
-                    </div>
-                    <MarketPriceOverview
-                      market={market}
-                      priceChange={priceChange}
-                    />
-                  </div>
-                </Link>
-              );
-              acc.push(link);
-            }
-            return acc;
-          }, [])}
-        </div>
+        <SimpleTable
+          table={table}
+          flexTable
+          mutedBackgroundOnHead={false}
+          onRowClick={handleRowClick}
+          showToolbar={false}
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

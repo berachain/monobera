@@ -7,12 +7,12 @@ import type { ColumnDef } from "@tanstack/react-table";
 import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { formatBorrowFee } from "~/utils/formatBorrowFee";
 import { calculatePercentDifference } from "~/utils/percentDifference";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
-import { formatBorrowFee } from "~/utils/formatBorrowFee";
 
-const MarketPrice = ({ pairIndex }: { pairIndex: string }) => {
+export const MarketPrice = ({ pairIndex }: { pairIndex: string }) => {
   const { marketPrices } = usePollPrices();
   const price = marketPrices[pairIndex ?? ""] ?? "0";
 
@@ -28,12 +28,14 @@ const MarketPrice = ({ pairIndex }: { pairIndex: string }) => {
   );
 };
 
-const Change = ({
+export const MarketPriceChange = ({
   pairIndex,
   dailyHistoricPrice,
+  showAbsolutePrice = true,
 }: {
   pairIndex: string;
   dailyHistoricPrice: number;
+  showAbsolutePrice?: boolean;
 }) => {
   const { marketPrices } = usePollPrices();
   const price = marketPrices[pairIndex ?? ""] ?? "0";
@@ -52,7 +54,7 @@ const Change = ({
   }, [dailyHistoricPrice, price]);
 
   return (
-    <div className="flex w-[88px] flex-col gap-1">
+    <div className={cn("flex flex-col gap-1", showAbsolutePrice && "w-[80px]")}>
       <div
         className={cn(
           "text-sm font-semibold leading-tight",
@@ -69,13 +71,17 @@ const Change = ({
           <Skeleton className="h-[16px] w-[50px]" />
         )}
       </div>
-      <div className="text-xs font-medium leading-tight text-muted-foreground">
-        {price !== "0" ? (
-          <span>{!difference.isNaN() ? formatUsd(priceDifference) : "$0"}</span>
-        ) : (
-          <Skeleton className="h-[16px] w-[80px]" />
-        )}
-      </div>
+      {showAbsolutePrice && (
+        <div className="text-xs font-medium leading-tight text-muted-foreground">
+          {price !== "0" ? (
+            <span>
+              {!difference.isNaN() ? formatUsd(priceDifference) : "$0"}
+            </span>
+          ) : (
+            <Skeleton className="h-[16px] w-[80px]" />
+          )}
+        </div>
+      )}
     </div>
   );
 };
@@ -119,7 +125,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     header: "24h Change",
     cell: ({ row }) => {
       return (
-        <Change
+        <MarketPriceChange
           pairIndex={row.original.pair_index}
           dailyHistoricPrice={Number(row.original.dailyHistoricPrice)}
         />

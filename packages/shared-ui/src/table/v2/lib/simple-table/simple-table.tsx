@@ -22,6 +22,7 @@ export type SimpleTableProps<TData> = TableBodyProps<TData> & {
   toolbarContent?: React.ReactNode;
   showToolbar?: boolean;
   showSelection?: boolean;
+  mutedBackgroundOnHead?: boolean;
 };
 
 export function SimpleTable<TData>({
@@ -34,6 +35,7 @@ export function SimpleTable<TData>({
   toolbarContent,
   showToolbar = true,
   showSelection = true,
+  mutedBackgroundOnHead = true,
   onRowClick,
 }: SimpleTableProps<TData>) {
   const minWidth = flexTable ? table.getTotalSize() : "auto";
@@ -62,6 +64,7 @@ export function SimpleTable<TData>({
           style={{ minWidth }}
           flexTable={flexTable}
           tableBodyRef={tableBodyRef}
+          backgroundColor={mutedBackgroundOnHead ? "muted" : "none"}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableHeaderGroup key={headerGroup.id} flexTable={flexTable}>
