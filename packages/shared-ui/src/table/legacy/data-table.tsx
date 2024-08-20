@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { cn } from "@bera/ui";
 import { Checkbox } from "@bera/ui/checkbox";
 import _ from "lodash";
+import { Skeleton } from "@bera/ui/skeleton"; // Added this import
 
 import "../../types/data-table.d.ts";
 import {
@@ -34,12 +35,15 @@ import {
 
 import { usePrevious } from "../../hooks";
 import { Spinner } from "../../spinner";
+import { PaginationWithLinks } from "../../pagination-with-links";
+import { useRouter, usePathname, useSearchParams } from "next/navigation.js";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: TData) => void;
   onCustomSortingChange?: (sorting: any) => void;
+  onCustomPaginationChange?: (pagination: any) => void;
   className?: string;
   title?: string;
   embedded?: boolean;
@@ -53,6 +57,10 @@ interface DataTableProps<TData, TValue> {
   customEmptyDataState?: React.ReactElement;
   stickyHeaders?: boolean;
   additionalActions?: React.ReactElement[];
+  totalCount?: number;
+  pageSize?: number;
+  page?: number;
+  useQueryParamSearch?: boolean;
 }
 
 interface RowSelectHeaderProps<TData, TValue>
@@ -122,6 +130,43 @@ const rowSelectColumn = {
   enableResizing: false,
 };
 
+// Added this new component
+export function DataTableLoading({
+  columns,
+  rowCount = 10,
+}: { columns: number; rowCount?: number }) {
+  return (
+    <div className="w-full">
+      <div>
+        <div className="flex flex-row justify-start space-x-4 py-4">
+          {Array(columns)
+            .fill(0)
+            .map((_, index) => (
+              <div className="flex w-full">
+                <Skeleton className="h-6 w-[100px]" />
+              </div>
+            ))}
+        </div>
+        {Array(rowCount)
+          .fill(0)
+          .map((_, rowIndex) => (
+            <div key={rowIndex} className="flex items-center space-x-4 py-4">
+              {Array(columns)
+                .fill(0)
+                .map((_, colIndex) => (
+                  <Skeleton key={colIndex} className="h-6 w-full" />
+                ))}
+            </div>
+          ))}
+      </div>
+      <div className="flex items-center justify-between space-x-4 py-4">
+        <Skeleton className="h-8 w-[150px]" />
+        <Skeleton className="h-8 w-[200px]" />
+      </div>
+    </div>
+  );
+}
+
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -134,12 +179,14 @@ export function DataTable<TData, TValue>({
   fetchData,
   stateChangeFetchInclusions = defaultStateChangeFetchInclusions,
   loading = false,
-  validating = false,
   additionalTableProps,
   customEmptyDataState,
   onCustomSortingChange,
   stickyHeaders,
-  additionalActions,
+  page,
+  pageSize,
+  totalCount,
+  useQueryParamSearch = false,
 }: DataTableProps<TData, TValue>) {
   const initialState = {
     columnFilters: [],
@@ -189,10 +236,15 @@ export function DataTable<TData, TValue>({
     return columns;
   }, [columns, enableSelection]);
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const table = useReactTable<TData>({
     state: mergedState,
     data,
     columns: tableColumns,
+    manualPagination: true,
     initialState: initialState,
     enableRowSelection: true,
     onStateChange: setState,
@@ -208,9 +260,25 @@ export function DataTable<TData, TValue>({
     meta: {
       ...additionalTableProps?.meta,
     },
-    ...(onCustomSortingChange
+    ...(onCustomSortingChange || useQueryParamSearch
       ? {
           onSortingChange: (value: any) => {
+            if (useQueryParamSearch) {
+              const sort = value()[0].id;
+              const desc = value()[0].desc === true ? "desc" : "asc";
+              const sortKey = "sort";
+              const descKey = "direction";
+              const newSearchParams = new URLSearchParams(
+                searchParams || undefined,
+              );
+              newSearchParams.set(sortKey, String(sort));
+              newSearchParams.set(descKey, String(desc));
+
+              router.push(`${pathname}?${newSearchParams.toString()}`, {
+                scroll: false,
+              });
+            } else {
+            }
             onCustomSortingChange?.(value());
           },
         }
@@ -296,63 +364,13 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {enablePagination && (
-        <div className="flex p-2 text-primary-foreground">
-          <div className="flex justify-center overflow-hidden">
-            {additionalActions?.map((action, index) => (
-              <div key={index} className="inline-flex gap-2.5">
-                {action}
-              </div>
-            ))}
-          </div>
-          <div className="flex-shink-0 ml-auto flex">
-            {validating && (
-              <p className="self-center px-4">
-                <Spinner size={16} color="white" />
-              </p>
-            )}
-            <div className="flex h-9 items-center gap-1 py-3">
-              <button
-                type="button"
-                onClick={() => table.setPageIndex(0)}
-                disabled={!table.getCanPreviousPage()}
-                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
-              >
-                First
-              </button>
-              <button
-                type="button"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
-              >
-                «
-              </button>
-
-              <div className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50">
-                {`${table.getState().pagination.pageIndex + 1} of ${
-                  table.getPageCount() || 1
-                }`}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
-              >
-                »
-              </button>
-
-              <button
-                type="button"
-                disabled={!table.getCanNextPage()}
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                className="select-none rounded-xs border border-border px-2 py-1 text-sm leading-tight text-foreground hover:bg-muted disabled:opacity-50"
-              >
-                Last
-              </button>
-            </div>
-          </div>
+        <div className="w-full mt-4">
+          <PaginationWithLinks
+            totalCount={totalCount ?? 0}
+            pageSize={pageSize ?? 10}
+            page={page ?? 0}
+            pageSizeSelectOptions={{ pageSizeOptions: [10, 25, 50, 100] }}
+          />
         </div>
       )}
     </div>

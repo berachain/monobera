@@ -175,8 +175,10 @@ export function mapPoolToPoolV2(pool: any): PoolV2 {
     feeRate: fee,
     baseTokens: pool.baseAmount,
     quoteTokens: pool.quoteAmount,
-    volume24h: pool.latestPoolDayData.volumeUsd, // Assuming volume24h needs to be calculated or fetched from another source
-    fees24h: parseFloat(pool.latestPoolDayData.feesUsd), // Assuming fees24h needs to be calculated or fetched from another source
+    // volume24h: pool.latestPoolDayData.volumeUsd, // Assuming volume24h needs to be calculated or fetched from another source
+    volume24h: 0, // Assuming volume24h needs to be calculated or fetched from another source
+    fees24h: 0, // Assuming fees24h needs to be calculated or fetched from another source
+    // fees24h: parseFloat(pool.latestPoolDayData.feesUsd), // Assuming fees24h needs to be calculated or fetched from another source
     totalApy: pool.bgtApy, // Assuming totalApy is initially equal to bgtApy
     bgtApy: pool.bgtApy,
     shareAddress: pool.shareAddress.address,

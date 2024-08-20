@@ -393,13 +393,15 @@ export default function CreatePageContent() {
               </span>
             </Card>
             <Card
-              onClick={() => setPoolId(POOLID.STABLE)}
+              // onClick={() => setPoolId(POOLID.STABLE)}
               className={cn(
-                "p-4 flex flex-col gap-0 w-full border-2",
+                "p-4 flex flex-col gap-0 w-full border-2 opacity-50 cursor-not-allowed",
                 poolId === POOLID.STABLE && "border-sky-600",
               )}
             >
-              <span className="text-lg font-semibold">Stable</span>
+              <span className="text-lg font-semibold">
+                Stable (coming soon)
+              </span>
               <span className="text-sm text-muted-foreground mt-[-4px]">
                 Recommended for stable pairs
               </span>

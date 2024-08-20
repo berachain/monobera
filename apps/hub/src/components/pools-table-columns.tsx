@@ -23,38 +23,50 @@ import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { getPoolAddLiquidityUrl } from "~/app/pools/fetchPools";
-import { beraTokenAddress, bgtUrl } from "@bera/config";
+import { beraTokenAddress } from "@bera/config";
 import { Address } from "viem";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   return (
-    <div className="flex flex-col items-start gap-2">
-      <span className="w-[180px] truncate text-left">{pool?.poolName}</span>
-      <TokenIconList tokenList={pool?.tokens} size="lg" />
-      <div className="flex flex-row items-center gap-1">
-        <Badge
-          variant={"secondary"}
-          className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
-        >
-          <span>{Number(pool?.feeRate).toFixed(2)}%</span>
-        </Badge>
-        {pool.poolIdx === POOLID.STABLE && (
+    <div className="flex flex-row items-start gap-2">
+      <TokenIconList
+        tokenList={pool?.tokens}
+        size="xl"
+        className="self-center"
+      />
+      <div className="flex flex-col items-start justify-start gap-1">
+        <div className="flex flex-row items-center gap-1 justify-start">
+          <span className="w-fit max-w-[180px] truncate text-left font-semibold text-sm">
+            {pool?.poolName}
+          </span>
+          {pool.bgtApy !== "0" && (
+            <Icons.bgt className="h-6 w-6 p-1 border border-border rounded-sm self-start" />
+          )}
+        </div>
+        <div className="flex flex-row gap-1">
           <Badge
             variant={"secondary"}
             className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
           >
-            <span>Stable</span>
+            <span>{Number(pool?.feeRate).toFixed(2)}%</span>
           </Badge>
-        )}
-        {pool.isDeposited && (
-          <Badge
-            variant="success"
-            className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
-          >
-            <span>Provided Liquidity</span>
-          </Badge>
-        )}
+          {pool.poolIdx === POOLID.STABLE && (
+            <Badge
+              variant={"secondary"}
+              className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
+            >
+              <span>Stable</span>
+            </Badge>
+          )}
+          {pool.isDeposited && (
+            <Badge
+              variant="success"
+              className="border-none bg-success px-2 py-1 text-[10px] leading-[10px] "
+            >
+              <span>Provided Liquidity</span>
+            </Badge>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -67,7 +79,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       <DataTableColumnHeader
         column={column}
         className="flex items-center gap-1"
-        tooltip={"Base and Quote assets in the liquidity pool."}
+        // tooltip={"Base and Quote assets in the liquidity pool."}
         title={"Pool Composition"}
       />
     ),
@@ -80,7 +92,7 @@ export const columns: ColumnDef<PoolV2>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        tooltip="Total amount of assets currently locked in the Pool, valued in HONEY"
+        // tooltip="Total amount of assets currently locked in the Pool, valued in HONEY"
         title="TVL"
         className="min-w-[95px]"
       />
@@ -105,7 +117,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       <DataTableColumnHeader
         column={column}
         title="Fees (24H)"
-        tooltip="Total trading fees this pool has generated in the last 24 hours, valued in HONEY"
+        // tooltip="Total trading fees this pool has generated in the last 24 hours, valued in HONEY"
         className="whitespace-nowrap"
       />
     ),
@@ -127,7 +139,7 @@ export const columns: ColumnDef<PoolV2>[] = [
       <DataTableColumnHeader
         column={column}
         title="Volume (24H)"
-        tooltip="Total trading or transaction volume in the last 24 hours"
+        // tooltip="Total trading or transaction volume in the last 24 hours"
         className="whitespace-nowrap"
       />
     ),
@@ -155,7 +167,13 @@ export const columns: ColumnDef<PoolV2>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center justify-start text-sm text-warning-foreground">
+        <div
+          className={`flex items-center justify-start text-sm ${
+            row.original.bgtApy === "0"
+              ? "text-muted-foreground"
+              : "text-warning-foreground"
+          }`}
+        >
           <FormattedNumber
             value={row.original.bgtApy ?? 0}
             compact
@@ -172,27 +190,27 @@ export const columns: ColumnDef<PoolV2>[] = [
       return 0;
     },
   },
-  {
-    accessorKey: "btns",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Actions"
-        className="text-center"
-      />
-    ),
-    cell: ({ row }) => (
-      <Link
-        href={getPoolAddLiquidityUrl(row.original)}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Button variant={"outline"} className="flex items-center gap-1">
-          <Icons.add className="h-5 w-5" /> Add
-        </Button>
-      </Link>
-    ),
-    enableSorting: false,
-  },
+  // {
+  //   accessorKey: "btns",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="Actions"
+  //       className="text-center"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Link
+  //       href={getPoolAddLiquidityUrl(row.original)}
+  //       onClick={(e) => e.stopPropagation()}
+  //     >
+  //       <Button variant={"outline"} className="flex items-center gap-1">
+  //         <Icons.add className="h-5 w-5" /> Add
+  //       </Button>
+  //     </Link>
+  //   ),
+  //   enableSorting: false,
+  // },
 ];
 
 export const getUserPoolColumns = (
@@ -209,24 +227,7 @@ export const getUserPoolColumns = (
           title={"Pool Composition"}
         />
       ),
-      cell: ({ row }) => (
-        <div className="flex flex-col items-start gap-2">
-          <span className="w-[180px] truncate text-left">
-            {row.original?.poolName}
-          </span>
-          <TokenIconList
-            tokenList={row.original?.tokens}
-            size="lg"
-            key={row.original.id}
-          />
-          <Badge
-            variant={"secondary"}
-            className="border-none px-2 py-1 text-[10px] leading-[10px] text-foreground"
-          >
-            {Number(row.original?.feeRate).toFixed(2)}%
-          </Badge>
-        </div>
-      ),
+      cell: ({ row }) => <PoolSummary pool={row.original} />,
       enableSorting: false,
       enableHiding: false,
     },

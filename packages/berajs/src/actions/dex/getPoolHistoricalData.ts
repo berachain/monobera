@@ -1,4 +1,4 @@
-import { GetPoolDayDatas, dexClient } from "@bera/graphql";
+import { GetPoolHistory, dexClient } from "@bera/graphql";
 import { BeraConfig } from "~/types";
 
 export type PoolDayData = {
@@ -25,11 +25,14 @@ export const getPoolHistoricalData = async ({
   if (!poolId) return undefined;
 
   const res = await dexClient.query({
-    query: GetPoolDayDatas,
+    query: GetPoolHistory,
     variables: {
       poolId: poolId.toLowerCase(),
     },
   });
 
-  return res.data.poolDayDatas;
+  return res.data.poolUsages.map((dayData: any) => ({
+    ...dayData,
+    date: Number(dayData.date) / 1000000,
+  }));
 };
