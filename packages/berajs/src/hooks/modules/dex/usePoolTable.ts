@@ -87,8 +87,6 @@ export const usePoolTable = (sorting: any, page: number, pageSize: number) => {
 
   const [processedData, setProcessedData] = useState<PoolV2[]>([]);
 
-  console.log(data);
-
   useEffect(() => {
     if (account && publicClient && data) {
       const validData = data.filter((item: PoolV2) => item.base && item.quote);

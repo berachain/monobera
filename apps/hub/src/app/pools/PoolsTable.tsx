@@ -2,9 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { usePoolTable, useTotalPoolCount } from "@bera/berajs";
-import { DataTable, NotFoundBear, SearchInput } from "@bera/shared-ui";
+import {
+  DataTable,
+  NotFoundBear,
+  SearchInput,
+  SimpleTable,
+  useBaseTable,
+} from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -13,24 +19,40 @@ import MyPool from "./components/pools/my-pool";
 import { getPoolUrl } from "./fetchPools";
 import { Icons } from "@bera/ui/icons";
 import { DataTableLoading } from "@bera/shared-ui/src/table/legacy/data-table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@bera/ui/select";
 
 export const PoolSearch = ({
   poolType,
 }: {
   poolType: "allPools" | "userPools";
 }) => {
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
   const pageSize = searchParams.get("pageSize");
   const sort = searchParams.get("sort");
   const direction = searchParams.get("direction");
 
-  const sorting = [
+  const [sorting, setSorting] = useState([
     {
       id: sort === null ? "tvlUsd" : sort,
       desc: direction === null ? true : direction === "desc" ? true : false,
     },
-  ];
+  ]);
+
+  useEffect(() => {}, [sorting]);
+
+  // const handleSortingChange = (newSorting: any) => {
+  //   if (newSorting !== sorting) {
+
+  //   }
+  // };
 
   const { search, keyword, setKeyword, setSearch, data, isLoadingMore } =
     usePoolTable(
@@ -61,6 +83,19 @@ export const PoolSearch = ({
     () => isLoadingMore && (data.length === 0 || !data),
     [isLoadingMore, data],
   );
+
+  const table = useBaseTable({
+    data,
+    columns,
+    additionalTableProps: {
+      state: { sorting },
+      initialState: { sorting },
+      manualPagination: true,
+      onSortingChange: (sorting) => setSorting(sorting),
+    },
+    enablePagination: true,
+    enableRowSelection: false,
+  });
 
   return (
     <div
@@ -136,18 +171,24 @@ export const PoolSearch = ({
             </div>
           ) : data?.length || data ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
-              <DataTable
-                key={data.length}
-                data={data ?? []}
-                columns={columns}
-                className="min-w-[1000px]"
+              <SimpleTable
+                table={table}
+                flexTable
                 onRowClick={(row: any) => router.push(getPoolUrl(row.original))}
-                additionalTableProps={{ state: { sorting } }}
-                enablePagination
-                totalCount={parseFloat(poolCount ?? "0")}
-                page={parseFloat(page ?? "1")}
-                pageSize={parseFloat(pageSize ?? "10")}
-                useQueryParamSearch
+                wrapperClassName="bg-transparent border-none"
+                showToolbar={true}
+                // toolbarContent={
+                //   <Select>
+                //     <SelectTrigger>
+                //       <SelectValue placeholder="Select a pool" />
+                //       <SelectContent>
+                //         <SelectItem value="tvlUsd">
+                //           TVL
+                //         </SelectItem>
+                //       </SelectContent>
+                //     </SelectTrigger>
+                //   </Select>
+                // }
               />
             </div>
           ) : (

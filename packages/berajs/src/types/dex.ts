@@ -66,7 +66,7 @@ export interface PoolV2 {
   volume24h: number;
   fees24h: number;
   totalApy: number;
-  bgtApy: string;
+  wtv: string;
   shareAddress: string;
   vaultAddress?: string;
   isDeposited?: boolean;

@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { notFound, useSearchParams } from "next/navigation";
 import {
   Token,
   truncateHash,
   useBeraJs,
+  useBgtInflation,
   usePoolHistoricalData,
   usePoolRecentProvisions,
   usePoolRecentSwaps,
@@ -49,6 +51,7 @@ import {
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 import { useSelectedPool } from "~/hooks/useSelectedPool";
+import { calculateApy } from "~/utils/calculateApy";
 
 const getTokenDisplay = (
   event: ISwapOrProvision | ISwaps | IProvision,
@@ -376,6 +379,8 @@ export default function PoolPageContent({
   const poolHistory = poolHistoryData;
   const timeCreated = pool?.timeCreate;
 
+  const { data: bgtInflation } = useBgtInflation();
+
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader
@@ -397,7 +402,10 @@ export default function PoolPageContent({
               <Skeleton className="h-4 w-8" />
             ) : (
               <FormattedNumber
-                value={pool?.bgtApy ? parseFloat(pool.bgtApy) / 100 : 0}
+                value={calculateApy(
+                  pool?.wtv ?? "0",
+                  bgtInflation?.usdPerYear ?? 0,
+                )}
                 colored
                 percent
               />
@@ -448,7 +456,6 @@ export default function PoolPageContent({
         <BgtStationBanner
           receiptTokenAddress={pool?.shareAddress as Address}
           vaultAddress={pool?.vaultAddress as Address}
-          isBex={true}
         />
       )}
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">
@@ -499,7 +506,10 @@ export default function PoolPageContent({
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold text-warning-foreground">
                 <FormattedNumber
-                  value={pool?.bgtApy ? parseFloat(pool.bgtApy) / 100 : 0}
+                  value={calculateApy(
+                    pool?.wtv ?? "0",
+                    bgtInflation?.usdPerYear ?? 0,
+                  )}
                   colored
                   percent
                 />
