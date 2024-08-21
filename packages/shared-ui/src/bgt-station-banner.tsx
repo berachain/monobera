@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useGaugeAddress } from "@bera/berajs";
 import { bgtUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
