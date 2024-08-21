@@ -93,6 +93,7 @@ export const ApproveButton = ({
       )}
       <Button
         className="w-full"
+        variant={amount ? "outline" : "primary"}
         disabled={!token || isLoading || isSubmitting || disabled}
         onClick={() => {
           write({

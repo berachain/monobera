@@ -1,11 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { ActionButton, Tooltip, usePrevious } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@bera/ui/accordion";
 import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 import BigNumber from "bignumber.js";
 
-import { INITIAL_GAIN, MAX_GAIN, MAX_STOP_LOSS } from "~/utils/constants";
+import { INITIAL_TL_PERC, MAX_SL_PERC, MAX_TP_PERC } from "~/utils/constants";
 import { getPriceFromPercent } from "~/utils/getPriceFromPercent";
 import {
   TPSL_LOSS_TOOLTIP_TEXT,
@@ -47,7 +53,7 @@ const InputSelect = ({
     <div className="flex w-full gap-1">
       <Input
         className="h-8 w-full min-w-[60px] rounded-sm bg-background text-xs sm:min-w-[96px]"
-        placeholder="Amount"
+        placeholder="Price"
         type={"number"}
         min={0}
         value={value}
@@ -63,10 +69,11 @@ const InputSelect = ({
         }
       />
       {bracket.map((amount: string, index: number) => (
-        <div
+        <button
+          type="button"
           key={index}
           className={cn(
-            "inline-flex h-8 w-full cursor-pointer items-center justify-center rounded-sm px-2 text-xs font-medium",
+            "inline-flex h-8 w-full cursor-pointer items-center justify-center rounded-sm border border-border px-2 text-xs font-medium",
             BigNumber(amount).eq(percent)
               ? `bg-${variant === "tp" ? "success" : "destructive"} text-${
                   variant === "tp" ? "success" : "destructive"
@@ -82,12 +89,35 @@ const InputSelect = ({
           }}
         >
           {amount === "" ? "None" : `${amount}%`}
-        </div>
+        </button>
       ))}
     </div>
   );
 };
 
+const _TPSLAccordionWrapper = ({
+  children,
+  renderAccordion,
+}: {
+  children: React.ReactNode;
+  renderAccordion: boolean;
+}) => {
+  return renderAccordion ? (
+    <>
+      <div className="hidden">{children}</div>
+      <Accordion type="single" collapsible className="mt-4">
+        <AccordionItem variant="outlined" value="tp-sl-lvg">
+          <AccordionTrigger variant="outlined">
+            Take Profit / Stop Loss / Leverage
+          </AccordionTrigger>
+          <AccordionContent>{children}</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </>
+  ) : (
+    children
+  );
+};
 export function TPSL({
   tpslOnChange,
   isUpdate,
@@ -102,7 +132,9 @@ export function TPSL({
   onTpChangeSubmit,
   onSlChangeSubmit,
   className,
-}: {
+  wrapInAccordion,
+  children,
+}: PropsWithChildren<{
   tpslOnChange: (value: string, key: string) => void;
   isUpdate?: boolean;
   formattedPrice?: string;
@@ -116,13 +148,19 @@ export function TPSL({
   onTpChangeSubmit?: () => void;
   onSlChangeSubmit?: () => void;
   className?: string;
-}) {
+  wrapInAccordion?: boolean;
+}>) {
   const [tpslPercent, setTpslPercent] = useState<{
     tpPercent: string;
     slPercent: string;
     stickyTp: boolean;
     stickySl: boolean;
-  }>({ tpPercent: "", slPercent: "", stickyTp: false, stickySl: false });
+  }>({
+    tpPercent: INITIAL_TL_PERC,
+    slPercent: "",
+    stickyTp: false,
+    stickySl: false,
+  });
   const [initTpState, setInitTpState] = useState(tp === "");
 
   const previousPrice = usePrevious(formattedPrice);
@@ -260,14 +298,14 @@ export function TPSL({
         if (initTpState && long && !isUpdate) {
           const newPriceBN = getPriceFromPercent(
             long,
-            INITIAL_GAIN,
+            INITIAL_TL_PERC,
             leverage,
             formattedPrice,
           );
           tpslOnChange(newPriceBN.toString(10), "tp");
           setTpslPercent((prev) => ({
             ...prev,
-            tpPercent: INITIAL_GAIN,
+            tpPercent: INITIAL_TL_PERC,
             stickyTp: true,
           }));
           setInitTpState(false);
@@ -375,7 +413,9 @@ export function TPSL({
 
   const sanitizedTpPercent =
     tpslPercent.tpPercent &&
-    `${BigNumber.min(BigNumber.max(tpslPercent.tpPercent, 0), MAX_GAIN).dp(2)}`;
+    `${BigNumber.min(BigNumber.max(tpslPercent.tpPercent, 0), MAX_TP_PERC).dp(
+      2,
+    )}`;
 
   const sanitizedSlPercent =
     tpslPercent.slPercent &&
@@ -385,83 +425,88 @@ export function TPSL({
   const slPercentBN = BigNumber(tpslPercent.slPercent);
 
   return (
-    <div className={className}>
-      <div className="mb-2 flex text-xs font-medium">
-        Take Profit{"  "}
-        <span className="ml-1 flex-1 text-success-foreground">
-          {tp === "" && !tpslPercent.tpPercent
-            ? "(Unset)"
-            : `${
-                tpslPercent.tpPercent
+    <>
+      <_TPSLAccordionWrapper renderAccordion={!!wrapInAccordion}>
+        {children}
+        <div className={className}>
+          <div className="mb-2 flex text-xs font-medium">
+            Take Profit{"  "}
+            <span className="ml-1 flex-1 text-success-foreground">
+              {tp === "" && !tpslPercent.tpPercent
+                ? "(Unset)"
+                : `${
+                    tpslPercent.tpPercent
+                      ? `(${
+                          tpPercentBN.lt("0")
+                            ? "Less than "
+                            : tpPercentBN.gt(MAX_TP_PERC)
+                            ? "Greater than "
+                            : ""
+                        }${sanitizedTpPercent}%)`
+                      : ""
+                  }`}
+            </span>
+            <Tooltip text={TPSL_PROFIT_TOOLTIP_TEXT} />
+          </div>
+          <InputSelect
+            value={tp}
+            bracket={["50", "100", "300", MAX_TP_PERC]}
+            percent={tpslPercent.tpPercent ?? ""}
+            onPercentChange={handleTpPercentChange}
+            onValueChange={handleTpChange}
+            variant="tp"
+          />
+          {onTpChangeSubmit && (
+            <ActionButton>
+              <Button
+                disabled={isTpSubmitLoading}
+                onClick={() => onTpChangeSubmit?.()}
+                className="mt-4 w-full"
+                size="sm"
+              >
+                Update Take Profit
+              </Button>
+            </ActionButton>
+          )}
+          <div className="mb-2 mt-4 flex text-xs font-medium">
+            Stop Loss{" "}
+            <span className="ml-1 flex-1 text-destructive-foreground">
+              {`${
+                tpslPercent.slPercent
                   ? `(${
-                      tpPercentBN.lt("0")
+                      slPercentBN.lt(MAX_SL_PERC)
                         ? "Less than "
-                        : tpPercentBN.gt(MAX_GAIN)
-                          ? "Greater than "
-                          : ""
-                    }${sanitizedTpPercent}%)`
+                        : slPercentBN.gt(0)
+                        ? "Greater than "
+                        : ""
+                    }${sanitizedSlPercent}%)`
                   : ""
               }`}
-        </span>
-        <Tooltip text={TPSL_PROFIT_TOOLTIP_TEXT} />
-      </div>
-      <InputSelect
-        value={tp}
-        bracket={["50", "100", "300", MAX_GAIN]}
-        percent={tpslPercent.tpPercent ?? ""}
-        onPercentChange={handleTpPercentChange}
-        onValueChange={handleTpChange}
-        variant="tp"
-      />
-      {onTpChangeSubmit && (
-        <ActionButton>
-          <Button
-            disabled={isTpSubmitLoading}
-            onClick={() => onTpChangeSubmit?.()}
-            className="mt-4 w-full"
-            size="sm"
-          >
-            Update Take Profit
-          </Button>
-        </ActionButton>
-      )}
-      <div className="mb-2 mt-4 flex text-xs font-medium">
-        Stop Loss{" "}
-        <span className="ml-1 flex-1 text-destructive-foreground">
-          {`${
-            tpslPercent.slPercent
-              ? `(${
-                  slPercentBN.lt(MAX_STOP_LOSS)
-                    ? "Less than "
-                    : slPercentBN.gt(0)
-                      ? "Greater than "
-                      : ""
-                }${sanitizedSlPercent}%)`
-              : ""
-          }`}
-        </span>
-        <Tooltip text={TPSL_LOSS_TOOLTIP_TEXT} />
-      </div>
-      <InputSelect
-        value={sl}
-        bracket={["", "-25", "-50", MAX_STOP_LOSS]}
-        percent={tpslPercent.slPercent ?? ""}
-        onPercentChange={handleSlPercentChange}
-        onValueChange={handleSlChange}
-        variant="sl"
-      />
-      {onSlChangeSubmit && (
-        <ActionButton>
-          <Button
-            disabled={isSlSubmitLoading}
-            onClick={() => onSlChangeSubmit?.()}
-            className="mt-4 w-full"
-            size="sm"
-          >
-            Update Stop Loss
-          </Button>
-        </ActionButton>
-      )}
-    </div>
+            </span>
+            <Tooltip text={TPSL_LOSS_TOOLTIP_TEXT} />
+          </div>
+          <InputSelect
+            value={sl}
+            bracket={["", "-25", "-50", MAX_SL_PERC]}
+            percent={tpslPercent.slPercent ?? ""}
+            onPercentChange={handleSlPercentChange}
+            onValueChange={handleSlChange}
+            variant="sl"
+          />
+          {onSlChangeSubmit && (
+            <ActionButton>
+              <Button
+                disabled={isSlSubmitLoading}
+                onClick={() => onSlChangeSubmit?.()}
+                className="mt-4 w-full"
+                size="sm"
+              >
+                Update Stop Loss
+              </Button>
+            </ActionButton>
+          )}
+        </div>
+      </_TPSLAccordionWrapper>
+    </>
   );
 }

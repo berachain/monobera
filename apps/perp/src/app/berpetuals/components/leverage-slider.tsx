@@ -40,7 +40,7 @@ export function LeverageSlider({
           onChange={handleInputChange}
         />
       </div>
-      <div className="mt-4 flex w-full gap-4 pr-2">
+      <div className="mt-4 flex w-full gap-4 px-2">
         <Slider
           defaultValue={[defaultValue ?? 1]}
           value={[Math.floor(((defaultValue ?? 1) * 100) / maxLeverage)]}

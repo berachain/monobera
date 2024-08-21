@@ -93,8 +93,6 @@ export function SimpleTable<TData>({
         >
           {rows.length > 0 ? (
             rows.map((row) => {
-              console.log("row", row);
-
               return (
                 <TableRow
                   row={row}

@@ -5,17 +5,11 @@ import Image from "next/image";
 import { usePollWalletBalances } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
 import { type GlobalParams } from "@bera/proto/src";
-import { FormattedNumber, usePrevious } from "@bera/shared-ui";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@bera/ui/accordion";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
 
-import { MAX_GAIN, MAX_STOP_LOSS } from "~/utils/constants";
+import { MAX_SL_PERC, MAX_TP_PERC } from "~/utils/constants";
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
 import { getPriceFromPercent } from "~/utils/getPriceFromPercent";
 import { HONEY_IMG } from "~/utils/marketImages";
@@ -50,6 +44,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   );
 
   const asset = market?.name.split("-")[0] as string;
+
   const initialState: OrderType = {
     assets: asset,
     orderType: (orderType ?? "long") as "long" | "short",
@@ -63,7 +58,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     sl: "",
   };
   const [form, setForm] = useState<OrderType>(initialState);
-  const prevOrderType = usePrevious(form.orderType);
+  // const prevOrderType = usePrevious(form.orderType);
 
   useEffect(() => {
     if (orderType !== form.orderType) {
@@ -202,13 +197,13 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   useEffect(() => {
     const maxTp = getPriceFromPercent(
       form.orderType === "long",
-      MAX_GAIN,
+      MAX_TP_PERC,
       form.leverage ?? "2",
       form.optionType === "market" ? price : form.limitPrice ?? "0",
     ).toString(10);
     const maxSl = getPriceFromPercent(
       form.orderType === "long",
-      MAX_STOP_LOSS,
+      MAX_SL_PERC,
       form.leverage ?? "2",
       form.optionType === "market" ? price : form.limitPrice ?? "0",
     ).toString(10);
@@ -448,39 +443,33 @@ export function CreatePosition({ market, params }: ICreatePosition) {
               />
             )}
           </div>
-          <Accordion type="single" collapsible className="mt-4">
-            <AccordionItem variant="outlined" value="tp-sl-lvg">
-              <AccordionTrigger variant="outlined">
-                Take Profit / Stop Loss / Leverage
-              </AccordionTrigger>
-              <AccordionContent>
-                <LeverageSlider
-                  defaultValue={Number(form.leverage)}
-                  maxLeverage={Number(maxLeverage)}
-                  onValueChange={(value: string) => {
-                    setForm((prev) => ({
-                      ...prev,
-                      leverage: value,
-                    }));
-                  }}
-                />
 
-                <TPSL
-                  key={form.optionType}
-                  className="mt-4 overflow-x-scroll "
-                  leverage={form.leverage ?? "2"}
-                  formattedPrice={
-                    form.optionType === "market" ? price : form.limitPrice
-                  }
-                  long={form.orderType === "long"}
-                  tp={form.tp}
-                  liqPrice={liqPrice}
-                  sl={form.sl}
-                  tpslOnChange={handleTPSLChange}
-                />
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <TPSL
+            key={form.optionType}
+            wrapInAccordion
+            className="mt-4 overflow-x-scroll "
+            leverage={form.leverage ?? "2"}
+            formattedPrice={
+              form.optionType === "market" ? price : form.limitPrice
+            }
+            long={form.orderType === "long"}
+            tp={form.tp}
+            liqPrice={liqPrice}
+            sl={form.sl}
+            tpslOnChange={handleTPSLChange}
+          >
+            <LeverageSlider
+              defaultValue={Number(form.leverage)}
+              maxLeverage={Number(maxLeverage)}
+              onValueChange={(value: string) => {
+                setForm((prev) => ({
+                  ...prev,
+                  leverage: value,
+                }));
+              }}
+            />
+          </TPSL>
+
           <PlaceOrder
             form={form}
             error={error}
