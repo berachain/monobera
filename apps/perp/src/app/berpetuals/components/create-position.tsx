@@ -6,6 +6,12 @@ import { usePollWalletBalances } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
 import { type GlobalParams } from "@bera/proto/src";
 import { FormattedNumber, usePrevious } from "@bera/shared-ui";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@bera/ui/accordion";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
 
@@ -21,6 +27,7 @@ import type { OrderType } from "~/types/order-type";
 import { CustomizeInput } from "./customize-input";
 import { LeverageSlider } from "./leverage-slider";
 import { LongShortTab } from "./long-short-tab";
+import { OrderDetails } from "./order-details";
 import { PlaceOrder } from "./place-order";
 import { TPSL } from "./tpsl";
 
@@ -441,34 +448,48 @@ export function CreatePosition({ market, params }: ICreatePosition) {
               />
             )}
           </div>
-          <LeverageSlider
-            defaultValue={Number(form.leverage)}
-            maxLeverage={Number(maxLeverage)}
-            onValueChange={(value: string) => {
-              setForm((prev) => ({
-                ...prev,
-                leverage: value,
-              }));
-            }}
-          />
-          <TPSL
-            key={form.optionType}
-            className="my-8"
-            leverage={form.leverage ?? "2"}
-            formattedPrice={
-              form.optionType === "market" ? price : form.limitPrice
-            }
-            long={form.orderType === "long"}
-            tp={form.tp}
-            liqPrice={liqPrice}
-            sl={form.sl}
-            tpslOnChange={handleTPSLChange}
-          />
+          <Accordion type="single" collapsible>
+            <AccordionItem value="tp-sl-lvg">
+              <AccordionTrigger>
+                Take Profit / Stop Loss / Leverage
+              </AccordionTrigger>
+              <AccordionContent>
+                <LeverageSlider
+                  defaultValue={Number(form.leverage)}
+                  maxLeverage={Number(maxLeverage)}
+                  onValueChange={(value: string) => {
+                    setForm((prev) => ({
+                      ...prev,
+                      leverage: value,
+                    }));
+                  }}
+                />
+
+                <TPSL
+                  key={form.optionType}
+                  className="my-8"
+                  leverage={form.leverage ?? "2"}
+                  formattedPrice={
+                    form.optionType === "market" ? price : form.limitPrice
+                  }
+                  long={form.orderType === "long"}
+                  tp={form.tp}
+                  liqPrice={liqPrice}
+                  sl={form.sl}
+                  tpslOnChange={handleTPSLChange}
+                />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
           <PlaceOrder
             form={form}
             error={error}
             price={price}
             pairIndex={market?.pair_index ?? "0"}
+          />
+          <OrderDetails
+            form={form}
+            price={price}
             openingFee={market?.pair_fixed_fee?.open_fee_p ?? "0"}
             liqPrice={liqPrice}
           />
