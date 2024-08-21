@@ -58,7 +58,7 @@ export const BgtStationBanner = ({
             </Button>
           </Link>
         ) : (
-          <Link href={`${bgtUrl}/vaults/${vaultAddress}`} target="_blank">
+          <Link href={`${bgtUrl}/gauge/${vaultAddress}`} target="_blank">
             <Button
               variant={"outline"}
               disabled={receiptTokenAddress === undefined}
