@@ -18,9 +18,18 @@ export default function UserDeposits() {
     name: "wrapped ether atoken (deprecated)",
   };
 
+  const wbtcDT = {
+    address: "0x0ddb38F7D473e8040985Fa3B4116FDeEF89778bc" as `0x${string}`,
+    decimals: 8,
+    symbol: "WBTC",
+    logoURI:
+      "https://artio-static-asset-public.s3.ap-southeast-1.amazonaws.com/assets/btc.png",
+    name: "wrapped bitcoin atoken (deprecated)",
+  };
+
   const { useSelectedTagWalletBalances, useSelectedWalletBalance } =
     usePollWalletBalances({
-      externalTokenList: [wethDT],
+      externalTokenList: [wethDT, wbtcDT],
     });
 
   const atokens = useSelectedTagWalletBalances("aToken")?.filter(
@@ -30,6 +39,7 @@ export default function UserDeposits() {
       atoken?.address !== aHoneyTokenAddress,
   );
   const wethD = useSelectedWalletBalance(wethDT.address);
+  const wbtcD = useSelectedWalletBalance(wbtcDT.address);
   return (
     <>
       <div>
@@ -64,7 +74,7 @@ export default function UserDeposits() {
                 <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
                   Deposited
                 </div>
-                <div className="flex h-8 items-center text-lg font-bold uppercase gap-4">
+                <div className="flex h-8 items-center gap-4 text-lg font-bold uppercase">
                   <FormattedNumber
                     value={wethD.formattedBalance}
                     symbol={"WETH"}
@@ -96,6 +106,57 @@ export default function UserDeposits() {
 
             <div className="grow-1 hidden w-full items-center gap-2 md:flex md:w-fit">
               <WithdrawBtnQ token={wethD} />
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {wbtcD && wbtcD?.balance > 0n && (
+        <Card className="bg-muted p-4">
+          <div className="flex flex-row items-center justify-between gap-6">
+            <div className="flex flex-shrink-0 items-center gap-4 ">
+              <TokenIcon
+                address={wbtcD.address}
+                imgOverride={wbtcD.logoURI}
+                size="2xl"
+                className="opacity-50"
+              />
+              <div>
+                <div className="flex items-center gap-1 text-xs font-medium leading-tight text-muted-foreground">
+                  Deposited
+                </div>
+                <div className="flex h-8 items-center gap-4 text-lg font-bold uppercase">
+                  <FormattedNumber
+                    value={wbtcD.formattedBalance}
+                    symbol={"WBTC"}
+                  />
+                  <Tooltip
+                    toolTipTrigger={
+                      <Badge
+                        variant="destructive"
+                        className="font-semibold capitalize"
+                      >
+                        Deprecated
+                      </Badge>
+                    }
+                    children={
+                      <div className="p-2 normal-case">
+                        <div className="font-bold">
+                          This token is deprecated
+                        </div>
+                        <div className="font-semibold leading-5 text-muted-foreground">
+                          You are still able to withdraw <br />
+                          but no new deposit can be made
+                        </div>
+                      </div>
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grow-1 hidden w-full items-center gap-2 md:flex md:w-fit">
+              <WithdrawBtnQ token={wbtcD} />
             </div>
           </div>
         </Card>
