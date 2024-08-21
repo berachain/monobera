@@ -104,6 +104,13 @@ const _TPSLAccordionWrapper = ({
 }) => {
   return renderAccordion ? (
     <>
+      {/**
+       * If the input is not rendered, there might be a weird bug if tp is set to 900%,
+       * since if price moves, it would be over max tp %
+       *
+       * There could be a better solution if this feat request on shadcn was implemented
+       * @see https://github.com/radix-ui/primitives/issues/1155
+       */}
       <div className="hidden">{children}</div>
       <Accordion type="single" collapsible className="mt-4">
         <AccordionItem variant="outlined" value="tp-sl-lvg">
