@@ -5,7 +5,7 @@ import { Button } from "@bera/ui/button";
 import { Input } from "@bera/ui/input";
 import BigNumber from "bignumber.js";
 
-import { MAX_GAIN, MAX_STOP_LOSS, INITIAL_GAIN } from "~/utils/constants";
+import { INITIAL_GAIN, MAX_GAIN, MAX_STOP_LOSS } from "~/utils/constants";
 import { getPriceFromPercent } from "~/utils/getPriceFromPercent";
 import {
   TPSL_LOSS_TOOLTIP_TEXT,
@@ -37,7 +37,7 @@ const InputSelect = ({
   variant = "tp",
 }: {
   value: string;
-  bracket: [string, string, string, string, string];
+  bracket: [string, string, string, string];
   percent: string;
   onValueChange: (percentage: string) => void;
   onPercentChange: (percentage: string) => void;
@@ -46,7 +46,7 @@ const InputSelect = ({
   return (
     <div className="flex w-full gap-1">
       <Input
-        className="h-8 w-full min-w-[60px] rounded-sm bg-background text-xs sm:min-w-[98px]"
+        className="h-8 w-full min-w-[60px] rounded-sm bg-background text-xs sm:min-w-[96px]"
         placeholder="Amount"
         type={"number"}
         min={0}
@@ -407,7 +407,7 @@ export function TPSL({
       </div>
       <InputSelect
         value={tp}
-        bracket={["25", "50", "100", "300", MAX_GAIN]}
+        bracket={["50", "100", "300", MAX_GAIN]}
         percent={tpslPercent.tpPercent ?? ""}
         onPercentChange={handleTpPercentChange}
         onValueChange={handleTpChange}
@@ -444,7 +444,7 @@ export function TPSL({
       </div>
       <InputSelect
         value={sl}
-        bracket={["", "-10", "-25", "-50", MAX_STOP_LOSS]}
+        bracket={["", "-25", "-50", MAX_STOP_LOSS]}
         percent={tpslPercent.slPercent ?? ""}
         onPercentChange={handleSlPercentChange}
         onValueChange={handleSlChange}

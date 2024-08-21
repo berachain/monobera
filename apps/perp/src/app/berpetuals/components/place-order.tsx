@@ -160,7 +160,6 @@ export function PlaceOrder({
   return (
     <>
       {ModalPortal}
-
       <ActionButton className="mt-4">
         {allowance?.formattedAllowance === "0" ||
         BigNumber((allowance?.allowance ?? 0n).toString()).isLessThan(

@@ -448,9 +448,9 @@ export function CreatePosition({ market, params }: ICreatePosition) {
               />
             )}
           </div>
-          <Accordion type="single" collapsible>
-            <AccordionItem value="tp-sl-lvg">
-              <AccordionTrigger>
+          <Accordion type="single" collapsible className="mt-4">
+            <AccordionItem variant="outlined" value="tp-sl-lvg">
+              <AccordionTrigger variant="outlined">
                 Take Profit / Stop Loss / Leverage
               </AccordionTrigger>
               <AccordionContent>
@@ -467,7 +467,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
 
                 <TPSL
                   key={form.optionType}
-                  className="my-8"
+                  className="mt-4 overflow-x-scroll "
                   leverage={form.leverage ?? "2"}
                   formattedPrice={
                     form.optionType === "market" ? price : form.limitPrice

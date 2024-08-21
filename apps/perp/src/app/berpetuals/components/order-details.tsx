@@ -54,10 +54,10 @@ export function OrderDetails({
   }, [form.amount, form.leverage]);
 
   return (
-    <Accordion type="single" collapsible>
-      <AccordionItem value="order-details">
-        <AccordionTrigger>Trade details</AccordionTrigger>
-        <AccordionContent className=" text-muted-foreground">
+    <Accordion type="single" collapsible className="mt-4">
+      <AccordionItem value="order-details" variant="outlined">
+        <AccordionTrigger variant="outlined">Trade details</AccordionTrigger>
+        <AccordionContent className=" pt-2 text-muted-foreground">
           {form.optionType === "market" ? (
             <div className="flex w-full justify-between">
               <div>Est. Execution Price</div>
@@ -96,7 +96,7 @@ export function OrderDetails({
             <div className="text-muted-foreground">{form.leverage}x</div>
           </div>
           <div className="flex w-full justify-between">
-            <div className="flex flex-1 self-center">SLIPPAGE</div>
+            <div className="flex flex-1 self-center">Slippage</div>
             <Input
               endAdornment={<div className="absolute left-1.5">%</div>}
               type="number"
