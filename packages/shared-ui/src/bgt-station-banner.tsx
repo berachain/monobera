@@ -13,13 +13,13 @@ export const BgtStationBanner = ({
   vaultAddress,
   className,
   text,
-  isBex = true,
+  isHub = false,
 }: {
   receiptTokenAddress: Address | undefined;
   vaultAddress: Address | undefined;
   className?: string;
   text?: string | JSX.Element;
-  isBex?: boolean;
+  isHub?: boolean;
 }) => {
   if (!vaultAddress) return null;
   return (
@@ -48,7 +48,7 @@ export const BgtStationBanner = ({
             </div>
           </div>
         )}
-        {isBex ? (
+        {isHub ? (
           <Link href={`/vaults/${vaultAddress}`}>
             <Button
               variant={"outline"}
@@ -58,7 +58,7 @@ export const BgtStationBanner = ({
             </Button>
           </Link>
         ) : (
-          <Link href={`${bgtUrl}/vaults/${vaultAddress}`} target="_blank">
+          <Link href={`${bgtUrl}/gauge/${vaultAddress}`} target="_blank">
             <Button
               variant={"outline"}
               disabled={receiptTokenAddress === undefined}

@@ -13,8 +13,8 @@ import { Address, isAddress } from "viem";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
-import { BgtStationBanner } from "./banner";
 import Loading from "../loading";
+import { BendRewardsBanner } from "./banner";
 import { MyGaugeDetails } from "./my-gauge-details";
 
 export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
@@ -79,7 +79,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
           {gaugeAddress !== bgtVaultBlackList ? (
             <MyGaugeDetails gauge={gauge} />
           ) : (
-            <BgtStationBanner />
+            <BendRewardsBanner />
           )}
 
           <Tabs defaultValue="incentives" className="flex flex-col gap-4">
