@@ -23,6 +23,7 @@ export type SimpleTableProps<TData> = TableBodyProps<TData> & {
   showToolbar?: boolean;
   showSelection?: boolean;
   mutedBackgroundOnHead?: boolean;
+  minWidth?: number;
 };
 
 export function SimpleTable<TData>({
@@ -37,8 +38,10 @@ export function SimpleTable<TData>({
   showSelection = true,
   mutedBackgroundOnHead = true,
   onRowClick,
+  ...props
 }: SimpleTableProps<TData>) {
-  const minWidth = flexTable ? table.getTotalSize() : "auto";
+  const minWidth =
+    props.minWidth ?? (flexTable ? table.getTotalSize() : "auto");
   const tableBodyRef = React.useRef<HTMLTableSectionElement>(null);
   const rows = table.getRowModel().rows;
   const loading = table.options.meta?.loading || table.options.meta?.validating;
@@ -70,10 +73,12 @@ export function SimpleTable<TData>({
             <TableHeaderGroup key={headerGroup.id} flexTable={flexTable}>
               {headerGroup.headers.map((header) => (
                 <TableHeader
+                  showBorders={mutedBackgroundOnHead}
                   flexTable={flexTable}
                   key={header.id}
                   header={header}
                   dynamicFlex={dynamicFlex}
+                  className={header.column.columnDef.meta?.className}
                 />
               ))}
             </TableHeaderGroup>
@@ -88,6 +93,8 @@ export function SimpleTable<TData>({
         >
           {rows.length > 0 ? (
             rows.map((row) => {
+              console.log("row", row);
+
               return (
                 <TableRow
                   row={row}
@@ -101,6 +108,7 @@ export function SimpleTable<TData>({
                       cell={cell}
                       key={cell.id}
                       dynamicFlex={dynamicFlex}
+                      className={cell.column.columnDef.meta?.className}
                     />
                   ))}
                 </TableRow>

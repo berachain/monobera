@@ -121,7 +121,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     accessorKey: "index_price",
     enableSorting: false,
     size: 150,
-    minSize: 130,
+    // minSize: 100,
   },
   {
     header: "24H",
@@ -137,7 +137,10 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     accessorKey: "dailyHistoricPrice",
     enableSorting: false,
     size: 150,
-    minSize: 130,
+    // minSize: 130,
+    // meta: {
+    //   className: "max-md:hidden",
+    // },
   },
   {
     header: "Open Interest",
@@ -164,11 +167,14 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     enableSorting: false,
     size: 150,
     minSize: 130,
+    meta: {
+      className: "max-md:hidden",
+    },
   },
   {
     header: "Volume",
     cell: ({ row }) => (
-      <div className=" pr-4 font-medium">
+      <div className=" font-medium sm:pr-4">
         ${formatter.format(row.original.dailyVolume ?? 0)}
       </div>
     ),
@@ -176,6 +182,9 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     enableSorting: false,
     size: 150,
     minSize: 130,
+    meta: {
+      className: "max-md:hidden",
+    },
   },
 ];
 
@@ -222,8 +231,8 @@ export function InstrumentDropdown({
       )}
       <DropdownMenuTrigger
         className={cn(
-          "relative z-50 flex h-[63px] w-full cursor-pointer items-center justify-between rounded-md px-8 py-4 hover:bg-muted",
-          dropdownOpen && "bg-muted",
+          "relative flex h-[63px] w-full cursor-pointer items-center justify-between rounded-md px-8 py-4 hover:bg-muted",
+          dropdownOpen && "z-50 bg-muted",
         )}
       >
         <div className="flex items-center gap-2 font-semibold leading-7">
@@ -250,11 +259,13 @@ export function InstrumentDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className={`mx-2 my-1 p-0  ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
+        className={`my-1 w-full p-0 max-lg:min-w-[calc(100vw-1rem)] lg:mx-2 ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
       >
         <SimpleTable
           table={table}
           flexTable
+          minWidth={0}
+          className="w-full"
           mutedBackgroundOnHead={false}
           onRowClick={handleRowClick}
           showToolbar={false}
