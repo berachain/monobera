@@ -5,7 +5,7 @@ import { lendUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
 
-export const BgtStationBanner = () => {
+export const BendRewardsBanner = () => {
   return (
     <Card>
       <CardContent className="flex w-full flex-row items-center justify-between p-4 pt-4">
