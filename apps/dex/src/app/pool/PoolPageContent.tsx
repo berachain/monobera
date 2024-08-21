@@ -43,13 +43,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Address } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
+import { useSelectedPool } from "~/hooks/useSelectedPool";
 import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
-import { useSelectedPool } from "~/hooks/useSelectedPool";
 
 const getTokenDisplay = (
   event: ISwapOrProvision | ISwaps | IProvision,
@@ -128,7 +128,7 @@ const TokenView = ({
         {isLoading ? (
           <div>
             <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full mt-2" />
+            <Skeleton className="mt-2 h-8 w-full" />
           </div>
         ) : (
           tokens?.map((token, index) => {
@@ -253,7 +253,9 @@ type ISwapOrProvision = ISwaps | IProvision;
 
 export default function PoolPageContent({
   shareAddress,
-}: { shareAddress: Address }) {
+}: {
+  shareAddress: Address;
+}) {
   const { data: pool, isLoading: isPoolLoading } =
     useSelectedPool(shareAddress);
 
