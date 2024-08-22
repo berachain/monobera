@@ -318,7 +318,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   );
 
   return (
-    <div className="m-2 flex h-[calc(100%-8px)] w-[calc(100%-16px)] flex-shrink-0 flex-col overflow-auto rounded-md border border-border lg:mt-0 lg:w-[400px]">
+    <div className="m-2 flex h-[calc(100%-8px)] w-[calc(100%-16px)] flex-shrink-0 flex-col overflow-auto rounded-md border border-border @container/createPosition lg:mt-0 lg:w-[400px]">
       <LongShortTab
         value={form.orderType}
         valueOnChange={(value) => setOrderType(value)}

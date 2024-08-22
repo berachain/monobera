@@ -49,28 +49,11 @@ export const ApproveButton = ({
     },
   });
   const ref = useRef<HTMLDivElement>(null);
-  const [smallScreen, setSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (ref.current?.clientWidth) {
-        if (ref.current.clientWidth < 360 && !smallScreen) {
-          setSmallScreen(true);
-        } else if (ref.current.clientWidth >= 360 && smallScreen) {
-          setSmallScreen(false);
-        }
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <div
       className={cn(
-        "flex gap-4",
-        smallScreen ? "flex-col" : "flex-row",
+        "flex flex-col gap-4 @[360px]/createPosition:flex-row",
         className,
       )}
       ref={ref}
