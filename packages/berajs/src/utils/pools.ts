@@ -168,17 +168,19 @@ export function mapPoolToPoolV2(pool: any): PoolV2 {
     baseInfo: pool.baseInfo,
     quoteInfo: pool.quoteInfo,
     timeCreate: pool.timeCreate,
-    poolIdx: pool.poolIdx,
+    poolIdx: Number(pool.poolIdx),
     poolName: `${pool.baseInfo.symbol}-${pool.quoteInfo.symbol}`, // Assuming poolName is a combination of base and quote symbols
     tokens: [pool.baseInfo, pool.quoteInfo],
     tvlUsd: pool.tvlUsd,
     feeRate: fee,
     baseTokens: pool.baseAmount,
     quoteTokens: pool.quoteAmount,
-    volume24h: pool.latestPoolDayData.volumeUsd, // Assuming volume24h needs to be calculated or fetched from another source
-    fees24h: parseFloat(pool.latestPoolDayData.feesUsd), // Assuming fees24h needs to be calculated or fetched from another source
+    // volume24h: pool.latestPoolDayData.volumeUsd, // Assuming volume24h needs to be calculated or fetched from another source
+    volume24h: 0, // Assuming volume24h needs to be calculated or fetched from another source
+    fees24h: 0, // Assuming fees24h needs to be calculated or fetched from another source
+    // fees24h: parseFloat(pool.latestPoolDayData.feesUsd), // Assuming fees24h needs to be calculated or fetched from another source
     totalApy: pool.bgtApy, // Assuming totalApy is initially equal to bgtApy
-    bgtApy: pool.bgtApy,
+    wtv: pool.wtv,
     shareAddress: pool.shareAddress.address,
     vaultAddress: pool.vault?.vaultAddress ?? undefined,
   };

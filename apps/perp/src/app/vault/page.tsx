@@ -1,8 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
 import {
-  bhoneyVaultContractAddress,
   bHoneyGaugeVaultContractAddress,
+  bhoneyVaultContractAddress,
   perpsName,
 } from "@bera/config";
 import { BgtStationBanner } from "@bera/shared-ui";

@@ -65,7 +65,6 @@ export function BGTStatusDetails() {
     );
   }, [userVaultInfo, beraInfo]);
 
-  console.log(totalBgtRewardValue + parseFloat(claimableFees ?? "0"));
   return (
     <div className="flex flex-col gap-4">
       <div>

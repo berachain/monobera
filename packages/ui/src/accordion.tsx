@@ -31,30 +31,41 @@ AccordionItem.displayName = "AccordionItem";
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
+    decorator?: React.ReactNode;
+  } & {
     variant?: "default" | "outlined";
   }
->(({ className, children, disabled, variant = "default", ...props }, ref) => (
-  <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "flex flex-1 items-center justify-between gap-1 font-medium transition-all [&[data-state=open]>svg]:rotate-180",
-        variant === "outlined" && "text-sm text-muted-foreground",
-        variant === "default" && "py-4",
-        className,
-      )}
-      {...props}
-    >
-      <span>{children}</span>
+>(
+  (
+    { className, children, disabled, decorator, variant = "default", ...props },
+    ref,
+  ) => (
+    <AccordionPrimitive.Header className="flex">
+      <AccordionPrimitive.Trigger
+        ref={ref}
+        className={cn(
+          "flex flex-1 items-center justify-between gap-1 font-medium transition-all [&[data-state=open]>svg]:rotate-180",
+          variant === "outlined" && "text-sm text-muted-foreground",
+          variant === "default" && "py-4",
+          className,
+        )}
+        {...props}
+      >
+        <span>{children}</span>
 
-      <hr className="grow border-b-[0.5px] border-border group-[.variant-default]/accordionItem:hidden" />
+        <hr className="grow border-b-[0.5px] border-border group-[.variant-default]/accordionItem:hidden" />
 
-      {!disabled && (
-        <ChevronDown className="h-4 w-4 transition-transform duration-200" />
-      )}
-    </AccordionPrimitive.Trigger>
-  </AccordionPrimitive.Header>
-));
+        {!disabled && (
+          <div className="flex flex-row items-center justify-center gap-1">
+            {decorator}
+            <ChevronDown className="h-4 w-4 transition-transform duration-200" />
+          </div>
+        )}
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  ),
+);
+
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
 
 const AccordionContent = React.forwardRef<

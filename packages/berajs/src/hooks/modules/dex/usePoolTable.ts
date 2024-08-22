@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
 import { multicallAddress } from "@bera/config";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { erc20Abi } from "viem";
+import { useQuery } from "@tanstack/react-query";
+import { erc20Abi, isAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import type { PoolV2 } from "~/types";
 import { mapPoolsToPoolsV2 } from "~/utils";
-import { dexClient, getFilteredPools } from "@bera/graphql";
+import {
+  dexClient,
+  getFilteredPoolsBySymbol,
+  getFilteredPoolsByAddress,
+} from "@bera/graphql";
 import { useTotalPoolCount } from "./useTotalPoolCount";
-
-const DEFAULT_SIZE = 8;
 interface Call {
   abi: typeof erc20Abi;
   address: `0x${string}`;
   functionName: string;
   args: any[];
 }
-export const usePoolTable = (sorting: any) => {
+export const usePoolTable = (sorting: any, page: number, pageSize: number) => {
   const [search, setSearch] = useState("");
   const [keyword, setKeyword] = useState("");
   const { account } = useBeraJs();
@@ -34,53 +36,60 @@ export const usePoolTable = (sorting: any) => {
         : "asc"
       : "desc";
 
-  const { data, fetchNextPage, isFetching, isFetchingNextPage } =
-    useInfiniteQuery<any, any, { pages: any[] }>({
-      queryKey: ["projects", sortOption, sortOrder, keyword, publicClient],
-      queryFn: async ({ pageParam = 1, queryKey }: any) => {
-        try {
+  const { data, isFetching } = useQuery<any, any, any[]>({
+    queryKey: [
+      "projects",
+      sortOption,
+      sortOrder,
+      keyword,
+      publicClient,
+      page,
+      pageSize,
+    ],
+    queryFn: async ({ queryKey }: any) => {
+      try {
+        const keyword = queryKey[3];
+
+        if (isAddress(keyword)) {
           const res = await dexClient.query({
-            query: getFilteredPools,
+            query: getFilteredPoolsByAddress,
             variables: {
               keyword: queryKey[3].toLowerCase(),
-              skip: (pageParam - 1) * DEFAULT_SIZE,
-              first: DEFAULT_SIZE,
+              skip: (queryKey[5] - 1) * queryKey[6],
+              first: queryKey[6],
               order: queryKey[1],
               orderDirection: queryKey[2],
             },
           });
-
           const data = mapPoolsToPoolsV2(res.data.pools);
-          return {
-            data,
-          };
-        } catch (e) {
-          console.error(e);
-          return {};
+          return data;
         }
-      },
-      initialPageParam: 1,
-      getNextPageParam: (_lastPage, pages) => {
-        return pages.length + 1;
-      },
-      placeholderData: (prev) => prev,
-      staleTime: 1000 * 60 * 5, // 5 mins
-    });
+        const res = await dexClient.query({
+          query: getFilteredPoolsBySymbol,
+          variables: {
+            keyword: queryKey[3].toLowerCase(),
+            skip: (queryKey[5] - 1) * queryKey[6],
+            first: queryKey[6],
+            order: queryKey[1],
+            orderDirection: queryKey[2],
+          },
+        });
+
+        const data = mapPoolsToPoolsV2(res.data.pools);
+        return data;
+      } catch (e) {
+        console.error(e);
+        return [];
+      }
+    },
+    staleTime: 1000 * 60 * 5, // 5 mins
+  });
 
   const [processedData, setProcessedData] = useState<PoolV2[]>([]);
 
   useEffect(() => {
-    let concatData: PoolV2[] = [];
-
-    data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
-      if (!page.data) return;
-      concatData = concatData.concat(page.data);
-    });
-
     if (account && publicClient && data) {
-      const validData = concatData.filter(
-        (item: PoolV2) => item.base && item.quote,
-      );
+      const validData = data.filter((item: PoolV2) => item.base && item.quote);
       const call: Call[] = validData.map((item: PoolV2) => ({
         address: item.shareAddress as `0x${string}`,
         abi: erc20Abi,
@@ -108,7 +117,7 @@ export const usePoolTable = (sorting: any) => {
           setProcessedData(newProcessedData);
         });
     } else {
-      setProcessedData(concatData);
+      setProcessedData(data ?? []);
     }
   }, [data, account]);
 
@@ -127,10 +136,9 @@ export const usePoolTable = (sorting: any) => {
   return {
     data: processedData,
     poolCount,
-    fetchNextPage,
     search,
     setSearch,
-    isLoadingMore: isFetching || isFetchingNextPage,
+    isLoadingMore: isFetching,
     handleEnter,
     keyword,
     setKeyword,

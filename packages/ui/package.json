@@ -218,6 +218,10 @@
       "import": "./dist/recharts.mjs",
       "types": "./dist/recharts.d.ts"
     },
+    "./pagination": {
+      "import": "./dist/pagination.mjs",
+      "types": "./dist/pagination.d.ts"
+    },
     "./badge": {
       "import": "./dist/badge.mjs",
       "types": "./dist/badge.d.ts"
@@ -375,6 +379,9 @@
       ],
       "chart": [
         "dist/chart.d.ts"
+      ],
+      "pagination": [
+        "dist/pagination.d.ts"
       ]
     }
   },

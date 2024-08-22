@@ -43,13 +43,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { Address } from "viem";
 
 import formatTimeAgo from "~/utils/formatTimeAgo";
+import { useSelectedPool } from "~/hooks/useSelectedPool";
 import {
   getPoolAddLiquidityUrl,
   getPoolWithdrawUrl,
 } from "../pools/fetchPools";
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
-import { useSelectedPool } from "~/hooks/useSelectedPool";
 
 const getTokenDisplay = (
   event: ISwapOrProvision | ISwaps | IProvision,
@@ -128,7 +128,7 @@ const TokenView = ({
         {isLoading ? (
           <div>
             <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full mt-2" />
+            <Skeleton className="mt-2 h-8 w-full" />
           </div>
         ) : (
           tokens?.map((token, index) => {
@@ -253,7 +253,9 @@ type ISwapOrProvision = ISwaps | IProvision;
 
 export default function PoolPageContent({
   shareAddress,
-}: { shareAddress: Address }) {
+}: {
+  shareAddress: Address;
+}) {
   const { data: pool, isLoading: isPoolLoading } =
     useSelectedPool(shareAddress);
 
@@ -380,6 +382,7 @@ export default function PoolPageContent({
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader
+        backHref="/pools"
         title={
           isPoolLoading ? (
             <Skeleton className="h-10 w-40" />
@@ -544,73 +547,69 @@ export default function PoolPageContent({
               }
             />
           </Card>
-          {isConnected &&
-            !isWrongNetwork &&
-            userPositionBreakdown &&
-            userPositionBreakdown.estimatedHoneyValue > 0 && (
-              <Card>
-                <CardContent className="flex items-center justify-between gap-4 p-4">
-                  <div className="w-full ">
-                    <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
-                      <h3 className="text-sm font-medium text-muted-foreground">
-                        My pool balance
-                      </h3>
-                      <div className="text-2xl">
-                        {isReady ? (
-                          isPositionBreakdownLoading ? (
-                            <Skeleton className="h-[32px] w-[150px]" />
-                          ) : (
-                            <FormattedNumber
-                              value={
-                                userPositionBreakdown?.estimatedHoneyValue ?? 0
-                              }
-                              symbol="USD"
-                            />
-                          )
-                        ) : (
+          {isConnected && !isWrongNetwork && userPositionBreakdown && (
+            // userPositionBreakdown.estimatedHoneyValue > 0 && (
+            <Card>
+              <CardContent className="flex items-center justify-between gap-4 p-4">
+                <div className="w-full ">
+                  <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
+                    <h3 className="text-sm font-medium text-muted-foreground">
+                      My pool balance
+                    </h3>
+                    <div className="text-2xl">
+                      {isReady ? (
+                        isPositionBreakdownLoading ? (
                           <Skeleton className="h-[32px] w-[150px]" />
-                        )}
-                      </div>
-                    </div>
-                    <div className="mt-4 lg:mt-8">
-                      <TokenView
-                        isLoading={isPositionBreakdownLoading}
-                        tokens={
-                          !pool
-                            ? []
-                            : [
-                                {
-                                  address: pool.baseInfo.address,
-                                  symbol: pool.baseInfo.symbol,
-                                  value:
-                                    truncateFloat(
-                                      userPositionBreakdown?.formattedBaseAmount,
-                                      6,
-                                    )?.toString() ?? "0",
-                                  valueUSD:
-                                    userPositionBreakdown?.baseHoneyValue ??
-                                    "0",
-                                },
-                                {
-                                  address: pool.quoteInfo.address,
-                                  symbol: pool.quoteInfo.symbol,
-                                  value:
-                                    truncateFloat(
-                                      userPositionBreakdown?.formattedQuoteAmount,
-                                      6,
-                                    )?.toString() ?? "0",
-                                  valueUSD:
-                                    userPositionBreakdown?.quoteHoneyValue ??
-                                    "0",
-                                },
-                              ]
-                        }
-                      />
+                        ) : (
+                          <FormattedNumber
+                            value={
+                              userPositionBreakdown?.estimatedHoneyValue ?? 0
+                            }
+                            symbol="USD"
+                          />
+                        )
+                      ) : (
+                        <Skeleton className="h-[32px] w-[150px]" />
+                      )}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                  <div className="mt-4 lg:mt-8">
+                    <TokenView
+                      isLoading={isPositionBreakdownLoading}
+                      tokens={
+                        !pool
+                          ? []
+                          : [
+                              {
+                                address: pool.baseInfo.address,
+                                symbol: pool.baseInfo.symbol,
+                                value:
+                                  truncateFloat(
+                                    userPositionBreakdown?.formattedBaseAmount,
+                                    6,
+                                  )?.toString() ?? "0",
+                                valueUSD:
+                                  userPositionBreakdown?.baseHoneyValue ?? "0",
+                              },
+                              {
+                                address: pool.quoteInfo.address,
+                                symbol: pool.quoteInfo.symbol,
+                                value:
+                                  truncateFloat(
+                                    userPositionBreakdown?.formattedQuoteAmount,
+                                    6,
+                                  )?.toString() ?? "0",
+                                valueUSD:
+                                  userPositionBreakdown?.quoteHoneyValue ?? "0",
+                              },
+                            ]
+                      }
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
       <Separator />

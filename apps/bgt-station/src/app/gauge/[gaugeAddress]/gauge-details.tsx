@@ -14,7 +14,7 @@ import { Address, isAddress } from "viem";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
 import { getGaugeValidatorColumns } from "~/columns/general-validator-columns";
-import { BgtStationBanner } from "./banner";
+import { BendRewardsBanner } from "./banner";
 import Loading from "./loading";
 import { MyGaugeDetails } from "./my-gauge-details";
 
@@ -80,11 +80,11 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
           {gaugeAddress !== bgtVaultBlackList ? (
             <MyGaugeDetails gauge={gauge} />
           ) : (
-            <BgtStationBanner />
+            <BendRewardsBanner />
           )}
 
           <Tabs defaultValue="incentives" className="flex flex-col gap-4">
-            <div className="flex flex-col justify-between gap-4 md:flex-row items-center">
+            <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
               <TabsList className="w-full md:w-fit">
                 <TabsTrigger value="incentives" className="w-full md:w-fit">
                   Incentives
@@ -96,7 +96,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
               <TabsContent value="incentives">
                 <Link
                   href={`/incentivize?gauge=${gaugeAddress}`}
-                  className="text-sm underline font-semibold"
+                  className="text-sm font-semibold underline"
                 >
                   Add Incentives
                 </Link>
