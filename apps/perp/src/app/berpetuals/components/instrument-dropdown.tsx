@@ -19,12 +19,9 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { calculatePercentDifference } from "~/utils/percentDifference";
-import {
-  MarketPrice,
-  MarketPriceChange,
-} from "~/app/markets/components/market-table-column";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import { type IMarket } from "~/types/market";
+import { MarketPrice, MarketPriceChange } from "./market-price";
 
 interface InstrumentProps {
   markets: IMarket[];
