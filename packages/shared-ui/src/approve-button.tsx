@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import {
   TransactionActionType,
   usePollAllowance,
@@ -75,8 +75,8 @@ export const ApproveButton = ({
         </Button>
       )}
       <Button
-        className="w-full"
-        variant={amount ? "outline" : "primary"}
+        className="w-full border-border"
+        variant={"outline"}
         disabled={!token || isLoading || isSubmitting || disabled}
         onClick={() => {
           write({
@@ -87,7 +87,7 @@ export const ApproveButton = ({
           });
         }}
       >
-        {isLoading ? "Loading..." : amount ? "Approve Infinite" : "Approve"}
+        {isLoading ? "Loading..." : "Approve Infinite"}
       </Button>
     </div>
   );

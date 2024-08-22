@@ -17,6 +17,7 @@ import {
   TPSL_LOSS_TOOLTIP_TEXT,
   TPSL_PROFIT_TOOLTIP_TEXT,
 } from "~/utils/tooltip-text";
+import { OrderType } from "~/types/order-type";
 
 const getPercentFromPrice = (
   formattedPrice: string,
@@ -102,6 +103,7 @@ const _TPSLAccordionWrapper = ({
   children: React.ReactNode;
   renderAccordion: boolean;
 }) => {
+  const [isOpen, setIsOpen] = useState(true);
   return renderAccordion ? (
     <>
       {/**
@@ -111,8 +113,16 @@ const _TPSLAccordionWrapper = ({
        * There could be a better solution if this feat request on shadcn was implemented
        * @see https://github.com/radix-ui/primitives/issues/1155
        */}
-      <div className="hidden">{children}</div>
-      <Accordion type="single" collapsible className="mt-4">
+      {!isOpen && <div className="hidden">{children}</div>}
+      <Accordion
+        onValueChange={(v) => {
+          setIsOpen(!!v);
+        }}
+        type="single"
+        collapsible
+        defaultValue="tp-sl-lvg"
+        className="mt-4"
+      >
         <AccordionItem variant="outlined" value="tp-sl-lvg">
           <AccordionTrigger variant="outlined">
             Take Profit / Stop Loss / Leverage
@@ -140,6 +150,7 @@ export function TPSL({
   onSlChangeSubmit,
   className,
   wrapInAccordion,
+  optionType,
   children,
 }: PropsWithChildren<{
   tpslOnChange: (value: string, key: string) => void;
@@ -156,6 +167,7 @@ export function TPSL({
   onSlChangeSubmit?: () => void;
   className?: string;
   wrapInAccordion?: boolean;
+  optionType?: OrderType["optionType"];
 }>) {
   const [tpslPercent, setTpslPercent] = useState<{
     tpPercent: string;
@@ -369,6 +381,7 @@ export function TPSL({
     leverage,
     long,
     tp,
+    optionType,
     initTpState,
     tpslOnChange,
     setTpslPercent,
@@ -447,8 +460,8 @@ export function TPSL({
                           tpPercentBN.lt("0")
                             ? "Less than "
                             : tpPercentBN.gt(MAX_TP_PERC)
-                            ? "Greater than "
-                            : ""
+                              ? "Greater than "
+                              : ""
                         }${sanitizedTpPercent}%)`
                       : ""
                   }`}
@@ -468,7 +481,7 @@ export function TPSL({
               <Button
                 disabled={isTpSubmitLoading}
                 onClick={() => onTpChangeSubmit?.()}
-                className="mt-4 w-full"
+                className="mt-4 h-8 w-full"
                 size="sm"
               >
                 Update Take Profit
@@ -484,8 +497,8 @@ export function TPSL({
                       slPercentBN.lt(MAX_SL_PERC)
                         ? "Less than "
                         : slPercentBN.gt(0)
-                        ? "Greater than "
-                        : ""
+                          ? "Greater than "
+                          : ""
                     }${sanitizedSlPercent}%)`
                   : ""
               }`}
@@ -505,7 +518,7 @@ export function TPSL({
               <Button
                 disabled={isSlSubmitLoading}
                 onClick={() => onSlChangeSubmit?.()}
-                className="mt-4 w-full"
+                className="mt-4 h-8 w-full"
                 size="sm"
               >
                 Update Stop Loss

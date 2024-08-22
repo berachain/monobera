@@ -1,4 +1,5 @@
 "use client";
+
 import { type GlobalParams } from "@bera/proto/src";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
@@ -13,18 +14,20 @@ export function LandingCard1({ params }: { params: GlobalParams }) {
       <LongShortTab />
       <div className="w-full px-4 py-6">
         <Tabs defaultValue={"market"} className="mb-4">
-          <TabsList className="w-full rounded-lg">
+          <TabsList variant="outline" className="w-full rounded-sm">
             <TabsTrigger
               value={"market"}
               key={"market"}
-              className="w-full rounded-lg"
+              variant="outline"
+              className="w-full rounded-l-sm"
             >
               Market
             </TabsTrigger>
             <TabsTrigger
               value={"limit"}
               key={"limit"}
-              className="w-full rounded-lg"
+              variant="outline"
+              className="w-full rounded-r-sm"
             >
               Limit
             </TabsTrigger>

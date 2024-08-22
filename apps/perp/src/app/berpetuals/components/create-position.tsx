@@ -445,7 +445,8 @@ export function CreatePosition({ market, params }: ICreatePosition) {
           </div>
 
           <TPSL
-            key={form.optionType}
+            optionType={form.optionType}
+            // key={form.optionType}
             wrapInAccordion
             className="mt-4 overflow-x-scroll "
             leverage={form.leverage ?? "2"}

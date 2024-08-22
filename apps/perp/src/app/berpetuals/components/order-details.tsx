@@ -54,7 +54,12 @@ export function OrderDetails({
   }, [form.amount, form.leverage]);
 
   return (
-    <Accordion type="single" collapsible className="mt-4">
+    <Accordion
+      type="single"
+      defaultValue="order-details"
+      collapsible
+      className="mt-4"
+    >
       <AccordionItem value="order-details" variant="outlined">
         <AccordionTrigger variant="outlined">Trade details</AccordionTrigger>
         <AccordionContent className=" pt-2 text-muted-foreground">
