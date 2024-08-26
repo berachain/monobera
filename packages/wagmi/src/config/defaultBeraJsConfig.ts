@@ -16,7 +16,7 @@ import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
 import { cookieStorage, createConfig, createStorage, http } from "wagmi";
 
-import { NetworkConfig } from "~/context/context";
+import type { NetworkConfig } from "~/context/context";
 
 const BeraChain: Chain = {
   id: chainId,

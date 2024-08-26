@@ -10,7 +10,9 @@ import { TableContextProvider } from "~/context/table-context";
 export default function Providers({
   children,
   initialWagmiState,
-}: PropsWithChildren<any>) {
+}: PropsWithChildren<{
+  initialWagmiState?: any;
+}>) {
   return (
     <BeraWagmi initialWagmiState={initialWagmiState}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
