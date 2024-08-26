@@ -36,7 +36,9 @@ jobs:
       run: pnpm set-env:bartio
       
     - name: Build all projects
-      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
+      env:
+        NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
+      run: NEXT_PUBLIC_DYNAMIC_API_KEY="$NEXT_PUBLIC_DYNAMIC_API_KEY" NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
       
     - name: Deploy Berps
       run: cd apps/perp && fleek sites deploy
