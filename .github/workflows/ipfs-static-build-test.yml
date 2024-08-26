@@ -31,5 +31,5 @@ jobs:
     - name: Build all projects
       env:
         NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
-      run: NEXT_PUBLIC_DYNAMIC_API_KEY="$NEXT_PUBLIC_DYNAMIC_API_KEY" NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
+      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
      
