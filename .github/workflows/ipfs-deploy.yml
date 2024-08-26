@@ -20,6 +20,10 @@ jobs:
         cache: 'pnpm'
     - name: Install dependencies
       run: pnpm install
+
+    - name: Set environment variables
+      run: pnpm set-env:bartio
+      
     - name: Build all projects
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
       
