@@ -30,6 +30,7 @@ export interface NetworkConfig {
 
 interface IBeraConfig extends PropsWithChildren {
   darkTheme?: boolean;
+  initialWagmiState?: any;
 }
 
 export interface IBeraConfigAPI {
@@ -45,6 +46,7 @@ const queryClient = new QueryClient();
 const Provider: React.FC<IBeraConfig> = ({
   children,
   darkTheme = undefined,
+  initialWagmiState = {},
 }) => {
   const { theme: nextTheme } = useTheme();
   const theme: ThemeSetting =
@@ -71,7 +73,7 @@ const Provider: React.FC<IBeraConfig> = ({
         }}
         theme={theme ?? "auto"}
       >
-        <WagmiProvider config={wagmiConfig}>
+        <WagmiProvider config={wagmiConfig} initialState={initialWagmiState}>
           <QueryClientProvider client={queryClient}>
             <DynamicWagmiConnector>
               <BeraJsProvider configOverride={undefined}>

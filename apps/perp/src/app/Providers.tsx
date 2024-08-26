@@ -7,9 +7,12 @@ import { ThemeProvider } from "next-themes";
 import { PriceContextProvider } from "~/context/price-context";
 import { TableContextProvider } from "~/context/table-context";
 
-export default function Providers({ children }: PropsWithChildren<any>) {
+export default function Providers({
+  children,
+  initialWagmiState,
+}: PropsWithChildren<any>) {
   return (
-    <BeraWagmi>
+    <BeraWagmi initialWagmiState={initialWagmiState}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
         <PriceContextProvider>
           <TableContextProvider>{children}</TableContextProvider>
