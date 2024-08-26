@@ -3,7 +3,6 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
-import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { ApolloProvider } from "@apollo/client";
 import { honeyName } from "@bera/config";
@@ -11,9 +10,9 @@ import { honeyClient } from "@bera/graphql";
 import {
   Footer,
   Header,
+  MainWithBanners,
   TailwindIndicator,
   TermOfUseModal,
-  getBannerCount,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { BeraWagmi } from "@bera/wagmi";
@@ -35,8 +34,6 @@ const fontHoney = Jua({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const pathName = usePathname();
-  const activeBanners = getBannerCount(honeyName, pathName);
   return (
     <html lang="en" suppressHydrationWarning>
       <Script
@@ -70,12 +67,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               mobileNavItems={mobileNavItems}
               appName={honeyName}
             />
-            <main
-              className="w-full pt-start"
-              style={{ paddingTop: `${48 * activeBanners + 72}px` }}
-            >
+            <MainWithBanners className="pt-start" appName={honeyName}>
               {props.children}
-            </main>
+            </MainWithBanners>
             <Toaster position="bottom-right" />
             <Footer />
             <TailwindIndicator />

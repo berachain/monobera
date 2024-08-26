@@ -1,21 +1,17 @@
-"use client";
-
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
-import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { dexName } from "@bera/config";
 import {
   Header,
+  MainWithBanners,
   TailwindIndicator,
   TermOfUseModal,
-  getBannerCount,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "usehooks-ts";
 
 import { navItems } from "~/app/config";
 import Providers from "./Providers";
@@ -27,13 +23,6 @@ const fontSans = IBM_Plex_Sans({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const [firstTimeUser, setFirstTimeUser] = useLocalStorage(
-    "FIRST_TIME_USER",
-    true,
-  );
-  const pathName = usePathname();
-  const activeBanners = getBannerCount(dexName, pathName);
-
   return (
     <html lang="en" className="bg-background">
       <Script
@@ -63,12 +52,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <div className="z-10 flex-1">
               <span className="hidden text-amber-300 text-green-300 text-green-400 text-green-500 text-neutral-400 text-red-400 text-red-500" />
               <Header navItems={navItems} appName={dexName} />
-              <main
-                className="w-full"
-                style={{ paddingTop: `${48 * activeBanners + 72}px` }}
-              >
+              <MainWithBanners appName={dexName}>
                 {props.children}
-              </main>
+              </MainWithBanners>
             </div>
           </div>
           <TailwindIndicator />

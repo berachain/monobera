@@ -1,13 +1,11 @@
-"use client";
-
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
-import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { lendName } from "@bera/config";
 import {
   Header,
+  MainWithBanners,
   TailwindIndicator,
   TermOfUseModal,
   getBannerCount,
@@ -26,8 +24,6 @@ const fontSans = IBM_Plex_Sans({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const pathName = usePathname();
-  const activeBanners = getBannerCount(lendName, pathName);
   return (
     <html lang="en">
       <Script
@@ -54,12 +50,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           </div>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <Header navItems={navItems} appName={lendName} />
-            <main
-              className="w-full"
-              style={{ paddingTop: `${48 * activeBanners + 80}px` }}
-            >
+            <MainWithBanners appName={lendName} paddingTop={80}>
               {props.children}
-            </main>
+            </MainWithBanners>
           </div>
           <TailwindIndicator />
           <Analytics />
