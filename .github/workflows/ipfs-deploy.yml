@@ -13,6 +13,8 @@ jobs:
       FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
       FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
       NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
+
+  
  
 
     steps:
@@ -24,7 +26,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 18.18.2
-        cache: 'pnpm'
+        cache:
+          key: ${CI_COMMIT_REF_SLUG}
+          paths:
+            - node_modules/
+            - .next/cache/
         
     - name: Install dependencies
       run: pnpm install

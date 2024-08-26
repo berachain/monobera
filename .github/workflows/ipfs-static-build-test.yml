@@ -11,6 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-22.04
 
+    
+
     steps:
     - uses: actions/checkout@v4
     - name: Install pnpm
@@ -20,7 +22,12 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 18.18.2
-        cache: 'pnpm'
+        cache:
+          key: ${CI_COMMIT_REF_SLUG}
+          paths:
+            - node_modules/
+            - .next/cache/
+
 
     - name: Install dependencies
       run: pnpm install
