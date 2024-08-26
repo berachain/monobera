@@ -15,7 +15,6 @@ import {
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "usehooks-ts";
 import { cookieToInitialState } from "wagmi";
 
 import Providers from "./Providers";
@@ -28,10 +27,6 @@ const fontSans = IBM_Plex_Sans({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const [firstTimeUser, setFirstTimeUser] = useLocalStorage(
-    "FIRST_TIME_USER",
-    true,
-  );
   const pathName = usePathname();
   const activeBanners = getBannerCount(perpsName, pathName);
 
@@ -54,7 +49,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+        <TermOfUseModal />
         <Providers>
           <div className="z-[100]">
             <Toaster position="bottom-right" />

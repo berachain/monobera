@@ -54,7 +54,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <span className="warning-foreground hidden text-amber-300 text-green-300 text-green-400 text-green-500 text-neutral-400 text-red-400 text-red-500" />
-        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+        <TermOfUseModal />
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <div className="z-[100]">

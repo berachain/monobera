@@ -3,8 +3,8 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
-import Script from "next/script";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 import { lendName } from "@bera/config";
 import {
   Header,
@@ -15,7 +15,6 @@ import {
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
@@ -27,10 +26,6 @@ const fontSans = IBM_Plex_Sans({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const [firstTimeUser, setFirstTimeUser] = useLocalStorage(
-    "FIRST_TIME_USER",
-    true,
-  );
   const pathName = usePathname();
   const activeBanners = getBannerCount(lendName, pathName);
   return (
@@ -52,7 +47,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+        <TermOfUseModal />
         <Providers>
           <div className="z-[100]">
             <Toaster position="bottom-right" />

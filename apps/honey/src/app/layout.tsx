@@ -3,8 +3,8 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
-import Script from "next/script";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 import { ApolloProvider } from "@apollo/client";
 import { honeyName } from "@bera/config";
 import { honeyClient } from "@bera/graphql";
@@ -19,7 +19,6 @@ import { cn } from "@bera/ui";
 import { BeraWagmi } from "@bera/wagmi";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "usehooks-ts";
 
 import { mobileNavItems, navItems } from "./config";
 
@@ -36,10 +35,6 @@ const fontHoney = Jua({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const [firstTimeUser, setFirstTimeUser] = useLocalStorage(
-    "FIRST_TIME_USER",
-    true,
-  );
   const pathName = usePathname();
   const activeBanners = getBannerCount(honeyName, pathName);
   return (
@@ -66,7 +61,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         {" "}
-        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+        <TermOfUseModal />
         <ApolloProvider client={honeyClient}>
           <BeraWagmi>
             <Header
