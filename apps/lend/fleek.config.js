@@ -2,9 +2,8 @@
 module.exports = {
   sites: [
     {
-      slug: "full-laptop-old",
+      slug: "bartio-lend",
       distDir: "out",
-      buildCommand: "npm run build",
     },
   ],
 };

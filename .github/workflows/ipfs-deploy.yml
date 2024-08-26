@@ -3,10 +3,17 @@ name: Deploy on Fleek
 on:
   push:
     branches: [ "v2" ]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+    env:
+      FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
+      FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
+      NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
+ 
 
     steps:
     - uses: actions/checkout@v4
@@ -18,8 +25,12 @@ jobs:
       with:
         node-version: 18.18.2
         cache: 'pnpm'
+        
     - name: Install dependencies
       run: pnpm install
+
+    - name: Install Fleek CLI
+      run: pnpm i -g @fleek-platform/cli
 
     - name: Set environment variables
       run: pnpm set-env:bartio
@@ -27,6 +38,8 @@ jobs:
     - name: Build all projects
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
       
-    - name: Deploy on Fleek
-      # TODO: add API key to secrets
-      run: pnpm dlx @fleek-platform/cli sites deploy
+    - name: Deploy Berps
+      run: cd apps/perp && fleek sites deploy
+
+    - name: Deploy Bend
+      run: cd apps/lend && fleek sites deploy
