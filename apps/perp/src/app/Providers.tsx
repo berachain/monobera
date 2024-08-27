@@ -6,8 +6,13 @@ import { ThemeProvider } from "next-themes";
 
 import { PriceContextProvider } from "~/context/price-context";
 import { TableContextProvider } from "~/context/table-context";
+import { PricesMap } from "~/types/prices";
 
-export default function Providers({ children }: PropsWithChildren<any>) {
+export default function Providers({
+  children,
+}: PropsWithChildren<{
+  initialPrices?: PricesMap;
+}>) {
   return (
     <BeraWagmi>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>

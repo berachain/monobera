@@ -21,6 +21,7 @@
     "@bera/tailwind-config": "workspace:*",
     "@bera/ui": "workspace:*",
     "@bera/wagmi": "workspace:*",
+    "@pythnetwork/hermes-client": "^1.0.4",
     "@pythnetwork/pyth-evm-js": "^1.39.0",
     "@sentry/nextjs": "^7.103.0",
     "@t3-oss/env-nextjs": "^0.2.2",

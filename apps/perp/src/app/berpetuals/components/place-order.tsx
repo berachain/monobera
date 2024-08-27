@@ -10,8 +10,8 @@ import {
 } from "@bera/berajs";
 import {
   honeyAddress,
-  tradingContractAddress,
   storageContractAddress,
+  tradingContractAddress,
 } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
 import {
@@ -101,16 +101,16 @@ export function PlaceOrder({
           ? TransactionActionType.MARKET_LONG
           : TransactionActionType.MARKET_SHORT
         : form.orderType === "long"
-          ? TransactionActionType.LIMIT_LONG
-          : TransactionActionType.LIMIT_SHORT,
+        ? TransactionActionType.LIMIT_LONG
+        : TransactionActionType.LIMIT_SHORT,
     message:
       form.optionType === "market"
         ? form.orderType === "long"
           ? `Longing ${form.assets}`
           : `Shorting ${form.assets}`
         : form.orderType === "long"
-          ? `Placing Limit Long Order ${form.assets}`
-          : `Placing Limit Short Order ${form.assets}`,
+        ? `Placing Limit Long Order ${form.assets}`
+        : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
       refreshBalance();
       refreshPositions();
@@ -132,6 +132,8 @@ export function PlaceOrder({
   const parsedPositionSize = parseUnits(safeAmount, 18);
 
   const handlePlaceOrder = useCallback(async () => {
+    console.log("place order", prices, pairIndex);
+
     const payload = [
       {
         trader: account,

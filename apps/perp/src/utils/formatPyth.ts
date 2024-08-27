@@ -63,8 +63,8 @@ export const generateEncodedPythPrices = (
   if (!priceMarketData || !priceUSDUSDC) {
     return ["", ""];
   }
-  let encodedMarketData = priceMarketData.getVAA();
-  let encodedUsdUsdcData = priceUSDUSDC.getVAA();
+  let encodedMarketData = priceMarketData.vaa;
+  let encodedUsdUsdcData = priceUSDUSDC.vaa;
   if (perpsPythPricesMocked === "true") {
     const priceUpdateData = formatPythPriceFeed(priceMarketData);
     const usdusdcPrice = formatPythPriceFeed(priceUSDUSDC);
