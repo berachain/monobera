@@ -3,11 +3,12 @@ name: Deploy on Fleek
 on:
   push:
     branches: [ "v2" ]
-  pull_request:
+  # pull_request:
   workflow_dispatch:
 
-jobs:
+jobs:  
   build:
+    environment: 'production'
     runs-on: ubuntu-22.04
     env:
       FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
