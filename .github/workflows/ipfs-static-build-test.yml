@@ -10,8 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
-    
+    env: 
+      NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
+      PERPS_OCT_KEY: ${{ secrects.PERPS_OCT_KEY }}
+      CHARTING_ACCESS_TOKEN: ${{ secrects.CHARTING_ACCESS_TOKEN }}
 
     steps:
     - uses: actions/checkout@v4
@@ -31,8 +33,6 @@ jobs:
     - name: Set environment variables
       run: pnpm set-env:bartio
 
-    - name: Build all projects
-      env:
-        NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
+    - name: Build all projects 
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
      
