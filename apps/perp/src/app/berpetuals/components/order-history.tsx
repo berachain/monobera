@@ -58,6 +58,7 @@ export function OrderHistory({
     isLoading: isPositionsLoading,
     isValidating: isPositionsValidating,
   } = usePollOpenPositions(tableState);
+
   const {
     data: openOrdersData,
     pagination: openOrdersPagination,

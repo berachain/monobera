@@ -53,6 +53,10 @@ const formatPythPriceFeed = (priceFeed: PriceFeed) => {
   };
 };
 
+/**
+ *
+ * @deprecated use useVaa instead
+ */
 export const generateEncodedPythPrices = (
   prices: { current: PricesMap },
   pairIndex: string,

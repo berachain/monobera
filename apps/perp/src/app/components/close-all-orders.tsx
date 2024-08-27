@@ -10,9 +10,8 @@ import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { Button } from "@bera/ui/button";
 import { encodeFunctionData, type Address } from "viem";
 
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import { createCloseOrderPayload } from "~/utils/generateCloseOrderPayload";
-import { usePriceData } from "~/context/price-context";
+import { useVaa } from "~/context/price-context";
 import type {
   CloseOrderPayload,
   ILimitOrder,
@@ -37,7 +36,7 @@ export const CloseAllOrders = ({
   refetchOrders,
   refetchPositions,
 }: CloseAllOrdersProps) => {
-  const prices = usePriceData();
+  const vaa = useVaa();
 
   const closePositionsPayload = useMemo<CloseOrderPayload[]>(() => {
     return createCloseOrderPayload(orders, tableState.selection || {});
@@ -47,18 +46,15 @@ export const CloseAllOrders = ({
     return createCloseOrderPayload(orders, tableState.selection || {});
   }, [orders, tableState.selection]);
 
-  const openPositionsEncodedData = closePositionsPayload.reduce<string[]>(
-    (acc, pos) => {
-      return [
-        ...acc,
-        ...(generateEncodedPythPrices(prices, pos?.pairIndex.toString()) ?? []),
-      ];
-    },
-    [],
-  );
+  // const openPositionsEncodedData = closePositionsPayload.reduce<string[]>(
+  //   (acc) => {
+  //     return [...acc, ...vaa.current];
+  //   },
+  //   [],
+  // );
 
   const { data: pythUpdateFee } = usePythUpdateFee(
-    openPositionsEncodedData,
+    vaa.current,
     closePositionsPayload.map((pos) => pos?.pairIndex.toString()).join(),
   );
 
@@ -102,10 +98,7 @@ export const CloseAllOrders = ({
       return encodeFunctionData({
         abi: tradingAbi,
         functionName: "closeTradeMarket",
-        args: [
-          pos.index,
-          generateEncodedPythPrices(prices, pos.pairIndex.toString()),
-        ],
+        args: [pos.index, vaa.current],
       });
     });
     writePositionsClose({
@@ -115,7 +108,7 @@ export const CloseAllOrders = ({
       params: [true, encodedData],
       value: pythUpdateFee,
     });
-  }, [closePositionsPayload, prices, writePositionsClose]);
+  }, [closePositionsPayload, vaa, writePositionsClose]);
 
   const handleCloseAllOrders = useCallback(() => {
     const encodedData = closeOrdersPayload.map((order) => {

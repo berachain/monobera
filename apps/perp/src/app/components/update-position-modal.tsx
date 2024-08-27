@@ -13,11 +13,9 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "ethers";
-import { type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import { usePriceData } from "~/context/price-context";
+import { usePriceData, useVaa } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
@@ -40,8 +38,9 @@ export function UpdatePositionModal({
   onOpenChange?: (state: boolean) => void;
 }) {
   const prices = usePriceData();
+  const vaa = useVaa();
   const { data: pythUpdateFee } = usePythUpdateFee(
-    generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
+    vaa.current,
     openPosition?.market?.pair_index,
   );
   const [open, setOpen] = useState<boolean>(false);
@@ -134,7 +133,7 @@ export function UpdatePositionModal({
             sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
             10,
           ),
-          generateEncodedPythPrices(prices, openPosition.market.pair_index),
+          vaa.current,
         ],
         value: pythUpdateFee,
       });

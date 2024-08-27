@@ -27,10 +27,9 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
-import { parseUnits, type Address } from "viem";
+import { parseUnits } from "viem";
 
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import {
   useIsPythConnected,
   usePriceData,
@@ -103,16 +102,16 @@ export function PlaceOrder({
           ? TransactionActionType.MARKET_LONG
           : TransactionActionType.MARKET_SHORT
         : form.orderType === "long"
-          ? TransactionActionType.LIMIT_LONG
-          : TransactionActionType.LIMIT_SHORT,
+        ? TransactionActionType.LIMIT_LONG
+        : TransactionActionType.LIMIT_SHORT,
     message:
       form.optionType === "market"
         ? form.orderType === "long"
           ? `Longing ${form.assets}`
           : `Shorting ${form.assets}`
         : form.orderType === "long"
-          ? `Placing Limit Long Order ${form.assets}`
-          : `Placing Limit Short Order ${form.assets}`,
+        ? `Placing Limit Long Order ${form.assets}`
+        : `Placing Limit Short Order ${form.assets}`,
     onSuccess: () => {
       refreshBalance();
       refreshPositions();
