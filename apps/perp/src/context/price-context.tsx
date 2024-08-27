@@ -3,10 +3,10 @@ import React, { PropsWithChildren } from "react";
 
 import { type PricesMap } from "~/types/prices";
 import { usePythSse } from "./usePtyhSSE";
-import { usePythWs } from "./usePtyhWs";
 
 type PriceContextType = {
   prices: { current: PricesMap };
+  vaa: { current: string[] };
   isConnected: boolean;
   createConnection: () => void;
   closeConnection: () => void;
@@ -28,6 +28,7 @@ const PriceContextProvider = ({
   initialPrices?: PricesMap;
 }>) => {
   const {
+    vaa,
     wsConnected,
     createWsConnection,
     closeWsConnection,
@@ -38,6 +39,7 @@ const PriceContextProvider = ({
   return (
     <PriceContext.Provider
       value={{
+        vaa: vaa,
         prices: pythOffChainPrices,
         isConnected: wsConnected,
         createConnection: createWsConnection,
@@ -56,6 +58,14 @@ const usePriceData = () => {
     throw new Error("usePriceData must be used within a PriceProvider");
   }
   return context?.prices;
+};
+
+const useVaa = () => {
+  const context = React.useContext(PriceContext);
+  if (context === undefined) {
+    throw new Error("useVaa must be used within a PriceProvider");
+  }
+  return context?.vaa;
 };
 
 const useIsPythConnected = () => {
@@ -88,6 +98,7 @@ const usePriceEvents = () => {
 export {
   PriceContextProvider,
   usePriceData,
+  useVaa,
   useIsPythConnected,
   restartPythConnection,
   usePriceEvents,

@@ -22,6 +22,7 @@ export const usePythSse = ({
   const eventSource = useRef<EventSource | null>(null);
   const lastConnectionTime = useRef<number>();
   const pythOffChainPrices = useRef<PricesMap>(initialPrices);
+  const vaa = useRef<string[]>([]);
   const wsTimeoutId = useRef<ReturnType<typeof setTimeout>>();
   const [wsConnected, setWsConnected] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -91,6 +92,8 @@ export const usePythSse = ({
         event.data,
       ) as PriceUpdate;
 
+      vaa.current = binary.data.map((vaa) => `0x${vaa}`);
+
       pythOffChainPrices.current =
         priceFeed?.reduce((acc, priceFeed) => {
           const id = normalizePythId(priceFeed.id);
@@ -105,14 +108,11 @@ export const usePythSse = ({
               // @ts-ignore
               [pairIndex]: new PriceFeed({
                 ...priceFeed,
-                vaa: `0x${binary.data[0]}`,
               }),
             };
           }
           return acc;
         }, {}) ?? {};
-
-      console.log("SSE pythOffChainPrices.current", pythOffChainPrices.current);
 
       throttleOffChainPricesUpdate(pythOffChainPrices.current);
     });
@@ -134,6 +134,7 @@ export const usePythSse = ({
 
   return {
     wsConnected,
+    vaa,
     isError,
     createWsConnection: createSseConnection,
     closeWsConnection: closeSseConnection,

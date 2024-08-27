@@ -9,19 +9,22 @@ export const getOffChainPrices = async () => {
     PYTH_IDS.map((pythPrice) => pythPrice.id),
   );
 
-  return pythPrices?.parsed?.reduce((acc, priceFeed) => {
-    const id = normalizePythId(priceFeed.id);
-    const pairIndex = PYTH_IDS.find((price) => id === price.id)?.pairIndex;
-    if (pairIndex) {
-      return {
-        ...acc,
-        // @ts-ignore
-        [pairIndex]: new PriceFeed({
-          ...priceFeed,
-          vaa: `0x${pythPrices.binary.data[0]}`,
-        }),
-      };
-    }
-    return acc;
-  }, {});
+  return {
+    vaa: pythPrices?.binary.data.map((vaa) => `0x${vaa}`) ?? [],
+    prices: pythPrices?.parsed?.reduce((acc, priceFeed) => {
+      const id = normalizePythId(priceFeed.id);
+      const pairIndex = PYTH_IDS.find((price) => id === price.id)?.pairIndex;
+      if (pairIndex) {
+        return {
+          ...acc,
+          // @ts-ignore
+          [pairIndex]: new PriceFeed({
+            ...priceFeed,
+            vaa: `0x${pythPrices.binary.data[0]}`,
+          }),
+        };
+      }
+      return acc;
+    }, {}),
+  };
 };
