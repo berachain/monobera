@@ -8,7 +8,6 @@ on:
 
 jobs:  
   build:
-    environment: 'production'
     runs-on: ubuntu-22.04
     env:
       FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}

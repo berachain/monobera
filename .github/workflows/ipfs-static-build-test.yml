@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    environment: 'production'
     env: 
       NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
       PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
