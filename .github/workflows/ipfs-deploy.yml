@@ -13,10 +13,7 @@ jobs:
       FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
       FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
       NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
-
   
- 
-
     steps:
     - uses: actions/checkout@v4
     - name: Install pnpm
@@ -25,12 +22,9 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 18.18.2
-        cache:
-          key: ${CI_COMMIT_REF_SLUG}
-          paths:
-            - node_modules/
-            - .next/cache/
+        node-version: 18.18.2        
+        cache: 'pnpm'
+
         
     - name: Install dependencies
       run: pnpm install
@@ -41,9 +35,7 @@ jobs:
     - name: Set environment variables
       run: pnpm set-env:bartio
       
-    - name: Build all projects
-      env:
-        NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
+    - name: Build all projects 
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
       
     - name: Deploy Berps
