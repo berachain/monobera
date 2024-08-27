@@ -9,7 +9,10 @@ import { EventEmitter } from "events";
 import { PYTH_IDS } from "~/utils/constants";
 import { normalizePythId } from "./utils";
 import { perpsPricesEndpoint } from "@bera/config";
-
+import { PriceFeed } from "@pythnetwork/pyth-evm-js";
+function hex2bin(hex: string) {
+  return parseInt(hex, 16).toString(2).padStart(8, "0");
+}
 export const usePythSse = ({
   initialPrices = {},
 }: {
@@ -99,11 +102,17 @@ export const usePythSse = ({
 
             return {
               ...acc,
-              [pairIndex]: { ...priceFeed, vaa: binary },
+              // @ts-ignore
+              [pairIndex]: new PriceFeed({
+                ...priceFeed,
+                vaa: `0x${binary.data[0]}`,
+              }),
             };
           }
           return acc;
         }, {}) ?? {};
+
+      console.log("SSE pythOffChainPrices.current", pythOffChainPrices.current);
 
       throttleOffChainPricesUpdate(pythOffChainPrices.current);
     });

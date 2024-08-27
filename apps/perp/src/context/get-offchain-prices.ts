@@ -15,8 +15,11 @@ export const getOffChainPrices = async () => {
     if (pairIndex) {
       return {
         ...acc,
-        // @ts-expect-error TODO: we should migrate to PriceFeedMetadata in formatPyth.ts
-        [pairIndex]: new PriceFeed(priceFeed),
+        // @ts-ignore
+        [pairIndex]: new PriceFeed({
+          ...priceFeed,
+          vaa: `0x${pythPrices.binary.data[0]}`,
+        }),
       };
     }
     return acc;
