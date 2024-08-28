@@ -1,7 +1,8 @@
+import Image from "next/image";
 import { usePollGlobalData } from "@bera/berajs";
+import { cloudinaryUrl } from "@bera/config";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
-import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 
 export const ValidatorGlobalInfo = () => {
@@ -17,8 +18,13 @@ export const ValidatorGlobalInfo = () => {
       ),
       text: "Total Validators",
       img: (
-        <div className="absolute bottom-3 right-3">
-          <Icons.valiCounts />
+        <div className="absolute bottom-0 right-0">
+          <Image
+            src={`${cloudinaryUrl}/station/validators`}
+            alt="Total Validators"
+            width={140}
+            height={140}
+          />
         </div>
       ),
     },
@@ -31,8 +37,13 @@ export const ValidatorGlobalInfo = () => {
       ),
       text: "Total Active Incentives",
       img: (
-        <div className="absolute bottom-3 right-3">
-          <Icons.celebrateIcons />
+        <div className="absolute bottom-0 right-0">
+          <Image
+            src={`${cloudinaryUrl}/station/incentives`}
+            alt="Validator Incentives"
+            width={100}
+            height={100}
+          />
         </div>
       ),
     },
@@ -47,7 +58,12 @@ export const ValidatorGlobalInfo = () => {
       text: "BGT Inflation per year",
       img: (
         <div className="absolute bottom-0 right-0">
-          <Icons.inflationIcons />
+          <Image
+            src={`${cloudinaryUrl}/station/inflation`}
+            alt="Inflation"
+            width={80}
+            height={80}
+          />
         </div>
       ),
     },
@@ -61,8 +77,13 @@ export const ValidatorGlobalInfo = () => {
       ),
       text: "Active gauges",
       img: (
-        <div className="absolute bottom-0 right-3">
-          <Icons.clockIcons />
+        <div className="absolute bottom-0 right-0">
+          <Image
+            src={`${cloudinaryUrl}/station/active-gauges`}
+            alt="Active Gauges"
+            width={100}
+            height={100}
+          />
         </div>
       ),
     },
@@ -71,7 +92,7 @@ export const ValidatorGlobalInfo = () => {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {generalInfo.map((info, index) => (
         <Card
-          className="relative h-[150px] border-border bg-muted p-6 text-left"
+          className="relative h-[150px] border-border p-6 text-left"
           key={info.text + index}
         >
           <div className="text-xs font-medium leading-[14px] text-muted-foreground">

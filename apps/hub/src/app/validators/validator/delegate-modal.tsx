@@ -5,7 +5,13 @@ import { Address } from "viem";
 
 import { DelegateContent } from "./delegate-content";
 
-export const DelegateModal = ({ validator }: { validator: Address }) => {
+export const DelegateModal = ({
+  validator,
+  setIsValidatorDataLoading,
+}: {
+  validator: Address;
+  setIsValidatorDataLoading: (loading: boolean) => void;
+}) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -13,7 +19,10 @@ export const DelegateModal = ({ validator }: { validator: Address }) => {
       <Button onClick={() => setOpen(true)}>Delegate</Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-full md:w-[550px]">
-          <DelegateContent validator={validator} />
+          <DelegateContent
+            validator={validator}
+            setIsValidatorDataLoading={setIsValidatorDataLoading}
+          />
         </DialogContent>
       </Dialog>
     </>

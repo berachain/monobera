@@ -1,5 +1,4 @@
-import { FormattedNumber } from "@bera/shared-ui";
-import { Icons } from "@bera/ui/icons";
+import { FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import { type ColumnDef } from "@tanstack/react-table";
 
 export const validatorIncentivesColumns: ColumnDef<any>[] = [
@@ -8,15 +7,14 @@ export const validatorIncentivesColumns: ColumnDef<any>[] = [
     accessorKey: "symbol",
     cell: ({ row }) => {
       return (
-        <div className="flex w-48 gap-1 items-center">
-          {row.original.symbol === "BGT" ? (
-            <Icons.bgt className="h-4 w-4 " />
-          ) : row.original.symbol === "HONEY" ? (
-            <Icons.honey className="h-4 w-4" />
-          ) : (
-            <Icons.bera className="h-4 w-4" />
-          )}
-          <p className="">{`${row.original.symbol}`}</p>
+        <div className="flex w-48 items-center gap-1">
+          <TokenIcon
+            symbol={row.original.token.symbol}
+            address={row.original.token.address}
+            className="mr-2 h-6 w-6"
+            key={row.original.token.address}
+          />
+          <p className="">{`${row.original.token.symbol}`}</p>
         </div>
       );
     },
@@ -24,18 +22,18 @@ export const validatorIncentivesColumns: ColumnDef<any>[] = [
   },
   {
     header: "Earned",
-    accessorKey: "earned",
+    accessorKey: "totalUsdValueTokenRewarded",
     cell: ({ row }) => {
       return (
         <div className="flex gap-2">
           <FormattedNumber
-            value={row.original.earned}
+            value={row.original.totalTokenRewarded}
             className="text-semibold flex"
           />
           <div className="flex text-muted-foreground">
             {"("}
             <FormattedNumber
-              value={row.original.value}
+              value={row.original.totalUsdValueTokenRewarded}
               symbol="USD"
               className="text-semibold flex"
             />

@@ -7,6 +7,7 @@ import {
   useBgtUnstakedBalance,
   useUserActiveValidators,
   useUserValidators,
+  useUserValidatorsSubgraph,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { ActionButton, FormattedNumber, useTxn } from "@bera/shared-ui";
@@ -18,11 +19,18 @@ import { Address, parseUnits } from "viem";
 import ValidatorInput from "~/components/validator-input";
 import { DelegateEnum, ImageMapEnum } from "./types";
 
-export const DelegateContent = ({ validator }: { validator?: Address }) => {
+export const DelegateContent = ({
+  validator,
+  setIsValidatorDataLoading,
+}: {
+  validator?: Address;
+  setIsValidatorDataLoading: (loading: boolean) => void;
+}) => {
   const { isReady } = useBeraJs();
 
   const [amount, setAmount] = React.useState<string | undefined>(undefined);
   const { refresh } = useUserValidators();
+  const { refresh: refreshUsers } = useUserValidatorsSubgraph();
   const { refresh: refreshActive } = useUserActiveValidators();
 
   const { data: bgtBalance, refresh: refreshBalance } = useBgtUnstakedBalance();
@@ -40,10 +48,13 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
     message: `Delegating ${Number(amount).toFixed(2)} BGT to Validator`,
     actionType: TransactionActionType.DELEGATE,
     onSuccess: () => {
+      setIsValidatorDataLoading(true);
       setTimeout(() => {
         refresh();
+        refreshUsers();
         refreshActive();
         refreshBalance();
+        setIsValidatorDataLoading(false);
       }, 5000);
     },
   });

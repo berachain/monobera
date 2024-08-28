@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useUserActiveValidators, type UserValidator } from "@bera/berajs";
-import { DataTable } from "@bera/shared-ui";
+import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { user_general_validator_columns } from "~/columns/general-validator-columns";
@@ -27,13 +27,27 @@ export const MyValidator = ({
       }
     });
   }, [data, keyword]);
+
+  const allValidatorTable = useAsyncTable({
+    fetchData: () => {},
+    columns: user_general_validator_columns as ColumnDef<UserValidator>[],
+    data: validators ?? [],
+    enablePagination: false,
+    additionalTableProps: {
+      meta: {
+        loading: isLoading,
+        loadingText: "Loading...",
+        validating: isValidating,
+      },
+    },
+  });
+
   return (
-    <DataTable
-      loading={isLoading}
-      validating={isValidating}
-      columns={user_general_validator_columns as ColumnDef<UserValidator>[]}
-      data={validators}
-      className="min-w-[1000px]"
+    <SimpleTable
+      table={allValidatorTable}
+      flexTable
+      variant="ghost"
+      showToolbar={false}
       onRowClick={onRowClick}
     />
   );

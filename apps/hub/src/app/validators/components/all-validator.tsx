@@ -1,41 +1,39 @@
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   usePollValidatorInfo,
   useUserValidators,
-  type UserValidator,
   type Validator,
 } from "@bera/berajs";
-import { DataTable } from "@bera/shared-ui";
-import type { ColumnDef, TableState } from "@tanstack/react-table";
+import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
+import type {
+  ColumnDef,
+  PaginationState,
+  SortingState,
+  TableState,
+  Updater,
+} from "@tanstack/react-table";
 
-import {
-  general_validator_columns,
-  user_general_validator_columns,
-} from "~/columns/general-validator-columns";
+import { generalValidatorColumns } from "~/columns/general-validator-columns";
 
 const VALIDATOR_PAGE_SIZE = 10;
 
 export const AllValidator = ({
-  user = false,
   keyword,
   isTyping,
   onRowClick,
+  page,
+  setPage,
 }: {
-  user?: boolean;
   keyword?: any;
   isTyping?: boolean;
   onRowClick?: any;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }) => {
-  const [page, setPage] = useState(0);
-  const [sorting, setSorting] = useState([{ id: "votingpower", desc: true }]);
-  const handleNewSort = (newSort: any) => {
-    if (newSort === sorting) return;
-    setSorting(newSort);
-  };
-  const fetchData = useCallback(
-    (state: TableState) => setPage(state?.pagination?.pageIndex),
-    [setPage],
-  );
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "votingpower", desc: true },
+  ]);
+
   const {
     validatorInfoList,
     isLoading,
@@ -56,54 +54,77 @@ export const AllValidator = ({
   } = useUserValidators();
 
   const validators = useMemo(() => {
-    if (user) {
-      return validatorInfoList.map((validator: Validator) => {
-        const uVali = data.find(
-          (userValidator: UserValidator) =>
-            userValidator.coinbase === validator.coinbase,
-        );
-        if (uVali) {
-          return {
-            ...validator,
-            userStaked: uVali.userStaked,
-            userQueued: uVali.userQueued,
-            latestBlock: uVali.latestBlock,
-            latestBlockTime: uVali.latestBlockTime,
-          };
-        }
-        return {
-          ...validator,
-          userStaked: "0",
-          userQueued: "0",
-          latestBlock: "0",
-          latestBlockTime: "0",
-        };
-      });
-    }
     return validatorInfoList;
   }, [data, validatorInfoList]);
 
+  const fetchData = useCallback(
+    (state: TableState) => {
+      setPage(state?.pagination?.pageIndex);
+      setSorting(state?.sorting);
+    },
+    [setPage],
+  );
+
+  const handleSortingChange = useCallback(
+    (updater: Updater<SortingState>) => {
+      setSorting((prev: SortingState) => {
+        return typeof updater === "function" ? updater(prev ?? []) : updater;
+      });
+    },
+    [setSorting],
+  );
+
+  const handlePaginationChange = useCallback(
+    (updater: Updater<PaginationState>) => {
+      setPage((prev: number) => {
+        const newPaginationState =
+          typeof updater === "function"
+            ? updater({
+                pageIndex: prev ?? 0,
+                pageSize: VALIDATOR_PAGE_SIZE,
+              })
+            : updater;
+        return newPaginationState.pageIndex ?? 0;
+      });
+    },
+    [setPage],
+  );
+
+  const allValidatorTable = useAsyncTable({
+    fetchData: fetchData,
+    columns: generalValidatorColumns as ColumnDef<Validator>[],
+    data: validators ?? [],
+    enablePagination: true,
+    additionalTableProps: {
+      meta: {
+        loading: isLoading || isUserLoading,
+        loadingText: "Loading...",
+        validating: isValidating || isUserValidating,
+      },
+      state: {
+        pagination: {
+          pageIndex: page,
+          pageSize: VALIDATOR_PAGE_SIZE,
+        },
+        sorting,
+      },
+      manualSorting: true,
+      manualPagination: true,
+      autoResetPageIndex: false,
+      pageCount: Math.ceil(validatorCounts / VALIDATOR_PAGE_SIZE),
+      onPaginationChange: handlePaginationChange,
+      onSortingChange: handleSortingChange,
+    },
+  });
+
   return (
-    <DataTable
-      columns={
-        (user
-          ? (user_general_validator_columns as ColumnDef<UserValidator>[])
-          : general_validator_columns) as ColumnDef<Validator>[]
-      }
-      data={validators}
-      className="min-h-[600px] min-w-[1000px]"
-      fetchData={fetchData}
-      enablePagination
-      loading={isLoading || isUserLoading}
-      validating={isValidating || isUserValidating}
-      additionalTableProps={{
-        initialState: { pagination: { pageSize: VALIDATOR_PAGE_SIZE } },
-        state: { sorting },
-        pageCount: Math.ceil(validatorCounts / VALIDATOR_PAGE_SIZE),
-        manualPagination: true,
-      }}
+    <SimpleTable
+      table={allValidatorTable}
+      className="min-h-[614px]"
+      flexTable
+      wrapperClassName="min-h-[614px]"
+      variant="ghost"
       onRowClick={onRowClick}
-      onCustomSortingChange={(a: any) => handleNewSort(a)}
     />
   );
 };

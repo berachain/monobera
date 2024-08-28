@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useUserValidatorsSubgraph } from "@bera/berajs";
-import { FormattedNumber } from "@bera/shared-ui";
+import { FormattedNumber, Spinner } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Address } from "viem";
@@ -10,7 +10,8 @@ import { DelegateModal } from "./delegate-modal";
 import { UnbondModal } from "./unbond-modal";
 
 export const UserDelegation = ({ validator }: { validator: Address }) => {
-  const { data = [], refresh, isLoading } = useUserValidatorsSubgraph();
+  const { data = [], isLoading } = useUserValidatorsSubgraph();
+  const [isValidatorDataLoading, setIsValidatorDataLoading] = useState(false);
 
   const userStaked = useMemo(() => {
     return data.find(
@@ -21,8 +22,14 @@ export const UserDelegation = ({ validator }: { validator: Address }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <div className="text-xl font-semibold">Your Delegations</div>
-        <DelegateModal validator={validator} />
+        <div className="flex items-center">
+          <div className="mr-2 text-xl font-semibold">Your Delegations</div>
+          {isValidatorDataLoading && <Spinner size={18} color="white" />}
+        </div>
+        <DelegateModal
+          validator={validator}
+          setIsValidatorDataLoading={setIsValidatorDataLoading}
+        />
       </div>
       {isLoading ? (
         <Skeleton className="h-full w-full" />
@@ -47,7 +54,10 @@ export const UserDelegation = ({ validator }: { validator: Address }) => {
                   </div>
                   <div className="text-muted-foreground">Delegated</div>
                 </div>
-                <UnbondModal userValidator={userStaked} />
+                <UnbondModal
+                  setIsValidatorDataLoading={setIsValidatorDataLoading}
+                  userValidator={userStaked}
+                />
               </div>
               <hr />
               {/* {ActivateModalPortal}
@@ -59,7 +69,10 @@ export const UserDelegation = ({ validator }: { validator: Address }) => {
                 isTxnLoading={isActivationLoading || isCancelLoading}
                 handleTransaction={handleTransaction}
               /> */}
-              <BoostQueue selectedValidator={validator as string} />
+              <BoostQueue
+                setIsValidatorDataLoading={setIsValidatorDataLoading}
+                selectedValidator={validator as string}
+              />
             </>
           )}
         </>

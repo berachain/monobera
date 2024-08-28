@@ -21,8 +21,10 @@ import { DelegateEnum, ImageMapEnum } from "./types";
 
 export const UnDelegateContent = ({
   userValidator,
+  setIsValidatorDataLoading,
 }: {
   userValidator: SubgraphUserValidator;
+  setIsValidatorDataLoading: (loading: boolean) => void;
 }) => {
   const { isConnected } = useBeraJs();
   const { theme, systemTheme } = useTheme();
@@ -39,7 +41,11 @@ export const UnDelegateContent = ({
     message: "Unbonding from Validator",
     actionType: TransactionActionType.UNBONDING,
     onSuccess: () => {
-      refresh();
+      setIsValidatorDataLoading(true);
+      setTimeout(() => {
+        refresh();
+        setIsValidatorDataLoading(false);
+      }, 5000);
     },
   });
 

@@ -2,8 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   truncateHash,
   useBeraJs,
-  usePollValidatorInfo,
-  useSelectedValidator,
   useValidValidator,
   useValidatorList,
 } from "@bera/berajs";
@@ -13,22 +11,17 @@ import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
-import { AllValidator } from "~/app/validators/components/all-validator";
-import { MyValidator } from "~/app/validators/components/my-validators";
-
 export default function ValidatorSelector({
   validatorAddress = "0x",
   onSelectValidator,
   showDelegated = false,
   unselectable = false,
-  filter,
   showSearch,
 }: {
   validatorAddress?: Address;
   onSelectValidator?: (address: string) => void;
   showDelegated?: boolean;
   unselectable?: boolean;
-  filter?: Address[];
   showSearch?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
@@ -117,7 +110,6 @@ const ValidatorModal = ({
   onClose: () => void;
   onSelect: (address: string) => void;
 }) => {
-  const { isReady } = useBeraJs();
   const [isTyping, setIsTyping] = useState(false);
   const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
   const [keyword, setKeyword] = useState("");
@@ -172,26 +164,6 @@ const ValidatorModal = ({
                 </Button>
               ))}
           </div>
-
-          {unbond || showDelegated ? (
-            <MyValidator
-              keyword={keyword}
-              onRowClick={(row: any) => {
-                onSelect(row.original.coinbase);
-                onClose();
-              }}
-            />
-          ) : (
-            <AllValidator
-              user={isReady}
-              keyword={keyword}
-              isTyping={isTyping}
-              onRowClick={(row: any) => {
-                onSelect(row.original.coinbase);
-                onClose();
-              }}
-            />
-          )}
         </div>
       </DialogContent>
     </Dialog>

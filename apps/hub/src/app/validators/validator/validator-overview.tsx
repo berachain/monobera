@@ -1,8 +1,17 @@
-import { useTokenHoneyPrices, type Token, type Validator } from "@bera/berajs";
+import {
+  usePollValidatorAllBlockStats,
+  usePollValidatorBlockStats,
+  usePollValidators,
+  useTokenHoneyPrices,
+  type AllTimeValidatorBlockCount,
+  type Token,
+  type Validator,
+} from "@bera/berajs";
 import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
+import { Skeleton } from "@bera/ui/skeleton";
 import { type Address } from "viem";
 
 import { type ActiveIncentiveWithVault } from "~/types/validators";
@@ -36,6 +45,38 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   const activeIncentivesArray: ActiveIncentiveWithVault[] =
     getActiveIncentivesArray(validator);
 
+  const { data, isLoading } = usePollValidatorBlockStats(validator.id);
+  const blocksSigned =
+    data?.blockStatsByValidators?.[0]?.allTimeblockCount ?? 0;
+  const totalBlocks = data?.blockStats_collection?.[0]?.allTimeblockCount ?? 0;
+  const {
+    data: allValidatorBlockData,
+    isLoading: isLoadingAllValidatorBlockData,
+  } = usePollValidatorAllBlockStats();
+  const { data: allValidators, isLoading: isLoadingValidators } =
+    usePollValidators();
+
+  const totalValidators = allValidators?.validators?.length ?? 0;
+  let valStakedRanking = -1;
+  allValidators?.validators?.find((v: Validator, index: number) => {
+    if (v.coinbase === validator.coinbase.toLowerCase()) {
+      valStakedRanking = index + 1;
+      return true;
+    }
+    return;
+  });
+
+  let valSignedRanking = -1;
+  allValidatorBlockData?.blockStatsByValidators?.find(
+    (v: AllTimeValidatorBlockCount, index: number) => {
+      if (v.validator.coinbase === validator.coinbase.toLowerCase()) {
+        valSignedRanking = index + 1;
+        return true;
+      }
+      return;
+    },
+  );
+
   const activeIncentivesTokens = [
     ...new Set(activeIncentivesArray?.map((incentive) => incentive.token)),
   ];
@@ -44,16 +85,6 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
       (t: Token) => t.address,
     ) as Address[],
   });
-
-  // const activeIncentivesValue: number = activeIncentivesArray?.reduce(
-  //   (acc: number, ab: ActiveIncentiveWithVault) => {
-  //     const tokenPrice = parseFloat(
-  //       tokenHoneyPrices?.[ab.token.address] ?? "0",
-  //     );
-  //     return acc + ab.amountLeft * tokenPrice;
-  //   },
-  //   0,
-  // );
 
   const returnPerBgt: number = activeIncentivesArray?.reduce(
     (acc: number, ab: ActiveIncentiveWithVault) => {
@@ -68,9 +99,10 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
       <div className="mt-2 flex flex-col gap-2">
-        <div className="flex justify-end text-sm text-muted-foreground">
+        {/* TODO: Binary Version?!? */}
+        {/* <div className="flex justify-end text-sm text-muted-foreground">
           {"Binary Version: V9.41"}
-        </div>
+        </div> */}
         <div className="grid w-full grid-cols-1 gap-x-0 gap-y-4 md:grid-cols-2 md:gap-x-4">
           <ValidatorDataCard
             className="h-[130px]"
@@ -78,13 +110,21 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
             value={
               <div className="flex flex-col items-start gap-1">
                 <div className="relative flex w-full flex-row justify-between">
-                  <span className="text-2xl font-semibold">{"1 of 119"}</span>
+                  {isLoadingValidators ? (
+                    <Skeleton className="mt-1 h-8 w-44" />
+                  ) : (
+                    <span className="text-2xl font-semibold">
+                      {valStakedRanking === -1
+                        ? "Unranked"
+                        : `${valStakedRanking} of ${totalValidators}`}
+                    </span>
+                  )}
                   <Icons.logo className="absolute right-0 h-16 w-16 self-center text-muted" />
                 </div>
-
-                <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
+                {/* TODO */}
+                {/* <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
                   {"+14 from last month"}
-                </span>
+                </span> */}
               </div>
             }
           />
@@ -94,21 +134,31 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
             value={
               <div className="flex flex-col items-start gap-1">
                 <div className="relative flex w-full flex-row justify-between">
-                  {/* TODO */}
-                  <span className="text-2xl font-semibold">{"1 of 119"}</span>
+                  {isLoading || isLoadingValidators ? (
+                    <Skeleton className="mt-1 h-8 w-44" />
+                  ) : (
+                    <span className="text-2xl font-semibold">
+                      {valSignedRanking === -1
+                        ? "Unranked"
+                        : `${valSignedRanking} of ${totalValidators}`}
+                    </span>
+                  )}
                   <Icons.cube className="absolute right-0 h-16 w-16 self-center text-muted" />
                 </div>
 
-                <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
-                  {/* TODO */}
-                  {"Signed: 10,000,127 / 10,000,023,399"}
-                </span>
+                {isLoading ? (
+                  <Skeleton className="mt-1 h-4 w-full" />
+                ) : (
+                  <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
+                    {`Signed: ${blocksSigned} / ${totalBlocks}`}
+                  </span>
+                )}
               </div>
             }
           />
           <ValidatorDataCard
             className="h-[130px]"
-            title="Avg Reward Rate (Per Block Proposal)"
+            title="Avg. Reward Rate (Per Block Proposal)"
             value={
               <div className="flex flex-col items-start gap-1">
                 <div className="relative flex w-full flex-row gap-1">
@@ -118,11 +168,10 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
                   />
                   <Icons.bgt className="h-6 w-6 self-center" />
                 </div>
-
-                <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
-                  {/* TODO */}
+                {/* TODO: Ask to get delta by month of reward rate on subgraph */}
+                {/* <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-muted-foreground">
                   {"+2.5% from last month"}
-                </span>
+                </span> */}
               </div>
             }
           />
@@ -142,7 +191,8 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
             }
           />
         </div>
-        <Uptime address={validator.id} />
+        {/* TODO: Uptime */}
+        {/* <Uptime address={validator.id} /> */}
       </div>
       <UserDelegation validator={validator.id} />
     </div>

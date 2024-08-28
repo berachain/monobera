@@ -24,31 +24,26 @@ import { CuttingBoardDisplay } from "~/app/validators/components/validators-tabl
 import { useValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBgtPerYear";
 
 const VALIDATOR_COLUMN: ColumnDef<Validator> = {
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Validator" />
-  ),
+  header: "Validator",
   cell: ({ row }) => (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1 overflow-hidden truncate">
       <ValidatorIcon
         address={row.original.id as Address}
-        className="h-8 w-8"
+        className="h-8 w-8 flex-shrink-0"
         imgOverride={row.original.metadata?.logoURI}
       />
-      {row.original.metadata?.name ?? truncateHash(row.original.id)}{" "}
+      <span className="flex-grow truncate">
+        {row.original.metadata?.name ?? truncateHash(row.original.id)}
+      </span>
     </div>
   ),
+  minSize: 200,
   accessorKey: "name",
   enableSorting: false,
 };
 
 const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
-  header: ({ column }) => (
-    <DataTableColumnHeader
-      column={column}
-      title="BGT delegated"
-      className="min-w-[200px] whitespace-nowrap"
-    />
-  ),
+  header: "BGT Delegated",
   cell: ({ row }) => (
     <div className="w-full text-start">
       <FormattedNumber
@@ -58,14 +53,13 @@ const GLOBAL_VOTING_POWER_COLUMN: ColumnDef<Validator> = {
       />
     </div>
   ),
+  minSize: 200,
   accessorKey: "votingpower",
   enableSorting: true,
 };
 
 const COMMISSION_COLUMN: ColumnDef<Validator> = {
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Commission" />
-  ),
+  header: "Commission",
   cell: ({ row }) => {
     return (
       <FormattedNumber
@@ -80,27 +74,23 @@ const COMMISSION_COLUMN: ColumnDef<Validator> = {
 };
 
 const APY_COLUMN: ColumnDef<Validator> = {
-  header: ({ column }) => (
-    <DataTableColumnHeader
-      column={column}
-      className="min-w-[150px] whitespace-nowrap"
-      title="vApy"
-      tooltip={bribeApyTooltipText()}
-    />
-  ),
+  header: "vAPY",
   cell: ({ row }) => (
     <div className="flex h-full w-[91px] items-center">
       <FormattedNumber value={row.original.apy / 10000} percent />
     </div>
   ),
+  minSize: 150,
+  meta: {
+    tooltip: bribeApyTooltipText(),
+    headerClassname: "flex-initial",
+  },
   accessorKey: "apy",
   enableSorting: true,
 };
 
 const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Most Weighted Vault" />
-  ),
+  header: "Most Weighted Vault",
   cell: ({ row }) => {
     const cuttingBoards: CuttingBoardWeight[] =
       row.original.cuttingBoard.weights ?? [];
@@ -114,9 +104,7 @@ const MOST_WEIGHTED_GAUGE_COLUMN: ColumnDef<Validator> = {
 };
 
 const BRIBES_COLUMN: ColumnDef<Validator> = {
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Incentives" />
-  ),
+  header: "Incentives",
   cell: ({ row }) => {
     return <BribesPopover incentives={row.original.activeIncentives} />;
   },
@@ -381,7 +369,7 @@ export const getGaugeValidatorColumns = (gauge: Gauge) => {
   return gauge_validator_columns;
 };
 
-export const general_validator_columns: ColumnDef<Validator>[] = [
+export const generalValidatorColumns: ColumnDef<Validator>[] = [
   VALIDATOR_COLUMN,
   GLOBAL_VOTING_POWER_COLUMN,
   COMMISSION_COLUMN,

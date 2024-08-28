@@ -15,11 +15,11 @@ export const ValidatorConfiguration = ({
   const [commission, setCommission] = useState<string>("0");
 
   const handleSaveSettings = useCallback(() => {
-    console.log("changing settings");
+    console.log("changing settings", validatorAddress);
   }, []);
 
   const handleUpdateMetadata = useCallback(() => {
-    console.log("updating metadata");
+    console.log("updating metadata", validatorAddress);
   }, []);
 
   return (
@@ -61,14 +61,14 @@ export const ValidatorConfiguration = ({
       <Card className="flex flex-col gap-1 p-4">
         <span className="text-2xl font-bold">Update your metadata</span>
         <span className="text-sm text-muted-foreground">
-          Configure your operator address & commission
+          Configure and modify your validator metadata
         </span>
         <div
           className="mt-2 flex cursor-pointer items-center text-xl font-bold"
           onClick={handleUpdateMetadata}
         >
-          {"Get Started"}
-          <Icons.arrowRight className="ml-1 cursor-pointer" />
+          {"Coming Soon"}
+          {/* <Icons.arrowRight className="ml-1 cursor-pointer" /> */}
         </div>
       </Card>
     </div>
