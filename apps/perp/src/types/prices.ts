@@ -6,7 +6,9 @@ export type HermesPrice = NonNullable<PriceUpdate["parsed"]>[number];
 
 export type PricesMap = Record<string | number, HermesPrice>;
 
-export type PricesListener = (updatedPrices: {
+export type PriceUpdateEvent = {
   prices: PricesMap;
   source: "fetch" | "stream";
-}) => void;
+};
+
+export type PricesListener = (updatedPrices: PriceUpdateEvent) => void;

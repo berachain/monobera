@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { type PricesMap } from "~/types/prices";
+import { PriceUpdateEvent, type PricesMap } from "~/types/prices";
 
 import { PriceUpdate } from "@pythnetwork/hermes-client";
 import throttle from "lodash/throttle";
@@ -10,6 +10,7 @@ import { PYTH_IDS } from "~/utils/constants";
 import { normalizePythId } from "./utils";
 import { perpsPricesEndpoint } from "@bera/config";
 import { Address } from "viem";
+import { getOffChainPrices } from "./get-offchain-prices";
 
 export const usePythSse = ({
   initialPrices = {},
@@ -34,7 +35,7 @@ export const usePythSse = ({
         createSseConnection();
       }
       monitorConnection();
-    }, 1000);
+    }, 1_000);
   }, [wsConnected]);
 
   const updateSseStatus = useCallback((connected: boolean) => {
@@ -57,13 +58,20 @@ export const usePythSse = ({
 
     eventSource.current = new EventSource(url);
 
-    if (!eventSource.current) {
-      // throw error
-      setIsError(true);
-      return;
-    }
-
     monitorConnection();
+
+    // Fetches prices just in case the stream doesn't start
+    getOffChainPrices().then(({ prices, vaa: fetcheVaa }) => {
+      if (prices && fetcheVaa) {
+        pythOffChainPrices.current = prices;
+        events.current.emit("prices_updated", {
+          prices,
+          source: "fetch",
+        } satisfies PriceUpdateEvent);
+        vaa.current = fetcheVaa;
+      }
+    });
+
     eventSource.current.onerror = (event) => {
       const error = event as ErrorEvent;
       setIsError(true);
@@ -80,7 +88,7 @@ export const usePythSse = ({
         events.current.emit("prices_updated", {
           prices: offChainPrices,
           source: "stream",
-        });
+        } satisfies PriceUpdateEvent);
       },
       10,
     );
