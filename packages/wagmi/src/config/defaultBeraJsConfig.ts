@@ -79,9 +79,9 @@ export const wagmiConfig = createConfig({
   chains: [defaultBeraNetworkConfig.chain],
   multiInjectedProviderDiscovery: false,
   ssr: true,
-  storage: createStorage({
-    storage: cookieStorage,
-  }),
+  // storage: createStorage({
+  //   storage: cookieStorage,
+  // }),
 
   batch: {
     /**
