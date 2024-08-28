@@ -114,3 +114,67 @@ export type ValidatorList = {
   description: string;
   twitter: string;
 };
+
+export type UserValidatorBoostQueued = {
+  amountQueued: string;
+  user: Address;
+};
+
+export type UserValidatorBoostDeposited = {
+  amountDeposited: string;
+  user: Address;
+};
+
+export type ValidatorBgtStaked = {
+  allTimeBgtStaked: string;
+  bgtStaked: string;
+  coinbase: string;
+  timestamp: string;
+};
+
+export type ValidatorBgtStakedDelta = {
+  amountStaked: string;
+  coinbase: string;
+  timestamp: string;
+};
+
+export type ValidatorUsages = {
+  allTimeUsdValueTokenRewarded: string;
+};
+
+export type ValidatorUsage = {
+  bgtDirected: string;
+  timestamp: string;
+  allTimeBgtDirected: string;
+  allTimeUsdValueBgtDirected: string;
+  validator: {
+    commission: string;
+  };
+};
+
+export type BlockRewardStatsByValidators = {
+  timestamp: string;
+  rewardRate: string;
+  commissionRate: string;
+};
+
+export type AllTimeBlockCount = {
+  allTimeblockCount: string;
+};
+
+export type AllTimeValidatorBlockCount = {
+  allTimeblockCount: string;
+  validator: {
+    coinbase: string;
+  };
+  timestamp: string;
+};
+
+export type ValidatorTokenRewardUsages = {
+  token: Token;
+  tokenRewarded: string;
+  usdValueTokenRewarded: string;
+  timestamp: string;
+  allTimeUsdValueTokenRewarded: string;
+  id: string;
+};

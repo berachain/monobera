@@ -1,5 +1,3 @@
-import { Address } from "viem";
-
 import { BeraConfig, Validator } from "../../types";
 
 export interface GetValidatorsInfo {
