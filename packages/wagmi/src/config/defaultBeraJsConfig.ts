@@ -69,7 +69,7 @@ export const defaultBeraNetworkConfig: NetworkConfig = {
 export const wagmiConfig = createConfig({
   chains: [defaultBeraNetworkConfig.chain],
   multiInjectedProviderDiscovery: false,
-  ssr: true,
+  ssr: false,
   transports: {
     [defaultBeraNetworkConfig.chain.id]: http(
       defaultBeraNetworkConfig.chain.rpcUrls.default.http[0] || "",

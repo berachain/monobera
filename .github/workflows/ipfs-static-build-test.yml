@@ -10,11 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    env: 
-      NEXT_PUBLIC_DYNAMIC_API_KEY: ${{ secrets.NEXT_PUBLIC_DYNAMIC_API_KEY }}
-      PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
-      CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
-
     steps:
     - uses: actions/checkout@v4
     - name: Install pnpm
@@ -33,5 +28,8 @@ jobs:
       run: pnpm set-env:bartio
 
     - name: Build all projects 
+      env: 
+        PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
+        CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
      
