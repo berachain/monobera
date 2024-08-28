@@ -30,10 +30,11 @@ jobs:
     - name: Build all projects 
       env: 
         PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
-        CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
+        # CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
         NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
         SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
+
+      run: NEXT_PUBLIC_PERPS_TRADINGVIEW_ENABLED="false" NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter='./packages/*'
      
