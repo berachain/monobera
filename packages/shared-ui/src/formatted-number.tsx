@@ -87,6 +87,7 @@ export function FormattedNumber({
   maxValue,
   className,
   prefixText = "",
+  suffixText = "",
   showIsSmallerThanMin = true,
   ...props
 }: {
@@ -101,6 +102,7 @@ export function FormattedNumber({
   maxValue?: number;
   className?: string;
   prefixText?: string;
+  suffixText?: string;
   showIsSmallerThanMin?: boolean;
 }) {
   const number = percent ? Number(value) * 100 : Number(value);
@@ -177,6 +179,7 @@ export function FormattedNumber({
       {symbol?.toLowerCase() !== "usd" && typeof symbol !== "undefined" && (
         <span className="ml-0.5">{symbol}</span>
       )}
+      {suffixText && <span className="ml-0.5">{suffixText}</span>}
     </span>
   );
 }

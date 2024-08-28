@@ -53,7 +53,7 @@ export function SimpleTable<TData>({
       className={cn(
         "flex h-full w-full flex-col overflow-auto ",
         wrapperClassName,
-        variant !== "ghost" && "border border-border rounded-md "
+        variant !== "ghost" && "border border-border rounded-md ",
       )}
     >
       <ReactTable flexTable={flexTable} className={className}>

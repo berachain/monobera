@@ -29,7 +29,7 @@ export const ConnectButton = ({
   className,
   isNavItem = false,
   isHoney = false,
-  isPopover = true
+  isPopover = true,
 }: {
   className?: string;
   isNavItem?: boolean;
@@ -57,7 +57,9 @@ export const ConnectButton = ({
       {isWrongNetwork && isConnected && (
         <SwitchNetworkBtn className={className} />
       )}
-      {isReady && <ConnectedWalletPopover isPopover={isPopover} isHoney={isHoney} />}
+      {isReady && (
+        <ConnectedWalletPopover isPopover={isPopover} isHoney={isHoney} />
+      )}
     </>
   );
 };

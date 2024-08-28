@@ -1,5 +1,4 @@
 import "@tanstack/react-table";
-
 import { RowData } from "@tanstack/react-table";
 
 declare module "@tanstack/react-table" {
@@ -16,5 +15,8 @@ declare module "@tanstack/react-table" {
     filter?: ColumnDefTemplate<HeaderContext<TData, TValue>>;
     tooltip?: string;
     className?: string;
+    tooltip?: string | ReactElement | undefined;
+    tooltipClassname?: string;
+    headerClassname?: string;
   }
 }

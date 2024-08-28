@@ -18,7 +18,7 @@ import { WalletBalanceInUs } from "./wallet-balance-in-us";
 
 export default function ConnectedWalletPopover({
   isHoney = false,
-  isPopover = true
+  isPopover = true,
 }: {
   isHoney?: boolean;
   isPopover?: boolean;
