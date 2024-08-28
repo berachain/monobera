@@ -9,10 +9,7 @@ import { EventEmitter } from "events";
 import { PYTH_IDS } from "~/utils/constants";
 import { normalizePythId } from "./utils";
 import { perpsPricesEndpoint } from "@bera/config";
-import { PriceFeed } from "@pythnetwork/pyth-evm-js";
-function hex2bin(hex: string) {
-  return parseInt(hex, 16).toString(2).padStart(8, "0");
-}
+
 export const usePythSse = ({
   initialPrices = {},
 }: {
@@ -95,7 +92,7 @@ export const usePythSse = ({
       vaa.current = binary.data.map((vaa) => `0x${vaa}`);
 
       pythOffChainPrices.current =
-        priceFeed?.reduce((acc, priceFeed) => {
+        priceFeed?.reduce<PricesMap>((acc, priceFeed) => {
           const id = normalizePythId(priceFeed.id);
           const pairIndex = PYTH_IDS.find(
             (price) => id === price.id,
@@ -105,14 +102,13 @@ export const usePythSse = ({
 
             return {
               ...acc,
-              // @ts-ignore
-              [pairIndex]: new PriceFeed({
-                ...priceFeed,
-              }),
+              [pairIndex]: priceFeed,
             };
           }
           return acc;
         }, {}) ?? {};
+
+      lastConnectionTime.current = Date.now();
 
       throttleOffChainPricesUpdate(pythOffChainPrices.current);
     });
@@ -127,9 +123,9 @@ export const usePythSse = ({
     if (!eventSource.current) {
       createSseConnection();
     }
-    // return () => {
-    //   closeSseConnection();
-    // };
+    return () => {
+      closeSseConnection();
+    };
   }, []);
 
   return {

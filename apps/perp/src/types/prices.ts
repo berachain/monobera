@@ -1,8 +1,10 @@
-import { type PriceFeed } from "@pythnetwork/pyth-evm-js";
+import { PriceUpdate } from "@pythnetwork/hermes-client";
 
 export type PythIds = { id: string; symbol: string; name: string }[];
 
-export type PricesMap = Record<string, PriceFeed>;
+export type HermesPrice = NonNullable<PriceUpdate["parsed"]>[number];
+
+export type PricesMap = Record<string | number, HermesPrice>;
 
 export type PricesListener = (updatedPrices: {
   prices: PricesMap;
