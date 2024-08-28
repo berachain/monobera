@@ -9,6 +9,7 @@ import { EventEmitter } from "events";
 import { PYTH_IDS } from "~/utils/constants";
 import { normalizePythId } from "./utils";
 import { perpsPricesEndpoint } from "@bera/config";
+import { Address } from "viem";
 
 export const usePythSse = ({
   initialPrices = {},
@@ -19,7 +20,7 @@ export const usePythSse = ({
   const eventSource = useRef<EventSource | null>(null);
   const lastConnectionTime = useRef<number>();
   const pythOffChainPrices = useRef<PricesMap>(initialPrices);
-  const vaa = useRef<string[]>([]);
+  const vaa = useRef<Address[]>([]);
   const wsTimeoutId = useRef<ReturnType<typeof setTimeout>>();
   const [wsConnected, setWsConnected] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -89,7 +90,7 @@ export const usePythSse = ({
         event.data,
       ) as PriceUpdate;
 
-      vaa.current = binary.data.map((vaa) => `0x${vaa}`);
+      vaa.current = binary.data.map((vaa) => `0x${vaa}` satisfies Address);
 
       pythOffChainPrices.current =
         priceFeed?.reduce<PricesMap>((acc, priceFeed) => {

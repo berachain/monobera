@@ -1,19 +1,19 @@
 import { pythContractAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { pythAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 
 export const usePythUpdateFee = (
-  pricesList: string[] | undefined,
+  pricesList: Address[] | undefined,
   pairIndex: string | undefined,
 ) => {
   const publicClient = usePublicClient();
   const method = "getUpdateFee";
   const { account } = useBeraJs();
-  const validPrices =
-    pricesList && pricesList.length > 0 && pricesList[0] !== "";
+  const validPrices = pricesList && pricesList.length > 0;
   const QUERY_KEY = [account, method, pairIndex, validPrices];
   const { data, isLoading } = useSWRImmutable(QUERY_KEY, async () => {
     if (!publicClient) return undefined;

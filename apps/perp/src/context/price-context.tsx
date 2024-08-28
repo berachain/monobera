@@ -1,12 +1,13 @@
 import { EventEmitter } from "events";
 import React, { PropsWithChildren } from "react";
+import { Address } from "viem";
 
 import { type PricesMap } from "~/types/prices";
 import { usePythSse } from "./usePtyhSSE";
 
 type PriceContextType = {
   prices: { current: PricesMap };
-  vaa: { current: string[] };
+  vaa: { current: Address[] };
   isConnected: boolean;
   createConnection: () => void;
   closeConnection: () => void;
