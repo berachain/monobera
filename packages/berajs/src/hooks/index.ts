@@ -20,3 +20,4 @@ export * from "./useSubgraphTokenInformation";
 export * from "./useSubgraphTokenInformations";
 export * from "./useValidatorList";
 export * from "./useGaugesMetadata";
+export * from "./usePrevious";

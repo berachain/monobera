@@ -7,9 +7,9 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { usePollPositionsLiqFeePrices } from "@bera/berajs";
+import { usePollPositionsLiqFeePrices, usePrevious } from "@bera/berajs";
 import type { OpenTrade } from "@bera/proto/src";
-import { SimpleTable, useAsyncTable, usePrevious } from "@bera/shared-ui";
+import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import {
   TableState,
   type PaginationState,

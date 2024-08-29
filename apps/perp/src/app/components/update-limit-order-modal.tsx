@@ -3,10 +3,10 @@ import {
   TransactionActionType,
   formatUsd,
   tradingAbi,
+  usePrevious,
   usePythUpdateFee,
 } from "@bera/berajs";
 import { tradingContractAddress } from "@bera/config";
-import { usePrevious } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
