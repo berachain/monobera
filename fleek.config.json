@@ -1,7 +1,7 @@
 {
   "sites": [
     {
-      "slug": "many-rose-broad",
+      "slug": "berps-bartio",
       "distDir": "apps/perp/out",
       "buildCommand": "pnpm run build:perp"
     }
