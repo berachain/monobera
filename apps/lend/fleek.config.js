@@ -4,7 +4,7 @@ module.exports = {
     {
       slug: "full-laptop-old",
       distDir: "out",
-      buildCommand: "npm run build",
+      buildCommand: "npm run build:ipfs",
     },
   ],
 };

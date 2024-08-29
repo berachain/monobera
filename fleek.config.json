@@ -3,7 +3,7 @@
     {
       "slug": "berps-bartio",
       "distDir": "apps/perp/out",
-      "buildCommand": "pnpm run build:perp"
+      "buildCommand": "NEXT_PUBLIC_IPFS=true pnpm run build:perp"
     }
   ]
 }

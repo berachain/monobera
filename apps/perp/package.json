@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "build": "pnpm copy-chart && pnpm with-env next build",
+    "build:ipfs": "NEXT_PUBLIC_IPFS=true pnpm build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "pnpm with-env next dev -p 3004",
     "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start -p 3004",
     "check-types": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --",
+    "with-env": "dotenv -e ../../.env -c --",
     "copy-chart": "pnpm with-env node ./copy-charting-lib.js"
   },
   "dependencies": {
