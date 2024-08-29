@@ -78,7 +78,8 @@ export const defaultBeraNetworkConfig: NetworkConfig = {
 export const wagmiConfig = createConfig({
   chains: [defaultBeraNetworkConfig.chain],
   multiInjectedProviderDiscovery: false,
-  ssr: true,
+  // Setting might to true messes up some pages like lend dashboard and berpetuals charts
+  ssr: false,
   // storage: createStorage({
   //   storage: cookieStorage,
   // }),
