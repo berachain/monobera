@@ -16,7 +16,6 @@ import {
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
@@ -28,11 +27,6 @@ const fontSans = IBM_Plex_Sans({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const [firstTimeUser, setFirstTimeUser] = useLocalStorage(
-    "FIRST_TIME_USER",
-    true,
-  );
-
   const pathName = usePathname();
   const activeBanners = getBannerCount(bgtName, pathName);
 
@@ -55,7 +49,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
-        <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
+        <TermOfUseModal />
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
             <div className="z-[100]">

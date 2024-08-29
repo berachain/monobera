@@ -14,9 +14,9 @@ import {
 } from "@bera/config";
 import { EvmNetwork } from "@dynamic-labs/sdk-react-core";
 import { type Chain } from "viem";
-import { createConfig, http } from "wagmi";
+import { cookieStorage, createConfig, createStorage, http } from "wagmi";
 
-import { NetworkConfig } from "~/context/context";
+import type { NetworkConfig } from "~/context/context";
 
 const BeraChain: Chain = {
   id: chainId,
@@ -78,7 +78,11 @@ export const defaultBeraNetworkConfig: NetworkConfig = {
 export const wagmiConfig = createConfig({
   chains: [defaultBeraNetworkConfig.chain],
   multiInjectedProviderDiscovery: false,
-  ssr: false,
+  ssr: true,
+  // storage: createStorage({
+  //   storage: cookieStorage,
+  // }),
+
   batch: {
     /**
      * @see https://viem.sh/docs/clients/public#batchmulticallwait-optional
