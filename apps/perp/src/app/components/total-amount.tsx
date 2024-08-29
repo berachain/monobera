@@ -139,8 +139,8 @@ export function TotalAmount({
       {tabType === "history"
         ? totalRelativePnL()
         : tabType === "pnl"
-        ? totalHistoricalPnL()
-        : totalOpenPnL()}
+          ? totalHistoricalPnL()
+          : totalOpenPnL()}
       {spacer && tabType !== "pnl" && (
         <span className="mx-1 flex items-center text-xs font-medium text-muted-foreground">
           {"|"}

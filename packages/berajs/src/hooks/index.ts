@@ -20,4 +20,5 @@ export * from "./useSubgraphTokenInformation";
 export * from "./useSubgraphTokenInformations";
 export * from "./useValidatorList";
 export * from "./useGaugesMetadata";
+export * from "./useTpsl";
 export * from "./usePrevious";

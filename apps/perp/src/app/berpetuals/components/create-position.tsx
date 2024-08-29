@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { usePollWalletBalances } from "@bera/berajs";
+import { getPriceFromPercent, usePollWalletBalances } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
 import { type GlobalParams } from "@bera/proto/src";
 import { FormattedNumber } from "@bera/shared-ui";
@@ -11,7 +11,6 @@ import BigNumber from "bignumber.js";
 
 import { MAX_SL_PERC, MAX_TP_PERC } from "~/utils/constants";
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
-import { getPriceFromPercent } from "~/utils/getPriceFromPercent";
 import { HONEY_IMG } from "~/utils/marketImages";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useClientLocalStorage } from "~/hooks/useClientLocalStorage";
@@ -321,7 +320,14 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     <div className="m-2 flex h-[calc(100%-8px)] w-[calc(100%-16px)] flex-shrink-0 flex-col overflow-auto rounded-md border border-border @container/createPosition lg:mt-0 lg:w-[400px]">
       <LongShortTab
         value={form.orderType}
-        valueOnChange={(value) => setOrderType(value)}
+        valueOnChange={(value) =>
+          setOrderType((prev) => {
+            if (prev !== value) {
+              setForm((f) => ({ ...f, tp: "", sl: "" }));
+            }
+            return value;
+          })
+        }
       />
       <div className="flex w-full flex-col overflow-auto">
         <Tabs
