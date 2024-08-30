@@ -11,6 +11,6 @@ if (!process.env.CHARTING_ACCESS_TOKEN) {
   );
 } else {
   const scriptPath = path.join(__dirname, "copy-charting-lib.sh");
-  const command = scriptPath;
+  const command = `CHARTING_ACCESS_TOKEN=${process.env.CHARTING_ACCESS_TOKEN} ${scriptPath}`;
   shell.exec(command);
 }
