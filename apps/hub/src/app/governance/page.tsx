@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import GovernanceByStatus from "./components/governance-by-status";
+import { HomePage } from "./components/home-page";
 
 export default function Governance() {
-  return <GovernanceByStatus />;
+  // return <GovernanceByStatus />;
+  return <HomePage/>
 }
