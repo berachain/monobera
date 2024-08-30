@@ -66,31 +66,28 @@ const useValueOrPercentage = ({
   );
 
   useEffect(() => {
-    if (!long) {
-      if (
-        assetPrice === "0" ||
-        assetPrice === "" ||
-        leverage === "0" ||
-        leverage === ""
-      ) {
-        setMaxPercentage("");
-      }
-      const perc = getPercentageFromPrice(
-        long,
-        "0.00000001",
-        leverage,
-        assetPrice,
-      );
-      if (perc.isFinite()) {
-        setMaxPercentage(
-          Math.min(
-            Number(maxPercentage),
-            Math.round(perc.toNumber()),
-          ).toString(),
-        );
-      }
+    if (long) {
+      setMaxPercentage("");
+      return;
     }
-  }, [assetPrice, leverage, long]);
+    if (leverage === "0" || leverage === "") {
+      setMaxPercentage("");
+    }
+
+    const perc = getPercentageFromPrice(
+      long,
+      "0",
+      leverage,
+      // This is set to 1 because it doesn't matter the price
+      // this increases the performance by avoiding useless re-renders
+      "1",
+    );
+    if (perc.isFinite()) {
+      setMaxPercentage(
+        Math.min(Number(maxPercentage), Math.round(perc.toNumber())).toString(),
+      );
+    }
+  }, [leverage, long]);
 
   useEffect(() => {
     if (percent && percent !== "") {

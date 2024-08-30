@@ -140,7 +140,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     // },
   },
   {
-    header: "Open Interest",
+    header: "Open Interest (L/S)",
     cell: ({ row }) => {
       const formattedOIL = formatFromBaseUnit(
         row.original?.open_interest?.oi_long ?? "0",
@@ -163,14 +163,14 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     },
     accessorKey: "open_interest",
     enableSorting: false,
-    size: 150,
-    minSize: 150,
+    size: 160,
+    minSize: 160,
     meta: {
       className: "max-md:hidden",
     },
   },
   {
-    header: "Volume",
+    header: "24H Volume",
     cell: ({ row }) => (
       <div className=" font-medium sm:pr-4">
         ${formatter.format(row.original.dailyVolume ?? 0)}
@@ -257,7 +257,7 @@ export function InstrumentDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className={`my-1 w-full p-0 max-lg:min-w-[calc(100vw-1rem)] lg:mx-2 ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
+        className={`my-1 max-w-full p-0 max-lg:min-w-[calc(100vw-1rem)] lg:mx-2 ${DYNAMIC_DROPDOWN_MOBILE_HEIGHTS[activeBanners]} ${DYNAMIC_DROPDOWN_DESKTOP_HEIGHTS[activeBanners]}`}
       >
         <SimpleTable
           table={table}

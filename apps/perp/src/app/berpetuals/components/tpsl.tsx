@@ -257,7 +257,7 @@ export function TPSL({
                             : tpPercentBN.gt(MAX_TP_PERC)
                               ? "Greater than "
                               : ""
-                        }${tpPercentBN.toString(10)}%)`
+                        }${tpPercentBN.decimalPlaces(0).toString(10)}%)`
                       : ""
                   }`}
             </span>
@@ -295,7 +295,7 @@ export function TPSL({
                         : slPercentBN.gt(0)
                           ? "Greater than "
                           : ""
-                    }${slPercentBN.toString(10)}%)`
+                    }${slPercentBN.decimalPlaces(0).toString(10)}%)`
                   : ""
               }`}
             </span>
