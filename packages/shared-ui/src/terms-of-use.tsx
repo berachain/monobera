@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";
+import { useLocalStorage } from "usehooks-ts";
 
 import Privacy from "./utils/privacy-policy.json";
 import Terms from "./utils/terms-of-use.json";
@@ -127,13 +128,8 @@ export const PrivacyPolicy = () => {
   );
 };
 
-export const TermOfUseModal = ({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}) => {
+export const TermOfUseModal = () => {
+  const [open, setOpen] = useLocalStorage("FIRST_TIME_USER", true);
   const [checked, setChecked] = useState(false);
   const [alert, setAlert] = useState(false);
   return (

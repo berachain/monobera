@@ -13,6 +13,7 @@
     "with-env": "dotenv -e ../../.env -c --"
   },
   "dependencies": {
+    "@bera/beracrocswap": "workspace:*",
     "@bera/berajs": "workspace:*",
     "@bera/config": "workspace:*",
     "@bera/graphql": "workspace:*",

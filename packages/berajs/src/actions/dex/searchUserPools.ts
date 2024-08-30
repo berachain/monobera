@@ -220,7 +220,7 @@ export const searchUserPools = async ({
         formattedVaultBalance: vaultBalance,
         estimatedDepositedHoneyValue,
         bgtEarned,
-        seeds: BigInt(0),
+        seeds: new BigNumber(0),
       };
 
       userPositions.push({
@@ -230,8 +230,9 @@ export const searchUserPools = async ({
     });
     return userPositions.filter(
       (p: IUserPool) =>
-        p.userPosition?.formattedBaseAmount !== "0" &&
-        p.userPosition?.formattedQuoteAmount !== "0",
+        (p.userPosition?.formattedBaseAmount !== "0" &&
+          p.userPosition?.formattedQuoteAmount !== "0") ||
+        p.userPosition?.formattedVaultBalance !== "0",
     ) as IUserPool[];
   } catch (e) {
     console.log(e);

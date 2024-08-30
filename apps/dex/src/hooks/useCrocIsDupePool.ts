@@ -7,14 +7,16 @@ import { useCrocPoolFromTokens, useCrocToken } from "./useCrocPoolFromTokens";
 export const useCrocIsDupePool = ({
   tokenA,
   tokenB,
+  poolIdx,
 }: {
   tokenA: Token | undefined;
   tokenB: Token | undefined;
+  poolIdx: number;
 }) => {
   const crocTokenA = useCrocToken(tokenA);
   const crocTokenB = useCrocToken(tokenB);
   const crocPool = useCrocPoolFromTokens(crocTokenA, crocTokenB);
-  const QUERY_KEY = ["isDupePool", crocPool];
+  const QUERY_KEY = ["isDupePool", crocPool, poolIdx];
   const { isLoading, isValidating } = useSWRImmutable(QUERY_KEY, async () => {
     if (!crocPool) {
       return undefined;
@@ -26,6 +28,7 @@ export const useCrocIsDupePool = ({
           variables: {
             baseAsset: crocPool.baseToken.tokenAddr,
             quoteAsset: crocPool.quoteToken.tokenAddr,
+            poolIdx: poolIdx,
           },
         })
         .then((result: any) => {
