@@ -29,7 +29,7 @@
     "@bera/config": "workspace:*",
     "@bera/ui": "workspace:*",
     "@bera/wagmi": "workspace:*",
-    "@dynamic-labs/sdk-react-core": "^2.2.0",
+    "@dynamic-labs/sdk-react-core": "^2.5.2",
     "@metamask/jazzicon": "^2.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
