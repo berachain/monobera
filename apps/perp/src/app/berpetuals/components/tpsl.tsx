@@ -66,7 +66,7 @@ const InputSelect = ({
               : undefined
           }
           className={cn(
-            "inline-flex h-8 w-full cursor-pointer items-center justify-center rounded-sm border border-border px-2 text-xs font-medium",
+            "inline-flex h-8 w-full  items-center justify-center rounded-sm border border-border px-2 text-xs font-medium",
             BigNumber(amount).eq(percent)
               ? [
                   variant === "tp" ? "bg-success" : "bg-destructive",
@@ -75,10 +75,10 @@ const InputSelect = ({
                     : "text-destructive-foreground",
                 ]
               : "bg-muted text-muted-foreground",
-            dynamicMaxPercent &&
-              BigNumber(dynamicMaxPercent).lt(amount) && [
-                "line-through opacity-50 ",
-              ],
+            // When shorting, tp might be capped at low leverages
+            dynamicMaxPercent && BigNumber(dynamicMaxPercent).lt(amount)
+              ? ["line-through opacity-50 "]
+              : "cursor-pointer",
             variant === "sl" &&
               amount === "" &&
               value === "" &&
@@ -197,10 +197,6 @@ export function TPSL({
     onChangeSl: (v) => tpslOnChange(v, "sl"),
   });
 
-  console.log({
-    dynamicMaxTpPercent,
-  });
-
   useEffect(() => {
     if (
       previousPrice !== formattedPrice &&
@@ -259,13 +255,13 @@ export function TPSL({
                           tpPercentBN.lt("0")
                             ? "Less than "
                             : tpPercentBN.gt(MAX_TP_PERC)
-                            ? "Greater than "
-                            : ""
+                              ? "Greater than "
+                              : ""
                         }${tpPercentBN.toString(10)}%)`
                       : ""
                   }`}
             </span>
-            <Tooltip text={TPSL_PROFIT_TOOLTIP_TEXT} />
+            <Tooltip text={TPSL_PROFIT_TOOLTIP_TEXT} portal />
           </div>
           <InputSelect
             dynamicMaxPercent={dynamicMaxTpPercent}
@@ -297,13 +293,13 @@ export function TPSL({
                       slPercentBN.lt(MAX_SL_PERC)
                         ? "Less than "
                         : slPercentBN.gt(0)
-                        ? "Greater than "
-                        : ""
+                          ? "Greater than "
+                          : ""
                     }${slPercentBN.toString(10)}%)`
                   : ""
               }`}
             </span>
-            <Tooltip text={TPSL_LOSS_TOOLTIP_TEXT} />
+            <Tooltip portal text={TPSL_LOSS_TOOLTIP_TEXT} />
           </div>
           <InputSelect
             value={sl}
