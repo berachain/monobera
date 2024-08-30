@@ -1,3 +1,5 @@
+"use client";
+
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
@@ -12,7 +14,6 @@ import {
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
-import { cookieToInitialState } from "wagmi";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
