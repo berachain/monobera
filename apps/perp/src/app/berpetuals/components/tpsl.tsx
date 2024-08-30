@@ -25,9 +25,12 @@ const InputSelect = ({
   percent,
   onValueChange,
   onPercentChange,
+  dynamicMaxPercent,
   variant = "tp",
 }: {
   value: string;
+
+  dynamicMaxPercent?: string;
   bracket: [string, string, string, string];
   percent: string;
   onValueChange: (percentage: string) => void;
@@ -57,6 +60,11 @@ const InputSelect = ({
         <button
           type="button"
           key={index}
+          disabled={
+            dynamicMaxPercent
+              ? BigNumber(dynamicMaxPercent).lt(amount)
+              : undefined
+          }
           className={cn(
             "inline-flex h-8 w-full cursor-pointer items-center justify-center rounded-sm border border-border px-2 text-xs font-medium",
             BigNumber(amount).eq(percent)
@@ -67,6 +75,10 @@ const InputSelect = ({
                     : "text-destructive-foreground",
                 ]
               : "bg-muted text-muted-foreground",
+            dynamicMaxPercent &&
+              BigNumber(dynamicMaxPercent).lt(amount) && [
+                "line-through opacity-50 ",
+              ],
             variant === "sl" &&
               amount === "" &&
               value === "" &&
@@ -169,6 +181,7 @@ export function TPSL({
     setSlPercent,
     tpPercent,
     slPercent,
+    dynamicMaxTpPercent,
     sanitizedTpPercent: realTpPercent,
     sanitizedSlPercent: realSlPercent,
   } = useTpsl({
@@ -182,6 +195,10 @@ export function TPSL({
     maxTpPercent: MAX_TP_PERC,
     onChangeTp: (v) => tpslOnChange(v, "tp"),
     onChangeSl: (v) => tpslOnChange(v, "sl"),
+  });
+
+  console.log({
+    dynamicMaxTpPercent,
   });
 
   useEffect(() => {
@@ -242,8 +259,8 @@ export function TPSL({
                           tpPercentBN.lt("0")
                             ? "Less than "
                             : tpPercentBN.gt(MAX_TP_PERC)
-                              ? "Greater than "
-                              : ""
+                            ? "Greater than "
+                            : ""
                         }${tpPercentBN.toString(10)}%)`
                       : ""
                   }`}
@@ -251,6 +268,7 @@ export function TPSL({
             <Tooltip text={TPSL_PROFIT_TOOLTIP_TEXT} />
           </div>
           <InputSelect
+            dynamicMaxPercent={dynamicMaxTpPercent}
             value={tp}
             bracket={["50", "100", "300", MAX_TP_PERC]}
             percent={tpPercent}
@@ -279,8 +297,8 @@ export function TPSL({
                       slPercentBN.lt(MAX_SL_PERC)
                         ? "Less than "
                         : slPercentBN.gt(0)
-                          ? "Greater than "
-                          : ""
+                        ? "Greater than "
+                        : ""
                     }${slPercentBN.toString(10)}%)`
                   : ""
               }`}

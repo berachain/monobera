@@ -28,6 +28,7 @@ export type useTpslReturn = {
   slPercent: string;
   sanitizedTpPercent: string;
   sanitizedSlPercent: string;
+  dynamicMaxTpPercent: string;
 };
 
 const useValueOrPercentage = ({
@@ -43,9 +44,9 @@ const useValueOrPercentage = ({
   setValue: (value: string) => void;
   maxPercentage: string;
   isNegative: boolean;
-} & CommonProps): [string, (v: string) => void, string] => {
-  const isPositive = !isNegative;
+} & CommonProps): [string, (v: string) => void, string, string] => {
   const [percent, setPercent] = useState(value ? "" : maxPercentage);
+  const [maxTpPercentage, setMaxPercentage] = useState("");
 
   const onChangePercentage = useCallback(
     (percent: string) => {
@@ -63,6 +64,33 @@ const useValueOrPercentage = ({
     },
     [setValue, long, leverage, assetPrice],
   );
+
+  useEffect(() => {
+    if (!long) {
+      if (
+        assetPrice === "0" ||
+        assetPrice === "" ||
+        leverage === "0" ||
+        leverage === ""
+      ) {
+        setMaxPercentage("");
+      }
+      const perc = getPercentageFromPrice(
+        long,
+        "0.00000001",
+        leverage,
+        assetPrice,
+      );
+      if (perc.isFinite()) {
+        setMaxPercentage(
+          Math.min(
+            Number(maxPercentage),
+            Math.round(perc.toNumber()),
+          ).toString(),
+        );
+      }
+    }
+  }, [assetPrice, leverage, long]);
 
   useEffect(() => {
     if (percent && percent !== "") {
@@ -101,14 +129,12 @@ const useValueOrPercentage = ({
     }
   }
 
-  return [percent, onChangePercentage, realPercentage];
+  return [percent, onChangePercentage, realPercentage, maxTpPercentage];
 };
 
 /**
  * TODO: handle tpsl value infinite
  * TODO: handle no asset price yet or no leverage
- * TODO: handle initial setup
- * TODO: handle deselect
  * TODO: handle isUpdate
  */
 export function useTpsl({
@@ -125,7 +151,12 @@ export function useTpsl({
 }: useTpslProps): useTpslReturn {
   const previousLeverage = usePrevious(leverage);
 
-  const [tpPercent, setTpPercent, sanitizedTpPercent] = useValueOrPercentage({
+  const [
+    tpPercent,
+    setTpPercent,
+    sanitizedTpPercent,
+    maxPercentageGivenStrategy,
+  ] = useValueOrPercentage({
     value: tp,
     maxPercentage: maxTpPercent,
     setValue: onChangeTp,
@@ -163,6 +194,7 @@ export function useTpsl({
   return {
     tpPercent,
     slPercent,
+    dynamicMaxTpPercent: maxPercentageGivenStrategy,
     sanitizedTpPercent,
     sanitizedSlPercent,
     setTpPercent,
