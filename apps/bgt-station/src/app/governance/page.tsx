@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: getMetaTitle("Governance", bgtName),
   description: "View Governance proposals on Berachain",
 };
-
+//ha
 export default function Governance() {
   return <GovernanceByStatus />;
 }
