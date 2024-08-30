@@ -8,13 +8,27 @@ on:
       - v2
   
 jobs:
-  build:
+  static-build:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.CHARTING_ACCESS_TOKEN }}
+        
     - name: Install pnpm
       uses: pnpm/action-setup@v4 
 
+
+    # - name: Copy trading view repo
+    #   env: 
+    #     PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
+    #     CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
+    #   working-directory: apps/perp
+    #   shell: bash
+    #   run: |
+    #      chmod +x ./copy-charting-lib.sh
+    #      CHARTING_ACCESS_TOKEN="$CHARTING_ACCESS_TOKEN" ./copy-charting-lib.sh
+  
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
@@ -27,13 +41,6 @@ jobs:
     - name: Set environment variables
       run: pnpm set-env:bartio
 
-    - name: Copy trading view repo
-      env: 
-        PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
-        CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
-
-      run: cd apps/perps && sh copy-trading-view.sh
-  
     - name: Build all projects 
       env: 
         PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}

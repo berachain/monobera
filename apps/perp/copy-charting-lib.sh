@@ -26,8 +26,4 @@ cp -r "$LATEST_HASH/charting_library" public/static
 cp -r "$LATEST_HASH/datafeeds" public/static
 
 remove_if_directory_exists "$LATEST_HASH"
-
-
-
-# echoes first 4 char of $CHARTING_ACCESS_TOKEN
-echo "CHARTING_ACCESS_TOKEN: ${CHARTING_ACCESS_TOKEN:0:4}..."
+ 
