@@ -1,4 +1,7 @@
 type Address = `0x${string}`;
+// Build
+
+export const isIPFS = process.env.NEXT_PUBLIC_HOST === "ipfs";
 
 // endpoints
 export const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_ENDPOINT as string;

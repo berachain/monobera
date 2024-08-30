@@ -10,6 +10,7 @@ import {
 import {
   cloudinaryUrl,
   honeyTokenAddress,
+  isIPFS,
   peripheryDebtToken,
   vdHoneyTokenAddress,
 } from "@bera/config";
@@ -137,7 +138,7 @@ export default function HoneyBorrowCard() {
           />
           <Link
             href={
-              process.env.NEXT_PUBLIC_HOST === "ipfs"
+              isIPFS
                 ? `/market?address=${honeyTokenAddress}`
                 : `/markets/${honeyTokenAddress}`
             }
