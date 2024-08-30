@@ -160,10 +160,10 @@ export const FavIcons = {
       <defs>
         <filter
           id="filter0_dd_6594_47"
-          x="8"
-          y="6"
-          width="23.493"
-          height="29"
+          x="6"
+          y="1"
+          width="27.493"
+          height="33"
           filterUnits="userSpaceOnUse"
           color-interpolation-filters="sRGB"
         >
@@ -174,12 +174,12 @@ export const FavIcons = {
             values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
             result="hardAlpha"
           />
-          <feOffset dy="1" />
-          <feGaussianBlur stdDeviation="1" />
+          <feOffset dy="0.5" />
+          <feGaussianBlur stdDeviation="0.5" />
           <feComposite in2="hardAlpha" operator="out" />
           <feColorMatrix
             type="matrix"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0"
+            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0"
           />
           <feBlend
             mode="normal"
@@ -192,12 +192,12 @@ export const FavIcons = {
             values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
             result="hardAlpha"
           />
-          <feOffset dy="1" />
-          <feGaussianBlur stdDeviation="1" />
+          <feOffset dy="-2" />
+          <feGaussianBlur stdDeviation="2" />
           <feComposite in2="hardAlpha" operator="out" />
           <feColorMatrix
             type="matrix"
-            values="0 0 0 0 0.113725 0 0 0 0 0.890196 0 0 0 0 0.941176 0 0 0 0.75 0"
+            values="0 0 0 0 0.454902 0 0 0 0 0.392157 0 0 0 0 0.898039 0 0 0 0.75 0"
           />
           <feBlend
             mode="normal"
@@ -219,8 +219,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#AEE4E7" />
-          <stop offset="1" stop-color="#41D6E0" />
+          <stop stop-color="#C7C2EB" />
+          <stop offset="1" stop-color="#7464E5" />
         </radialGradient>
       </defs>
     </svg>
@@ -235,8 +235,6 @@ export const FavIcons = {
       {...props}
     >
       <rect width="40" height="40" rx="10" fill="url(#paint0_radial_6594_37)" />
-      <rect width="40" height="40" rx="10" fill="#E76C52" />
-      <rect width="40" height="40" rx="10" fill="url(#paint1_radial_6594_37)" />
       <mask
         id="mask0_6594_37"
         style={{ maskType: "alpha" }}
@@ -305,21 +303,10 @@ export const FavIcons = {
           cy="0"
           r="1"
           gradientUnits="userSpaceOnUse"
-          gradientTransform="translate(10 9.5) rotate(50.5275) scale(33.0341)"
-        >
-          <stop stop-color="#EBB77B" />
-          <stop offset="1" stop-color="#EF785E" />
-        </radialGradient>
-        <radialGradient
-          id="paint1_radial_6594_37"
-          cx="0"
-          cy="0"
-          r="1"
-          gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#E29686" />
-          <stop offset="1" stop-color="#E96042" />
+          <stop stop-color="#AEE4E7" />
+          <stop offset="1" stop-color="#41D6E0" />
         </radialGradient>
       </defs>
     </svg>

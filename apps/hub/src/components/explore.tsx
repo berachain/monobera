@@ -89,14 +89,14 @@ export const Explore = () => {
       image: <Icons.berpsFav className="h-16 w-16" />,
       title: "BERPS",
       subtitle: "Trade your favorite pairs",
-      background: "#E96042",
+      background: "#41D6E0",
       href: perpsUrl,
     },
     {
       image: <Icons.bendFav className="h-16 w-16" />,
       title: "BEND",
       subtitle: "Supply assets and borrow honey",
-      background: "#41D6E0",
+      background: "#7464E5",
       href: lendUrl,
     },
     {
