@@ -3,7 +3,7 @@ name: Deploy on Fleek
 on:
   push:
     branches: [ "v2" ]
-  # pull_request:
+  pull_request:
   workflow_dispatch:
 
 jobs:  
@@ -20,7 +20,10 @@ jobs:
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
   
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.CHARTING_ACCESS_TOKEN }}
+
     - name: Install pnpm
       uses: pnpm/action-setup@v4 
       
@@ -30,7 +33,6 @@ jobs:
         node-version: 18.18.2        
         cache: 'pnpm'
 
-        
     - name: Install dependencies
       run: pnpm install
 
