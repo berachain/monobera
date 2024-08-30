@@ -27,14 +27,20 @@ jobs:
     - name: Set environment variables
       run: pnpm set-env:bartio
 
-    - name: Build all projects 
+    - name: Copy trading view repo
       env: 
         PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
         CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
+
+      run: cd apps/perps && sh copy-trading-view.sh
+  
+    - name: Build all projects 
+      env: 
+        PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
         NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
         SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
 
-      run: 'echo "CHARTING_ACCESS_TOKEN: ${CHARTING_ACCESS_TOKEN:0:4}..." && NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter="./packages/*"'
+      run: 'NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter=lend --filter=perp --filter="./packages/*"'
      
