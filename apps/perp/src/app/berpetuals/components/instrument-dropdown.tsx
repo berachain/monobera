@@ -154,8 +154,9 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
 
       return (
         <div>
-          <div className="text-sm font-medium ">
-            ${formatter.format(Number(formattedOIL) + Number(formattedOIS))}
+          <div className="text-sm font-medium leading-none ">
+            {formatter.format(Number(formattedOIL))} /{" "}
+            {formatter.format(Number(formattedOIS))}
           </div>
         </div>
       );
@@ -163,7 +164,7 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     accessorKey: "open_interest",
     enableSorting: false,
     size: 150,
-    minSize: 130,
+    minSize: 150,
     meta: {
       className: "max-md:hidden",
     },
