@@ -14,6 +14,7 @@ export default function Page() {
       <HowToEarn />
       <Resources />
       <Explore />
+      {/* test */}
     </div>
   );
 }
