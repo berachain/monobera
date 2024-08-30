@@ -3,7 +3,6 @@ name: Deploy on Fleek
 on:
   push:
     branches: [ "v2" ]
-  pull_request:
   workflow_dispatch:
 
 jobs:  

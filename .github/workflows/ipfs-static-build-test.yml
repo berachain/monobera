@@ -30,7 +30,7 @@ jobs:
     - name: Set environment variables
       run: pnpm set-env:bartio
 
-    - name: Build all projects 
+    - name: Build all projects
       env: 
         PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
         NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
