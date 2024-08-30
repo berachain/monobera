@@ -10,8 +10,8 @@ import { MarketTokenNames } from "~/utils/marketTokenNames";
 import {
   getDailyPriceChange,
   getGlobalParams,
-  getMarkets,
   getHistoricalSummary,
+  getMarkets,
 } from "~/endpoints";
 import { type IMarket } from "~/types/market";
 import { GeneralInfoBanner } from "../components/general-info-banner";

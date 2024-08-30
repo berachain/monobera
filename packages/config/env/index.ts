@@ -95,6 +95,10 @@ export const blockTime = Number(process.env.NEXT_PUBLIC_BLOCKTIME);
 // Precompiles & contracts
 export const multicallAddress = process.env
   .NEXT_PUBLIC_MULTICALL_ADDRESS as Address;
+export const multicallCreationBlock = process.env
+  .NEXT_PUBLIC_MULTICALL_CREATION_BLOCK
+  ? Number(process.env.NEXT_PUBLIC_MULTICALL_CREATION_BLOCK)
+  : undefined;
 export const erc20DexAddress = process.env
   .NEXT_PUBLIC_ERC20_DEX_ADDRESS as Address;
 export const erc20ModuleAddress = process.env

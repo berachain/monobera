@@ -40,6 +40,7 @@ export { ApproveButton } from "./approve-button";
 export { DynamicRewardBtn } from "./dynamic-reward-btn";
 export { Documentation } from "./documentation";
 export { MainNav } from "./main-nav";
+export { MainWithBanners } from "./main-with-banners";
 export { MobileDropdown } from "./mobile-nav";
 export { TermsOfUse, PrivacyPolicy, TermOfUseModal } from "./terms-of-use";
 export { AccessDenyModal, AccessDeny } from "./access-deny";
