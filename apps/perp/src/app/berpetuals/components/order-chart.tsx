@@ -1,3 +1,5 @@
+"use client";
+
 import { useContext, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { usePollPositionsLiqFeePrices } from "@bera/berajs";
