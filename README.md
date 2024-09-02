@@ -14,14 +14,32 @@
 
 ![CI](https://github.com/berachain/monobera/actions/workflows/quality.yml/badge.svg?branch=v2)
 
+#### Installation
+
+In order to setup your local environment, run
+
+```
+pnpm i
+pnpm setenv bartio
+```
+
+You'll also need to run
+
+```
+cp .env.local.example .env.local
+```
+
+After that, create your own `NEXT_PUBLIC_DYNAMIC_API_KEY` without any CORS restrictions to write into `.env.local`.
+
 #### Commands
 
-Monobera requires node 18+.
+Monobera requires node 18.18.2+.
 
 | Script                   | Description                                                                                              |
 | ------------------------ | -------------------------------------------------------------------------------------------------------- |
 | `pnpm i`                 | Installs packages for all apps & packages                                                                |
 | `pnpm build`             | Builds all packages and apps. Not recommended as it takes large amounts of memory                        |
+| `pnpm setenv bartio`             | Copies `.env.bartio` into `.env`. Don't do it manually.                        |
 | `pnpm build:dex`         | Builds only the `Bex` and related packages.                                                              |
 | `pnpm build:honey`       | Builds only the `Honey` and related packages.                                                            |
 | `pnpm build:bgt`         | Builds only the `BGT` and related packages.                                                              |
