@@ -2,14 +2,15 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-    "editor.codeActionsOnSave": {
-      "quickfix.biome": "explicit"
-    },
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit"
+  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "workbench.colorCustomizations": {
     "activityBar.background": "#0E3511",
     "titleBar.activeBackground": "#134A18",
     "titleBar.activeForeground": "#F3FCF4"
-  }
+  },
+  "conventionalCommits.scopes": ["hub"]
 }
