@@ -99,7 +99,7 @@ export const PoolSearch = ({
 
   return (
     <div
-      className="w-full flex-row items-center justify-center max-w-[1020px]"
+      className="w-full flex-row items-center justify-center"
       id="poolstable"
     >
       <Tabs className="flex flex-col gap-4" value={poolType}>
