@@ -115,7 +115,7 @@ export default function GaugeInfoCard() {
                   <div>
                     <Link
                       className="cursor-pointer text-nowrap text-sm font-semibold leading-5"
-                      href={`/validators/${validator.validator.id}`}
+                      href={`/validators?v=${validator.validator.id}`}
                       target="_blank"
                     >
                       {validator.validator?.metadata?.name ??

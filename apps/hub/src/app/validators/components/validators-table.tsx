@@ -129,7 +129,7 @@ export default function ValidatorsTable() {
             keyword={keyword}
             isTyping={isTyping}
             onRowClick={(row: any) =>
-              router.push(`/validators/${row.original.coinbase}`)
+              router.push(`/validators?v=${row.original.coinbase}`)
             }
           />
         </TabsContent>
@@ -137,7 +137,7 @@ export default function ValidatorsTable() {
           <MyValidator
             keyword={keyword}
             onRowClick={(row: any) =>
-              router.push(`/validators/${row.original.coinbase}`)
+              router.push(`/validators?v=${row.original.coinbase}`)
             }
           />
         </TabsContent>

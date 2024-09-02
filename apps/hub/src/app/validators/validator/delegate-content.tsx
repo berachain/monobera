@@ -12,12 +12,11 @@ import { bgtTokenAddress } from "@bera/config";
 import { ActionButton, FormattedNumber, useTxn } from "@bera/shared-ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Card } from "@bera/ui/card";
 import BigNumber from "bignumber.js";
 import { Address, parseUnits } from "viem";
 
 import ValidatorInput from "~/components/validator-input";
-import { DelegateEnum, ImageMapEnum } from "../types";
+import { DelegateEnum, ImageMapEnum } from "./types";
 
 export const DelegateContent = ({ validator }: { validator?: Address }) => {
   const { isReady } = useBeraJs();
