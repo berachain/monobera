@@ -1,10 +1,10 @@
 import { type Metadata } from "next";
-
-import { getMetaTitle } from "@bera/shared-ui";
-import Validator from "./components/validator";
-import { bgtName } from "@bera/config";
 import { notFound } from "next/navigation";
+import { bgtName } from "@bera/config";
+import { getMetaTitle } from "@bera/shared-ui";
 import { isAddress } from "viem";
+
+import Validator from "../validator/validator";
 
 type Props = {
   params: { validatorAddress: string };

@@ -10,7 +10,7 @@ export const ValidatorBanner = () => {
   return (
     <Link
       className="rounded-sm border px-4 py-6"
-      href={`/validators/${account}`}
+      href={`/validators?v=${account}`}
     >
       <div className="flex items-center text-sm font-semibold leading-5 text-muted-foreground hover:text-primary">
         <Icons.checkCircle2 className="mr-1 h-4 w-4 text-success-foreground" />{" "}

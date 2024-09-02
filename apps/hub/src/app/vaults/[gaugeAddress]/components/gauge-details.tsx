@@ -117,7 +117,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 data={validators}
                 className="min-w-[800px] shadow"
                 onRowClick={(row: any) =>
-                  window.open(`/validators/${row.original.id}`, "_blank")
+                  window.open(`/validators?v=${row.original.id}`, "_blank")
                 }
               />
             </TabsContent>

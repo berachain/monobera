@@ -4,7 +4,6 @@ import {
   formatInputTokenValue,
   useBeraJs,
   useBgtUnstakedBalance,
-  usePollWalletBalances,
   useUserValidators,
 } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
@@ -13,7 +12,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { type Address } from "viem";
 
-import { DelegateEnum } from "../app/validators/[validatorAddress]/types";
+import { DelegateEnum } from "../app/validators/validator/types";
 import ValidatorSelector from "./validator-selector";
 
 export default function ValidatorInput({
@@ -41,7 +40,6 @@ export default function ValidatorInput({
   showSearch?: boolean;
   // emptyMessage?: string;
 }) {
-  const router = useRouter();
   const { isReady } = useBeraJs();
   const { data: bgtBalance } = useBgtUnstakedBalance();
 
