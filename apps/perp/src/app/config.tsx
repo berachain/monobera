@@ -1,16 +1,14 @@
 import {
-  bgtName,
-  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
-  dexName,
-  dexUrl,
   faucetName,
   faucetUrl,
   homepageName,
   homepageUrl,
   honeyName,
   honeyUrl,
+  hubName,
+  hubUrl,
   lendName,
   lendUrl,
 } from "@bera/config";
@@ -38,27 +36,16 @@ export const navItems = [
     href: "/referrals",
     title: "Referrals",
   },
-  // {
-  //   href: faucetUrl,
-  //   title: "Faucet",
-  // },
   {
     href: "#",
     title: "Explore",
     children: [
       {
-        href: bgtUrl,
+        href: hubUrl,
         type: "external",
-        title: bgtName,
+        title: hubName,
         blurb: "The hub for BGT governance",
-        icon: <Icons.bgtFav className="h-8 w-8" />,
-      },
-      {
-        href: dexUrl,
-        type: "external",
-        title: dexName,
-        blurb: "Swap tokens and provide liquidity",
-        icon: <Icons.bexFav className="h-8 w-8" />,
+        icon: <Icons.hubFav className="h-8 w-8" />,
       },
       {
         href: honeyUrl,
@@ -74,13 +61,6 @@ export const navItems = [
         blurb: "Supply assets and borrow honey",
         icon: <Icons.bendFav className="h-8 w-8" />,
       },
-      // {
-      //   href: perpsUrl,
-      //   type: "external",
-      //   title: perpsName,
-      //   blurb: "Trade your favourite pairs",
-      //   icon: <Icons.berpsFav className="h-8 w-8" />,
-      // },
       {
         href: blockExplorerUrl,
         type: "external",

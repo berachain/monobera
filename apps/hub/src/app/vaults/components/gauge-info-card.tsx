@@ -10,8 +10,8 @@ import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBg
 export default function GaugeInfoCard() {
   const { data: globalData, isLoading } = usePollGlobalData();
   return (
-    <div className="flex w-full flex-1 gap-6">
-      <div className="flex flex-1 flex-col gap-6">
+    <div className="flex w-full flex-1 flex-col gap-6 sm:flex-row">
+      <div className="flex flex-1 flex-row gap-6 sm:flex-col">
         <div className="flex flex-1 flex-col gap-2 rounded-lg border border-border px-4 py-6">
           <div className="text-sm font-medium leading-5 text-muted-foreground">
             Active Gauges Vaults
@@ -42,7 +42,7 @@ export default function GaugeInfoCard() {
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-6">
+      <div className="flex flex-1 flex-row gap-6 sm:flex-col">
         <div className="flex flex-1 flex-col gap-2 rounded-lg border border-border px-4 py-6">
           <div className="text-sm font-medium leading-5 text-muted-foreground">
             Total Circulating BGT
