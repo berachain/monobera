@@ -59,7 +59,7 @@ export const BGTAPYTooltip = ({
           Honey Borrow Apy
         </div>
         <div className="flex items-center gap-1 text-xs font-medium text-foreground">
-          <FormattedNumber value={-borrowApy} percent />
+          <FormattedNumber value={borrowApy} percent />
         </div>
       </div>
 

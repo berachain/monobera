@@ -9,9 +9,8 @@ export const useTotalPoolCount = () => {
       const globaldata = await dexClient.query({
         query: GetPoolCount,
       });
-
       try {
-        return globaldata.data.bexGlobalData.poolCount;
+        return globaldata.data.bexGlobalUsages[0].poolCount;
       } catch (e) {
         return undefined;
       }

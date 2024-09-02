@@ -11,6 +11,7 @@ const config = {
   experimental: {
     esmExternals: "loose",
     webpackBuildWorker: true,
+    missingSuspenseWithCSRBailout: false,
   },
   /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },

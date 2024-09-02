@@ -7,10 +7,10 @@ import type { ColumnDef } from "@tanstack/react-table";
 import BigNumber from "bignumber.js";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
+import { formatBorrowFee } from "~/utils/formatBorrowFee";
 import { calculatePercentDifference } from "~/utils/percentDifference";
 import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
-import { formatBorrowFee } from "~/utils/formatBorrowFee";
 
 const MarketPrice = ({ pairIndex }: { pairIndex: string }) => {
   const { marketPrices } = usePollPrices();
@@ -188,6 +188,8 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     ),
     accessorKey: "dailyVolume",
     enableSorting: true,
+    sortingFn: (a, b) =>
+      (a.original.dailyVolume ?? 0) - (b.original.dailyVolume ?? 0),
     minSize: 130,
   },
   {
@@ -199,6 +201,8 @@ export const marketTableColumn: ColumnDef<IMarket>[] = [
     ),
     accessorKey: "dailyNumOfTrades",
     enableSorting: true,
+    sortingFn: (a, b) =>
+      (a.original.dailyNumOfTrades ?? 0) - (b.original.dailyNumOfTrades ?? 0),
     minSize: 130,
   },
 ];

@@ -11,7 +11,21 @@ const getPathId = (
   baseTokenAddress: Address,
   quoteTokenAddress: Address,
   isAmountBaseDenominated: boolean,
+  poolIdx: number,
 ) => {
+  if (poolIdx === 36003) {
+    // return 1
+    if (baseTokenAddress === nativeTokenAddress) {
+      return 11;
+    }
+    if (quoteTokenAddress === nativeTokenAddress) {
+      return 12;
+    }
+    if (isAmountBaseDenominated) {
+      return 11;
+    }
+    return 12;
+  }
   if (baseTokenAddress === nativeTokenAddress) {
     return 31;
   }
@@ -92,6 +106,7 @@ export const getAddLiquidityPayload = async ({
       baseToken.address,
       quoteToken.address,
       isAmountBaseDenominated,
+      poolIdx,
     );
 
     const mintCalldata = await encodeWarmPath(

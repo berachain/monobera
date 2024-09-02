@@ -10,11 +10,13 @@ export const BgtStationBanner = ({
   vaultAddress,
   className,
   text,
+  isHub = false,
 }: {
   receiptTokenAddress: Address | undefined;
   vaultAddress: Address | undefined;
   className?: string;
   text?: string | JSX.Element;
+  isHub?: boolean;
 }) => {
   if (!vaultAddress) return null;
   return (
@@ -43,14 +45,25 @@ export const BgtStationBanner = ({
             </div>
           </div>
         )}
-        <Link href={`${bgtUrl}/gauge/${vaultAddress}`} target="_blank">
-          <Button
-            variant={"outline"}
-            disabled={receiptTokenAddress === undefined}
-          >
-            Deposit
-          </Button>
-        </Link>
+        {isHub ? (
+          <Link href={`/vaults/${vaultAddress}`}>
+            <Button
+              variant={"outline"}
+              disabled={receiptTokenAddress === undefined}
+            >
+              Deposit
+            </Button>
+          </Link>
+        ) : (
+          <Link href={`${bgtUrl}/gauge/${vaultAddress}`} target="_blank">
+            <Button
+              variant={"outline"}
+              disabled={receiptTokenAddress === undefined}
+            >
+              Deposit
+            </Button>
+          </Link>
+        )}
       </CardContent>
     </Card>
   );

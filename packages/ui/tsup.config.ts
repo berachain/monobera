@@ -37,6 +37,7 @@ const client = [
   "./src/slider.tsx",
   "./src/chart.tsx",
   "./src/recharts.tsx",
+  "./src/pagination.tsx"
 ];
 
 const server = [
