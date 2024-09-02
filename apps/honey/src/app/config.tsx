@@ -1,14 +1,12 @@
 import {
-  bgtName,
-  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
-  dexName,
-  dexUrl,
   faucetName,
   faucetUrl,
   homepageName,
   homepageUrl,
+  hubName,
+  hubUrl,
   lendName,
   lendUrl,
   perpsName,
@@ -25,35 +23,17 @@ export const navItems = [
     href: "#stats",
     title: "Stats",
   },
-  // {
-  //   href: "#transactions",
-  //   title: "Transactions",
-  // },
   {
     href: "#",
     title: "Explore",
     children: [
       {
-        href: bgtUrl,
+        href: hubUrl,
         type: "external",
-        title: bgtName,
+        title: hubName,
         blurb: "The hub for BGT governance",
-        icon: <Icons.bgtFav className="h-8 w-8" />,
+        icon: <Icons.hubFav className="h-8 w-8" />,
       },
-      {
-        href: dexUrl,
-        type: "external",
-        title: dexName,
-        blurb: "Swap tokens and provide liquidity",
-        icon: <Icons.bexFav className="h-8 w-8" />,
-      },
-      // {
-      //   href: honeyUrl,
-      //   type: "external",
-      //   title: honeyName,
-      //   blurb: "Mint or redeem Berachain’s native stablecoin",
-      //   icon: <Icons.honeyFav className="h-8 w-8" />,
-      // },
       {
         href: lendUrl,
         type: "external",
@@ -99,18 +79,11 @@ export const mobileNavItems = [
     title: "Explore",
     children: [
       {
-        href: bgtUrl,
+        href: hubUrl,
         type: "external",
-        title: bgtName,
+        title: hubName,
         blurb: "The hub for BGT governance",
-        icon: <Icons.bgtFav className="h-8 w-8" />,
-      },
-      {
-        href: dexUrl,
-        type: "external",
-        title: dexName,
-        blurb: "Swap tokens and provide liquidity",
-        icon: <Icons.bexFav className="h-8 w-8" />,
+        icon: <Icons.hubFav className="h-8 w-8" />,
       },
       {
         href: lendUrl,

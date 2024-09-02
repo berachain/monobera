@@ -1,10 +1,6 @@
 import {
-  bgtName,
-  bgtUrl,
   blockExplorerName,
   blockExplorerUrl,
-  dexName,
-  dexUrl,
   faucetName,
   faucetUrl,
   homepageName,
@@ -13,6 +9,8 @@ import {
   honeyUrl,
   perpsName,
   perpsUrl,
+  hubName,
+  hubUrl,
 } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
@@ -26,18 +24,11 @@ export const navItems = [
     title: "Explore",
     children: [
       {
-        href: bgtUrl,
+        href: hubUrl,
         type: "external",
-        title: bgtName,
+        title: hubName,
         blurb: "The hub for BGT governance",
-        icon: <Icons.bgtFav className="h-8 w-8" />,
-      },
-      {
-        href: dexUrl,
-        type: "external",
-        title: dexName,
-        blurb: "Swap tokens and provide liquidity",
-        icon: <Icons.bexFav className="h-8 w-8" />,
+        icon: <Icons.hubFav className="h-8 w-8" />,
       },
       {
         href: honeyUrl,

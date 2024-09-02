@@ -1,11 +1,10 @@
 "use client";
 
 import React, { type PropsWithChildren } from "react";
-import { formatUsd, type Token } from "@bera/berajs";
+import { formatUsd, getSafeNumber, type Token } from "@bera/berajs";
 import { cn } from "@bera/ui";
 
 import { TokenIcon } from "./token-icon";
-import { getSafeNumber } from "../../../apps/bgt-station/src/utils/getSafeNumber";
 
 interface PreviewToken {
   token: Token | undefined;
