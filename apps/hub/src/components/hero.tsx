@@ -3,18 +3,9 @@ import { Icons } from "@bera/ui/icons";
 export const Hero = () => {
   return (
     <div className="mb-24 flex w-full flex-col items-center gap-3">
-      {/* <div className="flex w-fit gap-2 text-center text-xl md:text-2xl font-bold leading-7">
-        <Icons.bgtFav className="h-8 w-8" /> BGT Station
+      <div className="flex w-fit gap-2 text-center text-xl md:text-2xl font-bold leading-7">
+        <Icons.hubFav className="h-8 w-8" /> BeraHub
       </div>
-     */}
-      <div className="flex w-fit items-center gap-2 p-4 text-5xl font-bold">
-        {/* <Icons.bgtFav className="h-8 w-8" />  */}
-        Bera{" "}
-        <span className="rounded-xs bg-orange-400 px-1 text-background">
-          hub
-        </span>
-      </div>
-
       <div className="leading-15 relative w-fit text-center text-4xl font-bold md:text-7xl md:leading-[80px]">
         One stop shop
         <br />

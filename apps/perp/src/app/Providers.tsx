@@ -14,7 +14,7 @@ export default function Providers({
   initialPrices?: PricesMap;
 }>) {
   return (
-    <BeraWagmi initialWagmiState={initialWagmiState}>
+    <BeraWagmi>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
         <PriceContextProvider>
           <TableContextProvider>{children}</TableContextProvider>
