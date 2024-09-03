@@ -1,7 +1,10 @@
 "use client";
+
 import React, { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 import { usePollGauges, type Gauge } from "@bera/berajs";
 import { DataTable } from "@bera/shared-ui";
+import { getRewardsVaultUrl } from "@bera/shared-ui/src/utils/getRewardsVaultUrl";
 import { TableState, type ColumnDef } from "@tanstack/react-table";
 
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight-columns";
@@ -19,6 +22,7 @@ export default function GlobalGaugeWeightTable({
   markets?: string[];
   isTyping?: boolean;
 }) {
+  const router = useRouter();
   const [page, setPage] = useState(0);
   const [sorting, setSorting] = useState([
     { id: "activeIncentivesInHoney", desc: true },
@@ -51,7 +55,7 @@ export default function GlobalGaugeWeightTable({
       enablePagination
       columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
       data={myGauge ? [] : gaugeList ?? []}
-      className="min-h-[200px] min-w-[800px] shadow w-full"
+      className="min-h-[200px] w-full min-w-[800px] shadow"
       additionalTableProps={{
         initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
         pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
@@ -59,10 +63,7 @@ export default function GlobalGaugeWeightTable({
         manualPagination: true,
       }}
       onRowClick={(row: any) =>
-        window.open(
-          `/vaults/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
-          "_self",
-        )
+        router.push(getRewardsVaultUrl(row.original.address, myGauge))
       }
       onCustomSortingChange={(a: any) => handleNewSort(a)}
     />

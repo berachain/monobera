@@ -5,6 +5,8 @@ import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Address } from "viem";
 
+import { getRewardsVaultUrl } from "./utils/getRewardsVaultUrl";
+
 export const BgtStationBanner = ({
   receiptTokenAddress,
   vaultAddress,
@@ -46,7 +48,7 @@ export const BgtStationBanner = ({
           </div>
         )}
         {isHub ? (
-          <Link href={`/vaults/${vaultAddress}`}>
+          <Link href={getRewardsVaultUrl(vaultAddress)}>
             <Button
               variant={"outline"}
               disabled={receiptTokenAddress === undefined}

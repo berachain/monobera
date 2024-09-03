@@ -1,13 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 import { bgtUrl, blockExplorerName, blockExplorerUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
+import { Icons } from "@bera/ui/icons";
 import Balancer from "react-wrap-balancer";
 
 import { Spinner } from "./spinner";
-import { Icons } from "@bera/ui/icons";
 import { TokenIconList } from "./token-icon-list";
-import Link from "next/link";
+import { getRewardsVaultUrl } from "./utils/getRewardsVaultUrl";
 
 interface IModal {
   title: string;
@@ -171,21 +172,21 @@ export const AddLiquiditySuccess = ({ onClose, open = false, pool }: any) => {
   if (!pool) return undefined;
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="flex flex-col items-center justify-center gap-3 py-12 w-80">
+      <DialogContent className="flex w-80 flex-col items-center justify-center gap-3 py-12">
         <TokenIconList tokenList={pool.tokens} size="2xl" />
-        <span className="text-xl font-medium text-center">
+        <span className="text-center text-xl font-medium">
           Deposit your {pool.baseInfo.symbol}/{pool.quoteInfo.symbol} Receipt
           Tokens
         </span>
-        <span className="text-xs text-muted-foreground text-center my-2">
+        <span className="my-2 text-center text-xs text-muted-foreground">
           Deposit your receipt tokens in the gauge vault to start earning
           <span className="inline-flex items-center">
-            <Icons.bgt className="h-3 w-3 mx-1" />
+            <Icons.bgt className="mx-1 h-3 w-3" />
           </span>
           BGT Rewards
         </span>
         <Link
-          href={`/vaults/${pool.vaultAddress}`}
+          href={getRewardsVaultUrl(pool.vaultAddress)}
           onClick={(e) => e.stopPropagation()}
           className="w-full"
         >
