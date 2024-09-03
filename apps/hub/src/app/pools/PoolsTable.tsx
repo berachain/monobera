@@ -30,7 +30,7 @@ import { getPoolUrl } from "./fetchPools";
 export const PoolSearch = ({
   poolType = "allPools",
 }: {
-  poolType?: "allPools" | "userPools";
+  poolType: "allPools" | "userPools";
 }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();

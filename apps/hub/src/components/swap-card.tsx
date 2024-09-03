@@ -548,8 +548,8 @@ export function SwapCard({
                       isWrap
                         ? undefined
                         : swapInfo?.error
-                        ? undefined
-                        : differenceUSD
+                          ? undefined
+                          : differenceUSD
                     }
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap && !isRedeem}
