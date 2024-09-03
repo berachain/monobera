@@ -42,7 +42,7 @@ jobs:
       run: pnpm setenv:bartio
       
     - name: Build all projects 
-      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter='./packages/*'
+      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
       
     - name: Deploy Berps
       run: cd apps/perp && fleek sites deploy
