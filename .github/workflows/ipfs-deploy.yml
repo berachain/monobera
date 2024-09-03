@@ -46,5 +46,8 @@ jobs:
     - name: Deploy Bend
       run: cd apps/lend && fleek sites deploy
 
+    - name: Deploy Hub
+      run: cd apps/hub && fleek sites deploy
+
     - name: Deploy Honey
       run: cd apps/honey && fleek sites deploy

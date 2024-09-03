@@ -1,0 +1,8 @@
+{
+  "sites": [
+    {
+      "slug": "cartio-hub",
+      "distDir": "./out"
+    }
+  ]
+}
