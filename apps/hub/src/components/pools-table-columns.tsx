@@ -18,9 +18,9 @@ import {
   FormattedNumber,
   TokenIconList,
   apyTooltipText,
+  getRewardsVaultUrl,
   useTxn,
 } from "@bera/shared-ui";
-import { getRewardsVaultUrl } from "@bera/shared-ui/src/utils/getRewardsVaultUrl";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";

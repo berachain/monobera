@@ -14,3 +14,9 @@ export const getRewardsVaultUrl = (
     ? `/vaults/vault?address=${address}${isMyVault ? "&my-gauge" : ""}`
     : `/vaults/${address}${isMyVault ? "?my-gauge" : ""}`;
 };
+
+export const getHubValidatorPath = (address: string): string => {
+  return isIPFS
+    ? `/validators/validator/?address=${address}`
+    : `/validators/${address}`;
+};

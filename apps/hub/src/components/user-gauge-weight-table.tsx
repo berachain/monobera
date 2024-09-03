@@ -5,8 +5,7 @@ import {
   useUserVaults,
   type UserVault,
 } from "@bera/berajs";
-import { DataTable, useTxn } from "@bera/shared-ui";
-import { getRewardsVaultUrl } from "@bera/shared-ui/src/utils/getRewardsVaultUrl";
+import { DataTable, getRewardsVaultUrl, useTxn } from "@bera/shared-ui";
 
 import { getUserBgtColumns } from "~/columns/user-bgt-columns";
 
