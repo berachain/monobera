@@ -1,14 +1,16 @@
 "use client";
 
 import React from "react";
-import { PoolSearch } from "./PoolsTable";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { cloudinaryUrl } from "@bera/config";
-export default function PoolPageHeader({
-  poolType,
-}: {
-  poolType: "allPools" | "userPools";
-}) {
+
+import { PoolSearch } from "./PoolsTable";
+
+export default function PoolPageHeader() {
+  const sp = useSearchParams();
+  const poolType = sp.get("pool") as "allPools" | "userPools" | undefined;
+
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-center gap-8">
       {/* Large Screen */}
@@ -17,7 +19,7 @@ export default function PoolPageHeader({
         alt="Large Screen Image"
         width={1200}
         height={600}
-        className="w-full h-auto  object-cover"
+        className="h-auto w-full  object-cover"
       />
 
       {/* Tablet Screen

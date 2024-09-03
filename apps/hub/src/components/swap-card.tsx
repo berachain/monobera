@@ -30,6 +30,7 @@ import {
   useBreakpoint,
   useTxn,
 } from "@bera/shared-ui";
+import { AddTokenDialog } from "@bera/shared-ui/src/add-token-dialog";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
@@ -38,7 +39,6 @@ import { Icons } from "@bera/ui/icons";
 import { isAddress, parseUnits } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
-import { AddTokenDialog } from "@bera/shared-ui/src/add-token-dialog";
 import { SwapCardHeader } from "./swap-card-header";
 import { SwapCardInfo } from "./swap-card-info";
 import { SwapRoute } from "./swap-route";
@@ -66,8 +66,8 @@ const Connect = dynamic(
 );
 
 interface ISwapCard {
-  inputCurrency?: string | undefined;
-  outputCurrency?: string | undefined;
+  inputCurrency?: string | null;
+  outputCurrency?: string | null;
   isRedeem: boolean;
   addTokensOnLoad?: boolean;
   className?: string;
@@ -479,10 +479,10 @@ export function SwapCard({
         <div className="flex w-full flex-col gap-4">
           <Card className="w-full border-none">
             <SwapCardHeader isRedeem={isRedeem} />
-            <div className="mt-3 border-border border rounded-lg p-4">
+            <div className="mt-3 rounded-lg border border-border p-4">
               <div className="flex flex-col gap-1">
                 <ul
-                  className={cn("divide-y divide-border-y rounded-2xl")}
+                  className={cn("divide-border-y divide-y rounded-2xl")}
                   role="list"
                 >
                   <TokenInput
@@ -548,8 +548,8 @@ export function SwapCard({
                       isWrap
                         ? undefined
                         : swapInfo?.error
-                          ? undefined
-                          : differenceUSD
+                        ? undefined
+                        : differenceUSD
                     }
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap && !isRedeem}

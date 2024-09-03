@@ -10,18 +10,6 @@ export const metadata: Metadata = {
   title: getMetaTitle("Delegate", bgtName),
   description: "Delegate, Redelegate, or Undelegate your BGT",
 };
-export default function Page({
-  searchParams,
-}: {
-  searchParams: {
-    gauge: Address;
-    token: Address;
-  };
-}) {
-  return (
-    <Incentivize
-      gauge={searchParams.gauge}
-      selectedToken={searchParams.token}
-    />
-  );
+export default function Page() {
+  return <Incentivize />;
 }
