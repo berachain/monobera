@@ -1,6 +1,7 @@
 import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
+import { isIPFS } from "@bera/config";
 import { Address, isAddress } from "viem";
 
 import PoolPageContent from "../PoolPageContent";
@@ -11,13 +12,18 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export const dynamic = "force-dynamic";
+// THIS IS NOT COMPATIBLE WITH IPFS. CHECK THIS CAUSES BUGS
+// export const dynamic = "force-dynamic";
 
 export default async function PoolPage({
   params,
 }: {
   params: { shareAddress: string };
 }) {
+  if (isIPFS) {
+    return null;
+  }
+
   try {
     if (!isAddress(params.shareAddress)) {
       notFound();
@@ -27,4 +33,12 @@ export default async function PoolPage({
     console.log(`Error fetching pools: ${e}`);
     notFound();
   }
+}
+
+export function generateStaticParams() {
+  return [
+    {
+      shareAddress: "0x",
+    },
+  ];
 }

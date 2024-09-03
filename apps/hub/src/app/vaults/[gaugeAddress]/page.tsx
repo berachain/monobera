@@ -2,7 +2,7 @@ import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getGauge } from "@bera/berajs/actions";
-import { bgtName } from "@bera/config";
+import { bgtName, isIPFS } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import { unstable_serialize } from "swr";
 import { Address, isAddress } from "viem";
@@ -22,9 +22,10 @@ export default async function PoolPage({
 }: {
   params: { gaugeAddress: Address };
 }) {
-  if (process.env.NEXT_PUBLIC_HOST === "ipfs") {
-    return notFound();
+  if (isIPFS) {
+    return null;
   }
+
   if (!isAddress(params.gaugeAddress)) {
     console.error("Invalid gauge address", params.gaugeAddress);
     notFound();
@@ -37,4 +38,12 @@ export default async function PoolPage({
   }
 
   return <GaugeDetails gaugeAddress={params.gaugeAddress} />;
+}
+
+export function generateStaticParams() {
+  return [
+    {
+      gaugeAddress: "0x",
+    },
+  ];
 }

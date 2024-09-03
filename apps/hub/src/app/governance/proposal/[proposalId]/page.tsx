@@ -1,9 +1,9 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-
+import { bgtName, isIPFS } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
+
 import ProposalDetails from "./proposal-details";
-import { bgtName } from "@bera/config";
 
 export function generateMetadata({ params }: any): Metadata {
   const { proposalId } = params;
@@ -14,9 +14,21 @@ export function generateMetadata({ params }: any): Metadata {
 }
 
 export default function Page({ params }: { params: { proposalId: string } }) {
+  if (isIPFS) {
+    return null;
+  }
+
   if (!params.proposalId) {
     return notFound();
   }
 
   return <ProposalDetails proposalId={params.proposalId} />;
+}
+
+export function generateStaticParams() {
+  return [
+    {
+      proposalId: "0x",
+    },
+  ];
 }

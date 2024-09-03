@@ -1,17 +1,35 @@
 "use client";
 
+import { FC } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import Link from "next/link";
+
 import { SwapCard } from "~/components/swap-card";
 
+export const SwapPage: FC = () => {
+  const sp = useSearchParams();
+  const inputCurrency = sp.get("inputCurrency");
+  const outputCurrency = sp.get("outputCurrency");
+
+  return (
+    <div className="container">
+      <SwapContent
+        inutCurrency={inputCurrency}
+        outputCurrency={outputCurrency}
+        isRedeem={false}
+      />
+    </div>
+  );
+};
 export const SwapContent = ({
   inutCurrency,
   outputCurrency,
   isRedeem,
 }: {
-  inutCurrency: string | undefined;
-  outputCurrency: string | undefined;
+  inutCurrency: string | null;
+  outputCurrency: string | null;
   isRedeem: boolean;
 }) => {
   return (
@@ -29,7 +47,7 @@ export const SwapContent = ({
           </Link>
           <Link href={"/redeem"}>
             <Button
-              className={cn("rounded-full ml-2", !isRedeem && "bg-transparent")}
+              className={cn("ml-2 rounded-full", !isRedeem && "bg-transparent")}
               size="md"
               variant={isRedeem ? "primary" : "secondary"}
             >

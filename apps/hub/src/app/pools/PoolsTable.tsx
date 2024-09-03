@@ -11,14 +11,9 @@ import {
   SimpleTable,
   useBaseTable,
 } from "@bera/shared-ui";
-import { Button } from "@bera/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
-
-import { columns } from "~/components/pools-table-columns";
-import MyPool from "./components/pools/my-pool";
-import { getPoolUrl } from "./fetchPools";
-import { Icons } from "@bera/ui/icons";
 import { DataTableLoading } from "@bera/shared-ui/src/table/legacy/data-table";
+import { Button } from "@bera/ui/button";
+import { Icons } from "@bera/ui/icons";
 import {
   Select,
   SelectContent,
@@ -26,11 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@bera/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+
+import { columns } from "~/components/pools-table-columns";
+import MyPool from "./components/pools/my-pool";
+import { getPoolUrl } from "./fetchPools";
 
 export const PoolSearch = ({
-  poolType,
+  poolType = "allPools",
 }: {
-  poolType: "allPools" | "userPools";
+  poolType?: "allPools" | "userPools";
 }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -103,8 +103,8 @@ export const PoolSearch = ({
       id="poolstable"
     >
       <Tabs className="flex flex-col gap-4" value={poolType}>
-        <div className="flex flex-col lg:flex-row w-full justify-between  items-start lg:items-center gap-2">
-          <TabsList className="w-full  p-0 justify-start" variant="ghost">
+        <div className="flex w-full flex-col items-start justify-between  gap-2 lg:flex-row lg:items-center">
+          <TabsList className="w-full  justify-start p-0" variant="ghost">
             <TabsTrigger
               value="allPools"
               className="w-full sm:w-fit"
@@ -123,7 +123,7 @@ export const PoolSearch = ({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="allPools" className="text-center w-full">
+          <TabsContent value="allPools" className="w-full text-center">
             <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
               <SearchInput
                 value={search}
@@ -151,7 +151,7 @@ export const PoolSearch = ({
               <Button
                 size="md"
                 variant="secondary"
-                className="bg-transparent w-fit sm:w-fit whitespace-nowrap flex flex-row items-center h-[40px] gap-1"
+                className="flex h-[40px] w-fit flex-row items-center gap-1 whitespace-nowrap bg-transparent sm:w-fit"
                 onClick={() => router.push("/pools/create")}
               >
                 <Icons.droplet className="h-4 w-4" />
@@ -161,7 +161,7 @@ export const PoolSearch = ({
           </TabsContent>
         </div>
 
-        <TabsContent value="allPools" className="text-center mt-4">
+        <TabsContent value="allPools" className="mt-4 text-center">
           {isLoading ? (
             <div className="flex w-full flex-col items-center justify-center gap-4">
               <DataTableLoading
