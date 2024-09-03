@@ -1,7 +1,9 @@
-export const STABLESWAP_POOLIDX = 36003;
-export const AMBIENT_POOLIDX = 36001; // TODO: change or change in the template on crocswap
+export const STABLESWAP_POOLIDX = 1;
+export const WEIGHTED_POOLIDX = 2;
+export const METASTABLE_POOLIDX = 3;
 
 export const POOLID = {
-  AMBIENT: AMBIENT_POOLIDX,
+  WEIGHTED: WEIGHTED_POOLIDX,
   STABLE: STABLESWAP_POOLIDX,
+  METASTABLE: METASTABLE_POOLIDX,
 };

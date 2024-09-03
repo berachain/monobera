@@ -219,6 +219,10 @@ export const crocIndexerEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_INDEXER_ENDPOINT as Address;
 export const crocRouterEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;
+export const weightedPoolFactory = process.env
+  .NEXT_PUBLIC_WEIGHTED_FACTORY as Address;
+export const stablePoolFactory = process.env
+  .NEXT_PUBLIC_STABLE_FACTORY as Address;
 
 // Sentry && Mixpanel
 export const developmentAnalytics = process.env

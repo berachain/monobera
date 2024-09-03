@@ -171,6 +171,7 @@ export function TokenInput({
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center gap-1">
           <SelectToken
+            btnClassName="border-none"
             token={selected}
             onTokenSelection={handleTokenSelect}
             selectedTokens={selectedTokens}

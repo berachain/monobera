@@ -15,7 +15,7 @@ import { Input } from "@bera/ui/input";
 import { getSafeNumber } from "~/utils/getSafeNumber";
 
 type Props = {
-  token: Token;
+  token: Token | undefined;
   disabled: boolean;
   tokenAmount: string;
   onTokenBalanceChange: (amount: string) => void;
