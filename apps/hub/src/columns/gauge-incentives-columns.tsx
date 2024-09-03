@@ -13,7 +13,7 @@ import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 export const gauge_incentives_columns: ColumnDef<ActiveIncentive>[] = [
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Bribe Breakdown" />
+      <DataTableColumnHeader column={column} title="Incentive Breakdown" />
     ),
     cell: ({ row }) => {
       return (
@@ -116,7 +116,7 @@ export const validator_gauge_columns: ColumnDef<ActiveIncentiveWithVault>[] = [
   },
   {
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Bribe Breakdown" />
+      <DataTableColumnHeader column={column} title="Incentive Breakdown" />
     ),
     cell: ({ row }) => {
       return (
