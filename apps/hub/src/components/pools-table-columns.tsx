@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import {
-  type IUserPool,
-  type PoolV2,
-  useSubgraphTokenInformation,
-  TransactionActionType,
   ADDRESS_ZERO,
   BERA_VAULT_REWARDS_ABI,
-  useBeraJs,
   POOLID,
+  TransactionActionType,
+  useBeraJs,
   useBgtInflation,
+  useSubgraphTokenInformation,
+  type IUserPool,
+  type PoolV2,
 } from "@bera/berajs";
+import { beraTokenAddress } from "@bera/config";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -19,13 +20,13 @@ import {
   apyTooltipText,
   useTxn,
 } from "@bera/shared-ui";
+import { getRewardsVaultUrl } from "@bera/shared-ui/src/utils/getRewardsVaultUrl";
 import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
-
-import { beraTokenAddress } from "@bera/config";
 import { Address } from "viem";
+
 import { calculateApy } from "~/utils/calculateApy";
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
@@ -37,12 +38,12 @@ const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
         className="self-center"
       />
       <div className="flex flex-col items-start justify-start gap-1">
-        <div className="flex flex-row items-center gap-1 justify-start">
-          <span className="w-fit max-w-[180px] truncate text-left font-semibold text-sm">
+        <div className="flex flex-row items-center justify-start gap-1">
+          <span className="w-fit max-w-[180px] truncate text-left text-sm font-semibold">
             {pool?.poolName}
           </span>
           {pool.wtv !== "0" && (
-            <Icons.bgt className="h-6 w-6 p-1 border border-border rounded-sm self-start" />
+            <Icons.bgt className="h-6 w-6 self-start rounded-sm border border-border p-1" />
           )}
         </div>
         <div className="flex flex-row gap-1">
@@ -319,13 +320,13 @@ export const getUserPoolColumns = (
                   />
                 </div>
               ) : (
-                <div className="w-40 flex flex-col">
+                <div className="flex w-40 flex-col">
                   <span className="font-medium">
                     {" "}
                     Deposit balance in vault to start earning rewards
                   </span>
                   <div className="flex flex-row items-center text-success-foreground">
-                    <Icons.bgt className="w-4 h-4 mr-1" />
+                    <Icons.bgt className="mr-1 h-4 w-4" />
                     <FormattedNumber value={row.original.wtv ?? 0} compact />%
                     APY
                   </div>
@@ -378,7 +379,7 @@ export const getUserPoolColumns = (
                 </Button>
               ) : (
                 <Link
-                  href={`/vaults/${row.original.vaultAddress}`}
+                  href={getRewardsVaultUrl(row.original.vaultAddress)}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Button variant={"outline"} size="sm">

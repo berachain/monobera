@@ -1,10 +1,12 @@
 import React, { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   TransactionActionType,
   useUserVaults,
   type UserVault,
 } from "@bera/berajs";
 import { DataTable, useTxn } from "@bera/shared-ui";
+import { getRewardsVaultUrl } from "@bera/shared-ui/src/utils/getRewardsVaultUrl";
 
 import { getUserBgtColumns } from "~/columns/user-bgt-columns";
 
@@ -15,6 +17,7 @@ export default function UserGaugeWeightTable({
   myGauge?: boolean;
   keywords?: string;
 }) {
+  const router = useRouter();
   const {
     data: userVaultInfo,
     isLoading: isUserVaultInfoLoading,
@@ -62,10 +65,7 @@ export default function UserGaugeWeightTable({
         validating={isUserVaultInfoValidating}
         loading={isUserVaultInfoLoading}
         onRowClick={(row: any) =>
-          window.open(
-            `/vaults/${row.original.vaultAddress}${myGauge ? "?my-gauge" : ""}`,
-            "_self",
-          )
+          router.push(getRewardsVaultUrl(row.original.vaultAddress, myGauge))
         }
       />
     </div>

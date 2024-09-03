@@ -35,6 +35,7 @@
     "react-day-picker": "^8.7.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
+    "swr": "^2.2.5",
     "swr-devtools": "^1.3.2",
     "tailwindcss-animate": "^1.0.5",
     "uniqolor": "^1.1.0",
