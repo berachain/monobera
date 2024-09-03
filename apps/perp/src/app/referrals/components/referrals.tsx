@@ -8,13 +8,14 @@ import {
   usePollReferralsDetails,
   usePollTraderReferral,
 } from "@bera/berajs";
-import { cloudinaryUrl, perpsUrl } from "@bera/config";
+import { cloudinaryUrl, isIPFS, perpsUrl } from "@bera/config";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
 
+import { DEFAULT_MARKET } from "~/utils/constants";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 
 interface ReferralsDataProps {
@@ -140,7 +141,10 @@ export default function Referrals() {
   const handleButtonClick = useCallback(async () => {
     if (!generated) {
       setGenerated(true);
-      setReferralLink(`${perpsUrl}/berpetuals?ref=${account}`);
+      setReferralLink(
+        // If it's IPFS, create a link to a static page, otherwise, keep the dynamic page
+        `${perpsUrl}/berpetuals/${isIPFS ? DEFAULT_MARKET : ""}?ref=${account}`,
+      );
     } else {
       {
         try {

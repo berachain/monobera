@@ -2,6 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@bera/ui/button";
 
+import { DEFAULT_MARKET } from "~/utils/constants";
+
 export default function Hero() {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-4">
@@ -22,7 +24,7 @@ export default function Hero() {
         With Deep Liquidity and Market Diversity
       </div>
       <div className="mb-6 text-center md:text-left">
-        <Link href="/berpetuals">
+        <Link href={`/berpetuals/${DEFAULT_MARKET}`}>
           <Button className="mr-4">Start Trading</Button>
         </Link>
         <Link href="/markets">

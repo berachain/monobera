@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { formatUsd } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -25,6 +26,7 @@ function Position({
   className,
   ...props
 }: PositionProps) {
+  const router = useRouter();
   const animationDelay = useMemo(() => {
     const possibleAnimationDelays = [
       "0s",
@@ -49,7 +51,7 @@ function Position({
         className,
       )}
       onClick={() => {
-        window.open(`/berpetuals/${name}`, "_self");
+        router.push(`/berpetuals/${name}`);
       }}
       style={{ animationDelay }}
       {...props}

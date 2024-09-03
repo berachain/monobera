@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { SearchInput, SimpleTable, useBaseTable } from "@bera/shared-ui";
 
 import type { IMarket } from "~/types/market";
 import { marketTableColumn } from "./market-table-column";
 
 export default function AvailableMarket({ markets }: { markets: IMarket[] }) {
+  const router = useRouter();
   const [search, searchInput] = useState<string | undefined>(undefined);
   const filteredMarkets = useMemo(() => {
     return markets?.filter((market) => {
@@ -26,7 +28,7 @@ export default function AvailableMarket({ markets }: { markets: IMarket[] }) {
   });
 
   const handleRowClick = useCallback((row: any) => {
-    window.open(`/berpetuals/${row.original.name}`, "_self");
+    router.push(`/berpetuals/${row.original.name}`);
   }, []);
 
   return (
