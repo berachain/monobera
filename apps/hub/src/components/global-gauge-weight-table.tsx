@@ -63,7 +63,7 @@ export default function GlobalGaugeWeightTable({
         manualPagination: true,
       }}
       onRowClick={(row: any) =>
-        router.push(getRewardsVaultUrl(row.original.address, myGauge))
+        router.push(getRewardsVaultUrl(row.original.vaultAddress, myGauge))
       }
       onCustomSortingChange={(a: any) => handleNewSort(a)}
     />

@@ -9,7 +9,7 @@ import { PoolSearch } from "./PoolsTable";
 
 export default function PoolPageHeader() {
   const sp = useSearchParams();
-  const poolType = sp.get("pool") as "allPools" | "userPools" | undefined;
+  const poolType = sp.get("pool") as "allPools" | "userPools";
 
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-center gap-8">
@@ -43,7 +43,7 @@ export default function PoolPageHeader() {
           className="w-full h-auto object-cover"
         />
       </div> */}
-      <PoolSearch poolType={poolType} />
+      <PoolSearch poolType={poolType || "allPools"} />
     </div>
   );
 }
