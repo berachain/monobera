@@ -53,17 +53,8 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
     return {
       ...position,
       borrowing_fee:
-        Array.isArray(openPositionsLiqFeesData) &&
-        openPositionsLiqFeesData[1] &&
-        openPositionsLiqFeesData[1][index] !== undefined
-          ? openPositionsLiqFeesData[1][index].toString()
-          : "0",
-      liq_price:
-        Array.isArray(openPositionsLiqFeesData) &&
-        openPositionsLiqFeesData[0] &&
-        openPositionsLiqFeesData[0][index] !== undefined
-          ? openPositionsLiqFeesData[0][index].toString()
-          : "0",
+        openPositionsLiqFeesData?.at(1)?.at(index)?.toString() ?? "0",
+      liq_price: openPositionsLiqFeesData?.at(0)?.at(index)?.toString() ?? "0",
     };
   });
 

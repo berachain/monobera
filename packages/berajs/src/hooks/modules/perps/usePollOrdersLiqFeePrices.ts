@@ -13,15 +13,18 @@ export const usePollOrdersLiqFeePrices = (indices: number[]) => {
   const QUERY_KEY = [account, "orders", method, indices];
   const { data, isLoading, isValidating } = useSWR(
     QUERY_KEY,
-    async () => {
+    async (): Promise<
+      readonly [readonly bigint[], readonly bigint[]] | undefined
+    > => {
+      // Probably this should return error instead of undefined
       if (!publicClient) return undefined;
       try {
-        if (indices.length === 0) return [];
+        if (indices.length === 0) return [[], []];
         const result = await publicClient.readContract({
           address: perpsBorrowingContractAddress,
           abi: borrowingAbi,
           functionName: method,
-          args: [indices],
+          args: [indices.map((index) => BigInt(index))],
         });
         return result;
       } catch (e) {
