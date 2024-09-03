@@ -54,7 +54,7 @@ export const CloseAllOrders = ({
   // );
 
   const { data: pythUpdateFee } = usePythUpdateFee(
-    vaa.current,
+    Array(closeOrdersPayload.length).fill(vaa.current[0]),
     closePositionsPayload.map((pos) => pos?.pairIndex.toString()).join(),
   );
 
@@ -101,6 +101,7 @@ export const CloseAllOrders = ({
         args: [pos.index, vaa.current],
       });
     });
+
     writePositionsClose({
       address: tradingContractAddress,
       abi: tradingAbi,
