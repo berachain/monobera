@@ -8,7 +8,7 @@ import Balancer from "react-wrap-balancer";
 
 import { Spinner } from "./spinner";
 import { TokenIconList } from "./token-icon-list";
-import { getRewardsVaultUrl } from "./utils/getRewardsVaultUrl";
+import { getRewardsVaultUrl } from "./utils/getHubUrls";
 
 interface IModal {
   title: string;

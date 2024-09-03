@@ -12,9 +12,7 @@ import Validator from "./validator/validator";
 export default function Validators() {
   const searchParams = useSearchParams();
 
-  return searchParams.get("v") ? (
-    <Validator validatorAddress={searchParams.get("v") as `0x${string}`} />
-  ) : (
+  return (
     <div className="flex flex-col gap-16">
       <ValidatorBanner />
       <ValidatorGlobalInfo />

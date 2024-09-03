@@ -5,7 +5,7 @@ import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Address } from "viem";
 
-import { getRewardsVaultUrl } from "./utils/getRewardsVaultUrl";
+import { getRewardsVaultUrl } from "./utils/getHubUrls";
 
 export const BgtStationBanner = ({
   receiptTokenAddress,

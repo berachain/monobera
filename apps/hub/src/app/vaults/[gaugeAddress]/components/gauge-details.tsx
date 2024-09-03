@@ -9,6 +9,7 @@ import {
 } from "@bera/berajs";
 import { bgtVaultBlackList, blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
+import { getHubValidatorPath } from "@bera/shared-ui/src/utils/getHubUrls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { SWRConfig, unstable_serialize } from "swr";
 import { Address, isAddress } from "viem";
@@ -141,7 +142,7 @@ const _GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 data={validators}
                 className="min-w-[800px] shadow"
                 onRowClick={(row: any) =>
-                  window.open(`/validators?v=${row.original.id}`, "_blank")
+                  window.open(getHubValidatorPath(row.original.id), "_blank")
                 }
               />
             </TabsContent>

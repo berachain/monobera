@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { truncateHash, useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
+import { getHubValidatorPath } from "@bera/shared-ui/src/utils/getHubUrls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getAddress } from "viem";
 
@@ -129,7 +130,7 @@ export default function ValidatorsTable() {
             keyword={keyword}
             isTyping={isTyping}
             onRowClick={(row: any) =>
-              router.push(`/validators?v=${row.original.coinbase}`)
+              router.push(getHubValidatorPath(row.original.coinbase))
             }
           />
         </TabsContent>
@@ -137,7 +138,7 @@ export default function ValidatorsTable() {
           <MyValidator
             keyword={keyword}
             onRowClick={(row: any) =>
-              router.push(`/validators?v=${row.original.coinbase}`)
+              router.push(getHubValidatorPath(row.original.coinbase))
             }
           />
         </TabsContent>

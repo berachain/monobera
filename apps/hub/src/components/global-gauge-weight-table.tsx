@@ -3,8 +3,7 @@
 import React, { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePollGauges, type Gauge } from "@bera/berajs";
-import { DataTable } from "@bera/shared-ui";
-import { getRewardsVaultUrl } from "@bera/shared-ui/src/utils/getRewardsVaultUrl";
+import { DataTable, getRewardsVaultUrl } from "@bera/shared-ui";
 import { TableState, type ColumnDef } from "@tanstack/react-table";
 
 import { global_gauge_weight_columns } from "~/columns/global-gauge-weight-columns";
