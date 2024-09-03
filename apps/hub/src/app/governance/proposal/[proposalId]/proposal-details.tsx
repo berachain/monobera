@@ -50,8 +50,8 @@ export default function ProposalDetails({
 
           <div>
             <ProposalCard proposal={proposal} truncate={false} details />
-            <div className="mt-4 flex md:flex-row flex-col gap-4">
-              <Card className="w-full flex-col items-center justify-center p-6 flex">
+            <div className="mt-4 flex flex-col gap-4 md:flex-row">
+              <Card className="flex w-full flex-col items-center justify-center p-6">
                 <FormattedNumber
                   value={getTotalVotes(proposal)}
                   className="text-2xl font-semibold leading-loose text-foreground"
