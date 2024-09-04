@@ -2,13 +2,14 @@
 
 import React from "react";
 import { cn } from "@bera/ui";
-import { Icons } from "@bera/ui/icons";
-import { Header, flexRender } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@bera/ui/dropdown-menu";
+import { Icons } from "@bera/ui/icons";
+import { Header, flexRender } from "@tanstack/react-table";
+
 import { Tooltip } from "../../../../../tooltip";
 import { StringFilter } from "../filters/string-filter";
 
@@ -17,6 +18,10 @@ export interface TableHeaderProps<TData, TValue> {
   className?: string;
   flexTable?: boolean;
   dynamicFlex?: boolean;
+  /**
+   * Show borders on the table header
+   */
+  showBorders?: boolean;
 }
 
 export function TableHeader<TData, TValue>({
@@ -24,6 +29,7 @@ export function TableHeader<TData, TValue>({
   className,
   flexTable,
   dynamicFlex,
+  showBorders = true,
 }: TableHeaderProps<TData, TValue>) {
   if (header.isPlaceholder) {
     return <td colSpan={header.colSpan} />;
@@ -50,9 +56,10 @@ export function TableHeader<TData, TValue>({
                     ? "100%"
                     : header.column.columnDef.size,
                 minWidth: header.column.columnDef.minSize,
-                borderRight: header.column.getIsLastColumn()
-                  ? undefined
-                  : "1px solid hsla(0, 2%, 68%, 0.1)",
+                borderRight:
+                  !showBorders || header.column.getIsLastColumn()
+                    ? undefined
+                    : "1px solid hsla(0, 2%, 68%, 0.1)",
               }
             : {
                 width: header.column.columnDef.size,
@@ -61,9 +68,10 @@ export function TableHeader<TData, TValue>({
                 maxWidth: header.column.getIsLastColumn()
                   ? undefined
                   : header.column.columnDef.size,
-                borderRight: header.column.getIsLastColumn()
-                  ? undefined
-                  : "1px solid hsla(0, 2%, 68%, 0.1)",
+                borderRight:
+                  !showBorders || header.column.getIsLastColumn()
+                    ? undefined
+                    : "1px solid hsla(0, 2%, 68%, 0.1)",
               }
           : {}
       }
@@ -74,7 +82,7 @@ export function TableHeader<TData, TValue>({
             {canFilter ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <div className="mr-1 self-center cursor-pointer rounded-full p-1 hover:bg-hover data-[state=open]:bg-hover">
+                  <div className="mr-1 cursor-pointer self-center rounded-full p-1 hover:bg-hover data-[state=open]:bg-hover">
                     <Icons.filter
                       onClick={() => {}}
                       className={cn(

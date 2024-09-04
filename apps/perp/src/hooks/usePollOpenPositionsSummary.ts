@@ -9,14 +9,14 @@ import { PricesMap } from "~/types/prices";
 
 const formatPythPrices = (prices: PricesMap) => {
   const keys = PYTH_IDS.map((pythPrice) => pythPrice.pairIndex);
-  const usdcUsdPrice = prices[USDC_USD_INDEX].getPriceUnchecked();
+  const usdcUsdPrice = prices[USDC_USD_INDEX];
   return keys.reduce((acc: Record<string, string>, key) => {
     if (key === USDC_USD_INDEX || prices[USDC_USD_INDEX] === undefined)
       return acc;
     const priceFeed = prices[key];
     const result = formatUsdcPythPrice(
-      priceFeed.getPriceUnchecked(),
-      usdcUsdPrice,
+      priceFeed.price,
+      usdcUsdPrice.price,
       10,
       0,
     );

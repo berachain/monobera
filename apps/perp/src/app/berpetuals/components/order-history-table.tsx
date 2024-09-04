@@ -1,12 +1,8 @@
 "use client";
 
 import { useCallback, useContext, useEffect, useMemo } from "react";
-import {
-  SimpleTable,
-  TableFooter,
-  useAsyncTable,
-  usePrevious,
-} from "@bera/shared-ui";
+import { usePrevious } from "@bera/berajs";
+import { SimpleTable, TableFooter, useAsyncTable } from "@bera/shared-ui";
 import {
   TableState,
   type PaginationState,

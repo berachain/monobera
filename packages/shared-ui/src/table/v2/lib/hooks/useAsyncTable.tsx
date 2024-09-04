@@ -1,10 +1,10 @@
 "use client";
 
-import _ from "lodash";
+import { useEffect, useMemo, useState } from "react";
+import { usePrevious } from "@bera/berajs";
 import { TableState } from "@tanstack/react-table";
-import { useEffect, useState, useMemo } from "react";
+import _ from "lodash";
 
-import { usePrevious } from "../../../../hooks/usePrevious";
 import { BaseTableOptions, useBaseTable } from "./useBaseTable";
 
 interface AsyncTableOptions<TData> extends BaseTableOptions<TData> {

@@ -31,8 +31,8 @@ export function TableBody<TData>({
           : style
       }
       className={cn(
-        flexTable ? "flex flex-col flex-1" : "table-row-group",
-        "overflow-x-hidden overflow-y-auto",
+        flexTable ? "flex flex-1 flex-col" : "table-row-group",
+        "overflow-y-auto overflow-x-hidden",
         className,
       )}
       ref={tableBodyRef}

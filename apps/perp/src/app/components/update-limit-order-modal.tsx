@@ -3,10 +3,10 @@ import {
   TransactionActionType,
   formatUsd,
   tradingAbi,
+  usePrevious,
   usePythUpdateFee,
 } from "@bera/berajs";
 import { tradingContractAddress } from "@bera/config";
-import { usePrevious } from "@bera/shared-ui";
 import { useOctTxn } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
@@ -16,11 +16,10 @@ import { Input } from "@bera/ui/input";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
 import { parseUnits as ethersParseUnits } from "ethers";
-import { parseUnits, type Address } from "viem";
+import { parseUnits } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import { usePriceData } from "~/context/price-context";
+import { usePriceData, useVaa } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
@@ -39,8 +38,9 @@ export function UpdateLimitOrderModal({
   className?: string;
 }) {
   const prices = usePriceData();
+  const vaa = useVaa();
   const { data: pythUpdateFee } = usePythUpdateFee(
-    generateEncodedPythPrices(prices, openOrder?.market?.pair_index),
+    vaa.current,
     openOrder?.market?.pair_index,
   );
   const [open, setOpen] = useState<boolean>(false);
@@ -128,7 +128,7 @@ export function UpdateLimitOrderModal({
           sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
           10,
         ),
-        generateEncodedPythPrices(prices, openOrder?.market.pair_index),
+        vaa.current,
       ],
       value: pythUpdateFee,
     });

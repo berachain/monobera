@@ -1,6 +1,7 @@
 import { perpsEndpoint, perpsPricesBenchmark } from "@bera/config";
 import { type GlobalParams, type Market } from "@bera/proto/src";
-import { Price, PriceFeed } from "@pythnetwork/pyth-evm-js";
+import { PriceUpdate } from "@pythnetwork/hermes-client";
+import { PricesMap } from "~/types/prices";
 
 import { PYTH_IDS, USDC_USD_INDEX } from "~/utils/constants";
 import { formatUsdcPythPrice } from "~/utils/formatPyth";
@@ -44,19 +45,18 @@ export async function getDailyPriceChange(): Promise<any | undefined> {
       (item) => `ids=${item.id}`,
     ).join("&")}`;
     const res = await fetch(url);
-    const jsonRes = await res.json();
+    const jsonRes = (await res.json()) as PriceUpdate;
 
     if (jsonRes?.parsed) {
-      const formattedPrices = PYTH_IDS.reduce(
-        (acc: Record<string, Price>, pythMapItem) => {
-          const priceFeed = jsonRes.parsed.find(
-            (item: PriceFeed) => `0x${item.id}` === pythMapItem.id,
-          );
-          acc[pythMapItem.pairIndex] = priceFeed.price as Price;
-          return acc;
-        },
-        {},
-      );
+      const formattedPrices = PYTH_IDS.reduce<PricesMap>((acc, pythMapItem) => {
+        const priceFeed = jsonRes.parsed!.find(
+          (item) => `0x${item.id}` === pythMapItem.id,
+        );
+        if (priceFeed) {
+          acc[pythMapItem.pairIndex] = priceFeed;
+        }
+        return acc;
+      }, {});
 
       return (
         (formattedPrices &&
@@ -68,8 +68,8 @@ export async function getDailyPriceChange(): Promise<any | undefined> {
               )
                 return acc;
               acc[key] = formatUsdcPythPrice(
-                formattedPrices[key as "string"] as Price,
-                formattedPrices[USDC_USD_INDEX] as Price,
+                formattedPrices[key as "string"].price,
+                formattedPrices[USDC_USD_INDEX].price,
               );
               return acc;
             },
