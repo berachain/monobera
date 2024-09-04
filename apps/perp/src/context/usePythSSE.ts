@@ -7,10 +7,10 @@ import throttle from "lodash/throttle";
 import { EventEmitter } from "events";
 
 import { PYTH_IDS } from "~/utils/constants";
-import { normalizePythId } from "./utils";
+import { normalizePythId } from "../utils/normalize-pyth-id";
 import { perpsPricesEndpoint } from "@bera/config";
 import { Address } from "viem";
-import { getOffChainPrices } from "./get-offchain-prices";
+import { getOffChainPrices } from "./get-off-chain-prices";
 
 export const usePythSse = ({
   initialPrices = {},

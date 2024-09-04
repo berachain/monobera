@@ -46,13 +46,6 @@ export const CloseAllOrders = ({
     return createCloseOrderPayload(orders, tableState.selection || {});
   }, [orders, tableState.selection]);
 
-  // const openPositionsEncodedData = closePositionsPayload.reduce<string[]>(
-  //   (acc) => {
-  //     return [...acc, ...vaa.current];
-  //   },
-  //   [],
-  // );
-
   const { data: pythUpdateFee } = usePythUpdateFee(
     Array(closeOrdersPayload.length).fill(vaa.current[0]),
     closePositionsPayload.map((pos) => pos?.pairIndex.toString()).join(),

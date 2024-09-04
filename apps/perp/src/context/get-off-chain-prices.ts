@@ -1,5 +1,5 @@
 import { PYTH_IDS } from "~/utils/constants";
-import { normalizePythId } from "./utils";
+import { normalizePythId } from "../utils/normalize-pyth-id";
 import { HermesClient } from "@pythnetwork/hermes-client";
 import { perpsPricesEndpoint } from "@bera/config";
 import { Address } from "viem";

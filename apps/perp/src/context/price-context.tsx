@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from "react";
 import { Address } from "viem";
 
 import { type PricesMap } from "~/types/prices";
-import { usePythSse } from "./usePtyhSSE";
+import { usePythSse } from "./usePythSSE";
 
 type PriceContextType = {
   prices: { current: PricesMap };
