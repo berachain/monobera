@@ -5,6 +5,11 @@ import { getIsDelegated } from "~/actions/perps/getIsDelegated";
 import { useBeraJs } from "~/contexts";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
 
+/**
+ * Hook to check if the user has delegated their positions.
+ *
+ * @see {@link getIsDelegated}
+ */
 export const useIsDelegated = (
   options?: DefaultHookOptions,
 ): DefaultHookReturnType => {

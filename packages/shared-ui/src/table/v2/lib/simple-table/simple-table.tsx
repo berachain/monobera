@@ -113,13 +113,18 @@ export function SimpleTable<TData>({
               );
             })
           ) : loading ? (
-            <td className="flex h-24 items-center justify-center">
-              {table.options.meta?.loadingText ?? "Loading Table Data..."}
-            </td>
+            <tr>
+              {" "}
+              <td className="flex h-24 items-center justify-center">
+                {table.options.meta?.loadingText ?? "Loading Table Data..."}
+              </td>
+            </tr>
           ) : (
-            <td className="flex h-24 items-center justify-center">
-              {table.options.meta?.emptyDataText ?? "No Results"}
-            </td>
+            <tr>
+              <td className="flex h-24 items-center justify-center">
+                {table.options.meta?.emptyDataText ?? "No Results"}
+              </td>
+            </tr>
           )}
         </TableBody>
         {/* <tfoot> components */}

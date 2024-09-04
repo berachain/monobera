@@ -13,11 +13,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
-import { type Address } from "viem";
 
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import { usePriceData } from "~/context/price-context";
+import { usePriceData, useVaa } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
@@ -41,8 +39,9 @@ export function ClosePositionModal({
   onOpenChange?: (state: boolean) => void;
 }) {
   const prices = usePriceData();
+  const vaa = useVaa();
   const { data: pythUpdateFee } = usePythUpdateFee(
-    generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
+    vaa.current,
     openPosition?.market?.pair_index,
   );
   const [open, setOpen] = useState<boolean>(false);
@@ -91,10 +90,7 @@ export function ClosePositionModal({
       address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "closeTradeMarket",
-      params: [
-        openPosition?.index,
-        generateEncodedPythPrices(prices, openPosition?.market?.pair_index),
-      ],
+      params: [openPosition?.index, vaa.current],
       value: pythUpdateFee,
     });
   }, [prices, openPosition, write, pythUpdateFee]);
