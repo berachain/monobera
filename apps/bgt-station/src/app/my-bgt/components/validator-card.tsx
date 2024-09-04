@@ -24,7 +24,7 @@ export default function ValidatorCard({ validator }: { validator: any }) {
   const userDelegated = undefined;
   const bribeTotal = undefined;
   const { write, ModalPortal } = useTxn({
-    message: "Claiming bribes",
+    message: "Claiming Incentives",
     actionType: TransactionActionType.CLAIMING_BRIBES,
   });
 
@@ -69,8 +69,8 @@ export default function ValidatorCard({ validator }: { validator: any }) {
     {
       title: (
         <div className="flex flex-row items-center gap-1">
-          Bribes Earned{" "}
-          <Tooltip text="Total amount of bribes accrued from this validator" />
+          Icentives Earned{" "}
+          <Tooltip text="Total amount of incentives accrued from this validator" />
         </div>
       ),
       value: `${formatUsd(bribeTotal ?? 0)}`,
@@ -129,7 +129,7 @@ export default function ValidatorCard({ validator }: { validator: any }) {
             Unbond <Icons.minus className="relative ml-1 h-4 w-4" />
           </Button>
           <Button size="sm" onClick={claimBribe}>
-            Claim Bribes
+            Claim Incentives
           </Button>
         </div>
       </div>
@@ -153,7 +153,7 @@ export default function ValidatorCard({ validator }: { validator: any }) {
         <div className="mr-4 flex flex-shrink-0 items-center gap-4">
           {!validator.bribeTokenList ||
           validator.bribeTokenList.length === 0 ? (
-            <div className="text-muted-foreground">No active bribes</div>
+            <div className="text-muted-foreground">No active incentives</div>
           ) : (
             <TokenIconList size="2xl" tokenList={[]} />
           )}
@@ -193,7 +193,7 @@ export default function ValidatorCard({ validator }: { validator: any }) {
             <Icons.minus className="relative h-4 w-4" />
           </Button>
           <Button size="sm" onClick={claimBribe}>
-            Claim Bribes
+            Claim Incentives
           </Button>
         </div>
       </div>
