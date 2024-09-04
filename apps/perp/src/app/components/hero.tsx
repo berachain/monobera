@@ -27,9 +27,6 @@ export default function Hero() {
         <Link href={`/berpetuals/${DEFAULT_MARKET}`}>
           <Button className="mr-4">Start Trading</Button>
         </Link>
-        <Link href="/markets">
-          <Button variant="secondary">Explore Markets</Button>
-        </Link>
       </div>
     </div>
   );

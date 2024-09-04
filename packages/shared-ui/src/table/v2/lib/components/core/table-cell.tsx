@@ -7,6 +7,7 @@ export interface TableCellProps<TData, TValue> {
   cell: Cell<TData, TValue>;
   flexTable?: boolean;
   dynamicFlex?: boolean;
+  className?: string;
 }
 
 export function TableCell<TData, TValue>(
@@ -16,7 +17,8 @@ export function TableCell<TData, TValue>(
     <TableCellComponent
       className={cn(
         props.flexTable ? "flex" : "table-cell",
-        "items-center p-1.5 px-4 py-3 text-left truncate",
+        "items-center truncate p-1.5 px-4 py-3 text-left",
+        props.className,
       )}
       style={
         props.flexTable

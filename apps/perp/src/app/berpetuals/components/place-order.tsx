@@ -1,7 +1,6 @@
 import { useCallback, useContext, useMemo } from "react";
 import {
   TransactionActionType,
-  formatUsd,
   tradingAbi,
   useBeraJs,
   usePollAllowance,
@@ -10,26 +9,18 @@ import {
 } from "@bera/berajs";
 import {
   honeyAddress,
-  tradingContractAddress,
   storageContractAddress,
+  tradingContractAddress,
 } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
-import {
-  useOctTxn,
-  useSetSlippage,
-  useSlippage,
-} from "@bera/shared-ui/src/hooks";
-import { DEFAULT_SLIPPAGE, SLIPPAGE_MODE } from "@bera/shared-ui/src/settings";
+import { useOctTxn, useSlippage } from "@bera/shared-ui/src/hooks";
 import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
-import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
-import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
-import { parseUnits, type Address } from "viem";
+import { parseUnits } from "viem";
 
-import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
+import { formatToBaseUnit } from "~/utils/formatBigNumber";
 import { generateEncodedPythPrices } from "~/utils/formatPyth";
 import { useIsPythConnected, usePriceData } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
@@ -41,16 +32,12 @@ import { type OrderType } from "~/types/order-type";
 export function PlaceOrder({
   form,
   price,
-  openingFee,
   error,
-  liqPrice,
   pairIndex,
 }: {
   form: OrderType;
   price: string;
-  openingFee: string;
   error: string | undefined;
-  liqPrice: string | undefined;
   pairIndex: string;
 }) {
   const prices = usePriceData();
@@ -70,18 +57,6 @@ export function PlaceOrder({
   let warning = undefined;
 
   const slippage = useSlippage();
-  const { setSlippageMode, setSlippage } = useSetSlippage();
-
-  const handleSlippageChange = (e: any) => {
-    let newSlippage = Number(e.target.value);
-    if (newSlippage < 0) {
-      newSlippage = DEFAULT_SLIPPAGE;
-    } else if (newSlippage > 100) {
-      newSlippage = 100;
-    }
-    setSlippageMode(SLIPPAGE_MODE.CUSTOM);
-    setSlippage(newSlippage);
-  };
 
   if ((slippage ?? 0) < 0.3) {
     warning = "Slippage is set very low, your order may not be filled.";
@@ -121,14 +96,6 @@ export function PlaceOrder({
 
   const { account } = useBeraJs();
 
-  const posSize = useMemo(() => {
-    const positionSize = BigNumber(safeAmount).times(
-      BigNumber(form.leverage ?? "1"),
-    );
-    return positionSize.isNaN() || !positionSize.isFinite()
-      ? "0"
-      : positionSize.toString(10);
-  }, [form.amount, form.leverage]);
   const parsedPositionSize = parseUnits(safeAmount, 18);
 
   const handlePlaceOrder = useCallback(async () => {
@@ -190,122 +157,9 @@ export function PlaceOrder({
     token: honey,
   });
 
-  const orderOpeningFees = formatFromBaseUnit(openingFee, 10);
-
   return (
-    <div className="flex w-full flex-col gap-1 rounded-md border border-border bg-muted px-4 py-3 text-xs font-medium leading-5 text-muted-foreground">
+    <>
       {ModalPortal}
-      {form.optionType === "market" ? (
-        <div className="flex w-full justify-between">
-          <div>EST. EXECUTION PRICE</div>
-          <div className="text-foreground">
-            {price === "0" ? (
-              <Skeleton className="h-4 w-16" />
-            ) : (
-              formatUsd(price)
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className="flex w-full justify-between">
-          <div>LIMIT ORDER PRICE</div>
-          <div className="text-foreground">
-            {price === "0" ? (
-              <Skeleton className="h-4 w-16" />
-            ) : (
-              formatUsd(form.limitPrice ?? "0")
-            )}
-          </div>
-        </div>
-      )}
-      <div className="flex w-full justify-between">
-        <div>EST. LIQ. PRICE</div>
-        <div className="flex flex-row text-foreground">
-          {price === "0" || liqPrice === undefined ? (
-            <Skeleton className="h-4 w-14" />
-          ) : (
-            formatUsd(liqPrice)
-          )}
-        </div>
-      </div>
-      <div className="flex w-full justify-between">
-        <div>LEVERAGE</div>
-        <div className="text-foreground">{form.leverage}x</div>
-      </div>
-      <div className="flex w-full justify-between">
-        <div className="flex flex-1 self-center">SLIPPAGE</div>
-        <Input
-          endAdornment={<div className="absolute left-1.5">%</div>}
-          type="number"
-          outerClassName="w-auto"
-          className="flex h-6 w-[64px] rounded-sm bg-background pr-6 text-xs"
-          required={false}
-          min={1}
-          max={100}
-          onKeyDown={(e) =>
-            (e.key === "-" || e.key === "e" || e.key === "E") &&
-            e.preventDefault()
-          }
-          maxLength={3}
-          value={slippage === 0 ? undefined : slippage}
-          onChange={handleSlippageChange}
-        />
-      </div>
-      <div className="flex w-full justify-between">
-        <div>EST. TAKE PROFIT</div>
-        <div className="flex flex-row items-center gap-1 text-foreground">
-          {form.tp === "" ? (
-            "None"
-          ) : price === "0" ? (
-            <Skeleton className="h-4 w-14" />
-          ) : (
-            `${formatUsd(form.tp ?? 0)}`
-          )}{" "}
-          {form.tp !== "" && (
-            <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
-          )}
-        </div>
-      </div>
-      <div className="flex w-full justify-between">
-        <div>EST. STOP LOSS</div>
-        <div className="flex flex-row items-center gap-1 text-foreground">
-          {form.sl === "" ? (
-            "None"
-          ) : price === "0" ? (
-            <Skeleton className="h-4 w-14" />
-          ) : (
-            `${formatUsd(form.sl ?? 0)}`
-          )}{" "}
-          {form.sl !== "" && (
-            <Icons.honey className="inline h-3 w-3 text-muted-foreground" />
-          )}
-        </div>
-      </div>
-      <div className="flex w-full justify-between">
-        <div>OPENING FEES {`(${orderOpeningFees.toString(10)}%)`}</div>
-        <div className="truncate text-foreground">
-          {formatUsd(
-            BigNumber(posSize).times(orderOpeningFees).div(100).toString(10),
-          )}{" "}
-          <Icons.honey className="-mt-1 inline h-3 w-3 text-muted-foreground" />
-        </div>
-      </div>
-      <div className="flex w-full justify-between">
-        <div>POSITION SIZE</div>
-        <div className="align-items flex flex-row items-center gap-1 truncate text-foreground">
-          {formatUsd(
-            BigNumber(posSize)
-              .minus(
-                BigNumber(posSize)
-                  .times(orderOpeningFees)
-                  .div(100)
-                  .times(form.leverage ?? "1"),
-              )
-              .toString(10),
-          )}{" "}
-          <Icons.honey className=" inline h-3 w-3 flex-1 text-muted-foreground" />
-        </div>
-      </div>
       <ActionButton className="mt-4">
         {allowance?.formattedAllowance === "0" ||
         BigNumber((allowance?.allowance ?? 0n).toString()).isLessThan(
@@ -354,6 +208,6 @@ export function PlaceOrder({
           {error}
         </Alert>
       )}
-    </div>
+    </>
   );
 }
