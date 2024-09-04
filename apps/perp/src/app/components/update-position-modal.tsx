@@ -181,17 +181,16 @@ export function UpdatePositionModal({
             update one or both values.
           </div>
 
-          <div className="flex h-[108px] justify-between rounded-lg border border-border bg-muted p-4">
+          <div className="flex h-[108px] justify-between rounded-lg border border-border p-4">
             <div className="flex h-full flex-col justify-between">
               <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
                 <Avatar className="h-4 w-4">
                   <AvatarImage src={openPosition?.market?.imageUri} />
-                  <AvatarFallback>btc</AvatarFallback>
+                  <AvatarFallback>{openPosition?.market?.name}</AvatarFallback>
                 </Avatar>
                 {openPosition?.market?.name} /
                 <span
                   className={cn(
-                    "",
                     openPosition?.buy === true
                       ? "text-success-foreground"
                       : "text-destructive-foreground",
@@ -215,7 +214,7 @@ export function UpdatePositionModal({
             </div>
             <div className="flex h-full flex-col justify-between">
               <div>
-                <div className="text-right  text-[10px] leading-[10px] text-muted-foreground">
+                <div className="text-right  text-xs leading-[10px] text-muted-foreground">
                   Liquidation Price
                 </div>
                 <div className="text-right text-sm font-semibold leading-5 text-destructive-foreground">
@@ -227,7 +226,7 @@ export function UpdatePositionModal({
                 </div>
               </div>
               <div>
-                <div className="text-right text-[10px] leading-[10px] text-muted-foreground">
+                <div className="text-right text-xs leading-[10px] text-muted-foreground">
                   Executed at
                 </div>
                 <div className=" text-right  text-sm font-semibold leading-5 text-foreground">
@@ -237,9 +236,9 @@ export function UpdatePositionModal({
             </div>
           </div>
 
-          <div className="flex h-fit justify-between rounded-lg border border-border bg-muted p-4">
+          <div className="flex h-fit justify-between rounded-lg border border-border p-4">
             <div className="flex h-full flex-col justify-between">
-              <div className="text-[10px] text-muted-foreground">
+              <div className="text-xs text-muted-foreground">
                 UnRealized PnL
               </div>
               <MarketTradePNL
@@ -248,7 +247,7 @@ export function UpdatePositionModal({
               />
             </div>
             <div className="flex h-full flex-col justify-between">
-              <div className="text-[10px] text-muted-foreground">Leverage</div>
+              <div className="text-xs text-muted-foreground">Leverage</div>
               <div className=" text-sm font-semibold text-foreground">
                 {openPosition?.leverage}x
               </div>

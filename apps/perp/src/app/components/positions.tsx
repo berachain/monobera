@@ -224,11 +224,6 @@ export default function Positions({
       </div>
 
       <PositionGrid markets={markets} />
-      {showBtn && (
-        <Link className="mt-8 flex justify-center" href="/markets">
-          <Button variant="secondary">View All Markets</Button>
-        </Link>
-      )}
     </section>
   );
 }

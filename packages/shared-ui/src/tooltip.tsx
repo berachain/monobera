@@ -1,13 +1,27 @@
-import React from "react";
+import React, { ComponentProps, FC, PropsWithChildren } from "react";
 import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import {
   Tooltip as BeraUiTooltip,
   TooltipContent,
+  TooltipPortal,
   TooltipProvider,
   TooltipTrigger,
 } from "@bera/ui/tooltip";
+
+const OptionalPortal: FC<
+  PropsWithChildren<
+    {
+      usePortal?: boolean;
+    } & ComponentProps<typeof TooltipPortal>
+  >
+> = ({ usePortal = false, children, ...props }) => {
+  return usePortal ? (
+    <TooltipPortal {...props}>{children}</TooltipPortal>
+  ) : (
+    <>{children}</>
+  );
+};
 
 export function Tooltip({
   text,
@@ -15,11 +29,13 @@ export function Tooltip({
   size = 4,
   children,
   toolTipTrigger,
+  portal = false,
   ...props
 }: {
   text?: any;
   className?: string;
   size?: number;
+  portal?: boolean | ComponentProps<typeof TooltipPortal>;
   children?: React.ReactNode;
   toolTipTrigger?: React.ReactNode;
 }) {
@@ -38,7 +54,7 @@ export function Tooltip({
           ) : (
             <div
               className={cn(
-                "inline-flex h-5 w-5 rounded-full align-middle items-center text-muted-foreground hover:bg-transparent",
+                "inline-flex h-5 w-5 items-center rounded-full align-middle text-muted-foreground hover:bg-transparent",
                 className,
               )}
               onMouseEnter={() => setTooltipOpen(true)}
@@ -49,10 +65,15 @@ export function Tooltip({
             </div>
           )}
         </TooltipTrigger>
-        <TooltipContent className="w-fit max-w-[96vw]">
-          {text}
-          {children}
-        </TooltipContent>
+        <OptionalPortal
+          usePortal={!!portal}
+          {...(typeof portal === "object" ? portal : {})}
+        >
+          <TooltipContent className="w-fit max-w-[96vw]">
+            {text}
+            {children}
+          </TooltipContent>
+        </OptionalPortal>
       </BeraUiTooltip>
     </TooltipProvider>
   );
