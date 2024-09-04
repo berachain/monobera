@@ -43,8 +43,8 @@ export default withSentryConfig(
     // https://github.com/getsentry/sentry-webpack-plugin#options
     // Suppresses source map uploading logs during build
     silent: true,
-    org: "berachain-dapps",
-    project: "lend",
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
   },
   {
     // For all available options, see:

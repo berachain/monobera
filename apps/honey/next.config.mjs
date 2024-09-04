@@ -1,4 +1,5 @@
 import { withSentryConfig } from "@sentry/nextjs";
+
 import "./src/env.mjs";
 
 /** @type {import("next").NextConfig} */
@@ -45,8 +46,8 @@ export default withSentryConfig(
 
     // Suppresses source map uploading logs during build
     silent: true,
-    org: "berachain-dapps",
-    project: "honey",
+    org: process.env.SENTRY_ORG,
+    project: process.env.SENTRY_PROJECT,
   },
   {
     // For all available options, see:
