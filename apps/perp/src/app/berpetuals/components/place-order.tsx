@@ -20,12 +20,11 @@ import { Button } from "@bera/ui/button";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
-
 import { formatToBaseUnit } from "~/utils/formatBigNumber";
 import {
   useIsPythConnected,
   usePriceData,
-  useVaa, 
+  useVaa,
 } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
