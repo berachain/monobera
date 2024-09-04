@@ -7,7 +7,11 @@ export interface getIsDelegatedProps {
   config: BeraConfig;
   client: PublicClient;
 }
-
+/**
+ * Given a user account, check if the user has delegated their positions.
+ *
+ * @returns boolean indicating if the user has delegated their positions.
+ */
 export const getIsDelegated = async ({
   args: { account },
   config,

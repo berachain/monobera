@@ -20,9 +20,13 @@ import { Button } from "@bera/ui/button";
 import BigNumber from "bignumber.js";
 import { parseUnits } from "viem";
 
+
 import { formatToBaseUnit } from "~/utils/formatBigNumber";
-import { generateEncodedPythPrices } from "~/utils/formatPyth";
-import { useIsPythConnected, usePriceData } from "~/context/price-context";
+import {
+  useIsPythConnected,
+  usePriceData,
+  useVaa, 
+} from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenLimitOrders } from "~/hooks/usePollOpenLimitOrders";
@@ -41,11 +45,9 @@ export function PlaceOrder({
   pairIndex: string;
 }) {
   const prices = usePriceData();
+  const vaa = useVaa();
   const isPythConnected = useIsPythConnected();
-  const { data: pythUpdateFee } = usePythUpdateFee(
-    generateEncodedPythPrices(prices, pairIndex),
-    pairIndex,
-  );
+  const { data: pythUpdateFee } = usePythUpdateFee(vaa.current, pairIndex);
   const { tableState } = useContext(TableContext);
 
   const { multiRefresh: refreshPositions } = usePollOpenPositions(tableState);
@@ -117,7 +119,7 @@ export function PlaceOrder({
       },
       form.optionType === "market" ? 0 : 1,
       parseUnits(`${slippage ?? 0}`, 10),
-      generateEncodedPythPrices(prices, pairIndex),
+      vaa.current,
     ];
 
     write({

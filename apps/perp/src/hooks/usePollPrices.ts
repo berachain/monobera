@@ -1,9 +1,9 @@
-import { type Price, type PriceFeed } from "@pythnetwork/pyth-evm-js";
 import useSWR, { useSWRConfig } from "swr";
 
 import { PYTH_IDS, USDC_USD_INDEX } from "~/utils/constants";
 import { usePriceData, useIsPythConnected } from "~/context/price-context";
 import { formatUsdcPythPrice } from "~/utils/formatPyth";
+import { HermesPrice } from "~/types/prices";
 
 export const usePollPrices = () => {
   const prices = usePriceData();
@@ -14,9 +14,9 @@ export const usePollPrices = () => {
     QUERY_KEY,
     () => {
       const keys = PYTH_IDS.map((pythPrice) => pythPrice.pairIndex);
-      return keys.reduce((acc: Record<string, Price>, key) => {
+      return keys.reduce<Record<string, HermesPrice>>((acc, key) => {
         const priceFeed = prices.current?.[key];
-        acc[key] = priceFeed.getPriceUnchecked() as Price;
+        acc[key] = priceFeed;
         return acc;
       }, {});
     },
@@ -33,8 +33,8 @@ export const usePollPrices = () => {
         if (key === USDC_USD_INDEX || data[USDC_USD_INDEX] === undefined)
           return acc;
         acc[key] = formatUsdcPythPrice(
-          data[key as "string"] as Price,
-          data[USDC_USD_INDEX] as Price,
+          data[key as "string"].price,
+          data[USDC_USD_INDEX].price,
         );
         return acc;
       }, {})) ??
