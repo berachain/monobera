@@ -102,7 +102,7 @@ export const useUserVaults = (
         const aUnclaimed = parseFloat(a.unclaimedBgt);
         const bUnclaimed = parseFloat(b.unclaimedBgt);
         return aUnclaimed - bUnclaimed;
-      });
+      }).filter((vault: UserVault) => vault.balance !== "0");
 
       return {
         totalBgtRewards: formatUnits(total, 18),
