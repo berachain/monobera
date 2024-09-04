@@ -92,7 +92,7 @@ export const subscribeOffChainPrices = (
     const pairIndex = PYTH_IDS.find(
       (price) => symbolName === price.name,
     )?.pairIndex;
-    const currentPrice = prices[pairIndex ?? ""]?.getPriceUnchecked();
+    const currentPrice = prices[pairIndex ?? ""]?.price;
     if (currentPrice) {
       if (latestChartBar.current?.symbol !== symbol.ticker) return;
       const priceNum = Number(formatPythPrice(currentPrice));

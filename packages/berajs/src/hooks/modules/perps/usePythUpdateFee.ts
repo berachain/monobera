@@ -1,23 +1,26 @@
 import { pythContractAddress } from "@bera/config";
 import useSWRImmutable from "swr/immutable";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { pythAbi } from "~/abi";
 import { useBeraJs } from "~/contexts";
 
 export const usePythUpdateFee = (
-  pricesList: string[] | undefined,
+  pricesList: Address[] | undefined,
   pairIndex: string | undefined,
 ) => {
   const publicClient = usePublicClient();
   const method = "getUpdateFee";
   const { account } = useBeraJs();
-  const validPrices =
-    pricesList && pricesList.length > 0 && pricesList[0] !== "";
+  const validPrices = pricesList && pricesList.length > 0;
   const QUERY_KEY = [account, method, pairIndex, validPrices];
-  const { data, isLoading } = useSWRImmutable(QUERY_KEY, async () => {
-    if (!publicClient) return undefined;
-    if (!validPrices) return undefined;
+  const { data, isLoading } = useSWRImmutable<bigint>(QUERY_KEY, async () => {
+    // Default update fee: fetched prices * 2
+    const DEFAULT_UPDATE_FEE = 10n;
+
+    if (!publicClient || !validPrices) return DEFAULT_UPDATE_FEE;
+
     try {
       const result = await publicClient.readContract({
         address: pythContractAddress,
@@ -25,10 +28,10 @@ export const usePythUpdateFee = (
         functionName: method,
         args: [pricesList],
       });
-      return (result as bigint | undefined) ?? 10n;
+      return result;
     } catch (e) {
       console.error(e);
-      return undefined;
+      return DEFAULT_UPDATE_FEE;
     }
   });
 

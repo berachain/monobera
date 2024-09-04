@@ -22,7 +22,7 @@
     "@bera/tailwind-config": "workspace:*",
     "@bera/ui": "workspace:*",
     "@bera/wagmi": "workspace:*",
-    "@sentry/nextjs": "^7.103.0",
+    "@sentry/nextjs": "^8.28.0",
     "@t3-oss/env-nextjs": "^0.2.2",
     "@vercel/analytics": "^1.0.1",
     "bignumber.js": "^9.1.2",

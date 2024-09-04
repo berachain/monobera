@@ -1,18 +1,18 @@
 import { useContext, useMemo } from "react";
-import { FormattedNumber, Tooltip, usePrevious } from "@bera/shared-ui";
+import { FormattedNumber, Tooltip } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import BigNumber from "bignumber.js";
 
+import { calculateUnrealizedPnl } from "~/utils/calculateUnrealizedPnl";
 import { formatFromBaseUnit } from "~/utils/formatBigNumber";
 import { TableContext } from "~/context/table-context";
 import { usePollAccountTradingSummary } from "~/hooks/usePollAccountTradingSummary";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollOpenPositionsSummary } from "~/hooks/usePollOpenPositionsSummary";
+import { usePollPrices } from "~/hooks/usePollPrices";
 import type { IMarket } from "~/types/market";
 import type { TableTabTypes } from "~/types/table";
 import { TotalRelativePnLHoverState } from "../berpetuals/components/total-relative-pnl-hover-state";
-import { usePollPrices } from "~/hooks/usePollPrices";
-import { calculateUnrealizedPnl } from "~/utils/calculateUnrealizedPnl";
 
 export function TotalAmount({
   className,

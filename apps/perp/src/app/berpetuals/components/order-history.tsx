@@ -5,9 +5,9 @@ import {
   useBeraJs,
   usePollOrdersLiqFeePrices,
   usePollPositionsLiqFeePrices,
+  usePrevious,
 } from "@bera/berajs";
 import type { OpenTrade } from "@bera/proto/src";
-import { usePrevious } from "@bera/shared-ui";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { generateMarketOrders } from "~/utils/generateMarketOrders";
@@ -58,6 +58,7 @@ export function OrderHistory({
     isLoading: isPositionsLoading,
     isValidating: isPositionsValidating,
   } = usePollOpenPositions(tableState);
+
   const {
     data: openOrdersData,
     pagination: openOrdersPagination,

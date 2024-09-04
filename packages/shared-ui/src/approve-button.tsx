@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import {
   TransactionActionType,
   usePollAllowance,
@@ -49,28 +49,11 @@ export const ApproveButton = ({
     },
   });
   const ref = useRef<HTMLDivElement>(null);
-  const [smallScreen, setSmallScreen] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (ref.current?.clientWidth) {
-        if (ref.current.clientWidth < 360 && !smallScreen) {
-          setSmallScreen(true);
-        } else if (ref.current.clientWidth >= 360 && smallScreen) {
-          setSmallScreen(false);
-        }
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <div
       className={cn(
-        "flex gap-4",
-        smallScreen ? "flex-col" : "flex-row",
+        "flex flex-col gap-4 @[360px]/createPosition:flex-row",
         className,
       )}
       ref={ref}
@@ -92,7 +75,8 @@ export const ApproveButton = ({
         </Button>
       )}
       <Button
-        className="w-full"
+        className="w-full border-border"
+        variant={"outline"}
         disabled={!token || isLoading || isSubmitting || disabled}
         onClick={() => {
           write({
@@ -103,7 +87,7 @@ export const ApproveButton = ({
           });
         }}
       >
-        {isLoading ? "Loading..." : amount ? "Approve Infinite" : "Approve"}
+        {isLoading ? "Loading..." : "Approve Infinite"}
       </Button>
     </div>
   );

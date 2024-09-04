@@ -9,9 +9,9 @@ export const WEEKLY = "7d";
 export const MONTHLY = "30d";
 export const QUARTERLY = "90d";
 
-export const MAX_GAIN = "900";
-export const MAX_STOP_LOSS = "-75";
-export const INITIAL_GAIN = "100";
+export const MAX_TP_PERC = "900";
+export const MAX_SL_PERC = "-75";
+export const INITIAL_TL_PERC = "900";
 
 export const POSITIONS_SORTING_MAP = {
   position_size: "SORT_BY_SIZE",

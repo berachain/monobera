@@ -69,4 +69,4 @@ export const pythErrorsAbi = [
     name: "StalePrice",
     inputs: [],
   },
-];
+] as const;

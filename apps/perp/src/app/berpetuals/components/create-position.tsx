@@ -1,17 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { usePollWalletBalances } from "@bera/berajs";
+import { getPriceFromPercent, usePollWalletBalances } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
 import { type GlobalParams } from "@bera/proto/src";
-import { FormattedNumber, usePrevious } from "@bera/shared-ui";
+import { FormattedNumber } from "@bera/shared-ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import BigNumber from "bignumber.js";
 
-import { MAX_GAIN, MAX_STOP_LOSS } from "~/utils/constants";
+import { MAX_SL_PERC, MAX_TP_PERC } from "~/utils/constants";
 import { formatFromBaseUnit, formatToBaseUnit } from "~/utils/formatBigNumber";
-import { getPriceFromPercent } from "~/utils/getPriceFromPercent";
 import { HONEY_IMG } from "~/utils/marketImages";
 import { useCalculateLiqPrice } from "~/hooks/useCalculateLiqPrice";
 import { useClientLocalStorage } from "~/hooks/useClientLocalStorage";
@@ -21,6 +20,7 @@ import type { OrderType } from "~/types/order-type";
 import { CustomizeInput } from "./customize-input";
 import { LeverageSlider } from "./leverage-slider";
 import { LongShortTab } from "./long-short-tab";
+import { OrderDetails } from "./order-details";
 import { PlaceOrder } from "./place-order";
 import { TPSL } from "./tpsl";
 
@@ -43,6 +43,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   );
 
   const asset = market?.name.split("-")[0] as string;
+
   const initialState: OrderType = {
     assets: asset,
     orderType: (orderType ?? "long") as "long" | "short",
@@ -56,7 +57,7 @@ export function CreatePosition({ market, params }: ICreatePosition) {
     sl: "",
   };
   const [form, setForm] = useState<OrderType>(initialState);
-  const prevOrderType = usePrevious(form.orderType);
+  // const prevOrderType = usePrevious(form.orderType);
 
   useEffect(() => {
     if (orderType !== form.orderType) {
@@ -195,13 +196,13 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   useEffect(() => {
     const maxTp = getPriceFromPercent(
       form.orderType === "long",
-      MAX_GAIN,
+      MAX_TP_PERC,
       form.leverage ?? "2",
       form.optionType === "market" ? price : form.limitPrice ?? "0",
     ).toString(10);
     const maxSl = getPriceFromPercent(
       form.orderType === "long",
-      MAX_STOP_LOSS,
+      MAX_SL_PERC,
       form.leverage ?? "2",
       form.optionType === "market" ? price : form.limitPrice ?? "0",
     ).toString(10);
@@ -316,10 +317,17 @@ export function CreatePosition({ market, params }: ICreatePosition) {
   );
 
   return (
-    <div className="m-2 flex h-[calc(100%-8px)] w-[calc(100%-16px)] flex-shrink-0 flex-col overflow-auto rounded-md border border-border lg:mt-0 lg:w-[400px]">
+    <div className="m-2 flex h-[calc(100%-8px)] w-[calc(100%-16px)] flex-shrink-0 flex-col overflow-auto rounded-md border border-border @container/createPosition lg:mt-0 lg:w-[400px]">
       <LongShortTab
         value={form.orderType}
-        valueOnChange={(value) => setOrderType(value)}
+        valueOnChange={(value) =>
+          setOrderType((prev) => {
+            if (prev !== value) {
+              setForm((f) => ({ ...f, tp: "", sl: "" }));
+            }
+            return value;
+          })
+        }
       />
       <div className="flex w-full flex-col overflow-auto">
         <Tabs
@@ -327,18 +335,20 @@ export function CreatePosition({ market, params }: ICreatePosition) {
           onValueChange={(value) => setOptionType(value)}
           className="m-4"
         >
-          <TabsList className="w-full rounded-sm">
+          <TabsList variant="outline" className="w-full rounded-sm">
             <TabsTrigger
               value={"market"}
               key={"market"}
-              className="w-full rounded-sm"
+              variant="outline"
+              className="w-full rounded-l-sm"
             >
               Market
             </TabsTrigger>
             <TabsTrigger
               value={"limit"}
               key={"limit"}
-              className="w-full rounded-sm"
+              variant="outline"
+              className="w-full rounded-r-sm"
             >
               Limit
             </TabsTrigger>
@@ -439,19 +449,12 @@ export function CreatePosition({ market, params }: ICreatePosition) {
               />
             )}
           </div>
-          <LeverageSlider
-            defaultValue={Number(form.leverage)}
-            maxLeverage={Number(maxLeverage)}
-            onValueChange={(value: string) => {
-              setForm((prev) => ({
-                ...prev,
-                leverage: value,
-              }));
-            }}
-          />
+
           <TPSL
-            key={form.optionType}
-            className="my-8"
+            optionType={form.optionType}
+            // key={form.optionType}
+            wrapInAccordion
+            className="mt-4 overflow-x-scroll "
             leverage={form.leverage ?? "2"}
             formattedPrice={
               form.optionType === "market" ? price : form.limitPrice
@@ -461,12 +464,28 @@ export function CreatePosition({ market, params }: ICreatePosition) {
             liqPrice={liqPrice}
             sl={form.sl}
             tpslOnChange={handleTPSLChange}
-          />
+          >
+            <LeverageSlider
+              defaultValue={Number(form.leverage)}
+              maxLeverage={Number(maxLeverage)}
+              onValueChange={(value: string) => {
+                setForm((prev) => ({
+                  ...prev,
+                  leverage: value,
+                }));
+              }}
+            />
+          </TPSL>
+
           <PlaceOrder
             form={form}
             error={error}
             price={price}
             pairIndex={market?.pair_index ?? "0"}
+          />
+          <OrderDetails
+            form={form}
+            price={price}
             openingFee={market?.pair_fixed_fee?.open_fee_p ?? "0"}
             liqPrice={liqPrice}
           />

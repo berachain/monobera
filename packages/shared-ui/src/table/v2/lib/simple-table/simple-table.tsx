@@ -22,6 +22,8 @@ export type SimpleTableProps<TData> = TableBodyProps<TData> & {
   toolbarContent?: React.ReactNode;
   showToolbar?: boolean;
   showSelection?: boolean;
+  mutedBackgroundOnHead?: boolean;
+  minWidth?: number;
 };
 
 export function SimpleTable<TData>({
@@ -34,9 +36,12 @@ export function SimpleTable<TData>({
   toolbarContent,
   showToolbar = true,
   showSelection = true,
+  mutedBackgroundOnHead = true,
   onRowClick,
+  ...props
 }: SimpleTableProps<TData>) {
-  const minWidth = flexTable ? table.getTotalSize() : "auto";
+  const minWidth =
+    props.minWidth ?? (flexTable ? table.getTotalSize() : "auto");
   const tableBodyRef = React.useRef<HTMLTableSectionElement>(null);
   const rows = table.getRowModel().rows;
   const loading = table.options.meta?.loading || table.options.meta?.validating;
@@ -62,15 +67,18 @@ export function SimpleTable<TData>({
           style={{ minWidth }}
           flexTable={flexTable}
           tableBodyRef={tableBodyRef}
+          backgroundColor={mutedBackgroundOnHead ? "muted" : "none"}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableHeaderGroup key={headerGroup.id} flexTable={flexTable}>
               {headerGroup.headers.map((header) => (
                 <TableHeader
+                  showBorders={mutedBackgroundOnHead}
                   flexTable={flexTable}
                   key={header.id}
                   header={header}
                   dynamicFlex={dynamicFlex}
+                  className={header.column.columnDef.meta?.className}
                 />
               ))}
             </TableHeaderGroup>
@@ -98,19 +106,25 @@ export function SimpleTable<TData>({
                       cell={cell}
                       key={cell.id}
                       dynamicFlex={dynamicFlex}
+                      className={cell.column.columnDef.meta?.className}
                     />
                   ))}
                 </TableRow>
               );
             })
           ) : loading ? (
-            <td className="flex h-24 items-center justify-center">
-              {table.options.meta?.loadingText ?? "Loading Table Data..."}
-            </td>
+            <tr>
+              {" "}
+              <td className="flex h-24 items-center justify-center">
+                {table.options.meta?.loadingText ?? "Loading Table Data..."}
+              </td>
+            </tr>
           ) : (
-            <td className="flex h-24 items-center justify-center">
-              {table.options.meta?.emptyDataText ?? "No Results"}
-            </td>
+            <tr>
+              <td className="flex h-24 items-center justify-center">
+                {table.options.meta?.emptyDataText ?? "No Results"}
+              </td>
+            </tr>
           )}
         </TableBody>
         {/* <tfoot> components */}

@@ -8,6 +8,7 @@ import {
   DynamicContextProvider,
   EvmNetwork,
   SortWallets,
+  mergeNetworks,
 } from "@dynamic-labs/sdk-react-core";
 import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";

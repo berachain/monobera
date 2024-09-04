@@ -563,4 +563,4 @@ export const pythAbi = [
     ],
     anonymous: false,
   },
-];
+] as const;
