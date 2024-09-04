@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { usePrevious } from "@bera/shared-ui";
+import { usePrevious } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { useTheme } from "next-themes";
 

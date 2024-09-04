@@ -9,8 +9,8 @@
     "preview": "vocs preview"
   },
   "dependencies": {
-    "@types/react": "latest",
     "@bera/berajs": "workspace:*",
+    "@types/react": "latest",
     "react": "latest",
     "react-dom": "latest",
     "typescript": "latest",

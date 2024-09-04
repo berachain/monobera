@@ -4,10 +4,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@bera/ui";
 import { Checkbox } from "@bera/ui/checkbox";
+import { Skeleton } from "@bera/ui/skeleton";
 import _ from "lodash";
-import { Skeleton } from "@bera/ui/skeleton"; // Added this import
+
+// Added this import
 
 import "../../types/data-table.d.ts";
+import { usePathname, useRouter, useSearchParams } from "next/navigation.js";
+import { usePrevious } from "@bera/berajs";
 import {
   Table,
   TableBody,
@@ -33,10 +37,8 @@ import {
   type TableState,
 } from "@tanstack/react-table";
 
-import { usePrevious } from "../../hooks";
-import { Spinner } from "../../spinner";
 import { PaginationWithLinks } from "../../pagination-with-links";
-import { useRouter, usePathname, useSearchParams } from "next/navigation.js";
+import { Spinner } from "../../spinner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -134,7 +136,10 @@ const rowSelectColumn = {
 export function DataTableLoading({
   columns,
   rowCount = 10,
-}: { columns: number; rowCount?: number }) {
+}: {
+  columns: number;
+  rowCount?: number;
+}) {
   return (
     <div className="w-full">
       <div>
@@ -364,7 +369,7 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
       {enablePagination && (
-        <div className="w-full mt-4">
+        <div className="mt-4 w-full">
           <PaginationWithLinks
             totalCount={totalCount ?? 0}
             pageSize={pageSize ?? 10}

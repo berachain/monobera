@@ -23,10 +23,7 @@ export const navItems = [
     href: "/portfolio",
     title: "Portfolio",
   },
-  {
-    href: "/markets",
-    title: "Markets",
-  },
+
   {
     href: "/vault",
     title: "Vault",
