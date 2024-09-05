@@ -1,6 +1,7 @@
 packages:
   - packages/config/*
   - packages/beracrocswap
+  - packages/bera-b-sdk
   - packages/graphql
   - packages/berajs
   - packages/wagmi

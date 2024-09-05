@@ -1,0 +1,29 @@
+{
+    "include": ["src", "test", "examples"],
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "outDir": "dist",
+        "declaration": true,
+        "sourceMap": true,
+        "strict": true,
+        "noImplicitAny": false,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictPropertyInitialization": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "types": ["vitest/globals", "vite/client"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*"],
+            "@balancer/sdk": ["src/index.ts"]
+        },
+    }
+}

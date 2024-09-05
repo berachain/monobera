@@ -230,3 +230,5 @@ export const developmentAnalytics = process.env
 export const mixpanelProjectToken = process.env
   .NEXT_PUBLIC_MIXPANEL_PROJECT_TOKEN as string;
 export const projectName = process.env.NEXT_PUBLIC_PROJECT_NAME as string;
+
+export const balancerApiUrl = process.env.NEXT_PUBLIC_BALANCER_API_URL as string;

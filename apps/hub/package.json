@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@balancer-labs/balancer-js": "^2.0.0",
+    
+    "@balancer/sdk": "workspace:*",
     "@bera/beracrocswap": "workspace:*",
     "@bera/berajs": "workspace:*",
     "@bera/config": "workspace:*",
@@ -46,6 +48,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.16.6",
+    "@apollo/experimental-nextjs-app-support": "^0.8.0",
     "@types/react": "^18.2.0",
     "@types/react-datepicker": "^4.15.0",
     "@types/react-dom": "^18.2.1",

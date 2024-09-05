@@ -1,0 +1,120 @@
+# query GetSorSwaps(
+#   $tokenIn: String!
+#   $tokenOut: String!
+#   $swapType: GqlSorSwapType!
+#   $swapAmount: BigDecimal!
+#   $swapOptions: GqlSorSwapOptionsInput!
+# ) {
+#   swaps: sorGetSwaps(
+#     tokenIn: $tokenIn
+#     tokenOut: $tokenOut
+#     swapType: $swapType
+#     swapAmount: $swapAmount
+#     swapOptions: $swapOptions
+#   ) {
+#     tokenIn
+#     tokenOut
+#     swapAmount
+#     swapAmountForSwaps
+#     returnAmount
+#     returnAmountFromSwaps
+#     returnAmountConsideringFees
+#     marketSp
+#     swaps {
+#       amount
+#       assetInIndex
+#       assetOutIndex
+#       poolId
+#       userData
+#     }
+#     tokenAddresses
+#   }
+# }
+
+# query GetTokenRelativePriceChartData(
+#   $tokenIn: String!
+#   $tokenOut: String!
+#   $range: GqlTokenChartDataRange!
+# ) {
+#   prices: tokenGetRelativePriceChartData(tokenIn: $tokenIn, tokenOut: $tokenOut, range: $range) {
+#     id
+#     price
+#     timestamp
+#   }
+# }
+
+# fragment GqlSorSwapRoute on GqlSorSwapRoute {
+#   tokenIn
+#   tokenOut
+#   tokenInAmount
+#   tokenOutAmount
+#   share
+#   hops {
+#     ...GqlSorSwapRouteHop
+#   }
+# }
+
+# fragment GqlSorSwapRouteHop on GqlSorSwapRouteHop {
+#   poolId
+#   pool {
+#     id
+#     name
+#     type
+#     symbol
+#     dynamicData {
+#       totalLiquidity
+#     }
+#     allTokens {
+#       address
+#       isNested
+#       isPhantomBpt
+#       weight
+#     }
+#   }
+#   tokenIn
+#   tokenOut
+#   tokenInAmount
+#   tokenOutAmount
+# }
+
+# query GetTradeSelectedTokenData($tokenIn: String!, $tokenOut: String!) {
+#   tokenInData: tokenGetTokenData(address: $tokenIn) {
+#     id
+#     tokenAddress
+#     description
+#     discordUrl
+#     telegramUrl
+#     twitterUsername
+#   }
+#   tokenOutData: tokenGetTokenData(address: $tokenOut) {
+#     id
+#     tokenAddress
+#     description
+#     discordUrl
+#     telegramUrl
+#     twitterUsername
+#   }
+#   tokenInDynamicData: tokenGetTokenDynamicData(address: $tokenIn) {
+#     ...GqlTokenDynamicData
+#   }
+#   tokenOutDynamicData: tokenGetTokenDynamicData(address: $tokenOut) {
+#     ...GqlTokenDynamicData
+#   }
+# }
+
+# fragment GqlTokenDynamicData on GqlTokenDynamicData {
+#   id
+#   tokenAddress
+#   ath
+#   atl
+#   marketCap
+#   fdv
+#   priceChange24h
+#   priceChangePercent24h
+#   priceChangePercent7d
+#   priceChangePercent14d
+#   priceChangePercent30d
+#   high24h
+#   low24h
+#   updatedAt
+# }

@@ -38,6 +38,13 @@ export interface AddLiquidityRequest {
   shareAddress?: string;
 }
 
+export interface AddLiquidityRequest2 {
+  isStablePool: boolean;
+  amounts: string[];
+  poolId: string;
+  slippage: number;
+}
+
 export interface WithdrawLiquidityRequest {
   slippage: number;
   poolPrice: number;

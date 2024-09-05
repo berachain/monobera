@@ -1,0 +1,66 @@
+query GetAppGlobalPollingData {
+  tokenGetCurrentPrices {
+    price
+    address
+  }
+  protocolMetricsChain {
+    totalLiquidity
+    totalSwapVolume
+    totalSwapFee
+    poolCount
+    swapFee24h
+    swapVolume24h
+  }
+  blocksGetBlocksPerDay
+  blocksGetAverageBlockTime
+}
+
+query GetTokens($chains: [GqlChain!]!) {
+  tokens: tokenGetTokens(chains: $chains) {
+    address
+    name
+    symbol
+    decimals
+    chain
+    chainId
+    logoURI
+    priority
+    tradable
+    isErc4626
+    coingeckoId
+  }
+}
+
+query GetTokenPrices($chains: [GqlChain!]!) {
+  tokenPrices: tokenGetCurrentPrices(chains: $chains) {
+    price
+    address
+    chain
+    updatedAt
+  }
+}
+
+query GetTokensDynamicData($addresses: [String!]!) {
+  dynamicData: tokenGetTokensDynamicData(addresses: $addresses) {
+    ath
+    atl
+    fdv
+    high24h
+    id
+    low24h
+    marketCap
+    price
+    priceChange24h
+    priceChangePercent7d
+    priceChangePercent14d
+    priceChangePercent24h
+    priceChangePercent30d
+    tokenAddress
+    updatedAt
+  }
+}
+
+query GetBlocksPerDay {
+  blocksPerDay: blocksGetBlocksPerDay
+  avgBlockTime: blocksGetAverageBlockTime
+}

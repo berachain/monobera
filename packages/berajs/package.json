@@ -20,6 +20,7 @@
     "lint:fix": "pnpm lint --fix"
   },
   "dependencies": {
+    "@balancer/sdk": "workspace:*",
     "@bera/beracrocswap": "workspace:*",
     "@bera/config": "workspace:*",
     "@bera/graphql": "workspace:*",

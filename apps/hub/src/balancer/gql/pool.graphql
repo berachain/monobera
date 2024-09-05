@@ -1,0 +1,515 @@
+query GetPool($id: String!, $chain: GqlChain!, $userAddress: String) {
+  pool: poolGetPool(id: $id, chain: $chain, userAddress: $userAddress) {
+    id
+    address
+    name
+    version
+    owner
+    decimals
+    factory
+    symbol
+    createTime
+    type
+    chain
+    protocolVersion
+    tags
+    dynamicData {
+      poolId
+      swapEnabled
+      totalLiquidity
+      totalShares
+      fees24h
+      surplus24h
+      swapFee
+      volume24h
+      holdersCount
+      isInRecoveryMode
+      isPaused
+      aprItems {
+        id
+        title
+        apr
+        type
+        rewardTokenSymbol
+        rewardTokenAddress
+      }
+    }
+    allTokens {
+      id
+      address
+      name
+      symbol
+      decimals
+      isNested
+      isPhantomBpt
+      isMainToken
+    }
+    displayTokens {
+      id
+      address
+      name
+      weight
+      symbol
+      nestedTokens {
+        id
+        address
+        name
+        weight
+        symbol
+      }
+    }
+    staking {
+      id
+      type
+      chain
+      address
+      gauge {
+        id
+        gaugeAddress
+        version
+        status
+        workingSupply
+        otherGauges {
+          gaugeAddress
+          version
+          status
+          id
+          rewards {
+            id
+            tokenAddress
+            rewardPerSecond
+          }
+        }
+        rewards {
+          id
+          rewardPerSecond
+          tokenAddress
+        }
+      }
+      aura {
+        id
+        apr
+        auraPoolAddress
+        auraPoolId
+        isShutdown
+      }
+    }
+    userBalance {
+      totalBalance
+      totalBalanceUsd
+      walletBalance
+      walletBalanceUsd
+      stakedBalances {
+        balance
+        balanceUsd
+        stakingType
+        stakingId
+      }
+    }
+    ... on GqlPoolWeighted {
+      nestingType
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+    ... on GqlPoolStable {
+      amp
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+    ... on GqlPoolMetaStable {
+      amp
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+    ... on GqlPoolElement {
+      unitSeconds
+      principalToken
+      baseToken
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+    ... on GqlPoolComposableStable {
+      amp
+      nestingType
+      bptPriceRate
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+    ... on GqlPoolLiquidityBootstrapping {
+      name
+      nestingType
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+    ... on GqlPoolGyro {
+      alpha
+      beta
+      type
+      c
+      dSq
+      lambda
+      root3Alpha
+      s
+      sqrtAlpha
+      sqrtBeta
+      tauAlphaX
+      tauAlphaY
+      tauBetaX
+      tauBetaY
+      u
+      v
+      w
+      z
+      nestingType
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+    ... on GqlPoolFx {
+      alpha
+      beta
+      delta
+      epsilon
+      lambda
+      poolTokens {
+        ... on GqlPoolTokenDetail {
+          id
+          index
+          name
+          symbol
+          balance
+          balanceUSD
+          address
+          priceRate
+          decimals
+          weight
+          hasNestedPool
+          isAllowed
+          priceRateProvider
+          priceRateProviderData {
+            ...PriceRateProviderDataFields
+          }
+          nestedPool {
+            id
+            address
+            type
+            tokens {
+              index
+              address
+              decimals
+            }
+          }
+          isAllowed
+        }
+      }
+    }
+  }
+}
+
+fragment PriceRateProviderDataFields on GqlPriceRateProviderData {
+  address
+  name
+  summary
+  reviewed
+  warnings
+  upgradeableComponents {
+    entryPoint
+    implementationReviewed
+  }
+  reviewFile
+  factory
+}
+
+query GetPoolSnapshots($poolId: String!, $range: GqlPoolSnapshotDataRange!, $chainId: GqlChain!) {
+  snapshots: poolGetSnapshots(id: $poolId, range: $range, chain: $chainId) {
+    id
+    timestamp
+    totalLiquidity
+    volume24h
+    fees24h
+    surplus24h
+    sharePrice
+  }
+}
+
+query GetPoolTokensDynamicData($addresses: [String!]!) {
+  staticData: tokenGetTokensData(addresses: $addresses) {
+    id
+    tokenAddress
+    description
+    discordUrl
+    telegramUrl
+    twitterUsername
+    websiteUrl
+  }
+  dynamicData: tokenGetTokensDynamicData(addresses: $addresses) {
+    ...GqlTokenDynamicData
+  }
+}
+
+query GetPoolEvents(
+  $first: Int
+  $skip: Int
+  $poolIdIn: [String!]!
+  $chainIn: [GqlChain!]!
+  $range: GqlPoolEventsDataRange
+  $typeIn: [GqlPoolEventType]
+  $userAddress: String
+) {
+  poolEvents(
+    first: $first
+    skip: $skip
+    where: {
+      poolIdIn: $poolIdIn
+      chainIn: $chainIn
+      range: $range
+      typeIn: $typeIn
+      userAddress: $userAddress
+    }
+  ) {
+    id
+    poolId
+    timestamp
+    tx
+    type
+    valueUSD
+    chain
+    userAddress
+    ... on GqlPoolSwapEventV3 {
+      tokenIn {
+        address
+        amount
+      }
+      tokenOut {
+        address
+        amount
+      }
+    }
+    ... on GqlPoolSwapEventCowAmm {
+      tokenIn {
+        address
+        amount
+        valueUSD
+      }
+      tokenOut {
+        address
+        amount
+        valueUSD
+      }
+      surplus {
+        address
+        amount
+        valueUSD
+      }
+    }
+    ... on GqlPoolAddRemoveEventV3 {
+      tokens {
+        address
+        amount
+        valueUSD
+      }
+    }
+  }
+}

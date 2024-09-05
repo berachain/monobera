@@ -4,7 +4,7 @@ import { dexName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import { Address, isAddress } from "viem";
 
-import AddLiquidityContent from "../AddLiquidityContent";
+import AddLiquidityContent2 from "../AddLiquidityContent2";
 
 export function generateMetadata(): Metadata {
   return {
@@ -26,7 +26,7 @@ export default async function PoolPage({
     }
 
     return (
-      <AddLiquidityContent shareAddress={params.shareAddress as Address} />
+      <AddLiquidityContent2 shareAddress={params.shareAddress as Address} />
     );
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);

@@ -1,0 +1,154 @@
+query GetSorSwaps(
+  $tokenIn: String!
+  $tokenOut: String!
+  $swapType: GqlSorSwapType!
+  $swapAmount: AmountHumanReadable!
+  $chain: GqlChain!
+  $queryBatchSwap: Boolean!
+) {
+  swaps: sorGetSwapPaths(
+    tokenIn: $tokenIn
+    tokenOut: $tokenOut
+    swapType: $swapType
+    swapAmount: $swapAmount
+    chain: $chain
+    queryBatchSwap: $queryBatchSwap
+  ) {
+    effectivePrice
+    effectivePriceReversed
+    swapType
+    paths {
+      inputAmountRaw
+      outputAmountRaw
+      pools
+      protocolVersion
+      tokens {
+        address
+        decimals
+      }
+    }
+    priceImpact {
+      priceImpact
+      error
+    }
+    returnAmount
+    routes {
+      hops {
+        pool {
+          symbol
+        }
+        poolId
+        tokenIn
+        tokenInAmount
+        tokenOut
+        tokenOutAmount
+      }
+      share
+      tokenInAmount
+      tokenInAmount
+      tokenOut
+      tokenOutAmount
+    }
+    swapAmount
+    swaps {
+      amount
+      assetInIndex
+      assetOutIndex
+      poolId
+      userData
+    }
+    tokenIn
+    tokenInAmount
+    tokenOut
+    tokenOutAmount
+    protocolVersion
+  }
+}
+
+# query GetTokenRelativePriceChartData(
+#   $tokenIn: String!
+#   $tokenOut: String!
+#   $range: GqlTokenChartDataRange!
+# ) {
+#   prices: tokenGetRelativePriceChartData(tokenIn: $tokenIn, tokenOut: $tokenOut, range: $range) {
+#     id
+#     price
+#     timestamp
+#   }
+# }
+
+# fragment GqlSorSwapRoute on GqlSorSwapRoute {
+#   tokenIn
+#   tokenOut
+#   tokenInAmount
+#   tokenOutAmount
+#   share
+#   hops {
+#     ...GqlSorSwapRouteHop
+#   }
+# }
+
+# fragment GqlSorSwapRouteHop on GqlSorSwapRouteHop {
+#   poolId
+#   pool {
+#     id
+#     name
+#     type
+#     symbol
+#     dynamicData {
+#       totalLiquidity
+#     }
+#     allTokens {
+#       address
+#       isNested
+#       isPhantomBpt
+#       weight
+#     }
+#   }
+#   tokenIn
+#   tokenOut
+#   tokenInAmount
+#   tokenOutAmount
+# }
+
+# query GetTradeSelectedTokenData($tokenIn: String!, $tokenOut: String!) {
+#   tokenInData: tokenGetTokenData(address: $tokenIn) {
+#     id
+#     tokenAddress
+#     description
+#     discordUrl
+#     telegramUrl
+#     twitterUsername
+#   }
+#   tokenOutData: tokenGetTokenData(address: $tokenOut) {
+#     id
+#     tokenAddress
+#     description
+#     discordUrl
+#     telegramUrl
+#     twitterUsername
+#   }
+#   tokenInDynamicData: tokenGetTokenDynamicData(address: $tokenIn) {
+#     ...GqlTokenDynamicData
+#   }
+#   tokenOutDynamicData: tokenGetTokenDynamicData(address: $tokenOut) {
+#     ...GqlTokenDynamicData
+#   }
+# }
+
+fragment GqlTokenDynamicData on GqlTokenDynamicData {
+  id
+  tokenAddress
+  ath
+  atl
+  marketCap
+  fdv
+  priceChange24h
+  priceChangePercent24h
+  priceChangePercent7d
+  priceChangePercent14d
+  priceChangePercent30d
+  high24h
+  low24h
+  updatedAt
+}

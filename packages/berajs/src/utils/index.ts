@@ -13,3 +13,4 @@ export * from "./fixedPointEthers";
 export * from "./formatNumber";
 export * from "./pools";
 export * from "./numbers";
+export * from "./addresses";

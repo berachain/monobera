@@ -6,7 +6,6 @@ import {
 import { nativeTokenAddress } from "@bera/config";
 import { Address } from "viem";
 import { AddLiquidityRequest, PayloadReturnType } from "~/types";
-
 const getPathId = (
   baseTokenAddress: Address,
   quoteTokenAddress: Address,

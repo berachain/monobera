@@ -5,3 +5,4 @@ export * from "./governance";
 export * from "./berachef";
 export * from "./clients";
 export * from "./pol";
+export * from "./balancer";

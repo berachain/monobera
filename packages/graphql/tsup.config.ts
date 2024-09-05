@@ -1,15 +1,11 @@
-const config = {
-  entryPoints: ["src/index.ts"], // The entry point(s) of your library
-  format: ["esm"], // The desired output format(s)
-  clean: true,
-  splitting: true,
-  outDir: "dist",
-  skipNodeModulesBundle: true,
-  minify: true, // Whether to minify the output
-  sourcemap: true, // Whether to generate sourcemaps
-  // splitting: true, // Whether to split the bundle into chunks
-  dts: true, // Whether to generate TypeScript declaration files
-  // target: "node18", // Specify your target environment
-};
+import { defineConfig } from 'tsup';
 
-export default config;
+export default defineConfig({
+  entry: ['src/index.ts', '!src/modules/balancer/*.graphql'],
+  format: ['esm', 'cjs'],
+  dts: true,
+  splitting: false,
+  sourcemap: true,
+  clean: true,
+});
+
