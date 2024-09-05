@@ -56,7 +56,7 @@ export default withSentryConfig(config, {
   widenClientFileUpload: true,
 
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-  tunnelRoute: "/monitoring",
+  tunnelRoute: "/monitoring-tunnel",
 
   // Hides source maps from generated client bundles
   hideSourceMaps: true,
