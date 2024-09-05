@@ -1,10 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { cloudinaryUrl } from "@bera/config";
-import { Card } from "@bera/ui/card";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -15,7 +12,7 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 
-import { ProposalTypeEnum } from "../types";
+import { ProposalTypeEnum } from "../../types";
 import { TextProposal } from "./proposal/text-proposal";
 import { UpdateFriendsOfChef } from "./proposal/update-friends-of-chef";
 
@@ -23,25 +20,28 @@ export default function NewProposal() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [proposalType, setProposalType] = useState<ProposalTypeEnum>(
-    ProposalTypeEnum.TEXT_PROPOSAL,
+    ProposalTypeEnum.CUSTOM_PROPOSAL,
   );
 
   return (
-    <div className="mx-auto w-full max-w-[564px] pb-16">
-      <Image
-        className="max-[600px]:mx-auto"
-        src={`${cloudinaryUrl}/bears/pgnhgjsm1si8gb2bdm1m`}
-        alt="proposal-bear"
-        width={350}
-        height={174}
-      />
-      <Card className="flex flex-col justify-start gap-8 p-6">
-        <div className="relative text-3xl font-semibold leading-7 text-foreground">
-          Creating a New Proposal
-          <Link href="/governance">
-            <Icons.close className="absolute right-0 top-0 h-5 w-5 hover:cursor-pointer" />
-          </Link>
+    <div className="flex flex-col gap-8 pb-16">
+      <Link
+        href="/governance"
+        className="flex items-center gap-1 text-sm font-medium text-muted-foreground"
+      >
+        <Icons.arrowLeft className="h-4 w-4" /> All Proposals
+      </Link>
+
+      <div>
+        <div className="font-bold tracking-widest text-muted-foreground leading-6">
+          GOVERNANCE
         </div>
+        <div className="relative text-3xl font-semibold leading-9 text-foreground">
+          Create New Proposal
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-start gap-8">
         <div className="inline-flex flex-col justify-start gap-2">
           <div className="text-sm font-semibold leading-tight">
             Proposal Type
@@ -100,14 +100,14 @@ export default function NewProposal() {
           />
         </div>
 
-        {proposalType === ProposalTypeEnum.TEXT_PROPOSAL && (
+        {proposalType === ProposalTypeEnum.CUSTOM_PROPOSAL && (
           <TextProposal title={title} description={description} />
         )}
 
-        {proposalType === ProposalTypeEnum.FRIENDS_OF_CHEF && (
+        {proposalType === ProposalTypeEnum.UPDATE_REWARDS_GAUGE && (
           <UpdateFriendsOfChef title={title} description={description} />
         )}
-      </Card>
+      </div>
     </div>
   );
 }

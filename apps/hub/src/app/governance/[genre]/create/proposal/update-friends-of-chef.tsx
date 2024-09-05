@@ -8,7 +8,7 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Address, encodeFunctionData } from "viem";
 
-import { ProposalTypeEnum } from "../../types";
+import { ProposalTypeEnum } from "../../../types";
 import { useCreateProposal } from "../useCreateProposal";
 import { GaugeSelector } from "./gauge-selector";
 
@@ -34,7 +34,7 @@ export const UpdateFriendsOfChef = ({
     [beraChefAddress],
     [0],
     [encodedData],
-    `#${ProposalTypeEnum.FRIENDS_OF_CHEF}# ${title}\n${description}`,
+    `#${ProposalTypeEnum.UPDATE_REWARDS_GAUGE}# ${title}\n${description}`,
   ]);
 
   return (

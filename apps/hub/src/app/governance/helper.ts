@@ -27,9 +27,9 @@ export const getBadgeColor = (proposalStatus: StatusEnum) => {
 
 export const getThemeColor = (ProposalType: ProposalTypeEnum) => {
   switch (ProposalType) {
-    case ProposalTypeEnum.TEXT_PROPOSAL:
+    case ProposalTypeEnum.CUSTOM_PROPOSAL:
       return "foreground";
-    case ProposalTypeEnum.FRIENDS_OF_CHEF:
+    case ProposalTypeEnum.UPDATE_REWARDS_GAUGE:
       return "info-foreground";
     default:
       return "foreground";
@@ -125,7 +125,7 @@ export const decodeProposalCalldata = (
   type: string | null,
   calldata: string,
 ) => {
-  if (type === ProposalTypeEnum.FRIENDS_OF_CHEF) {
+  if (type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE) {
     const { functionName, args = [] } = decodeFunctionData({
       abi: BERA_CHEF_ABI,
       data: calldata as `0x${string}`,

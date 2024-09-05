@@ -18,15 +18,9 @@ export enum OrderByEnum {
 }
 
 export enum ProposalTypeEnum {
-  TEXT_PROPOSAL = "text-proposal",
-  FRIENDS_OF_CHEF = "update-friends-of-chef",
+  CUSTOM_PROPOSAL = "custom-proposal",
+  UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
 }
-
-export type ParameterChangeLine = {
-  subspace: string;
-  key: string;
-  value: string;
-};
 
 export type ProposalVotes = {
   yes: number;
@@ -61,13 +55,3 @@ export const voteTypes: VOTE_TYPE[] = ["yes", "no", "abstain"];
 export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";
-
-export type PROPOSAL_GENRE = "berahub" | "honey" | "bend" | "berps" | "general";
-
-export const ProposalGenreColorMap = {
-  berahub: "#E6B434",
-  honey: "#EC8A19",
-  bend: "#7464E5",
-  berps: "#41D6E0",
-  general: "#2F2F2F",
-};
