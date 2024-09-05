@@ -6,15 +6,15 @@ import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import { OverviewChart } from "../../components/overview-chart";
-import { ProposalCard } from "../../components/proposal-card";
-import { VoteCard } from "../../components/vote-card";
-import { VoterTable } from "../../components/voter-table";
 import { getTotalVotes, parseString } from "../../helper";
 import { Actions } from "./Actions";
 import { Status } from "./Status";
 import "@bera/graphql";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { ProposalCard } from "../../[genre]/components/proposal-card";
+import { VoteCard } from "../../[genre]/components/vote-card";
+import { OverviewChart } from "../../[genre]/components/overview-chart";
+import { VoterTable } from "../../[genre]/components/voter-table";
 
 export default function ProposalDetails({
   proposalId,

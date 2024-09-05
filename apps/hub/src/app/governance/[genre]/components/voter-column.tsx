@@ -4,7 +4,7 @@ import { Badge } from "@bera/ui/badge";
 import { type ColumnDef } from "@tanstack/react-table";
 import { formatEther } from "viem";
 
-import { VoteEnum } from "../types";
+import { VoteEnum } from "../../types";
 import { VoteInfo } from "./Voter";
 
 const getBadgeColor = (type: keyof typeof VoteEnum) => {

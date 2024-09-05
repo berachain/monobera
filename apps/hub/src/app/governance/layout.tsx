@@ -6,7 +6,7 @@ import { bgtClient } from "@bera/graphql";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <ApolloProvider client={bgtClient}>
-      <section className="container">{children}</section>
+      <section className="container pb-32">{children}</section>
     </ApolloProvider>
   );
 }

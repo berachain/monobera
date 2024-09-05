@@ -14,8 +14,8 @@ import {
   getTotalVotes,
   getVotesDataList,
   parseString,
-} from "../helper";
-import { ProposalTypeEnum, StatusEnum } from "../types";
+} from "../../helper";
+import { ProposalTypeEnum, StatusEnum } from "../../types";
 import { VoteInfo } from "./Voter";
 import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
