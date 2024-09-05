@@ -51,4 +51,3 @@ export const getDappByGenre = (genre: PROPOSAL_GENRE) => {
     Others.find((dapp) => dapp.link === genre)
   );
 };
-
