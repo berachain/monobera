@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,11 +13,14 @@ import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 
+import { PROPOSAL_GENRE, getDappByGenre } from "../../governance-genre-helper";
 import { ProposalTypeEnum } from "../../types";
 import { TextProposal } from "./proposal/text-proposal";
 import { UpdateFriendsOfChef } from "./proposal/update-friends-of-chef";
 
 export default function NewProposal() {
+  const pathname = usePathname().split("/")[2];
+  const dapp = getDappByGenre(pathname as PROPOSAL_GENRE);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [proposalType, setProposalType] = useState<ProposalTypeEnum>(
@@ -33,8 +37,8 @@ export default function NewProposal() {
       </Link>
 
       <div>
-        <div className="font-bold tracking-widest text-muted-foreground leading-6">
-          GOVERNANCE
+        <div className="font-bold leading-6 tracking-widest text-muted-foreground">
+          <span style={{ color: dapp?.color }}>{dapp?.name}</span> GOVERNANCE
         </div>
         <div className="relative text-3xl font-semibold leading-9 text-foreground">
           Create New Proposal

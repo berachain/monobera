@@ -44,3 +44,11 @@ export const Others: Dapp[] = [
     link: "general",
   },
 ];
+
+export const getDappByGenre = (genre: PROPOSAL_GENRE) => {
+  return (
+    NativeDapps.find((dapp) => dapp.link === genre) ||
+    Others.find((dapp) => dapp.link === genre)
+  );
+};
+
