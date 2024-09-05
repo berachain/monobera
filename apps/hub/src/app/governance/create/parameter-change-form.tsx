@@ -1,8 +1,7 @@
 import { Tooltip } from "@bera/shared-ui";
 import { FormField, FormItem, FormMessage } from "@bera/ui/form";
 import { type UseFormReturn } from "react-hook-form";
-
-import { CustomParameterGroup } from "../components/custom-parameter-group";
+import { CustomParameterGroup } from "../[genre]/components/custom-parameter-group";
 
 export default function ParameterForm({ form }: { form: UseFormReturn<any> }) {
   return (

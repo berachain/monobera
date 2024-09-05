@@ -1,8 +1,7 @@
 import { usePollWalletBalances, type Proposal, type Vote } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
-
-import { VoteDialog } from "../../components/vote-dialog";
 import { StatusEnum } from "../../types";
+import { VoteDialog } from "../../[genre]/components/deposit-dialog";
 
 export const Status = ({
   proposal,
@@ -23,6 +22,7 @@ export const Status = ({
       {status === StatusEnum.ACTIVE && (
         <VoteDialog
           votingPower={bgt?.formattedBalance}
+          //@ts-ignore
           proposalId={proposal.onchainId}
           disable={userVote ? true : false}
         />

@@ -17,7 +17,7 @@ import { TextArea } from "@bera/ui/text-area";
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  votingPower: number | undefined;
+  votingPower: number | string | undefined;
   comment: string;
   setComment: (comment: string) => void;
   selected: VoteOption | undefined;

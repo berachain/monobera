@@ -2,7 +2,7 @@ import React from "react";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { cn } from "@bera/ui";
 
-import { VoteColorMap } from "../types";
+import { VoteColorMap } from "../../types";
 
 type IMultiSelectBadge = {
   onSelect: (value: SelectedVotes) => void;
