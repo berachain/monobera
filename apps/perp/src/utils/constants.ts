@@ -139,6 +139,8 @@ export const PYTH_ABI = [
   },
 ];
 
+export const DEFAULT_MARKET = "ETH-USDC";
+
 // TODO: These IDs are hardcoded for now but will be fetched from chain based on governance voting to add new pairs
 export const USDC_USD_INDEX = "-1";
 export const PYTH_IDS = [

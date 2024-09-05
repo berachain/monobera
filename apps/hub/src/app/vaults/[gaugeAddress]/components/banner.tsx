@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { lendUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";

@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { FC, Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
-  referralsAbi,
   TransactionActionType,
+  referralsAbi,
   useBeraJs,
   usePollReferralsDetails,
   usePollTraderReferral,
@@ -18,11 +19,9 @@ import { isAddress, type Address } from "viem";
 
 const BLANK_WALLET_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-export const ReferralModal = ({
-  referralAddress,
-}: {
-  referralAddress: Address | undefined;
-}) => {
+const _ReferralModal: FC = () => {
+  const searchParams = useSearchParams();
+  const referralAddress = searchParams.get("ref") as Address | undefined;
   const [open, setOpen] = useState(false);
 
   const { write, ModalPortal, isSuccess } = useTxn({
@@ -124,5 +123,13 @@ export const ReferralModal = ({
         </DialogContent>
       </Dialog>
     </>
+  );
+};
+
+export const ReferralModal: FC = () => {
+  return (
+    <Suspense>
+      <_ReferralModal />
+    </Suspense>
   );
 };

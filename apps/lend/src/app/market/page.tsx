@@ -2,12 +2,13 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { notFound, useSearchParams } from "next/navigation";
-import { isAddress, Address } from "viem";
+import { isIPFS } from "@bera/config";
+import { Address, isAddress } from "viem";
 
 import IndividualMarketAnalytics from "../markets/[address]/individual-market-analytics";
 
 export default function Page() {
-  if (process.env.NEXT_PUBLIC_HOST !== "ipfs") {
+  if (isIPFS) {
     notFound();
   }
 
