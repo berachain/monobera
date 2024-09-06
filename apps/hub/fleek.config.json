@@ -1,7 +1,7 @@
 {
   "sites": [
     {
-      "slug": "cartio-hub",
+      "slug": "v2-hub",
       "distDir": "./out"
     }
   ]
