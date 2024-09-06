@@ -8,8 +8,7 @@ export default function Page({ params }: { params: { address: Address } }) {
   return <IndividualMarketAnalytics address={params.address} />;
 }
 
-export async function generateStaticParams() {
-  // TODO: is there any dynamic source of addresses?
+export function generateStaticParams() {
   const addresses = [honeyTokenAddress];
   return addresses.map((address) => ({
     address,
