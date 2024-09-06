@@ -26,3 +26,4 @@ cp -r "$LATEST_HASH/charting_library" public/static
 cp -r "$LATEST_HASH/datafeeds" public/static
 
 remove_if_directory_exists "$LATEST_HASH"
+ 

@@ -10,7 +10,7 @@
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start -p 3002",
     "check-types": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e ../../.env -c --"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",

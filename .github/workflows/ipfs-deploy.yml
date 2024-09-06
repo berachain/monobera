@@ -1,0 +1,50 @@
+name: Deploy on Fleek
+
+on:
+  push:
+    branches: [ "v2" ]
+  workflow_dispatch:
+
+jobs:  
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      FLEEK_TOKEN: ${{ secrets.FLEEK_TOKEN }}
+      FLEEK_PROJECT_ID: ${{ secrets.FLEEK_PROJECT_ID }}
+      PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
+      CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
+  
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.CHARTING_ACCESS_TOKEN }}
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4 
+      
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18.18.2        
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Install Fleek CLI
+      run: pnpm i -g @fleek-platform/cli
+
+    - name: Set environment variables
+      run: pnpm setenv:bartio
+      
+    - name: Build all projects 
+      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
+      
+    - name: Deploy Berps
+      run: cd apps/perp && fleek sites deploy
+
+    - name: Deploy Bend
+      run: cd apps/lend && fleek sites deploy
+
+    - name: Deploy Honey
+      run: cd apps/honey && fleek sites deploy

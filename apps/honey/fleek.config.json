@@ -1,0 +1,8 @@
+{
+  "sites": [
+    {
+      "slug": "v2-honey",
+      "distDir": "./out"
+    }
+  ]
+}

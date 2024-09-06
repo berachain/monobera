@@ -2,9 +2,8 @@
 module.exports = {
   sites: [
     {
-      slug: "full-laptop-old",
+      slug: "v2-lend",
       distDir: "out",
-      buildCommand: "npm run build:ipfs",
     },
   ],
 };
