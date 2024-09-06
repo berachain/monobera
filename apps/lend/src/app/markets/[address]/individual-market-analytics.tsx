@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { notFound, useSearchParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import { usePollReservesDataList, useTokens } from "@bera/berajs";
 import { honeyTokenAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
@@ -34,18 +34,18 @@ export default function IndividualMarketAnalytics({
       </div>
 
       <TokenInfoCard
-        {...{
-          token: tokenData?.tokenDictionary?.[address],
-          reserve:
-            Number(reserve?.totalLiquidity) *
-            Number(reserve?.formattedPriceInMarketReferenceCurrency),
-          liquidity:
-            Number(reserve?.totalLiquidity) *
-            Number(reserve?.formattedPriceInMarketReferenceCurrency) *
-            Number(1 - Number(reserve?.borrowUsageRatio)),
-          utilization: Number(reserve?.borrowUsageRatio),
-          oraclePrice: Number(reserve?.formattedPriceInMarketReferenceCurrency),
-        }}
+        token={tokenData?.tokenDictionary?.[address]}
+        reserve={
+          Number(reserve?.totalLiquidity) *
+          Number(reserve?.formattedPriceInMarketReferenceCurrency)
+        }
+        liquidity={
+          Number(reserve?.totalLiquidity) *
+          Number(reserve?.formattedPriceInMarketReferenceCurrency) *
+          Number(1 - Number(reserve?.borrowUsageRatio))
+        }
+        utilization={Number(reserve?.borrowUsageRatio)}
+        oraclePrice={Number(reserve?.formattedPriceInMarketReferenceCurrency)}
       />
 
       <div className="mt-9 flex flex-col gap-8 xl:flex-row">
