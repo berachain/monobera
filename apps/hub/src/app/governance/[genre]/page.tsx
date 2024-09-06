@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { notFound } from "next/navigation";
 
@@ -10,6 +8,8 @@ import {
 } from "../governance-genre-helper";
 import GovernanceByStatus from "./components/governance-by-status";
 import { governorAddress } from "@bera/config";
+
+const GOVERNANCE_GENRES = ["berahub", "honey", "bend", "berps", "general"];
 
 export default function Page({
   params,
@@ -24,4 +24,10 @@ export default function Page({
       dapp={getDappByGenre(params.genre)!}
     />
   );
+}
+
+export async function generateStaticParams() {
+  return GOVERNANCE_GENRES.map((genre) => ({
+    genre,
+  }));
 }
