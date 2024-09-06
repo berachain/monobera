@@ -13,6 +13,7 @@
     "setenv": "node ./.scripts/set-env.js",
     "setenv:artio": "pnpm run setenv artio",
     "setenv:bartio": "pnpm run setenv bartio",
+    "setenv:v2": "pnpm run setenv v2",
     "dev": "turbo dev --concurrency=20",
     "build:hub": "turbo build --filter=hub --filter='./packages/*' --concurrency=20",
     "build:honey": "turbo build --filter=honey --filter='./packages/*' --concurrency=20",
