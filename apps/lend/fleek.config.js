@@ -2,7 +2,7 @@
 module.exports = {
   sites: [
     {
-      slug: "bartio-lend",
+      slug: "v2-lend",
       distDir: "out",
     },
   ],

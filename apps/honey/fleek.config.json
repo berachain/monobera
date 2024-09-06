@@ -1,7 +1,7 @@
 {
   "sites": [
     {
-      "slug": "bartio-honey",
+      "slug": "v2-honey",
       "distDir": "./out"
     }
   ]
