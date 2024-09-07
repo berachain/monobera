@@ -114,13 +114,13 @@ A short list of tooling and libraries we use across all apps and packages.
 - [biomejs](https://biomejs.dev/)
 - [knip](https://knip.dev/)
 - [turbo](https://turbo.build/)
-- [next](https://nextjs.org/)
+- [nextjs](https://nextjs.org/)
 - [wagmi](https://wagmi.sh/)
 - [viem](https://viem.sh/)
 - [swr](https://swr.vercel.app/)
 - [vocs](https://vocs.dev/)
 - [shadcn](https://ui.shadcn.com/)
-- [tailwind](https://tailwindcss.com/)
+- [tailwindcss](https://tailwindcss.com/)
 
 #### Dapps banner management
 
