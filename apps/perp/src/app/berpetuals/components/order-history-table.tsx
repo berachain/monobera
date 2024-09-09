@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useContext, useEffect, useMemo } from "react";
-import { usePrevious } from "@bera/berajs";
+import { useBeraJs, usePrevious } from "@bera/berajs";
 import { SimpleTable, TableFooter, useAsyncTable } from "@bera/shared-ui";
 import {
   TableState,
@@ -50,6 +50,7 @@ export function OrderHistoryTable({
   const { setTableState, tableState } = useContext(TableContext);
   const prevTableState = usePrevious(tableState);
 
+  const { isConnected } = useBeraJs();
   const handleRowSelectionChange = (updater: Updater<RowSelectionState>) => {
     setTableState((prev) => {
       const newSelection =
@@ -166,6 +167,7 @@ export function OrderHistoryTable({
         loadingText: "Loading...",
         validating: isValidating,
         selectVisibleRows: true,
+        emptyDataText: !isConnected ? "No wallet connected" : undefined,
       },
     },
   });

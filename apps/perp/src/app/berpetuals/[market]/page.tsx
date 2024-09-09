@@ -51,7 +51,7 @@ export default async function Home({ params }: Props) {
   const p = getGlobalParams();
   const pc = getDailyPriceChange();
   const hs = getHistoricalSummary();
-  const data: any = await Promise.all([m, p, pc, hs]).then(
+  const data = await Promise.all([m, p, pc, hs]).then(
     ([markets, params, priceChange, historicalSummary]) => ({
       markets,
       params,
