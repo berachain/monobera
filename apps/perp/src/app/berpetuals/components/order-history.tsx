@@ -175,14 +175,14 @@ export function OrderHistory({
           ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
           : [];
         totalPages = openPositionsPagination?.total_pages ?? 1;
-        isLoading = isPositionsLoading || !isConnected;
+        isLoading = isPositionsLoading;
         isValidating = isPositionsValidating;
         break;
       case "orders":
         data = openMarketOrders as ILimitOrder[];
         columns = markets ? generateOrdersColumns(markets) : [];
         totalPages = openOrdersPagination?.total_pages ?? 1;
-        isLoading = isOpenOrdersLoading || !isConnected;
+        isLoading = isOpenOrdersLoading;
         isValidating = isOpenOrdersValidation;
         break;
       case "history":
@@ -204,14 +204,14 @@ export function OrderHistory({
         });
         columns = markets ? generateHistoryColumns(markets) : [];
         totalPages = marketOrdersPagination?.total_pages ?? 1;
-        isLoading = isMarketOrdersLoading || !isConnected;
+        isLoading = isMarketOrdersLoading;
         isValidating = isMarketOrdersValidation;
         break;
       case "pnl":
         data = closedMarketTrades as IClosedTrade[];
         columns = markets ? generatePnlColumns(markets) : [];
         totalPages = closedTradesPagination?.total_pages ?? 1;
-        isLoading = isClosedTradesLoading || !isConnected;
+        isLoading = isClosedTradesLoading;
         isValidating = isClosedTradesValidation;
         break;
       default:

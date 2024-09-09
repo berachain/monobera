@@ -6,7 +6,7 @@ import { PricesMap } from "~/types/prices";
 import { PYTH_IDS, USDC_USD_INDEX } from "~/utils/constants";
 import { formatUsdcPythPrice } from "~/utils/formatPyth";
 
-export async function getMarkets(): Promise<Market[] | undefined> {
+export async function getMarkets(): Promise<Market[]> {
   try {
     const res = await fetch(`${perpsEndpoint}/markets`);
     const jsonRes = await res.json();
@@ -16,7 +16,7 @@ export async function getMarkets(): Promise<Market[] | undefined> {
   }
 }
 
-export async function getGlobalParams(): Promise<GlobalParams | undefined> {
+export async function getGlobalParams(): Promise<GlobalParams> {
   try {
     const res = await fetch(`${perpsEndpoint}/globalparams`);
     const jsonRes = await res.json();
