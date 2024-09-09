@@ -3,10 +3,11 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
-import Script from "next/script";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 import { lendName } from "@bera/config";
 import {
+  BinanceVersionHandler,
   Header,
   TailwindIndicator,
   TermOfUseModal,
@@ -52,6 +53,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
+        <BinanceVersionHandler />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="z-[100]">

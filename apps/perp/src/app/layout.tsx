@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { perpsName } from "@bera/config";
 import {
+  BinanceVersionHandler,
   Header,
   TailwindIndicator,
   TermOfUseModal,
@@ -53,6 +54,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
+        <BinanceVersionHandler />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="z-[100]">

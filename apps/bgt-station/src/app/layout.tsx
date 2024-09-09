@@ -3,8 +3,11 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
+import { usePathname } from "next/navigation";
 import Script from "next/script";
+import { bgtName } from "@bera/config";
 import {
+  BinanceVersionHandler,
   Header,
   TailwindIndicator,
   TermOfUseModal,
@@ -17,8 +20,6 @@ import { useLocalStorage } from "usehooks-ts";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
-import { bgtName } from "@bera/config";
-import { usePathname } from "next/navigation";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -54,6 +55,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
+        <BinanceVersionHandler />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
