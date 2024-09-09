@@ -12,5 +12,5 @@
     "titleBar.activeBackground": "#134A18",
     "titleBar.activeForeground": "#F3FCF4"
   },
-  "conventionalCommits.scopes": ["perp"]
+  "conventionalCommits.scopes": ["perp", "hub"]
 }

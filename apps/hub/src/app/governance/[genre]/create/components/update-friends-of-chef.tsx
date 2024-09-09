@@ -8,9 +8,9 @@ import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Address, encodeFunctionData } from "viem";
 
-import { ProposalTypeEnum } from "../../../types";
-import { useCreateProposal } from "../../useCreateProposal";
 import { GaugeSelector } from "./gauge-selector";
+import { ProposalTypeEnum } from "~/app/governance/types";
+import { useCreateProposal } from "~/hooks/useCreateProposal";
 
 export const UpdateFriendsOfChef = ({
   title,
@@ -30,6 +30,7 @@ export const UpdateFriendsOfChef = ({
       })
     : "0x";
 
+  // @ts-expect-error temporary
   const { ModalPortal, submitProposal } = useCreateProposal([
     [beraChefAddress],
     [0],

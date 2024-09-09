@@ -1013,4 +1013,4 @@ export const GOVERNANCE_ABI = [
     name: "UUPSUnsupportedProxiableUUID",
     inputs: [{ name: "slot", type: "bytes32", internalType: "bytes32" }],
   },
-];
+] as const;

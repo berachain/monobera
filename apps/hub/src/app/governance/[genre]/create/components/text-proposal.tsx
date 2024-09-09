@@ -1,8 +1,7 @@
 import { governorAddress } from "@bera/config";
 import { ActionButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-
-import { useCreateProposal } from "../../useCreateProposal";
+import { useCreateProposal } from "~/hooks/useCreateProposal";
 
 export const TextProposal = ({
   title,
@@ -11,12 +10,7 @@ export const TextProposal = ({
   title: string;
   description: string;
 }) => {
-  const { ModalPortal, submitProposal } = useCreateProposal([
-    [governorAddress],
-    [0],
-    ["0x"],
-    `# ${title}\n${description}`,
-  ]);
+  const { ModalPortal, submitProposal } = useCreateProposal();
   return (
     <div>
       <ActionButton>
