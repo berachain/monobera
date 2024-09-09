@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 
