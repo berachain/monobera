@@ -36,7 +36,7 @@ export const generateStaticParams = async () => {
   const markets = await getMarkets();
 
   if (!markets) {
-    throw new Error("No markets found. Cannot generate staic paths");
+    throw new Error("No markets found. Cannot generate static paths");
   }
 
   return markets.map((market: Market) => ({

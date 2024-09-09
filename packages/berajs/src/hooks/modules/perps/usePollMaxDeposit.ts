@@ -13,7 +13,7 @@ export const usePollMaxDeposit = () => {
   const QUERY_KEY = [account, method];
   const { isLoading } = useSWRImmutable(QUERY_KEY, async () => {
     try {
-      if (!publicClient) return undefined;
+      if (!account || !publicClient) return undefined;
       const result = await publicClient.readContract({
         address: bhoneyVaultContractAddress,
         abi: bTokenAbi,

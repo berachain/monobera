@@ -2288,4 +2288,4 @@ export const bTokenAbi = [
       },
     ],
   },
-];
+] as const;
