@@ -9,7 +9,7 @@ import { Button } from "@bera/ui/button";
 import { Address, encodeFunctionData } from "viem";
 
 import { ProposalTypeEnum } from "../../../types";
-import { useCreateProposal } from "../useCreateProposal";
+import { useCreateProposal } from "../../useCreateProposal";
 import { GaugeSelector } from "./gauge-selector";
 
 export const UpdateFriendsOfChef = ({
