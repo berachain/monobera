@@ -1,3 +1,5 @@
+import { Address } from "viem";
+
 export enum StatusEnum {
   PENDING = "pending",
   QUEUED = "queued",
@@ -55,3 +57,18 @@ export const voteTypes: VOTE_TYPE[] = ["yes", "no", "abstain"];
 export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";
+
+export type CustomProposal = {
+  title: string;
+  description: any;
+  proposalType: ProposalTypeEnum;
+  actions: PropoalAction[];
+  forumLink: string;
+};
+
+export type PropoalAction = {
+  target: Address;
+  ABI: JSON;
+  functionName: string;
+  calldata: { params: string; type: string; value: any }[];
+};

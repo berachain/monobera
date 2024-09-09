@@ -2,7 +2,7 @@ import { governorAddress } from "@bera/config";
 import { ActionButton } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 
-import { useCreateProposal } from "../useCreateProposal";
+import { useCreateProposal } from "../../useCreateProposal";
 
 export const TextProposal = ({
   title,
