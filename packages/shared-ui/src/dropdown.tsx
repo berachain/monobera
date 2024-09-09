@@ -19,13 +19,23 @@ export const Dropdown = ({
   ...props
 }: {
   selected: string;
-  selectionList: string[];
+  selectionList: (
+    | string
+    | {
+        value: string;
+        label: string;
+      }
+  )[];
   onSelect: (selected: string) => void;
   sortby?: boolean;
   className?: string;
   triggerClassName?: string;
   contentClassname?: string;
 }) => {
+  const selectedFromList = selectionList.find(
+    (s) => typeof s === "object" && s.value === selected,
+  );
+
   return (
     <div {...props} className={cn("w-fit flex-shrink-0", className)}>
       <div className="flex items-center text-muted-foreground md:gap-1">
@@ -38,21 +48,30 @@ export const Dropdown = ({
                 triggerClassName,
               )}
             >
-              {selected.replaceAll("-", " ")}
+              {selectedFromList
+                ? typeof selectedFromList === "string"
+                  ? selectedFromList.replaceAll("-", " ")
+                  : selectedFromList.label
+                : selected.replaceAll("-", " ")}
               <Icons.chevronDown className=" h-4 w-4" />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className={cn(contentClassname)} align="start">
-            {selectionList.map((selection) => (
-              <DropdownMenuCheckboxItem
-                key={selection}
-                checked={selection === selected}
-                onClick={() => onSelect(selection)}
-                className="capitalize"
-              >
-                {selection.replaceAll("-", " ")}
-              </DropdownMenuCheckboxItem>
-            ))}
+            {selectionList.map((s) => {
+              const value = typeof s === "string" ? s : s.value;
+              const label =
+                typeof s === "string" ? s.replaceAll("-", " ") : s.label;
+              return (
+                <DropdownMenuCheckboxItem
+                  key={value}
+                  checked={value === selected}
+                  onClick={() => onSelect(value)}
+                  className="capitalize"
+                >
+                  {label}
+                </DropdownMenuCheckboxItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
