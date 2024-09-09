@@ -53,10 +53,17 @@ export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";
 
+export type CustomProposalActionErrors = {
+  type?: false | string;
+  target?: false | string;
+  ABI?: false | string;
+};
+
 export type CustomProposalErrors = {
   title?: false | string;
   description?: false | string;
   forumLink?: false | string;
+  actions?: CustomProposalActionErrors[];
 };
 
 export enum ProposalTypeEnum {
@@ -67,14 +74,18 @@ export enum ProposalTypeEnum {
 export type CustomProposal = {
   title: string;
   description: any;
-  actions: PropoalAction[];
+  actions: ProposalAction[];
   forumLink: string;
 };
 
-export type PropoalAction = {
+export type SafeProposalAction = {
   type: ProposalTypeEnum;
   target: Address;
   ABI: JSON;
   functionName: string;
   calldata: { params: string; type: string; value: any }[];
+};
+
+export type ProposalAction = Partial<SafeProposalAction> & {
+  type: SafeProposalAction["type"];
 };

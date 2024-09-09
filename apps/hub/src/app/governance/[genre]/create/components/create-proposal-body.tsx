@@ -1,12 +1,5 @@
-"use client";
-
 import { Button } from "@bera/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@bera/ui/dropdown-menu";
+
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
@@ -51,8 +44,8 @@ export const CreateProposalBody = ({
   }, [onNext]);
 
   return (
-    <div className="flex flex-col justify-start gap-8">
-      <div className="flex flex-col gap-2">
+    <div className="grid grid-cols-1 justify-start gap-8">
+      <div className="grid grid-cols-1 gap-2">
         <div className="text-sm font-semibold leading-tight">Title</div>
         <Input
           type="text"
@@ -73,7 +66,7 @@ export const CreateProposalBody = ({
         )}
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-1 gap-2">
         <div className="text-sm font-semibold leading-tight">Description</div>
         <TextArea
           id="proposal-message"
@@ -88,7 +81,7 @@ export const CreateProposalBody = ({
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-1 gap-2">
         <div className="text-sm font-semibold leading-tight">Forum Link</div>
         <Input
           type="text"

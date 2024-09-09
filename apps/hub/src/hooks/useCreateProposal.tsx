@@ -5,14 +5,25 @@ import { governorAddress } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
 import { Address } from "viem";
 import { useCallback, useState } from "react";
-import { CustomProposal } from "~/app/governance/types";
+import {
+  CustomProposal,
+  ProposalAction,
+  ProposalTypeEnum,
+} from "~/app/governance/types";
 
+const defaultAction: ProposalAction = {
+  type: ProposalTypeEnum.CUSTOM_PROPOSAL,
+  target: undefined,
+  ABI: undefined,
+  functionName: "",
+  calldata: [],
+};
 export const useCreateProposal = () => {
   const [proposal, setProposal] = useState<CustomProposal>({
     title: "",
     description: "",
     forumLink: "",
-    actions: [],
+    actions: [defaultAction],
   });
 
   const router = useRouter();
@@ -22,6 +33,21 @@ export const useCreateProposal = () => {
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => router.push("/governance"),
   });
+
+  const addProposalAction = useCallback(() => {
+    setProposal((p) => ({ ...p, actions: [...p.actions, defaultAction] }));
+  }, []);
+
+  const removeProposalAction = useCallback(
+    (idx: number) => {
+      setProposal((p) => {
+        const actions = [...p.actions];
+        actions.splice(idx, 1);
+        return { ...p, actions };
+      });
+    },
+    [setProposal],
+  );
 
   const submitProposal = useCallback(
     () =>
@@ -44,5 +70,7 @@ export const useCreateProposal = () => {
     setProposal,
     ModalPortal,
     submitProposal,
+    addProposalAction,
+    removeProposalAction,
   };
 };
