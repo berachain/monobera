@@ -8,6 +8,26 @@ import useSWRInfinite from "swr/infinite";
 
 const DEFAULT_SIZE = 10;
 
+const fetchHoneyData = (query: any, txnType?: string) => {
+  return async (key: any[]) => {
+    const page = key[1];
+    try {
+      const variables = txnType
+        ? { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE, txnType }
+        : { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE };
+
+      const res = await honeyClient.query({
+        query,
+        variables,
+      });
+      return res.data.honeyTxns || [];
+    } catch (error) {
+      console.error("Failed to fetch honey transactions:", error);
+      return [];
+    }
+  };
+};
+
 export const useHoneyEvents = () => {
   const {
     data: allData,
@@ -16,16 +36,7 @@ export const useHoneyEvents = () => {
     isLoading: isAllDataLoadingMore,
   } = useSWRInfinite(
     (index) => ["allData", index],
-    (key: any[]) => {
-      const page = key[1];
-      return honeyClient
-        .query({
-          query: GetHoneyTxn,
-          variables: { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE },
-        })
-        .then((res: any) => res.data.honeyTxns)
-        .catch((e: any) => console.error(e));
-    },
+    fetchHoneyData(GetHoneyTxn),
     { refreshInterval: 1800000 },
   );
 
@@ -36,20 +47,7 @@ export const useHoneyEvents = () => {
     isLoading: isMintDataLoading,
   } = useSWRInfinite(
     (index) => ["mintData", index],
-    (key: any[]) => {
-      const page = key[1];
-      return honeyClient
-        .query({
-          query: GetHoneyTxnByType,
-          variables: {
-            page: page * DEFAULT_SIZE,
-            limit: DEFAULT_SIZE,
-            txnType: "Mint",
-          },
-        })
-        .then((res: any) => res.data.honeyTxns)
-        .catch((e: any) => console.error(e));
-    },
+    fetchHoneyData(GetHoneyTxnByType, "Mint"),
     { refreshInterval: 1800000 },
   );
 
@@ -60,20 +58,7 @@ export const useHoneyEvents = () => {
     isLoading: isRedemptionDataLoading,
   } = useSWRInfinite(
     (index) => ["redeemData", index],
-    (key: any[]) => {
-      const page = key[1];
-      return honeyClient
-        .query({
-          query: GetHoneyTxnByType,
-          variables: {
-            page: page * DEFAULT_SIZE,
-            limit: DEFAULT_SIZE,
-            txnType: "Redeem",
-          },
-        })
-        .then((res: any) => res.data.honeyTxns)
-        .catch((e: any) => console.error(e));
-    },
+    fetchHoneyData(GetHoneyTxnByType, "Redeem"),
     { refreshInterval: 1800000 },
   );
 
