@@ -1,11 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { BERA_CHEF_ABI } from "@bera/berajs";
-import { GetFriendsOfTheChef } from "@bera/graphql";
-import { ActionButton } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { Button } from "@bera/ui/button";
-import { Address, encodeFunctionData } from "viem";
 
 import { GaugeSelector } from "./gauge-selector";
 import { ProposalAction, ProposalTypeEnum } from "~/app/governance/types";

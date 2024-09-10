@@ -1,21 +1,14 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { GOVERNANCE_ABI, TransactionActionType } from "@bera/berajs";
-import { governorAddress } from "@bera/config";
+import {
+  BERA_CHEF_ABI,
+  GOVERNANCE_ABI,
+  TransactionActionType,
+} from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import {
-  Address,
-  encodeAbiParameters,
-  encodeFunctionData,
-  parseAbi,
-  parseAbiItem,
-} from "viem";
+import { Address, encodeFunctionData, parseAbiItem } from "viem";
 import { useCallback, useState } from "react";
-import {
-  CustomProposal,
-  ProposalAction,
-  ProposalTypeEnum,
-} from "~/app/governance/types";
+import { CustomProposal, ProposalTypeEnum } from "~/app/governance/types";
 
 const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
@@ -27,7 +20,7 @@ const defaultAction = {
   receiptToken: undefined,
   isFriend: true,
 };
-export const useCreateProposal = () => {
+export const useCreateProposal = (governorAddress: Address) => {
   const [proposal, setProposal] = useState<CustomProposal>({
     title: "",
     description: "",
@@ -59,8 +52,22 @@ export const useCreateProposal = () => {
   );
 
   const submitProposal = useCallback(() => {
-    const actions = proposal.actions.map((action) => {
+    const actions = proposal.actions.map<Address>((action) => {
       switch (action.type) {
+        case ProposalTypeEnum.UPDATE_REWARDS_GAUGE:
+          if (
+            !action.target ||
+            !action.receiptToken ||
+            action.isFriend === undefined
+          ) {
+            throw new Error("Invalid action");
+          }
+          return encodeFunctionData({
+            abi: BERA_CHEF_ABI,
+            functionName: "updateFriendsOfTheChef",
+            args: [action.receiptToken, action.isFriend],
+          });
+
         case ProposalTypeEnum.CUSTOM_PROPOSAL:
           if (!action.target || !action.ABI) {
             throw new Error("Invalid action");
@@ -68,31 +75,24 @@ export const useCreateProposal = () => {
           // biome-ignore lint/correctness/noSwitchDeclarations: will return before the next case
           const abi = parseAbiItem(action.ABI);
 
-          // console.log(ProposalTypeEnum.CUSTOM_PROPOSAL, {
-          //   abi,
-          //   abiItem: parseAbiItem(action.ABI),
-          // });
-
-          encodeFunctionData({
+          return encodeFunctionData({
             abi: [abi],
             // functionName: action.functionName,
             args: action.calldata,
           });
-
-          return;
-
-        default:
-          break;
       }
     });
+
+    console.log("submitting proposal", proposal, governorAddress);
+
     write({
       address: governorAddress,
       abi: GOVERNANCE_ABI,
       functionName: "propose",
       params: [
         proposal.actions.map((action) => action.target),
-        [0],
-        ["0x"],
+        proposal.actions.map(() => 0n),
+        actions,
         // TODO: add forum link
         `# ${proposal.title}\n${proposal.description}`,
       ],

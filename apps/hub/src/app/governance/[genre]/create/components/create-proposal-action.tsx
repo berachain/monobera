@@ -1,7 +1,7 @@
 import { Dropdown } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import {
   CustomProposalActionErrors,
   ProposalAction,
@@ -9,6 +9,7 @@ import {
 } from "~/app/governance/types";
 import { UpdateFriendsOfChef } from "./update-friends-of-chef";
 import { CustomAction } from "./custom-action";
+import { usePrevious } from "@bera/berajs";
 
 export const CreateProposalAction = ({
   action,
@@ -25,6 +26,12 @@ export const CreateProposalAction = ({
   setErrors: Dispatch<SetStateAction<CustomProposalActionErrors>>;
   setAction: Dispatch<SetStateAction<ProposalAction>>;
 }) => {
+  const prevAction = usePrevious(action);
+  useEffect(() => {
+    if (action.type !== prevAction?.type) {
+      setAction({ type: action.type, calldata: [], target: "" });
+    }
+  }, [action, prevAction]);
   return (
     <div className="grid grid-cols-1 gap-y-6 pb-6 mb-6 border-border border-b">
       <div className="flex flex-col gap-2">
