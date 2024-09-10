@@ -15,8 +15,7 @@ function fillData(
   list: HoneyEntry[],
   endUnix: number,
   step: number,
-  typename: string,
-  getId: (time: number) => string,
+  typename: "HoneyVolumeHourData" | "HoneyVolumeDayData" | "HoneySupplyHourData" | "HoneySupplyDayData"
 ) {
   const data = [...list];
   const timeList = generateTimestamps(endUnix + step, step);
@@ -28,7 +27,7 @@ function fillData(
       data.push({
         //@ts-ignore
         __typename: typename,
-        id: getId(time),
+        id: (time / step).toString(),
         timestamp: time,
         amount: lastAmount,
       });
@@ -41,25 +40,17 @@ function fillData(
 }
 
 export function fillVolumeDataByHour(list: HoneyEntry[], endUnix: number) {
-  return fillData(list, endUnix, 3600, "HoneyVolumeHourData", (time) =>
-    (time / 3600).toString(),
-  );
+  return fillData(list, endUnix, 3600, "HoneyVolumeHourData");
 }
 
 export function fillVolumeDataByDay(list: HoneyEntry[], endUnix: number) {
-  return fillData(list, endUnix, 86400, "HoneyVolumeDayData", (time) =>
-    (time / 86400).toString(),
-  );
+  return fillData(list, endUnix, 86400, "HoneyVolumeDayData");
 }
 
 export function fillSupplyDataByHour(list: HoneyEntry[], endUnix: number) {
-  return fillData(list, endUnix, 3600, "HoneySupplyHourData", (time) =>
-    (time / 3600).toString(),
-  );
+  return fillData(list, endUnix, 3600, "HoneySupplyHourData");
 }
 
 export function fillSupplyDataByDay(list: HoneyEntry[], endUnix: number) {
-  return fillData(list, endUnix, 86400, "HoneySupplyDayData", (time) =>
-    (time / 86400).toString(),
-  );
+  return fillData(list, endUnix, 86400, "HoneySupplyDayData");
 }
