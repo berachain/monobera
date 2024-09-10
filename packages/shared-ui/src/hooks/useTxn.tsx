@@ -124,6 +124,7 @@ export const useTxn = ({
        * @param {Error} error - The error object.
        */
       onError: (error: any) => {
+        console.log("bera txn error", error);
         if (!disableToast) {
           const toastId = `error-${identifier}`;
           toast.remove(`loading-${identifier}`);
