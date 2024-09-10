@@ -8,13 +8,11 @@ import useSWRInfinite from "swr/infinite";
 
 const DEFAULT_SIZE = 10;
 
-const fetchHoneyData = (query: any, txnType?: string) => {
+const generateHoneyDataFetcher = (query: any, txnType?: string) => {
   return async (key: any[]) => {
     const page = key[1];
     try {
-      const variables = txnType
-        ? { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE, txnType }
-        : { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE };
+      const variables = { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE, txnType };
 
       const res = await honeyClient.query({
         query,
@@ -36,7 +34,7 @@ export const useHoneyEvents = () => {
     isLoading: isAllDataLoadingMore,
   } = useSWRInfinite(
     (index) => ["allData", index],
-    fetchHoneyData(GetHoneyTxn),
+    generateHoneyDataFetcher(GetHoneyTxn),
     { refreshInterval: 1800000 },
   );
 
@@ -47,7 +45,7 @@ export const useHoneyEvents = () => {
     isLoading: isMintDataLoading,
   } = useSWRInfinite(
     (index) => ["mintData", index],
-    fetchHoneyData(GetHoneyTxnByType, "Mint"),
+    generateHoneyDataFetcher(GetHoneyTxnByType, "Mint"),
     { refreshInterval: 1800000 },
   );
 
@@ -58,7 +56,7 @@ export const useHoneyEvents = () => {
     isLoading: isRedemptionDataLoading,
   } = useSWRInfinite(
     (index) => ["redeemData", index],
-    fetchHoneyData(GetHoneyTxnByType, "Redeem"),
+    generateHoneyDataFetcher(GetHoneyTxnByType, "Redeem"),
     { refreshInterval: 1800000 },
   );
 
