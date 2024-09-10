@@ -46,8 +46,6 @@ export const GaugeSelector = ({
     (vault: any) => vault.id === gauge?.target?.toLowerCase(),
   );
 
-  console.log({ gaugesMetadata, Vaults });
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div>

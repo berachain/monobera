@@ -122,22 +122,23 @@ export const parseString = (
 };
 
 export const decodeProposalCalldata = (
-  type: string | null,
+  isLoading: boolean,
   calldata: string,
+  abi: any,
 ) => {
-  if (type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE) {
-    const { functionName, args = [] } = decodeFunctionData({
-      abi: BERA_CHEF_ABI,
-      data: calldata as `0x${string}`,
-    });
-
+  if (isLoading) {
     return {
-      function: functionName,
-      params: args,
+      function: null,
+      params: null,
     };
   }
+  const { functionName, args = [] } = decodeFunctionData({
+    abi,
+    data: calldata as `0x${string}`,
+  });
+
   return {
-    function: null,
-    params: null,
+    function: functionName,
+    params: args,
   };
 };

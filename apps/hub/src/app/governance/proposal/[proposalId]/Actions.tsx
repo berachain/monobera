@@ -1,7 +1,9 @@
-import { type ExecutableCalls } from "@bera/berajs";
+import { BERA_CHEF_ABI, type ExecutableCalls } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
-import { decodeProposalCalldata } from "../../helper";
+import { useGetVerifiedAbi } from "@bera/berajs";
+import { ProposalTypeEnum } from "../../types";
+import { Abi, AbiFunction, Address, decodeFunctionData } from "viem";
 
 export const Actions = ({
   executableCalls,
@@ -13,20 +15,46 @@ export const Actions = ({
   return (
     <div className="flex-1">
       {executableCalls.map((executableCall, index) => {
-        const content = decodeProposalCalldata(type, executableCall.calldata);
+        const { data, error, isLoading } = useGetVerifiedAbi(
+          executableCall.target,
+        );
+
+        const abi: Abi =
+          type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE
+            ? BERA_CHEF_ABI
+            : data && !error && !isLoading
+              ? JSON.parse(data)
+              : [];
+
+        const content = abi?.length
+          ? decodeFunctionData({
+              data: executableCall.calldata as Address,
+              abi,
+            })
+          : { functionName: "", args: [] };
+        const fn = abi.find(
+          (a) => a.type === "function" && a.name === content.functionName,
+        ) as AbiFunction;
+
         return (
           <Card
             key={`${executableCall.target}-${index}`}
             className="mt-1 h-full break-words p-4 text-sm font-normal leading-normal text-muted-foreground"
           >
-            {content.function && (
+            {content.functionName && (
               <>
                 <div className="font-medium text-foreground">Function:</div>
-                <div className=" whitespace-pre-line">{content.function}</div>
+                <div className=" whitespace-pre-line">
+                  {content.functionName}
+                </div>
                 <br />
                 <div className="font-medium text-foreground">Params:</div>
                 <div className="whitespace-pre-line">
-                  {content.params.toLocaleString()}
+                  {content.args?.map((arg, idx) => (
+                    <div key={idx}>
+                      {fn.inputs[idx].name}: {arg?.toString()}
+                    </div>
+                  ))}
                 </div>
                 <br />
               </>
