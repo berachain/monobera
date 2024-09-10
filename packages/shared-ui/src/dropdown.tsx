@@ -14,11 +14,13 @@ export const Dropdown = ({
   onSelect,
   sortby = true,
   className,
+  placeholder,
   triggerClassName,
   contentClassname,
   ...props
 }: {
   selected: string;
+  placeholder?: string;
   selectionList: (
     | string
     | {
@@ -48,11 +50,13 @@ export const Dropdown = ({
                 triggerClassName,
               )}
             >
-              {selectedFromList
-                ? typeof selectedFromList === "string"
-                  ? selectedFromList.replaceAll("-", " ")
-                  : selectedFromList.label
-                : selected.replaceAll("-", " ")}
+              <span>
+                {selectedFromList
+                  ? typeof selectedFromList === "string"
+                    ? selectedFromList.replaceAll("-", " ")
+                    : selectedFromList.label
+                  : selected.replaceAll("-", " ") || placeholder}
+              </span>
               <Icons.chevronDown className=" h-4 w-4" />
             </div>
           </DropdownMenuTrigger>

@@ -1,5 +1,8 @@
 import { truncateHash, usePrevious } from "@bera/berajs";
+import { Dropdown } from "@bera/shared-ui";
 import { Input } from "@bera/ui/input";
+import { TextArea } from "@bera/ui/text-area";
+import { formatAbiItem } from "abitype";
 import {
   ChangeEventHandler,
   Dispatch,
@@ -8,7 +11,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { AbiFunction, isAddress, parseAbiItem } from "viem";
+import { Abi, AbiFunction, isAddress, parseAbiItem } from "viem";
 import {
   CustomProposalActionErrors,
   ProposalAction,
@@ -28,7 +31,26 @@ export function CustomAction({
   setErrors: Dispatch<SetStateAction<CustomProposalActionErrors>>;
 }) {
   const [abiItems, setAbiItems] = useState<AbiFunction>();
-  const prevAbi = usePrevious(abiItems);
+  const [contractSelectors, setContractSelectors] = useState<AbiFunction[]>([]);
+  const prevAbi = usePrevious(action.ABI);
+
+  useEffect(() => {
+    if (action.ABI && JSON.stringify(prevAbi) !== JSON.stringify(action.ABI)) {
+      try {
+        const parsedAbi = (JSON.parse(action.ABI) as Abi).filter(
+          (a) =>
+            a.type === "function" &&
+            ["payable", "nonpayable"].includes(a.stateMutability),
+        ) as AbiFunction[]; // parseAbi(JSON.parse(action.ABI));
+
+        setContractSelectors(parsedAbi);
+        setErrors((e) => ({ ...e, functionSignature: false }));
+      } catch (error) {
+        console.warn("error parsing abi", error);
+        setErrors((e) => ({ ...e, ABI: "Invalid ABI" }));
+      }
+    }
+  }, [action.ABI]);
 
   const handleUpdateCallData = useCallback(
     (idx: number): ChangeEventHandler<HTMLInputElement> =>
@@ -77,12 +99,17 @@ export function CustomAction({
   useEffect(() => {
     try {
       if (action.functionSignature) {
+        console.log("parsing abi", parseAbiItem(action.functionSignature));
+
         setAbiItems(parseAbiItem(action.functionSignature) as AbiFunction);
         setErrors((e) => ({ ...e, functionSignature: false }));
       }
     } catch (error) {
       console.warn("error parsing abi", error);
-      setErrors((e) => ({ ...e, functionSignature: "Invalid ABI" }));
+      setErrors((e) => ({
+        ...e,
+        functionSignature: "Invalid Function Signature",
+      }));
     }
   }, [action.functionSignature]);
 
@@ -115,53 +142,64 @@ export function CustomAction({
       </div>
       <div className="flex flex-col gap-2">
         <label
-          htmlFor={`proposal-message--${idx}`}
+          htmlFor={`proposal-abi--${idx}`}
           className="text-sm font-semibold leading-tight"
         >
           Enter ABI
         </label>
-        <Input
-          id={`proposal-message--${idx}`}
-          placeholder="function balanceOf(address owner) view returns (uint256)"
-          value={action.functionSignature}
-          onChange={(e) =>
+        <TextArea
+          id={`proposal-abi--${idx}`}
+          placeholder={JSON.stringify(
+            [
+              {
+                type: "function",
+                name: "myFunction",
+                inputs: [],
+                outputs: [],
+                stateMutability: "nonpayable",
+              },
+            ],
+            undefined,
+            2,
+          )}
+          value={action.ABI}
+          onChange={(e) => {
             setAction((prev) => ({
               ...prev,
-              functionSignature: e.target.value,
-            }))
-          }
+              ABI: e.target.value,
+            }));
+          }}
         />
-        {errors.functionSignature && (
+        {errors.ABI && (
           <div className="text-sm text-destructive-foreground">
-            * {errors.functionSignature}
+            * {errors.ABI}
           </div>
         )}
       </div>
       <div className="flex flex-col gap-2">
-        <label
-          htmlFor={`proposal-message--${idx}`}
-          className="text-sm font-semibold leading-tight"
-        >
-          Enter Function Signature
-        </label>
-        <Input
-          id={`proposal-message--${idx}`}
-          placeholder="function balanceOf(address owner) view returns (uint256)"
-          value={action.functionSignature}
-          onChange={(e) =>
-            setAction((prev) => ({
-              ...prev,
-              functionSignature: e.target.value,
+        <div className="text-sm font-semibold leading-tight">
+          <label>Select Contract Method</label>
+        </div>
+        <Dropdown
+          sortby={false}
+          placeholder="Select a contract method"
+          className="!w-full !grow"
+          triggerClassName="!w-full grow justify-between"
+          contentClassname="!w-full !grow"
+          selectionList={contractSelectors.map((c) => ({
+            value: formatAbiItem(c),
+            label: c.name,
+          }))}
+          selected={action.functionSignature || ""}
+          onSelect={(v) =>
+            setAction((a) => ({
+              ...a,
+              functionSignature: v as ProposalTypeEnum,
             }))
           }
         />
-        {errors.functionSignature && (
-          <div className="text-sm text-destructive-foreground">
-            * {errors.functionSignature}
-          </div>
-        )}
       </div>
-      {abiItems?.inputs.map((input, i) => {
+      {abiItems?.inputs?.map((input, i) => {
         return (
           <div className="flex flex-col gap-2">
             <label

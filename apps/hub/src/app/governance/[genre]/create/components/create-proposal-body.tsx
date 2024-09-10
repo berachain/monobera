@@ -91,7 +91,7 @@ export const CreateProposalBody = ({
         <Input
           type="text"
           id="proposal-forumLink"
-          placeholder="Ooga booga"
+          placeholder="https://forum.berachain.com/...."
           value={proposal.forumLink}
           onChange={(e: any) =>
             setProposal((prev: any) => ({

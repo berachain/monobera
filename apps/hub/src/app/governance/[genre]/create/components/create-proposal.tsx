@@ -28,7 +28,7 @@ export const CreateProposal = ({
     removeProposalAction,
     submitProposal,
   } = useCreateProposal(governorAddress);
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: false,
     description: false,
@@ -117,7 +117,7 @@ export const CreateProposal = ({
               } else {
               }
             } catch (error) {
-              errors.functionSignature = "Invalid ABI";
+              errors.functionSignature = "Invalid function signature";
             }
           }
         } else if (action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE) {

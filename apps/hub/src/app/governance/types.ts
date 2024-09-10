@@ -87,6 +87,7 @@ export type SafeProposalAction =
   | {
       type: ProposalTypeEnum.CUSTOM_PROPOSAL;
       target: "" | Address;
+      ABI: string;
       functionSignature: string;
       functionName: string;
       calldata: string[];
