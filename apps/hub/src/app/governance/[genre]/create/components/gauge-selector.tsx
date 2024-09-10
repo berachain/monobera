@@ -27,20 +27,26 @@ export const GaugeSelector = ({
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [keyword, setKeyword] = useState<string>("");
-  const { data, loading } = useQuery(GetFriendsOfTheChef);
+  const { data: friendsData, loading } = useQuery(GetFriendsOfTheChef);
   const { data: gaugesMetadata } = useGaugesMetadata();
 
   const Vaults = useMemo(() => {
-    return (data?.vaults ?? []).filter(
+    return (friendsData?.vaults ?? []).filter(
       (vault: any) =>
         vault.id.toLowerCase().includes(keyword.toLowerCase()) ||
         vault.stakingToken.id.toLowerCase().includes(keyword.toLowerCase()),
     );
-  }, [keyword, data]);
+  }, [keyword, friendsData]);
 
   const selectedGaugeMetadata = gauge?.target
-    ? gaugesMetadata?.[getAddress(gauge?.target)]
+    ? gaugesMetadata?.[getAddress(gauge?.target.toLowerCase())]
     : undefined;
+
+  const selectedGraphVault = Vaults.find(
+    (vault: any) => vault.id === gauge?.target?.toLowerCase(),
+  );
+
+  console.log({ gaugesMetadata, Vaults });
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -50,7 +56,7 @@ export const GaugeSelector = ({
         ) : (
           <DialogTrigger asChild>
             <div className="rounded-md border border-border p-3 hover:bg-muted">
-              {gauge?.target ? (
+              {gauge?.target && gauge.receiptToken ? (
                 <div>
                   <div className="flex gap-2 text-sm font-semibold">
                     <GaugeIcon
@@ -79,19 +85,13 @@ export const GaugeSelector = ({
                   </div>
                   <div className="text-sm font-medium text-muted-foreground">
                     Staking Token Address:{" "}
-                    {selectedGaugeMetadata ? (
-                      <Link
-                        href={`${blockExplorerUrl}/address/${gauge.receiptToken}`}
-                        className="text-foreground underline"
-                        target="_blank"
-                      >
-                        {gauge?.receiptToken
-                          ? truncateHash(gauge?.receiptToken)
-                          : undefined}
-                      </Link>
-                    ) : (
-                      <span>–</span>
-                    )}
+                    <Link
+                      href={`${blockExplorerUrl}/address/${selectedGraphVault.receiptToken}`}
+                      className="text-foreground underline"
+                      target="_blank"
+                    >
+                      {truncateHash(gauge.receiptToken)}
+                    </Link>
                   </div>
                 </div>
               ) : (
@@ -118,7 +118,7 @@ export const GaugeSelector = ({
                 key={vault.id}
                 className="my-1 w-full cursor-pointer rounded-md px-3 py-1 font-medium hover:bg-muted"
                 onClick={() => {
-                  const queriedGauge = data.friendsOfTheChefs.find(
+                  const queriedGauge = friendsData.friendsOfTheChefs.find(
                     (friend: { id: Address; isFriend: boolean }) =>
                       friend.id === vault.id,
                   );
@@ -149,9 +149,7 @@ export const GaugeSelector = ({
                   <div>{gaugeMetadata?.name ?? truncateHash(vault.id)}</div>
                 </div>
                 <div className="text-sm font-medium text-muted-foreground ">
-                  Staking Token Address: {truncateHash(
-                    vault.stakingToken.id,
-                  )}{" "}
+                  Staking Token Address: {truncateHash(vault.stakingToken.id)}
                 </div>
               </div>
             );
