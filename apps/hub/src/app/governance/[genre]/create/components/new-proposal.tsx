@@ -15,7 +15,7 @@ export default function NewProposal() {
   const dapp = getDappByGenre(pathname as PROPOSAL_GENRE);
 
   return (
-    <div className="pb-16">
+    <div className="pb-16 col-span-8 col-start-3">
       <Link
         href="/governance"
         className="flex mb-8 items-center gap-1 text-sm font-medium text-muted-foreground"

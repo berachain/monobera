@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { truncateHash, useGaugesMetadata } from "@bera/berajs";
@@ -14,19 +14,16 @@ import {
 } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Address, getAddress } from "viem";
+import { ProposalAction, ProposalTypeEnum } from "~/app/governance/types";
 
 export const GaugeSelector = ({
-  gauge,
+  selectedGauge: gauge,
   setGauge,
 }: {
-  gauge:
-    | { vault: Address; receiptToken: Address; isFriend: boolean }
+  selectedGauge:
+    | (ProposalAction & { type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE })
     | undefined;
-  setGauge: (gauge: {
-    vault: Address;
-    receiptToken: Address;
-    isFriend: boolean;
-  }) => void;
+  setGauge: Dispatch<SetStateAction<ProposalAction>>;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [keyword, setKeyword] = useState<string>("");
@@ -41,8 +38,8 @@ export const GaugeSelector = ({
     );
   }, [keyword, data]);
 
-  const selectGaugeMetadata = gauge
-    ? gaugesMetadata?.[getAddress(gauge.vault)]
+  const selectedGaugeMetadata = gauge?.target
+    ? gaugesMetadata?.[getAddress(gauge?.target)]
     : undefined;
 
   return (
@@ -57,37 +54,50 @@ export const GaugeSelector = ({
                 <div>
                   <div className="flex gap-2 text-sm font-semibold">
                     <GaugeIcon
-                      address={gauge.vault}
-                      overrideImage={selectGaugeMetadata?.logoURI}
+                      address={gauge.target}
+                      overrideImage={selectedGaugeMetadata?.logoURI}
                     />
-                    <Link
-                      href={`${blockExplorerUrl}/address/${gauge.vault}`}
-                      className="underline"
-                      target="_blank"
-                    >
-                      {selectGaugeMetadata?.name ?? truncateHash(gauge.vault)}
-                    </Link>
-                    <span
-                      className={cn(
-                        gauge.isFriend
-                          ? "text-success-foreground"
-                          : "text-destructive-foreground",
-                      )}
-                    >
-                      {gauge.isFriend
-                        ? "Reciving Emissions"
-                        : "Not Reciving Emissions"}
-                    </span>
+                    {selectedGaugeMetadata ? (
+                      <>
+                        <Link
+                          href={`${blockExplorerUrl}/address/${gauge.target}`}
+                          className="underline"
+                          target="_blank"
+                        >
+                          {selectedGaugeMetadata?.name ??
+                            truncateHash(gauge?.target ?? "0x")}
+                        </Link>
+                        <span
+                          className={cn(
+                            gauge.isFriend
+                              ? "text-success-foreground"
+                              : "text-destructive-foreground",
+                          )}
+                        >
+                          {gauge.isFriend
+                            ? "Reciving Emissions"
+                            : "Not Reciving Emissions"}
+                        </span>
+                      </>
+                    ) : (
+                      <span>No vault selected</span>
+                    )}
                   </div>
                   <div className="text-sm font-medium text-muted-foreground">
                     Staking Token Address:{" "}
-                    <Link
-                      href={`${blockExplorerUrl}/address/${gauge.receiptToken}`}
-                      className="text-foreground underline"
-                      target="_blank"
-                    >
-                      {truncateHash(gauge.receiptToken)}{" "}
-                    </Link>
+                    {selectedGaugeMetadata ? (
+                      <Link
+                        href={`${blockExplorerUrl}/address/${gauge.receiptToken}`}
+                        className="text-foreground underline"
+                        target="_blank"
+                      >
+                        {gauge?.receiptToken
+                          ? truncateHash(gauge?.receiptToken)
+                          : undefined}
+                      </Link>
+                    ) : (
+                      <span>–</span>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -118,18 +128,21 @@ export const GaugeSelector = ({
                     (friend: { id: Address; isFriend: boolean }) =>
                       friend.id === vault.id,
                   );
+
                   if (!gauge) {
-                    setGauge({
-                      vault: vault.id,
+                    setGauge((g) => ({
+                      ...g,
+                      gauge: vault.id,
                       receiptToken: vault.stakingToken.id,
                       isFriend: false,
-                    });
+                    }));
                   } else {
-                    setGauge({
-                      vault: gauge.id,
+                    setGauge((g) => ({
+                      ...g,
+                      gauge: gauge.id,
                       receiptToken: vault.stakingToken.id,
                       isFriend: gauge.isFriend,
-                    });
+                    }));
                   }
                   setOpen(false);
                 }}

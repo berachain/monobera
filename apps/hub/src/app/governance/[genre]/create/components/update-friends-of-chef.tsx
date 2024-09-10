@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { BERA_CHEF_ABI } from "@bera/berajs";
-import { beraChefAddress } from "@bera/config";
 import { GetFriendsOfTheChef } from "@bera/graphql";
 import { ActionButton } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -9,40 +8,28 @@ import { Button } from "@bera/ui/button";
 import { Address, encodeFunctionData } from "viem";
 
 import { GaugeSelector } from "./gauge-selector";
-import { ProposalTypeEnum } from "~/app/governance/types";
-import { useCreateProposal } from "~/hooks/useCreateProposal";
+import { ProposalAction, ProposalTypeEnum } from "~/app/governance/types";
 
 export const UpdateFriendsOfChef = ({
-  title,
-  description,
+  action: gauge,
+  setAction,
 }: {
-  title: string;
-  description: string;
+  action: ProposalAction & { type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE };
+  setAction: Dispatch<SetStateAction<ProposalAction>>;
 }) => {
-  const [gauge, setGauge] = useState<
-    { vault: Address; receiptToken: Address; isFriend: boolean } | undefined
-  >(undefined);
-  const encodedData = gauge
-    ? encodeFunctionData({
-        abi: BERA_CHEF_ABI,
-        functionName: "updateFriendsOfTheChef",
-        args: [gauge.receiptToken, !gauge.isFriend],
-      })
-    : "0x";
-
-  // @ts-expect-error temporary
-  const { ModalPortal, submitProposal } = useCreateProposal([
-    [beraChefAddress],
-    [0],
-    [encodedData],
-    `#${ProposalTypeEnum.UPDATE_REWARDS_GAUGE}# ${title}\n${description}`,
-  ]);
+  // const encodedData = gauge
+  //   ? encodeFunctionData({
+  //       abi: BERA_CHEF_ABI,
+  //       functionName: "updateFriendsOfTheChef",
+  //       args: [gauge.receiptToken, !gauge.isFriend],
+  //     })
+  //   : "0x";
 
   return (
     <>
       <div className="flex flex-col gap-2">
-        <div className="text-sm font-semibold leading-tight">Select Gauge</div>
-        <GaugeSelector gauge={gauge} setGauge={setGauge} />
+        <div className="text-sm font-semibold leading-tight">Select gauge</div>
+        <GaugeSelector selectedGauge={gauge} setGauge={setAction} />
       </div>
 
       {gauge && (
@@ -54,7 +41,7 @@ export const UpdateFriendsOfChef = ({
               <span
                 className={cn(
                   gauge.isFriend
-                    ? " text-destructive-foreground"
+                    ? "text-destructive-foreground"
                     : "text-success-foreground",
                 )}
               >
@@ -67,18 +54,6 @@ export const UpdateFriendsOfChef = ({
           </div>
         </div>
       )}
-
-      <ActionButton>
-        <Button
-          type="submit"
-          className="w-full"
-          onClick={submitProposal}
-          disabled={title.length === 0 || !gauge}
-        >
-          Submit
-        </Button>
-      </ActionButton>
-      {ModalPortal}
     </>
   );
 };
