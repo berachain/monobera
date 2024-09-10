@@ -50,38 +50,32 @@ export const GaugeSelector = ({
         ) : (
           <DialogTrigger asChild>
             <div className="rounded-md border border-border p-3 hover:bg-muted">
-              {gauge ? (
+              {gauge?.target ? (
                 <div>
                   <div className="flex gap-2 text-sm font-semibold">
                     <GaugeIcon
                       address={gauge.target}
                       overrideImage={selectedGaugeMetadata?.logoURI}
                     />
-                    {selectedGaugeMetadata ? (
-                      <>
-                        <Link
-                          href={`${blockExplorerUrl}/address/${gauge.target}`}
-                          className="underline"
-                          target="_blank"
-                        >
-                          {selectedGaugeMetadata?.name ??
-                            truncateHash(gauge?.target ?? "0x")}
-                        </Link>
-                        <span
-                          className={cn(
-                            gauge.isFriend
-                              ? "text-success-foreground"
-                              : "text-destructive-foreground",
-                          )}
-                        >
-                          {gauge.isFriend
-                            ? "Reciving Emissions"
-                            : "Not Reciving Emissions"}
-                        </span>
-                      </>
-                    ) : (
-                      <span>No vault selected</span>
-                    )}
+                    <Link
+                      href={`${blockExplorerUrl}/address/${gauge.target}`}
+                      className="underline"
+                      target="_blank"
+                    >
+                      {selectedGaugeMetadata?.name ??
+                        truncateHash(gauge?.target ?? "0x")}
+                    </Link>
+                    <span
+                      className={cn(
+                        gauge.isFriend
+                          ? "text-success-foreground"
+                          : "text-destructive-foreground",
+                      )}
+                    >
+                      {gauge.isFriend
+                        ? "Reciving Emissions"
+                        : "Not Reciving Emissions"}
+                    </span>
                   </div>
                   <div className="text-sm font-medium text-muted-foreground">
                     Staking Token Address:{" "}
@@ -124,24 +118,24 @@ export const GaugeSelector = ({
                 key={vault.id}
                 className="my-1 w-full cursor-pointer rounded-md px-3 py-1 font-medium hover:bg-muted"
                 onClick={() => {
-                  const gauge = data.friendsOfTheChefs.find(
+                  const queriedGauge = data.friendsOfTheChefs.find(
                     (friend: { id: Address; isFriend: boolean }) =>
                       friend.id === vault.id,
                   );
 
-                  if (!gauge) {
+                  if (!queriedGauge) {
                     setGauge((g) => ({
                       ...g,
-                      gauge: vault.id,
+                      target: vault.id,
                       receiptToken: vault.stakingToken.id,
                       isFriend: false,
                     }));
                   } else {
                     setGauge((g) => ({
                       ...g,
-                      gauge: gauge.id,
+                      target: queriedGauge.id,
                       receiptToken: vault.stakingToken.id,
-                      isFriend: gauge.isFriend,
+                      isFriend: queriedGauge.isFriend,
                     }));
                   }
                   setOpen(false);

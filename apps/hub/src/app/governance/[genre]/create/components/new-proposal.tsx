@@ -9,10 +9,14 @@ import {
   getDappByGenre,
 } from "../../../governance-genre-helper";
 import { CreateProposal } from "./create-proposal";
+import { governorAddress } from "@bera/config";
 
-export default function NewProposal() {
-  const pathname = usePathname().split("/")[2];
-  const dapp = getDappByGenre(pathname as PROPOSAL_GENRE);
+export default function NewProposal({
+  genre,
+}: {
+  genre: PROPOSAL_GENRE;
+}) {
+  const dapp = getDappByGenre(genre);
 
   return (
     <div className="pb-16 col-span-8 col-start-3">
@@ -32,7 +36,7 @@ export default function NewProposal() {
         </div>
       </div>
 
-      <CreateProposal />
+      <CreateProposal governorAddress={governorAddress} />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { CustomProposal, CustomProposalErrors } from "~/app/governance/types";
-import { useCreateProposal } from "~/hooks/useCreateProposal";
+import { type useCreateProposal } from "~/hooks/useCreateProposal";
 
 export const CreateProposalBody = ({
   proposal,

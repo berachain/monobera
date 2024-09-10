@@ -11,20 +11,24 @@ import {
 } from "~/app/governance/types";
 import { useCreateProposal } from "~/hooks/useCreateProposal";
 import { CreateProposalAction } from "./create-proposal-action";
-import { isAddress, parseAbiItem } from "viem";
+import { Address, isAddress, parseAbiItem } from "viem";
 import { ActionButton } from "@bera/shared-ui";
 import { Tabs } from "./tabs";
 import { Icons } from "@bera/ui/icons";
 
-export const CreateProposal = () => {
+export const CreateProposal = ({
+  governorAddress,
+}: {
+  governorAddress: Address;
+}) => {
   const {
     proposal,
     setProposal,
     addProposalAction,
     removeProposalAction,
     submitProposal,
-  } = useCreateProposal();
-  const [activeTab, setActiveTab] = useState(0);
+  } = useCreateProposal(governorAddress);
+  const [activeTab, setActiveTab] = useState(1);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: false,
     description: false,
@@ -88,8 +92,8 @@ export const CreateProposal = () => {
   const handleSubmitProposal = useCallback(() => {
     const e: CustomProposalErrors = getBodyErrors();
 
-    e.actions = proposal.actions.map(
-      (action, idx): CustomProposalActionErrors => {
+    e.actions = proposal.actions
+      .map((action, idx): CustomProposalActionErrors => {
         const errors: CustomProposalActionErrors = {};
 
         if (action.type === ProposalTypeEnum.CUSTOM_PROPOSAL) {
@@ -124,12 +128,23 @@ export const CreateProposal = () => {
           }
         }
         return errors;
-      },
-    );
+      })
+      .filter((e) => Object.values(e).some((v) => v));
 
     setErrors(e);
 
-    if (Object.values(e).some((v) => v)) {
+    if (
+      Object.getOwnPropertyNames(e)
+        .map((name) => e[name as keyof typeof e])
+        .some((v) => {
+          if (Array.isArray(v)) {
+            return v.length > 0;
+          }
+
+          return !!v;
+        })
+    ) {
+      console.log("errors", e, Object.values(e));
       return;
     }
 

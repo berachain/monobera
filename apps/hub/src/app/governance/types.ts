@@ -85,14 +85,14 @@ export type CustomProposal = {
 export type SafeProposalAction =
   | {
       type: ProposalTypeEnum.CUSTOM_PROPOSAL;
-      target: Address;
+      target: "" | Address;
       ABI: string;
       functionName: string;
       calldata: string[];
     }
   | {
       type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE;
-      target: Address;
+      target: "" | Address;
       receiptToken: Address;
       isFriend: boolean;
     };
