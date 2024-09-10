@@ -57,6 +57,7 @@ export type CustomProposalActionErrors = {
   type?: false | string;
   target?: false | string;
   ABI?: false | string;
+  functionSignature?: false | string;
   calldata?: (false | string)[];
   gauge?: false | string;
   receiptToken?: false | string;
@@ -86,7 +87,7 @@ export type SafeProposalAction =
   | {
       type: ProposalTypeEnum.CUSTOM_PROPOSAL;
       target: "" | Address;
-      ABI: string;
+      functionSignature: string;
       functionName: string;
       calldata: string[];
     }

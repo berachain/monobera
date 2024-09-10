@@ -8,13 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  AbiFunction,
-  AbiItem,
-  ParseAbiItem,
-  isAddress,
-  parseAbiItem,
-} from "viem";
+import { AbiFunction, isAddress, parseAbiItem } from "viem";
 import {
   CustomProposalActionErrors,
   ProposalAction,
@@ -82,15 +76,15 @@ export function CustomAction({
 
   useEffect(() => {
     try {
-      if (action.ABI) {
-        setAbiItems(parseAbiItem(action.ABI) as AbiFunction);
-        setErrors((e) => ({ ...e, ABI: false }));
+      if (action.functionSignature) {
+        setAbiItems(parseAbiItem(action.functionSignature) as AbiFunction);
+        setErrors((e) => ({ ...e, functionSignature: false }));
       }
     } catch (error) {
       console.warn("error parsing abi", error);
-      setErrors((e) => ({ ...e, ABI: "Invalid ABI" }));
+      setErrors((e) => ({ ...e, functionSignature: "Invalid ABI" }));
     }
-  }, [action.ABI]);
+  }, [action.functionSignature]);
 
   return (
     <>
@@ -129,17 +123,41 @@ export function CustomAction({
         <Input
           id={`proposal-message--${idx}`}
           placeholder="function balanceOf(address owner) view returns (uint256)"
-          value={action.ABI}
+          value={action.functionSignature}
           onChange={(e) =>
             setAction((prev) => ({
               ...prev,
-              ABI: e.target.value,
+              functionSignature: e.target.value,
             }))
           }
         />
-        {errors.ABI && (
+        {errors.functionSignature && (
           <div className="text-sm text-destructive-foreground">
-            * {errors.ABI}
+            * {errors.functionSignature}
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col gap-2">
+        <label
+          htmlFor={`proposal-message--${idx}`}
+          className="text-sm font-semibold leading-tight"
+        >
+          Enter Function Signature
+        </label>
+        <Input
+          id={`proposal-message--${idx}`}
+          placeholder="function balanceOf(address owner) view returns (uint256)"
+          value={action.functionSignature}
+          onChange={(e) =>
+            setAction((prev) => ({
+              ...prev,
+              functionSignature: e.target.value,
+            }))
+          }
+        />
+        {errors.functionSignature && (
+          <div className="text-sm text-destructive-foreground">
+            * {errors.functionSignature}
           </div>
         )}
       </div>

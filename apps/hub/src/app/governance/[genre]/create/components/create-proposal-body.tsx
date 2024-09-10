@@ -79,6 +79,11 @@ export const CreateProposalBody = ({
             }))
           }
         />
+        {errors.description && (
+          <div className="text-sm text-destructive-foreground">
+            * {errors.description}
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-2">
