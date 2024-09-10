@@ -69,11 +69,11 @@ export const useCreateProposal = (governorAddress: Address) => {
           });
 
         case ProposalTypeEnum.CUSTOM_PROPOSAL:
-          if (!action.target || !action.ABI) {
+          if (!action.target || !action.functionSignature) {
             throw new Error("Invalid action");
           }
           // biome-ignore lint/correctness/noSwitchDeclarations: will return before the next case
-          const abi = parseAbiItem(action.ABI);
+          const abi = parseAbiItem(action.functionSignature);
 
           return encodeFunctionData({
             abi: [abi],

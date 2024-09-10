@@ -107,17 +107,17 @@ export const CreateProposal = ({
             errors.target = "Required";
           }
 
-          if (!action.ABI) {
-            errors.ABI = "Required";
+          if (!action.functionSignature) {
+            errors.functionSignature = "Required";
           } else {
             try {
-              const abi = parseAbiItem(action.ABI);
+              const abi = parseAbiItem(action.functionSignature);
               if (abi.type !== "function") {
-                errors.ABI = "This signature is not a function";
+                errors.functionSignature = "This signature is not a function";
               } else {
               }
             } catch (error) {
-              errors.ABI = "Invalid ABI";
+              errors.functionSignature = "Invalid ABI";
             }
           }
         } else if (action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE) {
@@ -144,7 +144,6 @@ export const CreateProposal = ({
           return !!v;
         })
     ) {
-      console.log("errors", e, Object.values(e));
       return;
     }
 
