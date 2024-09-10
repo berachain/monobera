@@ -59,7 +59,7 @@ const Provider: React.FC<IBeraConfig> = ({
     <BeraWagmi.Provider value={{ networkConfig: defaultBeraNetworkConfig }}>
       <DynamicContextProvider
         settings={{
-          networkValidationMode:"always",
+          networkValidationMode: "always",
           initialAuthenticationMode: "connect-only",
           environmentId: dynamicWalletKey,
           walletConnectors: [EthereumWalletConnectors],
