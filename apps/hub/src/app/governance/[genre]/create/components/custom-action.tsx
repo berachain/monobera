@@ -81,15 +81,13 @@ export function CustomAction({
 
           prev as ProposalAction & { type: ProposalTypeEnum.CUSTOM_PROPOSAL };
 
-          let cd = prev.calldata;
+          const cd = [...(prev.calldata || [])];
 
-          if (!Array.isArray(cd) || cd.length === abiItems?.inputs.length) {
-            cd = Array(abiItems?.inputs.length).fill("");
-          }
+          cd[idx] = event.target.value;
 
           return {
             ...prev,
-            calldata: cd.map((c, j) => (j === idx ? event.target.value : c)),
+            calldata: cd,
           };
         });
       },
@@ -99,8 +97,6 @@ export function CustomAction({
   useEffect(() => {
     try {
       if (action.functionSignature) {
-        console.log("parsing abi", parseAbiItem(action.functionSignature));
-
         setAbiItems(parseAbiItem(action.functionSignature) as AbiFunction);
         setErrors((e) => ({ ...e, functionSignature: false }));
       }
