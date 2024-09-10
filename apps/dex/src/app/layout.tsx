@@ -2,6 +2,7 @@
 
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
+import { useEffect } from "react";
 import { IBM_Plex_Sans } from "next/font/google";
 import { usePathname } from "next/navigation";
 import Script from "next/script";
@@ -18,6 +19,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 import { useLocalStorage } from "usehooks-ts";
 
+import { initEruda } from "~/utils/eruda";
 import { navItems } from "~/app/config";
 import Providers from "./Providers";
 
@@ -34,6 +36,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   );
   const pathName = usePathname();
   const activeBanners = getBannerCount(dexName, pathName);
+
+  useEffect(() => {
+    initEruda();
+  }, []);
 
   return (
     <html lang="en" className="bg-background">
@@ -54,7 +60,6 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
-        <span className="warning-foreground hidden text-amber-300 text-green-300 text-green-400 text-green-500 text-neutral-400 text-red-400 text-red-500" />
         <BinanceVersionHandler />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
@@ -63,7 +68,6 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
             </div>
             <div className="z-10 flex-1">
-              <span className="hidden text-amber-300 text-green-300 text-green-400 text-green-500 text-neutral-400 text-red-400 text-red-500" />
               <Header navItems={navItems} appName={dexName} />
               <main
                 className="w-full"
