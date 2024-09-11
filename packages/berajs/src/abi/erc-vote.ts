@@ -106,4 +106,4 @@ export const IVotes_ABI = [
     name: "VotesExpiredSignature",
     inputs: [{ name: "expiry", type: "uint256", internalType: "uint256" }],
   },
-];
+] as const;

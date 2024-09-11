@@ -3,13 +3,22 @@ import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
+import { Address } from "viem";
 import { Dapp } from "../../governance-genre-helper";
 import { ProposalsList } from "./proposals-list";
 import { UserVotingPower } from "./user-voting-power";
+import { ActionButton } from "@bera/shared-ui";
+import { CreateIfHasVotingPower } from "./create-if-has-voting-power";
 
-export default function GovernanceByStatus({ dapp }: { dapp: Dapp }) {
+export default function GovernanceByStatus({
+  dapp,
+  governorAddress,
+}: {
+  dapp: Dapp;
+  governorAddress: Address;
+}) {
   return (
-    <div>
+    <div className="pb-32">
       <Link
         href={"/governance"}
         className="mb-8 flex cursor-pointer gap-2 font-semibold"
@@ -28,9 +37,10 @@ export default function GovernanceByStatus({ dapp }: { dapp: Dapp }) {
         or create your own
       </div>
       <div className="mx-auto my-8 flex w-[165px] flex-col gap-3 sm:w-full sm:flex-row">
-        <Link href={`/governance/${dapp.link}/create`}>
-          <Button>Create proposal</Button>
-        </Link>
+        <CreateIfHasVotingPower
+          href={`/governance/${dapp.link}/create`}
+          governorAddress={governorAddress}
+        />
         <Button variant="secondary">Visit forums</Button>
       </div>
 

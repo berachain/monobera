@@ -79,8 +79,6 @@ export function CustomAction({
             type: ProposalTypeEnum.CUSTOM_PROPOSAL;
           };
 
-          prev as ProposalAction & { type: ProposalTypeEnum.CUSTOM_PROPOSAL };
-
           const cd = [...(prev.calldata || [])];
 
           cd[idx] = event.target.value;
