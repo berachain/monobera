@@ -9,6 +9,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 
 export const Dropdown = ({
+  disabled,
   selected,
   selectionList,
   onSelect,
@@ -20,6 +21,7 @@ export const Dropdown = ({
   ...props
 }: {
   selected: string;
+  disabled?: boolean;
   placeholder?: string;
   selectionList: (
     | string
@@ -39,7 +41,14 @@ export const Dropdown = ({
   );
 
   return (
-    <div {...props} className={cn("w-fit flex-shrink-0", className)}>
+    <div
+      {...props}
+      className={cn(
+        "w-fit flex-shrink-0",
+        disabled && "text-muted cursor-not-allowed pointer-events-none",
+        className,
+      )}
+    >
       <div className="flex items-center text-muted-foreground md:gap-1">
         {sortby && <div className="mr-2 text-sm font-medium">Sort by</div>}
         <DropdownMenu>
@@ -50,7 +59,13 @@ export const Dropdown = ({
                 triggerClassName,
               )}
             >
-              <span>
+              <span
+                className={cn(
+                  selected
+                    ? "text-primary"
+                    : "text-muted-foreground select-none",
+                )}
+              >
                 {selectedFromList
                   ? typeof selectedFromList === "string"
                     ? selectedFromList.replaceAll("-", " ")
