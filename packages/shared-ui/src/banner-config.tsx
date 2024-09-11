@@ -135,7 +135,7 @@ export const bannerConfig: BannerConfig = {
       bannerComponent: <LaunchBanner appName={bgtName} />,
     },
     [DappBannerType.RPC]: {
-      enabled: true,
+      enabled: false,
       bannerComponent: <RPCBanner />,
     },
     [DappBannerType.SLOW]: {
