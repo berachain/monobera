@@ -4,7 +4,7 @@ import { Dapp, NativeDapps, Others } from "../governance-genre-helper";
 
 export const HomePage = () => {
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-12 pb-32">
       <div className="flex flex-col gap-2">
         <div className="font-bold leading-6  tracking-wider text-muted-foreground">
           GOVERNANCE

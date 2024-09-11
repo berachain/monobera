@@ -25,6 +25,9 @@ export const Tabs = ({
               "py-4 relative w-full text-left px-5 border border-border rounded-sm text-sm font-medium leading-none whitespace-nowrap overflow-hidden",
               activeTab === idx &&
                 "before:content-[''] before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:h-full before:bg-info-foreground",
+              tab.disabled
+                ? "text-muted-foreground"
+                : "text-muted-foreground hover:text-primary",
             )}
             onClick={tab.onClick}
             disabled={tab.disabled}
