@@ -9,6 +9,7 @@ import { ApolloProvider } from "@apollo/client";
 import { honeyName } from "@bera/config";
 import { honeyClient } from "@bera/graphql";
 import {
+  BinanceVersionHandler,
   Footer,
   Header,
   TailwindIndicator,
@@ -66,6 +67,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         {" "}
+        <BinanceVersionHandler />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <ApolloProvider client={honeyClient}>
           <BeraWagmi>

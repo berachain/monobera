@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { dexName } from "@bera/config";
 import {
+  BinanceVersionHandler,
   Header,
   TailwindIndicator,
   TermOfUseModal,
@@ -54,6 +55,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <span className="warning-foreground hidden text-amber-300 text-green-300 text-green-400 text-green-500 text-neutral-400 text-red-400 text-red-500" />
+        <BinanceVersionHandler />
         <TermOfUseModal open={firstTimeUser} setOpen={setFirstTimeUser} />
         <Providers>
           <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
