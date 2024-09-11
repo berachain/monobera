@@ -1,7 +1,7 @@
 import { Button } from "@bera/ui/button";
 
 import { Icons } from "@bera/ui/icons";
-import { Input } from "@bera/ui/input";
+import { Input, InputWithLabel } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { CustomProposal, CustomProposalErrors } from "~/app/governance/types";
@@ -44,68 +44,54 @@ export const CreateProposalBody = ({
   }, [onNext]);
 
   return (
-    <div className="grid grid-cols-1 justify-start gap-8">
-      <div className="grid grid-cols-1 gap-2">
-        <div className="text-sm font-semibold leading-tight">Title</div>
-        <Input
-          type="text"
-          id="proposal-title"
-          placeholder="Ooga booga"
-          value={proposal.title}
-          onChange={(e) =>
-            setProposal((prev: any) => ({
-              ...prev,
-              title: e.target.value,
-            }))
-          }
-        />
-        {errors.title && (
-          <div className="text-sm text-destructive-foreground">
-            * {errors.title}
-          </div>
-        )}
-      </div>
+    <div className="grid grid-cols-1 justify-start gap-6">
+      <InputWithLabel
+        label="Title"
+        error={errors.title}
+        variant="black"
+        type="text"
+        id="proposal-title"
+        placeholder="Ooga booga"
+        value={proposal.title}
+        onChange={(e) =>
+          setProposal((prev: any) => ({
+            ...prev,
+            title: e.target.value,
+          }))
+        }
+      />
 
-      <div className="grid grid-cols-1 gap-2">
-        <div className="text-sm font-semibold leading-tight">Description</div>
-        <TextArea
-          id="proposal-message"
-          placeholder="Tell us about your proposal"
-          value={proposal.description}
-          onChange={(e) =>
-            setProposal((prev: any) => ({
-              ...prev,
-              description: e.target.value,
-            }))
-          }
-        />
-        {errors.description && (
-          <div className="text-sm text-destructive-foreground">
-            * {errors.description}
-          </div>
-        )}
-      </div>
+      <TextArea
+        id="proposal-message"
+        label="Description"
+        error={errors.description}
+        variant="black"
+        placeholder="Tell us about your proposal"
+        value={proposal.description}
+        onChange={(e) =>
+          setProposal((prev: any) => ({
+            ...prev,
+            description: e.target.value,
+          }))
+        }
+      />
 
-      <div className="grid grid-cols-1 gap-2">
-        <div className="text-sm font-semibold leading-tight">Forum Link</div>
-        <Input
-          type="text"
-          id="proposal-forumLink"
-          placeholder="https://forum.berachain.com/...."
-          value={proposal.forumLink}
-          onChange={(e: any) =>
-            setProposal((prev: any) => ({
-              ...prev,
-              forumLink: e.target.value,
-            }))
-          }
-        />
-        {errors.forumLink && (
-          <div className="text-sm text-destructive-foreground">
-            * {errors.forumLink}
-          </div>
-        )}
-      </div>
+      <InputWithLabel
+        label="Forum Link"
+        error={errors.forumLink}
+        type="text"
+        variant="black"
+        id="proposal-forumLink"
+        placeholder="https://forum.berachain.com/...."
+        value={proposal.forumLink}
+        onChange={(e: any) =>
+          setProposal((prev: any) => ({
+            ...prev,
+            forumLink: e.target.value,
+          }))
+        }
+      />
+
       <div className="flex  justify-end">
         <Button onClick={handleNext}>Next</Button>
       </div>

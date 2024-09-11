@@ -1,6 +1,7 @@
 import { truncateHash, usePrevious } from "@bera/berajs";
 import { Dropdown } from "@bera/shared-ui";
-import { Input } from "@bera/ui/input";
+import { cn } from "@bera/ui";
+import { Input, InputWithLabel } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 import { formatAbiItem } from "abitype";
 import {
@@ -109,73 +110,67 @@ export function CustomAction({
 
   return (
     <>
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor={`proposal-target--${idx}`}
-          className="text-sm font-semibold leading-tight"
-        >
-          Target Contract Address
-        </label>
-        <Input
-          type="text"
-          id={`proposal-target--${idx}`}
-          placeholder={truncateHash("0x00000000000000")}
-          value={action.target}
-          onChange={(e: any) =>
-            setAction((prev) => ({
-              ...prev,
-              target: e.target.value,
-            }))
-          }
-        />
-        {errors.target && (
-          <div className="text-sm text-destructive-foreground">
-            * {errors.target}
-          </div>
+      <InputWithLabel
+        type="text"
+        variant="black"
+        label="Enter Target"
+        error={errors.target}
+        id={`proposal-target--${idx}`}
+        placeholder={truncateHash("0x00000000000000")}
+        value={action.target}
+        onChange={(e: any) =>
+          setAction((prev) => ({
+            ...prev,
+            target: e.target.value,
+          }))
+        }
+      />
+
+      <TextArea
+        label="Enter ABI"
+        variant="black"
+        error={errors.ABI}
+        id={`proposal-abi--${idx}`}
+        placeholder={JSON.stringify(
+          [
+            {
+              type: "function",
+              name: "myFunction",
+              inputs: [],
+              outputs: [],
+              stateMutability: "nonpayable",
+            },
+          ],
+          undefined,
+          2,
         )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor={`proposal-abi--${idx}`}
-          className="text-sm font-semibold leading-tight"
-        >
-          Enter ABI
-        </label>
-        <TextArea
-          id={`proposal-abi--${idx}`}
-          placeholder={JSON.stringify(
-            [
-              {
-                type: "function",
-                name: "myFunction",
-                inputs: [],
-                outputs: [],
-                stateMutability: "nonpayable",
-              },
-            ],
-            undefined,
-            2,
+        value={action.ABI}
+        onChange={(e) => {
+          setAction((prev) => ({
+            ...prev,
+            ABI: e.target.value,
+          }));
+        }}
+      />
+      <div
+        className={cn(
+          "flex flex-col gap-2",
+          contractSelectors.length || "opacity-50 pointer-events-none",
+        )}
+      >
+        <div
+          className={cn(
+            "text-sm font-semibold leading-tight",
+            !contractSelectors.length
+              ? "text-foreground cursor-not-allowed pointer-events-none"
+              : "",
           )}
-          value={action.ABI}
-          onChange={(e) => {
-            setAction((prev) => ({
-              ...prev,
-              ABI: e.target.value,
-            }));
-          }}
-        />
-        {errors.ABI && (
-          <div className="text-sm text-destructive-foreground">
-            * {errors.ABI}
-          </div>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="text-sm font-semibold leading-tight">
+        >
           <label>Select Contract Method</label>
         </div>
         <Dropdown
           sortby={false}
+          disabled={!contractSelectors.length}
           placeholder="Select a contract method"
           className="!w-full !grow"
           triggerClassName="!w-full grow justify-between"
@@ -195,26 +190,14 @@ export function CustomAction({
       </div>
       {abiItems?.inputs?.map((input, i) => {
         return (
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor={`proposal-calldata--${idx}-${i}-${input.name}`}
-              className="text-sm font-semibold leading-tight"
-            >
-              Enter {input.name}
-            </label>
-            <Input
-              id={`proposal-calldata--${idx}-${i}-${input.name}`}
-              placeholder={input.type}
-              value={action.calldata?.[i]}
-              onChange={handleUpdateCallData(i)}
-            />
-
-            {errors.calldata?.[i] && (
-              <div className="text-sm text-destructive-foreground">
-                * {errors.calldata?.[i]}
-              </div>
-            )}
-          </div>
+          <InputWithLabel
+            label={`Enter ${input.name}`}
+            error={errors.calldata?.[i]}
+            id={`proposal-calldata--${idx}-${i}-${input.name}`}
+            placeholder={input.type}
+            value={action.calldata?.[i]}
+            onChange={handleUpdateCallData(i)}
+          />
         );
       })}
     </>
