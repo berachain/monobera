@@ -1,5 +1,10 @@
 import { useCallback, useReducer } from "react";
-import { usePublicClient, useWriteContract } from "wagmi";
+import { createWalletClient, custom, http } from "viem";
+import {
+  useAccount,
+  usePublicClient,
+  useWriteContract,
+} from "wagmi";
 
 import { getErrorMessage, getRevertReason } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -25,6 +30,12 @@ const useBeraContractWrite = ({
 
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
+  const { chain } = useAccount();
+  const walletClient = createWalletClient({
+    chain: chain,
+    //@ts-ignore
+    transport: custom(window.ethereum),
+  });
   const { account, config } = useBeraJs();
 
   const { refresh } = usePollTransactionCount({
@@ -54,7 +65,7 @@ const useBeraContractWrite = ({
           value: value,
           account: account,
         });
-        receipt = await writeContractAsync({
+        receipt = await walletClient.writeContract({
           ...request,
           gas: gasLimit ?? request.gas,
         });
