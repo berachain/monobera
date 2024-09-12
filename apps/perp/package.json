@@ -10,7 +10,7 @@
     "lint:fix": "pnpm lint --fix",
     "start": "pnpm with-env next start -p 3004",
     "check-types": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --",
+    "with-env": "dotenv -e ../../.env -c --",
     "copy-chart": "pnpm with-env node ./copy-charting-lib.js"
   },
   "dependencies": {
