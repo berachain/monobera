@@ -12,6 +12,7 @@ type GovernanceContextType = {
   votesThreshold?: string;
   currentVotes?: string;
   isLoading: boolean;
+  governorAddress: Address;
   openNotEnoughVotingPowerDialog: (args?: {
     onClose?: () => void;
     isOpen?: boolean;
@@ -60,6 +61,7 @@ const _GovernanceProvider = ({ children }: { children: React.ReactNode }) => {
             setIsDialogOpen((prev) => ({ ...prev, isOpen, onClose }));
           },
           isLoading: isLoadingVotes || isLoadingVotesThreshold,
+          governorAddress,
           canPropose:
             !!voteData &&
             !!votesThresholdData &&
