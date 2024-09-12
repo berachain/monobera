@@ -10,20 +10,43 @@ import {
 import { CreateProposal } from "./create-proposal";
 import { governorAddress } from "@bera/config";
 
+import { useParams, useRouter } from "next/navigation";
+import { useGovernance } from "~/app/governance/components/governance-provider";
+import { useEffect } from "react";
+import { useBeraJs } from "@bera/berajs";
 export default function NewProposal({
   genre,
 }: {
   genre: PROPOSAL_GENRE;
 }) {
-  const dapp = getDappByGenre(genre);
+  // const dapp = getDappByGenre(genre);
+  const { account } = useBeraJs();
+  const params = useParams();
+  const { canPropose, openNotEnoughVotingPowerDialog } = useGovernance();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!canPropose && account) {
+      openNotEnoughVotingPowerDialog({
+        onClose: () => {
+          router.replace(`/governance/${params.genre}`);
+        },
+      });
+    } else {
+      openNotEnoughVotingPowerDialog({
+        isOpen: false,
+      });
+    }
+  }, [canPropose, account]);
 
   return (
     <div className="pb-16 col-span-12 xl:col-span-8 xl:col-start-3">
       <Link
-        href="/governance"
+        href={`/governance/${params.genre}`}
         className="flex mb-8 items-center gap-1 text-sm font-medium text-muted-foreground"
       >
-        <Icons.arrowLeft className="h-4 w-4" /> All Proposals
+        <Icons.arrowLeft className="h-4 w-4" />
+        All Proposals
       </Link>
 
       <div className="mb-9">
