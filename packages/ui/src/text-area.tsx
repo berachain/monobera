@@ -5,7 +5,7 @@ import { cn } from "./utils/cn";
 export type TextAreaProps =
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
     label?: string;
-    error?: string | boolean;
+    error?: string | null;
     variant?: "black" | "muted";
   };
 
