@@ -22,10 +22,12 @@ export default function NewProposal({
   // const dapp = getDappByGenre(genre);
   const { account } = useBeraJs();
   const params = useParams();
-  const { canPropose, openNotEnoughVotingPowerDialog } = useGovernance();
+  const { canPropose, isLoading, openNotEnoughVotingPowerDialog } =
+    useGovernance();
   const router = useRouter();
 
   useEffect(() => {
+    if (isLoading) return;
     if (!canPropose && account) {
       openNotEnoughVotingPowerDialog({
         onClose: () => {
@@ -37,7 +39,7 @@ export default function NewProposal({
         isOpen: false,
       });
     }
-  }, [canPropose, account]);
+  }, [canPropose, account, isLoading]);
 
   return (
     <div className="pb-16 col-span-12 xl:col-span-8 xl:col-start-3">
