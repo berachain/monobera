@@ -90,7 +90,11 @@ export const CreateProposalAction = ({
         />
       )}
       {action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE && (
-        <UpdateFriendsOfChef action={action} setAction={setAction} />
+        <UpdateFriendsOfChef
+          errors={errors}
+          action={action}
+          setAction={setAction}
+        />
       )}
       {action.type === ProposalTypeEnum.ERC20_TRANSFER && (
         <Erc20Transfer

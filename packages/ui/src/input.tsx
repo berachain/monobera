@@ -22,7 +22,7 @@ export interface CustomInputProps extends InputProps {
 
 const InputWithLabel = React.forwardRef<
   HTMLInputElement,
-  CustomInputProps & { label?: string; error?: string | boolean }
+  CustomInputProps & { label?: string; error?: string | null }
 >(({ label, error, ...props }, ref) => {
   return (
     <div className="grid grid-cols-1 gap-y-2">

@@ -1,10 +1,10 @@
 export const FormError = ({
   children: error,
-}: { children: string | boolean | undefined }) => {
+}: { children: string | null | undefined }) => {
   if (!error) return null;
 
   return (
-    <div className="text-sm text-destructive-foreground leading-tight">
+    <div className="text-sm text-destructive-foreground font-semibold capitalize leading-tight">
       {error}
     </div>
   );

@@ -4,8 +4,15 @@ import { Icons } from "@bera/ui/icons";
 import { Input, InputWithLabel } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
-import { CustomProposal, CustomProposalErrors } from "~/app/governance/types";
-import { type useCreateProposal } from "~/hooks/useCreateProposal";
+import {
+  CustomProposal,
+  CustomProposalErrors,
+  ProposalErrorCodes,
+} from "~/app/governance/types";
+import {
+  checkProposalField,
+  type useCreateProposal,
+} from "~/hooks/useCreateProposal";
 
 export const CreateProposalBody = ({
   proposal,
@@ -22,17 +29,10 @@ export const CreateProposalBody = ({
 }) => {
   const handleNext = useCallback(() => {
     const e: CustomProposalErrors = {};
-    if (proposal.title.length === 0) {
-      e.title = "Title is required";
-    }
 
-    if (proposal.description.length === 0) {
-      e.description = "Description is required";
-    }
-
-    if (proposal.forumLink.length === 0) {
-      e.forumLink = "Forum link is required";
-    }
+    e.title = checkProposalField("title", proposal.title);
+    e.description = checkProposalField("description", proposal.description);
+    e.forumLink = checkProposalField("forumLink", proposal.forumLink);
 
     setErrors(e);
 
@@ -47,7 +47,11 @@ export const CreateProposalBody = ({
     <div className="grid grid-cols-1 justify-start gap-6">
       <InputWithLabel
         label="Title"
-        error={errors.title}
+        error={
+          errors.title === ProposalErrorCodes.REQUIRED
+            ? "Title must be filled"
+            : errors.title
+        }
         variant="black"
         type="text"
         id="proposal-title"
@@ -64,7 +68,11 @@ export const CreateProposalBody = ({
       <TextArea
         id="proposal-message"
         label="Description"
-        error={errors.description}
+        error={
+          errors.description === ProposalErrorCodes.REQUIRED
+            ? "Description must be filled"
+            : errors.description
+        }
         variant="black"
         placeholder="Tell us about your proposal"
         value={proposal.description}
@@ -78,7 +86,15 @@ export const CreateProposalBody = ({
 
       <InputWithLabel
         label="Forum Link"
-        error={errors.forumLink}
+        error={
+          errors.forumLink === ProposalErrorCodes.REQUIRED
+            ? "Forum link must be filled"
+            : errors.forumLink === ProposalErrorCodes.INVALID_ADDRESS
+              ? "Invalid URL"
+              : errors.forumLink === ProposalErrorCodes.MUST_BE_HTTPS
+                ? "Forum link must start with HTTPS"
+                : errors.forumLink
+        }
         type="text"
         variant="black"
         id="proposal-forumLink"
@@ -92,7 +108,7 @@ export const CreateProposalBody = ({
         }
       />
 
-      <div className="flex  justify-end">
+      <div className="flex justify-end">
         <Button onClick={handleNext}>Next</Button>
       </div>
     </div>

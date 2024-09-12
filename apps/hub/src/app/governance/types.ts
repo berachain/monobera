@@ -54,22 +54,21 @@ export type VOTE_TYPE = "yes" | "no" | "abstain";
 export type ALL = "all";
 
 export type CustomProposalActionErrors = {
-  type?: false | string;
-  target?: false | string;
-  ABI?: false | string;
-  functionSignature?: false | string;
-  calldata?: (false | string)[];
-  gauge?: false | string;
-  receiptToken?: false | string;
-  isFriend?: false | string;
-  to?: false | string;
-  amount?: false | string;
+  type?: null | ProposalErrorCodes;
+  target?: null | ProposalErrorCodes;
+  ABI?: null | ProposalErrorCodes;
+  functionSignature?: null | ProposalErrorCodes;
+  calldata?: (null | ProposalErrorCodes)[];
+  vault?: null | ProposalErrorCodes;
+  isFriend?: null | ProposalErrorCodes;
+  to?: null | ProposalErrorCodes;
+  amount?: null | ProposalErrorCodes;
 };
 
 export type CustomProposalErrors = {
-  title?: false | string;
-  description?: false | string;
-  forumLink?: false | string;
+  title?: null | ProposalErrorCodes;
+  description?: null | ProposalErrorCodes;
+  forumLink?: null | ProposalErrorCodes;
   actions?: CustomProposalActionErrors[];
 };
 
@@ -77,6 +76,15 @@ export enum ProposalTypeEnum {
   CUSTOM_PROPOSAL = "custom-proposal",
   UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
   ERC20_TRANSFER = "erc20-transfer",
+}
+export enum ProposalErrorCodes {
+  REQUIRED = "Required",
+  INVALID_AMOUNT = "Invalid amount",
+  NEGATIVE_AMOUNT = "Negative amount",
+  INVALID_ADDRESS = "Invalid address",
+  INVALID_ACTION = "Invalid action",
+  INVALID_ABI = "Invalid ABI",
+  MUST_BE_HTTPS = "Must be https",
 }
 
 export type CustomProposal = {
