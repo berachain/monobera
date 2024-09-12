@@ -1,10 +1,6 @@
 import { useCallback, useReducer } from "react";
 import { createWalletClient, custom, http } from "viem";
-import {
-  useAccount,
-  usePublicClient,
-  useWriteContract,
-} from "wagmi";
+import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage, getRevertReason } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -15,6 +11,12 @@ import {
   type IUseContractWriteArgs,
   type useContractWriteApi,
 } from "./types";
+
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
 
 const increaseByPercentage = (value: bigint, percentage: number) => {
   return value + (value * BigInt(percentage)) / BigInt(100);
@@ -32,8 +34,7 @@ const useBeraContractWrite = ({
   const publicClient = usePublicClient();
   const { chain } = useAccount();
   const walletClient = createWalletClient({
-    chain: chain,
-    //@ts-ignore
+    chain,
     transport: custom(window.ethereum),
   });
   const { account, config } = useBeraJs();
