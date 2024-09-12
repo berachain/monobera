@@ -45,7 +45,7 @@ export const Dropdown = ({
       {...props}
       className={cn(
         "w-fit flex-shrink-0",
-        disabled && "text-muted cursor-not-allowed pointer-events-none",
+        disabled && "cursor-not-allowed pointer-events-none opacity-50",
         className,
       )}
     >
