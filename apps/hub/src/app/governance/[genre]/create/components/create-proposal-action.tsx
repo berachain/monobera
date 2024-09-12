@@ -10,6 +10,7 @@ import {
 import { UpdateFriendsOfChef } from "./update-friends-of-chef";
 import { CustomAction } from "./custom-action";
 import { usePrevious } from "@bera/berajs";
+import { Erc20Transfer } from "./erc20-transfer";
 
 export const CreateProposalAction = ({
   action,
@@ -27,11 +28,13 @@ export const CreateProposalAction = ({
   setAction: Dispatch<SetStateAction<ProposalAction>>;
 }) => {
   const prevAction = usePrevious(action);
+
   useEffect(() => {
     if (action.type !== prevAction?.type) {
       setAction({ type: action.type, calldata: [], target: "" });
     }
   }, [action, prevAction]);
+
   return (
     <div className="grid grid-cols-1 gap-y-6 pb-6 mb-6 border-border border-b">
       <div className="flex flex-col gap-2">
@@ -63,6 +66,10 @@ export const CreateProposalAction = ({
               value: ProposalTypeEnum.UPDATE_REWARDS_GAUGE,
               label: "Update Rewards Gauge",
             },
+            {
+              value: ProposalTypeEnum.ERC20_TRANSFER,
+              label: "Transfer ERC20 Tokens",
+            },
           ]}
           selected={action.type}
           onSelect={(v) =>
@@ -84,6 +91,15 @@ export const CreateProposalAction = ({
       )}
       {action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE && (
         <UpdateFriendsOfChef action={action} setAction={setAction} />
+      )}
+      {action.type === ProposalTypeEnum.ERC20_TRANSFER && (
+        <Erc20Transfer
+          idx={idx}
+          action={action}
+          setAction={setAction}
+          errors={errors}
+          setErrors={setErrors}
+        />
       )}
     </div>
   );

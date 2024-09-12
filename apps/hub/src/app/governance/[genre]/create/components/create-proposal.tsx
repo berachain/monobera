@@ -28,7 +28,7 @@ export const CreateProposal = ({
     removeProposalAction,
     submitProposal,
   } = useCreateProposal(governorAddress);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: false,
     description: false,
@@ -92,6 +92,8 @@ export const CreateProposal = ({
   const handleSubmitProposal = useCallback(() => {
     const e: CustomProposalErrors = getBodyErrors();
 
+    console.log("Submittin proposal");
+
     e.actions = proposal.actions
       .map((action, idx): CustomProposalActionErrors => {
         const errors: CustomProposalActionErrors = {};
@@ -121,10 +123,23 @@ export const CreateProposal = ({
             }
           }
         } else if (action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE) {
-          const errors: CustomProposalActionErrors = {};
-
           if (!action.vault) {
             errors.receiptToken = "Required";
+          }
+        } else if (action.type === ProposalTypeEnum.ERC20_TRANSFER) {
+          if (!action.amount || action.amount === "0") {
+            errors.amount = "An amount is required";
+          }
+
+          if (!action.to) {
+            errors.to = "Required";
+          } else if (!isAddress(action.to, { strict: true })) {
+            errors.to = "Invalid recipient address";
+          }
+          if (!action.target) {
+            errors.target = "A token is required";
+          } else if (!isAddress(action.target, { strict: true })) {
+            errors.target = "Invalid token address";
           }
         }
         return errors;
@@ -132,6 +147,8 @@ export const CreateProposal = ({
       .filter((e) => Object.values(e).some((v) => v));
 
     setErrors(e);
+
+    console.log(e);
 
     if (
       Object.getOwnPropertyNames(e)

@@ -62,6 +62,8 @@ export type CustomProposalActionErrors = {
   gauge?: false | string;
   receiptToken?: false | string;
   isFriend?: false | string;
+  to?: false | string;
+  amount?: false | string;
 };
 
 export type CustomProposalErrors = {
@@ -84,20 +86,26 @@ export type CustomProposal = {
   forumLink: string;
 };
 
-export type SafeProposalAction =
+export type SafeProposalAction = {
+  target: "" | Address;
+} & (
   | {
       type: ProposalTypeEnum.CUSTOM_PROPOSAL;
-      target: "" | Address;
       ABI: string;
       functionSignature: string;
       calldata: string[];
     }
   | {
       type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE;
-      target: "" | Address;
       vault: Address;
       isFriend: boolean;
-    };
+    }
+  | {
+      type: ProposalTypeEnum.ERC20_TRANSFER;
+      to: Address;
+      amount: string;
+    }
+);
 
 export type ProposalAction = Partial<SafeProposalAction> & {
   type: SafeProposalAction["type"];

@@ -6,7 +6,7 @@ import {
   TransactionActionType,
 } from "@bera/berajs";
 import { useTxn } from "@bera/shared-ui";
-import { Address, encodeFunctionData, parseAbiItem } from "viem";
+import { Address, encodeFunctionData, erc20Abi, parseAbiItem } from "viem";
 import { useCallback, useState } from "react";
 import {
   CustomProposal,
@@ -82,10 +82,17 @@ export const useCreateProposal = (governorAddress: Address) => {
             // functionName: action.functionName,
             args: action.calldata,
           });
+        case ProposalTypeEnum.ERC20_TRANSFER:
+          if (!action.target || !action.amount || !action.to) {
+            throw new Error("Invalid action");
+          }
+          return encodeFunctionData({
+            abi: erc20Abi,
+            functionName: "transfer",
+            args: [action.to, BigInt(action.amount)],
+          });
       }
     });
-
-    console.log("submitting proposal", proposal, governorAddress);
 
     write({
       address: governorAddress,
