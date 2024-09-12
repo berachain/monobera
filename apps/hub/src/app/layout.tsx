@@ -3,15 +3,14 @@
 import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
-import { usePathname } from "next/navigation";
 import Script from "next/script";
 import { bgtName } from "@bera/config";
 import {
   Footer,
   Header,
+  MainWithBanners,
   TailwindIndicator,
   TermOfUseModal,
-  getBannerCount,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Analytics } from "@vercel/analytics/react";
@@ -27,9 +26,6 @@ const fontSans = IBM_Plex_Sans({
 });
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-  const pathName = usePathname();
-  const activeBanners = getBannerCount(bgtName, pathName);
-
   return (
     <html lang="en" className="bg-background">
       <Script
@@ -57,12 +53,14 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             </div>
             <div className="z-10 flex-1">
               <Header navItems={navItems} appName={bgtName} />
-              <main
-                className="w-full pt-start"
-                style={{ paddingTop: `${150 + 50 * activeBanners}px` }}
+              <MainWithBanners
+                className="pt-start"
+                paddingTop={150}
+                multiplier={50}
+                appName={bgtName}
               >
                 {props.children}
-              </main>
+              </MainWithBanners>
             </div>
             <Footer />
           </div>
