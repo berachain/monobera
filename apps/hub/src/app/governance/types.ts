@@ -74,6 +74,7 @@ export type CustomProposalErrors = {
 export enum ProposalTypeEnum {
   CUSTOM_PROPOSAL = "custom-proposal",
   UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
+  ERC20_TRANSFER = "erc20-transfer",
 }
 
 export type CustomProposal = {
@@ -89,13 +90,12 @@ export type SafeProposalAction =
       target: "" | Address;
       ABI: string;
       functionSignature: string;
-      functionName: string;
       calldata: string[];
     }
   | {
       type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE;
       target: "" | Address;
-      receiptToken: Address;
+      vault: Address;
       isFriend: boolean;
     };
 

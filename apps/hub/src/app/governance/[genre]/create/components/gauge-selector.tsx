@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { truncateHash, useGaugesMetadata } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
+import { beraChefAddress, blockExplorerUrl } from "@bera/config";
 import { GetFriendsOfTheChef } from "@bera/graphql";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -38,12 +38,12 @@ export const GaugeSelector = ({
     );
   }, [keyword, friendsData]);
 
-  const selectedGaugeMetadata = gauge?.target
-    ? gaugesMetadata?.[getAddress(gauge?.target.toLowerCase())]
+  const selectedGaugeMetadata = gauge?.vault
+    ? gaugesMetadata?.[getAddress(gauge?.vault.toLowerCase())]
     : undefined;
 
   const selectedGraphVault = Vaults.find(
-    (vault: any) => vault.id === gauge?.target?.toLowerCase(),
+    (vault: any) => vault.id === gauge?.vault?.toLowerCase(),
   );
 
   return (
@@ -54,20 +54,20 @@ export const GaugeSelector = ({
         ) : (
           <DialogTrigger asChild>
             <div className="rounded-md border border-border p-3 hover:bg-muted">
-              {gauge?.target && gauge.receiptToken ? (
+              {gauge?.vault && gauge.vault ? (
                 <div>
                   <div className="flex gap-2 text-sm font-semibold">
                     <GaugeIcon
-                      address={gauge.target}
+                      address={gauge.vault}
                       overrideImage={selectedGaugeMetadata?.logoURI}
                     />
                     <Link
-                      href={`${blockExplorerUrl}/address/${gauge.target}`}
+                      href={`${blockExplorerUrl}/address/${gauge.vault}`}
                       className="underline"
                       target="_blank"
                     >
                       {selectedGaugeMetadata?.name ??
-                        truncateHash(gauge?.target ?? "0x")}
+                        truncateHash(gauge?.vault ?? "0x")}
                     </Link>
                     <span
                       className={cn(
@@ -88,7 +88,7 @@ export const GaugeSelector = ({
                       className="text-foreground underline"
                       target="_blank"
                     >
-                      {truncateHash(gauge.receiptToken)}
+                      {truncateHash(gauge.vault)}
                     </Link>
                   </div>
                 </div>
@@ -124,15 +124,15 @@ export const GaugeSelector = ({
                   if (!queriedGauge) {
                     setGauge((g) => ({
                       ...g,
-                      target: vault.id,
-                      receiptToken: vault.stakingToken.id,
+                      target: beraChefAddress,
+                      vault: vault.id,
                       isFriend: false,
                     }));
                   } else {
                     setGauge((g) => ({
                       ...g,
-                      target: queriedGauge.id,
-                      receiptToken: vault.stakingToken.id,
+                      target: beraChefAddress,
+                      vault: vault.id,
                       isFriend: queriedGauge.isFriend,
                     }));
                   }

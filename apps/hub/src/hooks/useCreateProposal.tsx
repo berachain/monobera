@@ -8,18 +8,20 @@ import {
 import { useTxn } from "@bera/shared-ui";
 import { Address, encodeFunctionData, parseAbiItem } from "viem";
 import { useCallback, useState } from "react";
-import { CustomProposal, ProposalTypeEnum } from "~/app/governance/types";
+import {
+  CustomProposal,
+  ProposalAction,
+  ProposalTypeEnum,
+  SafeProposalAction,
+} from "~/app/governance/types";
 
 const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
-  target: undefined,
-  ABI: undefined,
-  functionName: "",
+  target: "",
+  ABI: "",
+  functionSignature: "",
   calldata: [],
-  gauge: undefined,
-  receiptToken: undefined,
-  isFriend: true,
-};
+} satisfies SafeProposalAction;
 export const useCreateProposal = (governorAddress: Address) => {
   const [proposal, setProposal] = useState<CustomProposal>({
     title: "",
@@ -57,7 +59,7 @@ export const useCreateProposal = (governorAddress: Address) => {
         case ProposalTypeEnum.UPDATE_REWARDS_GAUGE:
           if (
             !action.target ||
-            !action.receiptToken ||
+            !action.vault ||
             action.isFriend === undefined
           ) {
             throw new Error("Invalid action");
@@ -65,7 +67,7 @@ export const useCreateProposal = (governorAddress: Address) => {
           return encodeFunctionData({
             abi: BERA_CHEF_ABI,
             functionName: "updateFriendsOfTheChef",
-            args: [action.receiptToken, action.isFriend],
+            args: [action.vault, action.isFriend],
           });
 
         case ProposalTypeEnum.CUSTOM_PROPOSAL:
