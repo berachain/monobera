@@ -2,13 +2,14 @@ import useSWR from "swr";
 import { Address, formatEther } from "viem";
 import { usePublicClient } from "wagmi";
 import { GOVERNANCE_ABI } from "~/abi";
+import POLLING from "~/enum/polling";
 import { DefaultHookReturnType } from "~/types";
 
 export const usePollProposalThreshold = (
   governorAddress: Address,
 ): DefaultHookReturnType<{ votesThreshold: string }> => {
   const publicClient = usePublicClient();
-  const QUERY_KEY = ["usePollProposalThreshold"];
+  const QUERY_KEY = ["usePollProposalThreshold", governorAddress];
   const swrResponse = useSWR<{ votesThreshold: string }, any, typeof QUERY_KEY>(
     QUERY_KEY,
     async () => {
@@ -21,6 +22,9 @@ export const usePollProposalThreshold = (
         functionName: "proposalThreshold",
       });
       return { votesThreshold: formatEther(votesThreshold) };
+    },
+    {
+      refreshInterval: POLLING.SLOW,
     },
   );
 
