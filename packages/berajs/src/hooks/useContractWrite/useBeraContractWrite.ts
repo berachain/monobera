@@ -36,7 +36,7 @@ const useBeraContractWrite = ({
   const { chain } = useAccount();
   const walletClient = createWalletClient({
     chain,
-    transport: custom(window.ethereum),
+    transport: custom(window?.ethereum),
   });
   const { account, config } = useBeraJs();
 
@@ -67,7 +67,7 @@ const useBeraContractWrite = ({
           value: value,
           account: account,
         });
-        if (window.bnVersion) {
+        if (window?.bnVersion) {
           receipt = await walletClient.writeContract({
             ...request,
             gas: gasLimit ?? request.gas,
