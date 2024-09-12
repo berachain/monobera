@@ -11,6 +11,7 @@ type GovernanceContextType = {
   canPropose: boolean;
   votesThreshold?: string;
   currentVotes?: string;
+  isLoading: boolean;
   openNotEnoughVotingPowerDialog: (args?: {
     onClose?: () => void;
     isOpen?: boolean;
@@ -44,10 +45,9 @@ const _GovernanceProvider = ({ children }: { children: React.ReactNode }) => {
     onClose: () => {},
   });
 
-  const { data: voteData } = usePollUserDelegates();
-  const { data: votesThresholdData } = usePollProposalThreshold(
-    governorAddress!,
-  );
+  const { data: voteData, isLoading: isLoadingVotes } = usePollUserDelegates();
+  const { data: votesThresholdData, isLoading: isLoadingVotesThreshold } =
+    usePollProposalThreshold(governorAddress!);
 
   return (
     <GovernanceContext.Provider
@@ -59,6 +59,7 @@ const _GovernanceProvider = ({ children }: { children: React.ReactNode }) => {
           } = {}) => {
             setIsDialogOpen((prev) => ({ ...prev, isOpen, onClose }));
           },
+          isLoading: isLoadingVotes || isLoadingVotesThreshold,
           canPropose:
             !!voteData &&
             !!votesThresholdData &&
