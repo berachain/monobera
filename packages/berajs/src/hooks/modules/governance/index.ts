@@ -1,3 +1,4 @@
-export { usePollAllProposals } from "./usePollAllProposals";
-export { usePollProposal } from "./usePollProposal";
-export { usePollUserDelegates } from "./usePollUserDelegates";
+export * from "./usePollAllProposals";
+export * from "./usePollProposal";
+export * from "./usePollUserDelegates";
+export * from "./usePollProposalThreshold";

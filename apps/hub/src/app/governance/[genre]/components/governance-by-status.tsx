@@ -3,13 +3,21 @@ import Link from "next/link";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
+import { Address } from "viem";
 import { Dapp } from "../../governance-genre-helper";
 import { ProposalsList } from "./proposals-list";
 import { UserVotingPower } from "./user-voting-power";
+import { GoToIfHasVotingPower } from "./go-to-if-has-voting-power";
 
-export default function GovernanceByStatus({ dapp }: { dapp: Dapp }) {
+export default function GovernanceByStatus({
+  dapp,
+  governorAddress,
+}: {
+  dapp: Dapp;
+  governorAddress: Address;
+}) {
   return (
-    <div>
+    <div className="pb-32">
       <Link
         href={"/governance"}
         className="mb-8 flex cursor-pointer gap-2 font-semibold"
@@ -27,11 +35,14 @@ export default function GovernanceByStatus({ dapp }: { dapp: Dapp }) {
         Vote on proposals <br />
         or create your own
       </div>
-      <div className="mx-auto my-8 flex w-[165px] flex-col gap-3 sm:w-full sm:flex-row">
-        <Link href={`/governance/${dapp.link}/create`}>
-          <Button>Create proposal</Button>
-        </Link>
-        <Button variant="secondary">Visit forums</Button>
+      <div className="mx-auto my-8 flex   flex-col gap-3 sm:w-full sm:flex-row">
+        <GoToIfHasVotingPower
+          href={`/governance/${dapp.link}/create`}
+          governorAddress={governorAddress}
+        />
+        <Button variant="secondary" className="w-fit">
+          Visit forums
+        </Button>
       </div>
 
       <div className="flex flex-col-reverse gap-4 pt-10 lg:flex-row">

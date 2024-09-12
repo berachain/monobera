@@ -51,7 +51,8 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       >
         <TermOfUseModal />
         <Providers>
-          <div className="relative flex min-h-screen w-full flex-col overflow-hidden">
+          {/* Note: This div previously had overflow-hidden, but it was removed as it interferes with sticky elements */}
+          <div className="relative flex min-h-screen w-full flex-col ">
             <div className="z-[100]">
               <Toaster position="bottom-right" />
             </div>

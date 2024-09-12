@@ -19,11 +19,6 @@ export enum OrderByEnum {
   LOWEST_PARTICIPATION = "lowest-participation",
 }
 
-export enum ProposalTypeEnum {
-  CUSTOM_PROPOSAL = "custom-proposal",
-  UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
-}
-
 export type ProposalVotes = {
   yes: number;
   no: number;
@@ -58,17 +53,52 @@ export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";
 
+export type CustomProposalActionErrors = {
+  type?: false | string;
+  target?: false | string;
+  ABI?: false | string;
+  functionSignature?: false | string;
+  calldata?: (false | string)[];
+  gauge?: false | string;
+  receiptToken?: false | string;
+  isFriend?: false | string;
+};
+
+export type CustomProposalErrors = {
+  title?: false | string;
+  description?: false | string;
+  forumLink?: false | string;
+  actions?: CustomProposalActionErrors[];
+};
+
+export enum ProposalTypeEnum {
+  CUSTOM_PROPOSAL = "custom-proposal",
+  UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
+  ERC20_TRANSFER = "erc20-transfer",
+}
+
 export type CustomProposal = {
   title: string;
   description: any;
-  proposalType: ProposalTypeEnum;
-  actions: PropoalAction[];
+  actions: ProposalAction[];
   forumLink: string;
 };
 
-export type PropoalAction = {
-  target: Address;
-  ABI: JSON;
-  functionName: string;
-  calldata: { params: string; type: string; value: any }[];
+export type SafeProposalAction =
+  | {
+      type: ProposalTypeEnum.CUSTOM_PROPOSAL;
+      target: "" | Address;
+      ABI: string;
+      functionSignature: string;
+      calldata: string[];
+    }
+  | {
+      type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE;
+      target: "" | Address;
+      vault: Address;
+      isFriend: boolean;
+    };
+
+export type ProposalAction = Partial<SafeProposalAction> & {
+  type: SafeProposalAction["type"];
 };

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Icons } from "@bera/ui/icons";
 
 import {
@@ -9,30 +8,59 @@ import {
   getDappByGenre,
 } from "../../../governance-genre-helper";
 import { CreateProposal } from "./create-proposal";
+import { governorAddress } from "@bera/config";
 
-export default function NewProposal() {
-  const pathname = usePathname().split("/")[2];
-  const dapp = getDappByGenre(pathname as PROPOSAL_GENRE);
+import { useParams, useRouter } from "next/navigation";
+import { useGovernance } from "~/app/governance/components/governance-provider";
+import { useEffect } from "react";
+import { useBeraJs } from "@bera/berajs";
+export default function NewProposal({
+  genre,
+}: {
+  genre: PROPOSAL_GENRE;
+}) {
+  // const dapp = getDappByGenre(genre);
+  const { account } = useBeraJs();
+  const params = useParams();
+  const { canPropose, isLoading, openNotEnoughVotingPowerDialog } =
+    useGovernance();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (!canPropose && account) {
+      openNotEnoughVotingPowerDialog({
+        onClose: () => {
+          router.replace(`/governance/${params.genre}`);
+        },
+      });
+    } else {
+      openNotEnoughVotingPowerDialog({
+        isOpen: false,
+      });
+    }
+  }, [canPropose, account, isLoading]);
 
   return (
-    <div className="flex flex-col gap-8 pb-16">
+    <div className="pb-16 col-span-12 xl:col-span-8 xl:col-start-3">
       <Link
-        href="/governance"
-        className="flex items-center gap-1 text-sm font-medium text-muted-foreground"
+        href={`/governance/${params.genre}`}
+        className="flex mb-8 items-center gap-1 text-sm font-medium text-muted-foreground"
       >
-        <Icons.arrowLeft className="h-4 w-4" /> All Proposals
+        <Icons.arrowLeft className="h-4 w-4" />
+        All Proposals
       </Link>
 
-      <div>
+      <div className="mb-9">
         <div className="font-bold leading-6 tracking-widest text-muted-foreground">
-          <span style={{ color: dapp?.color }}>{dapp?.name}</span> GOVERNANCE
+          GOVERNANCE
         </div>
         <div className="relative text-3xl font-semibold leading-9 text-foreground">
           Create New Proposal
         </div>
       </div>
 
-      <CreateProposal />
+      <CreateProposal governorAddress={governorAddress} />
     </div>
   );
 }
