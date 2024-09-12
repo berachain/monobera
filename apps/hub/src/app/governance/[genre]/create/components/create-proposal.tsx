@@ -153,22 +153,24 @@ export const CreateProposal = ({
   // this could be a form but we should handle connect modal on submit
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div className="sticky top-[73px] max-md:py-4 max-md:-my-4 px-4 -mx-4 max-md:border-b border-border z-10 bg-background">
-        <Tabs
-          activeTab={activeTab}
-          tabs={[
-            { title: "Proposal Content", onClick: () => setActiveTab(0) },
-            {
-              title: "Code Action",
-              onClick: leaveBodyTab,
-              disabled: !!(
-                errors.title ||
-                errors.description ||
-                errors.forumLink
-              ),
-            },
-          ]}
-        />
+      <div className="">
+        <div className="sticky top-[73px] py-4 -my-4 px-4 -mx-4 max-md:border-b border-border z-10 bg-background">
+          <Tabs
+            activeTab={activeTab}
+            tabs={[
+              { title: "Proposal Content", onClick: () => setActiveTab(0) },
+              {
+                title: "Code Actions",
+                onClick: leaveBodyTab,
+                disabled: !!(
+                  errors.title ||
+                  errors.description ||
+                  errors.forumLink
+                ),
+              },
+            ]}
+          />
+        </div>
       </div>
       <div className="md:col-span-3">
         {activeTab === 0 && (
