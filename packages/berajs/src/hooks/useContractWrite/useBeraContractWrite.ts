@@ -1,5 +1,6 @@
 import { useCallback, useReducer } from "react";
-import { usePublicClient, useWriteContract } from "wagmi";
+import { createWalletClient, custom, http } from "viem";
+import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 
 import { getErrorMessage, getRevertReason } from "~/utils/errorMessages";
 import { ActionEnum, initialState, reducer } from "~/utils/stateReducer";
@@ -10,6 +11,13 @@ import {
   type IUseContractWriteArgs,
   type useContractWriteApi,
 } from "./types";
+
+declare global {
+  interface Window {
+    ethereum: any;
+    bnVersion?: any;
+  }
+}
 
 const increaseByPercentage = (value: bigint, percentage: number) => {
   return value + (value * BigInt(percentage)) / BigInt(100);
@@ -25,6 +33,11 @@ const useBeraContractWrite = ({
 
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
+  const { chain } = useAccount();
+  const walletClient = createWalletClient({
+    chain,
+    transport: custom(window.ethereum),
+  });
   const { account, config } = useBeraJs();
 
   const { refresh } = usePollTransactionCount({
@@ -54,10 +67,17 @@ const useBeraContractWrite = ({
           value: value,
           account: account,
         });
-        receipt = await writeContractAsync({
-          ...request,
-          gas: gasLimit ?? request.gas,
-        });
+        if (window.bnVersion) {
+          receipt = await walletClient.writeContract({
+            ...request,
+            gas: gasLimit ?? request.gas,
+          });
+        } else {
+          receipt = await writeContractAsync({
+            ...request,
+            gas: gasLimit ?? request.gas,
+          });
+        }
         dispatch({ type: ActionEnum.SUBMITTING });
         if (receipt) {
           onSubmission?.(receipt);

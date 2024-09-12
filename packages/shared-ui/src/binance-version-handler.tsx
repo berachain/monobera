@@ -25,18 +25,21 @@ function compareVersions(
   return false;
 }
 
+declare global {
+  interface Window {
+    bnVersion?: any;
+  }
+}
+
 export const BinanceVersionHandler = () => {
   const [version, setVersion] = useState<string | undefined>(undefined);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    //@ts-ignore
     if (window?.bnVersion) {
-      //@ts-ignore
       setVersion(String(window.bnVersion));
       if (
         compareVersions(
-          //@ts-ignore
           String(window.bnVersion),
           process.env.NEXT_PUBLIC_BINANCE_VERSION || "0",
         )
