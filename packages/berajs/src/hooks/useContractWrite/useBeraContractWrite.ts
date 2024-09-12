@@ -15,6 +15,7 @@ import {
 declare global {
   interface Window {
     ethereum: any;
+    bnVersion?: any;
   }
 }
 
@@ -66,10 +67,17 @@ const useBeraContractWrite = ({
           value: value,
           account: account,
         });
-        receipt = await walletClient.writeContract({
-          ...request,
-          gas: gasLimit ?? request.gas,
-        });
+        if (window.bnVersion) {
+          receipt = await walletClient.writeContract({
+            ...request,
+            gas: gasLimit ?? request.gas,
+          });
+        } else {
+          receipt = await writeContractAsync({
+            ...request,
+            gas: gasLimit ?? request.gas,
+          });
+        }
         dispatch({ type: ActionEnum.SUBMITTING });
         if (receipt) {
           onSubmission?.(receipt);
