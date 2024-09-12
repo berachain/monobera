@@ -66,7 +66,10 @@ export const CreateProposalAction = ({
           ]}
           selected={action.type}
           onSelect={(v) =>
-            setAction((a) => ({ ...a, type: v as ProposalTypeEnum }))
+            setAction((a) => ({
+              ...a,
+              type: v as ProposalTypeEnum.CUSTOM_PROPOSAL,
+            }))
           }
         />
       </div>

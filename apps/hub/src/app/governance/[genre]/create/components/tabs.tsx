@@ -1,5 +1,5 @@
 import { cn } from "@bera/ui";
-import { MouseEventHandler } from "react";
+import { Fragment, MouseEventHandler } from "react";
 
 export const Tabs = ({
   activeTab,
@@ -16,7 +16,7 @@ export const Tabs = ({
   return (
     <div className="">
       {tabs.map((tab, idx) => (
-        <>
+        <Fragment key={idx}>
           <button
             key={idx}
             role="tab"
@@ -37,7 +37,7 @@ export const Tabs = ({
           {idx !== tabs.length - 1 && (
             <div className=" ml-1 h-4 border-r w-0.5 border-border" />
           )}
-        </>
+        </Fragment>
       ))}
     </div>
   );

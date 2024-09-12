@@ -123,7 +123,7 @@ export const CreateProposal = ({
         } else if (action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE) {
           const errors: CustomProposalActionErrors = {};
 
-          if (!action.receiptToken) {
+          if (!action.vault) {
             errors.receiptToken = "Required";
           }
         }
