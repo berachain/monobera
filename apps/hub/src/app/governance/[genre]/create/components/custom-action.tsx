@@ -155,7 +155,7 @@ export function CustomAction({
       <div
         className={cn(
           "flex flex-col gap-2",
-          contractSelectors.length || "opacity-50 pointer-events-none",
+          contractSelectors.length || "opacity-30 pointer-events-none",
         )}
       >
         <div

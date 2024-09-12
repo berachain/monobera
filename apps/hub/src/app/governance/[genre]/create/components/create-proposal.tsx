@@ -153,8 +153,10 @@ export const CreateProposal = ({
   // this could be a form but we should handle connect modal on submit
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <div className="">
-        <div className="sticky top-[73px] py-4 -my-4 px-4 -mx-4 max-md:border-b border-border z-10 bg-background">
+      {/* this one for mobile sticky */}
+      <div className="sticky top-[73px] py-4 -my-4 px-4 -mx-4 max-md:border-b border-border z-10 bg-background">
+        {/* this one for desktop sticky */}
+        <div className="sticky top-[73px] py-4 -my-4 px-4 -mx-4 z-10 bg-background">
           <Tabs
             activeTab={activeTab}
             tabs={[
