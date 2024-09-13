@@ -37,7 +37,7 @@ const client = [
   "./src/slider.tsx",
   "./src/chart.tsx",
   "./src/recharts.tsx",
-  "./src/pagination.tsx"
+  "./src/pagination.tsx",
 ];
 
 const server = [
@@ -82,7 +82,6 @@ export default defineConfig((opts) => {
         ) as PackageJson;
         pkgJson.exports = {
           "./package.json": "./package.json",
-          "./styles.css": "./dist/index.css",
           ".": {
             import: "./dist/index.mjs",
             types: "./dist/index.d.ts",
