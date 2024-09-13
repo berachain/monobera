@@ -23,14 +23,22 @@ export const usePollBalance = ({
 }: {
   address: string | undefined;
   owner?: string | undefined;
-}) => {
+}): DefaultHookReturnType<BalanceToken | undefined> & {
+  /**
+   *
+   * @deprecated you can use data instead
+   */
+  useBalance: () => BalanceToken | undefined;
+} => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
   const assetOwner = owner ?? account;
 
   const QUERY_KEY =
     publicClient && address ? [assetOwner, address, "balance"] : null;
-  const { isLoading, data } = useSWR<BalanceToken | undefined>(
+
+  // TODO: it would be better if we used useSWRImmutable here for token info, and a dynamic query for balance
+  const { isLoading, data, ...rest } = useSWR<BalanceToken | undefined>(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
@@ -65,18 +73,19 @@ export const usePollBalance = ({
           const result = await publicClient.multicall({
             contracts: call,
             multicallAddress: multicallAddress,
+            allowFailure: false,
           });
 
           const balance: BalanceToken = {
-            balance: result[0]?.result as bigint,
+            balance: result[0] as bigint,
             formattedBalance: formatUnits(
-              result[0]?.result as bigint,
-              (result[3]?.result as number) ?? 18,
+              result[0] as bigint,
+              (result[3] as number) ?? 18,
             ),
             address: getAddress(address),
-            decimals: result[3]?.result as number,
-            symbol: result[1]?.result as string,
-            name: result[2]?.result as string,
+            decimals: result[3] as number,
+            symbol: result[1] as string,
+            name: result[2] as string,
           };
           return balance;
         }
@@ -107,9 +116,12 @@ export const usePollBalance = ({
     const { data = undefined } = useSWRImmutable<BalanceToken>(QUERY_KEY);
     return data;
   };
+
   return {
+    ...rest,
     isLoading,
     data,
+    refresh: () => rest.mutate(),
     useBalance,
   };
 };
