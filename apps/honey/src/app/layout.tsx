@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
-import { honeyName, honeyUrl } from "@bera/config";
+import { honeyName } from "@bera/config";
 import {
   Footer,
   Header,
@@ -14,7 +14,6 @@ import { Toaster } from "react-hot-toast";
 
 import { mobileNavItems, navItems } from "./config";
 import HoneyProviders from "~/components/honey-providers";
-import { Metadata } from "next";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -27,10 +26,6 @@ const fontHoney = Jua({
   variable: "--font-honey",
   subsets: ["latin"],
 });
-
-export const metadata: Metadata = {
-  metadataBase: new URL(honeyUrl),
-};
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
