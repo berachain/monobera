@@ -123,7 +123,7 @@ export default function Referrals() {
 
   const { isLoading, useGetReferralsDetails } = usePollReferralsDetails();
   const { isLoading: isReferralLoading, useGetTraderReferrer } =
-    usePollTraderReferral(account ?? "");
+    usePollTraderReferral(account);
 
   const traderReferrer = useGetTraderReferrer();
   const userReferralData = useGetReferralsDetails();
@@ -194,17 +194,10 @@ export default function Referrals() {
           >
             <div className="flex">
               {generated ? (
-                copied ? (
-                  <>
-                    <Icons.check className="mr-2 h-4 w-4 self-center" />
-                    Copied
-                  </>
-                ) : (
-                  <>
-                    <Icons.copy className="mr-2 h-4 w-4 self-center" />
-                    Copy
-                  </>
-                )
+                <>
+                  <Icons.check className="mr-2 h-4 w-4 self-center" />
+                  {copied ? "Copied" : "Copy"}
+                </>
               ) : (
                 <>
                   <Icons.link2 className="mr-2 h-4 w-4 self-center" />

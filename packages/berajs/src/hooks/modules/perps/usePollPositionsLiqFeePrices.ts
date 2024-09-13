@@ -21,7 +21,7 @@ export const usePollPositionsLiqFeePrices = (indices: number[]) => {
           address: perpsBorrowingContractAddress,
           abi: borrowingAbi,
           functionName: method,
-          args: [indices],
+          args: [indices.map((index) => BigInt(index))],
         });
         return result;
       } catch (e) {
