@@ -36,7 +36,7 @@ const useBeraContractWrite = ({
   const { chain } = useAccount();
   const walletClient = createWalletClient({
     chain,
-    transport: custom(window?.ethereum),
+    transport: custom(typeof window !== "undefined" && window.ethereum),
   });
   const { account, config } = useBeraJs();
 
