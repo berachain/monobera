@@ -37,14 +37,14 @@ export function MainNav({
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="flex w-[404px] flex-col gap-1 p-4">
-                      {item.children.map((component: any) => (
+                      {item.children.map((component: any, idx: number) => (
                         <NavListItem
                           onClick={() => {
                             track(
                               `Navbar - "${item.title}" > "${component.title}" Clicked`,
                             );
                           }}
-                          key={component.title}
+                          key={component.title + idx}
                           title={component.title}
                           href={component.href}
                           type={component.type}
