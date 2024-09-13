@@ -38,14 +38,14 @@ export function MobileDropdown({ navItems }: { navItems: any[] }) {
       </PopoverTrigger>
       <PopoverContent className="z-40 mt-2 h-[calc(100vh-4rem)] w-screen animate-none rounded-none border-none transition-transform">
         <ScrollArea className="h-full py-8">
-          {navItems.map(({ href, title, children }) => {
+          {navItems.map(({ href, title, children }, idx) => {
             if (href === "#" && children) {
               return (
-                <NavigationMenu key={href}>
+                <NavigationMenu key={idx}>
                   <ul className="flex w-full flex-col gap-1 p-4" key={href}>
-                    {children.map((component: any) => (
+                    {children.map((component: any, idx: number) => (
                       <NavListItem
-                        key={component.title}
+                        key={component.title + idx}
                         title={component.title}
                         href={component.href}
                         type={component.type}
@@ -60,7 +60,7 @@ export function MobileDropdown({ navItems }: { navItems: any[] }) {
             }
             return (
               <Link
-                key={href}
+                key={idx}
                 onClick={() => setIsOpen(false)}
                 href={{ pathname: href }}
                 className="flex p-4 font-medium text-foreground transition-colors hover:text-primary"
