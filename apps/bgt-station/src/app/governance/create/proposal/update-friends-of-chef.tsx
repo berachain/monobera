@@ -87,6 +87,7 @@ export const UpdateFriendsOfChef = ({
               <DropdownMenuSeparator />
               {Vaults.map((vault: any) => (
                 <Button
+                  key={vault.id}
                   variant="ghost"
                   className="w-full font-medium"
                   onClick={() => {

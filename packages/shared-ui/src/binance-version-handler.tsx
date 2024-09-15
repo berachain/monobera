@@ -36,7 +36,7 @@ export const BinanceVersionHandler = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (window?.bnVersion) {
+    if (typeof window !== "undefined" && window.bnVersion) {
       setVersion(String(window.bnVersion));
       if (
         compareVersions(

@@ -34,10 +34,12 @@ const useBeraContractWrite = ({
   const { writeContractAsync } = useWriteContract();
   const publicClient = usePublicClient();
   const { chain } = useAccount();
-  const walletClient = createWalletClient({
-    chain,
-    transport: custom(window.ethereum),
-  });
+  const walletClient =
+    typeof window !== "undefined" &&
+    createWalletClient({
+      chain,
+      transport: custom(window?.ethereum),
+    });
   const { account, config } = useBeraJs();
 
   const { refresh } = usePollTransactionCount({
@@ -56,7 +58,7 @@ const useBeraContractWrite = ({
       dispatch({ type: ActionEnum.LOADING });
       onLoading?.();
       let receipt: any | undefined;
-      if (!publicClient) return;
+      if (!publicClient || !walletClient) return;
       try {
         // TODO: figure out clean way to early detect errors and effectively show them on the UI
         const { request } = await publicClient.simulateContract({
@@ -67,7 +69,7 @@ const useBeraContractWrite = ({
           value: value,
           account: account,
         });
-        if (window.bnVersion) {
+        if (window?.bnVersion) {
           receipt = await walletClient.writeContract({
             ...request,
             gas: gasLimit ?? request.gas,
