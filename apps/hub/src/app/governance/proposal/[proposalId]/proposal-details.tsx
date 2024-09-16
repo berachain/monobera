@@ -26,7 +26,7 @@ export default function ProposalDetails({
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
-  const fm = parseProposalBody(proposal?.metadata.description ?? "");
+  const fm = parseProposalBody(proposal);
   return (
     <div className="pb-16">
       {isLoading || !proposal ? (

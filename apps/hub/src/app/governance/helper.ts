@@ -119,30 +119,46 @@ const parseLegacyBody = (
 };
 
 export const parseProposalBody = (
-  body: string,
+  proposal?: Proposal,
 ): graymatter.GrayMatterFile<string> & {
   isFrontMatter: boolean;
 } => {
+  if (!proposal) {
+    return {
+      isFrontMatter: false,
+      data: { title: "Loading..." },
+      content: "",
+      matter: "",
+      language: "",
+      orig: "",
+      stringify: () => "",
+    };
+  }
+
+  const body = proposal?.metadata?.description ?? "";
+
   if (graymatter.test(body)) {
     return { ...graymatter(body), isFrontMatter: true };
   }
 
   try {
-    const legalBody = parseLegacyBody(body);
+    const legacyBody = parseLegacyBody(body);
 
     return {
       isFrontMatter: false,
-      data: { title: legalBody.title },
-      content: legalBody.content,
+      data: { title: legacyBody.title },
+      content: legacyBody.content,
       matter: "",
       language: "",
       orig: body,
       stringify: () => body,
     };
   } catch (error) {
+    console.log("error", error, proposal);
+
     return {
       isFrontMatter: false,
-      data: {},
+      data: { title: `Suspicious proposal #${proposal.id}` },
       content: body,
       matter: "",
       language: "",
