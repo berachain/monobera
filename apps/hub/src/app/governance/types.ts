@@ -1,3 +1,6 @@
+import { Address } from "viem";
+import { PROPOSAL_GENRE } from "./governance-genre-helper";
+
 export enum StatusEnum {
   PENDING = "pending",
   QUEUED = "queued",
@@ -16,17 +19,6 @@ export enum OrderByEnum {
   HIGHEST_PARTICIPATION = "highest-participation",
   LOWEST_PARTICIPATION = "lowest-participation",
 }
-
-export enum ProposalTypeEnum {
-  TEXT_PROPOSAL = "text-proposal",
-  FRIENDS_OF_CHEF = "update-friends-of-chef",
-}
-
-export type ParameterChangeLine = {
-  subspace: string;
-  key: string;
-  value: string;
-};
 
 export type ProposalVotes = {
   yes: number;
@@ -62,12 +54,69 @@ export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";
 
-export type PROPOSAL_GENRE = "berahub" | "honey" | "bend" | "berps" | "general";
+export type CustomProposalActionErrors = {
+  type?: null | ProposalErrorCodes;
+  target?: null | ProposalErrorCodes;
+  ABI?: null | ProposalErrorCodes;
+  functionSignature?: null | ProposalErrorCodes;
+  calldata?: (null | ProposalErrorCodes)[];
+  vault?: null | ProposalErrorCodes;
+  isFriend?: null | ProposalErrorCodes;
+  to?: null | ProposalErrorCodes;
+  amount?: null | ProposalErrorCodes;
+};
 
-export const ProposalGenreColorMap = {
-  berahub: "#E6B434",
-  honey: "#EC8A19",
-  bend: "#7464E5",
-  berps: "#41D6E0",
-  general: "#2F2F2F",
+export type CustomProposalErrors = {
+  title?: null | ProposalErrorCodes;
+  description?: null | ProposalErrorCodes;
+  forumLink?: null | ProposalErrorCodes;
+  actions?: CustomProposalActionErrors[];
+};
+
+export enum ProposalTypeEnum {
+  CUSTOM_PROPOSAL = "custom-proposal",
+  UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
+  ERC20_TRANSFER = "erc20-transfer",
+}
+export enum ProposalErrorCodes {
+  REQUIRED = "Required",
+  INVALID_AMOUNT = "Invalid amount",
+  NEGATIVE_AMOUNT = "Negative amount",
+  INVALID_ADDRESS = "Invalid address",
+  INVALID_ACTION = "Invalid action",
+  INVALID_ABI = "Invalid ABI",
+  MUST_BE_HTTPS = "Must be https",
+}
+
+export type CustomProposal = {
+  title: string;
+  description: any;
+  actions: ProposalAction[];
+  forumLink: string;
+  topic: Set<PROPOSAL_GENRE>;
+};
+
+export type SafeProposalAction = {
+  target: "" | Address;
+} & (
+  | {
+      type: ProposalTypeEnum.CUSTOM_PROPOSAL;
+      ABI: string;
+      functionSignature: string;
+      calldata: string[];
+    }
+  | {
+      type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE;
+      vault: Address;
+      isFriend: boolean;
+    }
+  | {
+      type: ProposalTypeEnum.ERC20_TRANSFER;
+      to: Address;
+      amount: string;
+    }
+);
+
+export type ProposalAction = Partial<SafeProposalAction> & {
+  type: SafeProposalAction["type"];
 };

@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import React, { useMemo } from "react";
 import { Vote, useBeraJs, usePollProposal } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import { getTotalVotes, parseString } from "../../helper";
+import { getTotalVotes, parseProposalBody } from "../../helper";
 import { Actions } from "./Actions";
 import { Status } from "./Status";
 import "@bera/graphql";
@@ -15,6 +16,7 @@ import { ProposalCard } from "../../[genre]/components/proposal-card";
 import { VoteCard } from "../../[genre]/components/vote-card";
 import { OverviewChart } from "../../[genre]/components/overview-chart";
 import { VoterTable } from "../../[genre]/components/voter-table";
+import MarkdownRenderer from "./markdown-renderer";
 
 export default function ProposalDetails({
   proposalId,
@@ -25,7 +27,8 @@ export default function ProposalDetails({
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
-  const body = parseString(proposal?.metadata.description ?? "");
+  const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
+
   return (
     <div className="pb-16">
       {isLoading || !proposal ? (
@@ -78,14 +81,13 @@ export default function ProposalDetails({
 
             <TabsContent value="description">
               <div className="border border-border p-4 rounded-md">
-                <div dangerouslySetInnerHTML={{ __html: body.content }} />
+                <div>
+                  <MarkdownRenderer content={fm.content} />
+                </div>
               </div>
             </TabsContent>
             <TabsContent value="code">
-              <Actions
-                executableCalls={proposal.executableCalls}
-                type={parseString(proposal.metadata.description).type}
-              />
+              <Actions executableCalls={proposal.executableCalls} />
             </TabsContent>
           </Tabs>
 

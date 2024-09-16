@@ -14,43 +14,40 @@ export const usePollUserDelegates = (
   delegate: Address;
   currentVotes: string | undefined;
 }> => {
-  const { config: beraConfig, isReady, account } = useBeraJs();
+  const { isReady, account } = useBeraJs();
   const publicClient = usePublicClient();
-  const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = ["usePollUserDelegates", account];
-  const swrResponse = useSWR<any, any, typeof QUERY_KEY>(
+  const QUERY_KEY = isReady ? ["usePollUserDelegates", account] : null;
+
+  const swrResponse = useSWR<
+    { delegate: Address; currentVotes: string | undefined },
+    any,
+    typeof QUERY_KEY
+  >(
     QUERY_KEY,
     async () => {
-      if (
-        !isReady ||
-        !account ||
-        !publicClient ||
-        !config.contracts?.multicallAddress
-      ) {
-        return undefined;
+      if (!publicClient || !account) {
+        throw new Error("usePollUserDelegates needs publicClient and account");
       }
-      const calls = [
-        {
+
+      // use promise all to better catch errors and have type safety
+      const [delegate, currentVotes] = await Promise.all([
+        publicClient.readContract({
           address: governanceTokenAddress,
           abi: IVotes_ABI,
           functionName: "delegates",
           args: [account],
-        },
-        {
+        }),
+        publicClient.readContract({
           address: governanceTokenAddress,
           abi: IVotes_ABI,
           functionName: "getVotes",
           args: [account],
-        },
-      ];
-      const results = (await publicClient.multicall({
-        // @ts-ignore
-        contracts: calls,
-        multicallAddress: config.contracts.multicallAddress,
-      })) as { result: any }[];
+        }),
+      ]);
+
       return {
-        delegate: results[0].result,
-        currentVotes: formatEther(results[1].result),
+        delegate: delegate,
+        currentVotes: formatEther(currentVotes),
       };
     },
     {
