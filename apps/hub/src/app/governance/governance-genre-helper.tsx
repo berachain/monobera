@@ -1,19 +1,12 @@
 import { Icons } from "@bera/ui/icons";
 
 export type PROPOSAL_GENRE = "berahub" | "honey" | "bend" | "berps" | "general";
-export const GOVERNANCE_GENRES = [
-  "berahub",
-  "honey",
-  "bend",
-  "berps",
-  "general",
-];
 
 export type Dapp = {
   color: string;
   icon: React.ReactNode;
   name: string;
-  link: string;
+  link: Omit<PROPOSAL_GENRE, "general">;
 };
 
 export const NativeDapps: Dapp[] = [
@@ -41,7 +34,7 @@ export const NativeDapps: Dapp[] = [
     name: "BERPS",
     link: "berps",
   },
-];
+] as const;
 
 export const Others: Dapp[] = [
   {

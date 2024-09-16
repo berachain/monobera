@@ -2,7 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 
 import {
-  GOVERNANCE_GENRES,
+  NativeDapps,
   PROPOSAL_GENRE,
   getDappByGenre,
   isValidGenre,
@@ -26,7 +26,7 @@ export default function Page({
 }
 
 export async function generateStaticParams() {
-  return GOVERNANCE_GENRES.map((genre) => ({
-    genre,
+  return NativeDapps.map((dapp) => ({
+    genre: dapp.link,
   }));
 }
