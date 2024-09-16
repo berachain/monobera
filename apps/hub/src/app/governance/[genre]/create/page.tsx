@@ -3,7 +3,10 @@ import { type Metadata } from "next";
 import { bgtName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import NewProposal from "./components/new-proposal";
-import { PROPOSAL_GENRE } from "../../governance-genre-helper";
+import {
+  GOVERNANCE_GENRES,
+  PROPOSAL_GENRE,
+} from "../../governance-genre-helper";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Create Proposal", bgtName),
@@ -19,4 +22,10 @@ export default function Create({
       <NewProposal genre={params.genre as PROPOSAL_GENRE} />
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  return GOVERNANCE_GENRES.map((genre) => ({
+    genre,
+  }));
 }

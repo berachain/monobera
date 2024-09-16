@@ -2,14 +2,13 @@ import React from "react";
 import { notFound } from "next/navigation";
 
 import {
+  GOVERNANCE_GENRES,
   PROPOSAL_GENRE,
   getDappByGenre,
   isValidGenre,
 } from "../governance-genre-helper";
 import GovernanceByStatus from "./components/governance-by-status";
 import { governorAddress } from "@bera/config";
-
-const GOVERNANCE_GENRES = ["berahub", "honey", "bend", "berps", "general"];
 
 export default function Page({
   params,

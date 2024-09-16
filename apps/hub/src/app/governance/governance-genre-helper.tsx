@@ -1,6 +1,13 @@
 import { Icons } from "@bera/ui/icons";
 
 export type PROPOSAL_GENRE = "berahub" | "honey" | "bend" | "berps" | "general";
+export const GOVERNANCE_GENRES = [
+  "berahub",
+  "honey",
+  "bend",
+  "berps",
+  "general",
+];
 
 export type Dapp = {
   color: string;
