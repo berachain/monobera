@@ -1,24 +1,28 @@
 import { Dropdown } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
-import { Input } from "@bera/ui/input";
 import { Dispatch, SetStateAction } from "react";
 import {
   CustomProposalActionErrors,
   ProposalAction,
   ProposalTypeEnum,
 } from "~/app/governance/types";
+import { UpdateFriendsOfChef } from "./update-friends-of-chef";
+import { CustomAction } from "./custom-action";
+
 export const CreateProposalAction = ({
   action,
   setAction,
   errors = {},
   onDestroy,
+  setErrors,
   idx,
 }: {
   idx: number;
   onDestroy: () => void;
   action: ProposalAction;
   errors: CustomProposalActionErrors;
+  setErrors: Dispatch<SetStateAction<CustomProposalActionErrors>>;
   setAction: Dispatch<SetStateAction<ProposalAction>>;
 }) => {
   return (
@@ -59,50 +63,18 @@ export const CreateProposalAction = ({
           }
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor={`proposal-target--${idx}`}
-          className="text-sm font-semibold leading-tight"
-        >
-          Target Contract Address
-        </label>
-        <Input
-          type="text"
-          id={`proposal-target--${idx}`}
-          placeholder="0x00000000000000"
-          value={action.target}
-          onChange={(e: any) =>
-            setAction((prev) => ({
-              ...prev,
-              target: e.target.value,
-            }))
-          }
+      {action.type === ProposalTypeEnum.CUSTOM_PROPOSAL && (
+        <CustomAction
+          errors={errors}
+          setErrors={setErrors}
+          action={action}
+          setAction={setAction}
+          idx={idx}
         />
-        {errors.target && (
-          <div className="text-sm text-destructive-foreground">
-            * {errors.target}
-          </div>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor={`proposal-message--${idx}`}
-          className="text-sm font-semibold leading-tight"
-        >
-          Enter ABI
-        </label>
-        <Input
-          id={`proposal-message--${idx}`}
-          placeholder="function balanceOf(address owner) view returns (uint256)"
-          value={JSON.stringify(action.ABI)}
-          onChange={(e) =>
-            setAction((prev) => ({
-              ...prev,
-              description: e.target.value,
-            }))
-          }
-        />
-      </div>
+      )}
+      {action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE && (
+        <UpdateFriendsOfChef action={action} setAction={setAction} />
+      )}
     </div>
   );
 };

@@ -57,6 +57,10 @@ export type CustomProposalActionErrors = {
   type?: false | string;
   target?: false | string;
   ABI?: false | string;
+  calldata?: (false | string)[];
+  gauge?: false | string;
+  receiptToken?: false | string;
+  isFriend?: false | string;
 };
 
 export type CustomProposalErrors = {
@@ -78,13 +82,20 @@ export type CustomProposal = {
   forumLink: string;
 };
 
-export type SafeProposalAction = {
-  type: ProposalTypeEnum;
-  target: Address;
-  ABI: JSON;
-  functionName: string;
-  calldata: { params: string; type: string; value: any }[];
-};
+export type SafeProposalAction =
+  | {
+      type: ProposalTypeEnum.CUSTOM_PROPOSAL;
+      target: Address;
+      ABI: string;
+      functionName: string;
+      calldata: string[];
+    }
+  | {
+      type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE;
+      target: Address;
+      receiptToken: Address;
+      isFriend: boolean;
+    };
 
 export type ProposalAction = Partial<SafeProposalAction> & {
   type: SafeProposalAction["type"];

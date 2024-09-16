@@ -9,5 +9,9 @@ export const metadata: Metadata = {
   description: "Create a new proposal on Berachain",
 };
 export default function Create() {
-  return <NewProposal />;
+  return (
+    <div className="grid grid-cols-12 gap-6">
+      <NewProposal />
+    </div>
+  );
 }

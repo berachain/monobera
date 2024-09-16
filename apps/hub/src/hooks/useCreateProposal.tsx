@@ -3,7 +3,13 @@ import { useRouter } from "next/navigation";
 import { GOVERNANCE_ABI, TransactionActionType } from "@bera/berajs";
 import { governorAddress } from "@bera/config";
 import { useTxn } from "@bera/shared-ui";
-import { Address } from "viem";
+import {
+  Address,
+  encodeAbiParameters,
+  encodeFunctionData,
+  parseAbi,
+  parseAbiItem,
+} from "viem";
 import { useCallback, useState } from "react";
 import {
   CustomProposal,
@@ -11,12 +17,15 @@ import {
   ProposalTypeEnum,
 } from "~/app/governance/types";
 
-const defaultAction: ProposalAction = {
+const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
   target: undefined,
   ABI: undefined,
   functionName: "",
   calldata: [],
+  gauge: undefined,
+  receiptToken: undefined,
+  isFriend: true,
 };
 export const useCreateProposal = () => {
   const [proposal, setProposal] = useState<CustomProposal>({
@@ -49,21 +58,46 @@ export const useCreateProposal = () => {
     [setProposal],
   );
 
-  const submitProposal = useCallback(
-    () =>
-      write({
-        address: governorAddress,
-        abi: GOVERNANCE_ABI,
-        functionName: "propose",
-        params: [
-          [governorAddress],
-          [0],
-          ["0x"],
-          `# ${proposal.title}\n${proposal.description}`,
-        ],
-      }),
-    [proposal],
-  );
+  const submitProposal = useCallback(() => {
+    const actions = proposal.actions.map((action) => {
+      switch (action.type) {
+        case ProposalTypeEnum.CUSTOM_PROPOSAL:
+          if (!action.target || !action.ABI) {
+            throw new Error("Invalid action");
+          }
+          // biome-ignore lint/correctness/noSwitchDeclarations: will return before the next case
+          const abi = parseAbiItem(action.ABI);
+
+          // console.log(ProposalTypeEnum.CUSTOM_PROPOSAL, {
+          //   abi,
+          //   abiItem: parseAbiItem(action.ABI),
+          // });
+
+          encodeFunctionData({
+            abi: [abi],
+            // functionName: action.functionName,
+            args: action.calldata,
+          });
+
+          return;
+
+        default:
+          break;
+      }
+    });
+    write({
+      address: governorAddress,
+      abi: GOVERNANCE_ABI,
+      functionName: "propose",
+      params: [
+        proposal.actions.map((action) => action.target),
+        [0],
+        ["0x"],
+        // TODO: add forum link
+        `# ${proposal.title}\n${proposal.description}`,
+      ],
+    });
+  }, [proposal]);
 
   return {
     proposal,
