@@ -36,6 +36,7 @@ const useBeraContractWrite = ({
   const { chain } = useAccount();
   const walletClient =
     typeof window !== "undefined" &&
+    window?.ethereum &&
     createWalletClient({
       chain,
       transport: custom(window?.ethereum),
