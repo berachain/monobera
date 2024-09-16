@@ -26,7 +26,7 @@ export const UpdateFriendsOfChef = ({
     ? encodeFunctionData({
         abi: BERA_CHEF_ABI,
         functionName: "updateFriendsOfTheChef",
-        args: [gauge.receiptToken, !gauge.isFriend],
+        args: [gauge.vault, !gauge.isFriend],
       })
     : "0x";
 
