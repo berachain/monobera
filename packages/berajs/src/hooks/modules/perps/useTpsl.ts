@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { useCallback, useEffect, useState } from "react";
-import { usePrevious } from "./usePrevious";
+import { usePrevious } from "../../usePrevious";
 
 function atLeastZero(value: string | BigNumber): string {
   return BigNumber(value).lt(0) ? "0" : value.toString(10);

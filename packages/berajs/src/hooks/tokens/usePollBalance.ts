@@ -6,7 +6,7 @@ import { usePublicClient } from "wagmi";
 
 import { multicall3Abi } from "~/abi";
 import POLLING from "~/enum/polling";
-import { useBeraJs } from "../contexts";
+import { useBeraJs } from "../../contexts";
 import { BalanceToken } from "~/types/dex";
 import { DefaultHookReturnType } from "..";
 

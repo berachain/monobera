@@ -9,9 +9,9 @@ import {
   DefaultHookOptions,
   DefaultHookReturnType,
   type Token,
-} from "..";
-import { useBeraJs } from "../contexts";
-import { useTokens } from "./useTokens";
+} from "../..";
+import { useBeraJs } from "../../contexts";
+import { useTokens } from "../useTokens";
 
 export type UsePollWalletBalancesArgs = {
   externalTokenList?: Token[];
