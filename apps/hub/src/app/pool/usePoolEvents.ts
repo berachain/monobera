@@ -20,19 +20,16 @@ export const usePoolEvents = ({
     size: allDataSize,
     setSize: setAllDataSize,
     isLoading: isAllDataLoading,
+    // SWR.error will have the error message in case any is thrown
+    error: allDataError,
   } = useSWRInfinite(
     (index) => ["allData", index, pool, combinedEvents],
     (key: any[]) => {
-      try {
-        const page = key[1];
-        return combinedEvents?.slice(
-          page * DEFAULT_SIZE,
-          (page + 1) * DEFAULT_SIZE,
-        );
-      } catch (e) {
-        console.log(e);
-        return undefined;
-      }
+      const page = key[1];
+      return combinedEvents?.slice(
+        page * DEFAULT_SIZE,
+        (page + 1) * DEFAULT_SIZE,
+      );
     },
   );
 
