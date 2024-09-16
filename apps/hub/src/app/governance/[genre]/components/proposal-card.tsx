@@ -32,7 +32,7 @@ export function ProposalCard({
   className?: string;
   proposal: Proposal;
 }) {
-  const fm = parseProposalBody(proposal.metadata.description);
+  const fm = parseProposalBody(proposal);
   const themeColor = getThemeColor(fm.data.type as ProposalTypeEnum);
 
   return (
