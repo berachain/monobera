@@ -1,6 +1,8 @@
 import * as React from "react";
 
 import { cn } from "./utils/cn";
+import { Label } from "./label";
+import { FormError } from "./form-error";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
@@ -20,29 +22,17 @@ export interface CustomInputProps extends InputProps {
 
 const InputWithLabel = React.forwardRef<
   HTMLInputElement,
-  CustomInputProps & { label?: string; error?: string | boolean }
+  CustomInputProps & { label?: string; error?: string | null }
 >(({ label, error, ...props }, ref) => {
   return (
     <div className="grid grid-cols-1 gap-y-2">
-      <label
-        htmlFor={props.id}
-        className={cn(
-          "text-sm font-semibold leading-none",
-          props.disabled
-            ? "text-foreground cursor-not-allowed pointer-events-none"
-            : "",
-        )}
-      >
+      <Label disabled={props.disabled} htmlFor={props.id}>
         {label}
-      </label>
+      </Label>
 
       <Input {...props} ref={ref} />
 
-      {error && (
-        <div className="text-sm text-destructive-foreground leading-tight">
-          {error}
-        </div>
-      )}
+      <FormError>{error}</FormError>
     </div>
   );
 });

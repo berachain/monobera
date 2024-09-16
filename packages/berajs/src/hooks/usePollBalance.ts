@@ -8,6 +8,7 @@ import { multicall3Abi } from "~/abi";
 import POLLING from "~/enum/polling";
 import { useBeraJs } from "../contexts";
 import { BalanceToken } from "~/types/dex";
+import { DefaultHookReturnType } from "..";
 
 interface Call {
   abi: typeof erc20Abi;
@@ -18,24 +19,29 @@ interface Call {
 
 export const usePollBalance = ({
   address,
+  owner,
 }: {
   address: string | undefined;
+  owner?: string | undefined;
 }) => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
-  const QUERY_KEY = [account, address, "balance"];
-  const { isLoading } = useSWR(
+  const assetOwner = owner ?? account;
+
+  const QUERY_KEY =
+    publicClient && address ? [assetOwner, address, "balance"] : null;
+  const { isLoading, data } = useSWR<BalanceToken | undefined>(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (account && address) {
+      if (assetOwner && address) {
         if (address !== nativeTokenAddress) {
           const call: Call[] = [
             {
               address: address as `0x${string}`,
               abi: erc20Abi,
               functionName: "balanceOf",
-              args: [account],
+              args: [assetOwner],
             },
             {
               address: address as `0x${string}`,
@@ -78,17 +84,17 @@ export const usePollBalance = ({
           address: multicallAddress,
           abi: multicall3Abi,
           functionName: "getEthBalance",
-          args: [account],
+          args: [assetOwner],
         };
         const result = await publicClient.readContract(call);
         return {
-          balance: result,
+          balance: result as bigint,
           formattedBalance: formatEther((result as bigint) ?? 0n),
           address,
           decimals: 18,
           symbol: "BERA",
           name: "Berachain",
-        };
+        } satisfies BalanceToken;
       }
       return undefined;
     },
@@ -96,12 +102,14 @@ export const usePollBalance = ({
       refreshInterval: POLLING.FAST,
     },
   );
+
   const useBalance = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable<BalanceToken>(QUERY_KEY);
     return data;
   };
   return {
     isLoading,
+    data,
     useBalance,
   };
 };

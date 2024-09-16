@@ -7,9 +7,20 @@ import { cn } from "@bera/ui";
 import { getBannerCount } from "./utils";
 
 export const MainWithBanners: FC<
-  PropsWithChildren<{ appName: string; paddingTop?: number }> &
+  PropsWithChildren<{
+    appName: string;
+    paddingTop?: number;
+    multiplier?: number;
+  }> &
     HTMLProps<HTMLDivElement>
-> = ({ appName, children, paddingTop = 72, className, ...props }) => {
+> = ({
+  appName,
+  children,
+  paddingTop = 72,
+  multiplier = 48,
+  className,
+  ...props
+}) => {
   const pathName = usePathname();
   const activeBanners = getBannerCount(appName, pathName);
 
@@ -18,7 +29,7 @@ export const MainWithBanners: FC<
       className={cn("w-full", className)}
       {...props}
       style={{
-        paddingTop: `${48 * activeBanners + paddingTop}px`,
+        paddingTop: `${multiplier * activeBanners + paddingTop}px`,
         ...props.style,
       }}
     >

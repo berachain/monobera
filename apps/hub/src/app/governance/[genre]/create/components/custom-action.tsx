@@ -16,8 +16,10 @@ import { Abi, AbiFunction, isAddress, parseAbiItem } from "viem";
 import {
   CustomProposalActionErrors,
   ProposalAction,
+  ProposalErrorCodes,
   ProposalTypeEnum,
 } from "~/app/governance/types";
+import { checkProposalField } from "~/hooks/useCreateProposal";
 export function CustomAction({
   idx,
   action,
@@ -45,10 +47,10 @@ export function CustomAction({
         ) as AbiFunction[]; // parseAbi(JSON.parse(action.ABI));
 
         setContractSelectors(parsedAbi);
-        setErrors((e) => ({ ...e, functionSignature: false }));
+        setErrors((e) => ({ ...e, functionSignature: null }));
       } catch (error) {
         console.warn("error parsing abi", error);
-        setErrors((e) => ({ ...e, ABI: "Invalid ABI" }));
+        setErrors((e) => ({ ...e, ABI: ProposalErrorCodes.INVALID_ABI }));
       }
     }
   }, [action.ABI]);
@@ -61,11 +63,7 @@ export function CustomAction({
           case "address":
             setErrors((e) => {
               const prev = e?.calldata || [];
-              prev[idx] = isAddress(event.target.value, {
-                strict: true,
-              })
-                ? false
-                : "Invalid address";
+              prev[idx] = checkProposalField("address", event.target.value);
               return {
                 ...e,
                 calldata: prev,
@@ -97,13 +95,12 @@ export function CustomAction({
     try {
       if (action.functionSignature) {
         setAbiItems(parseAbiItem(action.functionSignature) as AbiFunction);
-        setErrors((e) => ({ ...e, functionSignature: false }));
+        setErrors((e) => ({ ...e, functionSignature: null }));
       }
     } catch (error) {
-      console.warn("error parsing abi", error);
       setErrors((e) => ({
         ...e,
-        functionSignature: "Invalid Function Signature",
+        functionSignature: ProposalErrorCodes.INVALID_ADDRESS,
       }));
     }
   }, [action.functionSignature]);
@@ -114,7 +111,13 @@ export function CustomAction({
         type="text"
         variant="black"
         label="Enter Target"
-        error={errors.target}
+        error={
+          errors.target === ProposalErrorCodes.REQUIRED
+            ? "Target is required."
+            : errors.target === ProposalErrorCodes.INVALID_ADDRESS
+              ? "Invalid target address."
+              : errors.target
+        }
         id={`proposal-target--${idx}`}
         placeholder={truncateHash("0x00000000000000")}
         value={action.target}
@@ -129,7 +132,13 @@ export function CustomAction({
       <TextArea
         label="Enter ABI"
         variant="black"
-        error={errors.ABI}
+        error={
+          errors.ABI === ProposalErrorCodes.REQUIRED
+            ? "ABI is required."
+            : errors.ABI === ProposalErrorCodes.INVALID_ABI
+              ? "Invalid ABI"
+              : errors.ABI
+        }
         id={`proposal-abi--${idx}`}
         placeholder={JSON.stringify(
           [

@@ -3,7 +3,7 @@ import { Card } from "@bera/ui/card";
 
 import { useGetVerifiedAbi } from "@bera/berajs";
 import { ProposalTypeEnum } from "../../types";
-import { Abi, AbiFunction, Address, decodeFunctionData } from "viem";
+import { Abi, AbiFunction, Address, decodeFunctionData, erc20Abi } from "viem";
 
 export const Actions = ({
   executableCalls,
@@ -19,19 +19,23 @@ export const Actions = ({
           executableCall.target,
         );
 
-        const abi: Abi =
-          type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE
-            ? BERA_CHEF_ABI
-            : data && !error && !isLoading
-              ? JSON.parse(data)
-              : [];
+        const abi: Abi = [
+          ...BERA_CHEF_ABI,
+          ...erc20Abi,
+          ...(data && !error && !isLoading ? JSON.parse(data) : []),
+        ];
 
-        const content = abi?.length
-          ? decodeFunctionData({
-              data: executableCall.calldata as Address,
-              abi,
-            })
-          : { functionName: "", args: [] };
+        let content: {
+          args: readonly unknown[] | undefined;
+          functionName: string;
+        } = { functionName: "", args: [] };
+
+        try {
+          content = decodeFunctionData({
+            data: executableCall.calldata as Address,
+            abi,
+          });
+        } catch (error) {}
         const fn = abi.find(
           (a) => a.type === "function" && a.name === content.functionName,
         ) as AbiFunction;

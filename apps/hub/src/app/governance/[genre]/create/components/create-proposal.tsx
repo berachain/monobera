@@ -7,9 +7,14 @@ import {
   CustomProposalActionErrors,
   CustomProposalErrors,
   ProposalAction,
+  ProposalErrorCodes,
   ProposalTypeEnum,
 } from "~/app/governance/types";
-import { useCreateProposal } from "~/hooks/useCreateProposal";
+import {
+  checkProposalField,
+  getBodyErrors,
+  useCreateProposal,
+} from "~/hooks/useCreateProposal";
 import { CreateProposalAction } from "./create-proposal-action";
 import { Address, isAddress, parseAbiItem } from "viem";
 import { ActionButton } from "@bera/shared-ui";
@@ -30,9 +35,9 @@ export const CreateProposal = ({
   } = useCreateProposal(governorAddress);
   const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
-    title: false,
-    description: false,
-    forumLink: false,
+    title: null,
+    description: null,
+    forumLink: null,
   });
 
   const createActionUpdateHandler = useCallback(
@@ -61,93 +66,17 @@ export const CreateProposal = ({
     [setProposal],
   );
 
-  const getBodyErrors = useCallback(() => {
-    const e: CustomProposalErrors = {};
-    if (proposal.title.length === 0) {
-      e.title = "Title is required";
-    }
-
-    if (proposal.description.length === 0) {
-      e.description = "Description is required";
-    }
-
-    if (proposal.forumLink.length === 0) {
-      e.forumLink = "Forum link is required";
-    } else if (!proposal.forumLink.startsWith("https://")) {
-      e.forumLink = "Forum link must start with https://";
-    } else if (!URL.canParse(proposal.forumLink)) {
-      e.forumLink = "Invalid link";
-    }
-
-    return e;
-  }, [proposal]);
-
   const leaveBodyTab = useCallback(() => {
-    const errors = getBodyErrors();
+    const errors = getBodyErrors(proposal);
     if (Object.values(errors).some((v) => v)) {
       setErrors(errors);
     } else setActiveTab(1);
   }, [proposal]);
 
   const handleSubmitProposal = useCallback(() => {
-    const e: CustomProposalErrors = getBodyErrors();
-
-    e.actions = proposal.actions
-      .map((action, idx): CustomProposalActionErrors => {
-        const errors: CustomProposalActionErrors = {};
-
-        if (action.type === ProposalTypeEnum.CUSTOM_PROPOSAL) {
-          if (!action.target) {
-            errors.target = "Required";
-          } else if (!isAddress(action.target, { strict: true })) {
-            errors.target = "Invalid address";
-          }
-
-          if (!action.target) {
-            errors.target = "Required";
-          }
-
-          if (!action.functionSignature) {
-            errors.functionSignature = "Required";
-          } else {
-            try {
-              const abi = parseAbiItem(action.functionSignature);
-              if (abi.type !== "function") {
-                errors.functionSignature = "This signature is not a function";
-              } else {
-              }
-            } catch (error) {
-              errors.functionSignature = "Invalid function signature";
-            }
-          }
-        } else if (action.type === ProposalTypeEnum.UPDATE_REWARDS_GAUGE) {
-          const errors: CustomProposalActionErrors = {};
-
-          if (!action.vault) {
-            errors.receiptToken = "Required";
-          }
-        }
-        return errors;
-      })
-      .filter((e) => Object.values(e).some((v) => v));
-
-    setErrors(e);
-
-    if (
-      Object.getOwnPropertyNames(e)
-        .map((name) => e[name as keyof typeof e])
-        .some((v) => {
-          if (Array.isArray(v)) {
-            return v.length > 0;
-          }
-
-          return !!v;
-        })
-    ) {
-      return;
-    }
-
-    submitProposal();
+    submitProposal({
+      onError: setErrors,
+    });
   }, [proposal]);
 
   // this could be a form but we should handle connect modal on submit
