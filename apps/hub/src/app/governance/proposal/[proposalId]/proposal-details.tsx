@@ -6,7 +6,7 @@ import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import { getTotalVotes, parseString } from "../../helper";
+import { getTotalVotes, parseProposalBody } from "../../helper";
 import { Actions } from "./Actions";
 import { Status } from "./Status";
 import "@bera/graphql";
@@ -25,7 +25,7 @@ export default function ProposalDetails({
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
-  const body = parseString(proposal?.metadata.description ?? "");
+  const fm = parseProposalBody(proposal?.metadata.description ?? "");
   return (
     <div className="pb-16">
       {isLoading || !proposal ? (
@@ -78,14 +78,13 @@ export default function ProposalDetails({
 
             <TabsContent value="description">
               <div className="border border-border p-4 rounded-md">
-                <div dangerouslySetInnerHTML={{ __html: body.content }} />
+                <div>
+                  <div>{fm.content}</div>
+                </div>
               </div>
             </TabsContent>
             <TabsContent value="code">
-              <Actions
-                executableCalls={proposal.executableCalls}
-                type={parseString(proposal.metadata.description).type}
-              />
+              <Actions executableCalls={proposal.executableCalls} />
             </TabsContent>
           </Tabs>
 

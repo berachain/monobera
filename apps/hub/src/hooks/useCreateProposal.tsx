@@ -5,6 +5,7 @@ import {
   GOVERNANCE_ABI,
   TransactionActionType,
 } from "@bera/berajs";
+import matter from "gray-matter";
 import { useTxn } from "@bera/shared-ui";
 import {
   Address,
@@ -276,8 +277,11 @@ export const useCreateProposal = (governorAddress: Address) => {
           proposal.actions.map((action) => action.target),
           proposal.actions.map(() => 0n),
           actions,
-          // TODO: add forum link
-          `# ${proposal.title}\n${proposal.description}`,
+          matter.stringify(proposal.description, {
+            title: proposal.title,
+            forumLink: proposal.forumLink,
+            version: "1.0",
+          }),
         ],
       });
     },

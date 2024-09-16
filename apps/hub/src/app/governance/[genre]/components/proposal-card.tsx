@@ -13,7 +13,7 @@ import {
   getTimeText,
   getTotalVotes,
   getVotesDataList,
-  parseString,
+  parseProposalBody,
 } from "../../helper";
 import { ProposalTypeEnum, StatusEnum } from "../../types";
 import { VoteInfo } from "./Voter";
@@ -32,8 +32,8 @@ export function ProposalCard({
   className?: string;
   proposal: Proposal;
 }) {
-  const body = parseString(proposal.metadata.description);
-  const themeColor = getThemeColor(body.type as ProposalTypeEnum);
+  const fm = parseProposalBody(proposal.metadata.description);
+  const themeColor = getThemeColor(fm.data.type as ProposalTypeEnum);
 
   return (
     <div
@@ -53,7 +53,7 @@ export function ProposalCard({
             `text-${themeColor}`,
           )}
         >
-          {body.type ? body.type.replaceAll("-", " ") : "Text"}
+          {fm.data.type ? fm.data.type.replaceAll("-", " ") : "Text"}
         </div>
         <div
           className={cn(
@@ -61,7 +61,7 @@ export function ProposalCard({
             truncate && "line-clamp-1",
           )}
         >
-          {body.title}
+          {fm.data.title}
         </div>
 
         <div className="mt-4 text-xs font-medium leading-6 text-muted-foreground">
