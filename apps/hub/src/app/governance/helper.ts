@@ -154,8 +154,6 @@ export const parseProposalBody = (
       stringify: () => body,
     };
   } catch (error) {
-    console.log("error", error, proposal);
-
     return {
       isFrontMatter: false,
       data: { title: `Suspicious proposal #${proposal.id}` },

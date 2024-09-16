@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import React, { useMemo } from "react";
 import { Vote, useBeraJs, usePollProposal } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
@@ -26,7 +27,8 @@ export default function ProposalDetails({
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
-  const fm = parseProposalBody(proposal);
+  const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
+
   return (
     <div className="pb-16">
       {isLoading || !proposal ? (

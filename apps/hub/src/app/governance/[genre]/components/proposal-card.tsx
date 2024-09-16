@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { type Proposal } from "@bera/berajs";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
@@ -32,7 +32,7 @@ export function ProposalCard({
   className?: string;
   proposal: Proposal;
 }) {
-  const fm = parseProposalBody(proposal);
+  const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
   const themeColor = getThemeColor(fm.data.type as ProposalTypeEnum);
 
   return (
