@@ -9,7 +9,7 @@
   </a>
 </p>
 <p align="center">
-    Monorepo for maintaining Berachain Applications & Libraries
+    Monobera for maintaining Berachain Applications & Libraries
 <p>
 
 ![CI](https://github.com/berachain/monobera/actions/workflows/quality.yml/badge.svg?branch=v2)
