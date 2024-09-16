@@ -31,7 +31,7 @@ export default function GovernanceByStatus({
       >
         {dapp.name}
       </div>
-      <div className="text-forergound text-3xl font-bold leading-9 sm:text-5xl sm:leading-[48px]">
+      <div className="text-foreground text-3xl font-bold leading-9 sm:text-5xl sm:leading-[48px]">
         Vote on proposals <br />
         or create your own
       </div>

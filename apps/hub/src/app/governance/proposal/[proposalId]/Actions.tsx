@@ -7,10 +7,8 @@ import { Abi, AbiFunction, Address, decodeFunctionData, erc20Abi } from "viem";
 
 export const Actions = ({
   executableCalls,
-  type,
 }: {
   executableCalls: ExecutableCalls[];
-  type: string | null;
 }) => {
   return (
     <div className="flex-1">
