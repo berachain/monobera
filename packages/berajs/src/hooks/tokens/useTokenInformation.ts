@@ -9,6 +9,12 @@ import {
   Token,
   useBeraJs,
 } from "../..";
+import {
+  gasTokenDecimals,
+  gasTokenName,
+  gasTokenSymbol,
+  nativeTokenAddress,
+} from "@bera/config";
 
 export type UseTokenInformationResponse = DefaultHookReturnType<
   Token | undefined
