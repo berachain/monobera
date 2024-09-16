@@ -15,6 +15,7 @@ import { ProposalCard } from "../../[genre]/components/proposal-card";
 import { VoteCard } from "../../[genre]/components/vote-card";
 import { OverviewChart } from "../../[genre]/components/overview-chart";
 import { VoterTable } from "../../[genre]/components/voter-table";
+import MarkdownRenderer from "./markdown-renderer";
 
 export default function ProposalDetails({
   proposalId,
@@ -79,7 +80,7 @@ export default function ProposalDetails({
             <TabsContent value="description">
               <div className="border border-border p-4 rounded-md">
                 <div>
-                  <div>{fm.content}</div>
+                  <MarkdownRenderer content={fm.content} />
                 </div>
               </div>
             </TabsContent>
