@@ -1,29 +1,26 @@
-import { multicallAddress, nativeTokenAddress } from "@bera/config";
+import {
+  gasTokenDecimals,
+  gasTokenName,
+  gasTokenSymbol,
+  nativeTokenAddress,
+} from "@bera/config";
 import useSWR from "swr";
-import useSWRImmutable from "swr/immutable";
-import { erc20Abi, formatEther, formatUnits, getAddress } from "viem";
+import { Address, erc20Abi, formatEther, formatUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { multicall3Abi } from "~/abi";
 import POLLING from "~/enum/polling";
-import { useBeraJs } from "../../contexts";
+import { DefaultHookReturnType } from "~/types";
 import { BalanceToken } from "~/types/dex";
-import { DefaultHookReturnType } from "..";
-
-interface Call {
-  abi: typeof erc20Abi;
-  address: `0x${string}`;
-  functionName: string;
-  args: any[];
-}
+import { useBeraJs } from "../../contexts";
+import { useTokenInformation } from "./useTokenInformation";
 
 export const usePollBalance = ({
   address,
   owner,
 }: {
   address: string | undefined;
-  owner?: string | undefined;
-}): DefaultHookReturnType<BalanceToken | undefined> & {
+  owner?: Address | undefined;
+}): Omit<DefaultHookReturnType<BalanceToken | undefined>, "mutate"> & {
   /**
    *
    * @deprecated you can use data instead
@@ -35,75 +32,28 @@ export const usePollBalance = ({
   const assetOwner = owner ?? account;
 
   const QUERY_KEY =
-    publicClient && address ? [assetOwner, address, "balance"] : null;
+    publicClient && assetOwner ? [assetOwner, address, "balance"] : null;
+  const { data: tokenInformation, isLoading: isLoadingTokenInformation } =
+    useTokenInformation({ address });
 
-  // TODO: it would be better if we used useSWRImmutable here for token info, and a dynamic query for balance
-  const { isLoading, data, ...rest } = useSWR<BalanceToken | undefined>(
+  const isNativeToken = address === nativeTokenAddress;
+
+  const { isLoading, data, error, ...rest } = useSWR(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
       if (assetOwner && address) {
         if (address !== nativeTokenAddress) {
-          const call: Call[] = [
-            {
-              address: address as `0x${string}`,
-              abi: erc20Abi,
-              functionName: "balanceOf",
-              args: [assetOwner],
-            },
-            {
-              address: address as `0x${string}`,
-              abi: erc20Abi,
-              functionName: "symbol",
-              args: [],
-            },
-            {
-              address: address as `0x${string}`,
-              abi: erc20Abi,
-              functionName: "name",
-              args: [],
-            },
-            {
-              address: address as `0x${string}`,
-              abi: erc20Abi,
-              functionName: "decimals",
-              args: [],
-            },
-          ];
-          const result = await publicClient.multicall({
-            contracts: call,
-            multicallAddress: multicallAddress,
-            allowFailure: false,
+          return await publicClient.readContract({
+            address: address as `0x${string}`,
+            abi: erc20Abi,
+            functionName: "balanceOf",
+            args: [assetOwner!],
           });
-
-          const balance: BalanceToken = {
-            balance: result[0] as bigint,
-            formattedBalance: formatUnits(
-              result[0] as bigint,
-              (result[3] as number) ?? 18,
-            ),
-            address: getAddress(address),
-            decimals: result[3] as number,
-            symbol: result[1] as string,
-            name: result[2] as string,
-          };
-          return balance;
         }
-        const call = {
-          address: multicallAddress,
-          abi: multicall3Abi,
-          functionName: "getEthBalance",
-          args: [assetOwner],
-        };
-        const result = await publicClient.readContract(call);
-        return {
-          balance: result as bigint,
-          formattedBalance: formatEther((result as bigint) ?? 0n),
-          address,
-          decimals: 18,
-          symbol: "BERA",
-          name: "Berachain",
-        } satisfies BalanceToken;
+        return await publicClient.getBalance({
+          address: assetOwner!,
+        });
       }
       return undefined;
     },
@@ -112,16 +62,38 @@ export const usePollBalance = ({
     },
   );
 
+  const formattedBalance =
+    !error && data
+      ? address === nativeTokenAddress
+        ? formatEther(data as bigint)
+        : tokenInformation && !isLoadingTokenInformation
+          ? formatUnits(data, tokenInformation.decimals)
+          : undefined
+      : undefined;
+
+  const tokenBalance = {
+    balance: data ?? 0n,
+    formattedBalance: formattedBalance ?? "0",
+    address: address as `0x${string}`,
+    decimals: isNativeToken
+      ? gasTokenDecimals
+      : tokenInformation?.decimals ?? 0,
+    symbol: isNativeToken ? gasTokenSymbol : tokenInformation?.symbol ?? "",
+    name: isNativeToken ? gasTokenName : tokenInformation?.name ?? "",
+  } satisfies BalanceToken;
+
   const useBalance = () => {
-    const { data = undefined } = useSWRImmutable<BalanceToken>(QUERY_KEY);
-    return data;
+    return tokenBalance;
   };
 
   return {
     ...rest,
-    isLoading,
-    data,
-    refresh: () => rest.mutate(),
+    refresh: () => {
+      rest.mutate();
+    },
+    isLoading: isLoading || isNativeToken ? isLoadingTokenInformation : false,
+    error: error || !isNativeToken ? error : undefined,
+    data: tokenBalance,
     useBalance,
   };
 };
