@@ -8,6 +8,7 @@ import { multicall3Abi } from "~/abi";
 import POLLING from "~/enum/polling";
 import { useBeraJs } from "../contexts";
 import { BalanceToken } from "~/types/dex";
+import { DefaultHookReturnType } from "..";
 
 interface Call {
   abi: typeof erc20Abi;
@@ -18,24 +19,37 @@ interface Call {
 
 export const usePollBalance = ({
   address,
+  owner,
 }: {
   address: string | undefined;
-}) => {
+  owner?: string | undefined;
+}): DefaultHookReturnType<BalanceToken | undefined> & {
+  /**
+   *
+   * @deprecated you can use data instead
+   */
+  useBalance: () => BalanceToken | undefined;
+} => {
   const publicClient = usePublicClient();
   const { account } = useBeraJs();
-  const QUERY_KEY = [account, address, "balance"];
-  const { isLoading } = useSWR(
+  const assetOwner = owner ?? account;
+
+  const QUERY_KEY =
+    publicClient && address ? [assetOwner, address, "balance"] : null;
+
+  // TODO: it would be better if we used useSWRImmutable here for token info, and a dynamic query for balance
+  const { isLoading, data, ...rest } = useSWR<BalanceToken | undefined>(
     QUERY_KEY,
     async () => {
       if (!publicClient) return undefined;
-      if (account && address) {
+      if (assetOwner && address) {
         if (address !== nativeTokenAddress) {
           const call: Call[] = [
             {
               address: address as `0x${string}`,
               abi: erc20Abi,
               functionName: "balanceOf",
-              args: [account],
+              args: [assetOwner],
             },
             {
               address: address as `0x${string}`,
@@ -59,18 +73,19 @@ export const usePollBalance = ({
           const result = await publicClient.multicall({
             contracts: call,
             multicallAddress: multicallAddress,
+            allowFailure: false,
           });
 
           const balance: BalanceToken = {
-            balance: result[0]?.result as bigint,
+            balance: result[0] as bigint,
             formattedBalance: formatUnits(
-              result[0]?.result as bigint,
-              (result[3]?.result as number) ?? 18,
+              result[0] as bigint,
+              (result[3] as number) ?? 18,
             ),
             address: getAddress(address),
-            decimals: result[3]?.result as number,
-            symbol: result[1]?.result as string,
-            name: result[2]?.result as string,
+            decimals: result[3] as number,
+            symbol: result[1] as string,
+            name: result[2] as string,
           };
           return balance;
         }
@@ -78,17 +93,17 @@ export const usePollBalance = ({
           address: multicallAddress,
           abi: multicall3Abi,
           functionName: "getEthBalance",
-          args: [account],
+          args: [assetOwner],
         };
         const result = await publicClient.readContract(call);
         return {
-          balance: result,
+          balance: result as bigint,
           formattedBalance: formatEther((result as bigint) ?? 0n),
           address,
           decimals: 18,
           symbol: "BERA",
           name: "Berachain",
-        };
+        } satisfies BalanceToken;
       }
       return undefined;
     },
@@ -96,12 +111,17 @@ export const usePollBalance = ({
       refreshInterval: POLLING.FAST,
     },
   );
+
   const useBalance = () => {
-    const { data = undefined } = useSWRImmutable(QUERY_KEY);
+    const { data = undefined } = useSWRImmutable<BalanceToken>(QUERY_KEY);
     return data;
   };
+
   return {
+    ...rest,
     isLoading,
+    data,
+    refresh: () => rest.mutate(),
     useBalance,
   };
 };

@@ -29,6 +29,7 @@ type Props = {
   balance?: string;
   price?: number;
   hideBalance?: boolean;
+  forceShowBalance?: boolean;
   hidePrice?: boolean;
   selectable?: boolean;
   weight?: number;
@@ -57,6 +58,7 @@ export function TokenInput({
   amount = "",
   price = 1,
   balance = undefined,
+  forceShowBalance = false,
   hideBalance = false,
   hidePrice = false,
   selectable = true,
@@ -209,7 +211,7 @@ export function TokenInput({
             type="number-enhanced"
             step="any"
             min="0"
-            placeholder="0"
+            placeholder="0.0"
             disabled={disabled}
             className={cn(
               "ring-offset-none w-full grow border-0 bg-transparent p-0 text-right text-lg font-semibold shadow-none outline-none ring-0 drop-shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
@@ -274,54 +276,55 @@ export function TokenInput({
               </div>
             )}
           </div>
-          {isConnected &&
-            selected &&
-            Number(tokenBalance) !== 0 &&
-            !hideBalance && (
-              <div className="mt-1 flex flex-row items-center justify-start gap-1 px-1">
-                <Icons.wallet className="h-3 w-3 text-muted-foreground" />
-                <FormattedNumber
-                  value={tokenBalance ? tokenBalance : "0"}
-                  className="text-xs text-muted-foreground"
-                  showIsSmallerThanMin
-                />
-                {!hideMax && (
-                  <span
-                    className={`${
-                      hasMaxGasWarning ? "cursor-not-allowed" : "cursor-pointer"
-                    }`}
+          {(forceShowBalance ||
+            (isConnected &&
+              selected &&
+              Number(tokenBalance) !== 0 &&
+              !hideBalance)) && (
+            <div className="mt-1 flex flex-row items-center justify-start gap-1 px-1">
+              <Icons.wallet className="h-3 w-3 text-muted-foreground" />
+              <FormattedNumber
+                value={tokenBalance ? tokenBalance : "0"}
+                className="text-xs text-muted-foreground"
+                showIsSmallerThanMin
+              />
+              {!hideMax && (
+                <span
+                  className={`${
+                    hasMaxGasWarning ? "cursor-not-allowed" : "cursor-pointer"
+                  }`}
+                >
+                  <TooltipCustom
+                    tooltipContent={
+                      <div className="w-[150px]">
+                        <p className="text-xs">
+                          Your Bera balance is below the estimated gas prices,
+                          this transaction would likely fail.
+                        </p>
+                      </div>
+                    }
+                    {...gasMaxTooltipHiddenStyles}
                   >
-                    <TooltipCustom
-                      tooltipContent={
-                        <div className="w-[150px]">
-                          <p className="text-xs">
-                            Your Bera balance is below the estimated gas prices,
-                            this transaction would likely fail.
-                          </p>
-                        </div>
-                      }
-                      {...gasMaxTooltipHiddenStyles}
+                    <span
+                      className={`flex select-none flex-row items-center gap-1 text-xs text-muted-foreground underline ${
+                        hasMaxGasWarning
+                          ? "text-warning-foreground"
+                          : "hover:text-foreground"
+                      }`}
+                      onClick={hasMaxGasWarning ? undefined : handleMaxClick}
                     >
-                      <span
-                        className={`flex select-none flex-row items-center gap-1 text-xs text-muted-foreground underline ${
-                          hasMaxGasWarning
-                            ? "text-warning-foreground"
-                            : "hover:text-foreground"
-                        }`}
-                        onClick={hasMaxGasWarning ? undefined : handleMaxClick}
-                      >
-                        MAX
-                        {hasMaxGasWarning && (
-                          <span>
-                            <Icons.alertCircle size={12} />
-                          </span>
-                        )}
-                      </span>
-                    </TooltipCustom>
-                  </span>
-                )}
-              </div>
-            )}
+                      MAX
+                      {hasMaxGasWarning && (
+                        <span>
+                          <Icons.alertCircle size={12} />
+                        </span>
+                      )}
+                    </span>
+                  </TooltipCustom>
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </li>

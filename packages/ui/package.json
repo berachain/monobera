@@ -133,6 +133,10 @@
       "import": "./dist/form.mjs",
       "types": "./dist/form.d.ts"
     },
+    "./form-error": {
+      "import": "./dist/form-error.mjs",
+      "types": "./dist/form-error.d.ts"
+    },
     "./hover-card": {
       "import": "./dist/hover-card.mjs",
       "types": "./dist/hover-card.d.ts"
@@ -360,6 +364,9 @@
       ],
       "skeleton": [
         "dist/skeleton.d.ts"
+      ],
+      "form-error": [
+        "dist/form-error.d.ts"
       ],
       "slider": [
         "dist/slider.d.ts"

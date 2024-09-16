@@ -1,12 +1,15 @@
 import * as React from "react";
 
 import { cn } from "./utils/cn";
+import { Label } from "./label";
+import { FormError } from "./form-error";
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 export interface CustomInputProps extends InputProps {
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
+  variant?: "muted" | "black";
   outerClassName?: string;
   /** @param allowScientific - if @type is "number-enhanced", this allows scientific notation by allowing the characters "e" or "E" to be inserted into the input */
   allowScientific?: boolean;
@@ -16,6 +19,26 @@ export interface CustomInputProps extends InputProps {
   allowDecimal?: boolean;
   type?: InputProps["type"] | "number-enhanced";
 }
+
+const InputWithLabel = React.forwardRef<
+  HTMLInputElement,
+  CustomInputProps & { label?: string; error?: string | null }
+>(({ label, error, ...props }, ref) => {
+  return (
+    <div className="grid grid-cols-1 gap-y-2">
+      <Label disabled={props.disabled} htmlFor={props.id}>
+        {label}
+      </Label>
+
+      <Input {...props} ref={ref} />
+
+      <FormError>{error}</FormError>
+    </div>
+  );
+});
+
+InputWithLabel.displayName = "InputWithLabel";
+
 const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
   (
     {
@@ -29,6 +52,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
       allowDecimal = true,
       onChange,
       onKeyDown,
+      variant = "muted",
       ...props
     },
     ref,
@@ -104,7 +128,10 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         <input
           type={type === "number-enhanced" ? undefined : type}
           className={cn(
-            "focus:border-1 flex h-10 w-full rounded-md border border-border px-3 py-2 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-foreground focus:outline-none disabled:cursor-not-allowed disabled:text-muted-foreground",
+            "focus:border-1 flex h-10 w-full rounded-md border border-border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium  focus:border-foreground focus:outline-none disabled:cursor-not-allowed",
+            variant === "black" && "bg-black",
+            variant === "muted" &&
+              "text-foreground placeholder:text-muted-foreground disabled:text-muted-foreground",
             endAdornment && "pr-10", // Add right padding when endAdornment exists
             className,
           )}
@@ -114,7 +141,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
           {...props}
         />
         {endAdornment && (
-          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center pl-3 text-muted-foreground disabled:text-muted-foreground">
+          <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center pl-3 text-muted-foreground disabled:text-foreground-foreground">
             {endAdornment}
           </div>
         )}
@@ -124,4 +151,4 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
 );
 Input.displayName = "Input";
 
-export { Input };
+export { Input, InputWithLabel };

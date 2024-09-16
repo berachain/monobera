@@ -1,8 +1,8 @@
-import { BERA_CHEF_ABI, Proposal } from "@bera/berajs";
+import { Proposal } from "@bera/berajs";
 import BigNumber from "bignumber.js";
 import { decodeFunctionData, formatEther } from "viem";
-
 import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
+import graymatter from "gray-matter";
 
 export const getBadgeColor = (proposalStatus: StatusEnum) => {
   switch (proposalStatus) {
@@ -27,9 +27,9 @@ export const getBadgeColor = (proposalStatus: StatusEnum) => {
 
 export const getThemeColor = (ProposalType: ProposalTypeEnum) => {
   switch (ProposalType) {
-    case ProposalTypeEnum.TEXT_PROPOSAL:
+    case ProposalTypeEnum.CUSTOM_PROPOSAL:
       return "foreground";
-    case ProposalTypeEnum.FRIENDS_OF_CHEF:
+    case ProposalTypeEnum.UPDATE_REWARDS_GAUGE:
       return "info-foreground";
     default:
       return "foreground";
@@ -98,7 +98,7 @@ export const getTotalVoters = (proposal: Proposal) =>
     0,
   );
 
-export const parseString = (
+const parseLegacyBody = (
   s: string,
 ): { type: string | null; title: string; content: string } => {
   const pattern = /#(?:([\w-]+)# )?(.+)\n([\s\S]*)/;
@@ -114,30 +114,76 @@ export const parseString = (
       content,
     };
   }
-  return {
-    type: null,
-    title: s,
-    content: "",
-  };
+
+  throw new Error("Invalid proposal body");
+};
+
+export const parseProposalBody = (
+  proposal?: Proposal,
+): graymatter.GrayMatterFile<string> & {
+  isFrontMatter: boolean;
+} => {
+  if (!proposal) {
+    return {
+      isFrontMatter: false,
+      data: { title: "Loading..." },
+      content: "",
+      matter: "",
+      language: "",
+      orig: "",
+      stringify: () => "",
+    };
+  }
+
+  const body = proposal?.metadata?.description ?? "";
+
+  if (graymatter.test(body)) {
+    return { ...graymatter(body), isFrontMatter: true };
+  }
+
+  try {
+    const legacyBody = parseLegacyBody(body);
+
+    return {
+      isFrontMatter: false,
+      data: { title: legacyBody.title },
+      content: legacyBody.content,
+      matter: "",
+      language: "",
+      orig: body,
+      stringify: () => body,
+    };
+  } catch (error) {
+    return {
+      isFrontMatter: false,
+      data: { title: `Suspicious proposal #${proposal.id}` },
+      content: body,
+      matter: "",
+      language: "",
+      orig: body,
+      stringify: () => body,
+    };
+  }
 };
 
 export const decodeProposalCalldata = (
-  type: string | null,
+  isLoading: boolean,
   calldata: string,
+  abi: any,
 ) => {
-  if (type === ProposalTypeEnum.FRIENDS_OF_CHEF) {
-    const { functionName, args = [] } = decodeFunctionData({
-      abi: BERA_CHEF_ABI,
-      data: calldata as `0x${string}`,
-    });
-
+  if (isLoading) {
     return {
-      function: functionName,
-      params: args,
+      function: null,
+      params: null,
     };
   }
+  const { functionName, args = [] } = decodeFunctionData({
+    abi,
+    data: calldata as `0x${string}`,
+  });
+
   return {
-    function: null,
-    params: null,
+    function: functionName,
+    params: args,
   };
 };
