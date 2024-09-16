@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   BERA_CHEF_ABI,
   GOVERNANCE_ABI,
@@ -14,7 +14,7 @@ import {
   isAddress,
   parseAbiItem,
 } from "viem";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   CustomProposal,
   CustomProposalActionErrors,
@@ -23,6 +23,10 @@ import {
   ProposalTypeEnum,
   SafeProposalAction,
 } from "~/app/governance/types";
+import {
+  PROPOSAL_GENRE,
+  isValidGenre,
+} from "~/app/governance/governance-genre-helper";
 
 const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
@@ -140,10 +144,22 @@ export const useCreateProposal = (governorAddress: Address) => {
     title: "",
     description: "",
     forumLink: "",
+    topic: new Set(),
     actions: [defaultAction],
   });
 
   const router = useRouter();
+  const params = useParams();
+
+  useEffect(() => {
+    if (isValidGenre(params.genre)) {
+      const genre = params.genre as PROPOSAL_GENRE;
+      setProposal((p) => ({
+        ...p,
+        topic: new Set<PROPOSAL_GENRE>([genre]),
+      }));
+    }
+  }, [params.genre]);
 
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
@@ -279,6 +295,7 @@ export const useCreateProposal = (governorAddress: Address) => {
           actions,
           matter.stringify(proposal.description, {
             title: proposal.title,
+            topic: proposal.topic,
             forumLink: proposal.forumLink,
             version: "1.0",
           }),

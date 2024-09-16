@@ -51,3 +51,10 @@ export const getDappByGenre = (genre: PROPOSAL_GENRE) => {
     Others.find((dapp) => dapp.link === genre)
   );
 };
+
+export const isValidGenre = (genre: any): genre is PROPOSAL_GENRE => {
+  return (
+    NativeDapps.some((dapp) => dapp.link === genre) ||
+    Others.some((dapp) => dapp.link === genre)
+  );
+};

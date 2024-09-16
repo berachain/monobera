@@ -1,4 +1,5 @@
 import { Address } from "viem";
+import { PROPOSAL_GENRE } from "./governance-genre-helper";
 
 export enum StatusEnum {
   PENDING = "pending",
@@ -92,6 +93,7 @@ export type CustomProposal = {
   description: any;
   actions: ProposalAction[];
   forumLink: string;
+  topic: Set<PROPOSAL_GENRE>;
 };
 
 export type SafeProposalAction = {
