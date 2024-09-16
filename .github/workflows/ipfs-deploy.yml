@@ -37,7 +37,9 @@ jobs:
     - name: Set environment variables
       run: pnpm setenv:bartio
       
-    - name: Build all projects 
+    - name: Build all projects
+      env:
+        NODE_OPTIONS: "--max_old_space_size=8192"
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
       
     - name: Deploy Berps
