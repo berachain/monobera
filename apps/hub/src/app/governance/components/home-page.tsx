@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Dapp, NativeDapps, Others } from "../governance-genre-helper";
+import { DappConfig, NativeDapps, Others } from "../governance-genre-helper";
 
 export const HomePage = () => {
   return (
@@ -19,7 +19,7 @@ export const HomePage = () => {
           NATIVE dAPPS
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {NativeDapps.map((dapp: Dapp) => (
+          {NativeDapps.map((dapp: DappConfig) => (
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"
               key={dapp.name}
@@ -42,7 +42,7 @@ export const HomePage = () => {
           OTHER
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {Others.map((dapp: Dapp) => (
+          {Others.map((dapp: DappConfig) => (
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"
               key={dapp.name}

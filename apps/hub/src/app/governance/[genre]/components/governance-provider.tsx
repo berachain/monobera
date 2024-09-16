@@ -1,6 +1,7 @@
 "use client";
-import BigNumber from "bignumber.js";
 
+import { createContext, useContext, useEffect, useState } from "react";
+import { notFound } from "next/navigation";
 import { ApolloProvider } from "@apollo/client";
 import {
   useBeraJs,
@@ -8,15 +9,20 @@ import {
   usePollProposalThreshold,
   usePollUserDelegates,
 } from "@bera/berajs";
-import { bgtClient } from "@bera/graphql";
-import { createContext, useContext, useEffect, useState } from "react";
+import { bgtTokenAddress, governorAddress } from "@bera/config";
+import { getClient } from "@bera/graphql";
+import BigNumber from "bignumber.js";
 import { Address } from "viem";
+
 import {
-  governanceTokenAddress,
-  governorAddress as governorAddressFromEnv,
-} from "@bera/config";
+  DappConfig,
+  PROPOSAL_GENRE,
+  getDappByGenre,
+  isValidGenre,
+} from "../../governance-genre-helper";
+import { DelegateModal } from "./delegate-modal";
 import { NotEnoughVotingPower } from "./not-enough-voting-power";
-import { DelegateModal } from "../[genre]/components/delegate-modal";
+
 type GovernanceContextType = {
   canPropose: boolean;
   votesThreshold?: string;
@@ -36,6 +42,7 @@ type GovernanceContextType = {
     onClose?: () => void;
     isOpen?: boolean;
   }) => void;
+  dappConfig: DappConfig;
 };
 
 const GovernanceContext = createContext<GovernanceContextType | undefined>(
@@ -51,14 +58,20 @@ export const useGovernance = () => {
 };
 
 // Provides a context for the governance page
-const _GovernanceProvider = ({ children }: { children: React.ReactNode }) => {
-  // TODO: update this if we want to support multiple governors
-  const [governorAddress, setGovernorAddress] = useState<Address>(
-    governorAddressFromEnv,
-  );
+export const GovernanceProvider = ({
+  genre,
+  children,
+}: {
+  genre: PROPOSAL_GENRE;
+  children: React.ReactNode;
+}) => {
+  if (!isValidGenre(genre)) return notFound();
+  const dappConfig = getDappByGenre(genre);
+  const client = getClient(dappConfig!.subgraph);
+
   const { account } = useBeraJs();
   const { data: tokenBalanceData, isLoading: isLoadingTokenBalance } =
-    usePollBalance({ address: governanceTokenAddress });
+    usePollBalance({ address: bgtTokenAddress });
 
   const [isDialogOpen, setIsDialogOpen] = useState<{
     isOpen: boolean;
@@ -99,6 +112,7 @@ const _GovernanceProvider = ({ children }: { children: React.ReactNode }) => {
       setIsDialogOpen((prev) => ({ ...prev, isOpen: false }));
     }
   }, [canPropose]);
+
   return (
     <GovernanceContext.Provider
       value={
@@ -112,6 +126,7 @@ const _GovernanceProvider = ({ children }: { children: React.ReactNode }) => {
           isLoading:
             isLoadingVotes || isLoadingVotesThreshold || isLoadingTokenBalance,
           governorAddress,
+          dappConfig,
           delegatedByOthers,
           delegatedToThemselves,
           tokenBalance: tokenBalanceData?.formattedBalance,
@@ -151,17 +166,7 @@ const _GovernanceProvider = ({ children }: { children: React.ReactNode }) => {
           }));
         }}
       />
-      {children}
+      <ApolloProvider client={client}>{children}</ApolloProvider>
     </GovernanceContext.Provider>
-  );
-};
-
-export const GovernanceProvider = ({
-  children,
-}: { children: React.ReactNode }) => {
-  return (
-    <ApolloProvider client={bgtClient}>
-      <_GovernanceProvider>{children}</_GovernanceProvider>
-    </ApolloProvider>
   );
 };

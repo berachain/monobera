@@ -1,10 +1,16 @@
 import {
   beraTokenAddress,
+  bgtEndpointUrl,
+  bgtSubgraphUrl,
+  bgtTokenAddress,
   crocDexAddress,
   crocIndexerEndpoint,
   crocMultiSwapAddress,
   crocRouterEndpoint,
   crocSubgraphEndpoint,
+  governanceSubgraphUrl,
+  governanceTimelockAddress,
+  governorAddress,
   honeyRouterAddress,
   honeySubgraphUrl,
   lendOracleAddress,
@@ -13,15 +19,11 @@ import {
   lendRewardsAddress,
   lendSubgraphUrl,
   lendUIDataProviderAddress,
+  marketListUrl,
   multicallAddress,
   tokenListUrl,
   tradingContractAddress,
   validatorListUrl,
-  bgtEndpointUrl,
-  bgtTokenAddress,
-  marketListUrl,
-  bgtSubgraphUrl,
-  governanceSubgraphUrl,
 } from "@bera/config";
 
 import { BeraConfig } from "..";
@@ -56,5 +58,27 @@ export const defaultBeraConfig: BeraConfig = {
     lendRewardsAggregatorAddress: lendRewardsAddress,
     honeyRouterAddress: honeyRouterAddress,
     perpsTradingContractAddress: tradingContractAddress,
+    governance: {
+      berahub: {
+        governor: governorAddress,
+        timelock: governanceTimelockAddress,
+      },
+      honey: {
+        governor: governorAddress,
+        timelock: governanceTimelockAddress,
+      },
+      bend: {
+        governor: governorAddress,
+        timelock: governanceTimelockAddress,
+      },
+      berps: {
+        governor: governorAddress,
+        timelock: governanceTimelockAddress,
+      },
+      general: {
+        governor: governorAddress,
+        timelock: governanceTimelockAddress,
+      },
+    },
   },
 };
