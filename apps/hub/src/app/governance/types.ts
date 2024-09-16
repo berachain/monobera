@@ -19,11 +19,6 @@ export enum OrderByEnum {
   LOWEST_PARTICIPATION = "lowest-participation",
 }
 
-export enum ProposalTypeEnum {
-  CUSTOM_PROPOSAL = "custom-proposal",
-  UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
-}
-
 export type ProposalVotes = {
   yes: number;
   no: number;
@@ -58,15 +53,26 @@ export type VOTE_TYPE = "yes" | "no" | "abstain";
 
 export type ALL = "all";
 
+export type CustomProposalErrors = {
+  title?: false | string;
+  description?: false | string;
+  forumLink?: false | string;
+};
+
+export enum ProposalTypeEnum {
+  CUSTOM_PROPOSAL = "custom-proposal",
+  UPDATE_REWARDS_GAUGE = "update-rewards-gauge",
+}
+
 export type CustomProposal = {
   title: string;
   description: any;
-  proposalType: ProposalTypeEnum;
   actions: PropoalAction[];
   forumLink: string;
 };
 
 export type PropoalAction = {
+  type: ProposalTypeEnum;
   target: Address;
   ABI: JSON;
   functionName: string;

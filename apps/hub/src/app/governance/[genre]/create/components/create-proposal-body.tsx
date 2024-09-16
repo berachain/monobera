@@ -1,3 +1,6 @@
+"use client";
+
+import { Button } from "@bera/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -7,51 +10,48 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
-
-import { ProposalTypeEnum } from "../../../types";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { CustomProposal, CustomProposalErrors } from "~/app/governance/types";
+import { useCreateProposal } from "~/hooks/useCreateProposal";
 
 export const CreateProposalBody = ({
   proposal,
   setProposal,
+  errors,
+  setErrors,
+  onNext,
 }: {
-  proposal: any;
-  setProposal: any;
+  proposal: CustomProposal;
+  setProposal: ReturnType<typeof useCreateProposal>["setProposal"];
+  onNext: () => void;
+  errors: CustomProposalErrors;
+  setErrors: Dispatch<SetStateAction<CustomProposalErrors>>;
 }) => {
+  const handleNext = useCallback(() => {
+    const e: CustomProposalErrors = {};
+    if (proposal.title.length === 0) {
+      e.title = "Title is required";
+    }
+
+    if (proposal.description.length === 0) {
+      e.description = "Description is required";
+    }
+
+    if (proposal.forumLink.length === 0) {
+      e.forumLink = "Forum link is required";
+    }
+
+    setErrors(e);
+
+    if (e.title || e.description || e.forumLink) {
+      return;
+    }
+
+    onNext();
+  }, [onNext]);
+
   return (
     <div className="flex flex-col justify-start gap-8">
-      <div className="inline-flex flex-col justify-start gap-2">
-        <div className="text-sm font-semibold leading-tight">Proposal Type</div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <div className="inline-flex h-[42px] w-full flex-col items-start justify-start hover:cursor-pointer">
-              <div className=" inline-flex w-full items-center justify-start gap-2.5 rounded-md border border-border px-3 py-2">
-                <div className="relative shrink grow basis-0 caption-top text-sm font-normal capitalize leading-normal text-muted-foreground">
-                  {proposal.proposalType.replaceAll("-", " ")}
-                  <Icons.chevronDown className="absolute right-0 top-1 h-4 w-4" />
-                </div>
-              </div>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="min-w-[400px]">
-            {Object.values(ProposalTypeEnum).map((typeT: ProposalTypeEnum) => (
-              <DropdownMenuCheckboxItem
-                key={`proposal-option-${typeT}`}
-                onClick={() =>
-                  setProposal((prev: any) => ({
-                    ...prev,
-                    proposalType: typeT,
-                  }))
-                }
-                checked={proposal.proposalType === typeT}
-                className="w-full capitalize hover:text-foreground"
-              >
-                {typeT.replaceAll("-", " ")}
-              </DropdownMenuCheckboxItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
       <div className="flex flex-col gap-2">
         <div className="text-sm font-semibold leading-tight">Title</div>
         <Input
@@ -66,9 +66,9 @@ export const CreateProposalBody = ({
             }))
           }
         />
-        {proposal.title.length === 0 && (
+        {errors.title && (
           <div className="text-sm text-destructive-foreground">
-            * Title is required
+            * {errors.title}
           </div>
         )}
       </div>
@@ -89,24 +89,27 @@ export const CreateProposalBody = ({
       </div>
 
       <div className="flex flex-col gap-2">
-        <div className="text-sm font-semibold leading-tight">Title</div>
+        <div className="text-sm font-semibold leading-tight">Forum Link</div>
         <Input
           type="text"
-          id="proposal-title"
+          id="proposal-forumLink"
           placeholder="Ooga booga"
-          value={proposal.title}
+          value={proposal.forumLink}
           onChange={(e: any) =>
             setProposal((prev: any) => ({
               ...prev,
-              title: e.target.value,
+              forumLink: e.target.value,
             }))
           }
         />
-        {proposal.title.length === 0 && (
+        {errors.forumLink && (
           <div className="text-sm text-destructive-foreground">
-            * Title is required
+            * {errors.forumLink}
           </div>
         )}
+      </div>
+      <div className="flex  justify-end">
+        <Button onClick={handleNext}>Next</Button>
       </div>
     </div>
   );
