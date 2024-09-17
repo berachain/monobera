@@ -5,27 +5,24 @@ import { Skeleton } from "@bera/ui/skeleton";
 
 import { ProposalCard } from "./proposal-card";
 import { useRouter } from "next/navigation";
-import { useGovernance } from "./governance-provider";
 
 export const ProposalsList = () => {
-  const { dappConfig } = useGovernance();
-  const { data = [], isLoading } = usePollAllProposals();
+  const { data, isLoading } = usePollAllProposals();
   const router = useRouter();
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4">
-        {!isLoading &&
-          data.map((proposal: Proposal) => (
-            <ProposalCard
-              proposal={proposal}
-              key={`proposal-${proposal.id}`}
-              className="hover:cursor-pointer" //@ts-ignore
-              onClick={() => {
-                router.push(`/governance/proposal/${proposal.id}`);
-              }}
-            />
-          ))}
-        {isLoading && (
+        {data?.map((proposal: Proposal) => (
+          <ProposalCard
+            proposal={proposal}
+            key={`proposal-${proposal.id}`}
+            className="hover:cursor-pointer" //@ts-ignore
+            onClick={() => {
+              router.push(`/governance/proposal/${proposal.id}`);
+            }}
+          />
+        ))}
+        {!data?.length && (
           <>
             <Skeleton className="h-20 w-full" />
             <Skeleton className="h-20 w-full" />
@@ -36,7 +33,7 @@ export const ProposalsList = () => {
         )}
       </div>
 
-      {!isLoading && data.length === 0 && (
+      {data?.length === 0 && (
         <div className="mx-auto w-fit">
           <Image
             src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}

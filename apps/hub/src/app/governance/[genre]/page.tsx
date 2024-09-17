@@ -1,6 +1,11 @@
 import React from "react";
 import GovernanceByStatus from "./components/governance-by-status";
+import { SWRFallback } from "@bera/berajs";
+import { defaultBeraConfig } from "@bera/berajs/config";
 
-export default function Page() {
-  return <GovernanceByStatus />;
+import { getAllProposals } from "@bera/berajs/actions";
+
+export default async function Page() {
+  const allProposals = await getAllProposals({ config: defaultBeraConfig });
+  return <GovernanceByStatus allProposals={allProposals} />;
 }
