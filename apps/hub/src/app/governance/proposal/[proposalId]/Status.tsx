@@ -18,7 +18,7 @@ export const Status = ({
   return (
     <div className="flex items-center gap-3 font-medium">
       {status === StatusEnum.PENDING && <div>Voting starts at {time}</div>}
-      {status === StatusEnum.QUEUED && <div>Voting in queue</div>}
+      {status === StatusEnum.IN_QUEUE && <div>Voting in queue</div>}
       {status === StatusEnum.ACTIVE && (
         <VoteDialog
           votingPower={bgt?.formattedBalance}
@@ -28,7 +28,7 @@ export const Status = ({
         />
       )}
       {status === StatusEnum.CANCELED && <div>Canceled</div>}
-      {status === StatusEnum.SUCCEEDED && (
+      {status === StatusEnum.PENDING_EXECUTION && (
         <div className="text-success-foreground">Succeded</div>
       )}
       {status === StatusEnum.DEFEATED && (

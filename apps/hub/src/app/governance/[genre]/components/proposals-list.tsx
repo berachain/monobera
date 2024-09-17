@@ -1,16 +1,57 @@
+import { useState } from "react";
 import Image from "next/image";
+import { useQuery } from "@apollo/client";
 import { usePollAllProposals, type Proposal } from "@bera/berajs";
 import { cloudinaryUrl } from "@bera/config";
+import { getProposalss } from "@bera/graphql";
+import { SearchInput } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { ProposalCard } from "./proposal-card";
+import { ProposalSorting } from "./proposal-sorting";
+import { ProposalStatusFilter } from "./proposal-status-filter";
+
+const PROPOSALS_PER_PAGE = 10;
 
 export const ProposalsList = () => {
   const { data = [], isLoading } = usePollAllProposals();
+  const [page, setPage] = useState(0);
+
+  const {
+    loading,
+    error,
+    data: proposals,
+  } = useQuery(getProposalss, {
+    variables: {
+      offset: page * PROPOSALS_PER_PAGE,
+      limit: PROPOSALS_PER_PAGE,
+    },
+    pollInterval: 60000, // 1 min
+  });
+
   return (
     <div className="w-full">
+      <div className="flex-col md:flex-row flex w-full justify-between mb-10 gap-4">
+        <SearchInput
+          className="w-[300px] bg-transparent"
+          placeholder="Search proposals..."
+        />
+        <div className="flex gap-4">
+          <ProposalStatusFilter />
+          <ProposalSorting />
+        </div>
+      </div>
+
       <div className="flex flex-col gap-4">
-        {!isLoading &&
+        {isLoading ? (
+          <>
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+          </>
+        ) : (
           data.map((proposal: Proposal) => (
             <ProposalCard
               proposal={proposal}
@@ -20,15 +61,7 @@ export const ProposalsList = () => {
                 window.open(`/governance/proposal/${proposal.id}`, "_self");
               }}
             />
-          ))}
-        {isLoading && (
-          <>
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-20 w-full" />
-          </>
+          ))
         )}
       </div>
 

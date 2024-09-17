@@ -1,27 +1,27 @@
 import { Proposal } from "@bera/berajs";
 import BigNumber from "bignumber.js";
-import { decodeFunctionData, formatEther } from "viem";
-import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 import graymatter from "gray-matter";
+import { decodeFunctionData, formatEther } from "viem";
+
+import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 
 export const getBadgeColor = (proposalStatus: StatusEnum) => {
   switch (proposalStatus) {
     case StatusEnum.PENDING:
+    case StatusEnum.IN_QUEUE:
+    case StatusEnum.EXPIRED:
       return "default";
     case StatusEnum.ACTIVE:
-    case StatusEnum.QUEUED:
-      return "info";
     case StatusEnum.EXECUTED:
-    case StatusEnum.SUCCEEDED:
       return "success";
     case StatusEnum.DEFEATED:
-      return "destructive";
-    case StatusEnum.EXPIRED:
-      return "warning";
     case StatusEnum.CANCELED:
-      return "secondary";
+      return "destructive";
+    case StatusEnum.PENDING_EXECUTION:
+    case StatusEnum.PENDING_QUEUE:
+      return "info";
     default:
-      return "secondary";
+      return "foreground";
   }
 };
 

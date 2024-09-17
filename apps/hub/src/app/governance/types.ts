@@ -1,15 +1,17 @@
 import { Address } from "viem";
+
 import { PROPOSAL_GENRE } from "./governance-genre-helper";
 
 export enum StatusEnum {
   PENDING = "pending",
-  QUEUED = "queued",
   ACTIVE = "active",
-  CANCELED = "canceled",
-  SUCCEEDED = "succeeded",
   DEFEATED = "defeated",
-  EXPIRED = "expired",
+  CANCELED = "canceled",
+  PENDING_QUEUE = "pending-queue",
+  IN_QUEUE = "in-queue",
+  PENDING_EXECUTION = "pending-execution",
   EXECUTED = "executed",
+  EXPIRED = "expired",
 }
 
 export enum OrderByEnum {
