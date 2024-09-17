@@ -34,7 +34,7 @@ export default function GovernanceByStatus() {
       </div>
       <div className="mx-auto my-8 flex   flex-col gap-3 sm:w-full sm:flex-row">
         <GoToIfHasVotingPower
-          href={`/governance/${dappConfig.id}/create`}
+          href={`/governance/${dappConfig.slug}/create`}
           governorAddress={governorAddress}
         />
         <Button variant="secondary" className="w-fit">
