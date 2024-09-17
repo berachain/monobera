@@ -257,9 +257,9 @@ export const FavIcons = {
       <path
         d="M22 13H31V22"
         stroke="#F1EBE4"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <defs>
         <filter
@@ -269,9 +269,9 @@ export const FavIcons = {
           width="26.1542"
           height="26.1563"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -305,8 +305,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#AEE4E7" />
-          <stop offset="1" stop-color="#41D6E0" />
+          <stop stopColor="#AEE4E7" />
+          <stop offset="1" stopColor="#41D6E0" />
         </radialGradient>
       </defs>
     </svg>
@@ -323,7 +323,7 @@ export const FavIcons = {
       <rect width="40" height="40" rx="10" fill="#A96C47" />
       <rect width="40" height="40" rx="10" fill="url(#paint0_radial_6594_54)" />
       <rect width="40" height="40" rx="10" fill="url(#paint1_radial_6594_54)" />
-      <g clip-path="url(#clip0_6594_54)">
+      <g clipPath="url(#clip0_6594_54)">
         <g filter="url(#filter0_d_6594_54)">
           <path
             d="M29.1212 25.167C28.6915 23.9414 27.69 23.3203 26.7232 22.7197C25.8819 22.1968 25.0875 21.7026 24.568 20.8154C23.1358 18.3579 22.3492 16.875 20.003 16.875C17.6568 16.875 16.8678 18.3584 15.4322 20.8149C14.9122 21.7041 14.1139 22.1992 13.2716 22.7231C12.3048 23.3242 11.3053 23.9438 10.8741 25.167C10.7063 25.6081 10.6219 26.0764 10.6251 26.5483C10.6251 28.5376 12.2096 30.1562 13.9649 30.1562C15.7203 30.1562 18.0328 29.271 20.0079 29.271C21.983 29.271 24.2633 30.1562 26.0406 30.1562C27.818 30.1562 29.3751 28.5376 29.3751 26.5483C29.3765 26.0762 29.2904 25.6078 29.1212 25.167Z"
@@ -363,7 +363,7 @@ export const FavIcons = {
           width="20.7501"
           height="15.2812"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolation-filters="sRGB"
         >
           <feFlood flood-opacity="0" result="BackgroundImageFix" />
           <feColorMatrix
@@ -590,11 +590,11 @@ export const FavIcons = {
       {...props}
     >
       <rect width="40" height="40" rx="10" fill="url(#paint0_radial_6594_61)" />
-      <g clip-path="url(#clip0_6594_61)">
+      <g clipPath="url(#clip0_6594_61)">
         <g filter="url(#filter0_d_6594_61)">
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M19.9999 31.1607C15.8084 31.1607 12.4106 27.7629 12.4106 23.5714C12.4106 20.4576 14.699 15.7286 19.2758 9.38392C19.3586 9.26924 19.4673 9.17584 19.5932 9.11143C19.7191 9.04702 19.8585 9.01343 19.9999 9.01343C20.1413 9.01343 20.2807 9.04702 20.4066 9.11143C20.5325 9.17584 20.6413 9.26924 20.724 9.38392C25.3008 15.729 27.5892 20.458 27.5892 23.5714C27.5892 27.7629 24.1914 31.1607 19.9999 31.1607ZM19.6914 27.0924C19.6067 27.0886 19.5221 27.1029 19.4433 27.1344C19.3645 27.1659 19.2933 27.2139 19.2345 27.275C19.1757 27.3362 19.1306 27.4092 19.1022 27.4892C19.0739 27.5692 19.0629 27.6543 19.07 27.7388C19.099 28.0469 19.3723 28.2737 19.6807 28.2446C21.2022 28.1018 22.3785 27.6143 23.2106 26.7821C24.0428 25.95 24.5303 24.7732 24.6731 23.2522C24.6807 23.1717 24.6707 23.0905 24.6439 23.0142C24.6172 22.9379 24.5742 22.8683 24.5179 22.8102C24.4617 22.7521 24.3935 22.7068 24.3181 22.6776C24.2427 22.6483 24.1619 22.6357 24.0812 22.6406C23.9248 22.6501 23.7784 22.7206 23.6736 22.837C23.5688 22.9535 23.5139 23.1064 23.5209 23.2629C23.5656 24.2692 23.1906 25.1701 22.3946 25.9661C21.5986 26.762 20.6977 27.1375 19.6914 27.0924Z"
             fill="#EDE3D7"
           />
@@ -608,9 +608,9 @@ export const FavIcons = {
           width="19.1786"
           height="26.1473"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -644,8 +644,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#C0D5ED" />
-          <stop offset="1" stop-color="#326FE5" />
+          <stop stopColor="#C0D5ED" />
+          <stop offset="1" stopColor="#326FE5" />
         </radialGradient>
         <clipPath id="clip0_6594_61">
           <rect
@@ -682,9 +682,9 @@ export const FavIcons = {
           width="32.0894"
           height="28.0001"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -718,8 +718,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#C7AA9A" />
-          <stop offset="1" stop-color="#775A49" />
+          <stop stopColor="#C7AA9A" />
+          <stop offset="1" stopColor="#775A49" />
         </radialGradient>
       </defs>
     </svg>
@@ -748,9 +748,9 @@ export const FavIcons = {
           width="27.3674"
           height="27.9442"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -802,8 +802,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#E9D9B2" />
-          <stop offset="1" stop-color="#E6B434" />
+          <stop stopColor="#E9D9B2" />
+          <stop offset="1" stopColor="#E6B434" />
         </radialGradient>
       </defs>
     </svg>
@@ -838,9 +838,9 @@ export const FavIcons = {
           width="10.4591"
           height="25.0628"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -873,9 +873,9 @@ export const FavIcons = {
           width="10.4536"
           height="25.0577"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -909,8 +909,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#787878" />
-          <stop offset="1" stop-color="#2F2F2F" />
+          <stop stopColor="#787878" />
+          <stop offset="1" stopColor="#2F2F2F" />
         </radialGradient>
       </defs>
     </svg>
