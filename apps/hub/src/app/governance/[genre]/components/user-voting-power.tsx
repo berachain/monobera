@@ -1,9 +1,4 @@
-import {
-  ADDRESS_ZERO,
-  truncateHash,
-  useBeraJs,
-  usePollUserDelegates,
-} from "@bera/berajs";
+import { truncateHash, useBeraJs, usePollUserDelegates } from "@bera/berajs";
 import { ActionButton, FormattedNumber, TokenIcon } from "@bera/shared-ui";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -13,6 +8,7 @@ import { Button } from "@bera/ui/button";
 import { useState } from "react";
 import { useGovernance } from "./governance-provider";
 import { governanceTokenAddress } from "@bera/config";
+import { ADDRESS_ZERO } from "@bera/berajs/config";
 
 export const UserVotingPower = () => {
   const { isReady, account } = useBeraJs();

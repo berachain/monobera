@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { useAccount, useChains } from "wagmi";
 
-import { defaultBeraConfig } from "~/constants/defaultBeraConfig";
+import { defaultBeraConfig } from "~/config/defaultBeraConfig";
 import { TransactionStoreProvider } from "~/hooks";
 import { BeraConfig } from "~/types";
 import { CrocEnvContextProvider } from "../crocenv";

@@ -15,7 +15,7 @@ import {
 } from "viem";
 
 import { BERA_VAULT_REWARDS_ABI, bexQueryAbi } from "~/abi";
-import { ADDRESS_ZERO } from "~/constants";
+import { ADDRESS_ZERO } from "~/config";
 import { BeraConfig, IUserPool, PoolV2, IUserPosition } from "~/types";
 import { mapPoolToPoolV2 } from "~/utils";
 import * as react_hook_form from "react-hook-form";
