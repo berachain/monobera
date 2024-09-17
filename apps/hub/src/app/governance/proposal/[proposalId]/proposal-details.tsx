@@ -150,13 +150,14 @@ export default function ProposalDetails({
                 />
               </div>
             </div>
+            <hr className="border-b border-border mt-10 mb-16" />
             <div className="mx-auto gap-16">
               <div>
                 <div className="mt-4 flex md:flex-row flex-col gap-4">
-                  <Card className="w-full flex-col items-center justify-center flex">
+                  <Card className="px-8 flex-col items-center md:basis-1/3 shrink justify-center flex">
                     <FormattedNumber
                       value={getTotalVotes(proposal)}
-                      className="text-2xl font-semibold leading-loose text-foreground"
+                      className="text-lg sm:text-xl font-semibold leading-none text-foreground"
                       symbol="BGT"
                     />
                     <div className="flex items-center text-sm font-medium text-muted-foreground">
