@@ -3,6 +3,7 @@ import BigNumber from "bignumber.js";
 import { decodeFunctionData, formatEther } from "viem";
 import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 import graymatter from "gray-matter";
+import { NativeDapps, Others } from "./governance-genre-helper";
 
 export const getBadgeColor = (proposalStatus: StatusEnum) => {
   switch (proposalStatus) {
@@ -36,10 +37,61 @@ export const getThemeColor = (ProposalType: ProposalTypeEnum) => {
   }
 };
 
+export const getTopicColor = (topic: string) => {
+  return [...NativeDapps, ...Others].find((dapp) => dapp.id === topic)?.color;
+};
 export const getTimeText = (proposal: Proposal) => {
-  return `Created at ${proposal.createdAt
-    .replaceAll("T", " ")
-    .replaceAll("Z", "")}`;
+  const now = Date.now();
+  const targetTimestamp = new Date(proposal.createdAt).getTime();
+  const diffInMilliseconds = targetTimestamp - now;
+  const diffInSeconds = Math.round(diffInMilliseconds / 1000);
+
+  const absDiffInSeconds = Math.abs(diffInSeconds);
+  const oneWeekInSeconds = 7 * 24 * 60 * 60; // 7 days
+
+  const isFuture = diffInMilliseconds > 0;
+
+  if (absDiffInSeconds > oneWeekInSeconds) {
+    // Format the date as "Month Day, Year"
+    const date = new Date(targetTimestamp);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    return date.toLocaleDateString(undefined, options);
+  }
+
+  const rtf = new Intl.RelativeTimeFormat("en-US", {
+    numeric: "auto",
+    style: "long",
+  });
+
+  const thresholds = [
+    { limit: -60, divisor: 1, unit: "second" },
+    { limit: -3600, divisor: 60, unit: "minute" },
+    { limit: -86400, divisor: 3600, unit: "hour" },
+    { limit: -2592000, divisor: 86400, unit: "day" },
+    { limit: -31536000, divisor: 2592000, unit: "month" },
+    { limit: Infinity, divisor: 31536000, unit: "year" },
+  ];
+
+  for (const threshold of thresholds) {
+    if (
+      isFuture
+        ? diffInSeconds < threshold.limit
+        : diffInSeconds > threshold.limit
+    ) {
+      const value = Math.round(diffInSeconds / threshold.divisor);
+      const formatted = rtf.format(
+        value,
+        threshold.unit as Intl.RelativeTimeFormatUnit,
+      );
+      return isFuture ? `${formatted} left` : `${formatted}`;
+    }
+  }
+
+  return "";
 };
 
 export const getVotesDataList = (proposal: Proposal) => {

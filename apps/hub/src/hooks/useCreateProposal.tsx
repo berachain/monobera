@@ -295,7 +295,7 @@ export const useCreateProposal = (governorAddress: Address) => {
           actions,
           matter.stringify(proposal.description, {
             title: proposal.title,
-            topic: Array.from(proposal.topic.values()),
+            topics: Array.from(proposal.topic.values()),
             forumLink: proposal.forumLink,
             version: "1.0",
           }),

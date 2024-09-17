@@ -4,9 +4,13 @@ import { cloudinaryUrl } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { ProposalCard } from "./proposal-card";
+import { useRouter } from "next/navigation";
+import { useGovernance } from "./governance-provider";
 
 export const ProposalsList = () => {
+  const { dappConfig } = useGovernance();
   const { data = [], isLoading } = usePollAllProposals();
+  const router = useRouter();
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4">
@@ -17,7 +21,7 @@ export const ProposalsList = () => {
               key={`proposal-${proposal.id}`}
               className="hover:cursor-pointer" //@ts-ignore
               onClick={() => {
-                window.open(`/governance/proposal/${proposal.id}`, "_self");
+                router.push(`/governance/proposal/${proposal.id}`);
               }}
             />
           ))}
