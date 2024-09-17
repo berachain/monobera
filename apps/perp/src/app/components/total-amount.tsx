@@ -32,11 +32,11 @@ export function TotalAmount({
   const { marketPrices } = usePollPrices();
   const unrealizedPnl = useMemo(() => {
     const pnl = calculateUnrealizedPnl(openPositions, marketPrices);
-    return pnl ? BigNumber(pnl) : formatFromBaseUnit(totalUnrealizedPnl, 18);
+    return BigNumber(pnl ?? totalUnrealizedPnl);
   }, [openPositions, marketPrices, totalUnrealizedPnl]);
   const { useAccountTradingSummary } = usePollAccountTradingSummary();
-  const { data } = useAccountTradingSummary();
-  const realizedPnl = data?.pnl ?? "0";
+  const { data: accountTradingSummary } = useAccountTradingSummary();
+  const realizedPnl = accountTradingSummary?.pnl ?? "0";
   const totalPnlBN = unrealizedPnl.plus(realizedPnl);
 
   const totalRelativePnL = () => {
