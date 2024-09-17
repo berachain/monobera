@@ -13,7 +13,7 @@ export function VoteCard({
   yesPercentage,
 }: IVoteCard) {
   return (
-    <Card className="flex w-full p-6">
+    <Card className="flex w-full p-3">
       <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
         <div className="text-lg font-semibold leading-9 text-success-foreground sm:text-3xl">
           {Math.round(yesPercentage ?? 0)}%

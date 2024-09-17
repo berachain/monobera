@@ -28,6 +28,28 @@ import { VoteInfo } from "../../[genre]/components/Voter";
 import { QuorumStatus } from "../../[genre]/components/quorum-status";
 import { formatEther } from "viem";
 import { ProgressBarChart } from "../../[genre]/components/progress-bar-chart";
+import { SWRFallback } from "@bera/berajs/contexts";
+import { unstable_serialize } from "swr";
+
+export const ProposalDetailsWrapper = ({
+  children,
+  id,
+  content,
+}: {
+  children: React.ReactNode;
+  id: string;
+  content: any;
+}) => {
+  return (
+    <SWRFallback
+      fallback={{
+        [unstable_serialize(["usePollProposal", id])]: content,
+      }}
+    >
+      {children}
+    </SWRFallback>
+  );
+};
 
 export default function ProposalDetails({
   proposalId,
@@ -36,14 +58,16 @@ export default function ProposalDetails({
 }) {
   const { account, isReady } = useBeraJs();
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
+
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
+
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-12 pb-16 gap-4">
       <div className="xl:col-start-2 xl:col-span-10 grid grid-cols-1 gap-4">
-        {isLoading || !proposal ? (
+        {!proposal ? (
           <>Loading</>
         ) : (
           <>
@@ -146,7 +170,7 @@ export default function ProposalDetails({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr,3fr] auto-rows-min">
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
                 <div className="lg:col-start-2 ">
                   <div className="gap-4 p-5 rounded-sm border border-border ">
                     Initiated Initiated Jul,04, 09:14am Voting Period Begins
