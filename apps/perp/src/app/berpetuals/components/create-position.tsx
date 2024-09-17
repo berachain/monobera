@@ -231,6 +231,8 @@ export function CreatePosition({ market, params }: ICreatePosition) {
       setError("Take Profit must be set.");
     } else if (form.amount && safeAmountBN.lt(0)) {
       setError("Amount/Collateral must be positive.");
+    } else if (!leverageBN.isInteger()) {
+      setError("Leverage must be an integer.");
     } else if (
       leverageBN.lt(2) ||
       leverageBN.gt(maxLeverage) ||
