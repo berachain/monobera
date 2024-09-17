@@ -15,7 +15,7 @@ import BigNumber from "bignumber.js";
 import { Address } from "viem";
 
 import {
-  DappConfig,
+  GovernanceTopic,
   PROPOSAL_GENRE,
   getDappByGenre,
   isValidGenre,
@@ -42,7 +42,7 @@ type GovernanceContextType = {
     onClose?: () => void;
     isOpen?: boolean;
   }) => void;
-  dappConfig: DappConfig;
+  dappConfig: GovernanceTopic;
 };
 
 const GovernanceContext = createContext<GovernanceContextType | undefined>(

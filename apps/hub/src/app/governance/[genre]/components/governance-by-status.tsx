@@ -6,7 +6,6 @@ import { governorAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
-import { NativeDapps } from "../../governance-genre-helper";
 import { GoToIfHasVotingPower } from "./go-to-if-has-voting-power";
 import { useGovernance } from "./governance-provider";
 import { ProposalsList } from "./proposals-list";
@@ -35,7 +34,7 @@ export default function GovernanceByStatus() {
       </div>
       <div className="mx-auto my-8 flex   flex-col gap-3 sm:w-full sm:flex-row">
         <GoToIfHasVotingPower
-          href={`/governance/${dappConfig.link}/create`}
+          href={`/governance/${dappConfig.id}/create`}
           governorAddress={governorAddress}
         />
         <Button variant="secondary" className="w-fit">
