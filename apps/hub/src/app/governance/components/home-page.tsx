@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-import { Dapp, NativeDapps, Others } from "../governance-genre-helper";
+import {
+  GovernanceTopic,
+  NativeDapps,
+  Others,
+} from "../governance-genre-helper";
 
 export const HomePage = () => {
   return (
@@ -19,11 +23,11 @@ export const HomePage = () => {
           NATIVE dAPPS
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {NativeDapps.map((dapp: Dapp) => (
+          {NativeDapps.map((dapp: GovernanceTopic) => (
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"
               key={dapp.name}
-              href={`governance/${dapp.link}`}
+              href={`governance/${dapp.slug}`}
             >
               <div
                 className="flex justify-center border-b border-border p-1"
@@ -42,11 +46,11 @@ export const HomePage = () => {
           OTHER
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {Others.map((dapp: Dapp) => (
+          {Others.map((dapp: GovernanceTopic) => (
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"
               key={dapp.name}
-              href={`governance/${dapp.link}`}
+              href={`governance/${dapp.slug}`}
             >
               <div
                 className="flex justify-center border-b border-border p-1"

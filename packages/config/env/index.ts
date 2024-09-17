@@ -206,7 +206,7 @@ export const governorAddress = process.env
 export const governanceTokenAddress = process.env
   .NEXT_PUBLIC_GOVERNANCE_TOKEN_ADDRESS as Address;
 export const governanceTimelockAddress = process.env
-  .NEXT_PUBLIC_GOVERNANCE_TIMELOCK_ADDRESS as string;
+  .NEXT_PUBLIC_GOVERNANCE_TIMELOCK_ADDRESS as Address;
 export const beraChefAddress = process.env
   .NEXT_PUBLIC_BERA_CHEF_ADDRESS as Address;
 export const governanceOrganizationId = process.env

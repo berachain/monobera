@@ -5,7 +5,7 @@ import { ActionButton } from "@bera/shared-ui";
 import { Address } from "viem";
 import Link from "next/link";
 import { governanceTokenAddress } from "@bera/config";
-import { useGovernance } from "../../components/governance-provider";
+import { useGovernance } from "./governance-provider";
 
 export const GoToIfHasVotingPower = ({
   governorAddress,
