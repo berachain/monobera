@@ -1,7 +1,7 @@
-import { SWRConfiguration, SWRResponse } from "swr";
-import { Address } from "viem";
+import type { SWRConfiguration, SWRResponse } from "swr";
+import type { Address } from "viem";
 
-import { Token } from "./dex";
+import type { Token } from "./dex";
 
 export interface BeraConfig {
   endpoints?: {

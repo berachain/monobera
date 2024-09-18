@@ -1,5 +1,4 @@
 import { BeraConfig, ValidatorList } from "../../types";
-import { Token } from "../../types/dex";
 
 export interface GetValidatorsRequest {
   config: BeraConfig;

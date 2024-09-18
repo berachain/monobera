@@ -5,9 +5,9 @@ import { crocQueryAddress } from "@bera/config";
 import BigNumber from "bignumber.js";
 import { Address, PublicClient, erc20Abi } from "viem";
 import { bexQueryAbi } from "~/abi";
-import { POOLID } from "~/constants";
+import { POOLID } from "~/config";
 
-import { clientToProvider } from "~/hooks/useEthersProvider";
+import { clientToProvider } from "~/utils/ethers-client-to-provider";
 import { IUserPosition, PoolV2 } from "~/types";
 import { BeraConfig } from "~/types/global";
 

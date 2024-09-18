@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { notFound, useRouter } from "next/navigation";
 import {
-  ADDRESS_ZERO,
   TXN_GAS_USED_ESTIMATES,
   TransactionActionType,
   bexAbi,

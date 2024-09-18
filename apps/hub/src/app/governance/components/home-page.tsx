@@ -22,7 +22,7 @@ export const HomePage = () => {
         <div className="font-semibold leading-6  tracking-wider text-muted-foreground">
           NATIVE dAPPS
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:gap-6 grid-cols-2 sm:grid-cols-4">
           {NativeDapps.map((dapp: GovernanceTopic) => (
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"
@@ -45,7 +45,7 @@ export const HomePage = () => {
         <div className="font-semibold leading-6 tracking-wider text-muted-foreground">
           OTHER
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 lg: gap-6 grid-cols-2 lg:grid-cols-4">
           {Others.map((dapp: GovernanceTopic) => (
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"

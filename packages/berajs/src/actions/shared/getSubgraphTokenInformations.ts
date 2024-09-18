@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { GetTokenInformations } from "@bera/graphql";
 import { getAddress } from "viem";
 
-import { BeraConfig, Token } from "~/types";
+import type { BeraConfig, Token } from "~/types";
 import { handleNativeBera } from "~/utils";
 
 interface FetchSubgraphTokenInformationsArgs {
