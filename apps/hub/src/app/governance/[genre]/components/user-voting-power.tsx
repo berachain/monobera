@@ -13,7 +13,7 @@ import { ADDRESS_ZERO } from "@bera/berajs/config";
 export const UserVotingPower = () => {
   const { isReady, account } = useBeraJs();
   const { data } = usePollUserDelegates();
-  const { votesThreshold, delegatedByOthers, tokenBalance } = useGovernance();
+  const { delegatedByOthers, tokenBalance } = useGovernance();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,53 +29,59 @@ export const UserVotingPower = () => {
       ) : (
         <>
           <h3 className="font-semibold leading-6">Your info</h3>
-
-          <div className="text-sm font-semibold">
-            <div className="text-muted-foreground">Total Voting Power</div>
-            {data?.currentVotes ? (
-              <p className="flex items-center leading-none gap-1">
-                <FormattedNumber value={data?.currentVotes ?? 0} symbol="BGT" />
-                <TokenIcon size="md" address={governanceTokenAddress} />
-              </p>
-            ) : (
-              <Skeleton className="h-6 w-full" />
-            )}
-          </div>
-          <div className="text-sm font-semibold">
-            <div className="text-muted-foreground capitalize">
-              Your delegation
-            </div>
-            {data?.delegate ? (
-              data.delegate !== ADDRESS_ZERO ? (
-                <div className="flex items-center gap-2 text-sm font-medium">
-                  <Identicon account={data?.delegate as string} size={24} />
-                  {data?.delegate === account
-                    ? "My Self"
-                    : truncateHash(data?.delegate)}
-                </div>
-              ) : (
-                <p className="flex items-center gap-1">
-                  <span className="leading-none">Unassigned</span>
-                  <span className="text-muted-foreground whitespace-nowrap">
-                    ––
-                  </span>
-                  <p className="flex items-center leading-none gap-1 text-muted-foreground">
-                    {tokenBalance ? (
-                      <FormattedNumber
-                        value={tokenBalance}
-                        symbol="BGT"
-                        compact={true}
-                      />
-                    ) : (
-                      <Skeleton className="h-6 w-full" />
-                    )}
-                    <TokenIcon size="md" address={governanceTokenAddress} />
-                  </p>
+          <div className="flex flex-row gap-4">
+            <div className="text-sm font-semibold basis-1/2">
+              <div className="text-muted-foreground">Total Voting Power</div>
+              {data?.currentVotes ? (
+                <p className="flex items-center leading-none gap-1">
+                  <FormattedNumber
+                    value={data?.currentVotes ?? 0}
+                    symbol="BGT"
+                  />
+                  <TokenIcon size="md" address={governanceTokenAddress} />
                 </p>
-              )
-            ) : (
-              <Skeleton className="h-6 w-full" />
-            )}
+              ) : (
+                <Skeleton className="h-6 w-full" />
+              )}
+            </div>
+            <div className="text-sm font-semibold basis-1/2">
+              <div className="text-muted-foreground capitalize">
+                Your delegation
+              </div>
+              {data?.delegate ? (
+                data.delegate !== ADDRESS_ZERO ? (
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    <Identicon account={data?.delegate as string} size={24} />
+                    {data?.delegate === account
+                      ? "My Self"
+                      : truncateHash(data?.delegate)}
+                  </div>
+                ) : (
+                  <p className="sm:flex items-center gap-1">
+                    <span className="leading-none max-sm:grow flex">
+                      Unassigned
+                    </span>
+                    <span className="text-muted-foreground whitespace-nowrap max-sm:hidden">
+                      ––
+                    </span>
+                    <p className="flex items-center leading-none gap-1 text-muted-foreground">
+                      {tokenBalance ? (
+                        <FormattedNumber
+                          value={tokenBalance}
+                          symbol="BGT"
+                          compact={true}
+                        />
+                      ) : (
+                        <Skeleton className="h-6 w-full" />
+                      )}
+                      <TokenIcon size="md" address={governanceTokenAddress} />
+                    </p>
+                  </p>
+                )
+              ) : (
+                <Skeleton className="h-6 w-full" />
+              )}
+            </div>
           </div>
           <div className="text-sm font-semibold">
             <div className="text-muted-foreground capitalize">

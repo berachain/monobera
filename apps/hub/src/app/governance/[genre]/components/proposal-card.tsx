@@ -49,7 +49,7 @@ export function ProposalCard({
   return (
     <div
       className={cn(
-        "relative flex flex-col sm:flex-row h-40 items-start sm:items-center justify-between p-4 pt-3 gap-3 overflow-hidden rounded-md border border-border lg:h-[116px]",
+        "relative flex flex-col sm:flex-row  items-start sm:items-center justify-between p-4 pt-3 gap-3 gap-y-4 overflow-hidden rounded-md border border-border lg:h-[116px]",
         details && "h-fit lg:h-60",
         className,
       )}
@@ -115,7 +115,7 @@ export function ProposalCard({
 
       <div
         className={cn(
-          "hidden sm:flex flex-col items-start xl:items-center gap-2 p-4 sm:px-8 xl:flex-row xl:gap-16 xl:px-16",
+          "flex flex-col items-start xl:items-center gap-2 gap-y-4  xl:flex-row xl:gap-16 xl:px-16",
           details && "flex xl:items-start gap-0 xl:flex-col xl:gap-0",
         )}
       >

@@ -113,8 +113,8 @@ export default function ProposalDetails({
                 {fm.data.title}
               </div>
             </div>
-            <div className="flex col-span-full items-center justify-between gap-4">
-              <div className="text-xs font-medium leading-6 text-muted-foreground">
+            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between gap-4">
+              <div className="text-xs col-span-full font-medium leading-6 text-muted-foreground">
                 <Badge
                   variant={getBadgeColor(proposal.status as StatusEnum)}
                   className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
@@ -124,23 +124,23 @@ export default function ProposalDetails({
                 {getTimeText(proposal)}
               </div>
 
-              <div className="  text-muted-foreground ">
+              <div className=" col-span-full  text-muted-foreground ">
                 <VoteInfo
                   className="text-xs font-medium "
                   prefix="Submitted by "
                   voter={proposal.creator}
                 />
               </div>
-              <div>
+              <div className="col-start-2">
                 <h3 className="text-sm font-bold uppercase text-muted-foreground">
                   votes
                 </h3>
                 <ProgressBarChart
                   dataList={getVotesDataList(proposal)}
-                  className="w-52"
+                  className="sm:w-52"
                 />
               </div>
-              <div className="self-stretch">
+              <div className="self-stretch col-start-1 row-start-3">
                 <h3 className="text-sm font-bold uppercase text-muted-foreground">
                   quorum
                 </h3>

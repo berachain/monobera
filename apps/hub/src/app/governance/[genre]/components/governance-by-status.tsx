@@ -42,7 +42,7 @@ export default function GovernanceByStatus({
           Vote on proposals <br />
           or create your own
         </div>
-        <div className="mx-auto my-8 flex   flex-col gap-3 sm:w-full sm:flex-row">
+        <div className="mx-auto my-8 flex gap-3 sm:w-full flex-wrap ">
           <GoToIfHasVotingPower
             href={`/governance/${dappConfig.slug}/create`}
             governorAddress={governorAddress}
