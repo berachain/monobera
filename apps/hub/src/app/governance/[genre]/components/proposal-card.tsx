@@ -9,16 +9,28 @@ import { formatEther } from "viem";
 
 import {
   getBadgeColor,
-  getThemeColor,
   getTimeText,
+  getTopicColor,
   getTotalVotes,
   getVotesDataList,
   parseProposalBody,
 } from "../../helper";
-import { ProposalTypeEnum, StatusEnum } from "../../types";
+import { StatusEnum } from "../../types";
 import { VoteInfo } from "./Voter";
 import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
+import { Icons } from "@bera/ui/icons";
+
+// If the proposal is active there is a time left to vote
+const tAgo = new Intl.RelativeTimeFormat("en-US", {
+  style: "long",
+  numeric: "auto",
+});
+// If the proposal is closed there is a time ago
+const tIn = new Intl.RelativeTimeFormat("en-US", {
+  style: "long",
+  numeric: "auto",
+});
 
 export function ProposalCard({
   details = false,
@@ -33,41 +45,60 @@ export function ProposalCard({
   proposal: Proposal;
 }) {
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
-  const themeColor = getThemeColor(fm.data.type as ProposalTypeEnum);
 
   return (
     <div
       className={cn(
-        "relative flex flex-col sm:flex-row h-40 items-start sm:items-center justify-between gap-3 overflow-hidden rounded-md border border-border lg:h-[116px]",
+        "relative flex flex-col sm:flex-row  items-start sm:items-center justify-between p-4 pt-3 gap-3 gap-y-4 overflow-hidden rounded-md border border-border lg:h-[116px]",
         details && "h-fit lg:h-60",
         className,
       )}
       {...props}
     >
-      <div className={cn("absolute left-0 h-full w-1", `bg-${themeColor}`)} />
-
-      <div className="flex-1 p-4">
-        <div
+      <div className="flex-1 ">
+        <p
           className={cn(
-            "text-xs font-semibold capitalize leading-4",
-            `text-${themeColor}`,
+            "text-xs flex gap-2 font-semibold capitalize leading-4",
           )}
         >
-          {fm.data.type ? fm.data.type.replaceAll("-", " ") : "Text"}
-        </div>
+          <p>
+            {(fm.data.topics || fm.data.topic)?.map((topic: string) => (
+              <span
+                className="inline-block after:content-['•'] after:mx-1 last:after:hidden"
+                style={{ color: getTopicColor(topic) }}
+              >
+                {topic}
+              </span>
+            ))}
+          </p>
+          {fm.data.forumLink && (
+            <>
+              <span className="text-muted-foreground">•</span>
+              <a
+                href={fm.data.forumLink}
+                target="_blank"
+                className="text-muted-foreground"
+                rel="noreferrer "
+              >
+                View Forum Post
+                <Icons.externalLink className="w-3 h-3 ml-1 align-middle inline-block" />
+              </a>
+            </>
+          )}
+        </p>
         <div
           className={cn(
-            "mt-1 font-semibold leading-6",
+            "mt-2 mb-3 font-semibold  leading-6",
             truncate && "line-clamp-1",
           )}
         >
           {fm.data.title}
         </div>
 
-        <div className="mt-4 text-xs font-medium leading-6 text-muted-foreground">
+        <div className="  text-xs font-medium leading-6 text-muted-foreground">
           <Badge
             variant={getBadgeColor(proposal.status as StatusEnum)}
-            className="mr-3 rounded-xs px-2 py-0.5 text-xs font-semibold capitalize"
+            className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
           >
             {proposal.status}
           </Badge>
@@ -84,7 +115,7 @@ export function ProposalCard({
 
       <div
         className={cn(
-          "hidden sm:flex flex-col items-start xl:items-center gap-2 p-4 sm:px-8 xl:flex-row xl:gap-16 xl:px-16",
+          "flex flex-col items-start xl:items-center gap-2 gap-y-4  xl:flex-row xl:gap-16 xl:px-16",
           details && "flex xl:items-start gap-0 xl:flex-col xl:gap-0",
         )}
       >

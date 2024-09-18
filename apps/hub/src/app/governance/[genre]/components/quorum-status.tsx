@@ -13,6 +13,7 @@ export const QuorumStatus = ({
     .div(BigNumber(quorum))
     .times(100)
     .toNumber();
+
   return (
     <div className="flex h-4 w-[170px] gap-2 text-xs font-medium">
       <div className="whitespace-nowrap">

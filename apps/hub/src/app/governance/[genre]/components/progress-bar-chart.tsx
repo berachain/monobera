@@ -52,7 +52,7 @@ export function ProgressBarChart({
             style={{
               width: `${data.width}%`,
               backgroundColor: data.color,
-              zIndex: 50 - i * 10,
+              zIndex: 10 + (5 - i * 1),
             }}
           />
         ))}

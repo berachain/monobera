@@ -26,7 +26,7 @@ import {
   validatorListUrl,
 } from "@bera/config";
 
-import { BeraConfig } from "..";
+import type { BeraConfig } from "..";
 
 export const defaultBeraConfig: BeraConfig = {
   endpoints: {

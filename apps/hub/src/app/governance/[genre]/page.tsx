@@ -1,14 +1,20 @@
 import React from "react";
 
-import { NativeDapps } from "../governance-genre-helper";
+import { NativeDapps, Others } from "../governance-genre-helper";
 import GovernanceByStatus from "./components/governance-by-status";
+import { defaultBeraConfig } from "@bera/berajs/config";
 
-export default function Page() {
-  return <GovernanceByStatus />;
+import { getAllProposals } from "@bera/berajs/actions";
+
+export const revalidate = 120;
+
+export default async function Page() {
+  const allProposals = await getAllProposals({ config: defaultBeraConfig });
+  return <GovernanceByStatus allProposals={allProposals} />;
 }
 
 export async function generateStaticParams() {
-  return NativeDapps.map((dapp) => ({
+  return [...NativeDapps, ...Others].map((dapp) => ({
     genre: dapp.slug,
   }));
 }

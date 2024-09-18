@@ -25,7 +25,7 @@ export function VoterTable({
   });
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 max-w-full">
       <div className="flex flex-col items-center justify-end sm:flex-row">
         {/* <MultiSelectBadge onSelect={(value) => setVoteType(value)} /> */}
       </div>

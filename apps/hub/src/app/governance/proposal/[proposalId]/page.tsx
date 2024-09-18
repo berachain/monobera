@@ -2,8 +2,11 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { bgtName, isIPFS } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
+import ProposalDetails, { ProposalDetailsWrapper } from "./proposal-details";
+import { defaultBeraConfig } from "@bera/berajs/config";
+import { getProposalDetails } from "@bera/berajs/actions";
 
-import ProposalDetails from "./proposal-details";
+export const revalidate = 120;
 
 export function generateMetadata({ params }: any): Metadata {
   const { proposalId } = params;
@@ -13,7 +16,9 @@ export function generateMetadata({ params }: any): Metadata {
   };
 }
 
-export default function Page({ params }: { params: { proposalId: string } }) {
+export default async function Page({
+  params,
+}: { params: { proposalId: string } }) {
   if (isIPFS) {
     return null;
   }
@@ -22,7 +27,16 @@ export default function Page({ params }: { params: { proposalId: string } }) {
     return notFound();
   }
 
-  return <ProposalDetails proposalId={params.proposalId} />;
+  const proposal = await getProposalDetails({
+    proposalId: params.proposalId,
+    config: defaultBeraConfig,
+  });
+
+  return (
+    <ProposalDetailsWrapper id={params.proposalId} content={proposal}>
+      <ProposalDetails proposalId={params.proposalId} />
+    </ProposalDetailsWrapper>
+  );
 }
 
 export function generateStaticParams() {
