@@ -1,7 +1,7 @@
 import { usePollWalletBalances, type Proposal, type Vote } from "@bera/berajs";
 import { bgtTokenAddress } from "@bera/config";
 import { StatusEnum } from "../../types";
-import { VoteDialog } from "../../[genre]/components/deposit-dialog";
+import { VoteDialog } from "../../[genre]/components/vote-dialog";
 
 export const Status = ({
   proposal,

@@ -6,7 +6,7 @@ import { cloudinaryUrl } from "@bera/config";
 import { getProposalss } from "@bera/graphql";
 import { SearchInput } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-
+import { useRouter } from "next/navigation";
 import { ProposalCard } from "./proposal-card";
 import { ProposalSorting } from "./proposal-sorting";
 import { ProposalStatusFilter } from "./proposal-status-filter";
@@ -16,7 +16,7 @@ const PROPOSALS_PER_PAGE = 10;
 export const ProposalsList = () => {
   const { data = [], isLoading } = usePollAllProposals();
   const [page, setPage] = useState(0);
-
+const router = useRouter();
   const {
     loading,
     error,
@@ -65,7 +65,7 @@ export const ProposalsList = () => {
         )}
       </div>
 
-      {!isLoading && data.length === 0 && (
+      {data?.length === 0 && (
         <div className="mx-auto w-fit">
           <Image
             src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}

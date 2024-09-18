@@ -116,7 +116,7 @@ export function OverviewChart({
   );
 
   return (
-    <Card className="relative mt-1 h-[234px] p-4">
+    <Card className="relative mt-1 h-[234px] p-3">
       <Tabs defaultValue={voteType.toString()} className="absolute right-4">
         <TabsList>
           {voteTypes.map((type: any) => (

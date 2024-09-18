@@ -2,7 +2,6 @@ import { BERA_CHEF_ABI, type ExecutableCalls } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 import { useGetVerifiedAbi } from "@bera/berajs";
-import { ProposalTypeEnum } from "../../types";
 import { Abi, AbiFunction, Address, decodeFunctionData, erc20Abi } from "viem";
 
 export const Actions = ({
@@ -11,7 +10,7 @@ export const Actions = ({
   executableCalls: ExecutableCalls[];
 }) => {
   return (
-    <div className="flex-1">
+    <>
       {executableCalls.map((executableCall, index) => {
         const { data, error, isLoading } = useGetVerifiedAbi(
           executableCall.target,
@@ -71,6 +70,6 @@ export const Actions = ({
           </Card>
         );
       })}
-    </div>
+    </>
   );
 };
