@@ -398,9 +398,9 @@ export const FavIcons = {
           width="9.46875"
           height="11.0312"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -433,9 +433,9 @@ export const FavIcons = {
           width="9.46875"
           height="11.0312"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -468,9 +468,9 @@ export const FavIcons = {
           width="9.46875"
           height="11.0312"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -503,9 +503,9 @@ export const FavIcons = {
           width="9.46875"
           height="11.0312"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -539,8 +539,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#ECCAB5" />
-          <stop offset="1" stop-color="#79492C" />
+          <stop stopColor="#ECCAB5" />
+          <stop offset="1" stopColor="#79492C" />
         </radialGradient>
         <radialGradient
           id="paint1_radial_6594_54"

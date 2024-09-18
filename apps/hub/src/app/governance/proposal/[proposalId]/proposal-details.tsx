@@ -193,15 +193,15 @@ export default function ProposalDetails({
                 </div>
               </div>
 
-              <div>
+              <div className=" mt-4">
                 <div className="h-7 text-lg font-semibold leading-7 text-foreground">
                   Overview
                 </div>
                 <OverviewChart votes={votes} isLoading={isLoading} />
               </div>
 
-              <div>
-                <div className="mt-4 h-7 text-lg font-semibold leading-7 text-foreground">
+              <div className="mt-4">
+                <div className="h-7 text-lg font-semibold leading-7 text-foreground">
                   Voters
                 </div>
                 <VoterTable votes={votes} isLoading={isLoading} />

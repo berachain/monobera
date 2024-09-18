@@ -7,6 +7,8 @@ import { bgtName } from "@bera/config";
 import { defaultBeraConfig } from "@bera/berajs/config";
 import { getProposalDetails } from "@bera/berajs/actions";
 
+export const revalidate = 120;
+
 export function generateMetadata({ params }: any): Metadata {
   const { proposalId } = params;
   return {
