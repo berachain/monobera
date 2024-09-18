@@ -29,7 +29,7 @@ export const UserVotingPower = () => {
       ) : (
         <>
           <h3 className="font-semibold leading-6">Your info</h3>
-          <div className="flex flex-row gap-4">
+          <div className="flex flex-row sm:flex-col gap-y-6 gap-4">
             <div className="text-sm font-semibold basis-1/2">
               <div className="text-muted-foreground">Total Voting Power</div>
               {data?.currentVotes ? (
