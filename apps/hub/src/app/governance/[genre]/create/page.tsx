@@ -23,6 +23,6 @@ export default function Create({
 
 export async function generateStaticParams() {
   return NativeDapps.map((dapp) => ({
-    genre: dapp.link,
+    genre: dapp.slug,
   }));
 }

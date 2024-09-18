@@ -11,7 +11,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import { DelegateModal } from "./delegate-modal";
 import { Button } from "@bera/ui/button";
 import { useState } from "react";
-import { useGovernance } from "../../components/governance-provider";
+import { useGovernance } from "./governance-provider";
 import { governanceTokenAddress } from "@bera/config";
 
 export const UserVotingPower = () => {
