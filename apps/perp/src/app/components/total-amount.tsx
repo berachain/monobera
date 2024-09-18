@@ -31,6 +31,9 @@ export function TotalAmount({
   const { data: openPositions } = usePollOpenPositions(tableState);
   const { marketPrices } = usePollPrices();
   const unrealizedPnl = useMemo(() => {
+    if (!openPositions) {
+      return BigNumber(totalUnrealizedPnl);
+    }
     const pnl = calculateUnrealizedPnl(openPositions, marketPrices);
     return BigNumber(pnl ?? totalUnrealizedPnl);
   }, [openPositions, marketPrices, totalUnrealizedPnl]);

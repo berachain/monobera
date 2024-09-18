@@ -75,12 +75,13 @@ export default function Stats({ markets }: { markets: IMarket[] }) {
               onValueChange={(value) => setTabType(value as "Volume" | "PnL")}
               className="h-full w-full sm:w-fit"
             >
-              <TabsList className="h-full w-full border border-border sm:w-fit">
+              <TabsList className="h-full w-full border border-border sm:w-fit px-1">
                 {["Volume", "PnL"].map((status) => (
                   <TabsTrigger
                     value={status}
                     key={status}
-                    className="variant w-full flex-1 capitalize data-[state=active]:bg-secondary data-[state=active]:text-foreground sm:w-fit"
+                    variant="compact"
+                    className="variant  w-full flex-1 capitalize data-[state=active]:bg-secondary data-[state=active]:text-foreground sm:w-fit"
                     onClick={() => setTabType(status as "Volume" | "PnL")}
                   >
                     {status}{" "}

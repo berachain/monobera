@@ -14,7 +14,7 @@ import {
   type ResolutionString,
 } from "~/types/charting-library";
 import { type IMarket } from "~/types/market";
-import { ILimitOrder, IOpenTradeCalculated } from "~/types/order-history";
+import { ILimitOrder, IOpenTrade } from "~/types/order-history";
 import { type TableStateProps } from "~/types/table";
 import { ClosePositionModal } from "../../components/close-position-modal";
 import type { ChartProps } from "./TVChartContainer";
@@ -65,24 +65,16 @@ export function OrderChart({
   );
 
   const openPositions = useMemo(() => {
+    if (!openPositionData) {
+      return [];
+    }
+
     const positions = generateMarketOrders(openPositionData, markets);
     return positions.map((position, index) => {
       return {
         ...position,
-        borrowing_fee:
-          Array.isArray(openPositionsLiqFeesData) &&
-          openPositionsLiqFeesData[1] &&
-          openPositionsLiqFeesData[1][index] !== undefined
-            ? openPositionsLiqFeesData[1][index].toString()
-            : "0",
-        liq_price:
-          Array.isArray(openPositionsLiqFeesData) &&
-          openPositionsLiqFeesData[0] &&
-          openPositionsLiqFeesData[0][index] !== undefined
-            ? openPositionsLiqFeesData[0][index].toString()
-            : "0",
       };
-    }) as IOpenTradeCalculated[];
+    }) as IOpenTrade[];
   }, [openPositionData, markets, openPositionsLiqFeesData]);
 
   const openOrders = useMemo(() => {
@@ -91,7 +83,7 @@ export function OrderChart({
 
   const [positionOpenState, setPositionOpenState] = useState(false);
   const [orderOpenState, setOrderOpenState] = useState(false);
-  const [position, setPosition] = useState<IOpenTradeCalculated>();
+  const [position, setPosition] = useState<IOpenTrade>();
   const [order, setOrder] = useState<ILimitOrder>();
 
   const defaultWidgetProps: Partial<ChartingLibraryWidgetOptions> = {
