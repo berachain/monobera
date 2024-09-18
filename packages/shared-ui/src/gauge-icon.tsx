@@ -42,7 +42,10 @@ export const GaugeIcon = ({
   size,
   ...props
 }: IconProps) => {
-  const { gaugeDictionary } = usePollGauges();
+  // This returns all gauges, not just the ones for the validator or specific pages
+  const { gaugeDictionary } = usePollGauges({
+    pageSize: 9999,
+  });
   const img = useMemo(
     () => gaugeDictionary?.[address]?.metadata?.logoURI ?? "",
     [address],
@@ -55,7 +58,7 @@ export const GaugeIcon = ({
         alt={address}
       />
       <AvatarFallback>
-        <Icons.gauge className="w-full h-full p-[15%]" />
+        <Icons.gauge className="h-full w-full p-[15%]" />
       </AvatarFallback>
     </Avatar>
   );
