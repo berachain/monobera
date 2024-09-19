@@ -7,7 +7,7 @@ import { ProposalCard } from "./proposal-card";
 import { useRouter } from "next/navigation";
 
 export const ProposalsList = () => {
-  const { data, isLoading } = usePollAllProposals();
+  const { data } = usePollAllProposals();
   const router = useRouter();
   return (
     <div className="w-full">
@@ -16,7 +16,10 @@ export const ProposalsList = () => {
           <ProposalCard
             proposal={proposal}
             key={`proposal-${proposal.id}`}
-            className="hover:cursor-pointer" //@ts-ignore
+            className="hover:cursor-pointer"
+            onMouseOver={() => {
+              router.prefetch(`/governance/proposal/${proposal.id}`);
+            }}
             onClick={() => {
               router.push(`/governance/proposal/${proposal.id}`);
             }}

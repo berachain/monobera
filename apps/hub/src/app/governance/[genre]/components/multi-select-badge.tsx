@@ -60,14 +60,7 @@ export function MultiSelectBadge({ onSelect, className }: IMultiSelectBadge) {
         color: VoteColorMap.no,
       },
     },
-    {
-      value: VoteOption.VOTE_OPTION_NO_WITH_VETO,
-      label: "No with veto",
-      activeStyle: {
-        backgroundColor: VoteColorMap.veto_secondary,
-        color: VoteColorMap.veto,
-      },
-    },
+
     {
       value: VoteOption.VOTE_OPTION_ABSTAIN,
       label: "Abstain",

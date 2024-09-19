@@ -9,7 +9,7 @@ import {
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { MultiSelectBadge, SelectedVotes } from "./multi-select-badge";
-import { VoterColumns } from "./voter-column";
+import { voterColumns } from "./voter-column";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
@@ -54,7 +54,7 @@ export function VoterTable({
 
   const table = useAsyncTable({
     fetchData: async () => {},
-    columns: VoterColumns,
+    columns: voterColumns,
     data: filteredVotes,
     additionalTableProps: {
       manualSorting: false,
@@ -64,7 +64,7 @@ export function VoterTable({
   return (
     <div className="grid grid-cols-1 gap-2 max-w-full">
       <div className="flex justify-between items-center ">
-        <div className="text-lg sm:mb-2 font-semibold leading-none text-foreground">
+        <div className="text-lg  font-semibold leading-none text-foreground">
           Voters
         </div>
         <div className="sm:hidden flex items-center">
@@ -90,10 +90,6 @@ export function VoterTable({
                 label: "No",
                 value: "against",
               },
-              {
-                label: "No with veto",
-                value: "no with veto",
-              },
             ]}
             onSelect={(value) =>
               setFilter((filter) => ({
@@ -106,36 +102,6 @@ export function VoterTable({
             contentClassname="bg-muted border border-border"
           />
         </div>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <Tabs
-          defaultValue=""
-          className="max-sm:grow"
-          value={filter.walletType}
-          onValueChange={(value) =>
-            setFilter((filter) => ({
-              ...filter,
-              walletType:
-                value === "" ? undefined : (value as "user" | "validator"),
-            }))
-          }
-        >
-          <TabsList
-            variant="ghost"
-            className="grow w-full [&>button]:grow [&>button]:basis-1/3"
-          >
-            <TabsTrigger variant="compact" value={""}>
-              All
-            </TabsTrigger>
-            <TabsTrigger variant="compact" value="user">
-              User
-            </TabsTrigger>
-            <TabsTrigger variant="compact" value="validator">
-              Validator
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
         <div className="hidden sm:flex flex-col items-center justify-end sm:flex-row">
           <MultiSelectBadge
             onSelect={(value) =>
@@ -153,7 +119,6 @@ export function VoterTable({
       <div className="max-w-full overflow-scroll">
         {isLoading ? (
           <div className="flex flex-col gap-4">
-            {" "}
             {[0, 0, 0, 0, 0, 0].map((_, index) => (
               <Skeleton key={index} className="h-10 w-full" />
             ))}{" "}

@@ -20,28 +20,37 @@ const getBadgeColor = (type: keyof typeof VoteEnum) => {
   }
 };
 
-export const VoterColumns: ColumnDef<Vote>[] = [
+export const voterColumns: ColumnDef<Vote>[] = [
   {
     header: "Voter",
     cell: ({ row }) => <VoteInfo voter={row.original.voter} />,
     accessorKey: "voter",
     enableSorting: false,
+    minSize: 200,
   },
   {
     header: "Stance",
+    meta: {
+      className: "!min-w-8 grow-0 sm:!min-w-12",
+    },
     cell: ({ row }) => (
       <Badge
         variant={getBadgeColor(row.original.type)}
-        className="w-20 justify-center border-none px-2 py-1 text-sm capitalize"
+        className="justify-center border-none px-2 py-1 text-sm capitalize"
       >
         {VoteEnum[row.original.type as keyof typeof VoteEnum]}
       </Badge>
     ),
+    minSize: 100,
+    size: 120,
     accessorKey: "stance",
     enableSorting: false,
   },
   {
     header: "BGT delegated",
+    meta: {
+      className: "grow-0",
+    },
     cell: ({ row }) => (
       <FormattedNumber
         value={formatEther(BigInt(row.original.amount))}
@@ -50,6 +59,7 @@ export const VoterColumns: ColumnDef<Vote>[] = [
         className="text-sm font-medium"
       />
     ),
+    size: 250,
     accessorKey: "vp",
     sortingFn: (a, b) => Number(a.original.amount) - Number(b.original.amount),
     enableSorting: true,

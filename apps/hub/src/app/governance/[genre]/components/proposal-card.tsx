@@ -38,10 +38,9 @@ export function ProposalCard({
   className,
   proposal,
   ...props
-}: {
+}: React.HTMLAttributes<HTMLDivElement> & {
   details?: boolean;
   truncate?: boolean;
-  className?: string;
   proposal: Proposal;
 }) {
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);

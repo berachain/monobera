@@ -66,7 +66,7 @@ export default function ProposalDetails({
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-12 pb-16 gap-4">
+    <div className="grid grid-cols-1 xl:grid-cols-12 pb-16 gap-4 md:gap-6">
       <div className="xl:col-start-2 xl:col-span-10 grid grid-cols-1 gap-4">
         {!proposal ? (
           <>Loading</>
@@ -114,7 +114,7 @@ export default function ProposalDetails({
                 {fm.data.title}
               </div>
             </div>
-            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between gap-4">
+            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between gap-4 md:gap-6">
               <div className="text-xs col-span-full font-medium leading-6 text-muted-foreground">
                 <Badge
                   variant={getBadgeColor(proposal.status as StatusEnum)}
@@ -154,7 +154,7 @@ export default function ProposalDetails({
             <hr className="border-b border-border mt-10 mb-16" />
             <div className="mx-auto gap-16">
               <div>
-                <div className="mt-4 flex md:flex-row flex-col gap-4">
+                <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
                   <Card className="px-8 py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
                     <FormattedNumber
                       value={getTotalVotes(proposal)}
@@ -172,11 +172,11 @@ export default function ProposalDetails({
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
+              <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
                 <div className="lg:col-start-2 ">
                   <ProposalTimeline />
                 </div>
-                <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4">
+                <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
                   <div className="border border-border py-4 px-8 rounded-md">
                     <h3 className="font-medium mb-4">Description</h3>
                     <div>
