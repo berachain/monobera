@@ -261,6 +261,8 @@ export const useCreateProposal = (governorAddress: Address) => {
           }),
         );
 
+      onError?.(e);
+
       if (
         Object.getOwnPropertyNames(e)
           .map((name) => e[name as keyof typeof e])
@@ -273,7 +275,6 @@ export const useCreateProposal = (governorAddress: Address) => {
           })
       ) {
         console.warn("Proposal has errors", e);
-        onError?.(e);
         return;
       }
 

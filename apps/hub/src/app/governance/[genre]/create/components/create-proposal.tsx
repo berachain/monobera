@@ -118,6 +118,7 @@ export const CreateProposal = ({
             {proposal.actions.map((action, idx) => (
               <CreateProposalAction
                 idx={idx}
+                key={idx}
                 action={action}
                 setErrors={createActionErrorUpdateHandler(idx)}
                 setAction={createActionUpdateHandler(idx)}
