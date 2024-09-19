@@ -7,11 +7,11 @@ import type {
 
 import { type IMarket } from "./market";
 
-export interface IOpenTrade extends OpenTrade {
+export interface IOpenTrade extends IOpenTradeWithoutMarket {
   market: IMarket;
 }
 
-export interface IOpenTradeCalculated extends IOpenTrade {
+export interface IOpenTradeWithoutMarket extends OpenTrade {
   liq_price: string;
   borrowing_fee: string;
 }
