@@ -39,8 +39,6 @@ export const VoterColumns: ColumnDef<Vote>[] = [
     ),
     accessorKey: "stance",
     enableSorting: false,
-    minSize: 160,
-    size: 160,
   },
   {
     header: "BGT delegated",
@@ -55,7 +53,5 @@ export const VoterColumns: ColumnDef<Vote>[] = [
     accessorKey: "vp",
     sortingFn: (a, b) => Number(a.original.amount) - Number(b.original.amount),
     enableSorting: true,
-    minSize: 160,
-    size: 160,
   },
 ];
