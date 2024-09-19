@@ -22,9 +22,9 @@ import {
   ProposalErrorCodes,
   ProposalTypeEnum,
   SafeProposalAction,
-} from "~/app/governance/types";
-import { PROPOSAL_GENRE } from "~/app/governance/governance-genre-helper";
-import { useGovernance } from "~/app/governance/[genre]/components/governance-provider";
+} from "../app/governance/types";
+import { PROPOSAL_GENRE } from "../app/governance/governance-genre-helper";
+import { useGovernance } from "../app/governance/[genre]/components/governance-provider";
 
 const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
@@ -137,13 +137,22 @@ export const getBodyErrors = (proposal: CustomProposal) => {
   return e;
 };
 
-export const useCreateProposal = (governorAddress: Address) => {
+export const useCreateProposal = ({
+  governorAddress,
+  initialData = {},
+  onSuccess,
+}: {
+  governorAddress: Address;
+  initialData?: any;
+  onSuccess?: () => void;
+}) => {
   const [proposal, setProposal] = useState<CustomProposal>({
     title: "",
     description: "",
     forumLink: "",
-    topic: new Set(),
     actions: [defaultAction],
+    ...initialData,
+    topic: new Set(),
   });
 
   const router = useRouter();
@@ -160,7 +169,10 @@ export const useCreateProposal = (governorAddress: Address) => {
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
-    onSuccess: () => router.push("/governance"),
+    onSuccess: () => {
+      onSuccess?.();
+      router.push("/governance");
+    },
   });
 
   const addProposalAction = useCallback(() => {
