@@ -6,9 +6,7 @@
   "sideEffects": false,
   "types": "dist/index.d.ts",
   "type": "module",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -66,6 +64,14 @@
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
+    },
+    "./contexts": {
+      "types": "./dist/contexts/index.d.ts",
+      "import": "./dist/contexts/index.js"
+    },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js"
     },
     "./package.json": "./package.json"
   }

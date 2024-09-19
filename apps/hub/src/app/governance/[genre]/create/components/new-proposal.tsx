@@ -1,24 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useBeraJs } from "@bera/berajs";
+import { governorAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
 
-import {
-  PROPOSAL_GENRE,
-  getDappByGenre,
-} from "../../../governance-genre-helper";
+import { PROPOSAL_GENRE } from "../../../governance-genre-helper";
+import { useGovernance } from "../../components/governance-provider";
 import { CreateProposal } from "./create-proposal";
-import { governorAddress } from "@bera/config";
 
-import { useParams, useRouter } from "next/navigation";
-import { useGovernance } from "~/app/governance/components/governance-provider";
-import { useEffect } from "react";
-import { useBeraJs } from "@bera/berajs";
-export default function NewProposal({
-  genre,
-}: {
-  genre: PROPOSAL_GENRE;
-}) {
+export default function NewProposal({ genre }: { genre: PROPOSAL_GENRE }) {
   // const dapp = getDappByGenre(genre);
   const { account } = useBeraJs();
   const params = useParams();
@@ -42,10 +35,10 @@ export default function NewProposal({
   }, [canPropose, account, isLoading]);
 
   return (
-    <div className="pb-16 col-span-12 xl:col-span-8 xl:col-start-3">
+    <div className="col-span-12 pb-16 xl:col-span-8 xl:col-start-3">
       <Link
         href={`/governance/${params.genre}`}
-        className="flex mb-8 items-center gap-1 text-sm font-medium text-muted-foreground"
+        className="mb-8 flex items-center gap-1 text-sm font-medium text-muted-foreground"
       >
         <Icons.arrowLeft className="h-4 w-4" />
         All Proposals

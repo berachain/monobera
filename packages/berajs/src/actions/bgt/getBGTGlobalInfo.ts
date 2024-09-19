@@ -1,6 +1,4 @@
-import { Address } from "viem";
-
-import { ActiveIncentive, BeraConfig, Validator } from "~/types";
+import type { ActiveIncentive, BeraConfig, Validator } from "~/types";
 
 export interface GlobalInfo {
   bgtInfo: {

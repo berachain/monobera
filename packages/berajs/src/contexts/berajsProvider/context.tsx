@@ -9,12 +9,12 @@ import React, {
 } from "react";
 import { useAccount, useChains } from "wagmi";
 
-import { defaultBeraConfig } from "~/constants/defaultBeraConfig";
+import { defaultBeraConfig } from "~/config/defaultBeraConfig";
 import { TransactionStoreProvider } from "~/hooks";
 import { BeraConfig } from "~/types";
 import { CrocEnvContextProvider } from "../crocenv";
 import { SWRConfig } from "swr";
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs"; 
 
 export interface IBeraJsAPI {
   account: `0x${string}` | undefined;
@@ -26,7 +26,25 @@ export interface IBeraJsAPI {
 
 export const BeraJsContext = createContext<IBeraJsAPI | undefined>(undefined);
 
-const BeraJsProvider: React.FC<
+export const SWRFallback = ({
+  fallback,
+  children,
+}: {
+  fallback: Record<string, any>;
+  children: React.ReactNode;
+}) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback,
+      }}
+    >
+      {children}
+    </SWRConfig>
+  );
+};
+
+export const BeraJsProvider: React.FC<
   PropsWithChildren<{ configOverride?: BeraConfig }>
 > = ({ children, configOverride }) => {
   const chains = useChains();

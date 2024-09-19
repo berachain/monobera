@@ -10,9 +10,9 @@ import {
   ProposalErrorCodes,
   ProposalTypeEnum,
 } from "~/app/governance/types";
-import { useGovernance } from "~/app/governance/components/governance-provider";
 import { formatUnits, isAddress, parseUnits } from "viem";
 import { checkProposalField } from "~/hooks/useCreateProposal";
+import { useGovernance } from "../../components/governance-provider";
 
 export function Erc20Transfer({
   idx,

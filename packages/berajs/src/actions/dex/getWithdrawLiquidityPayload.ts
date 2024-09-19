@@ -3,7 +3,7 @@ import { PayloadReturnType, WithdrawLiquidityRequest } from "~/types";
 import { BigNumber } from "ethers";
 import { CrocContext, connectCroc } from "@bera/beracrocswap/dist/context";
 import { PublicClient } from "viem";
-import { clientToProvider } from "~/hooks/useEthersProvider";
+import { clientToProvider } from "~/utils/ethers-client-to-provider";
 import { CrocTokenView } from "@bera/beracrocswap/dist/tokens";
 
 /**

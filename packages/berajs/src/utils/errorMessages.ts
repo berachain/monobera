@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { PublicClient } from "viem";
-
-import { clientToProvider } from "~/hooks/useEthersProvider";
+import { clientToProvider } from "./ethers-client-to-provider";
 
 interface ErrorType {
   keywords: string[];
