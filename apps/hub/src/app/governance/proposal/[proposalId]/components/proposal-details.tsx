@@ -14,22 +14,23 @@ import {
   getTotalVotes,
   getVotesDataList,
   parseProposalBody,
-} from "../../helper";
-import { Actions } from "./Actions";
-import { Status } from "./Status";
+} from "../../../helper";
+import { Actions } from "../Actions";
+import { Status } from "../Status";
 import "@bera/graphql";
 import MarkdownRenderer from "./markdown-renderer";
 import { Badge } from "@bera/ui/badge";
-import { OverviewChart } from "../../[genre]/components/overview-chart";
-import { VoterTable } from "../../[genre]/components/voter-table";
-import { VoteCard } from "../../[genre]/components/vote-card";
-import { StatusEnum } from "../../types";
-import { VoteInfo } from "../../[genre]/components/Voter";
-import { QuorumStatus } from "../../[genre]/components/quorum-status";
+import { OverviewChart } from "../../../[genre]/components/overview-chart";
+import { VoterTable } from "../../../[genre]/components/voter-table";
+import { VoteCard } from "../../../[genre]/components/vote-card";
+import { StatusEnum } from "../../../types";
+import { VoteInfo } from "../../../[genre]/components/Voter";
+import { QuorumStatus } from "../../../[genre]/components/quorum-status";
 import { formatEther } from "viem";
-import { ProgressBarChart } from "../../[genre]/components/progress-bar-chart";
+import { ProgressBarChart } from "../../../[genre]/components/progress-bar-chart";
 import { SWRFallback } from "@bera/berajs/contexts";
 import { unstable_serialize } from "swr";
+import { ProposalTimeline } from "./proposal-timeline";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -154,7 +155,7 @@ export default function ProposalDetails({
             <div className="mx-auto gap-16">
               <div>
                 <div className="mt-4 flex md:flex-row flex-col gap-4">
-                  <Card className="px-8 flex-col items-center md:basis-1/3 shrink justify-center flex">
+                  <Card className="px-8 py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
                     <FormattedNumber
                       value={getTotalVotes(proposal)}
                       className="text-lg sm:text-xl font-semibold leading-none text-foreground"
@@ -173,11 +174,7 @@ export default function ProposalDetails({
               </div>
               <div className="grid grid-cols-1 gap-4 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
                 <div className="lg:col-start-2 ">
-                  <div className="gap-4 p-5 rounded-sm border border-border ">
-                    Initiated Initiated Jul,04, 09:14am Voting Period Begins
-                    Jul,04, 12:14pm Voting Period Ends Jul,04, 3:08pm Proposal
-                    Passed Jul,04, 9:41pm
-                  </div>
+                  <ProposalTimeline />
                 </div>
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4">
                   <div className="border border-border py-4 px-8 rounded-md">
