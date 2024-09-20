@@ -133,7 +133,7 @@ export default function ProposalDetails({
                 />
               </div>
               <div className="col-start-2">
-                <h3 className="text-sm font-medium uppercase text-muted-foreground">
+                <h3 className="text-sm font-medium uppercase leading-5 mb-1 text-muted-foreground">
                   votes
                 </h3>
                 <ProgressBarChart
@@ -142,7 +142,7 @@ export default function ProposalDetails({
                 />
               </div>
               <div className="self-stretch col-start-1 row-start-3 ">
-                <h3 className="text-sm font-medium uppercase text-muted-foreground">
+                <h3 className="text-sm font-medium leading-5 mb-1 uppercase text-muted-foreground">
                   quorum
                 </h3>
                 <QuorumStatus
