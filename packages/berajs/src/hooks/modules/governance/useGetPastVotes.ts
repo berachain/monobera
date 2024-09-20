@@ -3,7 +3,7 @@ import { usePublicClient } from "wagmi";
 import { useBeraJs } from "~/contexts";
 import { useProposalSnapshot } from "./useProposalSnapshot";
 import useSWRImmutable from "swr/immutable";
-import { IVotes_ABI } from "~/abi";
+import { BGT_ABI } from "~/abi";
 import { governanceTokenAddress } from "@bera/config";
 
 export const useGetPastVotes = (
@@ -52,7 +52,7 @@ export const useGetPastVotes = (
     }
 
     const votes = await publicClient.readContract({
-      abi: IVotes_ABI,
+      abi: BGT_ABI,
       address: governanceTokenAddress,
       functionName: "getPastVotes",
       args: [wallet, BigInt(ts!)],

@@ -24,4 +24,3 @@ export * from "./borrowingAbi";
 export * from "./berpsErrorsAbi";
 export * from "./pythErrorsAbi";
 export * from "./beraChef";
-export * from "./erc-vote";
