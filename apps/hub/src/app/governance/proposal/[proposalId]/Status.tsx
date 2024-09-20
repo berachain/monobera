@@ -3,7 +3,7 @@ import { StatusEnum } from "../../types";
 import { VoteDialog } from "../../[genre]/components/vote-dialog";
 import { CancelButton } from "./components/cancel-button";
 
-export const Status = ({
+export const StatusAction = ({
   proposal,
   userVote,
 }: {
@@ -16,7 +16,7 @@ export const Status = ({
   return (
     <div className="flex items-center gap-3 font-medium">
       {status === StatusEnum.PENDING && <div>Voting starts at {time}</div>}
-      {true && (
+      {status === StatusEnum.QUEUED && (
         <CancelButton
           // TODO: this is wrong, must be provided from subgraph data
           proposalTimelockId={proposal.onchainId}

@@ -10,13 +10,12 @@ import { Icons } from "@bera/ui/icons";
 import {
   getBadgeColor,
   getTimeText,
-  getTopicColor,
   getTotalVotes,
   getVotesDataList,
   parseProposalBody,
 } from "../../../helper";
 import { Actions } from "../Actions";
-import { Status } from "../Status";
+import { StatusAction } from "../Status";
 import "@bera/graphql";
 import MarkdownRenderer from "./markdown-renderer";
 import { Badge } from "@bera/ui/badge";
@@ -31,6 +30,7 @@ import { ProgressBarChart } from "../../../[genre]/components/progress-bar-chart
 import { SWRFallback } from "@bera/berajs/contexts";
 import { unstable_serialize } from "swr";
 import { ProposalTimeline } from "./proposal-timeline";
+import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -81,38 +81,12 @@ export default function ProposalDetails({
                 Governance
               </Link>
               {proposal && (
-                <Status proposal={proposal as any} userVote={userVote} />
+                <StatusAction proposal={proposal as any} userVote={userVote} />
               )}
             </div>
 
             <div className="col-span-full">
-              <p className="text-xs flex gap-2 font-semibold capitalize leading-4">
-                {fm.data.topics?.map((topic: string) => (
-                  <span
-                    className="inline-block after:content-['•'] after:mx-1 last:after:hidden"
-                    style={{ color: getTopicColor(fm.data.topic) }}
-                  >
-                    {topic}
-                  </span>
-                ))}
-                {fm.data.forumLink && (
-                  <>
-                    <span className="text-muted-foreground">•</span>
-                    <a
-                      href={fm.data.forumLink}
-                      target="_blank"
-                      className="text-muted-foreground"
-                      rel="noreferrer "
-                    >
-                      View Forum Post
-                      <Icons.externalLink className="w-3 h-3 ml-1 align-middle inline-block" />
-                    </a>
-                  </>
-                )}
-              </p>
-              <div className={"mt-2 mb-3 font-semibold  text-xl leading-6"}>
-                {fm.data.title}
-              </div>
+              <ProposalHeading frontmatter={fm} size="md" />
             </div>
             <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-4 md:gap-6">
               <div className="text-xs col-span-full font-medium leading-6 text-muted-foreground">
@@ -151,7 +125,7 @@ export default function ProposalDetails({
                 />
               </div>
             </div>
-            <hr className="border-b border-border mt-10 mb-16" />
+            <hr className="border-b border-border sm:mt-10 sm:mb-16" />
             <div className="mx-auto gap-16">
               <div>
                 <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
@@ -177,13 +151,13 @@ export default function ProposalDetails({
                   <ProposalTimeline />
                 </div>
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
-                  <div className="border border-border py-4 px-8 rounded-md">
+                  <div className="border border-border p-4 px-8 rounded-md">
                     <h3 className="font-medium mb-4">Description</h3>
                     <div>
                       <MarkdownRenderer content={fm.content} />
                     </div>
                   </div>
-                  <div className="border border-border  grid grid-cols-1 gap-y-4  pt-4 pb-8 px-8 rounded-md">
+                  <div className="border border-border grid grid-cols-1 gap-y-4 py-4 pb-8 px-8 rounded-md">
                     <h3 className="font-medium">Code Actions</h3>
                     <Actions executableCalls={proposal.executableCalls} />
                   </div>

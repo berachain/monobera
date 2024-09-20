@@ -11,7 +11,12 @@ export const ProposalsList = () => {
   const router = useRouter();
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-4">
+      <div className="max-sm:hidden font-medium text-xs text-muted-foreground px-4 lg:pr-8 xl:pr-16 gap-4 grid grid-cols-[4fr_2.5fr_2.5fr] mb-3 uppercase">
+        <h4>Proposal</h4>
+        <h4>Votes</h4>
+        <h4>Quorum</h4>
+      </div>
+      <div className="grid grid-cols-1 gap-4">
         {data?.map((proposal: Proposal) => (
           <ProposalCard
             proposal={proposal}
