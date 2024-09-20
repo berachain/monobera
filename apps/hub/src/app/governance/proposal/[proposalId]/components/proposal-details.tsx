@@ -114,7 +114,7 @@ export default function ProposalDetails({
                 {fm.data.title}
               </div>
             </div>
-            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between gap-4 md:gap-6">
+            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-4 md:gap-6">
               <div className="text-xs col-span-full font-medium leading-6 text-muted-foreground">
                 <Badge
                   variant={getBadgeColor(proposal.status as StatusEnum)}
@@ -133,7 +133,7 @@ export default function ProposalDetails({
                 />
               </div>
               <div className="col-start-2">
-                <h3 className="text-sm font-bold uppercase text-muted-foreground">
+                <h3 className="text-sm font-medium uppercase text-muted-foreground">
                   votes
                 </h3>
                 <ProgressBarChart
@@ -141,8 +141,8 @@ export default function ProposalDetails({
                   className="sm:w-52"
                 />
               </div>
-              <div className="self-stretch col-start-1 row-start-3">
-                <h3 className="text-sm font-bold uppercase text-muted-foreground">
+              <div className="self-stretch col-start-1 row-start-3 ">
+                <h3 className="text-sm font-medium uppercase text-muted-foreground">
                   quorum
                 </h3>
                 <QuorumStatus

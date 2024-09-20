@@ -114,7 +114,7 @@ export function ProposalCard({
 
       <div
         className={cn(
-          "flex flex-col items-start xl:items-center gap-2 gap-y-4  xl:flex-row xl:gap-16 xl:px-16",
+          "flex flex-col items-start xl:items-center gap-2 gap-y-4  text-xs xl:flex-row xl:gap-16 xl:px-16",
           details && "flex xl:items-start gap-0 xl:flex-col xl:gap-0",
         )}
       >

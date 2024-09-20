@@ -1,7 +1,7 @@
-import { usePollWalletBalances, type Proposal, type Vote } from "@bera/berajs";
-import { bgtTokenAddress } from "@bera/config";
+import { type Proposal, type Vote } from "@bera/berajs";
 import { StatusEnum } from "../../types";
 import { VoteDialog } from "../../[genre]/components/vote-dialog";
+import { CancelButton } from "./components/cancel-button";
 
 export const Status = ({
   proposal,
@@ -16,7 +16,12 @@ export const Status = ({
   return (
     <div className="flex items-center gap-3 font-medium">
       {status === StatusEnum.PENDING && <div>Voting starts at {time}</div>}
-      {status === StatusEnum.QUEUED && <div>Voting in queue</div>}
+      {true && (
+        <CancelButton
+          // TODO: this is wrong, must be provided from subgraph data
+          proposalTimelockId={proposal.onchainId}
+        />
+      )}
       {status === StatusEnum.ACTIVE && (
         <VoteDialog proposal={proposal} disable={false} />
       )}

@@ -2,6 +2,7 @@ export * from "./staking";
 export * from "./epochs";
 export * from "./bgt";
 export * from "./governance";
+export * from "./governance-timelock";
 export * from "./rewards";
 export * from "./honeyRouterAbi";
 export * from "./bribe";
