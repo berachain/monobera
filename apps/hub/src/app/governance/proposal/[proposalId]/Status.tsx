@@ -2,6 +2,7 @@ import { type Proposal, type Vote } from "@bera/berajs";
 import { StatusEnum } from "../../types";
 import { VoteDialog } from "../../[genre]/components/vote-dialog";
 import { CancelButton } from "./components/cancel-button";
+import { QueueButton } from "./components/queue-button";
 
 export const StatusAction = ({
   proposal,
@@ -19,6 +20,7 @@ export const StatusAction = ({
       {status === StatusEnum.QUEUED && (
         <CancelButton
           // TODO: this is wrong, must be provided from subgraph data
+          // @ts-ignore
           proposalTimelockId={proposal.onchainId}
         />
       )}
@@ -27,7 +29,7 @@ export const StatusAction = ({
       )}
       {status === StatusEnum.CANCELED && <div>Canceled</div>}
       {status === StatusEnum.SUCCEEDED && (
-        <div className="text-success-foreground">Succeded</div>
+        <QueueButton proposalId={proposal.onchainId} />
       )}
       {status === StatusEnum.DEFEATED && (
         <div className="text-destructive-foreground">Defeated</div>

@@ -90,7 +90,7 @@ export function ClosePositionModal({
       address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "closeTradeMarket",
-      params: [openPosition?.index, vaa.current],
+      params: [BigInt(openPosition?.index), vaa.current],
       value: pythUpdateFee,
     });
   }, [prices, openPosition, write, pythUpdateFee]);

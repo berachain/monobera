@@ -113,7 +113,7 @@ const CancelWithdraw = ({
             address: bhoneyVaultContractAddress,
             abi: bTokenAbi,
             functionName: "redeem",
-            params: [BigInt(withdrawRequest.shares), account, account],
+            params: [BigInt(withdrawRequest.shares), account!, account!],
           })
         }
       >

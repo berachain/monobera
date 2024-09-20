@@ -149,7 +149,7 @@ export const DelegateModal = ({
                     address: governanceTokenAddress,
                     abi: BGT_ABI,
                     functionName: "delegate",
-                    params: [delegate],
+                    params: [delegate as Address],
                   })
                 }
               >

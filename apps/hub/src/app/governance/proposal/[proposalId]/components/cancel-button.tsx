@@ -1,14 +1,14 @@
 import { useBeraJs } from "@bera/berajs";
 import { useCancellerRole } from "@bera/berajs";
 import { governanceTimelockAbi } from "@bera/berajs";
-import { Proposal } from "@bera/berajs";
 import { governanceTimelockAddress } from "@bera/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { Address } from "viem";
 
 export const CancelButton = ({
   proposalTimelockId,
-}: { proposalTimelockId: string }) => {
+}: { proposalTimelockId: Address }) => {
   const { data: cancellerRole = "0xDa9487a32DD76e22B31cd5993F0699C0dc94435e" } =
     useCancellerRole();
   const { account } = useBeraJs();

@@ -33,6 +33,7 @@ import {
   modalReducer,
   type ModalName,
 } from "../utils/modalsReducer";
+import { Abi, ContractFunctionName } from "viem";
 
 interface IUseTxn {
   message?: string;
@@ -48,7 +49,11 @@ interface IUseTxn {
 }
 
 interface UseTxnApi {
-  write: (props: IContractWrite) => void;
+  write<
+    TAbi extends Abi | any[] = Abi,
+    TFunctionName extends
+      ContractFunctionName<TAbi> = ContractFunctionName<TAbi>,
+  >(props: IContractWrite<TAbi, TFunctionName>): void;
   fundWrite: (props: IValueSend) => void;
   isLoading: boolean;
   isSubmitting: boolean;

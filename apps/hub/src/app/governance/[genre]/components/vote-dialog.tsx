@@ -45,7 +45,7 @@ export function VoteDialog({
   const [selected, setSelected] = useState(-1);
 
   // @ts-ignore
-  const proposalId = proposal.onchainId;
+  const proposalId = BigInt(proposal.onchainId);
   const {
     data: votingPower,
     isLoading,

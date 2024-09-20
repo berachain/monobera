@@ -9,7 +9,7 @@ export const useClaimAllBgtCalldata = (vaultAddresses: Address[]) => {
       const data = encodeFunctionData({
         abi: BERA_VAULT_REWARDS_ABI,
         functionName: "getReward",
-        args: [account],
+        args: [account as `0x${string}`],
       });
       return {
         target: vaultAddress as Address,

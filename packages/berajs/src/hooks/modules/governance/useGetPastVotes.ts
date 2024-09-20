@@ -11,11 +11,11 @@ export const useGetPastVotes = (
     wallet?: Address;
   } & (
     | {
-        proposalId?: number | string;
+        proposalId?: bigint;
         timepoint: number | bigint;
       }
     | {
-        proposalId: number | string;
+        proposalId: bigint;
         timepoint?: number | bigint;
       }
   ),

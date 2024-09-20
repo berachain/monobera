@@ -299,7 +299,7 @@ export const useCreateProposal = ({
         abi: GOVERNANCE_ABI,
         functionName: "propose",
         params: [
-          proposal.actions.map((action) => action.target),
+          proposal.actions.map((action) => action.target as `0x${string}`),
           proposal.actions.map(() => 0n),
           actions,
           matter.stringify(proposal.description, {
