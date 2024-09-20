@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   GOVERNANCE_ABI,
   TransactionActionType,
@@ -28,6 +28,9 @@ import { Skeleton } from "@bera/ui/skeleton";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { Label } from "@bera/ui/label";
 import { TextArea } from "@bera/ui/text-area";
+import { ProposalHeading } from "../../components/proposal-heading";
+import { parseProposalBody } from "../../helper";
+import { cn } from "@bera/ui";
 
 export function VoteDialog({
   proposal,
@@ -37,6 +40,7 @@ export function VoteDialog({
   disable?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState("");
   // 0 = Against, 1 = For, 2 = Abstain
   const [selected, setSelected] = useState(-1);
 
@@ -56,14 +60,15 @@ export function VoteDialog({
     onSuccess: () => setOpen(false),
   });
 
+  const frontmatter = useMemo(() => parseProposalBody(proposal), [proposal]);
   const { account } = useBeraJs();
 
   const vote = () =>
     write({
       address: governorAddress,
       abi: GOVERNANCE_ABI,
-      functionName: "castVote",
-      params: [proposalId, selected],
+      functionName: "castVoteWithReason",
+      params: [proposalId, selected, reason],
     });
 
   return (
@@ -83,8 +88,8 @@ export function VoteDialog({
           </ActionButton>
         </DialogTrigger>
         <DialogContent className=" ">
-          <DialogHeader>
-            <DialogTitle className="mb-3">Vote</DialogTitle>
+          <DialogHeader className="!text-left">
+            <ProposalHeading size="md" frontmatter={frontmatter} />
           </DialogHeader>
           <div className="flex w-full flex-wrap items-center ">
             <div className="basis-1/2">
@@ -118,38 +123,37 @@ export function VoteDialog({
             </div>
           </div>
           <div>
-            <Label>Your vote</Label>
-            <div className="flex items-center gap-4 max-w-[360px]">
-              <Button
-                variant={selected === 1 ? "primary" : "outline"}
-                onClick={() => setSelected(1)}
-                className="basis-1/3"
-                size="md"
-              >
-                Yes
-              </Button>
-              <Button
-                variant={selected === 0 ? "primary" : "outline"}
-                onClick={() => setSelected(0)}
-                className="basis-1/3"
-                size="md"
-              >
-                No
-              </Button>
-              <Button
-                variant={selected === 2 ? "primary" : "outline"}
-                onClick={() => setSelected(2)}
-                className="basis-1/3"
-                size="md"
-              >
-                Abstain
-              </Button>
+            <Label>Your Vote</Label>
+            <div className="flex items-center gap-2 max-w-[360px]">
+              {[
+                { label: "For", value: 1 },
+                { label: "Against", value: 0 },
+                { label: "Abstain", value: 2 },
+              ].map(({ label, value }) => (
+                <button
+                  key={label}
+                  type="button"
+                  className={cn(
+                    "basis-1/3 rounded-sm text-sm font-semibold p-2 h-9 border-2 flex items-center justify-center",
+                    value === 0 && "text-destructive-foreground",
+                    value === 1 && "text-success-foreground",
+                    value === 2 && "text-muted-foreground",
+                    selected === value ? "border-current" : "border-border",
+                  )}
+                  onClick={() => setSelected(value)}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
           <div>
             <TextArea
               placeholder="Explain your voting decision"
               label="Description"
+              value={reason}
+              variant="black"
+              onChange={(e) => setReason(e.target.value)}
             />
           </div>
           <ActionButton>
