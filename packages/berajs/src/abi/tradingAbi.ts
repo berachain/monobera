@@ -958,4 +958,4 @@ export const tradingAbi = [
       },
     ],
   },
-];
+] as const;

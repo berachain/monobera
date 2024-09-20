@@ -1,18 +1,13 @@
-"use client";
-
 import React from "react";
-import { notFound } from "next/navigation";
-
-import { PROPOSAL_GENRE } from "../types";
 import GovernanceByStatus from "./components/governance-by-status";
+import { SWRFallback } from "@bera/berajs";
+import { defaultBeraConfig } from "@bera/berajs/config";
 
-export default function Page({
-  params,
-}: {
-  params: { genre: PROPOSAL_GENRE };
-}) {
-  if (!["berahub", "honey", "bend", "berps", "general"].includes(params.genre))
-    return notFound();
+import { getAllProposals } from "@bera/berajs/actions";
 
-  return <GovernanceByStatus genre={params.genre} />;
+export const revalidate = 120;
+
+export default async function Page() {
+  const allProposals = await getAllProposals({ config: defaultBeraConfig });
+  return <GovernanceByStatus allProposals={allProposals} />;
 }

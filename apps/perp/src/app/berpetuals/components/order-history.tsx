@@ -27,7 +27,7 @@ import type {
   IClosedTrade,
   ILimitOrder,
   IMarketOrder,
-  IOpenTradeCalculated,
+  IOpenTrade,
 } from "~/types/order-history";
 import { TotalAmount } from "../../components/total-amount";
 import { getAssetCardList } from "./asset-cards/getAssetCards";
@@ -41,12 +41,8 @@ export function OrderHistory({
   markets: IMarket[];
   size: "sm" | "md" | "lg";
 }) {
-  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTradeCalculated>(
-    false,
-  );
-  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTradeCalculated>(
-    false,
-  );
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
 
   const { tableState, setTableState } = useContext(TableContext);
   const { isConnected } = useBeraJs();
@@ -98,7 +94,10 @@ export function OrderHistory({
   );
 
   const openMarketPositions = useMemo(
-    () => generateMarketOrders(openPositionData, markets) ?? [],
+    () =>
+      openPositionData
+        ? (generateMarketOrders(openPositionData, markets) as IOpenTrade[])
+        : [],
     [markets, openPositionData],
   );
   const openMarketOrders = useMemo(
@@ -115,11 +114,11 @@ export function OrderHistory({
   );
 
   // edge case for selection when new orders are opened or closed
-  const prevPositionLength = usePrevious(openPositionData?.length ?? 0);
+  const prevPositionLength = usePrevious(openPositionData?.result?.length ?? 0);
   useEffect(() => {
     if (
       tableState.tabType === "positions" &&
-      (openPositionData?.length ?? 0) !== prevPositionLength
+      (openPositionData?.result?.length ?? 0) !== prevPositionLength
     ) {
       setTableState((prev) => ({ ...prev, selection: {} }));
     }
@@ -136,14 +135,9 @@ export function OrderHistory({
 
   // props generation
   const tableProps = useMemo(() => {
-    let data: (
-      | IOpenTradeCalculated
-      | ILimitOrder
-      | IMarketOrder
-      | IClosedTrade
-    )[] = [];
+    let data: (IOpenTrade | ILimitOrder | IMarketOrder | IClosedTrade)[] = [];
     let columns:
-      | ColumnDef<IOpenTradeCalculated>[]
+      | ColumnDef<IOpenTrade>[]
       | ColumnDef<ILimitOrder>[]
       | ColumnDef<IMarketOrder>[]
       | ColumnDef<IClosedTrade>[] = [];
@@ -154,23 +148,7 @@ export function OrderHistory({
 
     switch (tableState.tabType) {
       case "positions":
-        data = openMarketPositions.map((position, index) => {
-          return {
-            ...position,
-            borrowing_fee:
-              Array.isArray(openPositionsLiqFeesData) &&
-              openPositionsLiqFeesData[1] &&
-              openPositionsLiqFeesData[1][index] !== undefined
-                ? openPositionsLiqFeesData[1][index].toString()
-                : "0",
-            liq_price:
-              Array.isArray(openPositionsLiqFeesData) &&
-              openPositionsLiqFeesData[0] &&
-              openPositionsLiqFeesData[0][index] !== undefined
-                ? openPositionsLiqFeesData[0][index].toString()
-                : "0",
-          };
-        });
+        data = openMarketPositions as IOpenTrade[];
         columns = markets
           ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
           : [];
@@ -254,7 +232,7 @@ export function OrderHistory({
 
   const assetCardItems = useMemo(() => {
     return getAssetCardList({
-      openPositionsItems: openMarketPositions as IOpenTradeCalculated[],
+      openPositionsItems: openMarketPositions as IOpenTrade[],
       openOrderItems: openMarketOrders as ILimitOrder[],
       marketOrdersItems: marketOrders as IMarketOrder[],
       closedTradesItems: closedMarketTrades as IClosedTrade[],
@@ -277,12 +255,12 @@ export function OrderHistory({
         tabType={tableState.tabType ?? "positions"}
       />
       <UpdatePositionModal
-        openPosition={updateOpen as IOpenTradeCalculated}
+        openPosition={updateOpen as IOpenTrade}
         controlledOpen={!!updateOpen}
         onOpenChange={setUpdateOpen}
       />
       <ClosePositionModal
-        openPosition={deleteOpen as IOpenTradeCalculated}
+        openPosition={deleteOpen as IOpenTrade}
         controlledOpen={!!deleteOpen}
         onOpenChange={setDeleteOpen}
       />

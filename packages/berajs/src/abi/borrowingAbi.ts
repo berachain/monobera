@@ -1696,4 +1696,4 @@ export const borrowingAbi = [
       },
     ],
   },
-];
+] as const;

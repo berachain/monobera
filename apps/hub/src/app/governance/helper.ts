@@ -1,8 +1,9 @@
-import { BERA_CHEF_ABI, Proposal } from "@bera/berajs";
+import { Proposal } from "@bera/berajs";
 import BigNumber from "bignumber.js";
 import { decodeFunctionData, formatEther } from "viem";
-
 import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
+import graymatter from "gray-matter";
+import { NativeDapps, Others } from "./governance-genre-helper";
 
 export const getBadgeColor = (proposalStatus: StatusEnum) => {
   switch (proposalStatus) {
@@ -27,19 +28,70 @@ export const getBadgeColor = (proposalStatus: StatusEnum) => {
 
 export const getThemeColor = (ProposalType: ProposalTypeEnum) => {
   switch (ProposalType) {
-    case ProposalTypeEnum.TEXT_PROPOSAL:
+    case ProposalTypeEnum.CUSTOM_PROPOSAL:
       return "foreground";
-    case ProposalTypeEnum.FRIENDS_OF_CHEF:
+    case ProposalTypeEnum.UPDATE_REWARDS_GAUGE:
       return "info-foreground";
     default:
       return "foreground";
   }
 };
 
+export const getTopicColor = (topic: string) => {
+  return [...NativeDapps, ...Others].find((dapp) => dapp.id === topic)?.color;
+};
 export const getTimeText = (proposal: Proposal) => {
-  return `Created at ${proposal.createdAt
-    .replaceAll("T", " ")
-    .replaceAll("Z", "")}`;
+  const now = Date.now();
+  const targetTimestamp = new Date(proposal.createdAt).getTime();
+  const diffInMilliseconds = targetTimestamp - now;
+  const diffInSeconds = Math.round(diffInMilliseconds / 1000);
+
+  const absDiffInSeconds = Math.abs(diffInSeconds);
+  const oneWeekInSeconds = 7 * 24 * 60 * 60; // 7 days
+
+  const isFuture = diffInMilliseconds > 0;
+
+  if (absDiffInSeconds > oneWeekInSeconds) {
+    // Format the date as "Month Day, Year"
+    const date = new Date(targetTimestamp);
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    return date.toLocaleDateString(undefined, options);
+  }
+
+  const rtf = new Intl.RelativeTimeFormat("en-US", {
+    numeric: "auto",
+    style: "long",
+  });
+
+  const thresholds = [
+    { limit: -60, divisor: 1, unit: "second" },
+    { limit: -3600, divisor: 60, unit: "minute" },
+    { limit: -86400, divisor: 3600, unit: "hour" },
+    { limit: -2592000, divisor: 86400, unit: "day" },
+    { limit: -31536000, divisor: 2592000, unit: "month" },
+    { limit: Infinity, divisor: 31536000, unit: "year" },
+  ];
+
+  for (const threshold of thresholds) {
+    if (
+      isFuture
+        ? diffInSeconds < threshold.limit
+        : diffInSeconds > threshold.limit
+    ) {
+      const value = Math.round(diffInSeconds / threshold.divisor);
+      const formatted = rtf.format(
+        value,
+        threshold.unit as Intl.RelativeTimeFormatUnit,
+      );
+      return isFuture ? `${formatted} left` : `${formatted}`;
+    }
+  }
+
+  return "";
 };
 
 export const getVotesDataList = (proposal: Proposal) => {
@@ -98,7 +150,7 @@ export const getTotalVoters = (proposal: Proposal) =>
     0,
   );
 
-export const parseString = (
+const parseLegacyBody = (
   s: string,
 ): { type: string | null; title: string; content: string } => {
   const pattern = /#(?:([\w-]+)# )?(.+)\n([\s\S]*)/;
@@ -114,30 +166,76 @@ export const parseString = (
       content,
     };
   }
-  return {
-    type: null,
-    title: s,
-    content: "",
-  };
+
+  throw new Error("Invalid proposal body");
+};
+
+export const parseProposalBody = (
+  proposal?: Proposal,
+): graymatter.GrayMatterFile<string> & {
+  isFrontMatter: boolean;
+} => {
+  if (!proposal) {
+    return {
+      isFrontMatter: false,
+      data: { title: "Loading..." },
+      content: "",
+      matter: "",
+      language: "",
+      orig: "",
+      stringify: () => "",
+    };
+  }
+
+  const body = proposal?.metadata?.description ?? "";
+
+  if (graymatter.test(body)) {
+    return { ...graymatter(body), isFrontMatter: true };
+  }
+
+  try {
+    const legacyBody = parseLegacyBody(body);
+
+    return {
+      isFrontMatter: false,
+      data: { title: legacyBody.title },
+      content: legacyBody.content,
+      matter: "",
+      language: "",
+      orig: body,
+      stringify: () => body,
+    };
+  } catch (error) {
+    return {
+      isFrontMatter: false,
+      data: { title: `Suspicious proposal #${proposal.id}` },
+      content: body,
+      matter: "",
+      language: "",
+      orig: body,
+      stringify: () => body,
+    };
+  }
 };
 
 export const decodeProposalCalldata = (
-  type: string | null,
+  isLoading: boolean,
   calldata: string,
+  abi: any,
 ) => {
-  if (type === ProposalTypeEnum.FRIENDS_OF_CHEF) {
-    const { functionName, args = [] } = decodeFunctionData({
-      abi: BERA_CHEF_ABI,
-      data: calldata as `0x${string}`,
-    });
-
+  if (isLoading) {
     return {
-      function: functionName,
-      params: args,
+      function: null,
+      params: null,
     };
   }
+  const { functionName, args = [] } = decodeFunctionData({
+    abi,
+    data: calldata as `0x${string}`,
+  });
+
   return {
-    function: null,
-    params: null,
+    function: functionName,
+    params: args,
   };
 };

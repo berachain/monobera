@@ -1,12 +1,7 @@
-"use client";
-
-import "@bera/ui/styles.css";
 import "../styles/globals.css";
 import { IBM_Plex_Sans, Jua } from "next/font/google";
 import Script from "next/script";
-import { ApolloProvider } from "@apollo/client";
 import { honeyName } from "@bera/config";
-import { honeyClient } from "@bera/graphql";
 import {
   Footer,
   Header,
@@ -15,11 +10,10 @@ import {
   TermOfUseModal,
 } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
-import { BeraWagmi } from "@bera/wagmi";
-import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "react-hot-toast";
 
 import { mobileNavItems, navItems } from "./config";
+import HoneyProviders from "~/components/honey-providers";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -59,23 +53,20 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       >
         {" "}
         <TermOfUseModal />
-        <ApolloProvider client={honeyClient}>
-          <BeraWagmi>
-            <Header
-              isHoney
-              navItems={navItems}
-              mobileNavItems={mobileNavItems}
-              appName={honeyName}
-            />
-            <MainWithBanners className="pt-start" appName={honeyName}>
-              {props.children}
-            </MainWithBanners>
-            <Toaster position="bottom-right" />
-            <Footer />
-            <TailwindIndicator />
-            <Analytics />
-          </BeraWagmi>
-        </ApolloProvider>
+        <HoneyProviders>
+          <Header
+            isHoney
+            navItems={navItems}
+            mobileNavItems={mobileNavItems}
+            appName={honeyName}
+          />
+          <MainWithBanners className="pt-start" appName={honeyName}>
+            {props.children}
+          </MainWithBanners>
+          <Toaster position="bottom-right" />
+          <Footer />
+          <TailwindIndicator />
+        </HoneyProviders>
       </body>
     </html>
   );

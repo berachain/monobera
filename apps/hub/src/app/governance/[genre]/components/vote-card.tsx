@@ -1,5 +1,6 @@
 import React from "react";
 import { Card } from "@bera/ui/card";
+import { cn } from "@bera/ui";
 
 interface IVoteCard {
   abstainPercentage: number;
@@ -7,37 +8,39 @@ interface IVoteCard {
   yesPercentage: number;
 }
 
+const VotePercentage = ({
+  percentage,
+  type,
+}: { percentage: number; type: "yes" | "no" | "abstain" }) => {
+  const color =
+    type === "yes"
+      ? "text-success-foreground"
+      : type === "no"
+        ? "text-destructive-foreground"
+        : "text-muted-foreground";
+  return (
+    <div className="flex flex-1 flex-col items-center border-r border-border last:border-r-0 sm:w-[140px]">
+      <div
+        className={cn("text-lg font-semibold leading-none sm:text-xl", color)}
+      >
+        {Math.round(percentage ?? 0)}%
+      </div>
+      <div className="flex capitalize items-center text-xs font-medium leading-none text-muted-foreground sm:text-sm">
+        {type}
+      </div>
+    </div>
+  );
+};
 export function VoteCard({
   abstainPercentage,
   noPercentage,
   yesPercentage,
 }: IVoteCard) {
   return (
-    <Card className="flex w-full p-6">
-      <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
-        <div className="text-lg font-semibold leading-9 text-success-foreground sm:text-3xl">
-          {Math.round(yesPercentage ?? 0)}%
-        </div>
-        <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
-          Yes
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col items-center gap-2 border-r border-border sm:w-[140px]">
-        <div className="text-lg font-semibold leading-9 text-destructive-foreground sm:text-3xl">
-          {Math.round(noPercentage ?? 0)}%
-        </div>
-        <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
-          No
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col items-center gap-2 sm:w-[140px]">
-        <div className="text-lg font-semibold leading-9 text-muted-foreground sm:text-3xl">
-          {Math.round(abstainPercentage ?? 0)}%
-        </div>
-        <div className="flex items-center gap-0.5 text-xs font-medium leading-[14px] text-muted-foreground sm:text-sm">
-          Abstain
-        </div>
-      </div>
+    <Card className="flex w-full grow p-3">
+      <VotePercentage percentage={yesPercentage} type="yes" />
+      <VotePercentage percentage={noPercentage} type="no" />
+      <VotePercentage percentage={abstainPercentage} type="abstain" />
     </Card>
   );
 }

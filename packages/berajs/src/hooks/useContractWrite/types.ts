@@ -1,8 +1,9 @@
+import { Abi } from "viem";
 import { BeraConfig } from "~/types";
 
 export interface IContractWrite {
   address: `0x${string}`;
-  abi: any[];
+  abi: Abi | any[];
   functionName: string;
   params: any[];
   txnName?: string;

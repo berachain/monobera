@@ -1,6 +1,6 @@
 import { Address } from "viem";
 
-import { Token } from "./dex";
+import type { Token } from "./dex";
 
 export interface ValidatorInfo {
   id: Address;

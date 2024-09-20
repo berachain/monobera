@@ -549,4 +549,4 @@ export const referralsAbi = [
       },
     ],
   },
-];
+] as const;

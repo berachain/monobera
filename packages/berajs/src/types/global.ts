@@ -1,7 +1,7 @@
-import { SWRConfiguration, SWRResponse } from "swr";
-import { Address } from "viem";
+import type { SWRConfiguration, SWRResponse } from "swr";
+import type { Address } from "viem";
 
-import { Token } from "./dex";
+import type { Token } from "./dex";
 
 export interface BeraConfig {
   endpoints?: {
@@ -33,6 +33,13 @@ export interface BeraConfig {
     lendRewardsAggregatorAddress?: Address;
     honeyRouterAddress?: Address;
     perpsTradingContractAddress?: Address;
+    governance: {
+      berahub?: { governor: Address; timelock: Address };
+      honey?: { governor: Address; timelock: Address };
+      bend?: { governor: Address; timelock: Address };
+      berps?: { governor: Address; timelock: Address };
+      general?: { governor: Address; timelock: Address };
+    };
   };
 }
 

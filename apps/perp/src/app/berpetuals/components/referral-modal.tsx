@@ -35,9 +35,7 @@ const _ReferralModal: FC = () => {
 
   const { isConnected, account } = useBeraJs();
 
-  const { isLoading, useGetTraderReferrer } = usePollTraderReferral(
-    account ?? "",
-  );
+  const { isLoading, useGetTraderReferrer } = usePollTraderReferral(account);
 
   const { isLoading: isLoadingDetails, useGetReferralsDetails } =
     usePollReferralsDetails();

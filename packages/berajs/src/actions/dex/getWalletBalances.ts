@@ -7,7 +7,7 @@ import {
 } from "viem";
 
 import { multicall3Abi } from "~/abi";
-import { ADDRESS_ZERO } from "~/constants";
+import { ADDRESS_ZERO } from "~/config";
 import type { BeraConfig } from "../../types";
 import type { BalanceToken, Token } from "../../types/dex";
 

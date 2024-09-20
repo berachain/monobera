@@ -1,8 +1,8 @@
-import { useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { truncateHash, useGaugesMetadata } from "@bera/berajs";
-import { blockExplorerUrl } from "@bera/config";
+import { beraChefAddress, blockExplorerUrl } from "@bera/config";
 import { GetFriendsOfTheChef } from "@bera/graphql";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
@@ -14,36 +14,37 @@ import {
 } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Address, getAddress } from "viem";
+import { ProposalAction, ProposalTypeEnum } from "~/app/governance/types";
 
 export const GaugeSelector = ({
-  gauge,
+  selectedGauge: gauge,
   setGauge,
 }: {
-  gauge:
-    | { vault: Address; receiptToken: Address; isFriend: boolean }
+  selectedGauge:
+    | (ProposalAction & { type: ProposalTypeEnum.UPDATE_REWARDS_GAUGE })
     | undefined;
-  setGauge: (gauge: {
-    vault: Address;
-    receiptToken: Address;
-    isFriend: boolean;
-  }) => void;
+  setGauge: Dispatch<SetStateAction<ProposalAction>>;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [keyword, setKeyword] = useState<string>("");
-  const { data, loading } = useQuery(GetFriendsOfTheChef);
+  const { data: friendsData, loading } = useQuery(GetFriendsOfTheChef);
   const { data: gaugesMetadata } = useGaugesMetadata();
 
   const Vaults = useMemo(() => {
-    return (data?.vaults ?? []).filter(
+    return (friendsData?.vaults ?? []).filter(
       (vault: any) =>
         vault.id.toLowerCase().includes(keyword.toLowerCase()) ||
         vault.stakingToken.id.toLowerCase().includes(keyword.toLowerCase()),
     );
-  }, [keyword, data]);
+  }, [keyword, friendsData]);
 
-  const selectGaugeMetadata = gauge
-    ? gaugesMetadata?.[getAddress(gauge.vault)]
+  const selectedGaugeMetadata = gauge?.vault
+    ? gaugesMetadata?.[getAddress(gauge?.vault.toLowerCase())]
     : undefined;
+
+  const selectedGraphVault = Vaults.find(
+    (vault: any) => vault.id === gauge?.vault?.toLowerCase(),
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -53,19 +54,20 @@ export const GaugeSelector = ({
         ) : (
           <DialogTrigger asChild>
             <div className="rounded-md border border-border p-3 hover:bg-muted">
-              {gauge ? (
+              {gauge?.vault && gauge.vault ? (
                 <div>
                   <div className="flex gap-2 text-sm font-semibold">
                     <GaugeIcon
                       address={gauge.vault}
-                      overrideImage={selectGaugeMetadata?.logoURI}
+                      overrideImage={selectedGaugeMetadata?.logoURI}
                     />
                     <Link
                       href={`${blockExplorerUrl}/address/${gauge.vault}`}
                       className="underline"
                       target="_blank"
                     >
-                      {selectGaugeMetadata?.name ?? truncateHash(gauge.vault)}
+                      {selectedGaugeMetadata?.name ??
+                        truncateHash(gauge?.vault ?? "0x")}
                     </Link>
                     <span
                       className={cn(
@@ -82,11 +84,11 @@ export const GaugeSelector = ({
                   <div className="text-sm font-medium text-muted-foreground">
                     Staking Token Address:{" "}
                     <Link
-                      href={`${blockExplorerUrl}/address/${gauge.receiptToken}`}
+                      href={`${blockExplorerUrl}/address/${selectedGraphVault.receiptToken}`}
                       className="text-foreground underline"
                       target="_blank"
                     >
-                      {truncateHash(gauge.receiptToken)}{" "}
+                      {truncateHash(gauge.vault)}
                     </Link>
                   </div>
                 </div>
@@ -114,22 +116,25 @@ export const GaugeSelector = ({
                 key={vault.id}
                 className="my-1 w-full cursor-pointer rounded-md px-3 py-1 font-medium hover:bg-muted"
                 onClick={() => {
-                  const gauge = data.friendsOfTheChefs.find(
+                  const queriedGauge = friendsData.friendsOfTheChefs.find(
                     (friend: { id: Address; isFriend: boolean }) =>
                       friend.id === vault.id,
                   );
-                  if (!gauge) {
-                    setGauge({
+
+                  if (!queriedGauge) {
+                    setGauge((g) => ({
+                      ...g,
+                      target: beraChefAddress,
                       vault: vault.id,
-                      receiptToken: vault.stakingToken.id,
                       isFriend: false,
-                    });
+                    }));
                   } else {
-                    setGauge({
-                      vault: gauge.id,
-                      receiptToken: vault.stakingToken.id,
-                      isFriend: gauge.isFriend,
-                    });
+                    setGauge((g) => ({
+                      ...g,
+                      target: beraChefAddress,
+                      vault: vault.id,
+                      isFriend: queriedGauge.isFriend,
+                    }));
                   }
                   setOpen(false);
                 }}
@@ -142,9 +147,7 @@ export const GaugeSelector = ({
                   <div>{gaugeMetadata?.name ?? truncateHash(vault.id)}</div>
                 </div>
                 <div className="text-sm font-medium text-muted-foreground ">
-                  Staking Token Address: {truncateHash(
-                    vault.stakingToken.id,
-                  )}{" "}
+                  Staking Token Address: {truncateHash(vault.stakingToken.id)}
                 </div>
               </div>
             );

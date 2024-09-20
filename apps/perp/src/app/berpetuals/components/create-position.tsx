@@ -238,6 +238,8 @@ export function CreatePosition({ market, params }: ICreatePosition) {
       !form.leverage
     ) {
       setError(`Leverage must be between 2x and ${maxLeverage}x.`);
+    } else if (!leverageBN.isInteger()) {
+      setError("Leverage must be an integer.");
     } else if (
       form.amount &&
       safeAmountBN.times(leverageBN).lt(minLevPosHoney)
