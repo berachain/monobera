@@ -32,7 +32,7 @@ export const CreateProposal = ({
     addProposalAction,
     removeProposalAction,
     submitProposal,
-  } = useCreateProposal(governorAddress);
+  } = useCreateProposal({ governorAddress });
   const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: null,

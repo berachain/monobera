@@ -10,8 +10,6 @@ export const Status = ({
   proposal: Proposal;
   userVote: Vote | false | undefined;
 }) => {
-  const { useSelectedWalletBalance } = usePollWalletBalances();
-  const bgt = useSelectedWalletBalance(bgtTokenAddress);
   const status = proposal.status as StatusEnum;
   const date = new Date(proposal.start.timestamp);
   const time = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
@@ -20,22 +18,17 @@ export const Status = ({
       {status === StatusEnum.PENDING && <div>Voting starts at {time}</div>}
       {status === StatusEnum.QUEUED && <div>Voting in queue</div>}
       {status === StatusEnum.ACTIVE && (
-        <VoteDialog
-          votingPower={bgt?.formattedBalance}
-          //@ts-ignore
-          proposalId={proposal.onchainId}
-          disable={userVote ? true : false}
-        />
+        <VoteDialog proposal={proposal} disable={false} />
       )}
       {status === StatusEnum.CANCELED && <div>Canceled</div>}
       {status === StatusEnum.SUCCEEDED && (
         <div className="text-success-foreground">Succeded</div>
       )}
       {status === StatusEnum.DEFEATED && (
-        <div className="text-desctructive-foreground">Defeated</div>
+        <div className="text-destructive-foreground">Defeated</div>
       )}
       {status === StatusEnum.EXPIRED && (
-        <div className="text-desctructive-foreground">Expired</div>
+        <div className="text-destructive-foreground">Expired</div>
       )}
       {status === StatusEnum.EXECUTED && (
         <div className="text-success-foreground">Executed</div>
