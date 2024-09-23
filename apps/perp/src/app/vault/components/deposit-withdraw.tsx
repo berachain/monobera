@@ -82,7 +82,7 @@ export default function DepositWithdraw({
     token: honey,
   });
 
-  const withdrawPayload = [
+  const withdrawPayload: readonly [bigint] = [
     parseUnits(withdrawAmount === "" ? "0" : withdrawAmount, 18),
   ];
 
@@ -204,7 +204,7 @@ export default function DepositWithdraw({
                           depositAmount === "" ? "0" : depositAmount,
                           18,
                         ),
-                        account,
+                        account!,
                       ],
                     })
                   }

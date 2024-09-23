@@ -287,7 +287,7 @@ export function SwapCard({
               abi: BGT_ABI,
               functionName: "redeem",
               params: [
-                account,
+                account!,
                 parseUnits(
                   fromAmount === "" || !fromAmount ? "0" : fromAmount,
                   18,

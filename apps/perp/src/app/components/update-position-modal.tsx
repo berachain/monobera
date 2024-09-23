@@ -128,7 +128,7 @@ export function UpdatePositionModal({
         abi: tradingAbi,
         functionName: "updateSl",
         params: [
-          openPosition.index,
+          BigInt(openPosition.index),
           parseUnits(
             sl === "" || sl === "NaN" ? "0" : BigNumber(sl).dp(10).toString(10),
             10,
@@ -153,7 +153,7 @@ export function UpdatePositionModal({
         abi: tradingAbi,
         functionName: "updateTp",
         params: [
-          openPosition.index,
+          BigInt(openPosition.index),
           parseUnits(
             tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),
             10,

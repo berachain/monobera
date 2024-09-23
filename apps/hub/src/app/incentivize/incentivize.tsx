@@ -296,7 +296,8 @@ export const Incentivize = ({
                 abi: BERA_VAULT_REWARDS_ABI,
                 functionName: "addIncentive",
                 params: [
-                  token?.address,
+                  // We should make sure token is not undefined
+                  token?.address ?? "0x",
                   parseUnits(totalAmount, token?.decimals ?? 18),
                   parseUnits(incentiveRate, token?.decimals ?? 18),
                 ],

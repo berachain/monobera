@@ -908,4 +908,4 @@ export const BGT_ABI = [
   },
   { type: "error", name: "WithdrawAmountIsZero", inputs: [] },
   { type: "error", name: "ZeroAddress", inputs: [] },
-];
+] as const;

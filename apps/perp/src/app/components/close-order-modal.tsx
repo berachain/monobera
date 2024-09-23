@@ -84,7 +84,7 @@ export function CloseOrderModal({
       address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "cancelOpenLimitOrder",
-      params: [openOrder?.index],
+      params: [BigInt(openOrder?.index)],
     });
   }, [openOrder, write]);
 

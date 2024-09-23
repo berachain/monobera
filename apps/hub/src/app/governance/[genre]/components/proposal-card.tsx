@@ -20,6 +20,7 @@ import { VoteInfo } from "./Voter";
 import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
 import { Icons } from "@bera/ui/icons";
+import { ProposalHeading } from "../../components/proposal-heading";
 
 // If the proposal is active there is a time left to vote
 const tAgo = new Intl.RelativeTimeFormat("en-US", {
@@ -38,10 +39,9 @@ export function ProposalCard({
   className,
   proposal,
   ...props
-}: {
+}: React.HTMLAttributes<HTMLDivElement> & {
   details?: boolean;
   truncate?: boolean;
-  className?: string;
   proposal: Proposal;
 }) {
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
@@ -49,53 +49,15 @@ export function ProposalCard({
   return (
     <div
       className={cn(
-        "relative flex flex-col sm:flex-row  items-start sm:items-center justify-between p-4 pt-3 gap-3 gap-y-4 overflow-hidden rounded-md border border-border lg:h-[116px]",
+        "relative flex flex-col sm:grid sm:grid-cols-[4fr_5fr] items-start sm:items-center justify-between p-4 pt-3 lg:pr-8 xl:pr-16 gap-4 gap-y-4 overflow-hidden rounded-md border border-border lg:h-[116px]",
         details && "h-fit lg:h-60",
         className,
       )}
       {...props}
     >
       <div className="flex-1 ">
-        <p
-          className={cn(
-            "text-xs flex gap-2 font-semibold capitalize leading-4",
-          )}
-        >
-          <p>
-            {(fm.data.topics || fm.data.topic)?.map((topic: string) => (
-              <span
-                className="inline-block after:content-['•'] after:mx-1 last:after:hidden"
-                style={{ color: getTopicColor(topic) }}
-              >
-                {topic}
-              </span>
-            ))}
-          </p>
-          {fm.data.forumLink && (
-            <>
-              <span className="text-muted-foreground">•</span>
-              <a
-                href={fm.data.forumLink}
-                target="_blank"
-                className="text-muted-foreground"
-                rel="noreferrer "
-              >
-                View Forum Post
-                <Icons.externalLink className="w-3 h-3 ml-1 align-middle inline-block" />
-              </a>
-            </>
-          )}
-        </p>
-        <div
-          className={cn(
-            "mt-2 mb-3 font-semibold  leading-6",
-            truncate && "line-clamp-1",
-          )}
-        >
-          {fm.data.title}
-        </div>
-
-        <div className="  text-xs font-medium leading-6 text-muted-foreground">
+        <ProposalHeading frontmatter={fm} size="sm" />
+        <div className="mt-3 text-xs font-medium leading-6 text-muted-foreground">
           <Badge
             variant={getBadgeColor(proposal.status as StatusEnum)}
             className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
@@ -104,38 +66,20 @@ export function ProposalCard({
           </Badge>
           {getTimeText(proposal)}
         </div>
-
-        {details && (
-          <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mt-2">
-            Submitted by
-            <VoteInfo voter={proposal.creator} />
-          </div>
-        )}
       </div>
 
       <div
         className={cn(
-          "flex flex-col items-start xl:items-center gap-2 gap-y-4  xl:flex-row xl:gap-16 xl:px-16",
-          details && "flex xl:items-start gap-0 xl:flex-col xl:gap-0",
+          "flex flex-col items-start sm:grid sm:grid-cols-2 xl:items-center gap-2 gap-y-4  text-xs xl:flex-row ",
         )}
       >
-        {details && (
-          <div className="text-sm font-bold uppercase text-muted-foreground">
-            quorum
-          </div>
-        )}
         <QuorumStatus
           delegatesVotesCount={getTotalVotes(proposal)}
           quorum={formatEther(BigInt(proposal.governor.quorum))}
         />
-        {details && (
-          <div className="mt-4 text-sm font-bold uppercase text-muted-foreground">
-            votes
-          </div>
-        )}
         <ProgressBarChart
           dataList={getVotesDataList(proposal)}
-          className="w-52"
+          className="w-full"
         />
       </div>
     </div>
