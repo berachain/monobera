@@ -15,15 +15,10 @@ function compareVersions(
     i < Math.max(currentVersionParts.length, requiredVersionParts.length);
     i++
   ) {
-    const partcurrentVersion = currentVersionParts[i] || 0;
-    const partrequiredVersion = requiredVersionParts[i] || 0;
-
-    if (partcurrentVersion < partrequiredVersion) {
-      return true;
-    }
-    if (partcurrentVersion > partrequiredVersion) {
-      return false;
-    }
+    const partCurrentVersion = currentVersionParts[i] || 0;
+    const partRequiredVersion = requiredVersionParts[i] || 0;
+    if (partCurrentVersion === partRequiredVersion) continue;
+    return partCurrentVersion < partRequiredVersion;
   }
   return false;
 }
