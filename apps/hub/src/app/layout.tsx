@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { bgtName, hubUrl } from "@bera/config";
+import { hubName, hubUrl } from "@bera/config";
 import {
   Footer,
   Header,
@@ -55,12 +55,12 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
             </div>
             <div className="z-10 flex-1">
-              <Header navItems={navItems} appName={bgtName} />
+              <Header navItems={navItems} appName={hubName} />
               <MainWithBanners
                 className="pt-start"
                 paddingTop={150}
                 multiplier={50}
-                appName={bgtName}
+                appName={hubName}
               >
                 {props.children}
               </MainWithBanners>

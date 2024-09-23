@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { dexName } from "@bera/config";
+import { dexName, isIPFS } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import { isAddress } from "viem";
 
@@ -20,6 +20,10 @@ export default async function Withdraw({
 }: {
   params: { shareAddress: string };
 }) {
+  if (isIPFS) {
+    return null;
+  }
+
   try {
     if (!isAddress(params.shareAddress)) {
       notFound();
@@ -29,4 +33,12 @@ export default async function Withdraw({
     console.log(`Error fetching pools: ${e}`);
     notFound();
   }
+}
+
+export function generateStaticParams() {
+  return [
+    {
+      shareAddress: "0x",
+    },
+  ];
 }

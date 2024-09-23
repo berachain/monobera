@@ -1,13 +1,27 @@
 import { type PoolV2 } from "@bera/berajs";
+import { isIPFS } from "@bera/config";
 import BigNumber from "bignumber.js";
 
-export const getPoolUrl = (pool: PoolV2 | undefined, isMyPool = false) => {
+export const getPoolUrl = (
+  pool: PoolV2 | undefined,
+  isMyPool = false,
+): string => {
   if (!pool) return "";
+  if (isIPFS) {
+    return `/pool?address=${pool?.shareAddress}${
+      isMyPool ? "&back=my-pools" : ""
+    }`;
+  }
   return `/pool/${pool?.shareAddress}${isMyPool ? "?back=my-pools" : ""}`;
 };
 
 export const getPoolAddLiquidityUrl = (pool: PoolV2 | undefined) => {
   if (!pool) return "";
+
+  if (isIPFS) {
+    return `/add-liquidity?address=${pool?.shareAddress}`;
+  }
+
   return `/add-liquidity/${pool?.shareAddress}`;
 };
 

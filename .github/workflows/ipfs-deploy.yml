@@ -19,6 +19,14 @@ jobs:
       with:
         token: ${{ secrets.CHARTING_ACCESS_TOKEN }}
 
+    - name: Cache turbo build setup
+      uses: actions/cache@v4
+      with: 
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-
+            
     - name: Install pnpm
       uses: pnpm/action-setup@v4 
       
@@ -35,7 +43,7 @@ jobs:
       run: pnpm i -g @fleek-platform/cli
 
     - name: Set environment variables
-      run: pnpm setenv:bartio
+      run: pnpm setenv:v2
       
     - name: Build all projects 
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
@@ -45,6 +53,9 @@ jobs:
 
     - name: Deploy Bend
       run: cd apps/lend && fleek sites deploy
+
+    - name: Deploy Hub
+      run: cd apps/hub && fleek sites deploy
 
     - name: Deploy Honey
       run: cd apps/honey && fleek sites deploy

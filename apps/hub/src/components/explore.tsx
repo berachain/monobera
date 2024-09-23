@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import {
-  bgtUrl,
+  hubUrl,
   blockExplorerUrl,
   faucetUrl,
   homepageUrl,
@@ -62,7 +62,7 @@ export const Explore = () => {
       title: "BeraHub",
       subtitle: "The HUB for BGT Governance",
       background: "#E6B434",
-      href: bgtUrl,
+      href: hubUrl,
     },
     {
       image: <Icons.honeyFav className="h-16 w-16" />,

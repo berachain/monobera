@@ -45,7 +45,7 @@ export const NativeDapps: GovernanceTopic[] = [
     slug: "berps",
     subgraph: governanceSubgraphUrl,
   },
-];
+] as const;
 
 export const Others: GovernanceTopic[] = [
   {

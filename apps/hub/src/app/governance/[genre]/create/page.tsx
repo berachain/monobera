@@ -1,12 +1,12 @@
 import React from "react";
 import { type Metadata } from "next";
-import { bgtName } from "@bera/config";
+import { hubName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import NewProposal from "./components/new-proposal";
-import { PROPOSAL_GENRE } from "../../governance-genre-helper";
+import { NativeDapps, PROPOSAL_GENRE } from "../../governance-genre-helper";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Create Proposal", bgtName),
+  title: getMetaTitle("Create Proposal", hubName),
   description: "Create a new proposal on Berachain",
 };
 export default function Create({
@@ -19,4 +19,10 @@ export default function Create({
       <NewProposal genre={params.genre as PROPOSAL_GENRE} />
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  return NativeDapps.map((dapp) => ({
+    genre: dapp.slug,
+  }));
 }

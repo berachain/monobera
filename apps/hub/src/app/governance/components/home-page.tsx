@@ -27,7 +27,7 @@ export const HomePage = () => {
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"
               key={dapp.name}
-              href={`governance/${dapp.slug}`}
+              href={`/governance/${dapp.slug}`}
             >
               <div
                 className="flex justify-center border-b border-border p-1"
@@ -50,7 +50,7 @@ export const HomePage = () => {
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:scale-105"
               key={dapp.name}
-              href={`governance/${dapp.slug}`}
+              href={`/governance/${dapp.slug}`}
             >
               <div
                 className="flex justify-center border-b border-border p-1"

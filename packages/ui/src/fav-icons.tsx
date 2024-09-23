@@ -120,8 +120,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#E9D0B4" />
-          <stop offset="1" stop-color="#DA9713" />
+          <stop stopColor="#E9D0B4" />
+          <stop offset="1" stopColor="#DA9713" />
         </radialGradient>
         <radialGradient
           id="paint1_radial_6594_45"
@@ -131,8 +131,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#E9D0B4" />
-          <stop offset="1" stop-color="#EC8A19" />
+          <stop stopColor="#E9D0B4" />
+          <stop offset="1" stopColor="#EC8A19" />
         </radialGradient>
       </defs>
     </svg>
@@ -165,9 +165,9 @@ export const FavIcons = {
           width="27.493"
           height="33"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -192,7 +192,7 @@ export const FavIcons = {
             values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
             result="hardAlpha"
           />
-          <feOffset dy="-2" />
+          <feOffset dy="2" />
           <feGaussianBlur stdDeviation="2" />
           <feComposite in2="hardAlpha" operator="out" />
           <feColorMatrix
@@ -219,8 +219,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#C7C2EB" />
-          <stop offset="1" stop-color="#7464E5" />
+          <stop stopColor="#C7C2EB" />
+          <stop offset="1" stopColor="#7464E5" />
         </radialGradient>
       </defs>
     </svg>
@@ -363,9 +363,9 @@ export const FavIcons = {
           width="20.7501"
           height="15.2812"
           filterUnits="userSpaceOnUse"
-          colorInterpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"
@@ -550,8 +550,8 @@ export const FavIcons = {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(20 20) rotate(90) scale(20)"
         >
-          <stop stop-color="#D5AC94" />
-          <stop offset="1" stop-color="#96532C" />
+          <stop stopColor="#D5AC94" />
+          <stop offset="1" stopColor="#96532C" />
         </radialGradient>
         <clipPath id="clip0_6594_54">
           <rect

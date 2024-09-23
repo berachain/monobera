@@ -1,30 +1,19 @@
+import { Suspense } from "react";
 import { type Metadata } from "next";
 import { dexName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 
-import { SwapContent } from "./swap";
+import { SwapPage } from "./swap";
 
 export const metadata: Metadata = {
   title: getMetaTitle("Swap", dexName),
   description: "Swap tokens on Berachain",
 };
 
-export default function Swap({
-  searchParams,
-}: {
-  searchParams: {
-    inputCurrency: string;
-    outputCurrency: string;
-  };
-}) {
-  const { inputCurrency, outputCurrency } = searchParams;
+export default function Swap() {
   return (
-    <div className="container">
-      <SwapContent
-        inutCurrency={inputCurrency}
-        outputCurrency={outputCurrency}
-        isRedeem={false}
-      />
-    </div>
+    <Suspense>
+      <SwapPage />
+    </Suspense>
   );
 }
