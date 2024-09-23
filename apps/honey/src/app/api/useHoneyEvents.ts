@@ -26,31 +26,46 @@ export const useHoneyEvents = () => {
     data: allData,
     size: allDataSize,
     setSize: setAllDataSize,
-    isLoading: isAllDataLoading
+    isLoading: isAllDataLoading,
   } = useSWRInfinite(
     (index) => ["allHoneyData", index],
-    (key) => fetchData(`${getAbsoluteUrl()}/api?page=${(key[1] ?? 0) + 1}&perPage=${DEFAULT_SIZE}`),
-    { refreshInterval: POLLING.SLOW }
+    (key) =>
+      fetchData(
+        `${getAbsoluteUrl()}/api?page=${
+          (key[1] ?? 0) + 1
+        }&perPage=${DEFAULT_SIZE}`,
+      ),
+    { refreshInterval: POLLING.SLOW },
   );
 
   const {
     data: mintData,
     size: mintDataSize,
     setSize: setMintDataSize,
-    isLoading: isMintDataLoading
+    isLoading: isMintDataLoading,
   } = useSWRInfinite(
     (index) => ["mintData", index],
-    (key) => fetchData(`${getAbsoluteUrl()}/api?page=${(key[1] ?? 0) + 1}&perPage=${DEFAULT_SIZE}&mint`)
+    (key) =>
+      fetchData(
+        `${getAbsoluteUrl()}/api?page=${
+          (key[1] ?? 0) + 1
+        }&perPage=${DEFAULT_SIZE}&mint`,
+      ),
   );
 
   const {
     data: burnData,
     size: burnDataSize,
     setSize: setBurnDataSize,
-    isLoading: isBurnDataLoading
+    isLoading: isBurnDataLoading,
   } = useSWRInfinite(
     (index) => ["burnData", index],
-    (key) => fetchData(`${getAbsoluteUrl()}/api?page=${(key[1] ?? 0) + 1}&perPage=${DEFAULT_SIZE}&burn`)
+    (key) =>
+      fetchData(
+        `${getAbsoluteUrl()}/api?page=${
+          (key[1] ?? 0) + 1
+        }&perPage=${DEFAULT_SIZE}&burn`,
+      ),
   );
 
   const isAllDataLoadingMore =
