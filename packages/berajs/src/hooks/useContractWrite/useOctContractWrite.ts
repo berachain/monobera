@@ -57,6 +57,7 @@ const useOctContractWrite = (
             abi: [...abi, ...pythErrorsAbi, ...berpsErrorsAbi],
             functionName: functionName,
             args: params,
+            // @ts-ignore
             value: value,
             account: account,
           });
@@ -78,6 +79,7 @@ const useOctContractWrite = (
             abi: [...abi, ...pythErrorsAbi, ...berpsErrorsAbi],
             functionName: "delegatedAction",
             args: delegatedActionArgs as any[],
+            // @ts-ignore
             value: value,
             account: octAccount,
           });
@@ -148,7 +150,7 @@ const useOctContractWrite = (
     isSubmitting: state.confirmState === "submitting",
     isSuccess: state.confirmState === "success",
     isError: state.confirmState === "fail",
-    write,
+    write: write as any,
   };
 };
 

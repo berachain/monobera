@@ -468,7 +468,7 @@ export function ManageOctDialog({
       address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "setDelegate",
-      params: [octAddress],
+      params: [octAddress as Address],
     });
   };
 

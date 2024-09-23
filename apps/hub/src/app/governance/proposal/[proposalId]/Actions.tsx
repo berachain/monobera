@@ -1,4 +1,8 @@
-import { BERA_CHEF_ABI, type ExecutableCalls } from "@bera/berajs";
+import {
+  BERA_CHEF_ABI,
+  truncateHash,
+  type ExecutableCalls,
+} from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 import { useGetVerifiedAbi } from "@bera/berajs";

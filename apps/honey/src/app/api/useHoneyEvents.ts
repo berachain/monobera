@@ -5,6 +5,22 @@ import { getAbsoluteUrl } from "~/utils/vercel-utils";
 
 const DEFAULT_SIZE = 10;
 
+const fetchData = async (url: string) => {
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "x-vercel-protection-bypass": "4fphLjUJKQcW0kAbaFBGUNcAHb2WwnTX",
+      },
+    });
+    const jsonRes = await res.json();
+    return jsonRes;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
 export const useHoneyEvents = () => {
   const {
     data: allData,
@@ -13,27 +29,13 @@ export const useHoneyEvents = () => {
     isLoading: isAllDataLoading,
   } = useSWRInfinite(
     (index) => ["allHoneyData", index],
-    async (key: any[]) => {
-      const page = key[1] ?? 0 + 1;
-      try {
-        const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}`,
-          {
-            method: "GET",
-            headers: {
-              "x-vercel-protection-bypass": "4fphLjUJKQcW0kAbaFBGUNcAHb2WwnTX",
-            },
-          },
-        );
-        const jsonRes = await res.json();
-        return jsonRes;
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    {
-      refreshInterval: POLLING.SLOW,
-    },
+    (key) =>
+      fetchData(
+        `${getAbsoluteUrl()}/api?page=${
+          (key[1] ?? 0) + 1
+        }&perPage=${DEFAULT_SIZE}`,
+      ),
+    { refreshInterval: POLLING.SLOW },
   );
 
   const {
@@ -43,24 +45,12 @@ export const useHoneyEvents = () => {
     isLoading: isMintDataLoading,
   } = useSWRInfinite(
     (index) => ["mintData", index],
-    async (key: any[]) => {
-      const page = key[1] ?? 0 + 1;
-      try {
-        const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&mint`,
-          {
-            method: "GET",
-            headers: {
-              "x-vercel-protection-bypass": "4fphLjUJKQcW0kAbaFBGUNcAHb2WwnTX",
-            },
-          },
-        );
-        const jsonRes = await res.json();
-        return jsonRes;
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    (key) =>
+      fetchData(
+        `${getAbsoluteUrl()}/api?page=${
+          (key[1] ?? 0) + 1
+        }&perPage=${DEFAULT_SIZE}&mint`,
+      ),
   );
 
   const {
@@ -70,24 +60,12 @@ export const useHoneyEvents = () => {
     isLoading: isBurnDataLoading,
   } = useSWRInfinite(
     (index) => ["burnData", index],
-    async (key: any[]) => {
-      const page = key[1] ?? 0 + 1;
-      try {
-        const res = await fetch(
-          `${getAbsoluteUrl()}/api?page=${page}&perPage=${DEFAULT_SIZE}&burn`,
-          {
-            method: "GET",
-            headers: {
-              "x-vercel-protection-bypass": "4fphLjUJKQcW0kAbaFBGUNcAHb2WwnTX",
-            },
-          },
-        );
-        const jsonRes = await res.json();
-        return jsonRes;
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    (key) =>
+      fetchData(
+        `${getAbsoluteUrl()}/api?page=${
+          (key[1] ?? 0) + 1
+        }&perPage=${DEFAULT_SIZE}&burn`,
+      ),
   );
 
   const isAllDataLoadingMore =

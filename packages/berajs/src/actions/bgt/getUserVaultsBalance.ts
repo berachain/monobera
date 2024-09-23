@@ -21,7 +21,7 @@ export const getUserVaultsBalance = async ({
       address: vaultAddress,
       abi: BERA_VAULT_REWARDS_ABI,
       functionName: "balanceOf",
-      args: [account],
+      args: [account as `0x${string}`],
     });
 
     return result as bigint;

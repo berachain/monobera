@@ -3,7 +3,7 @@ import useSWR from "swr";
 import { Address, formatEther } from "viem";
 import { usePublicClient } from "wagmi";
 
-import { IVotes_ABI } from "~/abi";
+import { BGT_ABI } from "~/abi";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types";
@@ -33,13 +33,13 @@ export const usePollUserDelegates = (
       const [delegate, currentVotes] = await Promise.all([
         publicClient.readContract({
           address: governanceTokenAddress,
-          abi: IVotes_ABI,
+          abi: BGT_ABI,
           functionName: "delegates",
           args: [account],
         }),
         publicClient.readContract({
           address: governanceTokenAddress,
-          abi: IVotes_ABI,
+          abi: BGT_ABI,
           functionName: "getVotes",
           args: [account],
         }),

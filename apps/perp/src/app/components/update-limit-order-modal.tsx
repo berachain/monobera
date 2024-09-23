@@ -118,7 +118,7 @@ export function UpdateLimitOrderModal({
       abi: tradingAbi,
       functionName: "updateOpenLimitOrder",
       params: [
-        openOrder?.index,
+        BigInt(openOrder?.index),
         parseUnits(`${executionPrice}`, 10),
         ethersParseUnits(
           tp === "" || tp === "NaN" ? "0" : BigNumber(tp).dp(10).toString(10),

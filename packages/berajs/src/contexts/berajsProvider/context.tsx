@@ -14,7 +14,7 @@ import { TransactionStoreProvider } from "~/hooks";
 import { BeraConfig } from "~/types";
 import { CrocEnvContextProvider } from "../crocenv";
 import { SWRConfig } from "swr";
-import * as Sentry from "@sentry/nextjs"; 
+import * as Sentry from "@sentry/nextjs";
 
 export interface IBeraJsAPI {
   account: `0x${string}` | undefined;

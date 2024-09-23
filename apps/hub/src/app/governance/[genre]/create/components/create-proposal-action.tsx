@@ -27,11 +27,11 @@ export const CreateProposalAction = ({
   setErrors: Dispatch<SetStateAction<CustomProposalActionErrors>>;
   setAction: Dispatch<SetStateAction<ProposalAction>>;
 }) => {
-  const prevAction = usePrevious(action);
+  const prevAction: ProposalAction | undefined = usePrevious(action);
 
   useEffect(() => {
-    if (action.type !== prevAction?.type) {
-      setAction({ type: action.type, calldata: [], target: "" });
+    if (prevAction?.type && action.type !== prevAction?.type) {
+      setAction((prev) => ({ type: action.type, calldata: [], target: "" }));
     }
   }, [action, prevAction]);
 

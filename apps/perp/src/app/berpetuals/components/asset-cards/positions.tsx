@@ -9,10 +9,10 @@ import { PositionLiquidationPrice } from "~/app/components/table-columns/positio
 import { MarketTradePNL } from "~/app/components/market-trade-pnl";
 import { UpdatePositionModal } from "~/app/components/update-position-modal";
 import { type IMarket } from "~/types/market";
-import type { ICards, IOpenTradeCalculated } from "~/types/order-history";
+import type { ICards, IOpenTrade } from "~/types/order-history";
 
 export const getMarketListItems = (
-  marketOrderItems: IOpenTradeCalculated[],
+  marketOrderItems: IOpenTrade[],
   markets: IMarket[],
 ): ICards[] => {
   const cards = marketOrderItems.map((item) => {

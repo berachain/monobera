@@ -1,11 +1,20 @@
-import { Abi } from "viem";
+import {
+  Abi,
+  AbiStateMutability,
+  ContractFunctionArgs,
+  ContractFunctionName,
+  ExtractAbiItem,
+} from "viem";
 import { BeraConfig } from "~/types";
 
-export interface IContractWrite {
+export interface IContractWrite<
+  TAbi extends Abi = Abi,
+  TFunctionName extends ContractFunctionName<TAbi> = ContractFunctionName<TAbi>,
+> {
   address: `0x${string}`;
-  abi: Abi | any[];
-  functionName: string;
-  params: any[];
+  abi: TAbi;
+  functionName: TFunctionName;
+  params: ContractFunctionArgs<TAbi, AbiStateMutability, TFunctionName>;
   txnName?: string;
   gasLimit?: bigint;
   value?: bigint;
