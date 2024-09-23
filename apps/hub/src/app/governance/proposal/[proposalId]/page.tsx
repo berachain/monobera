@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { bgtName, isIPFS } from "@bera/config";
+import { hubName, isIPFS } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import ProposalDetails, {
   ProposalDetailsWrapper,
@@ -13,7 +13,7 @@ export const revalidate = 120;
 export function generateMetadata({ params }: any): Metadata {
   const { proposalId } = params;
   return {
-    title: getMetaTitle("Proposal Details", bgtName),
+    title: getMetaTitle("Proposal Details", hubName),
     description: `View proposal details for proposal ${proposalId} on Berachain`,
   };
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { bgtUrl } from "@bera/config";
+import { hubUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -57,7 +57,7 @@ export const BgtStationBanner = ({
             </Button>
           </Link>
         ) : (
-          <Link href={`${bgtUrl}/gauge/${vaultAddress}`} target="_blank">
+          <Link href={`${hubUrl}/gauge/${vaultAddress}`} target="_blank">
             <Button
               variant={"outline"}
               disabled={receiptTokenAddress === undefined}

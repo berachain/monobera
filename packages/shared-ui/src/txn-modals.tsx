@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { bgtUrl, blockExplorerName, blockExplorerUrl } from "@bera/config";
+import { blockExplorerName, blockExplorerUrl } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";

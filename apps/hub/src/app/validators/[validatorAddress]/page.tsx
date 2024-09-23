@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { bgtName, isIPFS } from "@bera/config";
+import { hubName, isIPFS } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 import { isAddress } from "viem";
 
@@ -13,7 +13,7 @@ type Props = {
 export function generateMetadata({ params }: Props): Metadata {
   const { validatorAddress } = params;
   return {
-    title: getMetaTitle("Validator Details", bgtName),
+    title: getMetaTitle("Validator Details", hubName),
     description: `Validator details for ${validatorAddress}`,
   };
 }
