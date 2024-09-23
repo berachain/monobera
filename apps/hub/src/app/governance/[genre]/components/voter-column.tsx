@@ -6,6 +6,11 @@ import { formatEther } from "viem";
 
 import { VoteEnum } from "../../types";
 import { VoteInfo } from "./Voter";
+import {
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@bera/ui/accordion";
 
 const getBadgeColor = (type: keyof typeof VoteEnum) => {
   switch (type) {
@@ -23,7 +28,22 @@ const getBadgeColor = (type: keyof typeof VoteEnum) => {
 export const voterColumns: ColumnDef<Vote>[] = [
   {
     header: "Voter",
-    cell: ({ row }) => <VoteInfo voter={row.original.voter} />,
+    cell: ({ row }) => (
+      <AccordionItem value={row.original.voter.address}>
+        <AccordionTrigger>
+          <VoteInfo voter={row.original.voter} />
+        </AccordionTrigger>
+        <AccordionContent className="ml-7">
+          {row.original.reason ? (
+            <p className="m">{row.original.reason}</p>
+          ) : (
+            <span className="italic text-muted-foreground">
+              No reason provided
+            </span>
+          )}
+        </AccordionContent>
+      </AccordionItem>
+    ),
     accessorKey: "voter",
     enableSorting: false,
     minSize: 200,

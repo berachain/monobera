@@ -31,6 +31,7 @@ import { SWRFallback } from "@bera/berajs/contexts";
 import { unstable_serialize } from "swr";
 import { ProposalTimeline } from "./proposal-timeline";
 import { ProposalHeading } from "~/app/governance/components/proposal-heading";
+import { cn } from "@bera/ui";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -106,7 +107,13 @@ export default function ProposalDetails({
                   voter={proposal.creator}
                 />
               </div>
-              <div className="col-start-2">
+
+              <div
+                className={cn(
+                  "col-start-2",
+                  proposal.status === StatusEnum.PENDING ? "invisible" : "",
+                )}
+              >
                 <h3 className="text-sm font-medium uppercase leading-5 mb-1 text-muted-foreground">
                   votes
                 </h3>
@@ -115,7 +122,12 @@ export default function ProposalDetails({
                   className="sm:w-52"
                 />
               </div>
-              <div className="self-stretch col-start-1 row-start-3 ">
+              <div
+                className={cn(
+                  "self-stretch col-start-1 row-start-3 ",
+                  proposal.status === StatusEnum.PENDING ? "invisible" : "",
+                )}
+              >
                 <h3 className="text-sm font-medium leading-5 mb-1 uppercase text-muted-foreground">
                   quorum
                 </h3>
@@ -164,16 +176,19 @@ export default function ProposalDetails({
                 </div>
               </div>
 
-              <div className="mt-4 sm:mt-10">
-                <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
-                  Overview
-                </div>
-                <OverviewChart votes={votes} isLoading={isLoading} />
-              </div>
-
-              <div className="mt-4 sm:mt-10">
-                <VoterTable votes={votes} isLoading={isLoading} />
-              </div>
+              {proposal.status !== StatusEnum.PENDING && (
+                <>
+                  <div className="mt-4 sm:mt-10">
+                    <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
+                      Overview
+                    </div>
+                    <OverviewChart votes={votes} isLoading={isLoading} />
+                  </div>
+                  <div className="mt-4 sm:mt-10">
+                    <VoterTable votes={votes} isLoading={isLoading} />
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}
