@@ -10,28 +10,14 @@ import { formatEther } from "viem";
 import {
   getBadgeColor,
   getTimeText,
-  getTopicColor,
   getTotalVotes,
   getVotesDataList,
   parseProposalBody,
 } from "../../helper";
 import { StatusEnum } from "../../types";
-import { VoteInfo } from "./Voter";
 import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
-import { Icons } from "@bera/ui/icons";
 import { ProposalHeading } from "../../components/proposal-heading";
-
-// If the proposal is active there is a time left to vote
-const tAgo = new Intl.RelativeTimeFormat("en-US", {
-  style: "long",
-  numeric: "auto",
-});
-// If the proposal is closed there is a time ago
-const tIn = new Intl.RelativeTimeFormat("en-US", {
-  style: "long",
-  numeric: "auto",
-});
 
 export function ProposalCard({
   details = false,
@@ -57,31 +43,33 @@ export function ProposalCard({
     >
       <div className="flex-1 ">
         <ProposalHeading frontmatter={fm} size="sm" />
-        <div className="mt-3 text-xs font-medium leading-6 text-muted-foreground">
+        <div className="mt-1 md:mt-3 text-xs font-medium leading-6 text-muted-foreground">
           <Badge
             variant={getBadgeColor(proposal.status as StatusEnum)}
-            className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
+            className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize select-none"
           >
             {proposal.status}
           </Badge>
-          {getTimeText(proposal)}
+          <span className="inline-block">{getTimeText(proposal)}</span>
         </div>
       </div>
 
-      <div
-        className={cn(
-          "flex flex-col items-start sm:grid sm:grid-cols-2 xl:items-center gap-2 gap-y-4  text-xs xl:flex-row ",
-        )}
-      >
-        <QuorumStatus
-          delegatesVotesCount={getTotalVotes(proposal)}
-          quorum={formatEther(BigInt(proposal.governor.quorum))}
-        />
-        <ProgressBarChart
-          dataList={getVotesDataList(proposal)}
-          className="w-full"
-        />
-      </div>
+      {proposal.status !== StatusEnum.PENDING && (
+        <div
+          className={cn(
+            "flex flex-col items-start min-w-36 sm:grid sm:grid-cols-2 xl:items-center gap-2 gap-y-4 text-xs xl:flex-row ",
+          )}
+        >
+          <QuorumStatus
+            delegatesVotesCount={getTotalVotes(proposal)}
+            quorum={formatEther(BigInt(proposal.governor.quorum))}
+          />
+          <ProgressBarChart
+            dataList={getVotesDataList(proposal)}
+            className="w-full"
+          />
+        </div>
+      )}
     </div>
   );
 }

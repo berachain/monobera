@@ -52,9 +52,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <div className="z-10 flex-1">
               <Header navItems={navItems} appName={bgtName} />
               <MainWithBanners
-                className="pt-start"
-                paddingTop={150}
-                multiplier={50}
+                // mt-8 should probably be removed
+                className="mt-8"
+                // paddingTop={150}
+                // multiplier={50}
                 appName={bgtName}
               >
                 {props.children}
