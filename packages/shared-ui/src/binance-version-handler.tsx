@@ -21,6 +21,9 @@ function compareVersions(
     if (partcurrentVersion < partrequiredVersion) {
       return true;
     }
+    if (partcurrentVersion > partrequiredVersion) {
+      return false;
+    }
   }
   return false;
 }
