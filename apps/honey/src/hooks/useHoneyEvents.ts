@@ -12,7 +12,11 @@ const generateHoneyDataFetcher = (query: any, txnType?: string) => {
   return async (key: any[]) => {
     const page = key[1];
     try {
-      const variables = { page: page * DEFAULT_SIZE, limit: DEFAULT_SIZE, txnType };
+      const variables = {
+        page: page * DEFAULT_SIZE,
+        limit: DEFAULT_SIZE,
+        txnType,
+      };
 
       const res = await honeyClient.query({
         query,

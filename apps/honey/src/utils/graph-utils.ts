@@ -15,7 +15,11 @@ function fillData(
   list: HoneyEntry[],
   endUnix: number,
   step: number,
-  typename: "HoneyVolumeHourData" | "HoneyVolumeDayData" | "HoneySupplyHourData" | "HoneySupplyDayData"
+  typename:
+    | "HoneyVolumeHourData"
+    | "HoneyVolumeDayData"
+    | "HoneySupplyHourData"
+    | "HoneySupplyDayData",
 ) {
   const data = [...list];
   const timeList = generateTimestamps(endUnix + step, step);
