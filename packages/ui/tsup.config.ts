@@ -57,7 +57,7 @@ export default defineConfig((opts) => {
     clean: !opts.watch,
     dts: true,
     format: ["esm"],
-    minify: true,
+    minify: process.env.NODE_ENV !== "development",
     outDir: "dist",
   } satisfies Options;
 
