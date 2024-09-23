@@ -43,7 +43,7 @@ jobs:
       run: pnpm i -g @fleek-platform/cli
 
     - name: Set environment variables
-      run: pnpm setenv:bartio
+      run: pnpm setenv:v2
       
     - name: Build all projects 
       run: NEXT_PUBLIC_HOST="ipfs" pnpm run build
