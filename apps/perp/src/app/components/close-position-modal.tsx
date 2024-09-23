@@ -20,7 +20,7 @@ import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import type { IOpenTradeCalculated } from "~/types/order-history";
+import type { IOpenTrade } from "~/types/order-history";
 import { MarketTradePNL } from "./market-trade-pnl";
 
 export function ClosePositionModal({
@@ -33,7 +33,7 @@ export function ClosePositionModal({
 }: {
   trigger?: any;
   disabled?: boolean;
-  openPosition: IOpenTradeCalculated;
+  openPosition: IOpenTrade;
   className?: string;
   controlledOpen?: boolean;
   onOpenChange?: (state: boolean) => void;
@@ -90,7 +90,7 @@ export function ClosePositionModal({
       address: tradingContractAddress,
       abi: tradingAbi,
       functionName: "closeTradeMarket",
-      params: [openPosition?.index, vaa.current],
+      params: [BigInt(openPosition?.index), vaa.current],
       value: pythUpdateFee,
     });
   }, [prices, openPosition, write, pythUpdateFee]);

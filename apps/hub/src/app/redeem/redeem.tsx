@@ -101,6 +101,7 @@ export default function Redeem() {
           <Button
             className="w-full"
             disabled={
+              !account ||
               BigNumber(redeemAmount).lte(0) ||
               redeemAmount === "" ||
               BigNumber(redeemAmount).gt(bgtFormattedBalance) ||
@@ -112,7 +113,7 @@ export default function Redeem() {
                 abi: BGT_ABI,
                 functionName: "redeem",
                 params: [
-                  account,
+                  account!,
                   parseUnits(redeemAmount === "" ? "0" : redeemAmount, 18),
                 ],
               })

@@ -371,7 +371,7 @@ export const getUserPoolColumns = (
                         ADDRESS_ZERO) as Address,
                       abi: BERA_VAULT_REWARDS_ABI,
                       functionName: "getReward",
-                      params: [account],
+                      params: [account!],
                     });
                   }}
                 >

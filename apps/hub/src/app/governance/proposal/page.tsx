@@ -3,8 +3,7 @@
 import { FC, Suspense } from "react";
 import { notFound, useSearchParams } from "next/navigation";
 import { isIPFS } from "@bera/config";
-
-import ProposalDetails from "./[proposalId]/proposal-details";
+import ProposalDetails from "./[proposalId]/components/proposal-details";
 
 const SearchParamsProposal: FC = () => {
   const sp = useSearchParams();

@@ -3,9 +3,9 @@ import type {
   Market,
   MarketOrder,
   OpenLimitOrder,
-  OpenTrade,
   Pagination,
 } from "@bera/proto/src";
+import { IOpenTradeWithoutMarket } from "./order-history";
 
 export interface IMarket extends Market {
   imageUri?: string;
@@ -15,7 +15,7 @@ export interface IMarket extends Market {
   dailyNumOfTrades?: number;
 }
 export interface OpenPositionData {
-  result: OpenTrade[];
+  result: IOpenTradeWithoutMarket[];
   pagination: Pagination;
 }
 

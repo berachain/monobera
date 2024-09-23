@@ -19,7 +19,7 @@ export function ProgressBarChart({
   ...props
 }: IProgressBarProps) {
   return (
-    <div {...props} className={cn("flex flex-col gap-1", className)}>
+    <div {...props} className={cn("flex flex-col gap-2", className)}>
       <div className="relative flex h-4 justify-between text-xs font-bold">
         {Number(dataList[0].votesCount) > 0 && (
           <FormattedNumber

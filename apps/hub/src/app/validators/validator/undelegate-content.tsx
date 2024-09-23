@@ -105,7 +105,10 @@ export const UnDelegateContent = ({
                 address: bgtTokenAddress,
                 abi: BGT_ABI,
                 functionName: "dropBoost",
-                params: [userValidator.coinbase, parseUnits(amount ?? "0", 18)],
+                params: [
+                  userValidator.coinbase as Address,
+                  parseUnits(amount ?? "0", 18),
+                ],
               })
             }
           >

@@ -32,7 +32,7 @@ export const CreateProposal = ({
     addProposalAction,
     removeProposalAction,
     submitProposal,
-  } = useCreateProposal(governorAddress);
+  } = useCreateProposal({ governorAddress });
   const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: null,
@@ -118,6 +118,7 @@ export const CreateProposal = ({
             {proposal.actions.map((action, idx) => (
               <CreateProposalAction
                 idx={idx}
+                key={idx}
                 action={action}
                 setErrors={createActionErrorUpdateHandler(idx)}
                 setAction={createActionUpdateHandler(idx)}

@@ -11,6 +11,7 @@ import {
 } from "~/app/governance/types";
 import {
   checkProposalField,
+  getBodyErrors,
   type useCreateProposal,
 } from "~/hooks/useCreateProposal";
 
@@ -100,12 +101,16 @@ export const CreateProposalBody = ({
         id="proposal-forumLink"
         placeholder="https://forum.berachain.com/...."
         value={proposal.forumLink}
-        onChange={(e: any) =>
+        onChange={(e: any) => {
           setProposal((prev: any) => ({
             ...prev,
             forumLink: e.target.value,
-          }))
-        }
+          }));
+          setErrors((errs) => ({
+            ...errs,
+            forumLink: checkProposalField("forumLink", e.target.value),
+          }));
+        }}
       />
 
       <div className="flex justify-end">

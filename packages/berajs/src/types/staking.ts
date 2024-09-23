@@ -45,7 +45,7 @@ export type SubgraphUserValidator = {
   latestBlock: string;
   latestBlockTime: string;
   user: string;
-  coinbase: string;
+  coinbase: Address;
   canActivate?: boolean;
 };
 

@@ -98,7 +98,7 @@ export const DelegateContent = ({ validator }: { validator?: Address }) => {
                 address: bgtTokenAddress,
                 abi: BGT_ABI,
                 functionName: "queueBoost",
-                params: [validator, parseUnits(amount ?? "0", 18)],
+                params: [validator!, parseUnits(amount ?? "0", 18)],
               })
             }
           >

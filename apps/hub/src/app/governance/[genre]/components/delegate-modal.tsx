@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  IVotes_ABI,
+  BGT_ABI,
   TransactionActionType,
   truncateHash,
   useBeraJs,
@@ -147,9 +147,9 @@ export const DelegateModal = ({
                 onClick={() =>
                   write({
                     address: governanceTokenAddress,
-                    abi: IVotes_ABI,
+                    abi: BGT_ABI,
                     functionName: "delegate",
-                    params: [delegate],
+                    params: [delegate as Address],
                   })
                 }
               >

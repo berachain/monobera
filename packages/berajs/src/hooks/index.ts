@@ -22,4 +22,5 @@ export * from "./useValidatorList";
 export * from "./useGaugesMetadata";
 export * from "./useTpsl";
 export * from "./usePrevious";
+export * from "./useInterval";
 export * from "./useGetVerifiedAbi";

@@ -7,8 +7,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { usePollPositionsLiqFeePrices, usePrevious } from "@bera/berajs";
-import type { OpenTrade } from "@bera/proto/src";
+import { usePrevious } from "@bera/berajs";
 import { SimpleTable, useAsyncTable } from "@bera/shared-ui";
 import {
   TableState,
@@ -27,7 +26,7 @@ import { TableContext } from "~/context/table-context";
 import { usePollMarketOrders } from "~/hooks/usePollMarketOrders";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import type { IMarket } from "~/types/market";
-import type { IOpenTrade, IOpenTradeCalculated } from "~/types/order-history";
+import type { IOpenTrade } from "~/types/order-history";
 import { FilterableTableState } from "~/types/table";
 import { TotalAmount } from "../../components/total-amount";
 
@@ -40,30 +39,20 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
     isValidating,
     refresh: refetchPositions,
   } = usePollOpenPositions(tableState);
-  const { data: openPositionsLiqFeesData } = usePollPositionsLiqFeePrices(
-    data?.result
-      ? data.result.map((position: OpenTrade) => Number(position.index))
-      : [],
-  );
 
   const { refresh: refetchMarketHistory } = usePollMarketOrders(tableState);
 
-  let openPositions = generateMarketOrders(data, markets) as IOpenTrade[];
+  let openPositions = data
+    ? (generateMarketOrders(data, markets) as IOpenTrade[])
+    : [];
   openPositions = openPositions.map((position, index) => {
     return {
       ...position,
-      borrowing_fee:
-        openPositionsLiqFeesData?.at(1)?.at(index)?.toString() ?? "0",
-      liq_price: openPositionsLiqFeesData?.at(0)?.at(index)?.toString() ?? "0",
     };
   });
 
-  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTradeCalculated>(
-    false,
-  );
-  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTradeCalculated>(
-    false,
-  );
+  const [updateOpen, setUpdateOpen] = useState<boolean | IOpenTrade>(false);
+  const [deleteOpen, setDeleteOpen] = useState<boolean | IOpenTrade>(false);
 
   const prevPositionLength = usePrevious(openPositions?.length ?? 0);
   useEffect(() => {
@@ -140,7 +129,7 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
   );
 
   const table = useAsyncTable({
-    data: (openPositions as IOpenTradeCalculated[]) ?? [],
+    data: (openPositions as IOpenTrade[]) ?? [],
     columns: markets
       ? generatePositionColumns(markets, setUpdateOpen, setDeleteOpen)
       : [],
@@ -202,12 +191,12 @@ export default function UserOpenPositions({ markets }: { markets: IMarket[] }) {
         </div>
       </div>
       <UpdatePositionModal
-        openPosition={updateOpen as IOpenTradeCalculated}
+        openPosition={updateOpen as IOpenTrade}
         controlledOpen={!!updateOpen}
         onOpenChange={setUpdateOpen}
       />
       <ClosePositionModal
-        openPosition={deleteOpen as IOpenTradeCalculated}
+        openPosition={deleteOpen as IOpenTrade}
         controlledOpen={!!deleteOpen}
         onOpenChange={setDeleteOpen}
       />
