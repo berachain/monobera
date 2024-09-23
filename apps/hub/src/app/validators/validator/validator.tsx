@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { useSelectedValidator } from "@bera/berajs";
 import { type Address } from "viem";
 
-import { ValidatorTabs } from "../../components/validator-tabs";
+import { ValidatorTabs } from "../components/validator-tabs";
 import ValidatorDetails from "./validator-details";
 
 export default function Validator({

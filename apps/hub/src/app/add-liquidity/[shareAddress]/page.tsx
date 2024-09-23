@@ -33,3 +33,11 @@ export default async function PoolPage({
     notFound();
   }
 }
+
+export function generateStaticParams() {
+  return [
+    {
+      shareAddress: "0x",
+    },
+  ];
+}

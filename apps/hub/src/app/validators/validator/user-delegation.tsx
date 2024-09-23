@@ -1,12 +1,13 @@
+import { useMemo } from "react";
 import { useUserValidatorsSubgraph } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 import { Address } from "viem";
+
+import { BoostQueue } from "../components/boost-queue";
 import { DelegateModal } from "./delegate-modal";
 import { UnbondModal } from "./unbond-modal";
-import { BoostQueue } from "../../components/boost-queue";
-import { useMemo } from "react";
 
 export const UserDelegation = ({ validator }: { validator: Address }) => {
   const { data = [], refresh, isLoading } = useUserValidatorsSubgraph();

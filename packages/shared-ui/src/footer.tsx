@@ -1,6 +1,6 @@
 import {
-  bgtName,
-  bgtUrl,
+  hubName,
+  hubUrl,
   blockExplorerName,
   blockExplorerUrl,
   blogUrl,
@@ -30,8 +30,8 @@ const footerNavigation = {
       href: dexUrl,
     },
     {
-      name: bgtName,
-      href: bgtUrl,
+      name: hubName,
+      href: hubUrl,
     },
     {
       name: honeyName,

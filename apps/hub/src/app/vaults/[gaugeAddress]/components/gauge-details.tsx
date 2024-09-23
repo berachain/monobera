@@ -2,13 +2,16 @@
 
 import { notFound } from "next/navigation";
 import {
+  Gauge,
   truncateHash,
   useSelectedGauge,
   useSelectedGaugeValidators,
 } from "@bera/berajs";
 import { bgtVaultBlackList, blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
+import { getHubValidatorPath } from "@bera/shared-ui/src/utils/getHubUrls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { SWRConfig, unstable_serialize } from "swr";
 import { Address, isAddress } from "viem";
 
 import { gauge_incentives_columns } from "~/columns/gauge-incentives-columns";
@@ -17,10 +20,31 @@ import Loading from "../loading";
 import { BendRewardsBanner } from "./banner";
 import { MyGaugeDetails } from "./my-gauge-details";
 
-export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
+export const GaugeDetails = ({
+  gaugeAddress,
+  gauge,
+}: {
+  gaugeAddress: Address;
+  gauge?: Gauge;
+}) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          [unstable_serialize(["useSelectedValidator", gaugeAddress])]: gauge,
+        },
+      }}
+    >
+      <_GaugeDetails gaugeAddress={gaugeAddress} />
+    </SWRConfig>
+  );
+};
+
+const _GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
   const {
     data: gauge,
     isLoading: isGaugeLoading,
+    error: gaugeError,
     isValidating: isGaugeValidating,
   } = useSelectedGauge(gaugeAddress);
 
@@ -30,9 +54,10 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
     isValidating: isValidatorsValidating,
   } = useSelectedGaugeValidators(gaugeAddress);
 
-  if (!gaugeAddress || !isAddress(gaugeAddress)) return notFound();
+  if (gaugeError || !gaugeAddress || !isAddress(gaugeAddress))
+    return notFound();
   if (!isGaugeLoading && !isGaugeValidating && !gauge) return notFound();
-  console.log("gauge", gauge);
+  console.log("gauge", gauge, gaugeError);
   return (
     <>
       {gauge ? (
@@ -117,7 +142,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
                 data={validators}
                 className="min-w-[800px] shadow"
                 onRowClick={(row: any) =>
-                  window.open(`/validators/${row.original.id}`, "_blank")
+                  window.open(getHubValidatorPath(row.original.id), "_blank")
                 }
               />
             </TabsContent>

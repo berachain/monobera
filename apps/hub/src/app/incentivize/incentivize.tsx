@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useSearchParams } from "next/navigation";
 import {
   BERA_VAULT_REWARDS_ABI,
   TransactionActionType,
@@ -27,17 +27,21 @@ import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import { Skeleton } from "@bera/ui/skeleton";
 import BigNumber from "bignumber.js";
-import { Address, formatUnits, parseUnits } from "viem";
+import { Address, formatUnits, isAddress, parseUnits } from "viem";
 
-export const Incentivize = ({
-  gauge,
-  selectedToken,
-}: {
-  gauge: Address;
-  selectedToken?: Address;
-}) => {
+export const Incentivize = () => {
+  const sp = useSearchParams();
+  const gauge = sp.get("gauge");
+  const selectedToken = sp.get("selectedToken") as Address | null;
   //is valid pool address
-  if (!gauge) return notFound();
+  if (
+    !gauge ||
+    !isAddress(gauge) ||
+    !selectedToken ||
+    !isAddress(selectedToken)
+  )
+    return notFound();
+
   const {
     data: gaugeInfo,
     isLoading: isGaugeLoading,
@@ -247,7 +251,7 @@ export const Incentivize = ({
             Amount of Proposals
           </div>
           <FormattedNumber
-            className="font-semibold leading-7 truncate"
+            className="truncate font-semibold leading-7"
             value={
               isInvalidInput ||
               totalAmount === "" ||

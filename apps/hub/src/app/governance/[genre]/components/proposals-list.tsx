@@ -1,10 +1,10 @@
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { usePollAllProposals, type Proposal } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, isIPFS } from "@bera/config";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { ProposalCard } from "./proposal-card";
-import { useRouter } from "next/navigation";
 
 export const ProposalsList = () => {
   const { data } = usePollAllProposals();
@@ -22,12 +22,16 @@ export const ProposalsList = () => {
             proposal={proposal}
             key={`proposal-${proposal.id}`}
             className="hover:cursor-pointer"
-            onMouseOver={() => {
-              router.prefetch(`/governance/proposal/${proposal.id}`);
-            }}
-            onClick={() => {
-              router.push(`/governance/proposal/${proposal.id}`);
-            }}
+            onClick={() =>
+              router.push(
+                `/governance/proposal${isIPFS ? "?id=" : "/"}${proposal.id}`,
+              )
+            }
+            onMouseOver={() =>
+              router.prefetch(
+                `/governance/proposal${isIPFS ? "?id=" : "/"}${proposal.id}`,
+              )
+            }
           />
         ))}
         {!data?.length && (

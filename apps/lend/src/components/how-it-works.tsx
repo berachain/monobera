@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import {
-  bgtUrl,
+  hubUrl,
   honeyTokenAddress,
   wbtcTokenAddress,
   wethTokenAddress,
@@ -51,7 +51,7 @@ export default function HowItWorks() {
           <h3 className="mb-2 text-lg font-semibold">Earn BGT Rewards</h3>
           <p>
             Borrowing HONEY qualifies you for increased BGT rewards on BEND.{" "}
-            <Link href={bgtUrl} target="_blank" className="underline">
+            <Link href={hubUrl} target="_blank" className="underline">
               Stake your BGT at BGT Station
             </Link>{" "}
             to earn additional incentives.
