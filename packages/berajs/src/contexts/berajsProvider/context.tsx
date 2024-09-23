@@ -14,6 +14,7 @@ import { TransactionStoreProvider } from "~/hooks";
 import { BeraConfig } from "~/types";
 import { CrocEnvContextProvider } from "../crocenv";
 import { SWRConfig } from "swr";
+import * as Sentry from "@sentry/nextjs";
 
 export interface IBeraJsAPI {
   account: `0x${string}` | undefined;
@@ -57,25 +58,36 @@ export const BeraJsProvider: React.FC<
     return !chains.some((c) => c.id === chain?.id);
   }, [chains, chain?.id]);
   return (
-    <BeraJsContext.Provider
+    <SWRConfig
       value={{
-        account: account as `0x${string}`,
-        isConnected: useMemo(
-          () => (account && isMounted ? true : false),
-          [account, isMounted, status],
-        ),
-        isWrongNetwork,
-        isReady: useMemo(
-          () => account && isMounted && !isWrongNetwork,
-          [account, isMounted, chain?.id, status, isWrongNetwork],
-        ),
-        config: configOverride ?? defaultBeraConfig,
+        onError: (error, key) => {
+          if (error.status !== 403 && error.status !== 404) {
+            console.log("SWRError", error);
+            Sentry.captureException(error);
+          }
+        },
       }}
     >
-      <TransactionStoreProvider>
-        <CrocEnvContextProvider>{children}</CrocEnvContextProvider>
-      </TransactionStoreProvider>
-    </BeraJsContext.Provider>
+      <BeraJsContext.Provider
+        value={{
+          account: account as `0x${string}`,
+          isConnected: useMemo(
+            () => (account && isMounted ? true : false),
+            [account, isMounted, status],
+          ),
+          isWrongNetwork,
+          isReady: useMemo(
+            () => account && isMounted && !isWrongNetwork,
+            [account, isMounted, chain?.id, status, isWrongNetwork],
+          ),
+          config: configOverride ?? defaultBeraConfig,
+        }}
+      >
+        <TransactionStoreProvider>
+          <CrocEnvContextProvider>{children}</CrocEnvContextProvider>
+        </TransactionStoreProvider>
+      </BeraJsContext.Provider>
+    </SWRConfig>
   );
 };
 export default BeraJsProvider;
