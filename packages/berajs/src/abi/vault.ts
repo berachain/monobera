@@ -768,4 +768,4 @@ export const BERA_VAULT_REWARDS_ABI = [
   { type: "error", name: "VaultAlreadyExists", inputs: [] },
   { type: "error", name: "WithdrawAmountIsZero", inputs: [] },
   { type: "error", name: "ZeroAddress", inputs: [] },
-];
+] as const;

@@ -16,7 +16,7 @@ const PROPOSALS_PER_PAGE = 10;
 export const ProposalsList = () => {
   const { data = [], isLoading } = usePollAllProposals();
   const [page, setPage] = useState(0);
-const router = useRouter();
+  const router = useRouter();
   const {
     loading,
     error,

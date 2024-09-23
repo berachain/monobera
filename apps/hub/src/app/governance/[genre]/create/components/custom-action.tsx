@@ -1,6 +1,7 @@
 import { truncateHash, usePrevious } from "@bera/berajs";
 import { Dropdown } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
+import { FormError } from "@bera/ui/form-error";
 import { Input, InputWithLabel } from "@bera/ui/input";
 import { TextArea } from "@bera/ui/text-area";
 import { formatAbiItem } from "abitype";
@@ -35,10 +36,22 @@ export function CustomAction({
 }) {
   const [abiItems, setAbiItems] = useState<AbiFunction>();
   const [contractSelectors, setContractSelectors] = useState<AbiFunction[]>([]);
-  const prevAbi = usePrevious(action.ABI);
+  const prevSig = usePrevious(action.functionSignature);
 
   useEffect(() => {
-    if (action.ABI && JSON.stringify(prevAbi) !== JSON.stringify(action.ABI)) {
+    // RESET CALL DATA WHEN FUNCTION SIGNATURE CHANGES
+    if (prevSig && prevSig !== action.functionSignature) {
+      setAction((a) => ({
+        ...a,
+        calldata: [],
+      }));
+      setErrors((e) => ({ ...e, calldata: [] }));
+    }
+  }, [action.functionSignature, prevSig]);
+
+  useEffect(() => {
+    // PARSE ABI
+    if (action.ABI) {
       try {
         const parsedAbi = (JSON.parse(action.ABI) as Abi).filter(
           (a) =>
@@ -47,7 +60,7 @@ export function CustomAction({
         ) as AbiFunction[]; // parseAbi(JSON.parse(action.ABI));
 
         setContractSelectors(parsedAbi);
-        setErrors((e) => ({ ...e, functionSignature: null }));
+        setErrors((e) => ({ ...e, ABI: null }));
       } catch (error) {
         console.warn("error parsing abi", error);
         setErrors((e) => ({ ...e, ABI: ProposalErrorCodes.INVALID_ABI }));
@@ -70,6 +83,21 @@ export function CustomAction({
               };
             });
 
+            break;
+          default:
+            try {
+              setErrors((e) => {
+                const prev = e?.calldata || [];
+                prev[idx] = checkProposalField(
+                  supposedType as any,
+                  event.target.value,
+                );
+                return {
+                  ...e,
+                  calldata: prev,
+                };
+              });
+            } catch (error) {}
             break;
         }
 
@@ -196,6 +224,11 @@ export function CustomAction({
             }))
           }
         />
+        <FormError>
+          {errors.functionSignature === ProposalErrorCodes.REQUIRED
+            ? "A Method Must Be chosen"
+            : errors.functionSignature}
+        </FormError>
       </div>
       {abiItems?.inputs?.map((input, i) => {
         return (

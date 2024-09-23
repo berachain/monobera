@@ -122,6 +122,7 @@ export function OverviewChart({
           {voteTypes.map((type: any) => (
             <TabsTrigger
               value={type}
+              variant="compact"
               key={type}
               className="capitalize"
               onClick={() => setVoteType(type)}

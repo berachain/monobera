@@ -4,7 +4,6 @@ import graymatter from "gray-matter";
 import { decodeFunctionData, formatEther } from "viem";
 
 import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
-import graymatter from "gray-matter";
 import { NativeDapps, Others } from "./governance-genre-helper";
 
 export const getBadgeColor = (proposalStatus: StatusEnum) => {

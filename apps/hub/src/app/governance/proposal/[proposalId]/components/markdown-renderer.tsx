@@ -11,6 +11,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
   return (
     <ReactMarkdown
       children={content}
+      className={"hyphens-auto"}
       rehypePlugins={[rehypeSanitize]} // Enables sanitization and raw HTML processing
       components={{
         // Customize how links are rendered

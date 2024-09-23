@@ -96,7 +96,7 @@ const _ReferralModal: FC = () => {
                     address: referralsContract,
                     abi: referralsAbi,
                     functionName: "registerPotentialReferrer",
-                    params: [referralAddress],
+                    params: [referralAddress!],
                   })
                 }
                 className="flex-1"

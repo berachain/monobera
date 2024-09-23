@@ -15,18 +15,18 @@ export const QuorumStatus = ({
     .toNumber();
 
   return (
-    <div className="flex h-4 w-[170px] gap-2 text-xs font-medium">
-      <div className="whitespace-nowrap">
+    <div className="sm:flex sm:h-4 gap-2 font-medium">
+      <div className="whitespace-nowrap leading-none">
         <FormattedNumber value={delegatesVotesCount} visibleDecimals={1} /> of{" "}
         <FormattedNumber value={quorum} visibleDecimals={1} />
       </div>
       <div>
         {percentage >= 100 ? (
-          <div className="flex items-center gap-1 text-xs font-medium text-success-foreground">
+          <div className="flex items-center gap-1 leading-none font-medium text-success-foreground">
             Reached <Icons.checkCircle className="h-4 w-4" />
           </div>
         ) : (
-          <div>
+          <div className="text-muted-foreground leading-none whitespace-nowrap">
             (
             <FormattedNumber
               value={percentage}

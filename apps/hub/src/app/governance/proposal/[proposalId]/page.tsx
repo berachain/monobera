@@ -2,7 +2,9 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getMetaTitle } from "@bera/shared-ui";
-import ProposalDetails, { ProposalDetailsWrapper } from "./proposal-details";
+import ProposalDetails, {
+  ProposalDetailsWrapper,
+} from "./components/proposal-details";
 import { bgtName } from "@bera/config";
 import { defaultBeraConfig } from "@bera/berajs/config";
 import { getProposalDetails } from "@bera/berajs/actions";

@@ -18,7 +18,7 @@ import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";
 import BigNumber from "bignumber.js";
-import { parseUnits } from "viem";
+import { ContractFunctionArgs, parseUnits } from "viem";
 
 import { formatToBaseUnit } from "~/utils/formatBigNumber";
 import {
@@ -100,19 +100,23 @@ export function PlaceOrder({
   const parsedPositionSize = parseUnits(safeAmount, 18);
 
   const handlePlaceOrder = useCallback(async () => {
-    const payload = [
+    const payload: ContractFunctionArgs<
+      typeof tradingAbi,
+      "payable",
+      "openTrade"
+    > = [
       {
-        trader: account,
-        pairIndex: Number(pairIndex),
-        index: 0,
-        initialPosToken: 0,
+        trader: account!,
+        pairIndex: BigInt(pairIndex),
+        index: 0n,
+        initialPosToken: 0n,
         positionSizeHoney: parsedPositionSize, // position size
         openPrice:
           form.optionType === "market"
             ? parseUnits(`${price ?? 0}`, 10)
             : parseUnits(`${form.limitPrice ?? 0}`, 10), // for limit orders
         buy: form.orderType === "long" ? true : false,
-        leverage: Number(form.leverage),
+        leverage: BigInt(form.leverage!),
         tp: form.tp === "" ? 0n : parseUnits(form?.tp ?? "0", 10),
         sl: form.sl === "" ? 0n : parseUnits(form?.sl ?? "0", 10),
       },
