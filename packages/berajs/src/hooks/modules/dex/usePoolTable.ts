@@ -74,7 +74,15 @@ export const usePoolTable = (sorting: any) => {
 
     data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
       if (!page.data) return;
-      concatData = concatData.concat(page.data);
+      concatData = concatData.concat(
+        page.data.filter(
+          (item: PoolV2) =>
+            getAddress(item.shareAddress) !==
+              getAddress("0x50f7d4da89f720fbfb35be369f34c6b51e2cada1") &&
+            getAddress(item.shareAddress) !==
+              getAddress("0x14ee0a8dcd1714781aa0d026f46fc7f77b73c01d"),
+        ),
+      );
     });
 
     if (account && publicClient && data) {
@@ -108,15 +116,7 @@ export const usePoolTable = (sorting: any) => {
           setProcessedData(newProcessedData);
         });
     } else {
-      setProcessedData(
-        concatData.filter(
-          (item: PoolV2) =>
-            getAddress(item.shareAddress) !==
-              getAddress("0x50f7d4da89f720fbfb35be369f34c6b51e2cada1") &&
-            getAddress(item.shareAddress) !==
-              getAddress("0x14ee0a8dcd1714781aa0d026f46fc7f77b73c01d"),
-        ),
-      );
+      setProcessedData(concatData);
     }
   }, [data, account]);
 
