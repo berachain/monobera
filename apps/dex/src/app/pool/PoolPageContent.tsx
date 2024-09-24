@@ -391,20 +391,20 @@ export default function PoolPageContent({
           )
         }
         subtitles={[
-          {
-            title: "BGT APY",
-            content: isPoolLoading ? (
-              <Skeleton className="h-4 w-8" />
-            ) : (
-              <FormattedNumber
-                value={pool?.bgtApy ? parseFloat(pool.bgtApy) / 100 : 0}
-                colored
-                percent
-              />
-            ),
-            color: "warning",
-            tooltip: <ApyTooltip />,
-          },
+          // {
+          //   title: "BGT APY",
+          //   content: isPoolLoading ? (
+          //     <Skeleton className="h-4 w-8" />
+          //   ) : (
+          //     <FormattedNumber
+          //       value={pool?.bgtApy ? parseFloat(pool.bgtApy) / 100 : 0}
+          //       colored
+          //       percent
+          //     />
+          //   ),
+          //   color: "warning",
+          //   tooltip: <ApyTooltip />,
+          // },
           {
             title: "Fee",
             content: isPoolLoading ? (
@@ -459,7 +459,7 @@ export default function PoolPageContent({
             timeCreated={timeCreated}
             isLoading={isPoolHistoryLoading}
           />
-          <div className="mb-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="mb-3 grid grid-cols-1 gap-4 md:grid-cols-3">
             <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
                 <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
@@ -490,7 +490,7 @@ export default function PoolPageContent({
                 <FormattedNumber value={pool?.fees24h ?? 0} symbol="USD" />
               </div>{" "}
             </Card>
-            <Card className="px-4 py-2">
+            {/* <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-1 overflow-hidden truncate whitespace-nowrap text-sm ">
                   BGT APY <ApyTooltip />
@@ -503,7 +503,7 @@ export default function PoolPageContent({
                   percent
                 />
               </div>
-            </Card>
+            </Card> */}
           </div>
         </div>
         <div className="col-span-5 flex w-full flex-col gap-5 lg:col-span-2">
