@@ -24,7 +24,7 @@ const BLOCKED_COUNTRY = [
 ];
 export { default } from "next-auth/middleware";
 export const config = {
-  matcher: ["/"],
+  matcher: ["/((?!monitoring-tunnel))"],
 };
 export function middleware(req: NextRequest) {
   // Extract country

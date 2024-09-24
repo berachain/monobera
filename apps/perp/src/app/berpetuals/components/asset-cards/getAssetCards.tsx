@@ -4,7 +4,7 @@ import type {
   IClosedTrade,
   ILimitOrder,
   IMarketOrder,
-  IOpenTradeCalculated,
+  IOpenTrade,
 } from "~/types/order-history";
 import { getHistoryListItems } from "./history";
 import { getLimitListItems } from "./orders";
@@ -18,7 +18,7 @@ export const getAssetCardList = ({
   markets,
   closedTradesItems,
 }: {
-  openPositionsItems: IOpenTradeCalculated[];
+  openPositionsItems: IOpenTrade[];
   openOrderItems: ILimitOrder[];
   closedTradesItems: IClosedTrade[];
   markets: IMarket[];

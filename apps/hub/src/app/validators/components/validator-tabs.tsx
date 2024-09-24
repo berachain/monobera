@@ -1,8 +1,8 @@
 import { useBeraJs, type Validator } from "@bera/berajs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
-import { ValidatorOverview } from "../[validatorAddress]/components/validator-overview";
-import { ValidatorPolData } from "../[validatorAddress]/components/validator-pol-data";
+import { ValidatorOverview } from "../validator/validator-overview";
+import { ValidatorPolData } from "../validator/validator-pol-data";
 import { ValidatorAnalytics } from "./validator-analytics";
 import { ValidatorConfiguration } from "./validator-configuration";
 import { ValidatorEvents } from "./validator-events";

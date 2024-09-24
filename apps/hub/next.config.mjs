@@ -6,10 +6,12 @@ import "./src/env.mjs";
 const config = {
   reactStrictMode: true,
   pageExtensions: ["ts", "tsx"],
+  trailingSlash: true,
   transpilePackages: ["@bera/ui", "@bera/berajs", "@bera/wagmi"],
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
+  output: process.env.NEXT_PUBLIC_HOST === "ipfs" ? "export" : undefined,
   experimental: {
     instrumentationHook: true,
     esmExternals: "loose",
@@ -24,6 +26,7 @@ const config = {
     return config;
   },
   images: {
+    unoptimized: process.env.NEXT_PUBLIC_HOST === "ipfs" ? true : undefined,
     remotePatterns: [
       {
         protocol: "https",
@@ -56,7 +59,7 @@ export default withSentryConfig(config, {
   widenClientFileUpload: true,
 
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-  tunnelRoute: "/monitoring",
+  tunnelRoute: "/monitoring-tunnel",
 
   // Hides source maps from generated client bundles
   hideSourceMaps: true,

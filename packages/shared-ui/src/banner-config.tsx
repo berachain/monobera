@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  bgtName,
+  hubName,
   dexName,
   faucetName,
   honeyName,
@@ -132,7 +132,7 @@ export const bannerConfig: BannerConfig = {
   "BGT Station": {
     [DappBannerType.LAUNCH]: {
       enabled: false,
-      bannerComponent: <LaunchBanner appName={bgtName} />,
+      bannerComponent: <LaunchBanner appName={hubName} />,
     },
     [DappBannerType.RPC]: {
       enabled: false,

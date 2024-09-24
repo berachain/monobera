@@ -21,7 +21,10 @@ export function OrderHistoryHeader({ markets }: { markets: IMarket[] }) {
   } = usePollOpenPositions(tableState);
 
   const openPositions = useMemo(
-    () => generateMarketOrders(openPositionsData, markets) as IOpenTrade[],
+    () =>
+      openPositionsData
+        ? (generateMarketOrders(openPositionsData, markets) as IOpenTrade[])
+        : [],
     [openPositionsData, markets],
   );
 

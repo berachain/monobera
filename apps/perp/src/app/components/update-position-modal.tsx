@@ -19,7 +19,7 @@ import { usePriceData, useVaa } from "~/context/price-context";
 import { TableContext } from "~/context/table-context";
 import { usePollOpenPositions } from "~/hooks/usePollOpenPositions";
 import { usePollPrices } from "~/hooks/usePollPrices";
-import type { IOpenTradeCalculated } from "~/types/order-history";
+import type { IOpenTrade } from "~/types/order-history";
 import { TPSL } from "../berpetuals/components/tpsl";
 import { MarketTradePNL } from "./market-trade-pnl";
 
@@ -32,7 +32,7 @@ export function UpdatePositionModal({
 }: {
   trigger?: any;
   disabled?: boolean;
-  openPosition: IOpenTradeCalculated;
+  openPosition: IOpenTrade;
   className?: string;
   controlledOpen?: boolean;
   onOpenChange?: (state: boolean) => void;
