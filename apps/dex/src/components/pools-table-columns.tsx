@@ -134,35 +134,35 @@ export const columns: ColumnDef<PoolV2>[] = [
       return value.includes(row.getValue(id));
     },
   },
-  {
-    accessorKey: "bgtApy",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="BGT APY"
-        tooltip={apyTooltipText()}
-        className="whitespace-nowrap"
-      />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex items-center justify-start text-sm text-warning-foreground">
-          <FormattedNumber
-            value={row.original.bgtApy ?? 0}
-            compact
-            showIsSmallerThanMin
-          />
-          %
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    sortingFn: (rowA, rowB) => {
-      return 0;
-    },
-  },
+  // {
+  //   accessorKey: "bgtApy",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="BGT APY"
+  //       tooltip={apyTooltipText()}
+  //       className="whitespace-nowrap"
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="flex items-center justify-start text-sm text-warning-foreground">
+  //         <FormattedNumber
+  //           value={row.original.bgtApy ?? 0}
+  //           compact
+  //           showIsSmallerThanMin
+  //         />
+  //         %
+  //       </div>
+  //     );
+  //   },
+  //   filterFn: (row, id, value) => {
+  //     return value.includes(row.getValue(id));
+  //   },
+  //   sortingFn: (rowA, rowB) => {
+  //     return 0;
+  //   },
+  // },
   {
     accessorKey: "btns",
     header: ({ column }) => (

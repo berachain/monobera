@@ -23,11 +23,11 @@ export const getTokenHoneyPrice = async ({
   tokenAddress,
   config,
 }: FetchHoneyPriceArgs): Promise<string | undefined> => {
-  if (!config.subgraphs?.dexSubgraph) {
+  if (!config.subgraphs?.bgtSubgraph) {
     throw new Error("dex subgraph uri s not found in config");
   }
-  const subgraphEndpoint = config.subgraphs?.dexSubgraph;
-  const dexClient = new ApolloClient({
+  const subgraphEndpoint = config.subgraphs?.bgtSubgraph;
+  const bgtClient = new ApolloClient({
     uri: subgraphEndpoint,
     cache: new InMemoryCache(),
   });
@@ -37,7 +37,7 @@ export const getTokenHoneyPrice = async ({
   if (tokenAddress.toLowerCase() === honeyTokenAddress.toLowerCase()) {
     return "1";
   }
-  return await dexClient
+  return await bgtClient
     .query({
       query: getTokenHoneyPriceReq,
       variables: {
@@ -49,7 +49,7 @@ export const getTokenHoneyPrice = async ({
       },
     })
     .then((res: any) => {
-      return res.data.tokenHoneyPrice?.price;
+      return res.data.tokenInformation?.usdValue;
     })
     .catch((e: any) => {
       console.log(e);
