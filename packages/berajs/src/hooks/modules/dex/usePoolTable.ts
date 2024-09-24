@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { multicallAddress } from "@bera/config";
+import { dexClient, getFilteredPools } from "@bera/graphql";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { erc20Abi } from "viem";
+import { erc20Abi, getAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { useBeraJs } from "~/contexts";
 import type { PoolV2 } from "~/types";
 import { mapPoolsToPoolsV2 } from "~/utils";
-import { dexClient, getFilteredPools } from "@bera/graphql";
 import { useTotalPoolCount } from "./useTotalPoolCount";
 
 const DEFAULT_SIZE = 8;
@@ -74,7 +74,15 @@ export const usePoolTable = (sorting: any) => {
 
     data?.pages?.forEach((page: { data: PoolV2[]; totalCount: number }) => {
       if (!page.data) return;
-      concatData = concatData.concat(page.data);
+      concatData = concatData.concat(
+        page.data.filter(
+          (item: PoolV2) =>
+            getAddress(item.shareAddress) !==
+              getAddress("0x50f7d4da89f720fbfb35be369f34c6b51e2cada1") &&
+            getAddress(item.shareAddress) !==
+              getAddress("0x14ee0a8dcd1714781aa0d026f46fc7f77b73c01d"),
+        ),
+      );
     });
 
     if (account && publicClient && data) {
