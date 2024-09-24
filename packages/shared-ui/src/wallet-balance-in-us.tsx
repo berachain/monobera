@@ -19,6 +19,7 @@ export function WalletBalanceInUs() {
       (featuredToken: Token) => featuredToken.address,
     ),
   });
+  console.log("pricesArray", pricesArray);
   const total =
     assets && pricesArray
       ? assets?.reduce((acc: number, curr: BalanceToken) => {

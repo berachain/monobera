@@ -26,7 +26,7 @@ export const getTokenHoneyPrice = async ({
   if (!config.subgraphs?.dexSubgraph) {
     throw new Error("dex subgraph uri s not found in config");
   }
-  const subgraphEndpoint = config.subgraphs?.dexSubgraph;
+  const subgraphEndpoint = config.subgraphs?.bgtSubgraph;
   const dexClient = new ApolloClient({
     uri: subgraphEndpoint,
     cache: new InMemoryCache(),
@@ -49,7 +49,7 @@ export const getTokenHoneyPrice = async ({
       },
     })
     .then((res: any) => {
-      return res.data.tokenHoneyPrice?.price;
+      return res.data.tokenInformation?.usdValue;
     })
     .catch((e: any) => {
       console.log(e);
