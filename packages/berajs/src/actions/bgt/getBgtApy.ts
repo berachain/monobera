@@ -42,7 +42,7 @@ export const getBgtApy = async ({
     return undefined;
   }
 
-  const beraHoneyPrice = await dexClient
+  const beraHoneyPrice = await bgtClient
     .query({
       query: getTokenHoneyPriceReq,
       variables: {
@@ -50,7 +50,7 @@ export const getBgtApy = async ({
       },
     })
     .then((res: any) => {
-      return res.data.tokenHoneyPrice?.price;
+      return res.data.tokenInformation?.usdValue;
     })
     .catch((e: any) => {
       console.log(e);

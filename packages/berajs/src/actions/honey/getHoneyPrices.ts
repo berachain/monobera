@@ -25,7 +25,7 @@ export const getTokenHoneyPrices = async ({
     throw new Error("dex subgraph uri s not found in config");
   }
   const subgraphEndpoint = config.subgraphs?.bgtSubgraph;
-  const dexClient = new ApolloClient({
+  const bgtClient = new ApolloClient({
     uri: subgraphEndpoint,
     cache: new InMemoryCache(),
   });
@@ -37,7 +37,7 @@ export const getTokenHoneyPrices = async ({
     handleNativeBera(token).toLowerCase(),
   );
   try {
-    const res = await dexClient.query({
+    const res = await bgtClient.query({
       query: getTokenHoneyPricesReq,
       variables: {
         id: swappedAddresses,
