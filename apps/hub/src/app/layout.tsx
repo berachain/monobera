@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import { IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
-import { bgtName } from "@bera/config";
+import { hubName, hubUrl } from "@bera/config";
 import {
   Footer,
   Header,
@@ -15,12 +15,17 @@ import { Toaster } from "react-hot-toast";
 
 import Providers from "./Providers";
 import { navItems } from "./config";
+import { Metadata } from "next";
 
 const fontSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
   subsets: ["latin"],
 });
+
+export const metadata: Metadata = {
+  metadataBase: new URL(hubUrl),
+};
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
@@ -50,12 +55,12 @@ export default function RootLayout(props: { children: React.ReactNode }) {
               <Toaster position="bottom-right" />
             </div>
             <div className="z-10 flex-1">
-              <Header navItems={navItems} appName={bgtName} />
+              <Header navItems={navItems} appName={hubName} />
               <MainWithBanners
                 className="pt-start"
                 paddingTop={150}
                 multiplier={50}
-                appName={bgtName}
+                appName={hubName}
               >
                 {props.children}
               </MainWithBanners>

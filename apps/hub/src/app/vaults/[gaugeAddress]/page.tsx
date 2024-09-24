@@ -1,22 +1,49 @@
 import React from "react";
 import { type Metadata } from "next";
-import { GaugeDetails } from "./components/gauge-details";
-import { Address } from "viem";
+import { notFound } from "next/navigation";
+import { getGauge } from "@bera/berajs/actions";
+import { hubName, isIPFS } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
-import { bgtName } from "@bera/config";
+import { unstable_serialize } from "swr";
+import { Address, isAddress } from "viem";
+
+import { GaugeDetails } from "./components/gauge-details";
 
 export function generateMetadata(): Metadata {
   return {
-    title: getMetaTitle("Gauge", bgtName),
+    title: getMetaTitle("Gauge", hubName),
   };
 }
 
-export const revalidate = 5;
+export const revalidate = 10;
 
 export default async function PoolPage({
   params,
 }: {
   params: { gaugeAddress: Address };
 }) {
+  if (isIPFS) {
+    return null;
+  }
+
+  if (!isAddress(params.gaugeAddress)) {
+    console.error("Invalid gauge address", params.gaugeAddress);
+    notFound();
+  }
+  const gauge = await getGauge(params.gaugeAddress);
+
+  if (!gauge) {
+    console.error("gauge not found", gauge);
+    notFound();
+  }
+
   return <GaugeDetails gaugeAddress={params.gaugeAddress} />;
+}
+
+export function generateStaticParams() {
+  return [
+    {
+      gaugeAddress: "0x",
+    },
+  ];
 }

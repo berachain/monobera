@@ -6,7 +6,7 @@ import { Icons } from "@bera/ui/icons";
 import { type Address } from "viem";
 
 import { type ActiveIncentiveWithVault } from "~/types/validators";
-import Uptime from "../../components/charts/validator-uptime";
+import Uptime from "../components/charts/validator-uptime";
 import { UserDelegation } from "./user-delegation";
 import { getActiveIncentivesArray } from "./validator-pol-data";
 

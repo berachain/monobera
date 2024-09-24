@@ -1,12 +1,12 @@
 import React from "react";
 import { type Metadata } from "next";
-import { bgtName } from "@bera/config";
+import { hubName } from "@bera/config";
 import { getMetaTitle } from "@bera/shared-ui";
 
 import Rewards from "./rewards";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Rewards", bgtName),
+  title: getMetaTitle("Rewards", hubName),
   description: "Redeem your BGT for BERA",
 };
 
