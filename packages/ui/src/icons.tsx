@@ -22,6 +22,7 @@ import {
   ChevronsDown,
   ChevronsRight,
   ChevronsUp,
+  ChevronsUpDown,
   Circle,
   ClipboardCheck,
   Clock,
@@ -31,6 +32,7 @@ import {
   Copy,
   CreditCard,
   Download,
+  Droplet,
   Edit,
   Expand,
   ExternalLink,
@@ -69,7 +71,6 @@ import {
   PenSquare,
   PieChart,
   Pizza,
-  Droplet,
   Play,
   Plus,
   PlusCircle,
@@ -85,6 +86,7 @@ import {
   Settings,
   SortAsc,
   SortDesc,
+  SquareEqual,
   SunMedium,
   Ticket,
   Timer,
@@ -146,6 +148,7 @@ export const Icons = {
   chevronUp: ChevronUp,
   chevronsUp: ChevronsUp,
   chevronDown: ChevronDown,
+  chevronsUpDown: ChevronsUpDown,
   edit: Edit,
   download: Download,
   trash: Trash,
@@ -212,6 +215,7 @@ export const Icons = {
   refreshccw: RefreshCcw,
   biohazard: Biohazard,
   droplet: Droplet,
+  squareEqual: SquareEqual,
   vault: (props: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -10,6 +10,7 @@ import { getValidatorEstimatedBgtPerYear } from "~/hooks/useValidatorEstimatedBg
 
 export default function GaugeInfoCard() {
   const { data: globalData, isLoading } = usePollGlobalData();
+  console.log("check globalData", globalData);
   return (
     <div className="flex w-full flex-1 flex-col gap-6 sm:flex-row">
       <div className="flex flex-1 flex-row gap-6 sm:flex-col">

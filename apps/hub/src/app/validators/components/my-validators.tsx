@@ -49,6 +49,7 @@ export const MyValidator = ({
       variant="ghost"
       showToolbar={false}
       onRowClick={onRowClick}
+      mutedBackgroundOnHead={false}
     />
   );
 };

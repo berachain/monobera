@@ -5,6 +5,7 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 import { Input } from "@bera/ui/input";
 import { Address } from "viem";
+import { CuttingBoardConfiguration } from "./cutting-board-configuration";
 
 export const ValidatorConfiguration = ({
   validatorAddress,
@@ -27,8 +28,9 @@ export const ValidatorConfiguration = ({
       <Card className="flex flex-col gap-1 p-4">
         <span className="text-2xl font-bold">Berachef Weight</span>
         <span className="text-sm text-muted-foreground">
-          Configure your guage distribution weighting
+          Configure your gauge distribution weighting
         </span>
+        <CuttingBoardConfiguration />
       </Card>
       <Card className="flex flex-col gap-1 p-4">
         <span className="text-2xl font-bold">General Settings</span>

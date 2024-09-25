@@ -74,7 +74,11 @@ export default function ValidatorsTable() {
             >
               My Validators
             </TabsTrigger>
-            <TabsTrigger value="queued" className="w-full" disabled={!isReady}>
+            <TabsTrigger
+              value="queued"
+              className="w-full"
+              disabled={!isReady}
+            >
               Delegation Queue
             </TabsTrigger>
           </TabsList>

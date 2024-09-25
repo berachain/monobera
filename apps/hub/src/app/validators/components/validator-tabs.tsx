@@ -29,7 +29,7 @@ export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
             <TabsTrigger value="configuration">Configuration</TabsTrigger>
           )}
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="events">Events</TabsTrigger>
+          {/* <TabsTrigger value="events">Events</TabsTrigger> */}
         </TabsList>
         <TabsContent value="analytics">
           <Select onValueChange={(value: string) => setDayRange(value)}>
@@ -73,9 +73,10 @@ export const ValidatorTabs = ({ validator }: { validator: Validator }) => {
           validatorAddress={validator.coinbase}
         />
       </TabsContent>
-      <TabsContent value="events">
+      {/* TODO: Uncomment this when we have the events data */}
+      {/* <TabsContent value="events">
         <ValidatorEvents validatorAddress={validator.coinbase} />
-      </TabsContent>
+      </TabsContent> */}
     </Tabs>
   );
 };

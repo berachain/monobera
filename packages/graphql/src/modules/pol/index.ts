@@ -202,3 +202,44 @@ export const GetAllValidatorBlockCount = gql`
     }
   }
 `;
+
+// Get Cutting Board weights for validator
+export const GetGauges = gql`
+query GetGauges {
+  globalInfos(first: 1) {
+    totalValidators
+    totalIncentivesVolumeUsd
+    totalBgtStaked
+    totalBgtQueued
+    totalBGTDistributed
+    totalActiveIncentivesUsd
+    rewardRate
+    id
+    baseRewardRate
+  }
+  globalCuttingBoardWeights(first: 1) {
+    amount
+    id
+    receiver
+    vault {
+      activeIncentivesValueUsd
+      id
+      stakingTokenAmount
+      vaultAddress
+    }
+  }
+  vaults(first: 1000, where: { stakingTokenAmount_gt: "0" }) {
+    activeIncentivesValueUsd
+    vaultAddress
+    stakingTokenAmount
+    stakingToken {
+      address
+      beraValue
+      decimals
+      name
+      symbol
+      usdValue
+    }
+  }
+}
+`;

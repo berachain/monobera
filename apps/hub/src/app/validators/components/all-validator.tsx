@@ -125,6 +125,7 @@ export const AllValidator = ({
       wrapperClassName="min-h-[614px]"
       variant="ghost"
       onRowClick={onRowClick}
+      mutedBackgroundOnHead={false}
     />
   );
 };

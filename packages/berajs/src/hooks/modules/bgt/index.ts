@@ -27,3 +27,4 @@ export { usePollValidatorBgtStakedDelta } from "./usePollValidatorBgtStakedDelta
 export { usePollValidatorBlockStats } from "./usePollValidatorBlockStats";
 export { usePollValidatorAllBlockStats } from "./usePollValidatorAllBlockStats";
 export { usePollValidators } from "./usePollValidators";
+export { usePollGaugesData } from "./usePollGaugesData";

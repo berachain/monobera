@@ -25,18 +25,29 @@ export const ValidatorEvents = ({
       timestamp: "2021-10-01 12:00:00",
       info: "Info 3",
     },
+    {
+      eventType: "Event 4",
+      timestamp: "2021-10-02 09:30:00",
+      info: "Info 4",
+    },
+    {
+      eventType: "Event 5",
+      timestamp: "2021-10-02 14:45:00",
+      info: "Info 5",
+    },
+    {
+      eventType: "Event 6",
+      timestamp: "2021-10-03 11:15:00",
+      info: "Info 6",
+    },
   ];
+
   const validatorEvents = useAsyncTable({
     fetchData: async () => {},
     columns: validatorEventColumns,
     data: mockedData ?? [],
     additionalTableProps: {
       manualSorting: false,
-      //   meta: {
-      //     loading: isLoading,
-      //     loadingText: "Loading...",
-      //     validating: isValidating,
-      //   },
     },
   });
 
@@ -44,11 +55,12 @@ export const ValidatorEvents = ({
     <div className="mt-8">
       <SimpleTable
         table={validatorEvents}
-        // variant="ghost"
-        wrapperClassName={"w-full"}
+        variant="ghost"
+        wrapperClassName="w-full"
         flexTable
         dynamicFlex
         showToolbar={false}
+        mutedBackgroundOnHead={false}
       />
     </div>
   );

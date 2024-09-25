@@ -3,25 +3,32 @@ import Link from "next/link";
 import { cloudinaryUrl, dexUrl, lendUrl, perpsUrl } from "@bera/config";
 import { FadeSlides } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
-
+import { cn } from "@bera/ui";
 export interface HowToEarnCardProps {
   image: string;
   title: string;
   subtitle: string | ReactNode;
+  className?: string;
 }
 
 export const HowToEarnCard: React.FC<HowToEarnCardProps> = ({
   image,
   title,
   subtitle,
+  className,
 }) => {
   return (
-    <div className="flex h-full w-full grid-cols-1 flex-col justify-between overflow-hidden rounded-xl border-[1px] border-border bg-transparent px-4 py-3">
+    <div
+      className={cn(
+        "flex h-full w-full grid-cols-1 flex-col justify-between overflow-hidden rounded-xl border-[1px] border-border bg-transparent px-4 py-3",
+        className,
+      )}
+    >
       <div className="flex flex-col gap-1">
         <div className="text-xl font-bold text-muted-foreground">{title}</div>
         <div className="font-bold text-muted-foreground">{subtitle}</div>
       </div>
-      <div className="flex flex-grow translate-y-[10px] flex-col justify-self-end">
+      <div className="flex flex-grow flex-col justify-self-end">
         <img src={image} alt={title} className="h-[160px] object-contain" />
       </div>
     </div>
@@ -31,7 +38,7 @@ export const HowToEarnCard: React.FC<HowToEarnCardProps> = ({
 export const HowToEarn = () => {
   const step1Cards: HowToEarnCardProps[] = [
     {
-      image: `${cloudinaryUrl}/Station/52525252_rnz5dj.jpg`,
+      image: `${cloudinaryUrl}/Station/wjejdpxjbufqqk6dmezv`,
       title: "Step 1",
       subtitle: (
         <>
@@ -48,7 +55,7 @@ export const HowToEarn = () => {
       ),
     },
     {
-      image: `${cloudinaryUrl}/Station/btd6rcfpatj2jljwommn.jpg`,
+      image: `${cloudinaryUrl}/Station/qwfu0axkx04krmt35nag`,
       title: "Step 1",
       subtitle: (
         <>
@@ -65,7 +72,7 @@ export const HowToEarn = () => {
       ),
     },
     {
-      image: `${cloudinaryUrl}/Station/pkq96nsxdkdlw4o5d8zg.jpg`,
+      image: `${cloudinaryUrl}/Station/rvibpqls211afcxyb2wc`,
       title: "Step 1",
       subtitle: (
         <>
@@ -84,17 +91,17 @@ export const HowToEarn = () => {
   ];
   const step2Cards: HowToEarnCardProps[] = [
     {
-      image: `${cloudinaryUrl}/Station/ktnyx2nwlhe7wfrdlcu6.jpg`,
+      image: `${cloudinaryUrl}/Station/j1awylj5pprulkrcr3f1`,
       title: "Step 2",
       subtitle: "Receive receipt tokens",
     },
     {
-      image: `${cloudinaryUrl}/Station/hj1vaocabjjngsoyq3bx.jpg`,
+      image: `${cloudinaryUrl}/Station/wzkj1hximsuf2ahx3cde`,
       title: "Step 2",
       subtitle: "Receive receipt tokens",
     },
     {
-      image: `${cloudinaryUrl}/Station/fw7az7bckmttzdjmqf9d.jpg`,
+      image: `${cloudinaryUrl}/Station/frbmavtjzg0lkapzp2pa`,
       title: "Step 2",
       subtitle: "Receive receipt tokens",
     },
