@@ -9,11 +9,10 @@ import {
   usePollProposalThreshold,
   usePollUserDelegates,
 } from "@bera/berajs";
-import { bgtTokenAddress, governorAddress } from "@bera/config";
+import { bgtTokenAddress, governorAddress, governanceSubgraphUrl } from "@bera/config";
 import { getClient } from "@bera/graphql";
 import BigNumber from "bignumber.js";
 import { Address } from "viem";
-
 import {
   GovernanceTopic,
   PROPOSAL_GENRE,
@@ -67,7 +66,7 @@ export const GovernanceProvider = ({
 }) => {
   if (!isValidGenre(genre)) return notFound();
   const dappConfig = getDappByGenre(genre);
-  const client = getClient(dappConfig!.subgraph);
+  const client = getClient(governanceSubgraphUrl);
 
   const { account } = useBeraJs();
   const { data: tokenBalanceData, isLoading: isLoadingTokenBalance } =

@@ -17,49 +17,36 @@ export const getVotes = gql`
 `;
 
 export const getProposals = gql`
-  query GovernanceProposals($input: ProposalsInput!) {
-    proposals(input: $input) {
-      nodes {
-        ... on Proposal {
-          id
-          onchainId
-          status
-          originalId
-          createdAt
-          creator {
-            name
-            picture
-            address
-          }
-          voteStats {
-            votesCount
-            percent
-            type
-            votersCount
-          }
-          metadata {
-            description
-          }
-          block {
-            timestamp
-          }
-          governor {
-            id
-            quorum
-            delegatesVotesCount
-            name
-            timelockId
-            token {
-              decimals
-            }
-          }
-        }
+  query getProposals($offset: Int, $limit: Int) {
+    proposals(
+      skip: $offset
+      first: $limit
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      status
+      createdAt
+      createdAtBlock
+      voteStart
+      voteEnd
+      canceledAt
+      canceledAtBlock
+      executedAt
+      executedAtBlock
+      description
+      id
+      proposalId
+      proposalVotes {
+        abstain
+        against
+        for
+        id
+        total
       }
-      pageInfo {
-        firstCursor
-        lastCursor
-        count
-      }
+      queueEnd
+      queueStartBlock
+      quorum
+      queueStart
     }
   }
 `;
@@ -186,28 +173,6 @@ export const getProposal = gql`
           }
         }
       }
-    }
-  }
-`;
-
-export const getProposalss = gql`
-  query getProposals($offset: Int, $limit: Int) {
-    proposals(skip: $offset, first: $limit, orderBy: createdAt, orderDirection: desc) {
-      id
-      proposer
-      proposalId
-      targets
-      values
-      signatures
-      calldatas
-      description
-      status
-      createdAt
-      voteStart
-      voteEnd
-      queuedAt
-      canceledAt
-      executedAt
     }
   }
 `;

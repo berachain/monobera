@@ -7,7 +7,6 @@ export enum StatusEnum {
   ACTIVE = "active",
   CANCELED_BY_GUARDIAN = "canceled-by-guardian",
   CANCELED_BY_USER = "canceled",
-  SUCCEEDED = "succeeded",
   DEFEATED = "defeated",
   PENDING_QUEUE = "pending-queue",
   IN_QUEUE = "in-queue",

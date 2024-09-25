@@ -1,12 +1,12 @@
+import { ComponentProps } from "react";
 import { Proposal } from "@bera/berajs";
+import { Badge } from "@bera/ui/badge";
 import BigNumber from "bignumber.js";
 import graymatter from "gray-matter";
 import { decodeFunctionData, formatEther } from "viem";
 
-import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 import { NativeDapps, Others } from "./governance-genre-helper";
-import { ComponentProps } from "react";
-import { Badge } from "@bera/ui/badge";
+import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 
 export const getBadgeColor = (
   proposalStatus: StatusEnum,
@@ -188,7 +188,7 @@ export const parseProposalBody = (
     };
   }
 
-  const body = proposal?.metadata?.description ?? "";
+  const body = proposal?.description ?? "";
 
   if (graymatter.test(body)) {
     return { ...graymatter(body), isFrontMatter: true };
@@ -209,7 +209,7 @@ export const parseProposalBody = (
   } catch (error) {
     return {
       isFrontMatter: false,
-      data: { title: `Suspicious proposal #${proposal.id}` },
+      data: { title: `Suspicious proposal #${proposal.proposalId}` },
       content: body,
       matter: "",
       language: "",
@@ -239,4 +239,26 @@ export const decodeProposalCalldata = (
     function: functionName,
     params: args,
   };
+};
+
+export const getProposalStatus = (proposal: Proposal, currentBlock: number) => {
+  if (proposal.status === "created") {
+    if (currentBlock < proposal.voteStart) return StatusEnum.PENDING;
+    if (currentBlock >= proposal.voteStart && currentBlock < proposal.voteEnd)
+      return StatusEnum.ACTIVE;
+    if (currentBlock >= proposal.voteEnd) {
+      const succeeded = (Number(proposal.proposalVotes[0].for) + Number(proposal.proposalVotes[0].abstain)) >= Number(proposal.quorum) && Number(proposal.proposalVotes[0].for) >= Number(proposal.proposalVotes[0].against);
+      if (succeeded) return StatusEnum.PENDING_QUEUE;
+      else return StatusEnum.DEFEATED;
+    }
+  }
+  if (proposal.status === "queued") {
+    const timestamp = new Date().getTime() / 1000;
+    if (timestamp < proposal.queueEnd) return StatusEnum.IN_QUEUE;
+    else return StatusEnum.PENDING_EXECUTION;
+  }
+  if (proposal.status === "executed") return StatusEnum.EXECUTED;
+  if (proposal.status === "canceled") return StatusEnum.CANCELED_BY_USER;
+
+  return StatusEnum.EXPIRED;
 };

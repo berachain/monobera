@@ -12,7 +12,7 @@ export const ProposalHeading = ({
   const Heading = size === "sm" ? "h3" : "h1";
   return (
     <>
-      {(fm.data.topics || fm.data.topic || fm.data.forumLink) && (
+      {/* {(fm.data.topics || fm.data.topic || fm.data.forumLink) && (
         <div
           className={cn(
             "text-xs flex gap-2 font-semibold capitalize leading-4",
@@ -43,7 +43,7 @@ export const ProposalHeading = ({
             </>
           )}
         </div>
-      )}
+      )} */}
       <Heading
         className={cn(
           "first:mt-0  mt-1 md:mt-2 font-semibold ",

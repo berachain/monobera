@@ -7,6 +7,8 @@ import { Badge } from "@bera/ui/badge";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatEther } from "viem";
 
+import { ProposalHeading } from "../../components/proposal-heading";
+import { GovernanceTopic } from "../../governance-genre-helper";
 import {
   getBadgeColor,
   getTimeText,
@@ -17,36 +19,31 @@ import {
 import { StatusEnum } from "../../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
-import { ProposalHeading } from "../../components/proposal-heading";
 
 export function ProposalCard({
-  details = false,
-  truncate = true,
-  className,
   proposal,
+  dappConfig,
   ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
-  details?: boolean;
-  truncate?: boolean;
   proposal: Proposal;
+  dappConfig: GovernanceTopic;
 }) {
-  const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
 
-  return (
+  const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
+  console.log(proposal);
+  return (  
     <div
       className={cn(
-        "relative flex flex-col sm:grid sm:grid-cols-[4fr_5fr] items-start sm:items-center justify-between p-4 pt-3 lg:pr-8 xl:pr-16 gap-4 gap-y-4 overflow-hidden rounded-md border border-border lg:h-[116px]",
-        details && "h-fit lg:h-60",
-        className,
+        "relative flex flex-col items-start justify-between gap-4 gap-y-4 overflow-hidden rounded-md border border-border p-4 pt-3 sm:grid sm:grid-cols-[4fr_5fr] sm:items-center lg:pr-8 xl:pr-16",
       )}
       {...props}
     >
       <div className="flex-1 ">
         <ProposalHeading frontmatter={fm} size="sm" />
-        <div className="mt-1 md:mt-3 text-xs font-medium leading-6 text-muted-foreground">
+        <div className="mt-1 text-xs font-medium leading-6 text-muted-foreground md:mt-3">
           <Badge
             variant={getBadgeColor(proposal.status as StatusEnum)}
-            className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize select-none"
+            className="mr-3 select-none rounded-xs px-2 py-1 text-sm font-semibold capitalize leading-none"
           >
             {proposal.status}
           </Badge>
@@ -54,14 +51,14 @@ export function ProposalCard({
         </div>
       </div>
 
-      {![
+      {/* {![
         StatusEnum.PENDING,
         StatusEnum.CANCELED_BY_USER,
         StatusEnum.CANCELED_BY_GUARDIAN,
       ].includes(proposal.status as StatusEnum) ? (
         <div
           className={cn(
-            "flex flex-col items-start min-w-36 sm:grid sm:grid-cols-2 xl:items-center gap-2 gap-y-4 text-xs xl:flex-row ",
+            "flex min-w-36 flex-col items-start gap-2 gap-y-4 text-xs sm:grid sm:grid-cols-2 xl:flex-row xl:items-center ",
           )}
         >
           <QuorumStatus
@@ -75,7 +72,7 @@ export function ProposalCard({
         </div>
       ) : (
         <div>--</div>
-      )}
+      )} */}
     </div>
   );
 }
