@@ -61,6 +61,8 @@ export default function ProposalDetails({
   const { account, isReady } = useBeraJs();
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
 
+  console.log({ proposal });
+
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
 
@@ -168,7 +170,7 @@ export default function ProposalDetails({
               </div>
               <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
                 <div className="lg:col-start-2 ">
-                  <ProposalTimeline />
+                  <ProposalTimeline proposal={proposal} />
                 </div>
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
                   <div className="border border-border p-4 px-8 rounded-md">

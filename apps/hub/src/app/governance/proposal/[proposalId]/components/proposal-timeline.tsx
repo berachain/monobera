@@ -1,5 +1,7 @@
+import { Proposal } from "@bera/berajs";
+import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { cn } from "@bera/ui";
-import { useBlockNumber } from "wagmi";
+import { StatusEnum } from "~/app/governance/types";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -35,27 +37,82 @@ const Step = ({
     </div>
   );
 };
-export const ProposalTimeline = () => {
-  const activeStep: number = 0;
-  const now = Date.now();
+export const ProposalTimeline = ({ proposal }: { proposal: Proposal }) => {
+  const steps = [
+    {
+      title: "Initiated",
+      date: new Date(proposal.createdAt),
+      isActive: proposal.status === StatusEnum.PENDING,
+    },
+  ];
+
+  if (proposal.status === StatusEnum.CANCELED_BY_USER) {
+    steps.push({
+      title: "Canceled by proposer",
+      date: new Date(proposal.createdAt),
+      isActive: true,
+    });
+  } else {
+    steps.push({
+      title: "Voting Period Begins",
+      date: new Date(proposal.start.timestamp),
+      isActive: proposal.status === StatusEnum.ACTIVE,
+    });
+  }
+
+  if (proposal.status === StatusEnum.ACTIVE) {
+    steps.push({
+      title: "Voting Period Ends",
+      date: new Date(proposal.start.timestamp),
+      isActive: false,
+    });
+  } else if (proposal.status === StatusEnum.DEFEATED) {
+    steps.push({
+      title: "Proposal Defeated",
+      date: new Date(0),
+      isActive: true,
+    });
+  } else {
+    steps.push({
+      title: "Proposal Passed",
+      date: new Date(0),
+      isActive: proposal.status === StatusEnum.PENDING_QUEUE,
+    });
+
+    if (proposal.status !== StatusEnum.PENDING_QUEUE) {
+      steps.push({
+        title: "Proposal Queued",
+        date: new Date(0),
+        isActive: proposal.status === StatusEnum.PENDING_EXECUTION,
+      });
+
+      if (proposal.status === StatusEnum.CANCELED_BY_GUARDIAN) {
+        steps.push({
+          title: "Canceled by guardian",
+          date: new Date(0),
+          isActive: true,
+        });
+      } else if (proposal.status === StatusEnum.EXECUTED) {
+        steps.push({
+          title: "Proposal Executed",
+          date: new Date(0),
+          isActive: proposal.status === StatusEnum.EXECUTED,
+        });
+      } else if (proposal.status === StatusEnum.PENDING_EXECUTION) {
+        steps.push({
+          title: "Proposal Executs",
+          date: new Date(0),
+          isActive: true,
+        });
+      }
+    }
+  }
+
   return (
     <div className="gap-4 p-5 rounded-sm border border-border relative   ">
-      <Step title="Initiated" date={now} isActive={activeStep === 0} />
-      <Step
-        title="Voting Period Begins"
-        date={now + 1000 * 60 * 24}
-        isActive={activeStep === 1}
-      />
-      <Step
-        title="Voting Period Ends"
-        date={now + 1000 * 60 * 24 * 2}
-        isActive={activeStep === 2}
-      />
-      <Step
-        title="Proposal Passed"
-        date={now + 1000 * 60 * 24 * 3}
-        isActive={activeStep === 3}
-      />
+      {steps.map((step) => (
+        <Step key={step.title} {...step} />
+      ))}
     </div>
   );
 };

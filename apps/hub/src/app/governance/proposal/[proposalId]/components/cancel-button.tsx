@@ -8,7 +8,7 @@ import { useGovernance } from "~/app/governance/[genre]/components/governance-pr
 import { StatusEnum } from "~/app/governance/types";
 
 export const CancelButton = ({ proposal }: { proposal: Proposal }) => {
-  const { governorAddress } = useGovernance();
+  // const { governorAddress } = useGovernance();
   const { data: cancellerRole = "0xDa9487a32DD76e22B31cd5993F0699C0dc94435e" } =
     useCancellerRole();
   const {
@@ -16,7 +16,7 @@ export const CancelButton = ({ proposal }: { proposal: Proposal }) => {
     isLoading,
     mutate,
   } = useProposalState({
-    proposalId: proposal.onchainId,
+    proposalId: proposal?.onchainId,
     governorAddress,
   });
   const { account } = useBeraJs();
@@ -25,10 +25,12 @@ export const CancelButton = ({ proposal }: { proposal: Proposal }) => {
     onSuccess: mutate,
   });
 
+  if (!proposal) {
+    return null;
+  }
+
   // This ensures user
   const isCanceledOnChain = !isLoading && onChainProposalState === "canceled";
-
-  console.log({ isCanceledOnChain, onChainProposalState });
 
   const canCancel =
     !isCanceledOnChain &&

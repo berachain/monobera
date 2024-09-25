@@ -12,9 +12,10 @@ export const StatusAction = ({
   userVote: Vote | false | undefined;
 }) => {
   const status = proposal.status as StatusEnum;
-  const date = new Date(proposal.start.timestamp);
-  const time = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 
+  if (!proposal || !proposal.onchainId) {
+    return null;
+  }
   return (
     <div className="flex items-center gap-3 font-medium">
       {status === StatusEnum.QUEUED && (
