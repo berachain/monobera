@@ -8,10 +8,10 @@ import {
 } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
-import { MultiSelectBadge, SelectedVotes } from "./multi-select-badge";
+import { MultiSelectBadge } from "./multi-select-badge";
 import { voterColumns } from "./voter-column";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
-import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
+import { Accordion } from "@bera/ui/accordion";
 
 const voteOptionMap: Record<VoteOption, string> = {
   [VoteOption.VOTE_OPTION_YES]: "for",
@@ -126,13 +126,15 @@ export function VoterTable({
         ) : votes.length === 0 ? (
           <NotFoundBear title="No recent votes found." />
         ) : (
-          <SimpleTable
-            table={table}
-            wrapperClassName={""}
-            flexTable
-            dynamicFlex
-            showToolbar={false}
-          />
+          <Accordion type="single" collapsible>
+            <SimpleTable
+              table={table}
+              wrapperClassName={""}
+              flexTable
+              dynamicFlex
+              showToolbar={false}
+            />
+          </Accordion>
         )}
       </div>
 

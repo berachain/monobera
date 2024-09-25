@@ -58,8 +58,6 @@ export const useGetPastVotes = (
       args: [wallet, BigInt(ts!)],
     });
 
-    console.log(QUERY_KEY, formatUnits(votes, 18));
-
     return formatUnits(votes, 18);
   });
 };

@@ -12,11 +12,12 @@ export const StatusAction = ({
   userVote: Vote | false | undefined;
 }) => {
   const status = proposal.status as StatusEnum;
-  const date = new Date(proposal.start.timestamp);
-  const time = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+  if (!proposal || !proposal.onchainId) {
+    return null;
+  }
   return (
     <div className="flex items-center gap-3 font-medium">
-      {status === StatusEnum.PENDING && <div>Voting starts at {time}</div>}
       {status === StatusEnum.IN_QUEUE && (
         <CancelButton
           // TODO: this is wrong, must be provided from subgraph data
@@ -24,12 +25,17 @@ export const StatusAction = ({
           proposalTimelockId={proposal.onchainId}
         />
       )}
-      {status === StatusEnum.ACTIVE && (
-        <VoteDialog proposal={proposal} disable={false} />
-      )}
-      {status === StatusEnum.CANCELED && <div>Canceled</div>}
+      {(status === StatusEnum.PENDING_EXECUTION ||
+        status === StatusEnum.PENDING) && <CancelButton proposal={proposal} />}
       {status === StatusEnum.PENDING_QUEUE && (
-        <QueueButton proposalId={proposal.onchainId} />
+        <div className="text-destructive-foreground">Pending Queue</div>
+      )}
+      {status === StatusEnum.ACTIVE && (
+        <VoteDialog proposal={proposal} disable={userVote && !!userVote.type} />
+      )}
+      {(status === StatusEnum.CANCELED_BY_USER ||
+        status === StatusEnum.CANCELED_BY_GUARDIAN) && (
+        <div className="text-destructive-foreground">Canceled</div>
       )}
       {status === StatusEnum.DEFEATED && (
         <div className="text-destructive-foreground">Defeated</div>
@@ -40,7 +46,6 @@ export const StatusAction = ({
       {status === StatusEnum.EXECUTED && (
         <div className="text-success-foreground">Executed</div>
       )}
-      {userVote && <div>{userVote.type}</div>}
     </div>
   );
 };

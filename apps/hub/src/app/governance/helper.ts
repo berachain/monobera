@@ -5,24 +5,25 @@ import { decodeFunctionData, formatEther } from "viem";
 
 import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 import { NativeDapps, Others } from "./governance-genre-helper";
+import { ComponentProps } from "react";
+import { Badge } from "@bera/ui/badge";
 
-export const getBadgeColor = (proposalStatus: StatusEnum) => {
+export const getBadgeColor = (
+  proposalStatus: StatusEnum,
+): ComponentProps<typeof Badge>["variant"] => {
   switch (proposalStatus) {
     case StatusEnum.PENDING:
-    case StatusEnum.IN_QUEUE:
-    case StatusEnum.EXPIRED:
-      return "default";
+      return "outline";
     case StatusEnum.ACTIVE:
     case StatusEnum.EXECUTED:
       return "success";
     case StatusEnum.DEFEATED:
-    case StatusEnum.CANCELED:
       return "destructive";
-    case StatusEnum.PENDING_EXECUTION:
-    case StatusEnum.PENDING_QUEUE:
-      return "info";
-    default:
-      return "foreground";
+    case StatusEnum.EXPIRED:
+      return "warning";
+    case StatusEnum.CANCELED_BY_GUARDIAN:
+    case StatusEnum.CANCELED_BY_USER:
+      return "outline";
   }
 };
 

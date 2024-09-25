@@ -4,3 +4,4 @@ export * from "./useSlippage";
 export * from "./useSetSlippage";
 export * from "./useDeadline";
 export * from "./useBreakpoint";
+export * from "./useOnResize";
