@@ -14,9 +14,9 @@ export const StatusAction = ({
   const status = proposal.status as StatusEnum;
   const date = new Date(proposal.start.timestamp);
   const time = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
   return (
     <div className="flex items-center gap-3 font-medium">
-      {status === StatusEnum.PENDING && <div>Voting starts at {time}</div>}
       {status === StatusEnum.QUEUED && (
         <CancelButton
           // TODO: this is wrong, must be provided from subgraph data
@@ -24,14 +24,17 @@ export const StatusAction = ({
           proposalTimelockId={proposal.onchainId}
         />
       )}
+      {(status === StatusEnum.PENDING_EXECUTION ||
+        status === StatusEnum.PENDING) && <CancelButton proposal={proposal} />}
+      {status === StatusEnum.PENDING_QUEUE && (
+        <div className="text-destructive-foreground">Pending Queue</div>
+      )}
       {status === StatusEnum.ACTIVE && (
         <VoteDialog proposal={proposal} disable={false} />
       )}
-      {status === StatusEnum.CANCELED_BY_USER ||
-      status === StatusEnum.CANCELED_BY_GUARDIAN ? (
+      {(status === StatusEnum.CANCELED_BY_USER ||
+        status === StatusEnum.CANCELED_BY_GUARDIAN) && (
         <div className="text-destructive-foreground">Canceled</div>
-      ) : (
-        <QueueButton proposalId={proposal.onchainId} />
       )}
       {status === StatusEnum.DEFEATED && (
         <div className="text-destructive-foreground">Defeated</div>

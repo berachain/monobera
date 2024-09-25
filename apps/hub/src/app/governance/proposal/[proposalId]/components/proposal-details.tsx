@@ -100,7 +100,7 @@ export default function ProposalDetails({
                 {getTimeText(proposal)}
               </div>
 
-              <div className=" col-span-full  text-muted-foreground ">
+              <div className="col-span-full  text-muted-foreground ">
                 <VoteInfo
                   className="text-xs font-medium "
                   prefix="Submitted by "
@@ -111,7 +111,11 @@ export default function ProposalDetails({
               <div
                 className={cn(
                   "col-start-2",
-                  proposal.status === StatusEnum.PENDING ? "invisible" : "",
+                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                    proposal.status as StatusEnum,
+                  )
+                    ? "invisible"
+                    : "",
                 )}
               >
                 <h3 className="text-sm font-medium uppercase leading-5 mb-1 text-muted-foreground">
@@ -125,7 +129,11 @@ export default function ProposalDetails({
               <div
                 className={cn(
                   "self-stretch col-start-1 row-start-3 ",
-                  proposal.status === StatusEnum.PENDING ? "invisible" : "",
+                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                    proposal.status as StatusEnum,
+                  )
+                    ? "invisible"
+                    : "",
                 )}
               >
                 <h3 className="text-sm font-medium leading-5 mb-1 uppercase text-muted-foreground">
@@ -176,7 +184,9 @@ export default function ProposalDetails({
                 </div>
               </div>
 
-              {proposal.status !== StatusEnum.PENDING && (
+              {[StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                proposal.status as StatusEnum,
+              ) && (
                 <>
                   <div className="mt-4 sm:mt-10">
                     <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
