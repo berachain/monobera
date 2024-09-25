@@ -26,8 +26,6 @@ export const useProposalSnapshot = ({
       args: [BigInt(proposalId!)],
     });
 
-    console.log(QUERY_KEY, snapshot.toString());
-
     return snapshot.toString();
   });
 };

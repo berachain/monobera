@@ -25,6 +25,10 @@ const fontSans = IBM_Plex_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(hubUrl),
+  title: {
+    template: `%s | ${hubName}`,
+    default: hubName,
+  },
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {
@@ -57,9 +61,10 @@ export default function RootLayout(props: { children: React.ReactNode }) {
             <div className="z-10 flex-1">
               <Header navItems={navItems} appName={hubName} />
               <MainWithBanners
-                className="pt-start"
-                paddingTop={150}
-                multiplier={50}
+                // mt-8 should probably be removed
+                className="mt-8"
+                // paddingTop={150}
+                // multiplier={50}
                 appName={hubName}
               >
                 {props.children}

@@ -4,7 +4,6 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "sideEffects": false,
-  "types": "dist/index.d.ts",
   "type": "module",
   "files": ["dist"],
   "author": "deez",

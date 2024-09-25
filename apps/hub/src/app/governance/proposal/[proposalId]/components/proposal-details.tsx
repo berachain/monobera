@@ -31,6 +31,7 @@ import { SWRFallback } from "@bera/berajs/contexts";
 import { unstable_serialize } from "swr";
 import { ProposalTimeline } from "./proposal-timeline";
 import { ProposalHeading } from "~/app/governance/components/proposal-heading";
+import { cn } from "@bera/ui";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -59,6 +60,8 @@ export default function ProposalDetails({
 }) {
   const { account, isReady } = useBeraJs();
   const { isLoading, proposal, votes } = usePollProposal(proposalId);
+
+  console.log({ proposal });
 
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
@@ -99,14 +102,24 @@ export default function ProposalDetails({
                 {getTimeText(proposal)}
               </div>
 
-              <div className=" col-span-full  text-muted-foreground ">
+              <div className="col-span-full  text-muted-foreground ">
                 <VoteInfo
                   className="text-xs font-medium "
                   prefix="Submitted by "
                   voter={proposal.creator}
                 />
               </div>
-              <div className="col-start-2">
+
+              <div
+                className={cn(
+                  "col-start-2",
+                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                    proposal.status as StatusEnum,
+                  )
+                    ? "invisible"
+                    : "",
+                )}
+              >
                 <h3 className="text-sm font-medium uppercase leading-5 mb-1 text-muted-foreground">
                   votes
                 </h3>
@@ -115,7 +128,16 @@ export default function ProposalDetails({
                   className="sm:w-52"
                 />
               </div>
-              <div className="self-stretch col-start-1 row-start-3 ">
+              <div
+                className={cn(
+                  "self-stretch col-start-1 row-start-3 ",
+                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                    proposal.status as StatusEnum,
+                  )
+                    ? "invisible"
+                    : "",
+                )}
+              >
                 <h3 className="text-sm font-medium leading-5 mb-1 uppercase text-muted-foreground">
                   quorum
                 </h3>
@@ -148,7 +170,7 @@ export default function ProposalDetails({
               </div>
               <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
                 <div className="lg:col-start-2 ">
-                  <ProposalTimeline />
+                  <ProposalTimeline proposal={proposal} />
                 </div>
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
                   <div className="border border-border p-4 px-8 rounded-md">
@@ -164,16 +186,21 @@ export default function ProposalDetails({
                 </div>
               </div>
 
-              <div className="mt-4 sm:mt-10">
-                <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
-                  Overview
-                </div>
-                <OverviewChart votes={votes} isLoading={isLoading} />
-              </div>
-
-              <div className="mt-4 sm:mt-10">
-                <VoterTable votes={votes} isLoading={isLoading} />
-              </div>
+              {[StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                proposal.status as StatusEnum,
+              ) && (
+                <>
+                  <div className="mt-4 sm:mt-10">
+                    <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
+                      Overview
+                    </div>
+                    <OverviewChart votes={votes} isLoading={isLoading} />
+                  </div>
+                  <div className="mt-4 sm:mt-10">
+                    <VoterTable votes={votes} isLoading={isLoading} />
+                  </div>
+                </>
+              )}
             </div>
           </>
         )}

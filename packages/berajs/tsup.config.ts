@@ -1,4 +1,6 @@
-const config = {
+import { defineConfig } from "tsup";
+
+const config = defineConfig({
   entryPoints: [
     "src/abi/index.ts",
     "src/actions/index.ts",
@@ -13,11 +15,11 @@ const config = {
   splitting: true,
   outDir: "dist",
   skipNodeModulesBundle: true,
-  minify: true, // Whether to minify the output
-  sourcemap: true, // Whether to generate sourcemaps
+  minify: process.env.NODE_ENV !== "development", // Whether to minify the output
+  sourcemap: process.env.NODE_ENV !== "development", // Whether to generate sourcemaps
   // splitting: true, // Whether to split the bundle into chunks
   dts: true, // Whether to generate TypeScript declaration files
   // target: "node18", // Specify your target environment
-};
+});
 
 export default config;

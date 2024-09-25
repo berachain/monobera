@@ -5,8 +5,11 @@ export enum StatusEnum {
   PENDING = "pending",
   QUEUED = "queued",
   ACTIVE = "active",
-  CANCELED = "canceled",
+  CANCELED_BY_GUARDIAN = "canceled-by-guardian",
+  CANCELED_BY_USER = "canceled", // TODO: rename to canceled-by-user on subgraph
   SUCCEEDED = "succeeded",
+  PENDING_EXECUTION = "pending-execution",
+  PENDING_QUEUE = "pending-queue",
   DEFEATED = "defeated",
   EXPIRED = "expired",
   EXECUTED = "executed",
