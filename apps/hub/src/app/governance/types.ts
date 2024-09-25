@@ -1,18 +1,19 @@
 import { Address } from "viem";
+
 import { PROPOSAL_GENRE } from "./governance-genre-helper";
 
 export enum StatusEnum {
   PENDING = "pending",
-  QUEUED = "queued",
   ACTIVE = "active",
   CANCELED_BY_GUARDIAN = "canceled-by-guardian",
-  CANCELED_BY_USER = "canceled", // TODO: rename to canceled-by-user on subgraph
+  CANCELED_BY_USER = "canceled",
   SUCCEEDED = "succeeded",
-  PENDING_EXECUTION = "pending-execution",
-  PENDING_QUEUE = "pending-queue",
   DEFEATED = "defeated",
-  EXPIRED = "expired",
+  PENDING_QUEUE = "pending-queue",
+  IN_QUEUE = "in-queue",
+  PENDING_EXECUTION = "pending-execution",
   EXECUTED = "executed",
+  EXPIRED = "expired",
 }
 
 export enum OrderByEnum {

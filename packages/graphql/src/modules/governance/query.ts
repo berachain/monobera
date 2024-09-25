@@ -73,17 +73,17 @@ export const getProposal = gql`
       originalId
       createdAt
       events {
-      type
-      txHash
-    }
+        type
+        txHash
+      }
       start {
-      ... on Block {
-        timestamp
+        ... on Block {
+          timestamp
+        }
+        ... on BlocklessTimestamp {
+          timestamp
+        }
       }
-      ... on BlocklessTimestamp {
-        timestamp
-      }
-    }
       creator {
         name
         picture
@@ -186,6 +186,28 @@ export const getProposal = gql`
           }
         }
       }
+    }
+  }
+`;
+
+export const getProposalss = gql`
+  query getProposals($offset: Int, $limit: Int) {
+    proposals(skip: $offset, first: $limit, orderBy: createdAt, orderDirection: desc) {
+      id
+      proposer
+      proposalId
+      targets
+      values
+      signatures
+      calldatas
+      description
+      status
+      createdAt
+      voteStart
+      voteEnd
+      queuedAt
+      canceledAt
+      executedAt
     }
   }
 `;

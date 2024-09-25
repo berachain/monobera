@@ -5,9 +5,7 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -15,11 +13,21 @@
     "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "tsup src --watch",
     "lint": "eslint src",
-    "lint:fix": "pnpm lint --fix"
+    "lint:fix": "pnpm lint --fix",
+    "codegen": "graphql-codegen",
+    "codegen:watch": "graphql-codegen --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
     "@bera/config": "workspace:*",
     "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-document-nodes": "^4.0.9",
+    "@graphql-codegen/typescript-operations": "^4.2.3",
+    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
+    "@parcel/watcher": "^2.4.1"
   }
 }

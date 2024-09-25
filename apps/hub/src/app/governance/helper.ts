@@ -1,8 +1,9 @@
 import { Proposal } from "@bera/berajs";
 import BigNumber from "bignumber.js";
-import { decodeFunctionData, formatEther } from "viem";
-import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 import graymatter from "gray-matter";
+import { decodeFunctionData, formatEther } from "viem";
+
+import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 import { NativeDapps, Others } from "./governance-genre-helper";
 import { ComponentProps } from "react";
 import { Badge } from "@bera/ui/badge";
@@ -14,10 +15,7 @@ export const getBadgeColor = (
     case StatusEnum.PENDING:
       return "outline";
     case StatusEnum.ACTIVE:
-    case StatusEnum.QUEUED:
-      return "info";
     case StatusEnum.EXECUTED:
-    case StatusEnum.SUCCEEDED:
       return "success";
     case StatusEnum.DEFEATED:
       return "destructive";
