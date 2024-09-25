@@ -30,7 +30,7 @@ export const StatusAction = ({
         <div className="text-destructive-foreground">Pending Queue</div>
       )}
       {status === StatusEnum.ACTIVE && (
-        <VoteDialog proposal={proposal} disable={false} />
+        <VoteDialog proposal={proposal} disable={userVote && !!userVote.type} />
       )}
       {(status === StatusEnum.CANCELED_BY_USER ||
         status === StatusEnum.CANCELED_BY_GUARDIAN) && (
@@ -45,7 +45,6 @@ export const StatusAction = ({
       {status === StatusEnum.EXECUTED && (
         <div className="text-success-foreground">Executed</div>
       )}
-      {userVote && <div>{userVote.type}</div>}
     </div>
   );
 };
