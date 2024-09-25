@@ -54,7 +54,11 @@ export function ProposalCard({
         </div>
       </div>
 
-      {proposal.status !== StatusEnum.PENDING && (
+      {![
+        StatusEnum.PENDING,
+        StatusEnum.CANCELED_BY_USER,
+        StatusEnum.CANCELED_BY_GUARDIAN,
+      ].includes(proposal.status as StatusEnum) ? (
         <div
           className={cn(
             "flex flex-col items-start min-w-36 sm:grid sm:grid-cols-2 xl:items-center gap-2 gap-y-4 text-xs xl:flex-row ",
@@ -69,6 +73,8 @@ export function ProposalCard({
             className="w-full"
           />
         </div>
+      ) : (
+        <div>--</div>
       )}
     </div>
   );

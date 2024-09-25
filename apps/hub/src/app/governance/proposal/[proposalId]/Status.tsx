@@ -27,8 +27,10 @@ export const StatusAction = ({
       {status === StatusEnum.ACTIVE && (
         <VoteDialog proposal={proposal} disable={false} />
       )}
-      {status === StatusEnum.CANCELED && <div>Canceled</div>}
-      {status === StatusEnum.SUCCEEDED && (
+      {status === StatusEnum.CANCELED_BY_USER ||
+      status === StatusEnum.CANCELED_BY_GUARDIAN ? (
+        <div className="text-destructive-foreground">Canceled</div>
+      ) : (
         <QueueButton proposalId={proposal.onchainId} />
       )}
       {status === StatusEnum.DEFEATED && (

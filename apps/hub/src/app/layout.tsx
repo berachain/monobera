@@ -25,6 +25,10 @@ const fontSans = IBM_Plex_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(hubUrl),
+  title: {
+    template: `%s | ${hubName}`,
+    default: hubName,
+  },
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {

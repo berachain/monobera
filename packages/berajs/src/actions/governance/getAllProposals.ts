@@ -42,7 +42,7 @@ export const getAllProposals = async ({
     const data = await response.json();
     return data.data.proposals.nodes;
   } catch (e) {
-    console.log("getAllProposals:", e);
+    console.error("getAllProposals:", e);
     return [];
   }
 };
