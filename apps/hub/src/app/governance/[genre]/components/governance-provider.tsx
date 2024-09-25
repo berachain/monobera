@@ -9,7 +9,11 @@ import {
   usePollProposalThreshold,
   usePollUserDelegates,
 } from "@bera/berajs";
-import { bgtTokenAddress, governorAddress, governanceSubgraphUrl } from "@bera/config";
+import {
+  bgtTokenAddress,
+  governorAddress,
+  governanceSubgraphUrl,
+} from "@bera/config";
 import { getClient } from "@bera/graphql";
 import BigNumber from "bignumber.js";
 import { Address } from "viem";

@@ -52,7 +52,7 @@ export default function GovernanceByStatus({
         </div>
 
         <div className="flex flex-col-reverse gap-4 pt-10 lg:flex-row">
-          <ProposalsList dappConfig={dappConfig}/>
+          <ProposalsList dappConfig={dappConfig} />
           <UserVotingPower />
         </div>
       </div>

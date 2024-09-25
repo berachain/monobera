@@ -25,7 +25,7 @@ export const ProposalsList = ({
   const {
     loading,
     error,
-    data = { proposals: [] }, 
+    data = { proposals: [] },
   } = useQuery(getProposals, {
     variables: {
       offset: page * PROPOSALS_PER_PAGE,

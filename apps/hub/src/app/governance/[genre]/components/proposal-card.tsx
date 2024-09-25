@@ -28,10 +28,9 @@ export function ProposalCard({
   proposal: Proposal;
   dappConfig: GovernanceTopic;
 }) {
-
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
   console.log(proposal);
-  return (  
+  return (
     <div
       className={cn(
         "relative flex flex-col items-start justify-between gap-4 gap-y-4 overflow-hidden rounded-md border border-border p-4 pt-3 sm:grid sm:grid-cols-[4fr_5fr] sm:items-center lg:pr-8 xl:pr-16",

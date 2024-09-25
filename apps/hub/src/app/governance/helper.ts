@@ -247,7 +247,12 @@ export const getProposalStatus = (proposal: Proposal, currentBlock: number) => {
     if (currentBlock >= proposal.voteStart && currentBlock < proposal.voteEnd)
       return StatusEnum.ACTIVE;
     if (currentBlock >= proposal.voteEnd) {
-      const succeeded = (Number(proposal.proposalVotes[0].for) + Number(proposal.proposalVotes[0].abstain)) >= Number(proposal.quorum) && Number(proposal.proposalVotes[0].for) >= Number(proposal.proposalVotes[0].against);
+      const succeeded =
+        Number(proposal.proposalVotes[0].for) +
+          Number(proposal.proposalVotes[0].abstain) >=
+          Number(proposal.quorum) &&
+        Number(proposal.proposalVotes[0].for) >=
+          Number(proposal.proposalVotes[0].against);
       if (succeeded) return StatusEnum.PENDING_QUEUE;
       else return StatusEnum.DEFEATED;
     }
