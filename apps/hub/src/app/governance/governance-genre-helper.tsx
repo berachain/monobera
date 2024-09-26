@@ -19,7 +19,9 @@ export const NativeDapps: GovernanceTopic[] = [
     icon: <Icons.hubFav className="h-16 w-16" />,
     name: "BeraHub",
     slug: "berahub",
-    subgraph: governanceSubgraphUrl,
+    // subgraph: governanceSubgraphUrl,
+    subgraph:
+      "https://api.goldsky.com/api/public/project_clq1h5ct0g4a201x18tfte5iv/subgraphs/governance-subgraph/v1/gn",
   },
   {
     id: "honey",

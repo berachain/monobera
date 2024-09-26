@@ -15,10 +15,7 @@ export const getBadgeColor = (
     case StatusEnum.PENDING:
       return "outline";
     case StatusEnum.ACTIVE:
-    case StatusEnum.QUEUED:
-      return "info";
     case StatusEnum.EXECUTED:
-    case StatusEnum.SUCCEEDED:
       return "success";
     case StatusEnum.DEFEATED:
       return "destructive";

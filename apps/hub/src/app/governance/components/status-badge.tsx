@@ -17,7 +17,7 @@ export const StatusBadge = ({
     >
       <Badge
         variant={getBadgeColor(proposal.status as StatusEnum)}
-        className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
+        className="mr-3 select-none rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
       >
         {proposal.status}
       </Badge>
@@ -30,8 +30,7 @@ export const StatusBadge = ({
       {proposal.status === StatusEnum.ACTIVE && (
         // TODO: get end time from proposal
         <span className="whitespace-nowrap">
-          {formatTimeLeft(getTimeLeft(new Date(proposal.end.timestamp)))} until
-          voting ends
+          {formatTimeLeft(getTimeLeft(new Date(proposal.end.timestamp)))} left
         </span>
       )}
     </div>

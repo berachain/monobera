@@ -18,7 +18,7 @@ export const StatusAction = ({
   }
   return (
     <div className="flex items-center gap-3 font-medium">
-      {status === StatusEnum.QUEUED && (
+      {status === StatusEnum.IN_QUEUE && (
         <CancelButton
           // TODO: this is wrong, must be provided from subgraph data
           // @ts-ignore

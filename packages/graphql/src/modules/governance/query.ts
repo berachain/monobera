@@ -213,3 +213,30 @@ export const getProposal = gql`
     }
   }
 `;
+
+export const getProposalss = gql`
+  query getProposals($offset: Int, $limit: Int) {
+    proposals(
+      skip: $offset
+      first: $limit
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      id
+      proposer
+      proposalId
+      targets
+      values
+      signatures
+      calldatas
+      description
+      status
+      createdAt
+      voteStart
+      voteEnd
+      queuedAt
+      canceledAt
+      executedAt
+    }
+  }
+`;
