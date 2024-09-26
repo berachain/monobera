@@ -42,9 +42,13 @@ export default async function Page({
 }
 
 export function generateStaticParams() {
-  return [
-    {
-      proposalId: "0x",
-    },
-  ];
+  if (isIPFS) {
+    return [
+      {
+        proposalId: "0x",
+      },
+    ];
+  }
+
+  return [];
 }

@@ -113,7 +113,7 @@ export default function ProposalDetails({
               <div
                 className={cn(
                   "col-start-2",
-                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                  ![StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
                     proposal.status as StatusEnum,
                   )
                     ? "invisible"
@@ -131,7 +131,7 @@ export default function ProposalDetails({
               <div
                 className={cn(
                   "self-stretch col-start-1 row-start-3 ",
-                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                  ![StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
                     proposal.status as StatusEnum,
                   )
                     ? "invisible"
@@ -186,7 +186,7 @@ export default function ProposalDetails({
                 </div>
               </div>
 
-              {[StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+              {![StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
                 proposal.status as StatusEnum,
               ) && (
                 <>
