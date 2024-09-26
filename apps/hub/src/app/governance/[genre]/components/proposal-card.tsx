@@ -18,6 +18,7 @@ import { StatusEnum } from "../../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
 import { ProposalHeading } from "../../components/proposal-heading";
+import { StatusBadge } from "../../components/status-badge";
 
 export function ProposalCard({
   details = false,
@@ -41,17 +42,9 @@ export function ProposalCard({
       )}
       {...props}
     >
-      <div className="flex-1 ">
+      <div className="flex-1">
         <ProposalHeading frontmatter={fm} size="sm" />
-        <div className="mt-1 md:mt-3 text-xs font-medium leading-6 text-muted-foreground">
-          <Badge
-            variant={getBadgeColor(proposal.status as StatusEnum)}
-            className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize select-none"
-          >
-            {proposal.status}
-          </Badge>
-          <span className="inline-block">{getTimeText(proposal)}</span>
-        </div>
+        <StatusBadge proposal={proposal} className="mt-1 md:mt-3" />
       </div>
 
       {![

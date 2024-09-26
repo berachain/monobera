@@ -53,6 +53,22 @@ export const getProposals = gql`
               decimals
             }
           }
+          start {
+            ... on Block {
+              timestamp
+            }
+            ... on BlocklessTimestamp {
+              timestamp
+            }
+          }
+          end {
+            ... on Block {
+              timestamp
+            }
+            ... on BlocklessTimestamp {
+              timestamp
+            }
+          }
         }
       }
       pageInfo {
@@ -77,6 +93,14 @@ export const getProposal = gql`
         txHash
       }
       start {
+        ... on Block {
+          timestamp
+        }
+        ... on BlocklessTimestamp {
+          timestamp
+        }
+      }
+      end {
         ... on Block {
           timestamp
         }
@@ -192,7 +216,12 @@ export const getProposal = gql`
 
 export const getProposalss = gql`
   query getProposals($offset: Int, $limit: Int) {
-    proposals(skip: $offset, first: $limit, orderBy: createdAt, orderDirection: desc) {
+    proposals(
+      skip: $offset
+      first: $limit
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
       id
       proposer
       proposalId

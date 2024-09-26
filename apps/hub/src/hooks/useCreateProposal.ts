@@ -1,12 +1,14 @@
 "use client";
+
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   BERA_CHEF_ABI,
   GOVERNANCE_ABI,
   TransactionActionType,
 } from "@bera/berajs";
-import matter from "gray-matter";
 import { useTxn } from "@bera/shared-ui";
+import matter from "gray-matter";
 import {
   Address,
   encodeFunctionData,
@@ -14,7 +16,9 @@ import {
   isAddress,
   parseAbiItem,
 } from "viem";
-import { useCallback, useEffect, useState } from "react";
+
+import { useGovernance } from "../app/governance/[genre]/components/governance-provider";
+import { PROPOSAL_GENRE } from "../app/governance/governance-genre-helper";
 import {
   CustomProposal,
   CustomProposalActionErrors,
@@ -23,8 +27,6 @@ import {
   ProposalTypeEnum,
   SafeProposalAction,
 } from "../app/governance/types";
-import { PROPOSAL_GENRE } from "../app/governance/governance-genre-helper";
-import { useGovernance } from "../app/governance/[genre]/components/governance-provider";
 
 const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
@@ -191,11 +193,7 @@ export const useCreateProposal = ({
   );
 
   const submitProposal = useCallback(
-    ({
-      onError,
-    }: {
-      onError?: (e: CustomProposalErrors) => void;
-    }) => {
+    ({ onError }: { onError?: (e: CustomProposalErrors) => void }) => {
       const e: CustomProposalErrors = getBodyErrors(proposal);
 
       const actions: Address[] = [];
@@ -306,7 +304,9 @@ export const useCreateProposal = ({
             title: proposal.title,
             topics: Array.from(proposal.topic.values()),
             forumLink: proposal.forumLink,
-            version: "1.0",
+            version: "1.0.0",
+            "content-encoding": "utf-8",
+            "content-type": "text/markdown",
           }),
         ],
       });

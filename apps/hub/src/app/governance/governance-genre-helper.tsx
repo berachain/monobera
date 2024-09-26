@@ -52,7 +52,7 @@ export const NativeDapps: GovernanceTopic[] = [
 export const Others: GovernanceTopic[] = [
   {
     id: "general",
-    color: "#2F2F2F",
+    color: "#AFABAB",
     icon: <Icons.ecoFav className="h-16 w-16" />,
     name: "General",
     slug: "general",

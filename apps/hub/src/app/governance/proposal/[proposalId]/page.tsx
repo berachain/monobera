@@ -34,6 +34,10 @@ export default async function Page({
     config: defaultBeraConfig,
   });
 
+  if (!proposal) {
+    return notFound();
+  }
+
   return (
     <ProposalDetailsWrapper id={params.proposalId} content={proposal}>
       <ProposalDetails proposalId={params.proposalId} />
@@ -41,10 +45,14 @@ export default async function Page({
   );
 }
 
-export function generateStaticParams() {
-  return [
-    {
-      proposalId: "0x",
-    },
-  ];
-}
+export const generateStaticParams = async () => {
+  if (isIPFS) {
+    return [
+      {
+        proposalId: "0x",
+      },
+    ];
+  }
+
+  return [];
+};
