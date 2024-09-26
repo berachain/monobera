@@ -58,52 +58,52 @@ export const ProposalTimeline = ({ proposal }: { proposal: Proposal }) => {
       date: new Date(proposal.start.timestamp),
       isActive: proposal.status === StatusEnum.ACTIVE,
     });
-  }
 
-  if (proposal.status === StatusEnum.ACTIVE) {
-    steps.push({
-      title: "Voting Period Ends",
-      date: new Date(proposal.start.timestamp),
-      isActive: false,
-    });
-  } else if (proposal.status === StatusEnum.DEFEATED) {
-    steps.push({
-      title: "Proposal Defeated",
-      date: new Date(0),
-      isActive: true,
-    });
-  } else {
-    steps.push({
-      title: "Proposal Passed",
-      date: new Date(0),
-      isActive: proposal.status === StatusEnum.PENDING_QUEUE,
-    });
-
-    if (proposal.status !== StatusEnum.PENDING_QUEUE) {
+    if (proposal.status === StatusEnum.ACTIVE) {
       steps.push({
-        title: "Proposal Queued",
+        title: "Voting Period Ends",
+        date: new Date(proposal.start.timestamp),
+        isActive: false,
+      });
+    } else if (proposal.status === StatusEnum.DEFEATED) {
+      steps.push({
+        title: "Proposal Defeated",
         date: new Date(0),
-        isActive: proposal.status === StatusEnum.PENDING_EXECUTION,
+        isActive: true,
+      });
+    } else {
+      steps.push({
+        title: "Proposal Passed",
+        date: new Date(0),
+        isActive: proposal.status === StatusEnum.PENDING_QUEUE,
       });
 
-      if (proposal.status === StatusEnum.CANCELED_BY_GUARDIAN) {
+      if (proposal.status !== StatusEnum.PENDING_QUEUE) {
         steps.push({
-          title: "Canceled by guardian",
+          title: "Proposal Queued",
           date: new Date(0),
-          isActive: true,
+          isActive: proposal.status === StatusEnum.PENDING_EXECUTION,
         });
-      } else if (proposal.status === StatusEnum.EXECUTED) {
-        steps.push({
-          title: "Proposal Executed",
-          date: new Date(0),
-          isActive: proposal.status === StatusEnum.EXECUTED,
-        });
-      } else if (proposal.status === StatusEnum.PENDING_EXECUTION) {
-        steps.push({
-          title: "Proposal Executs",
-          date: new Date(0),
-          isActive: true,
-        });
+
+        if (proposal.status === StatusEnum.CANCELED_BY_GUARDIAN) {
+          steps.push({
+            title: "Canceled by guardian",
+            date: new Date(0),
+            isActive: true,
+          });
+        } else if (proposal.status === StatusEnum.EXECUTED) {
+          steps.push({
+            title: "Proposal Executed",
+            date: new Date(0),
+            isActive: proposal.status === StatusEnum.EXECUTED,
+          });
+        } else if (proposal.status === StatusEnum.PENDING_EXECUTION) {
+          steps.push({
+            title: "Proposal Executs",
+            date: new Date(0),
+            isActive: true,
+          });
+        }
       }
     }
   }
