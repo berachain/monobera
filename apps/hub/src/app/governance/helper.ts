@@ -1,11 +1,12 @@
-import { Proposal } from "@bera/berajs";
-import BigNumber from "bignumber.js";
-import { decodeFunctionData, formatEther } from "viem";
-import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
-import graymatter from "gray-matter";
-import { NativeDapps, Others } from "./governance-genre-helper";
 import { ComponentProps } from "react";
+import { Proposal } from "@bera/berajs";
 import { Badge } from "@bera/ui/badge";
+import BigNumber from "bignumber.js";
+import graymatter from "gray-matter";
+import { decodeFunctionData, formatEther } from "viem";
+
+import { NativeDapps, Others } from "./governance-genre-helper";
+import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
 
 export const getBadgeColor = (
   proposalStatus: StatusEnum,
@@ -43,9 +44,34 @@ export const getThemeColor = (ProposalType: ProposalTypeEnum) => {
 export const getTopicColor = (topic: string) => {
   return [...NativeDapps, ...Others].find((dapp) => dapp.id === topic)?.color;
 };
-export const getTimeText = (proposal: Proposal) => {
+
+export const getTimeLeft = (date: Date) => {
   const now = Date.now();
-  const targetTimestamp = new Date(proposal.createdAt).getTime();
+  const targetTimestamp = date.getTime();
+  const diffInMilliseconds = targetTimestamp - now;
+  const diffInSeconds = Math.round(diffInMilliseconds / 1000);
+  return diffInSeconds;
+};
+
+/**
+ * Formats the time left into a string like "8 hours, 23 minutes".
+ *
+ * @param timeLeftInSeconds - The time left in seconds.
+ * @returns A formatted string representing the time left.
+ */
+export function formatTimeLeft(timeLeftInSeconds: number): string {
+  const hours = Math.floor(timeLeftInSeconds / 3600);
+  const minutes = Math.floor((timeLeftInSeconds % 3600) / 60);
+
+  const hoursDisplay =
+    hours > 0 ? `${hours} hour${hours !== 1 ? "s" : ""}` : "";
+  const minutesDisplay = `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+
+  return [hoursDisplay, minutesDisplay].filter(Boolean).join(", ");
+}
+export const getTimeText = (date: Date) => {
+  const now = Date.now();
+  const targetTimestamp = date.getTime();
   const diffInMilliseconds = targetTimestamp - now;
   const diffInSeconds = Math.round(diffInMilliseconds / 1000);
 

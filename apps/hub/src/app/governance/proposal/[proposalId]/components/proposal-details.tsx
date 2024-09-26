@@ -8,8 +8,6 @@ import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
 import {
-  getBadgeColor,
-  getTimeText,
   getTotalVotes,
   getVotesDataList,
   parseProposalBody,
@@ -32,6 +30,7 @@ import { unstable_serialize } from "swr";
 import { ProposalTimeline } from "./proposal-timeline";
 import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 import { cn } from "@bera/ui";
+import { StatusBadge } from "~/app/governance/components/status-badge";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -92,15 +91,7 @@ export default function ProposalDetails({
               <ProposalHeading frontmatter={fm} size="md" />
             </div>
             <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-4 md:gap-6">
-              <div className="text-xs col-span-full font-medium leading-6 text-muted-foreground">
-                <Badge
-                  variant={getBadgeColor(proposal.status as StatusEnum)}
-                  className="mr-3 rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
-                >
-                  {proposal.status}
-                </Badge>
-                {getTimeText(proposal)}
-              </div>
+              <StatusBadge proposal={proposal} />
 
               <div className="col-span-full  text-muted-foreground ">
                 <VoteInfo
@@ -113,7 +104,7 @@ export default function ProposalDetails({
               <div
                 className={cn(
                   "col-start-2",
-                  ![StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
                     proposal.status as StatusEnum,
                   )
                     ? "invisible"
@@ -131,7 +122,7 @@ export default function ProposalDetails({
               <div
                 className={cn(
                   "self-stretch col-start-1 row-start-3 ",
-                  ![StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
+                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
                     proposal.status as StatusEnum,
                   )
                     ? "invisible"
