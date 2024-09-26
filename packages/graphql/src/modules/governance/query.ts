@@ -71,6 +71,14 @@ export const getProposal = gql`
           timestamp
         }
       }
+      end {
+        ... on Block {
+          timestamp
+        }
+        ... on BlocklessTimestamp {
+          timestamp
+        }
+      }
       creator {
         name
         picture

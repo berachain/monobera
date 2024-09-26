@@ -13,6 +13,7 @@ export const getProposalDetails = async ({
     if (!config.subgraphs?.governanceSubgraph) {
       throw new Error("governance subgraph uri is not found in config");
     }
+
     const subgraphEndpoint = config.subgraphs.governanceSubgraph;
     const variables = {
       input: {

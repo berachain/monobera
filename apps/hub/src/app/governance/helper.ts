@@ -41,9 +41,34 @@ export const getThemeColor = (ProposalType: ProposalTypeEnum) => {
 export const getTopicColor = (topic: string) => {
   return [...NativeDapps, ...Others].find((dapp) => dapp.id === topic)?.color;
 };
-export const getTimeText = (proposal: Proposal) => {
+
+export const getTimeLeft = (date: Date) => {
   const now = Date.now();
-  const targetTimestamp = new Date(proposal.createdAt).getTime();
+  const targetTimestamp = date.getTime();
+  const diffInMilliseconds = targetTimestamp - now;
+  const diffInSeconds = Math.round(diffInMilliseconds / 1000);
+  return diffInSeconds;
+};
+
+/**
+ * Formats the time left into a string like "8 hours, 23 minutes".
+ *
+ * @param timeLeftInSeconds - The time left in seconds.
+ * @returns A formatted string representing the time left.
+ */
+export function formatTimeLeft(timeLeftInSeconds: number): string {
+  const hours = Math.floor(timeLeftInSeconds / 3600);
+  const minutes = Math.floor((timeLeftInSeconds % 3600) / 60);
+
+  const hoursDisplay =
+    hours > 0 ? `${hours} hour${hours !== 1 ? "s" : ""}` : "";
+  const minutesDisplay = `${minutes} minute${minutes !== 1 ? "s" : ""}`;
+
+  return [hoursDisplay, minutesDisplay].filter(Boolean).join(", ");
+}
+export const getTimeText = (date: Date) => {
+  const now = Date.now();
+  const targetTimestamp = date.getTime();
   const diffInMilliseconds = targetTimestamp - now;
   const diffInSeconds = Math.round(diffInMilliseconds / 1000);
 
@@ -254,13 +279,13 @@ export const getProposalStatus = (proposal: Proposal, currentBlock: number) => {
         Number(proposal.proposalVotes[0].for) >=
           Number(proposal.proposalVotes[0].against);
       if (succeeded) return StatusEnum.PENDING_QUEUE;
-      else return StatusEnum.DEFEATED;
+      return StatusEnum.DEFEATED;
     }
   }
   if (proposal.status === "queued") {
     const timestamp = new Date().getTime() / 1000;
     if (timestamp < proposal.queueEnd) return StatusEnum.IN_QUEUE;
-    else return StatusEnum.PENDING_EXECUTION;
+    return StatusEnum.PENDING_EXECUTION;
   }
   if (proposal.status === "executed") return StatusEnum.EXECUTED;
   if (proposal.status === "canceled") return StatusEnum.CANCELED_BY_USER;

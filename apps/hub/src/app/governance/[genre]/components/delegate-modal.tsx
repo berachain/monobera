@@ -22,6 +22,7 @@ import { Skeleton } from "@bera/ui/skeleton";
 import Identicon from "@bera/shared-ui/src/identicon";
 import { useGovernance } from "./governance-provider";
 import { InputWithLabel } from "@bera/ui/input";
+import { cn } from "@bera/ui";
 
 export const DelegateModal = ({
   isOpen,
@@ -85,7 +86,12 @@ export const DelegateModal = ({
                 </div>
               </div>
               <div
-                className="flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted border border-border "
+                className={cn(
+                  "flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted border",
+                  delegate === account
+                    ? "border-info-foreground"
+                    : "border-border",
+                )}
                 onClick={() => {
                   setInput(false);
                   setDelegate(account as Address);
@@ -102,7 +108,12 @@ export const DelegateModal = ({
                 </div>
               </div>
               <div
-                className="flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted border border-border "
+                className={cn(
+                  "flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted border",
+                  delegate === account
+                    ? "border-border"
+                    : "border-info-foreground",
+                )}
                 onClick={() => {
                   setInput(true);
                   setDelegate("");
@@ -119,9 +130,10 @@ export const DelegateModal = ({
                 </div>
               </div>
 
-              <div className="px-2">
-                <div className="font-bold text-foreground">Delegate to: </div>
-                {input ? (
+              {input ? (
+                <div className="px-2">
+                  <div className="font-bold text-foreground">Delegate to: </div>
+
                   <InputWithLabel
                     variant="black"
                     className="w-full "
@@ -136,10 +148,8 @@ export const DelegateModal = ({
                     value={delegate}
                     onChange={(e) => setDelegate(e.target.value)}
                   />
-                ) : (
-                  "My Self"
-                )}
-              </div>
+                </div>
+              ) : null}
 
               <Button
                 className="mt-4"

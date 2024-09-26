@@ -76,9 +76,7 @@ export const CancelButton = ({ proposal }: { proposal: Proposal }) => {
             <div>Execution in queue</div>
           )}
         </ActionButton>
-      ) : (
-        <div>Canceled</div>
-      )}
+      ) : null}
     </>
   );
 };
