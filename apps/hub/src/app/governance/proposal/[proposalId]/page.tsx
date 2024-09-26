@@ -41,14 +41,12 @@ export default async function Page({
   );
 }
 
-export function generateStaticParams() {
-  if (isIPFS) {
-    return [
-      {
-        proposalId: "0x",
-      },
-    ];
-  }
-
-  return [];
-}
+export const generateStaticParams = isIPFS
+  ? async () => {
+      return [
+        {
+          proposalId: "0x",
+        },
+      ];
+    }
+  : undefined;
