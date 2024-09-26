@@ -2,7 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { useQuery } from "@apollo/client";
 import { usePollAllProposals, type Proposal } from "@bera/berajs";
-import { cloudinaryUrl } from "@bera/config";
+import { cloudinaryUrl, isIPFS } from "@bera/config";
 import { getProposalss } from "@bera/graphql";
 import { SearchInput } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -56,9 +56,18 @@ export const ProposalsList = () => {
             <ProposalCard
               proposal={proposal}
               key={`proposal-${proposal.id}`}
-              className="hover:cursor-pointer" //@ts-ignore
+              className="hover:cursor-pointer"
+              onMouseOver={() => {
+                if (!isIPFS) {
+                  router.prefetch(`/governance/proposal/${proposal.id}`);
+                }
+              }}
               onClick={() => {
-                window.open(`/governance/proposal/${proposal.id}`, "_self");
+                router.push(
+                  isIPFS
+                    ? `/governance/proposal/?id=${proposal.id}`
+                    : `/governance/proposal/${proposal.id}`,
+                );
               }}
             />
           ))

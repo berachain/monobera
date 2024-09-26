@@ -21,14 +21,11 @@ export function generateMetadata({ params }: any): Metadata {
 export default async function Page({
   params,
 }: { params: { proposalId: string } }) {
-  console.log("fetching proposal id pageparams", params);
-
   if (isIPFS) {
     return null;
   }
 
   if (!params.proposalId) {
-    console.error("proposal id not found", params);
     return notFound();
   }
 
@@ -37,7 +34,9 @@ export default async function Page({
     config: defaultBeraConfig,
   });
 
-  console.log("proposal", proposal);
+  if (!proposal) {
+    return notFound();
+  }
 
   return (
     <ProposalDetailsWrapper id={params.proposalId} content={proposal}>
@@ -46,14 +45,14 @@ export default async function Page({
   );
 }
 
-export const generateStaticParams = isIPFS
-  ? async () => {
-      console.log("generating static params on proposal id page");
+export const generateStaticParams = async () => {
+  if (isIPFS) {
+    return [
+      {
+        proposalId: "0x",
+      },
+    ];
+  }
 
-      return [
-        {
-          proposalId: "0x",
-        },
-      ];
-    }
-  : undefined;
+  return [];
+};
