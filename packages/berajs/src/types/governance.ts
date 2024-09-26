@@ -17,6 +17,7 @@ export type Proposal = {
     timelockId: string;
     token: { decimals: number };
   };
+
   executableCalls: ExecutableCalls[];
   id: string;
   metadata: {
@@ -26,6 +27,9 @@ export type Proposal = {
   originalId: string;
   status: string;
   start: {
+    timestamp: string;
+  };
+  end: {
     timestamp: string;
   };
   voteStats: {

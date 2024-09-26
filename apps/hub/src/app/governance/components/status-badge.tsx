@@ -24,13 +24,14 @@ export const StatusBadge = ({
       {proposal.status === StatusEnum.PENDING && (
         // TODO: get end time from proposal
         <span className="whitespace-nowrap">
-          {formatTimeLeft(60 * 12)} left
+          {formatTimeLeft(getTimeLeft(new Date(proposal.start.timestamp)))} left
         </span>
       )}
       {proposal.status === StatusEnum.ACTIVE && (
         // TODO: get end time from proposal
         <span className="whitespace-nowrap">
-          {formatTimeLeft(60 * 42)} until voting ends
+          {formatTimeLeft(getTimeLeft(new Date(proposal.end.timestamp)))} until
+          voting ends
         </span>
       )}
     </div>

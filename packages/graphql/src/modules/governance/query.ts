@@ -53,6 +53,22 @@ export const getProposals = gql`
               decimals
             }
           }
+          start {
+            ... on Block {
+              timestamp
+            }
+            ... on BlocklessTimestamp {
+              timestamp
+            }
+          }
+          end {
+            ... on Block {
+              timestamp
+            }
+            ... on BlocklessTimestamp {
+              timestamp
+            }
+          }
         }
       }
       pageInfo {
@@ -73,17 +89,25 @@ export const getProposal = gql`
       originalId
       createdAt
       events {
-      type
-      txHash
-    }
+        type
+        txHash
+      }
       start {
-      ... on Block {
-        timestamp
+        ... on Block {
+          timestamp
+        }
+        ... on BlocklessTimestamp {
+          timestamp
+        }
       }
-      ... on BlocklessTimestamp {
-        timestamp
+      end {
+        ... on Block {
+          timestamp
+        }
+        ... on BlocklessTimestamp {
+          timestamp
+        }
       }
-    }
       creator {
         name
         picture
