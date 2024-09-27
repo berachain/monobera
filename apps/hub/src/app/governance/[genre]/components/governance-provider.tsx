@@ -2,21 +2,16 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
-import { ApolloProvider } from "@apollo/client";
 import {
   useBeraJs,
   usePollBalance,
   usePollProposalThreshold,
   usePollUserDelegates,
 } from "@bera/berajs";
-import {
-  bgtTokenAddress,
-  governorAddress,
-  governanceSubgraphUrl,
-} from "@bera/config";
-import { getClient } from "@bera/graphql";
+import { bgtTokenAddress, governorAddress } from "@bera/config";
 import BigNumber from "bignumber.js";
 import { Address } from "viem";
+
 import {
   GovernanceTopic,
   PROPOSAL_GENRE,
@@ -70,7 +65,6 @@ export const GovernanceProvider = ({
 }) => {
   if (!isValidGenre(genre)) return notFound();
   const dappConfig = getDappByGenre(genre);
-  const client = getClient(governanceSubgraphUrl);
 
   const { account } = useBeraJs();
   const { data: tokenBalanceData, isLoading: isLoadingTokenBalance } =
@@ -169,7 +163,7 @@ export const GovernanceProvider = ({
           }));
         }}
       />
-      <ApolloProvider client={client}>{children}</ApolloProvider>
+      {children}
     </GovernanceContext.Provider>
   );
 };

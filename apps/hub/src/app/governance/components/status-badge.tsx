@@ -1,36 +1,56 @@
-import { Badge } from "@bera/ui/badge";
-import { StatusEnum } from "~/app/governance/types";
-import { formatTimeLeft, getBadgeColor, getTimeLeft } from "../helper";
-import { Proposal } from "@bera/berajs";
+import { useState } from "react";
+import { type Proposal } from "@bera/graphql";
 import { cn } from "@bera/ui";
+import { Badge } from "@bera/ui/badge";
+import { createPublicClient } from "viem";
+import { usePublicClient } from "wagmi";
+
+import { StatusEnum } from "~/app/governance/types";
+import {
+  formatTimeLeft,
+  getBadgeColor,
+  getProposalStatus,
+  getTimeLeft,
+} from "../helper";
 
 export const StatusBadge = ({
   proposal,
   className,
-}: { proposal: Proposal; className?: string }) => {
+}: {
+  proposal: Proposal;
+  className?: string;
+}) => {
+  const [status, setStatus] = useState<StatusEnum>(StatusEnum.PENDING);
+  usePublicClient()
+    ?.getBlockNumber()
+    .then((block) => {
+      const status = getProposalStatus(proposal, Number(block));
+      setStatus(status);
+    });
+
   return (
     <div
       className={cn(
-        "text-xs col-span-full font-medium leading-6 text-muted-foreground",
+        "col-span-full text-xs font-medium leading-6 text-muted-foreground",
         className,
       )}
     >
       <Badge
-        variant={getBadgeColor(proposal.status as StatusEnum)}
-        className="mr-3 select-none rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
+        variant={getBadgeColor(status)}
+        className="mr-3 select-none rounded-xs px-2 py-1 text-sm font-semibold capitalize leading-none"
       >
-        {proposal.status}
+        {status}
       </Badge>
-      {proposal.status === StatusEnum.PENDING && (
+      {status === StatusEnum.PENDING && (
         // TODO: get end time from proposal
         <span className="whitespace-nowrap">
-          {formatTimeLeft(getTimeLeft(new Date(proposal.start.timestamp)))} left
+          {formatTimeLeft(getTimeLeft(new Date(proposal.voteStart)))} left
         </span>
       )}
-      {proposal.status === StatusEnum.ACTIVE && (
+      {status === StatusEnum.ACTIVE && (
         // TODO: get end time from proposal
         <span className="whitespace-nowrap">
-          {formatTimeLeft(getTimeLeft(new Date(proposal.end.timestamp)))} left
+          {formatTimeLeft(getTimeLeft(new Date(proposal.voteStart)))} left
         </span>
       )}
     </div>

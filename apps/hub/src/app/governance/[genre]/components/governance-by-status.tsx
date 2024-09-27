@@ -1,6 +1,8 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
+import { SWRFallback, usePollAllProposalsQueryKey } from "@bera/berajs";
 import { governorAddress } from "@bera/config";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
@@ -9,7 +11,6 @@ import { GoToIfHasVotingPower } from "./go-to-if-has-voting-power";
 import { useGovernance } from "./governance-provider";
 import { ProposalsList } from "./proposals-list";
 import { UserVotingPower } from "./user-voting-power";
-import { SWRFallback, usePollAllProposalsQueryKey } from "@bera/berajs";
 
 export default function GovernanceByStatus({
   allProposals,
@@ -41,7 +42,7 @@ export default function GovernanceByStatus({
           Vote on proposals <br />
           or create your own
         </div>
-        <div className="mx-auto my-8 flex gap-3 sm:w-full flex-wrap ">
+        <div className="mx-auto my-8 flex flex-wrap gap-3 sm:w-full ">
           <GoToIfHasVotingPower
             href={`/governance/${dappConfig.slug}/create`}
             governorAddress={governorAddress}

@@ -1,11 +1,10 @@
 import React from "react";
+import { getAllProposals } from "@bera/berajs/actions";
+import { defaultBeraConfig } from "@bera/berajs/config";
+import { isIPFS } from "@bera/config";
 
 import { NativeDapps, Others } from "../governance-genre-helper";
 import GovernanceByStatus from "./components/governance-by-status";
-import { defaultBeraConfig } from "@bera/berajs/config";
-
-import { getAllProposals } from "@bera/berajs/actions";
-import { isIPFS } from "@bera/config";
 
 export const revalidate = 120;
 

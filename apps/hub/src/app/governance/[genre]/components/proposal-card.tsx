@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { type Proposal } from "@bera/berajs";
+import { type Proposal } from "@bera/graphql";
 import { cn } from "@bera/ui";
 import { Badge } from "@bera/ui/badge";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatEther } from "viem";
 
 import { ProposalHeading } from "../../components/proposal-heading";
+import { StatusBadge } from "../../components/status-badge";
 import { GovernanceTopic } from "../../governance-genre-helper";
 import {
   getBadgeColor,
@@ -19,7 +20,6 @@ import {
 import { StatusEnum } from "../../types";
 import { ProgressBarChart } from "./progress-bar-chart";
 import { QuorumStatus } from "./quorum-status";
-import { StatusBadge } from "../../components/status-badge";
 
 export function ProposalCard({
   proposal,
@@ -30,41 +30,36 @@ export function ProposalCard({
   dappConfig: GovernanceTopic;
 }) {
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
-  console.log(proposal);
   return (
     <div
       className={cn(
-        "relative flex flex-col items-start justify-between gap-4 gap-y-4 overflow-hidden rounded-md border border-border p-4 pt-3 sm:grid sm:grid-cols-[4fr_5fr] sm:items-center lg:pr-8 xl:pr-16",
+        "md:flex-row flex-col relative flex items-start justify-between gap-4 gap-y-4 overflow-hidden rounded-md border border-border p-4 hover:cursor-pointer sm:items-center",
       )}
       {...props}
     >
-      <div className="flex-1">
+      <div className="w-fit max-w-[400px]">
         <ProposalHeading frontmatter={fm} size="sm" />
         <StatusBadge proposal={proposal} className="mt-1 md:mt-3" />
       </div>
 
-      {/* {![
+      {![
         StatusEnum.PENDING,
         StatusEnum.CANCELED_BY_USER,
         StatusEnum.CANCELED_BY_GUARDIAN,
       ].includes(proposal.status as StatusEnum) ? (
-        <div
-          className={cn(
-            "flex min-w-36 flex-col items-start gap-2 gap-y-4 text-xs sm:grid sm:grid-cols-2 xl:flex-row xl:items-center ",
-          )}
-        >
+        <>
           <QuorumStatus
             delegatesVotesCount={getTotalVotes(proposal)}
-            quorum={formatEther(BigInt(proposal.governor.quorum))}
+            quorum={BigInt(proposal.quorum)}
           />
           <ProgressBarChart
             dataList={getVotesDataList(proposal)}
-            className="w-full"
+            className="w-[200px]"
           />
-        </div>
+        </>
       ) : (
         <div>--</div>
-      )} */}
+      )}
     </div>
   );
 }

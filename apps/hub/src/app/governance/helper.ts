@@ -1,9 +1,10 @@
 import { ComponentProps } from "react";
-import { Proposal } from "@bera/berajs";
+import { type Proposal } from "@bera/graphql";
 import { Badge } from "@bera/ui/badge";
 import BigNumber from "bignumber.js";
 import graymatter from "gray-matter";
 import { decodeFunctionData, formatEther } from "viem";
+import { bigint } from "zod";
 
 import { NativeDapps, Others } from "./governance-genre-helper";
 import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
@@ -121,27 +122,21 @@ export const getTimeText = (date: Date) => {
 };
 
 export const getVotesDataList = (proposal: Proposal) => {
-  const votes = proposal.voteStats;
-  const quorum = proposal.governor.quorum;
-  const globalYesPercentage = BigNumber(votes[0].votesCount)
-    .div(BigNumber(quorum))
-    .times(100)
-    .toNumber();
-
-  const globalNoPercentage = BigNumber(votes[1].votesCount)
-    .div(BigNumber(quorum))
-    .times(100)
-    .toNumber();
-
-  const globalAbstainPercentage = BigNumber(votes[2].votesCount)
-    .div(BigNumber(quorum))
-    .times(100)
-    .toNumber();
+  const quorum = proposal.quorum;
+  const globalYesPercentage = Number(
+    (BigInt(proposal.proposalVotes?.for ?? "0") * 100n) / BigInt(quorum),
+  );
+  const globalNoPercentage = Number(
+    (BigInt(proposal.proposalVotes?.against ?? "0") * 100n) / BigInt(quorum),
+  );
+  const globalAbstainPercentage = Number(
+    (BigInt(proposal.proposalVotes?.abstain ?? "0") * 100n) / BigInt(quorum),
+  );
   return [
     {
       color: VoteColorMap.yes,
       width: globalYesPercentage > 100 ? 100 : globalYesPercentage,
-      votesCount: votes[0].votesCount,
+      votesCount: proposal.proposalVotes?.for ?? "0",
     },
     {
       color: VoteColorMap.no,
@@ -149,7 +144,7 @@ export const getVotesDataList = (proposal: Proposal) => {
         globalYesPercentage + globalNoPercentage > 100
           ? 100
           : globalYesPercentage + globalNoPercentage,
-      votesCount: votes[1].votesCount,
+      votesCount: proposal.proposalVotes?.against ?? "0",
     },
     {
       color: VoteColorMap.abstain,
@@ -157,24 +152,20 @@ export const getVotesDataList = (proposal: Proposal) => {
         globalYesPercentage + globalNoPercentage + globalAbstainPercentage > 100
           ? 100
           : globalYesPercentage + globalNoPercentage + globalAbstainPercentage,
-      votesCount: votes[2].votesCount,
+      votesCount: proposal.proposalVotes?.abstain ?? "0",
     },
   ];
 };
 
-export const getTotalVotes = (proposal: Proposal) =>
-  formatEther(
-    proposal.voteStats.reduce(
-      (acc: bigint, curr: any) => acc + BigInt(curr.votesCount),
-      0n,
-    ),
-  );
+export const getTotalVotes = (proposal: Proposal): bigint =>
+  BigInt(proposal.proposalVotes?.for ?? "0") +
+  BigInt(proposal.proposalVotes?.abstain ?? "0");
 
-export const getTotalVoters = (proposal: Proposal) =>
-  proposal.voteStats.reduce(
-    (acc: number, curr: any) => acc + curr.votersCount,
-    0,
-  );
+export const getTotalVoters = (proposal: Proposal) => "0";
+// proposal.voteStats.reduce(
+//   (acc: number, curr: any) => acc + curr.votersCount,
+//   0,
+// );
 
 const parseLegacyBody = (
   s: string,
@@ -273,11 +264,11 @@ export const getProposalStatus = (proposal: Proposal, currentBlock: number) => {
       return StatusEnum.ACTIVE;
     if (currentBlock >= proposal.voteEnd) {
       const succeeded =
-        Number(proposal.proposalVotes[0].for) +
-          Number(proposal.proposalVotes[0].abstain) >=
+        Number(proposal.proposalVotes?.for ?? "0") +
+          Number(proposal.proposalVotes?.abstain ?? "0") >=
           Number(proposal.quorum) &&
-        Number(proposal.proposalVotes[0].for) >=
-          Number(proposal.proposalVotes[0].against);
+        Number(proposal.proposalVotes?.for ?? "0") >=
+          Number(proposal.proposalVotes?.against ?? "0");
       if (succeeded) return StatusEnum.PENDING_QUEUE;
       return StatusEnum.DEFEATED;
     }
