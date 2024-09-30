@@ -10,6 +10,7 @@ import { useGovernance } from "./governance-provider";
 import { ProposalsList } from "./proposals-list";
 import { UserVotingPower } from "./user-voting-power";
 import { SWRFallback, usePollAllProposalsQueryKey } from "@bera/berajs";
+import { unstable_serialize } from "swr/infinite";
 
 export default function GovernanceByStatus({
   allProposals,
@@ -20,7 +21,7 @@ export default function GovernanceByStatus({
   return (
     <SWRFallback
       fallback={{
-        [usePollAllProposalsQueryKey]: allProposals,
+        [unstable_serialize(usePollAllProposalsQueryKey)]: allProposals,
       }}
     >
       <div className="pb-32">

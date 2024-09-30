@@ -10,7 +10,7 @@ export enum StatusEnum {
   SUCCEEDED = "succeeded",
   DEFEATED = "defeated",
   PENDING_QUEUE = "pending-queue",
-  IN_QUEUE = "in-queue",
+  IN_QUEUE = "queued",
   PENDING_EXECUTION = "pending-execution",
   EXECUTED = "executed",
   EXPIRED = "expired",

@@ -14,7 +14,7 @@ export default async function Page() {
     ? undefined
     : await getAllProposals({ config: defaultBeraConfig });
 
-  return <GovernanceByStatus allProposals={allProposals} />;
+  return <GovernanceByStatus allProposals={allProposals?.nodes} />;
 }
 
 export async function generateStaticParams() {
