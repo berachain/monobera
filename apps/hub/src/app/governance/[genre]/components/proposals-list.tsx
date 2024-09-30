@@ -6,7 +6,7 @@ import { cloudinaryUrl, isIPFS } from "@bera/config";
 import { getProposalss } from "@bera/graphql";
 import { SearchInput } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ProposalCard } from "./proposal-card";
 import { ProposalSorting } from "./proposal-sorting";
 import { ProposalStatusFilter } from "./proposal-status-filter";
@@ -17,6 +17,7 @@ export const ProposalsList = () => {
   const { data = [], isLoading } = usePollAllProposals();
   const [page, setPage] = useState(0);
   const router = useRouter();
+  const parms = useParams();
   // const {
   //   loading,
   //   error,
@@ -61,14 +62,16 @@ export const ProposalsList = () => {
                 className="hover:cursor-pointer"
                 onMouseOver={() => {
                   if (!isIPFS) {
-                    router.prefetch(`/governance/proposal/${proposal.id}`);
+                    router.prefetch(
+                      `/governance/${parms.genre}/proposal/${proposal.id}`,
+                    );
                   }
                 }}
                 onClick={() => {
                   router.push(
                     isIPFS
-                      ? `/governance/proposal/?id=${proposal.id}`
-                      : `/governance/proposal/${proposal.id}`,
+                      ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
+                      : `/governance/${parms.genre}/proposal/${proposal.id}`,
                   );
                 }}
               />

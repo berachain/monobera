@@ -1,6 +1,6 @@
 import { type Proposal, type Vote } from "@bera/berajs";
-import { StatusEnum } from "../../types";
-import { VoteDialog } from "../../[genre]/components/vote-dialog";
+import { StatusEnum } from "../../../types";
+import { VoteDialog } from "../../components/vote-dialog";
 import { CancelButton } from "./components/cancel-button";
 import { QueueButton } from "./components/queue-button";
 
@@ -45,6 +45,9 @@ export const StatusAction = ({
       )}
       {status === StatusEnum.EXECUTED && (
         <div className="text-success-foreground">Executed</div>
+      )}
+      {status === StatusEnum.SUCCEEDED && (
+        <QueueButton proposalId={proposal.onchainId} />
       )}
     </div>
   );

@@ -11,25 +11,26 @@ import {
   getTotalVotes,
   getVotesDataList,
   parseProposalBody,
-} from "~/app/governance/helper";
+} from "../../../../helper";
+import { Actions } from "../Actions";
+import { StatusAction } from "../Status";
 import "@bera/graphql";
+import MarkdownRenderer from "./markdown-renderer";
+import { Badge } from "@bera/ui/badge";
+import { OverviewChart } from "../../../components/overview-chart";
+import { VoterTable } from "../../../components/voter-table";
+import { VoteCard } from "../../../components/vote-card";
+import { StatusEnum } from "../../../../types";
+import { VoteInfo } from "../../../components/Voter";
+import { QuorumStatus } from "../../../components/quorum-status";
 import { formatEther } from "viem";
+import { ProgressBarChart } from "../../../components/progress-bar-chart";
 import { SWRFallback } from "@bera/berajs/contexts";
 import { unstable_serialize } from "swr";
+import { ProposalTimeline } from "./proposal-timeline";
 import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 import { cn } from "@bera/ui";
 import { StatusBadge } from "~/app/governance/components/status-badge";
-import { Actions } from "~/app/governance/[genre]/proposal/[proposalId]/Actions";
-import { StatusAction } from "~/app/governance/[genre]/proposal/[proposalId]/Status";
-import { VoteInfo } from "~/app/governance/[genre]/components/Voter";
-import { StatusEnum } from "~/app/governance/types";
-import { ProgressBarChart } from "~/app/governance/[genre]/components/progress-bar-chart";
-import { QuorumStatus } from "~/app/governance/[genre]/components/quorum-status";
-import { VoteCard } from "~/app/governance/[genre]/components/vote-card";
-import { ProposalTimeline } from "~/app/governance/[genre]/proposal/[proposalId]/components/proposal-timeline";
-import MarkdownRenderer from "~/app/governance/[genre]/proposal/[proposalId]/components/markdown-renderer";
-import { OverviewChart } from "~/app/governance/[genre]/components/overview-chart";
-import { VoterTable } from "~/app/governance/[genre]/components/voter-table";
 
 export const ProposalDetailsWrapper = ({
   children,

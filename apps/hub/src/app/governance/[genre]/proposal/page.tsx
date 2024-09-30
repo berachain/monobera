@@ -4,6 +4,7 @@ import { FC, Suspense } from "react";
 import { notFound, useSearchParams } from "next/navigation";
 import { isIPFS } from "@bera/config";
 import ProposalDetails from "./[proposalId]/components/proposal-details";
+import { NativeDapps, Others } from "../../governance-genre-helper";
 
 const SearchParamsProposal: FC = () => {
   const sp = useSearchParams();
@@ -24,3 +25,9 @@ export default function StaticProposalPage() {
     </Suspense>
   );
 }
+
+export const generateStaticParams = async () => {
+  return [...NativeDapps, ...Others].map((dapp) => ({
+    genre: dapp.slug,
+  }));
+};
