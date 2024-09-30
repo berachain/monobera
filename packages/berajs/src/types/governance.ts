@@ -32,6 +32,10 @@ export type Proposal = {
   end: {
     timestamp: string;
   };
+  events: {
+    type: string;
+    txHash: string;
+  }[];
   voteStats: {
     percent: number;
     type: string;

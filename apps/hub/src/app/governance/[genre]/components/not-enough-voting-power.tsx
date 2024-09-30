@@ -70,7 +70,7 @@ export const NotEnoughVotingPower = ({
         </DialogDescription>
         <DialogFooter>
           <div className="grid grid-cols-1 w-full gap-3">
-            <Button className="w-full " onClick={() => onOpenDelegate()}>
+            <Button className="w-full" onClick={() => onOpenDelegate()}>
               Delegate
             </Button>
             <Button

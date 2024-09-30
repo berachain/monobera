@@ -1,8 +1,9 @@
-import useSWRImmutable from "swr/immutable";
-import { usePublicClient } from "wagmi";
-import { GOVERNANCE_ABI } from "../../../abi";
 import { SWRResponse } from "swr";
+import useSWRImmutable from "swr/immutable";
 import { Address } from "viem";
+import { usePublicClient } from "wagmi";
+
+import { GOVERNANCE_ABI } from "../../../abi";
 
 enum ProposalState {
   Pending = 0,

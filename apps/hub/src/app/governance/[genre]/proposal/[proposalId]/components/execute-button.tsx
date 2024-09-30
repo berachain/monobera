@@ -24,7 +24,7 @@ export const ExecuteButton = ({ proposalId }: { proposalId: string }) => {
             })
           }
         >
-          Queue
+          Execute
         </Button>
       </ActionButton>
     </>

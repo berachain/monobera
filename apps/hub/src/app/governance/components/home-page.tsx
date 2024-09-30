@@ -41,7 +41,7 @@ const GovernanceSection = ({
 
 export const HomePage = () => {
   return (
-    <div className="flex flex-col gap-12 pb-32">
+    <div className="flex flex-col gap-12 pt-12 pb-32">
       <div className="flex flex-col gap-2">
         <h1 className="font-bold leading-6 tracking-wider text-muted-foreground">
           GOVERNANCE
