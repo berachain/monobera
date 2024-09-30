@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import { Vote, useBeraJs, usePollProposal } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
@@ -31,6 +31,7 @@ import { ProposalTimeline } from "./proposal-timeline";
 import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 import { cn } from "@bera/ui";
 import { StatusBadge } from "~/app/governance/components/status-badge";
+import { useSearchParams } from "next/navigation";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -50,6 +51,14 @@ export const ProposalDetailsWrapper = ({
       {children}
     </SWRFallback>
   );
+};
+
+export const SearchParamsProposal: FC = () => {
+  const sp = useSearchParams();
+  if (!sp.get("id")) {
+    throw Error("No proposal id found in search params");
+  }
+  return <ProposalDetails proposalId={sp.get("id")!} />;
 };
 
 export default function ProposalDetails({
