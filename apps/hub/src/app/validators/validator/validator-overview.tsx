@@ -67,6 +67,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   });
 
   let valSignedRanking = -1;
+  console.log('val sign ranking', valSignedRanking, allValidatorBlockData);
   allValidatorBlockData?.blockStatsByValidators?.find(
     (v: AllTimeValidatorBlockCount, index: number) => {
       if (v.validator.coinbase === validator.coinbase.toLowerCase()) {
