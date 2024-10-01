@@ -7,6 +7,7 @@ export type GovernanceTopic = {
   id: PROPOSAL_GENRE;
   color: string;
   icon: React.ReactNode;
+  iconBackground?: string;
   name: string;
   slug: string;
   subgraph: string;
@@ -53,6 +54,7 @@ export const Others: GovernanceTopic[] = [
   {
     id: "general",
     color: "#AFABAB",
+    iconBackground: "#2F2F2F",
     icon: <Icons.ecoFav className="h-16 w-16" />,
     name: "General",
     slug: "general",

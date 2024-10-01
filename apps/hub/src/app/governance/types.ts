@@ -9,7 +9,7 @@ export enum StatusEnum {
   CANCELED_BY_USER = "canceled",
   DEFEATED = "defeated",
   PENDING_QUEUE = "pending-queue",
-  IN_QUEUE = "in-queue",
+  IN_QUEUE = "queued",
   PENDING_EXECUTION = "pending-execution",
   EXECUTED = "executed",
   EXPIRED = "expired",

@@ -62,12 +62,12 @@ export function VoterTable({
   });
 
   return (
-    <div className="grid grid-cols-1 gap-2 max-w-full">
-      <div className="flex justify-between items-center ">
+    <div className="grid grid-cols-1 max-w-full">
+      <div className=" flex justify-between items-center sm:block">
         <div className="text-lg  font-semibold leading-none text-foreground">
           Voters
         </div>
-        <div className="sm:hidden flex items-center">
+        <div className="sm:hidden flex items-center  my-4">
           <label
             htmlFor="vote-type-dropdown"
             className=" text-sm text-muted-foreground mr-1"
@@ -98,11 +98,11 @@ export function VoterTable({
               }))
             }
             sortby={false}
-            triggerClassName="bg-muted border border-border"
-            contentClassname="bg-muted border border-border"
+            triggerClassName=" border border-border"
+            contentClassname=" border border-border"
           />
         </div>
-        <div className="hidden sm:flex flex-col items-center justify-end sm:flex-row">
+        <div className="hidden sm:flex flex-col items-center  my-4 sm:flex-row">
           <MultiSelectBadge
             onSelect={(value) =>
               setFilter((filter) => ({

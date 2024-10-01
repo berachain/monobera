@@ -11,7 +11,6 @@ export * from "./useOct";
 export * from "./usePollBeraBalance";
 export * from "./usePollTransactionCount";
 export * from "./useGasData";
-export * from "./usePollDenom";
 export * from "./useTokenHoneyPrice";
 export * from "./useTokenHoneyPrices";
 export * from "./usePollWalletBalances";

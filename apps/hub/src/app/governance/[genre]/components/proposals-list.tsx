@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { usePollAllProposals, type Proposal } from "@bera/berajs";
 import { cloudinaryUrl, isIPFS } from "@bera/config";
@@ -14,11 +13,12 @@ import { SearchInput } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { GovernanceTopic } from "../../governance-genre-helper";
+import { useParams, useRouter } from "next/navigation";
 import { ProposalCard } from "./proposal-card";
 import { ProposalSorting } from "./proposal-sorting";
 import { ProposalStatusFilter } from "./proposal-status-filter";
 
-const PROPOSALS_PER_PAGE = 10;
+const PROPOSALS_PER_PAGE = 100;
 
 export const ProposalsList = ({
   dappConfig,
@@ -26,6 +26,8 @@ export const ProposalsList = ({
   dappConfig: GovernanceTopic;
 }) => {
   const [page, setPage] = useState(0);
+  const router = useRouter();
+  const parms = useParams();
   const { data = { proposals: [] }, loading } = useGetProposalsQuery({
     variables: {
       offset: page * PROPOSALS_PER_PAGE,
@@ -80,6 +82,29 @@ export const ProposalsList = ({
               // }}
             />
           ))
+          // data
+          //   .flatMap((page) => page?.nodes ?? [])
+          //   .map((proposal: Proposal) => (
+          //     <ProposalCard
+          //       proposal={proposal}
+          //       key={`proposal-${proposal.id}`}
+          //       className="hover:cursor-pointer"
+          //       onMouseOver={() => {
+          //         if (!isIPFS) {
+          //           router.prefetch(
+          //             `/governance/${parms.genre}/proposal/${proposal.id}`,
+          //           );
+          //         }
+          //       }}
+          //       onClick={() => {
+          //         router.push(
+          //           isIPFS
+          //             ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
+          //             : `/governance/${parms.genre}/proposal/${proposal.id}`,
+          //         );
+          //       }}
+          //     />
+          //   ))
         )}
       </div>
     </div>

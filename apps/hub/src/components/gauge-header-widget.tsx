@@ -10,7 +10,9 @@ export const GaugeHeaderWidget = ({
   address: Address;
   className?: string;
 }) => {
-  const { gaugeDictionary, isLoading } = usePollGauges();
+  const { gaugeDictionary, isLoading } = usePollGauges({
+    pageSize: 9999,
+  });
   const gauge = gaugeDictionary?.[address];
 
   const { data } = useTokens();

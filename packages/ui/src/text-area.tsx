@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "./utils/cn";
+import { FormError } from "./form-error";
 
 export type TextAreaProps =
   React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
@@ -31,11 +32,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           rows={4}
           {...props}
         />
-        {error && (
-          <div className="text-sm leading-none text-destructive-foreground">
-            {error}
-          </div>
-        )}
+        {error && <FormError>{error}</FormError>}
       </div>
     );
   },

@@ -7,6 +7,7 @@ import ProposalDetails, {
 } from "./components/proposal-details";
 import { defaultBeraConfig } from "@bera/berajs/config";
 import { getProposalDetails } from "@bera/berajs/actions";
+import { NativeDapps, Others } from "~/app/governance/governance-genre-helper";
 
 export const revalidate = 120;
 
@@ -47,11 +48,10 @@ export default async function Page({
 
 export const generateStaticParams = async () => {
   if (isIPFS) {
-    return [
-      {
-        proposalId: "0x",
-      },
-    ];
+    return [...NativeDapps, ...Others].map((dapp) => ({
+      genre: dapp.slug,
+      proposalId: "0x",
+    }));
   }
 
   return [];

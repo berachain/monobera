@@ -1,10 +1,10 @@
 import { useBeraJs } from "@bera/berajs";
 import { getUserVaultsReward } from "@bera/berajs/actions";
-import { POLLING } from "@bera/shared-ui";
-import { usePublicClient } from "wagmi";
-import useSWR from "swr";
 import { bgtStaker } from "@bera/config";
+import { POLLING } from "@bera/shared-ui";
+import useSWR from "swr";
 import { formatUnits } from "viem";
+import { usePublicClient } from "wagmi";
 
 export const useClaimableFees = (): any => {
   const { account } = useBeraJs();

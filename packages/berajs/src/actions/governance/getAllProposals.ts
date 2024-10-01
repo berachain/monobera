@@ -5,10 +5,25 @@ import { BeraConfig, Proposal } from "~/types";
 
 export const getAllProposals = async ({
   config,
+  afterCursor,
+  beforeCursor,
+  perPage = 20,
 }: {
+  afterCursor?: string;
+  beforeCursor?: string;
+  perPage?: number;
   config: BeraConfig;
-}): Promise<Proposal[]> => {
+}): Promise<
+  | {
+      nodes: Proposal[];
+      pageInfo: { firstCursor: string; lastCursor: string; count: number };
+    }
+  | undefined
+> => {
   try {
+    if (perPage > 20) {
+      throw new Error("perPage must be less than 20");
+    }
     if (!config.subgraphs?.governanceSubgraph) {
       throw new Error("governance subgraph uri is not found in config");
     }
@@ -23,7 +38,9 @@ export const getAllProposals = async ({
           isDescending: true,
         },
         page: {
-          limit: 100,
+          limit: perPage,
+          afterCursor,
+          beforeCursor,
         },
       },
     };
@@ -40,9 +57,9 @@ export const getAllProposals = async ({
       }),
     });
     const data = await response.json();
-    return data.data.proposals.nodes;
+    return data.data.proposals;
   } catch (e) {
     console.error("getAllProposals:", e);
-    return [];
+    return undefined;
   }
 };
