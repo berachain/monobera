@@ -14,6 +14,16 @@
 
 ![CI](https://github.com/berachain/monobera/actions/workflows/quality.yml/badge.svg?branch=v2)
 
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Commands](#commands)
+3. [Apps](#apps)
+4. [Packages](#packages)
+5. [Environments](#environments)
+6. [Tooling & Libraries](#tooling--libraries)
+7. [Dapps Banner Management](#dapps-banner-management)
+
 #### Installation
 
 In order to setup your local environment, run
@@ -39,7 +49,7 @@ Monobera requires node 18.18.2+.
 | ------------------------ | -------------------------------------------------------------------------------------------------------- |
 | `pnpm i`                 | Installs packages for all apps & packages                                                                |
 | `pnpm build`             | Builds all packages and apps. Not recommended as it takes large amounts of memory                        |
-| `pnpm setenv bartio`             | Copies `.env.bartio` into `.env`. Don't do it manually.                        |
+| `pnpm setenv bartio`     | Copies `.env.bartio` into `.env`. Don't do it manually.                        |
 | `pnpm build:dex`         | Builds only the `Bex` and related packages.                                                              |
 | `pnpm build:honey`       | Builds only the `Honey` and related packages.                                                            |
 | `pnpm build:bgt`         | Builds only the `BGT` and related packages.                                                              |
