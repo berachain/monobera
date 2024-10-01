@@ -27,7 +27,7 @@ const GovernanceSection = ({
           >
             <div
               className="flex justify-center border-b border-border p-1"
-              style={{ background: dapp.color }}
+              style={{ background: dapp.iconBackground ?? dapp.color }}
             >
               {dapp.icon}
             </div>
