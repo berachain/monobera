@@ -34,6 +34,7 @@ export const DelegateModal = ({
   const { account } = useBeraJs();
   const { refresh, data, isLoading } = usePollUserDelegates();
   const [delegate, setDelegate] = useState<string>("");
+  const [error, setError] = useState<string>();
   const [input, setInput] = useState(false);
   const { tokenBalance, isLoading: isGovernanceLoading } = useGovernance();
 
@@ -50,6 +51,16 @@ export const DelegateModal = ({
     },
   });
 
+  function checkAddress() {
+    const error = !isAddress(delegate)
+      ? "Enter a valid address"
+      : data?.delegate === delegate
+        ? "You already delegating to this address"
+        : undefined;
+    setError(error);
+    return !error;
+  }
+
   return (
     <>
       {ModalPortal}
@@ -57,20 +68,22 @@ export const DelegateModal = ({
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="mb-4">Update Delegation</DialogTitle>
-            <DialogDescription className="flex flex-col gap-4">
+            <DialogDescription className="grid grid-cols-1 gap-4">
               <p className="text-muted-foreground">
                 Delegating BGT to yourself or others grants voting power.
               </p>
-              <div className="grid grid-cols-1 items-center md:grid-cols-2 mt-6 mb-6 gap-4 leading-tight text-muted-foreground">
+              <div className="grid grid-cols-1 items-center sm:grid-cols-2 mt-6 mb-6 gap-4 leading-tight text-foreground">
                 <div className=" ">
-                  <div className="flex items-center gap-2 text-sm font-medium">
+                  <div className="flex items-center gap-2 text-sm font-medium ">
                     <Identicon account={account!} size={24} />
                     {truncateHash(account ?? "0x", 6)}
                   </div>
                 </div>
 
                 <div className="">
-                  <h3>Your BGT balance</h3>
+                  <h3 className="text-muted-foreground font-medium text-sm">
+                    Your BGT balance
+                  </h3>
                   <p className="flex items-center mt-1 gap-1">
                     {tokenBalance || isGovernanceLoading ? (
                       <FormattedNumber
@@ -85,12 +98,16 @@ export const DelegateModal = ({
                   </p>
                 </div>
               </div>
+              <h3 className="text-sm font-semibold text-foreground">
+                Delegate to
+              </h3>
+
               <div
                 className={cn(
-                  "flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted border",
+                  "flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted ",
                   delegate === account
-                    ? "border-info-foreground"
-                    : "border-border",
+                    ? "border-2 border-info-foreground"
+                    : "border border-border",
                 )}
                 onClick={() => {
                   setInput(false);
@@ -109,10 +126,10 @@ export const DelegateModal = ({
               </div>
               <div
                 className={cn(
-                  "flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted border",
+                  "flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-muted ",
                   delegate === account
-                    ? "border-border"
-                    : "border-info-foreground",
+                    ? "border-border border "
+                    : "border-info-foreground border-2",
                 )}
                 onClick={() => {
                   setInput(true);
@@ -131,20 +148,12 @@ export const DelegateModal = ({
               </div>
 
               {input ? (
-                <div className="px-2">
-                  <div className="font-bold text-foreground">Delegate to: </div>
-
+                <div className="">
                   <InputWithLabel
                     variant="black"
-                    className="w-full "
-                    placeholder="Enter address"
-                    error={
-                      !isAddress(delegate)
-                        ? "Enter a valid address"
-                        : data?.delegate === delegate
-                          ? "You already delegating to this address"
-                          : ""
-                    }
+                    className="w-full"
+                    placeholder="Enter delegation address"
+                    error={error}
                     value={delegate}
                     onChange={(e) => setDelegate(e.target.value)}
                   />
@@ -155,6 +164,7 @@ export const DelegateModal = ({
                 className="mt-4"
                 disabled={!isAddress(delegate) || data?.delegate === delegate}
                 onClick={() =>
+                  checkAddress() &&
                   write({
                     address: governanceTokenAddress,
                     abi: BGT_ABI,
