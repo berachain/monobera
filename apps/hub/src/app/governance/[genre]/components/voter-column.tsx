@@ -30,7 +30,7 @@ export const voterColumns: ColumnDef<Vote>[] = [
     header: "Voter",
     cell: ({ row }) => (
       <AccordionItem value={row.original.voter.address}>
-        <AccordionTrigger>
+        <AccordionTrigger className="!justify-start">
           <VoteInfo voter={row.original.voter} />
         </AccordionTrigger>
         <AccordionContent className="ml-7">

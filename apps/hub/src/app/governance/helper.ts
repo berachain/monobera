@@ -13,6 +13,7 @@ export const getBadgeColor = (
 ): ComponentProps<typeof Badge>["variant"] => {
   switch (proposalStatus) {
     case StatusEnum.PENDING:
+    case StatusEnum.IN_QUEUE:
       return "outline";
     case StatusEnum.ACTIVE:
     case StatusEnum.EXECUTED:
@@ -23,7 +24,7 @@ export const getBadgeColor = (
       return "warning";
     case StatusEnum.CANCELED_BY_GUARDIAN:
     case StatusEnum.CANCELED_BY_USER:
-      return "outline";
+      return "destructive";
   }
 };
 
