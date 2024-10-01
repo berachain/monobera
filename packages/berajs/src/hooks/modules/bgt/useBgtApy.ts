@@ -1,10 +1,10 @@
 import useSWR from "swr";
+import { Address } from "viem";
 
+import { getBgtApy } from "~/actions/bgt/getBgtApy";
+import { useBeraJs, useBlockTime } from "~/contexts";
 import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
-import { Address } from "viem";
-import { useBeraJs } from "~/contexts";
-import { getBgtApy } from "~/actions/bgt/getBgtApy";
 
 /**
  *
@@ -22,10 +22,12 @@ export const useBgtApy = (
 ): DefaultHookReturnType<string | undefined> => {
   const QUERY_KEY = ["bgtApy", args.receiptTokenAddress, args.tvlInHoney];
   const { config: beraConfig } = useBeraJs();
+  const blockTime = useBlockTime();
   const swrResponse = useSWR<string | undefined>(
     QUERY_KEY,
     async () => {
       return getBgtApy({
+        blockTime,
         receiptTokenAddress: args.receiptTokenAddress,
         tvlInHoney: args.tvlInHoney,
         config: options?.beraConfigOverride ?? beraConfig,

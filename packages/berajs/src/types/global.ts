@@ -33,7 +33,7 @@ export interface BeraConfig {
     lendRewardsAggregatorAddress?: Address;
     honeyRouterAddress?: Address;
     perpsTradingContractAddress?: Address;
-    governance: {
+    governance?: {
       berahub?: { governor: Address; timelock: Address };
       honey?: { governor: Address; timelock: Address };
       bend?: { governor: Address; timelock: Address };

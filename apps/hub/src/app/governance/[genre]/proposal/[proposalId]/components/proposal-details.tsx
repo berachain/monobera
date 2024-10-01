@@ -6,7 +6,7 @@ import { Vote, useBeraJs, usePollProposal } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
-import {type Proposal} from "@bera/graphql";
+import { type Proposal } from "@bera/graphql";
 import {
   getTotalVotes,
   getVotesDataList,
@@ -100,7 +100,7 @@ export default function ProposalDetails({
               <ProposalHeading frontmatter={fm} size="md" />
             </div>
             <div className="col-span-full  grid grid-cols-2 items-center justify-between gap-4 text-sm sm:flex md:gap-6">
-            {/* <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-x-4 gap-y-6 md:gap-6"> */}
+              {/* <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-x-4 gap-y-6 md:gap-6"> */}
               <StatusBadge proposal={proposal} />
 
               <div className="col-span-full  text-muted-foreground ">
@@ -122,7 +122,7 @@ export default function ProposalDetails({
                 )}
               >
                 <h3 className="mb-1 text-sm font-medium uppercase leading-5 text-muted-foreground">
-                {/* <h3 className="text-sm font-medium uppercase leading-5 mb-3 md:mb-1 text-muted-foreground"> */}
+                  {/* <h3 className="text-sm font-medium uppercase leading-5 mb-3 md:mb-1 text-muted-foreground"> */}
                   votes
                 </h3>
                 <ProgressBarChart
@@ -141,7 +141,7 @@ export default function ProposalDetails({
                 )}
               >
                 <h3 className="mb-1 text-sm font-medium uppercase leading-5 text-muted-foreground">
-                {/* <h3 className="text-sm font-medium leading-5 mb-3 md:mb-1 uppercase text-muted-foreground"> */}
+                  {/* <h3 className="text-sm font-medium leading-5 mb-3 md:mb-1 uppercase text-muted-foreground"> */}
                   quorum
                 </h3>
                 <QuorumStatus

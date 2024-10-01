@@ -36,6 +36,8 @@ export const bgtStakerSubgraphUrl = process.env
   .NEXT_PUBLIC_BGT_STAKER_SUBGRAPH_URL as string;
 export const governanceSubgraphUrl = process.env
   .NEXT_PUBLIC_GOVERNANCE_SUBGRAPH_URL as string;
+export const blocksSubgraphUrl = process.env
+  .NEXT_PUBLIC_CHAIN_BLOCKS_SUBGRAPH_URL as string;
 
 //Dapps
 export const homepageUrl = process.env.NEXT_PUBLIC_HOMEPAGE_URL as string;
@@ -91,7 +93,13 @@ export const bech32Prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
 export const governanceMinDeposit = Number(
   process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT,
 );
-export const blockTime = Number(process.env.NEXT_PUBLIC_BLOCKTIME);
+
+/**
+ * Default block time in seconds, in case the dynamic block time is not available
+ */
+export const FALLBACK_BLOCK_TIME = Number(
+  process.env.NEXT_PUBLIC_FALLBACK_BLOCKTIME,
+);
 
 // Precompiles & contracts
 export const multicallAddress = process.env

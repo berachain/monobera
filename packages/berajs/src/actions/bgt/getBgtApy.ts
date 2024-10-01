@@ -1,13 +1,15 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { Address } from "viem";
+import { beraTokenAddress } from "@bera/config";
 import { getApyInfo, getTokenHoneyPriceReq } from "@bera/graphql";
+import { Address } from "viem";
+
 import { BeraConfig } from "~/types/global";
-import { beraTokenAddress, blockTime } from "@bera/config";
 
 interface GetBgtApyArgs {
   receiptTokenAddress: Address | undefined;
   tvlInHoney: number | undefined;
   config: BeraConfig;
+  blockTime: number;
 }
 
 /**
@@ -18,6 +20,7 @@ export const getBgtApy = async ({
   receiptTokenAddress,
   tvlInHoney,
   config,
+  blockTime,
 }: GetBgtApyArgs): Promise<string | undefined> => {
   if (!config.subgraphs?.bgtSubgraph) {
     throw new Error("bgt subgraph uri is not found in config");
