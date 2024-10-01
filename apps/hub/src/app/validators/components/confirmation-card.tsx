@@ -3,10 +3,11 @@ import {
   IContractWrite,
   SubgraphUserValidator,
   truncateHash,
+  useBlockTime,
   useValidatorList,
 } from "@bera/berajs";
 import { useBlock } from "wagmi";
-import { bgtTokenAddress, blockTime } from "@bera/config";
+import { bgtTokenAddress } from "@bera/config";
 import { FormattedNumber, ValidatorIcon } from "@bera/shared-ui";
 import { Address, parseUnits } from "viem";
 import { Button } from "@bera/ui/button";
@@ -31,6 +32,7 @@ export const ConfirmationCard = ({
     props: IContractWrite,
   ) => void;
 }) => {
+  const blockTime = useBlockTime();
   const blockNumber = useBlock()?.data?.number;
   const blocksLeft =
     parseInt(userValidator.latestBlock) + HISTORY_BUFFER - Number(blockNumber);
@@ -43,7 +45,7 @@ export const ConfirmationCard = ({
     parseInt(userValidator.latestBlockTime) + HISTORY_BUFFER * blockTime;
 
   const timeText = (
-    <span className=" text-info-foreground">{blocksLeft} blocks remaining</span>
+    <span className="text-info-foreground">{blocksLeft} blocks remaining</span>
   );
 
   const { data } = useValidatorList();

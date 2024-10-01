@@ -93,7 +93,6 @@ export const bech32Prefix = process.env.NEXT_PUBLIC_BECH32_PREFIX as string;
 export const governanceMinDeposit = Number(
   process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT,
 );
-export const blockTime = Number(process.env.NEXT_PUBLIC_BLOCKTIME);
 
 // Precompiles & contracts
 export const multicallAddress = process.env

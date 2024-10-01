@@ -6,11 +6,10 @@ import {
   TransactionActionType,
   truncateHash,
   useBgtUnstakedBalance,
-  usePollValidatorInfo,
   useUserValidatorsSubgraph,
   useValidatorList,
 } from "@bera/berajs";
-import { bgtTokenAddress, blockTime } from "@bera/config";
+import { bgtTokenAddress } from "@bera/config";
 import { FormattedNumber, ValidatorIcon, useTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
@@ -165,9 +164,6 @@ const ConfirmationCard = ({
   const width = userValidator.canActivate
     ? 100
     : Math.round(Math.abs(1 - blocksLeft / HISTORY_BUFFER) * 100);
-
-  const time =
-    parseInt(userValidator.latestBlockTime) + HISTORY_BUFFER * blockTime;
 
   const timeText = (
     <span className=" text-info-foreground">{blocksLeft} blocks remaining</span>
