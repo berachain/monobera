@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import { Vote, useBeraJs, usePollProposal } from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
@@ -11,26 +11,27 @@ import {
   getTotalVotes,
   getVotesDataList,
   parseProposalBody,
-} from "../../../helper";
+} from "../../../../helper";
 import { Actions } from "../Actions";
 import { StatusAction } from "../Status";
 import "@bera/graphql";
 import MarkdownRenderer from "./markdown-renderer";
 import { Badge } from "@bera/ui/badge";
-import { OverviewChart } from "../../../[genre]/components/overview-chart";
-import { VoterTable } from "../../../[genre]/components/voter-table";
-import { VoteCard } from "../../../[genre]/components/vote-card";
-import { StatusEnum } from "../../../types";
-import { VoteInfo } from "../../../[genre]/components/Voter";
-import { QuorumStatus } from "../../../[genre]/components/quorum-status";
+import { OverviewChart } from "../../../components/overview-chart";
+import { VoterTable } from "../../../components/voter-table";
+import { VoteCard } from "../../../components/vote-card";
+import { StatusEnum } from "../../../../types";
+import { VoteInfo } from "../../../components/Voter";
+import { QuorumStatus } from "../../../components/quorum-status";
 import { formatEther } from "viem";
-import { ProgressBarChart } from "../../../[genre]/components/progress-bar-chart";
+import { ProgressBarChart } from "../../../components/progress-bar-chart";
 import { SWRFallback } from "@bera/berajs/contexts";
 import { unstable_serialize } from "swr";
 import { ProposalTimeline } from "./proposal-timeline";
 import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 import { cn } from "@bera/ui";
 import { StatusBadge } from "~/app/governance/components/status-badge";
+import { useSearchParams } from "next/navigation";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -50,6 +51,14 @@ export const ProposalDetailsWrapper = ({
       {children}
     </SWRFallback>
   );
+};
+
+export const SearchParamsProposal: FC = () => {
+  const sp = useSearchParams();
+  if (!sp.get("id")) {
+    throw Error("No proposal id found in search params");
+  }
+  return <ProposalDetails proposalId={sp.get("id")!} />;
 };
 
 export default function ProposalDetails({
@@ -90,7 +99,7 @@ export default function ProposalDetails({
             <div className="col-span-full">
               <ProposalHeading frontmatter={fm} size="md" />
             </div>
-            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-4 md:gap-6">
+            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-x-4 gap-y-6 md:gap-6">
               <StatusBadge proposal={proposal} />
 
               <div className="col-span-full  text-muted-foreground ">
@@ -111,7 +120,7 @@ export default function ProposalDetails({
                     : "",
                 )}
               >
-                <h3 className="text-sm font-medium uppercase leading-5 mb-1 text-muted-foreground">
+                <h3 className="text-sm font-medium uppercase leading-5 mb-3 md:mb-1 text-muted-foreground">
                   votes
                 </h3>
                 <ProgressBarChart
@@ -129,7 +138,7 @@ export default function ProposalDetails({
                     : "",
                 )}
               >
-                <h3 className="text-sm font-medium leading-5 mb-1 uppercase text-muted-foreground">
+                <h3 className="text-sm font-medium leading-5 mb-3 md:mb-1 uppercase text-muted-foreground">
                   quorum
                 </h3>
                 <QuorumStatus
@@ -138,17 +147,17 @@ export default function ProposalDetails({
                 />
               </div>
             </div>
-            <hr className="border-b border-border sm:mt-10 sm:mb-16" />
+            <hr className="border-b border-border mt-4 sm:mt-10 sm:mb-16" />
             <div className="mx-auto gap-16">
               <div>
                 <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
-                  <Card className="px-8 py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
+                  <Card className="px-8 py-3 md:py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
                     <FormattedNumber
                       value={getTotalVotes(proposal)}
                       className="text-lg sm:text-xl font-semibold leading-none text-foreground"
                       symbol="BGT"
                     />
-                    <div className="flex items-center text-sm font-medium text-muted-foreground">
+                    <div className="flex items-center text-sm font-medium leading-none mt-2 md:mt-0 text-muted-foreground">
                       Total votes
                     </div>
                   </Card>
@@ -160,9 +169,6 @@ export default function ProposalDetails({
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
-                <div className="lg:col-start-2 ">
-                  <ProposalTimeline proposal={proposal} />
-                </div>
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
                   <div className="border border-border p-4 px-8 rounded-md">
                     <h3 className="font-medium mb-4">Description</h3>
@@ -174,6 +180,9 @@ export default function ProposalDetails({
                     <h3 className="font-medium">Code Actions</h3>
                     <Actions executableCalls={proposal.executableCalls} />
                   </div>
+                </div>
+                <div className="lg:col-start-2 ">
+                  <ProposalTimeline proposal={proposal} />
                 </div>
               </div>
 

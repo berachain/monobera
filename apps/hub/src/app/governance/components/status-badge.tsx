@@ -8,6 +8,10 @@ export const StatusBadge = ({
   proposal,
   className,
 }: { proposal: Proposal; className?: string }) => {
+  let statusLabel = proposal.status;
+  if (proposal.status === StatusEnum.IN_QUEUE) {
+    statusLabel = "In queue";
+  }
   return (
     <div
       className={cn(
@@ -19,7 +23,7 @@ export const StatusBadge = ({
         variant={getBadgeColor(proposal.status as StatusEnum)}
         className="mr-3 select-none rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
       >
-        {proposal.status}
+        {statusLabel}
       </Badge>
       {proposal.status === StatusEnum.PENDING && (
         // TODO: get end time from proposal

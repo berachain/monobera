@@ -1,27 +1,46 @@
-import useSWR from "swr";
+import useSwrInfinite, {
+  SWRInfiniteKeyLoader,
+  SWRInfiniteResponse,
+} from "swr/infinite";
+
 import { getAllProposals } from "~/actions/governance";
 import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
-import { DefaultHookOptions, DefaultHookReturnType, Proposal } from "~/types";
+import { DefaultHookOptions } from "~/types";
 
-export const usePollAllProposalsQueryKey = "usePollAllProposals";
 export const usePollAllProposals = (
-  args?: {
-    sortBy: string;
-  },
   options?: DefaultHookOptions,
-): DefaultHookReturnType<Proposal[] | undefined> => {
+): SWRInfiniteResponse<Awaited<ReturnType<typeof getAllProposals>>> => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const QUERY_KEY = usePollAllProposalsQueryKey;
-  const swrResponse = useSWR<Proposal[] | undefined, any, typeof QUERY_KEY>(
-    QUERY_KEY,
-    async () => await getAllProposals({ config }),
+  const swrResponse = useSwrInfinite<
+    Awaited<ReturnType<typeof getAllProposals>>,
+    typeof usePollAllProposalsQueryKey
+  >(
+    usePollAllProposalsQueryKey,
+    async ([key, afterCursor]) => {
+      return await getAllProposals({ config, afterCursor });
+    },
     {
       ...options?.opts,
+      initialSize: 5,
       refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
 
-  return { ...swrResponse, refresh: () => swrResponse?.mutate?.() };
+  return {
+    ...swrResponse,
+  };
+};
+
+export const usePollAllProposalsQueryKey = (
+  page: number,
+  previousPageData?: Awaited<ReturnType<typeof getAllProposals>>,
+): [string, string | undefined] | null => {
+  if (!page) {
+    return ["usePollAllProposals", undefined];
+  }
+
+  const afterCursor = previousPageData?.pageInfo?.lastCursor;
+  return afterCursor ? ["usePollAllProposals", afterCursor] : null;
 };

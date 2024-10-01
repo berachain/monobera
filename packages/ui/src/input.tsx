@@ -26,9 +26,11 @@ const InputWithLabel = React.forwardRef<
 >(({ label, error, ...props }, ref) => {
   return (
     <div className="grid grid-cols-1 gap-y-2">
-      <Label disabled={props.disabled} htmlFor={props.id}>
-        {label}
-      </Label>
+      {label && (
+        <Label disabled={props.disabled} htmlFor={props.id}>
+          {label}
+        </Label>
+      )}
 
       <Input {...props} ref={ref} />
 
@@ -128,7 +130,7 @@ const Input = React.forwardRef<HTMLInputElement, CustomInputProps>(
         <input
           type={type === "number-enhanced" ? undefined : type}
           className={cn(
-            "focus:border-1 flex h-10 w-full rounded-md border border-border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium  focus:border-foreground focus:outline-none disabled:cursor-not-allowed",
+            "focus:border-1 flex h-10 w-full rounded-sm border border-border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium  focus:border-foreground focus:outline-none disabled:cursor-not-allowed",
             variant === "black" && "bg-black",
             variant === "muted" &&
               "text-foreground placeholder:text-muted-foreground disabled:text-muted-foreground",

@@ -6,28 +6,29 @@ import { cloudinaryUrl, isIPFS } from "@bera/config";
 import { getProposalss } from "@bera/graphql";
 import { SearchInput } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ProposalCard } from "./proposal-card";
 import { ProposalSorting } from "./proposal-sorting";
 import { ProposalStatusFilter } from "./proposal-status-filter";
 
-const PROPOSALS_PER_PAGE = 10;
+// const PROPOSALS_PER_PAGE = 100;
 
 export const ProposalsList = () => {
   const { data = [], isLoading } = usePollAllProposals();
   const [page, setPage] = useState(0);
   const router = useRouter();
-  const {
-    loading,
-    error,
-    data: proposals,
-  } = useQuery(getProposalss, {
-    variables: {
-      offset: page * PROPOSALS_PER_PAGE,
-      limit: PROPOSALS_PER_PAGE,
-    },
-    pollInterval: 60000, // 1 min
-  });
+  const parms = useParams();
+  // const {
+  //   loading,
+  //   error,
+  //   data: proposals,
+  // } = useQuery(getProposalss, {
+  //   variables: {
+  //     offset: page * PROPOSALS_PER_PAGE,
+  //     limit: PROPOSALS_PER_PAGE,
+  //   },
+  //   pollInterval: 60000, // 1 min
+  // });
 
   return (
     <div className="w-full">
@@ -52,25 +53,29 @@ export const ProposalsList = () => {
             <Skeleton className="h-20 w-full" />
           </>
         ) : (
-          data.map((proposal: Proposal) => (
-            <ProposalCard
-              proposal={proposal}
-              key={`proposal-${proposal.id}`}
-              className="hover:cursor-pointer"
-              onMouseOver={() => {
-                if (!isIPFS) {
-                  router.prefetch(`/governance/proposal/${proposal.id}`);
-                }
-              }}
-              onClick={() => {
-                router.push(
-                  isIPFS
-                    ? `/governance/proposal/?id=${proposal.id}`
-                    : `/governance/proposal/${proposal.id}`,
-                );
-              }}
-            />
-          ))
+          data
+            .flatMap((page) => page?.nodes ?? [])
+            .map((proposal: Proposal) => (
+              <ProposalCard
+                proposal={proposal}
+                key={`proposal-${proposal.id}`}
+                className="hover:cursor-pointer"
+                onMouseOver={() => {
+                  if (!isIPFS) {
+                    router.prefetch(
+                      `/governance/${parms.genre}/proposal/${proposal.id}`,
+                    );
+                  }
+                }}
+                onClick={() => {
+                  router.push(
+                    isIPFS
+                      ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
+                      : `/governance/${parms.genre}/proposal/${proposal.id}`,
+                  );
+                }}
+              />
+            ))
         )}
       </div>
 

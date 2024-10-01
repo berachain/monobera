@@ -1,12 +1,14 @@
-import { GOVERNANCE_ABI, useBeraJs } from "@bera/berajs";
-import { governanceTimelockAddress } from "@bera/config";
+import React from "react";
+import { GOVERNANCE_ABI } from "@bera/berajs";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
+import { useGovernance } from "~/app/governance/[genre]/components/governance-provider";
 
-export const QueueButton = ({ proposalId }: { proposalId: string }) => {
+export const ExecuteButton = ({ proposalId }: { proposalId: string }) => {
   const { write, ModalPortal } = useTxn({
     message: "Queuing proposal",
   });
+  const { governorAddress } = useGovernance();
 
   return (
     <>
@@ -15,14 +17,14 @@ export const QueueButton = ({ proposalId }: { proposalId: string }) => {
         <Button
           onClick={() =>
             write({
-              address: governanceTimelockAddress,
+              address: governorAddress,
               abi: GOVERNANCE_ABI,
-              functionName: "queue",
+              functionName: "execute",
               params: [BigInt(proposalId)],
             })
           }
         >
-          Queue
+          Execute
         </Button>
       </ActionButton>
     </>

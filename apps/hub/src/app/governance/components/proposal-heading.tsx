@@ -19,14 +19,17 @@ export const ProposalHeading = ({
           )}
         >
           <p>
-            {(fm.data.topics || fm.data.topic)?.map((topic: string) => (
-              <span
-                className="inline-block after:content-['•'] after:mx-1 last:after:hidden"
-                style={{ color: getTopicColor(topic) }}
-              >
-                {topic}
-              </span>
-            ))}
+            {((fm.data.topics || fm.data.topic) as Array<string>)?.map(
+              (topic: string, idx: number) => (
+                <span
+                  key={idx}
+                  className="inline-block after:content-['•'] after:mx-1 last:after:hidden"
+                  style={{ color: getTopicColor(topic) }}
+                >
+                  {topic}
+                </span>
+              ),
+            )}
           </p>
           {fm.data.forumLink && (
             <>
