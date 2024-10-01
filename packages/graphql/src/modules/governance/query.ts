@@ -215,7 +215,7 @@ export const getProposal = gql`
 `;
 
 export const getProposalss = gql`
-  query getProposals($offset: Int, $limit: Int) {
+  query GetProposals($offset: Int, $limit: Int) {
     proposals(
       skip: $offset
       first: $limit
@@ -234,7 +234,7 @@ export const getProposalss = gql`
       createdAt
       voteStart
       voteEnd
-      queuedAt
+      queueEnd
       canceledAt
       executedAt
     }
