@@ -94,6 +94,13 @@ export const governanceMinDeposit = Number(
   process.env.NEXT_PUBLIC_GOVERNANCE_MIN_DEPOSIT,
 );
 
+/**
+ * Default block time in seconds, in case the dynamic block time is not available
+ */
+export const FALLBACK_BLOCK_TIME = Number(
+  process.env.NEXT_PUBLIC_FALLBACK_BLOCKTIME,
+);
+
 // Precompiles & contracts
 export const multicallAddress = process.env
   .NEXT_PUBLIC_MULTICALL_ADDRESS as Address;

@@ -1,14 +1,18 @@
 import { createContext, useContext } from "react";
 import { useGetBlocksTimeStampQuery, blocksClient } from "@bera/graphql";
+import { FALLBACK_BLOCK_TIME } from "@bera/config";
 
-export const useBlockTime = () => {
+/**
+ * Average berachain block time in seconds
+ */
+export const useBlockTime = (): number => {
   return useContext(BlockTimeContext);
 };
 
-export const BlockTimeContext = createContext<number>(2);
+export const BlockTimeContext = createContext<number>(FALLBACK_BLOCK_TIME);
 
 export const BlockTimeProvider = ({
-  defaultBlockTime = 2,
+  defaultBlockTime = FALLBACK_BLOCK_TIME,
   children,
 }: { children: React.ReactNode; defaultBlockTime?: number }) => {
   const SKIP = 40_000;
