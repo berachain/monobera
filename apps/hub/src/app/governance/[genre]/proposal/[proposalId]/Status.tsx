@@ -14,13 +14,16 @@ import { wagmiConfig, useTransactionReceipt } from "@bera/wagmi";
 import { Address, parseEventLogs } from "viem";
 import { governanceTimelockAddress } from "@bera/config";
 import { ExecuteButton } from "./components/execute-button";
+import { parseProposalBody } from "~/app/governance/helper";
 
 export const StatusAction = ({
   proposal,
   userVote,
+  frontmatter,
 }: {
   proposal: Proposal;
   userVote: Vote | false | undefined;
+  frontmatter?: ReturnType<typeof parseProposalBody>;
 }) => {
   const status = proposal.status as StatusEnum;
 
@@ -63,33 +66,31 @@ export const StatusAction = ({
     <div className="flex items-center gap-3 font-medium">
       {status === StatusEnum.IN_QUEUE &&
         (proposalTimelockState === "ready" ? (
-          <ExecuteButton proposalId={proposal.onchainId} />
+          <ExecuteButton
+            proposal={proposal}
+            title={frontmatter?.data.title || ""}
+          />
         ) : (
-          <CancelButton proposal={proposal} proposalTimelockId={timelockId} />
+          <CancelButton
+            title={frontmatter?.data.title || ""}
+            proposal={proposal}
+            proposalTimelockId={timelockId}
+          />
         ))}
-      {(status === StatusEnum.PENDING_EXECUTION ||
-        status === StatusEnum.PENDING) && <CancelButton proposal={proposal} />}
-      {status === StatusEnum.PENDING_QUEUE && (
-        <div className="text-destructive-foreground">Pending Queue</div>
+      {status === StatusEnum.PENDING && (
+        <CancelButton
+          title={frontmatter?.data.title || ""}
+          proposal={proposal}
+        />
       )}
       {status === StatusEnum.ACTIVE && (
         <VoteDialog proposal={proposal} disable={userVote && !!userVote.type} />
       )}
-      {(status === StatusEnum.CANCELED_BY_USER ||
-        status === StatusEnum.CANCELED_BY_GUARDIAN) && (
-        <div className="text-destructive-foreground">Canceled</div>
-      )}
-      {status === StatusEnum.DEFEATED && (
-        <div className="text-destructive-foreground">Defeated</div>
-      )}
-      {status === StatusEnum.EXPIRED && (
-        <div className="text-destructive-foreground">Expired</div>
-      )}
-      {status === StatusEnum.EXECUTED && (
-        <div className="text-success-foreground">Executed</div>
-      )}
       {status === StatusEnum.SUCCEEDED && (
-        <QueueButton proposalId={proposal.onchainId} />
+        <QueueButton
+          proposal={proposal}
+          title={frontmatter?.data.title || ""}
+        />
       )}
     </div>
   );
