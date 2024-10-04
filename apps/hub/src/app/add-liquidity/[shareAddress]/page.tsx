@@ -1,14 +1,13 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { dexName } from "@bera/config";
-import { getMetaTitle } from "@bera/shared-ui";
 import { Address, isAddress } from "viem";
 
 import AddLiquidityContent from "../AddLiquidityContent";
 
 export function generateMetadata(): Metadata {
   return {
-    title: getMetaTitle("Add Liquidity", dexName),
+    title: "Add Liquidity",
     description: `Add liquidity to ${dexName}`,
   };
 }

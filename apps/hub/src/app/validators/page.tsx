@@ -1,11 +1,9 @@
 import React from "react";
 import { type Metadata } from "next";
-import { getMetaTitle } from "@bera/shared-ui";
 import Validators from "./validators";
-import { hubName } from "@bera/config";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Validators", hubName),
+  title: "Validators",
   description: "View active validators on Berachain",
 };
 
