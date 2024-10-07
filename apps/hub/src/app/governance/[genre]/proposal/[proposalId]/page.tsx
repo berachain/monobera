@@ -1,7 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { hubName, isIPFS } from "@bera/config";
-import { getMetaTitle } from "@bera/shared-ui";
+import { isIPFS } from "@bera/config";
 import ProposalDetails, {
   ProposalDetailsWrapper,
 } from "./components/proposal-details";
@@ -11,10 +10,20 @@ import { NativeDapps, Others } from "~/app/governance/governance-genre-helper";
 
 export const revalidate = 120;
 
-export function generateMetadata({ params }: any): Metadata {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { proposalId } = params;
+
+  const proposal = await getProposalDetails({
+    proposalId: params.proposalId,
+    config: defaultBeraConfig,
+  });
+
+  if (!proposal) {
+    return {};
+  }
+
   return {
-    title: getMetaTitle("Proposal Details", hubName),
+    title: proposal.title,
     description: `View proposal details for proposal ${proposalId} on Berachain`,
   };
 }

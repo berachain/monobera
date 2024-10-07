@@ -2,16 +2,14 @@ import React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getGauge } from "@bera/berajs/actions";
-import { hubName, isIPFS } from "@bera/config";
-import { getMetaTitle } from "@bera/shared-ui";
-import { unstable_serialize } from "swr";
+import { isIPFS } from "@bera/config";
 import { Address, isAddress } from "viem";
 
 import { GaugeDetails } from "./components/gauge-details";
 
 export function generateMetadata(): Metadata {
   return {
-    title: getMetaTitle("Gauge", hubName),
+    title: "Gauge",
   };
 }
 

@@ -1,11 +1,9 @@
 import { type Metadata } from "next";
 
-import { getMetaTitle } from "@bera/shared-ui";
 import CreatePageContent from "./CreatePageContent";
-import { dexName } from "@bera/config";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Create Pool", dexName),
+  title: "Create Pool",
   description: "Create a custom pool",
 };
 

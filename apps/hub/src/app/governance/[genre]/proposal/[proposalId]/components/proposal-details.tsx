@@ -92,7 +92,11 @@ export default function ProposalDetails({
                 Governance
               </Link>
               {proposal && (
-                <StatusAction proposal={proposal as any} userVote={userVote} />
+                <StatusAction
+                  frontmatter={fm}
+                  proposal={proposal as any}
+                  userVote={userVote}
+                />
               )}
             </div>
 

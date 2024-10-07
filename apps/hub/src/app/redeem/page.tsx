@@ -2,14 +2,12 @@ import { type Metadata } from "next";
 import {
   beraTokenAddress,
   bgtTokenAddress,
-  dexName,
   nativeTokenAddress,
 } from "@bera/config";
-import { getMetaTitle } from "@bera/shared-ui";
 import { SwapContent } from "../swap/swap";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Redeem", dexName),
+  title: "Redeem",
   description: "Swap tokens on Berachain",
 };
 

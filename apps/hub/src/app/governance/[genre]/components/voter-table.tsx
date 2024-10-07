@@ -98,8 +98,8 @@ export function VoterTable({
               }))
             }
             sortby={false}
-            triggerClassName=" border border-border"
-            contentClassname=" border border-border"
+            triggerClassName="border border-border"
+            contentClassname="border border-border"
           />
         </div>
         <div className="hidden sm:flex flex-col items-center  my-4 sm:flex-row">

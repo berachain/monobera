@@ -1,12 +1,10 @@
 import React from "react";
 import { type Metadata } from "next";
-import { hubName } from "@bera/config";
-import { getMetaTitle } from "@bera/shared-ui";
 import NewProposal from "./components/new-proposal";
 import { NativeDapps, PROPOSAL_GENRE } from "../../governance-genre-helper";
 
 export const metadata: Metadata = {
-  title: getMetaTitle("Create Proposal", hubName),
+  title: "Create Proposal",
   description: "Create a new proposal on Berachain",
 };
 export default function Create({
