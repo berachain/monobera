@@ -235,7 +235,9 @@ export const parseProposalBody = (
   } catch (error) {
     return {
       isFrontMatter: false,
-      data: { title: `Suspicious proposal #${proposal.id}` },
+      data: {
+        title: proposal.metadata.description.split("\n")[0].slice(0, 100),
+      },
       content: body,
       matter: "",
       language: "",

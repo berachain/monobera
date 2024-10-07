@@ -71,7 +71,7 @@ export const CancelButton = ({
   return (
     <>
       {ModalPortal}
-      {!isCanceledOnChain ? (
+      {canCancel ? (
         <Dialog>
           <DialogTrigger>
             <Button>Cancel</Button>
@@ -134,9 +134,7 @@ export const CancelButton = ({
                       Cancel
                     </Button>
                   </ActionButton>
-                ) : (
-                  <div>Execution in queue</div>
-                )}
+                ) : null}
               </ActionButton>
             </DialogFooter>
           </DialogContent>
