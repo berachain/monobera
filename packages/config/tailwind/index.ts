@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
-export default {
+const config: Config = {
   darkMode: ["class"],
   content: [
     "src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -29,22 +29,10 @@ export default {
       auto: "auto",
       square: "1 / 1",
       video: "16 / 9",
-      1: "1",
-      2: "2",
-      3: "3",
-      4: "4",
-      5: "5",
-      6: "6",
-      7: "7",
-      8: "8",
-      9: "9",
-      10: "10",
-      11: "11",
-      12: "12",
-      13: "13",
-      14: "14",
-      15: "15",
-      16: "16",
+      ...Array.from({ length: 16 }, (_, i) => i + 1).reduce(
+        (acc, val) => ({ ...acc, [val]: String(val) }),
+        {}
+      ),
     },
     container: {
       center: true,
@@ -135,12 +123,12 @@ export default {
           foreground: "hsl(var(--warning-foreground) / <alpha-value>)",
         },
         info: {
-          DEFAULT: `hsl(var(--info) / <alpha-value>)`,
-          foreground: `hsl(var(--info-foreground) / <alpha-value>)`,
+          DEFAULT: "hsl(var(--info) / <alpha-value>)",
+          foreground: "hsl(var(--info-foreground) / <alpha-value>)",
         },
         success: {
-          DEFAULT: `hsl(var(--success) / <alpha-value>)`,
-          foreground: `hsl(var(--success-foreground) / <alpha-value>)`,
+          DEFAULT: "hsl(var(--success) / <alpha-value>)",
+          foreground: "hsl(var(--success-foreground) / <alpha-value>)",
         },
         ring: "hsl(var(--ring) / <alpha-value>)",
         positive: "hsl(var(--positive) / <alpha-value>)",
@@ -157,13 +145,13 @@ export default {
         "2xs": "0.125rem",
         xs: "0.25rem",
         sm: "0.5rem",
-        md: `0.75rem`,
-        lg: `1rem`,
-        xl: `1.25rem`,
-        "2xl": `1.5rem`,
-        "3xl": `2rem`,
-        "4xl": `2rem`,
-        "5xl": `2.5rem`,
+        md: "0.75rem",
+        lg: "1rem",
+        xl: "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
+        "4xl": "2rem",
+        "5xl": "2.5rem",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
@@ -171,48 +159,24 @@ export default {
       },
       keyframes: {
         "fade-in": {
-          from: {
-            opacity: "0",
-          },
-          to: {
-            opacity: "1",
-          },
+          from: { opacity: "0" },
+          to: { opacity: "1" },
         },
         "fade-up": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(10px)",
-          },
-          "80%": {
-            opacity: "0.6",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0px)",
-          },
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "80%": { opacity: "0.6" },
+          "100%": { opacity: "1", transform: "translateY(0px)" },
         },
         "fade-down": {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(-10px)",
-          },
-          "80%": {
-            opacity: "0.6",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0px)",
-          },
+          "0%": { opacity: "0", transform: "translateY(-10px)" },
+          "80%": { opacity: "0.6" },
+          "100%": { opacity: "1", transform: "translateY(0px)" },
         },
         marquee: {
-          "100%": {
-            transform: "translateY(-50%)",
-          },
+          "100%": { transform: "translateY(-50%)" },
         },
         "marquee-x": {
-          "100%": {
-            transform: "translateX(-50%)",
-          },
+          "100%": { transform: "translateX(-50%)" },
         },
         "accordion-down": {
           from: { height: "0" },
@@ -223,9 +187,7 @@ export default {
           to: { height: "0" },
         },
         "spin-reverse": {
-          to: {
-            transform: "rotate(-360deg)",
-          },
+          to: { transform: "rotate(-360deg)" },
         },
         "infinite-scroll": {
           from: { transform: "translateX(0)" },
@@ -257,4 +219,6 @@ export default {
     require("tailwindcss-animate"),
     require("@tailwindcss/container-queries"),
   ],
-} satisfies Config;
+};
+
+export default config;
