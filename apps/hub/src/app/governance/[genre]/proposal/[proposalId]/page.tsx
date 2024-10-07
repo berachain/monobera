@@ -18,6 +18,10 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     config: defaultBeraConfig,
   });
 
+  if (!proposal) {
+    return {};
+  }
+
   return {
     title: proposal.title,
     description: `View proposal details for proposal ${proposalId} on Berachain`,
