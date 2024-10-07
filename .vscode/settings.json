@@ -8,8 +8,8 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "workbench.colorCustomizations": {
-    "activityBar.background": "#0E3511",
-    "titleBar.activeBackground": "#134A18",
+    "activityBar.background": "#FFC0CB",
+    "titleBar.activeBackground": "#FFC0CB",
     "titleBar.activeForeground": "#F3FCF4"
   },
   "conventionalCommits.scopes": [
