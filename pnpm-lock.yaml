@@ -544,9 +544,15 @@ importers:
 
   apps/storybook:
     dependencies:
+      '@bera/shared-ui':
+        specifier: workspace:*
+        version: link:../../packages/shared-ui
       '@bera/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/config/tailwind
+      '@bera/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@fontsource/ibm-plex-sans':
         specifier: ^5.0.3
         version: 5.0.20

@@ -1,5 +1,5 @@
 {
-  "name": "storybook",
+  "name": "@bera/storybook",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,7 +8,9 @@
     "build": "storybook build"
   },
   "dependencies": {
+    "@bera/shared-ui": "workspace:*",
     "@bera/tailwind-config": "workspace:*",
+    "@bera/ui": "workspace:*",
     "@fontsource/ibm-plex-sans": "^5.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
