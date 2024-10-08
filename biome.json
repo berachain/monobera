@@ -17,7 +17,8 @@
       ".vscode",
       "tsconfig.apps.base.json",
       "out",
-      "**/types/*.d.ts"
+      "**/types/*.d.ts",
+      "storybook-static/**"
     ]
   },
   "organizeImports": {
