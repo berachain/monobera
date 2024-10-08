@@ -8,7 +8,7 @@
         "dist/**",
         ".next/**",
         "!.next/cache/**",
-        "./apps/storybook/storybook-static/**"
+        "storybook-static/**"
       ]
     },
 
@@ -31,7 +31,7 @@
     "check-types": {
       "dependsOn": ["^build"],
       "cache": false,
-      "outputs": ["./apps/storybook/storybook-static/**"]
+      "outputs": ["storybook-static/**"]
     }
   },
   "globalEnv": [
