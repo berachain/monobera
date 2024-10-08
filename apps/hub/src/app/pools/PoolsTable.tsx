@@ -14,13 +14,7 @@ import {
 import { DataTableLoading } from "@bera/shared-ui/src/table/legacy/data-table";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@bera/ui/select";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 
 import { columns } from "~/components/pools-table-columns";
