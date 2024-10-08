@@ -14,13 +14,13 @@
 
 ![CI](https://github.com/berachain/monobera/actions/workflows/quality.yml/badge.svg?branch=v2)
 
-#### Installation
+## Installation
 
 In order to setup your local environment, run
 
 ```
 pnpm i
-pnpm setenv bartio
+pnpm setenv v2
 ```
 
 You'll also need to run
@@ -31,7 +31,16 @@ cp .env.local.example .env.local
 
 After that, create your own `NEXT_PUBLIC_DYNAMIC_API_KEY` without any CORS restrictions to write into `.env.local`.
 
-#### Commands
+
+All Berachain dapps are built to be single chain applications.
+
+| Environment Variables | Environment |
+| --------------------- | ---------------------------------------------------------------------------------------------- |
+| `.env.v2` | Environment variables for future release of Berachain dapps |
+| `.env.bartio` | Environment variables used for testing on `bartio` branch. It's not supported on `v2` branch. |
+
+
+## Commands
 
 Monobera requires node 18.18.2+.
 
@@ -39,25 +48,19 @@ Monobera requires node 18.18.2+.
 | ------------------------ | -------------------------------------------------------------------------------------------------------- |
 | `pnpm i`                 | Installs packages for all apps & packages                                                                |
 | `pnpm build`             | Builds all packages and apps. Not recommended as it takes large amounts of memory                        |
-| `pnpm setenv bartio`             | Copies `.env.bartio` into `.env`. Don't do it manually.                        |
-| `pnpm build:dex`         | Builds only the `Bex` and related packages.                                                              |
+| `pnpm setenv <environment>`     | Copies `.env.<environment>` into `.env`. Don't do it manually.                                                  |
+| `pnpm build:hub`         | Builds only the `Hub` and related packages.                                                              |
 | `pnpm build:honey`       | Builds only the `Honey` and related packages.                                                            |
-| `pnpm build:bgt`         | Builds only the `BGT` and related packages.                                                              |
 | `pnpm build:lend`        | Builds only the `Bend` and related packages.                                                             |
 | `pnpm build:perp`        | Builds only the `Berps` and related packages.                                                            |
 | `pnpm build:berajs-docs` | Builds only the `Berajs Docs` and related packages.                                                      |
-| `pnpm build:ambassador`  | Builds only the `Ambassador` and related packages.                                                       |
-| `pnpm build:ecosystem`   | Builds only the `Ecosystem` and related packages.                                                        |
 | `pnpm build:pkg`         | Builds all packages.                                                                                     |
 | `pnpm dev`               | Runs all packages and apps in dev mode. Not recommended as it takes large amounts of memory              |
-| `pnpm dev:dex`           | Runs `Bex` and related packages in dev mode.                                                             |
+| `pnpm dev:hub`           | Runs `Hub` and related packages in dev mode.                                                             |
 | `pnpm dev:honey`         | Runs `Honey` and related packages in dev mode.                                                           |
-| `pnpm dev:bgt`           | Runs `BGT` Station and related packages in dev mode.                                                     |
 | `pnpm dev:lend`          | Runs `Bend` and related packages in dev mode.                                                            |
 | `pnpm dev:perp`          | Runs `Berps` and related packages in dev mode.                                                           |
 | `pnpm dev:berajs-docs`   | Runs `Berajs Docs` and related packages in dev mode.                                                     |
-| `pnpm dev:ambassador`    | Runs `Ambassador` and related packages in dev mode.                                                      |
-| `pnpm dev:ecosystem`     | Runs `Ecosystem` and related packages in dev mode.                                                       |
 | `pnpm clean`             | Cleans the project using turbo clean and removes untracked files with git clean, including node_modules. |
 | `pnpm pullenv`           | Pulls production environment variables from Vercel. Requires Vercel Login                                |
 | `pnpm check-types`       | Runs type-checking across all apps and packages.                                                         |
@@ -69,21 +72,18 @@ Monobera requires node 18.18.2+.
 | `pnpm upsertenv`         | Runs a script to upsert environment variables in Vercel for the project.                                 |
 | `pnpm knip`              | Executes the knip command to exclude binaries from operations.                                           |
 
-To run Bex for example, run `pnpm i && pnpm dev:dex`
+To run Hub for example, run `pnpm i && pnpm dev:hub`
 
-#### Apps
+## Apps
 
 | App                  | Description                                    |
 | -------------------- | ---------------------------------------------- |
-| `app/dex`            | `Bex` application code                         |
+| `app/hub`            | `Hub` application code                         |
 | `app/honey`          | `Honey` application code                       |
-| `app/bgt-station`    | `BGT Station` application code                 |
 | `app/lend`           | `Bend` application code                        |
 | `app/perp`           | `Berps` application code                       |
-| `app/ambassador`     | `Ambassador` application code                  |
-| `app/ecosystem`      | `Ecosystem` application code                   |
 
-#### Packages
+## Packages
 
 | Package                 | Description                                                                                               |
 | ----------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -96,18 +96,9 @@ To run Bex for example, run `pnpm i && pnpm dev:dex`
 | `packages/ui`           | A package of [shadcn](https://ui.shadcn.com/) components                                                  |
 | `packages/beracrocswap` | A forked version of [CrocSwap SDK](https://github.com/CrocSwap/sdk) to work better with `packages/berajs` |
 
-#### Environments
 
-All Berachain dapps are built to be single chain applications.
-| Environment Variables | Environment |
-| --------------------- | ---------------------------------------------------------------------------------------------- |
-| `.env.devnet` | Environment variables for running the application against our Devnet. Subject to change often |
-| `.env.testnet` | Environment variables for running the application against our Testnet. Subject to change often |
-| `.env.prod` | thoon |
 
-To run our applications in one of these environments, simply copy and paste a `.env.*` file into your `.env` and run any application.
-
-#### Tooling & Libraries
+## Tooling & Libraries
 
 A short list of tooling and libraries we use across all apps and packages.
 
@@ -122,7 +113,11 @@ A short list of tooling and libraries we use across all apps and packages.
 - [shadcn](https://ui.shadcn.com/)
 - [tailwind](https://tailwindcss.com/)
 
-#### Dapps banner management
+## CI
+
+We have set up a caching mechanism for turbo builds to speed up CI times. This is done by using an open source github action called [rharkor/caching-for-turbo@v1.5](https://github.com/rharkor/caching-for-turbo).
+
+## Dapps banner management
 
 Banners serve as an essential tool for communicating urgent messages or event-related information to users across the site. The management of these banners is centralized in the Bannerconfig component, located within the `packages/shared-ui` directory. This allows for effective global notification during scenarios like RPC issues or network congestion.
 For targeted communications, banners can be configured to appear on specific pages by listing the desired paths in the hrefs field. For example, to display a banner only on the "Pools," "Swap," and homepage in BEX, you would set `hrefs` to `["/pools", "/swap", "/"]`.
