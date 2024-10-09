@@ -39,7 +39,7 @@ const Step = ({
       <div className="h-4">
         <h3 className="leading-none text-primary mb-1">{title}</h3>
         <p className="text-xs text-muted-foreground">
-          {dateFormatter.format(d instanceof Date ? d : d * 1000)}
+          {d ? dateFormatter.format(d instanceof Date ? d : d * 1000) : "--"}
         </p>
       </div>
     </div>
@@ -73,7 +73,7 @@ export const ProposalTimeline = ({ proposal }: { proposal: Proposal }) => {
   } else {
     steps.push({
       title: "Voting Period Begins",
-      block: proposal.voteStart,
+      block: proposal.voteStart ?? 0,
       isActive: proposal.status === StatusEnum.ACTIVE,
     });
 

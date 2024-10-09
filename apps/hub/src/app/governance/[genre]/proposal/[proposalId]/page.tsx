@@ -19,6 +19,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   });
 
   if (!proposal) {
+    console.error("proposal not found", proposal);
     return {};
   }
 

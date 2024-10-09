@@ -67,8 +67,9 @@ export default function ProposalDetails({
   proposalId: string;
 }) {
   const { account, isReady } = useBeraJs();
-  const { isLoading, proposal, votes } = usePollProposal(proposalId);
+  const { isLoading, proposal } = usePollProposal(proposalId);
 
+  const votes = proposal?.votes ?? [];
   console.log({ proposal });
 
   const userVote =
@@ -127,10 +128,10 @@ export default function ProposalDetails({
                 <h3 className="text-sm font-medium uppercase leading-5 mb-3 md:mb-1 text-muted-foreground">
                   votes
                 </h3>
-                <ProgressBarChart
+                {/* <ProgressBarChart
                   dataList={getVotesDataList(proposal)}
                   className="sm:w-52"
-                />
+                /> */}
               </div>
               <div
                 className={cn(
@@ -145,10 +146,10 @@ export default function ProposalDetails({
                 <h3 className="text-sm font-medium leading-5 mb-3 md:mb-1 uppercase text-muted-foreground">
                   quorum
                 </h3>
-                <QuorumStatus
+                {/* <QuorumStatus
                   delegatesVotesCount={getTotalVotes(proposal)}
-                  quorum={formatEther(BigInt(proposal.governor.quorum))}
-                />
+                  quorum={formatEther(BigInt(proposal.quorum))}
+                /> */}
               </div>
             </div>
             <hr className="border-b border-border mt-4 sm:mt-10 sm:mb-16" />
@@ -156,20 +157,20 @@ export default function ProposalDetails({
               <div>
                 <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
                   <Card className="px-8 py-3 md:py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
-                    <FormattedNumber
+                    {/* <FormattedNumber
                       value={getTotalVotes(proposal)}
                       className="text-lg sm:text-xl font-semibold leading-none text-foreground"
                       symbol="BGT"
-                    />
+                    /> */}
                     <div className="flex items-center text-sm font-medium leading-none mt-2 md:mt-0 text-muted-foreground">
                       Total votes
                     </div>
                   </Card>
-                  <VoteCard
+                  {/* <VoteCard
                     yesPercentage={proposal.voteStats[0].percent}
                     noPercentage={proposal.voteStats[1].percent}
                     abstainPercentage={proposal.voteStats[2].percent}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
@@ -182,7 +183,7 @@ export default function ProposalDetails({
                   </div>
                   <div className="border border-border grid grid-cols-1 gap-y-4 py-4 pb-8 px-8 rounded-md">
                     <h3 className="font-medium">Code Actions</h3>
-                    <Actions executableCalls={proposal.executableCalls} />
+                    <Actions executableCalls={proposal.calldatas} />
                   </div>
                 </div>
                 <div className="lg:col-start-2 ">
@@ -198,7 +199,7 @@ export default function ProposalDetails({
                     <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
                       Overview
                     </div>
-                    <OverviewChart votes={votes} isLoading={isLoading} />
+                    {/* <OverviewChart votes={votes} isLoading={isLoading} /> */}
                   </div>
                   <div className="mt-4 sm:mt-10">
                     <VoterTable votes={votes} isLoading={isLoading} />
