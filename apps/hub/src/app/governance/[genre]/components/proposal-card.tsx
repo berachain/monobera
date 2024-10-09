@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { type Proposal } from "@bera/berajs";
 import { cn } from "@bera/ui";
+import { ProposalSelectionFragment } from "@bera/graphql/governance";
 import { Badge } from "@bera/ui/badge";
 import { Skeleton } from "@bera/ui/skeleton";
 import { formatEther } from "viem";
@@ -29,7 +29,7 @@ export function ProposalCard({
 }: React.HTMLAttributes<HTMLDivElement> & {
   details?: boolean;
   truncate?: boolean;
-  proposal: Proposal;
+  proposal: ProposalSelectionFragment;
 }) {
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
 
@@ -58,13 +58,13 @@ export function ProposalCard({
           )}
         >
           <QuorumStatus
-            delegatesVotesCount={getTotalVotes(proposal)}
-            quorum={formatEther(BigInt(proposal.governor.quorum))}
+            delegatesVotesCount={"0"} //{getTotalVotes(proposal)}
+            quorum={formatEther(BigInt(proposal.quorum))}
           />
-          <ProgressBarChart
-            dataList={getVotesDataList(proposal)}
+          {/* <ProgressBarChart
+            dataList={[{}, {}, {}]} //{getVotesDataList(proposal.votes)}
             className="w-full"
-          />
+          /> */}
         </div>
       ) : (
         <div>--</div>

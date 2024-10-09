@@ -1,5 +1,6 @@
 import { ComponentProps } from "react";
 import { Proposal } from "@bera/berajs";
+import { ProposalSelectionFragment } from "@bera/graphql/governance";
 import { Badge } from "@bera/ui/badge";
 import BigNumber from "bignumber.js";
 import graymatter from "gray-matter";
@@ -123,7 +124,7 @@ export const getTimeText = (date: Date) => {
 
 export const getVotesDataList = (proposal: Proposal) => {
   const votes = proposal.voteStats;
-  const quorum = proposal.governor.quorum;
+  const quorum = proposal.quorum;
   const globalYesPercentage = BigNumber(votes[0].votesCount)
     .div(BigNumber(quorum))
     .times(100)
@@ -198,7 +199,7 @@ const parseLegacyBody = (
 };
 
 export const parseProposalBody = (
-  proposal?: Proposal,
+  proposal?: ProposalSelectionFragment,
 ): graymatter.GrayMatterFile<string> & {
   isFrontMatter: boolean;
 } => {
@@ -214,7 +215,7 @@ export const parseProposalBody = (
     };
   }
 
-  const body = proposal?.metadata?.description ?? "";
+  const body = proposal?.description ?? "";
 
   if (graymatter.test(body)) {
     return { ...graymatter(body), isFrontMatter: true };
@@ -236,7 +237,7 @@ export const parseProposalBody = (
     return {
       isFrontMatter: false,
       data: {
-        title: proposal.metadata.description.split("\n")[0].slice(0, 100),
+        title: proposal?.description?.split("\n")[0].slice(0, 100),
       },
       content: body,
       matter: "",

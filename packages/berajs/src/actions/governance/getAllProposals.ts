@@ -1,5 +1,5 @@
 import { governanceOrganizationId } from "@bera/config";
-import { getProposals } from "@bera/graphql";
+import { getProposals } from "@bera/graphql/governance";
 
 import { BeraConfig, Proposal } from "~/types";
 
