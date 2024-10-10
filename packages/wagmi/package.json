@@ -27,7 +27,6 @@
     "dev": "tsup src --watch"
   },
   "dependencies": {
-    "@bera/berajs": "workspace:*",
     "@bera/config": "workspace:*",
     "@dynamic-labs/ethereum": "^2.5.2",
     "@dynamic-labs/sdk-react-core": "^2.5.2",

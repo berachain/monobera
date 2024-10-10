@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, type PropsWithChildren } from "react";
-import { BeraJsProvider } from "@bera/berajs";
 import { dynamicWalletKey } from "@bera/config";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import {
@@ -10,7 +9,6 @@ import {
   SortWallets,
   mergeNetworks,
 } from "@dynamic-labs/sdk-react-core";
-import { ThemeSetting } from "@dynamic-labs/sdk-react-core/src/lib/context/ThemeContext";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useTheme } from "next-themes";
@@ -49,7 +47,7 @@ const Provider: React.FC<IBeraConfig> = ({
   initialWagmiState = {},
 }) => {
   const { theme: nextTheme } = useTheme();
-  const theme: ThemeSetting =
+  const theme =
     darkTheme === undefined
       ? nextTheme !== "dark" && nextTheme !== "light"
         ? "auto"
@@ -74,11 +72,7 @@ const Provider: React.FC<IBeraConfig> = ({
       >
         <WagmiProvider config={wagmiConfig} initialState={initialWagmiState}>
           <QueryClientProvider client={queryClient}>
-            <DynamicWagmiConnector>
-              <BeraJsProvider configOverride={undefined}>
-                {children}
-              </BeraJsProvider>
-            </DynamicWagmiConnector>
+            <DynamicWagmiConnector>{children}</DynamicWagmiConnector>
           </QueryClientProvider>
         </WagmiProvider>
       </DynamicContextProvider>

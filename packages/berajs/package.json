@@ -5,9 +5,7 @@
   "module": "dist/index.js",
   "sideEffects": false,
   "type": "module",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -23,6 +21,7 @@
     "@bera/beracrocswap": "workspace:*",
     "@bera/config": "workspace:*",
     "@bera/graphql": "workspace:*",
+    "@bera/wagmi": "workspace:*",
     "@dynamic-labs/sdk-react-core": "^2.5.2",
     "@metamask/browser-passworder": "^5.0.0",
     "@tanstack/react-query": "^5.26.3",

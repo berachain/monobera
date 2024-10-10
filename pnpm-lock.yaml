@@ -599,6 +599,9 @@ importers:
       '@bera/graphql':
         specifier: workspace:*
         version: link:../graphql
+      '@bera/wagmi':
+        specifier: workspace:*
+        version: link:../wagmi
       '@dynamic-labs/sdk-react-core':
         specifier: ^2.5.2
         version: 2.5.2(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)(utf-8-validate@5.0.10)(viem@2.13.7(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))
@@ -1033,9 +1036,6 @@ importers:
 
   packages/wagmi:
     dependencies:
-      '@bera/berajs':
-        specifier: workspace:*
-        version: link:../berajs
       '@bera/config':
         specifier: workspace:*
         version: link:../config/env

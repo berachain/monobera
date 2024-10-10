@@ -1,5 +1,7 @@
-import { ProposalVoteFragment } from "@bera/graphql/dist/modules/governance/codegen";
-import { ProposalWithVotesFragment } from "@bera/graphql/governance";
+import {
+  ProposalVoteFragment,
+  ProposalWithVotesFragment,
+} from "@bera/graphql/governance";
 import { Address } from "viem";
 
 export type Proposal = ProposalWithVotesFragment;
