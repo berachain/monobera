@@ -23,7 +23,7 @@ const VotePercentage = ({
       <div
         className={cn("text-lg font-semibold leading-none sm:text-xl", color)}
       >
-        {Math.round(percentage ?? 0)}%
+        {Math.round(percentage * 100 ?? 0)}%
       </div>
       <div className="flex capitalize items-center text-xs font-medium leading-none text-muted-foreground sm:text-sm">
         {type}

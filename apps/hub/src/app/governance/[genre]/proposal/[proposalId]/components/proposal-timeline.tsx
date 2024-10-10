@@ -1,7 +1,9 @@
-import { Proposal, useBlockToTimestamp } from "@bera/berajs";
-import { ProposalStatus } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
+import { useBlockToTimestamp } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { StatusEnum } from "~/app/governance/types";
+import {
+  ProposalStatus,
+  ProposalWithVotesFragment,
+} from "@bera/graphql/governance";
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -18,9 +20,9 @@ const Step = ({
   block,
 }: {
   title: string;
-  date: number | Date;
+  date?: number | Date;
   isActive: boolean;
-  block: number | bigint | string;
+  block?: number | bigint | string;
 }) => {
   const d = block ? useBlockToTimestamp(block) : date;
 
@@ -45,7 +47,9 @@ const Step = ({
     </div>
   );
 };
-export const ProposalTimeline = ({ proposal }: { proposal: Proposal }) => {
+export const ProposalTimeline = ({
+  proposal,
+}: { proposal: ProposalWithVotesFragment }) => {
   const steps: ({
     title: string;
     isActive: boolean;
@@ -60,11 +64,11 @@ export const ProposalTimeline = ({ proposal }: { proposal: Proposal }) => {
     {
       title: "Initiated",
       date: proposal.createdAt,
-      isActive: proposal.status === StatusEnum.PENDING,
+      isActive: proposal.status === ProposalStatus.Pending,
     },
   ];
 
-  if (proposal.status === StatusEnum.CANCELED_BY_USER) {
+  if (proposal.status === ProposalStatus.CanceledByUser) {
     steps.push({
       title: "Canceled by proposer",
       date: proposal.canceledAt,
@@ -73,49 +77,55 @@ export const ProposalTimeline = ({ proposal }: { proposal: Proposal }) => {
   } else {
     steps.push({
       title: "Voting Period Begins",
-      block: proposal.voteStart ?? 0,
-      isActive: proposal.status === StatusEnum.ACTIVE,
+      block: proposal.voteStartBlock ?? 0,
+      isActive: proposal.status === ProposalStatus.Active,
     });
 
-    if (proposal.status === StatusEnum.ACTIVE) {
+    if (proposal.status === ProposalStatus.Active) {
       steps.push({
         title: "Voting Period Ends",
-        block: proposal.voteEnd,
+        block: proposal.voteEndBlock,
         isActive: false,
       });
-    } else if (proposal.status === StatusEnum.DEFEATED) {
+    } else if (proposal.status === ProposalStatus.Defeated) {
       steps.push({
         title: "Proposal Defeated",
-        block: proposal.voteEnd,
+        block: proposal.voteEndBlock,
         isActive: true,
+      });
+    } else if (proposal.status === ProposalStatus.Pending) {
+      steps.push({
+        title: "Voting Period Ends",
+        block: proposal.voteEndBlock,
+        isActive: false,
       });
     } else {
       steps.push({
         title: "Proposal Passed",
-        block: proposal.voteEnd,
-        isActive: proposal.status === StatusEnum.PENDING_QUEUE,
+        block: proposal.voteEndBlock,
+        isActive: proposal.status === ProposalStatus.PendingQueue,
       });
 
-      if (proposal.status !== StatusEnum.PENDING_QUEUE) {
+      if (proposal.status !== ProposalStatus.PendingQueue) {
         steps.push({
           title: "Proposal Queued",
-          block: proposal.voteEnd,
-          isActive: proposal.status === StatusEnum.PENDING_EXECUTION,
+          block: proposal.voteEndBlock,
+          isActive: proposal.status === ProposalStatus.InQueue,
         });
 
-        if (proposal.status === StatusEnum.CANCELED_BY_GUARDIAN) {
+        if (proposal.status === ProposalStatus.CanceledByGuardian) {
           steps.push({
             title: "Canceled by guardian",
             date: proposal.canceledAt,
             isActive: true,
           });
-        } else if (proposal.status === StatusEnum.EXECUTED) {
+        } else if (proposal.status === ProposalStatus.Executed) {
           steps.push({
             title: "Proposal Executed",
             date: proposal.executedAt,
-            isActive: proposal.status === StatusEnum.EXECUTED,
+            isActive: proposal.status === ProposalStatus.Executed,
           });
-        } else if (proposal.status === StatusEnum.PENDING_EXECUTION) {
+        } else if (proposal.status === ProposalStatus.PendingExecution) {
           steps.push({
             title: "Proposal Executes",
             date: new Date(0),

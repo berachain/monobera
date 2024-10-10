@@ -14,22 +14,22 @@ import {
 
 const getBadgeColor = (type: keyof typeof VoteEnum) => {
   switch (type) {
-    case "for":
+    case "FOR":
       return "success";
-    case "against":
+    case "AGAINST":
       return "destructive";
-    case "abstain":
+    case "ABSTAIN":
       return "secondary";
     default:
       return "secondary";
   }
 };
 
-export const voterColumns: ColumnDef<Vote>[] = [
+export const voterColumns = [
   {
     header: "Voter",
     cell: ({ row }) => (
-      <AccordionItem value={row.original.voter.address}>
+      <AccordionItem value={row.original.voter}>
         <AccordionTrigger className="!justify-start">
           <VoteInfo voter={row.original.voter} />
         </AccordionTrigger>
@@ -81,7 +81,7 @@ export const voterColumns: ColumnDef<Vote>[] = [
     ),
     size: 250,
     accessorKey: "vp",
-    sortingFn: (a, b) => Number(a.original.amount) - Number(b.original.weight),
+    sortingFn: (a, b) => Number(a.original.weight) - Number(b.original.weight),
     enableSorting: true,
   },
-];
+] satisfies ColumnDef<Vote>[];

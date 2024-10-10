@@ -7,7 +7,6 @@ import {
   truncateHash,
   useBeraJs,
   useGetPastVotes,
-  Proposal,
 } from "@bera/berajs";
 import { governorAddress } from "@bera/config";
 import {
@@ -21,7 +20,6 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -31,12 +29,13 @@ import { TextArea } from "@bera/ui/text-area";
 import { ProposalHeading } from "../../components/proposal-heading";
 import { parseProposalBody } from "../../helper";
 import { cn } from "@bera/ui";
+import { ProposalWithVotesFragment } from "@bera/graphql/governance";
 
 export function VoteDialog({
   proposal,
   disable,
 }: {
-  proposal: Proposal;
+  proposal: ProposalWithVotesFragment;
   disable?: boolean;
 }) {
   const [open, setOpen] = useState(false);
@@ -44,8 +43,7 @@ export function VoteDialog({
   // 0 = Against, 1 = For, 2 = Abstain
   const [selected, setSelected] = useState(-1);
 
-  // @ts-ignore
-  const proposalId = BigInt(proposal.onchainId);
+  const proposalId = BigInt(proposal.id);
   const {
     data: votingPower,
     isLoading,

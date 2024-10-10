@@ -13,34 +13,29 @@ export const usePollAllProposals = (
 ): SWRInfiniteResponse<Awaited<ReturnType<typeof getAllProposals>>> => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  const swrResponse = useSwrInfinite<
+  return useSwrInfinite<
     Awaited<ReturnType<typeof getAllProposals>>,
     typeof usePollAllProposalsQueryKey
   >(
     usePollAllProposalsQueryKey,
-    async ([key, afterCursor]) => {
-      return await getAllProposals({ config, afterCursor });
+    async ([key, page]) => {
+      return await getAllProposals({ config, offset: page * 20 });
     },
     {
       ...options?.opts,
-      initialSize: 5,
+      initialSize: 1,
       refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
-
-  return {
-    ...swrResponse,
-  };
 };
 
 export const usePollAllProposalsQueryKey = (
   page: number,
   previousPageData?: Awaited<ReturnType<typeof getAllProposals>>,
-): [string, string | undefined] | null => {
+): [string, number] | null => {
   if (!page) {
-    return ["usePollAllProposals", undefined];
+    return ["usePollAllProposals", 0];
   }
 
-  const afterCursor = previousPageData?.pageInfo?.lastCursor;
-  return afterCursor ? ["usePollAllProposals", afterCursor] : null;
+  return previousPageData?.length ? ["usePollAllProposals", page] : null;
 };

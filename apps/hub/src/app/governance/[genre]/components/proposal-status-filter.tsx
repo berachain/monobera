@@ -10,9 +10,10 @@ import {
 import { Icons } from "@bera/ui/icons";
 
 import { StatusEnum } from "../../types";
+import { ProposalStatus } from "@bera/graphql/governance";
 
 export const ProposalStatusFilter = () => {
-  const config = Object.keys(StatusEnum).reduce(
+  const config = Object.keys(ProposalStatus).reduce(
     (acc, curr) => {
       acc[curr] = true;
       return acc;

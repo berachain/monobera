@@ -5,21 +5,43 @@ export default gql`
     id
     proposer
     proposalId
-    targets
-    values
-    # signatures
-    # calldatas
     description
     status
     createdAt
-    voteStart
     quorum
-    voteEnd
-    voteStart
+    pollResult {
+      for
+      forVotersCount
+      forPercentage
+
+      against
+      againstVotersCount
+      againstPercentage
+
+      abstain
+      abstainVotersCount
+      abstainPercentage
+
+      total
+      totalVotersCount
+      totalTowardsQuorum
+    }
+    voteEndBlock
+    voteStartBlock
     queueEnd
     canceledAt
     canceledAt
     executedAt
+
+    title
+    topics
+  }
+
+  fragment ExecutableCallSubset on ExecutableCall {
+    id
+    target
+    value
+    calldata
   }
 
   fragment ProposalVote on Vote {
@@ -33,8 +55,28 @@ export default gql`
 
   fragment ProposalWithVotes on Proposal {
     ...ProposalSelection
-    calldatas
-    votes {
+
+    executableCalls {
+      ...ExecutableCallSubset
+    }
+    timelock {
+      timelockId
+    }
+    votes(orderBy: weight, orderDirection: desc) {
+      ...ProposalVote
+    }
+  }
+
+  query GetProposalVotes(
+    $proposalId: String!
+    $orderBy: Vote_orderBy = weight
+    $orderDirection: OrderDirection = desc
+  ) {
+    votes(
+      where: { proposalId: $proposalId }
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
       ...ProposalVote
     }
   }

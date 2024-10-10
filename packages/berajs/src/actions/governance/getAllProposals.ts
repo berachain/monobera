@@ -1,63 +1,52 @@
-import { governanceOrganizationId } from "@bera/config";
-import { getProposals } from "@bera/graphql/governance";
+import { FALLBACK_BLOCK_TIME } from "@bera/config";
+import { governanceClient } from "@bera/graphql";
+import {
+  GetProposals,
+  GetProposalsQuery,
+  GetProposalsQueryVariables,
+  ProposalSelectionFragment,
+} from "@bera/graphql/governance";
+import { wagmiConfig } from "@bera/wagmi/config";
+import { getBlockNumber } from "@wagmi/core";
 
 import { BeraConfig, Proposal } from "~/types";
+import { computeActualStatus } from "./computeActualStatus";
 
 export const getAllProposals = async ({
   config,
-  afterCursor,
-  beforeCursor,
+  offset = 0,
   perPage = 20,
 }: {
-  afterCursor?: string;
-  beforeCursor?: string;
+  offset?: number;
   perPage?: number;
   config: BeraConfig;
-}): Promise<
-  | {
-      nodes: Proposal[];
-      pageInfo: { firstCursor: string; lastCursor: string; count: number };
-    }
-  | undefined
-> => {
+}): Promise<ProposalSelectionFragment[] | undefined> => {
   try {
     if (perPage > 20) {
       throw new Error("perPage must be less than 20");
     }
+
     if (!config.subgraphs?.governanceSubgraph) {
       throw new Error("governance subgraph uri is not found in config");
     }
-    const subgraphEndpoint = config.subgraphs.governanceSubgraph;
-    const variables = {
-      input: {
-        filters: {
-          organizationId: governanceOrganizationId,
-        },
-        sort: {
-          sortBy: "id",
-          isDescending: true,
-        },
-        page: {
+
+    const [response, blockNumber] = await Promise.all([
+      governanceClient.query<GetProposalsQuery>({
+        query: GetProposals,
+        variables: {
+          offset,
           limit: perPage,
-          afterCursor,
-          beforeCursor,
-        },
-      },
-    };
-    const response = await fetch(subgraphEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Api-Key": process.env.NEXT_PUBLIC_TALLY_API_KEY as string,
-      },
-      body: JSON.stringify({
-        query: getProposals.loc?.source.body,
-        variables: variables,
+        } satisfies GetProposalsQueryVariables,
       }),
-    });
-    const data = await response.json();
-    return data.data.proposals;
+      getBlockNumber(wagmiConfig, {
+        cacheTime: FALLBACK_BLOCK_TIME * 1000,
+      }),
+    ]);
+
+    return response.data.proposals.map((p) => ({
+      ...p,
+      status: computeActualStatus(p, blockNumber),
+    }));
   } catch (e) {
     console.error("getAllProposals:", e);
     return undefined;

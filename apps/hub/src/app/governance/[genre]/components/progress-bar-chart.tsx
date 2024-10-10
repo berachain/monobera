@@ -4,7 +4,7 @@ import { formatEther } from "viem";
 
 interface IProgressBar {
   color: string;
-  width: number; // 1 = 0.01  50 = 50%
+  width?: number; // 1 = 0.01  50 = 50%
   votesCount: string;
 }
 
@@ -50,7 +50,7 @@ export function ProgressBarChart({
             key={(data.width, data.color)}
             className={"absolute left-0 top-0 h-2 rounded-full"}
             style={{
-              width: `${data.width}%`,
+              width: `${data.width ?? 0}%`,
               backgroundColor: data.color,
               zIndex: 10 + (5 - i * 1),
             }}

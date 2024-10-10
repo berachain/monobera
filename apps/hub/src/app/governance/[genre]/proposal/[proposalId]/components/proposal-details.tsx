@@ -32,6 +32,7 @@ import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 import { cn } from "@bera/ui";
 import { StatusBadge } from "~/app/governance/components/status-badge";
 import { useSearchParams } from "next/navigation";
+import { ProposalStatus } from "@bera/graphql/governance";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -67,7 +68,7 @@ export default function ProposalDetails({
   proposalId: string;
 }) {
   const { account, isReady } = useBeraJs();
-  const { isLoading, proposal } = usePollProposal(proposalId);
+  const { isLoading, data: proposal } = usePollProposal(proposalId);
 
   const votes = proposal?.votes ?? [];
   console.log({ proposal });
@@ -111,16 +112,17 @@ export default function ProposalDetails({
                 <VoteInfo
                   className="text-xs font-medium "
                   prefix="Submitted by "
-                  voter={proposal.creator}
+                  voter={proposal.proposer}
                 />
               </div>
 
               <div
                 className={cn(
                   "col-start-2",
-                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
-                    proposal.status as StatusEnum,
-                  )
+                  [
+                    ProposalStatus.Pending,
+                    ProposalStatus.CanceledByUser,
+                  ].includes(proposal.status)
                     ? "invisible"
                     : "",
                 )}
@@ -128,17 +130,18 @@ export default function ProposalDetails({
                 <h3 className="text-sm font-medium uppercase leading-5 mb-3 md:mb-1 text-muted-foreground">
                   votes
                 </h3>
-                {/* <ProgressBarChart
+                <ProgressBarChart
                   dataList={getVotesDataList(proposal)}
                   className="sm:w-52"
-                /> */}
+                />
               </div>
               <div
                 className={cn(
                   "self-stretch col-start-1 row-start-3 ",
-                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
-                    proposal.status as StatusEnum,
-                  )
+                  [
+                    ProposalStatus.Pending,
+                    ProposalStatus.CanceledByUser,
+                  ].includes(proposal.status as ProposalStatus)
                     ? "invisible"
                     : "",
                 )}
@@ -146,10 +149,10 @@ export default function ProposalDetails({
                 <h3 className="text-sm font-medium leading-5 mb-3 md:mb-1 uppercase text-muted-foreground">
                   quorum
                 </h3>
-                {/* <QuorumStatus
-                  delegatesVotesCount={getTotalVotes(proposal)}
-                  quorum={formatEther(BigInt(proposal.quorum))}
-                /> */}
+                <QuorumStatus
+                  delegatesVotesCount={proposal.pollResult.totalTowardsQuorum}
+                  quorum={proposal.quorum}
+                />
               </div>
             </div>
             <hr className="border-b border-border mt-4 sm:mt-10 sm:mb-16" />
@@ -157,20 +160,24 @@ export default function ProposalDetails({
               <div>
                 <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
                   <Card className="px-8 py-3 md:py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
-                    {/* <FormattedNumber
-                      value={getTotalVotes(proposal)}
+                    <FormattedNumber
+                      value={formatEther(
+                        BigInt(proposal.pollResult?.total ?? 0),
+                      )}
                       className="text-lg sm:text-xl font-semibold leading-none text-foreground"
                       symbol="BGT"
-                    /> */}
+                    />
                     <div className="flex items-center text-sm font-medium leading-none mt-2 md:mt-0 text-muted-foreground">
                       Total votes
                     </div>
                   </Card>
-                  {/* <VoteCard
-                    yesPercentage={proposal.voteStats[0].percent}
-                    noPercentage={proposal.voteStats[1].percent}
-                    abstainPercentage={proposal.voteStats[2].percent}
-                  /> */}
+                  <VoteCard
+                    yesPercentage={proposal.pollResult?.forPercentage ?? 0}
+                    noPercentage={proposal.pollResult?.againstPercentage ?? 0}
+                    abstainPercentage={
+                      proposal.pollResult?.abstainPercentage ?? 0
+                    }
+                  />
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
@@ -183,7 +190,7 @@ export default function ProposalDetails({
                   </div>
                   <div className="border border-border grid grid-cols-1 gap-y-4 py-4 pb-8 px-8 rounded-md">
                     <h3 className="font-medium">Code Actions</h3>
-                    <Actions executableCalls={proposal.calldatas} />
+                    <Actions executableCalls={proposal.executableCalls} />
                   </div>
                 </div>
                 <div className="lg:col-start-2 ">
@@ -191,15 +198,16 @@ export default function ProposalDetails({
                 </div>
               </div>
 
-              {![StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
-                proposal.status as StatusEnum,
-              ) && (
+              {![
+                ProposalStatus.Pending,
+                ProposalStatus.CanceledByUser,
+              ].includes(proposal.status) && (
                 <>
                   <div className="mt-4 sm:mt-10">
                     <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
                       Overview
                     </div>
-                    {/* <OverviewChart votes={votes} isLoading={isLoading} /> */}
+                    <OverviewChart votes={votes} isLoading={isLoading} />
                   </div>
                   <div className="mt-4 sm:mt-10">
                     <VoterTable votes={votes} isLoading={isLoading} />

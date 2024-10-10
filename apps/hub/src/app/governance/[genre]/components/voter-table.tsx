@@ -12,6 +12,7 @@ import { MultiSelectBadge } from "./multi-select-badge";
 import { voterColumns } from "./voter-column";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { Accordion } from "@bera/ui/accordion";
+import { VoteEnum } from "../../types";
 
 const voteOptionMap: Record<VoteOption, string> = {
   [VoteOption.VOTE_OPTION_YES]: "for",
@@ -40,12 +41,16 @@ export function VoterTable({
   // Let's compute the filtered votes since there might be a lot of them
   const filteredVotes = useMemo(() => {
     return votes.filter((vote) => {
-      if (filter.voteType?.length && !filter.voteType.includes(vote.type)) {
+      if (
+        filter.voteType?.length &&
+        // Idk where it's coming from but voteType is lowercase
+        !filter.voteType.includes(vote.support.toLowerCase())
+      ) {
         return false;
       }
 
       if (filter.walletType) {
-        // TODO: Implement wallet type filter
+        // DEPRECATED: Implement wallet type filter
         return false;
       }
       return true;
@@ -80,15 +85,15 @@ export function VoterTable({
             selectionList={[
               {
                 label: "Yes",
-                value: "for",
+                value: "For",
               },
               {
                 label: "Abstain",
-                value: "abstain",
+                value: "Abstain",
               },
               {
                 label: "No",
-                value: "against",
+                value: "Against",
               },
             ]}
             onSelect={(value) =>

@@ -1,4 +1,5 @@
-import { useBlock } from "wagmi";
+import { FALLBACK_BLOCK_TIME } from "@bera/config";
+import { useBlock, useBlockNumber } from "wagmi";
 
 import { useBlockTime } from "..";
 
@@ -9,8 +10,14 @@ import { useBlockTime } from "..";
 export const useBlockToTimestamp = (
   inputBlock: number | bigint | string,
 ): number | undefined => {
-  const { data: currentBlock, isLoading } = useBlock();
-  const { data: block } = useBlock({ blockNumber: BigInt(inputBlock) });
+  const { data: currentBlock, isLoading } = useBlockNumber({
+    cacheTime: FALLBACK_BLOCK_TIME * 1000,
+  });
+  const { data: block } = useBlock({
+    blockNumber: BigInt(inputBlock),
+    includeTransactions: false,
+    watch: false,
+  });
   const blockDuration = useBlockTime();
 
   if (block) {
@@ -20,7 +27,7 @@ export const useBlockToTimestamp = (
   if (isLoading || !currentBlock) return undefined;
 
   return (
-    Number(currentBlock.timestamp) +
-    Number(blockDuration) * (Number(inputBlock) - Number(currentBlock.number))
+    Date.now() / 1000 +
+    blockDuration * (Number(inputBlock) - Number(currentBlock))
   );
 };

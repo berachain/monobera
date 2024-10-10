@@ -1,7 +1,5 @@
-import { useState } from "react";
 import Image from "next/image";
-import { useQuery } from "@apollo/client";
-import { usePollAllProposals, type Proposal } from "@bera/berajs";
+import { usePollAllProposals } from "@bera/berajs";
 import { cloudinaryUrl, isIPFS } from "@bera/config";
 import { SearchInput } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -9,12 +7,12 @@ import { useParams, useRouter } from "next/navigation";
 import { ProposalCard } from "./proposal-card";
 import { ProposalSorting } from "./proposal-sorting";
 import { ProposalStatusFilter } from "./proposal-status-filter";
-import { useGetProposalsQuery } from "@bera/graphql/governance";
+import { Button } from "@bera/ui/button";
+import { ProposalSelectionFragment } from "@bera/graphql/governance";
 
 // const PROPOSALS_PER_PAGE = 100;
 
 export const ProposalsList = () => {
-  const [page, setPage] = useState(0);
   const router = useRouter();
   const parms = useParams();
   // const {
@@ -28,9 +26,7 @@ export const ProposalsList = () => {
   //   },
   //   pollInterval: 60000, // 1 min
   // });
-  const { data } = useGetProposalsQuery({
-    pollInterval: 0, // 1 min
-  });
+  const { data, error, setSize } = usePollAllProposals();
 
   return (
     <div className="w-full">
@@ -46,7 +42,7 @@ export const ProposalsList = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        {!data?.proposals ? (
+        {!data?.flat() ? (
           <>
             <Skeleton className="h-20 w-full" />
             <Skeleton className="h-20 w-full" />
@@ -55,31 +51,36 @@ export const ProposalsList = () => {
             <Skeleton className="h-20 w-full" />
           </>
         ) : (
-          data?.proposals.map((proposal) => (
-            <ProposalCard
-              proposal={proposal}
-              key={`proposal-${proposal.id}`}
-              className="hover:cursor-pointer"
-              onMouseOver={() => {
-                if (!isIPFS) {
-                  router.prefetch(
-                    `/governance/${parms.genre}/proposal/${proposal.id}`,
-                  );
-                }
-              }}
-              onClick={() => {
-                router.push(
-                  isIPFS
-                    ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
-                    : `/governance/${parms.genre}/proposal/${proposal.id}`,
-                );
-              }}
-            />
-          ))
+          <>
+            {data?.flat().map((proposal) =>
+              proposal ? (
+                <ProposalCard
+                  proposal={proposal}
+                  key={`proposal-${proposal.id}`}
+                  className="hover:cursor-pointer"
+                  onMouseOver={() => {
+                    if (!isIPFS) {
+                      router.prefetch(
+                        `/governance/${parms.genre}/proposal/${proposal.id}`,
+                      );
+                    }
+                  }}
+                  onClick={() => {
+                    router.push(
+                      isIPFS
+                        ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
+                        : `/governance/${parms.genre}/proposal/${proposal.id}`,
+                    );
+                  }}
+                />
+              ) : null,
+            )}
+            <Button onClick={() => setSize((s) => s + 1)}>Load More</Button>
+          </>
         )}
       </div>
 
-      {data?.proposals?.length === 0 && (
+      {data?.flat().length === 0 && (
         <div className="mx-auto w-fit">
           <Image
             src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
@@ -88,7 +89,7 @@ export const ProposalsList = () => {
             height={200}
           />
           <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
-            No Proposals found.{" "}
+            No Proposals found.
           </div>
         </div>
       )}

@@ -1,6 +1,5 @@
 import {
   GOVERNANCE_ABI,
-  Proposal,
   governanceTimelockAbi,
   useBeraJs,
   useCancellerRole,
@@ -23,13 +22,17 @@ import { StatusBadge } from "~/app/governance/components/status-badge";
 import { StatusEnum } from "~/app/governance/types";
 import { Checkbox } from "@bera/ui/checkbox";
 import { useState } from "react";
+import {
+  ProposalSelectionFragment,
+  ProposalStatus,
+} from "@bera/graphql/governance";
 
 export const CancelButton = ({
   proposal,
   proposalTimelockId,
   title,
 }: {
-  proposal?: Proposal;
+  proposal?: ProposalSelectionFragment;
   proposalTimelockId?: Address;
   title: string;
 }) => {
@@ -41,7 +44,7 @@ export const CancelButton = ({
     isLoading,
     mutate,
   } = useProposalState({
-    proposalId: proposal?.onchainId,
+    proposalId: proposal?.id,
     governorAddress,
   });
 
@@ -63,10 +66,10 @@ export const CancelButton = ({
 
   const canCancel =
     !isCanceledOnChain &&
-    ((proposal.status === StatusEnum.PENDING_EXECUTION &&
+    ((proposal.status === StatusEnum.PendingExecution &&
       account === cancellerRole) ||
-      (proposal.status === StatusEnum.PENDING &&
-        account === proposal.creator.address));
+      (proposal.status === StatusEnum.Pending &&
+        account === proposal.proposer));
 
   return (
     <>
@@ -111,20 +114,20 @@ export const CancelButton = ({
                       onClick={() =>
                         write({
                           address:
-                            proposal.status === StatusEnum.PENDING_EXECUTION
+                            proposal.status === ProposalStatus.PendingExecution
                               ? governanceTimelockAddress
                               : governorAddress,
                           abi:
-                            proposal.status === StatusEnum.PENDING_EXECUTION
+                            proposal.status === ProposalStatus.PendingExecution
                               ? governanceTimelockAbi
                               : GOVERNANCE_ABI,
                           functionName: "cancel",
 
                           params: [
-                            proposal.status === StatusEnum.PENDING_EXECUTION
+                            proposal.status === ProposalStatus.PendingExecution
                               ? proposalTimelockId!
-                              : proposal.status === StatusEnum.PENDING
-                                ? BigInt(proposal.onchainId)
+                              : proposal.status === ProposalStatus.Pending
+                                ? BigInt(proposal.id)
                                 : // This should never happen
                                   0n,
                           ],
