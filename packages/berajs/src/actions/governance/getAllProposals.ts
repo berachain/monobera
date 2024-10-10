@@ -5,6 +5,7 @@ import {
   GetProposalsQuery,
   GetProposalsQueryVariables,
   ProposalSelectionFragment,
+  Proposal_Filter,
 } from "@bera/graphql/governance";
 import { wagmiConfig } from "@bera/wagmi/config";
 import { getBlockNumber } from "@wagmi/core";
@@ -14,16 +15,18 @@ import { computeActualStatus } from "./computeActualStatus";
 
 export const getAllProposals = async ({
   config,
+  where,
   offset = 0,
   perPage = 20,
 }: {
   offset?: number;
+  where: Proposal_Filter;
   perPage?: number;
   config: BeraConfig;
 }): Promise<ProposalSelectionFragment[] | undefined> => {
   try {
-    if (perPage > 20) {
-      throw new Error("perPage must be less than 20");
+    if (perPage > 1000) {
+      throw new Error("perPage must be less than 1000");
     }
 
     if (!config.subgraphs?.governanceSubgraph) {
@@ -36,6 +39,7 @@ export const getAllProposals = async ({
         variables: {
           offset,
           limit: perPage,
+          where,
         } satisfies GetProposalsQueryVariables,
       }),
       getBlockNumber(wagmiConfig, {

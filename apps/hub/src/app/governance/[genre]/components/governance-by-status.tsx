@@ -17,11 +17,12 @@ export default function GovernanceByStatus({
 }: {
   allProposals?: any;
 }) {
-  const { dappConfig } = useGovernance();
+  const { dappConfig: govTopic } = useGovernance();
   return (
     <SWRFallback
       fallback={{
-        [unstable_serialize(usePollAllProposalsQueryKey)]: allProposals,
+        [unstable_serialize(usePollAllProposalsQueryKey(govTopic.slug))]:
+          allProposals,
       }}
     >
       <div className="pb-32">
@@ -34,9 +35,9 @@ export default function GovernanceByStatus({
         </Link>
         <div
           className="font-bold uppercase tracking-widest"
-          style={{ color: dappConfig.color }}
+          style={{ color: govTopic.color }}
         >
-          {dappConfig.name}
+          {govTopic.name}
         </div>
         <div className="text-3xl font-bold leading-9 text-foreground sm:text-5xl sm:leading-[48px]">
           Vote on proposals <br />
@@ -44,7 +45,7 @@ export default function GovernanceByStatus({
         </div>
         <div className="mx-auto my-8 flex gap-3 sm:w-full flex-wrap ">
           <GoToIfHasVotingPower
-            href={`/governance/${dappConfig.slug}/create`}
+            href={`/governance/${govTopic.slug}/create`}
             governorAddress={governorAddress}
           />
           <Button variant="secondary" className="w-fit">

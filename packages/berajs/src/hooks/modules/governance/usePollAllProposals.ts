@@ -1,7 +1,5 @@
-import useSwrInfinite, {
-  SWRInfiniteKeyLoader,
-  SWRInfiniteResponse,
-} from "swr/infinite";
+import { Proposal_Filter } from "@bera/graphql/governance";
+import useSwrInfinite, { SWRInfiniteResponse } from "swr/infinite";
 
 import { getAllProposals } from "~/actions/governance";
 import { useBeraJs } from "~/contexts";
@@ -9,6 +7,11 @@ import POLLING from "~/enum/polling";
 import { DefaultHookOptions } from "~/types";
 
 export const usePollAllProposals = (
+  args: {
+    topic: string;
+    where?: Proposal_Filter;
+    perPage?: number;
+  },
   options?: DefaultHookOptions,
 ): SWRInfiniteResponse<Awaited<ReturnType<typeof getAllProposals>>> => {
   const { config: beraConfig } = useBeraJs();
@@ -17,9 +20,16 @@ export const usePollAllProposals = (
     Awaited<ReturnType<typeof getAllProposals>>,
     typeof usePollAllProposalsQueryKey
   >(
-    usePollAllProposalsQueryKey,
-    async ([key, page]) => {
-      return await getAllProposals({ config, offset: page * 20 });
+    usePollAllProposalsQueryKey(args.topic, args.where),
+    async ([key, page]: [string, number]) => {
+      return await getAllProposals({
+        where: {
+          topics_contains: [args.topic],
+          ...args.where,
+        },
+        config,
+        offset: page * 20,
+      });
     },
     {
       ...options?.opts,
@@ -29,13 +39,11 @@ export const usePollAllProposals = (
   );
 };
 
-export const usePollAllProposalsQueryKey = (
-  page: number,
-  previousPageData?: Awaited<ReturnType<typeof getAllProposals>>,
-): [string, number] | null => {
-  if (!page) {
-    return ["usePollAllProposals", 0];
-  }
-
-  return previousPageData?.length ? ["usePollAllProposals", page] : null;
-};
+export const usePollAllProposalsQueryKey =
+  (topic: string, where?: Proposal_Filter) =>
+  (
+    page: number,
+    // previousPageData?: Awaited<ReturnType<typeof getAllProposals>>,
+  ): [string, number, ...any[]] => {
+    return ["usePollAllProposals", page, topic, where];
+  };

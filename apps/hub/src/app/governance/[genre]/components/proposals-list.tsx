@@ -8,13 +8,14 @@ import { ProposalCard } from "./proposal-card";
 import { ProposalSorting } from "./proposal-sorting";
 import { ProposalStatusFilter } from "./proposal-status-filter";
 import { Button } from "@bera/ui/button";
-import { ProposalSelectionFragment } from "@bera/graphql/governance";
+import { useGovernance } from "./governance-provider";
 
 // const PROPOSALS_PER_PAGE = 100;
 
 export const ProposalsList = () => {
   const router = useRouter();
   const parms = useParams();
+  const { dappConfig } = useGovernance();
   // const {
   //   loading,
   //   error,
@@ -26,7 +27,9 @@ export const ProposalsList = () => {
   //   },
   //   pollInterval: 60000, // 1 min
   // });
-  const { data, error, setSize } = usePollAllProposals();
+  const { data, error, setSize } = usePollAllProposals({
+    topic: dappConfig.slug,
+  });
 
   return (
     <div className="w-full">
@@ -75,7 +78,9 @@ export const ProposalsList = () => {
                 />
               ) : null,
             )}
-            <Button onClick={() => setSize((s) => s + 1)}>Load More</Button>
+            {data.flat().length ? (
+              <Button onClick={() => setSize((s) => s + 1)}>Load More</Button>
+            ) : null}
           </>
         )}
       </div>

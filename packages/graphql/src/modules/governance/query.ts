@@ -81,12 +81,13 @@ export default gql`
     }
   }
 
-  query GetProposals($offset: Int, $limit: Int) {
+  query GetProposals($offset: Int, $limit: Int, $where: Proposal_filter) {
     proposals(
       skip: $offset
       first: $limit
       orderBy: createdAt
       orderDirection: desc
+      where: $where
     ) {
       ...ProposalSelection
     }

@@ -54,7 +54,7 @@ export function ProposalCard({
         >
           <QuorumStatus
             delegatesVotesCount={proposal.pollResult?.totalTowardsQuorum}
-            quorum={formatEther(BigInt(proposal.quorum))}
+            quorum={proposal.quorum}
           />
           <ProgressBarChart
             dataList={getVotesDataList(proposal)}

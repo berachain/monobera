@@ -9,10 +9,21 @@ import { isIPFS } from "@bera/config";
 
 export const revalidate = 120;
 
-export default async function Page() {
+export default async function Page({
+  params,
+}: {
+  params: {
+    genre: string;
+  };
+}) {
   const allProposals = isIPFS
     ? undefined
-    : await getAllProposals({ config: defaultBeraConfig });
+    : await getAllProposals({
+        config: defaultBeraConfig,
+        where: {
+          topics_contains: [params.genre],
+        },
+      });
 
   return <GovernanceByStatus allProposals={allProposals} />;
 }

@@ -1559,6 +1559,7 @@ export type GetProposalVotesQuery = {
 export type GetProposalsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars["Int"]["input"]>;
   limit?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<Proposal_Filter>;
 }>;
 
 export type GetProposalsQuery = {
@@ -1810,12 +1811,13 @@ export type GetProposalVotesQueryResult = Apollo.QueryResult<
   GetProposalVotesQueryVariables
 >;
 export const GetProposalsDocument = gql`
-    query GetProposals($offset: Int, $limit: Int) {
+    query GetProposals($offset: Int, $limit: Int, $where: Proposal_filter) {
   proposals(
     skip: $offset
     first: $limit
     orderBy: createdAt
     orderDirection: desc
+    where: $where
   ) {
     ...ProposalSelection
   }
@@ -1836,6 +1838,7 @@ export const GetProposalsDocument = gql`
  *   variables: {
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      where: // value for 'where'
  *   },
  * });
  */
@@ -2052,12 +2055,13 @@ export const GetProposalVotes = gql`
 }
     ${ProposalVote}`;
 export const GetProposals = gql`
-    query GetProposals($offset: Int, $limit: Int) {
+    query GetProposals($offset: Int, $limit: Int, $where: Proposal_filter) {
   proposals(
     skip: $offset
     first: $limit
     orderBy: createdAt
     orderDirection: desc
+    where: $where
   ) {
     ...ProposalSelection
   }
