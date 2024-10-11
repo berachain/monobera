@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { useCallback, useEffect } from "react";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import {
@@ -25,16 +25,41 @@ export function Combobox({
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+  const [buttonWidth, setButtonWidth] = React.useState(0);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  const updateButtonWidth = useCallback(() => {
+    if (buttonRef.current) {
+      setButtonWidth(buttonRef.current.offsetWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    updateButtonWidth();
+    window.addEventListener("resize", updateButtonWidth);
+    return () => window.removeEventListener("resize", updateButtonWidth);
+  }, [updateButtonWidth]);
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (newOpen) {
+      updateButtonWidth();
+    }
+    setOpen(newOpen);
+  };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
           size="sm"
-          className={cn("w-full justify-between rounded-md border border-border p-3 font-semibold text-foreground", className)}
+          ref={buttonRef}
+          className={cn(
+            "w-full justify-between rounded-md border border-border p-3 font-semibold text-foreground",
+            className,
+          )}
         >
           <span className="font-regular">
             {value
@@ -44,7 +69,7 @@ export function Combobox({
           <Icons.chevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="p-0" style={{ width: buttonWidth }}>
         <Command>
           <CommandInput placeholder="Search item..." />
           <CommandList>

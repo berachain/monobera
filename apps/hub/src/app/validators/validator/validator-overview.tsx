@@ -56,6 +56,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   const { data: allValidators, isLoading: isLoadingValidators } =
     usePollValidators();
 
+  console.log('allValidators', allValidators);
   const totalValidators = allValidators?.validators?.length ?? 0;
   let valStakedRanking = -1;
   allValidators?.validators?.find((v: Validator, index: number) => {
@@ -67,7 +68,6 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
   });
 
   let valSignedRanking = -1;
-  console.log('val sign ranking', valSignedRanking, allValidatorBlockData);
   allValidatorBlockData?.blockStatsByValidators?.find(
     (v: AllTimeValidatorBlockCount, index: number) => {
       if (v.validator.coinbase === validator.coinbase.toLowerCase()) {
@@ -112,7 +112,7 @@ export const ValidatorOverview = ({ validator }: { validator: Validator }) => {
               <div className="flex flex-col items-start gap-1">
                 <div className="relative flex w-full flex-row justify-between">
                   {isLoadingValidators ? (
-                    <Skeleton className="mt-1 h-8 w-44" />
+                    <Skeleton className="mt-1 h-8 w-40" />
                   ) : (
                     <span className="text-2xl font-semibold">
                       {valStakedRanking === -1

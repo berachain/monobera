@@ -49,7 +49,6 @@ const TabsTrigger = React.forwardRef<
     outline: "data-[state=active]:bg-white data-[state=active]:text-background",
   };
 
-  console.log("checking", variant, props);
   return (
     <TabsPrimitive.Trigger
       ref={ref}

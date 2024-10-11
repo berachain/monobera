@@ -12,45 +12,26 @@ export const CuttingBoardConfiguration = () => {
   >([{ address: "", distribution: 0, color: Math.random() * 360 }]);
   const { data, isLoading } = usePollGaugesData();
 
-  // Sample gauge data
-  const sampleGaugeData = [
-    {
-      address: "0x1234567890123456789012345678901234567890",
-      name: "Gauge A",
-      distribution: 30,
-      color: Math.random() * 360,
-    },
-    {
-      address: "0x2345678901234567890123456789012345678901",
-      name: "Gauge B",
-      distribution: 25,
-      color: Math.random() * 360,
-    },
-    {
-      address: "0x3456789012345678901234567890123456789012",
-      name: "Gauge C",
-      distribution: 20,
-      color: Math.random() * 360,
-    },
-    {
-      address: "0x4567890123456789012345678901234567890123",
-      name: "Gauge D",
-      distribution: 15,
-      color: Math.random() * 360,
-    },
-    {
-      address: "0x5678901234567890123456789012345678901234",
-      name: "Gauge E",
-      distribution: 10,
-      color: Math.random() * 360,
-    },
+  const colourPalette = [
+    0,
+    240,
+    120,
+    300,
+    60,
+    180,
+    270,
   ];
 
-  // Use the sample data instead of the actual API call for now
-  const { data: gaugeData, isLoading: isLoadingData } = {
-    data: sampleGaugeData,
-    isLoading: false,
-  };
+  const gaugesData = useMemo(() => {
+    return data?.data?.vaults?.map((gauge: any) => ({
+      vaultAddress: gauge.vaultAddress,
+      stakingTokenAddress: gauge.stakingToken.stakingTokenAddress,
+      symbol: gauge.stakingToken.symbol,
+      name: gauge.stakingToken.name,
+    }));
+  }, [data]);
+
+  console.log("checking the data", data, gaugesData);
 
   const handleAddGauge = () => {
     setGauges([
@@ -83,7 +64,6 @@ export const CuttingBoardConfiguration = () => {
   );
 
   const pieChartData = useMemo(() => {
-    const colours = gauges.map(() => `hsl(${Math.random() * 360}, 70%, 50%)`);
     return {
       labels: gauges.map((gauge) => gauge.address || "Unassigned"),
       datasets: [
@@ -94,10 +74,20 @@ export const CuttingBoardConfiguration = () => {
           spacing: 5,
           borderWidth: 0,
           backgroundColor: gauges.map(
-            (gauge) => `hsl(${gauge.color}, 70%, 50%)`,
+            (gauge, index) =>
+              `hsl(${
+                colourPalette[index]
+                  ? colourPalette[index]
+                  : Math.random() * 360
+              }, 70%, 40%)`,
           ),
           hoverBorderColor: gauges.map(
-            (gauge) => `hsl(${gauge.color}, 70%, 40%)`,
+            (gauge, index) =>
+              `hsl(${
+                colourPalette[index]
+                  ? colourPalette[index]
+                  : Math.random() * 360
+              }, 70%, 40%)`,
           ),
           // borderColor: "colours",
         },
@@ -132,15 +122,14 @@ export const CuttingBoardConfiguration = () => {
           <div key={index} className="flex w-full gap-4">
             <Combobox
               items={
-                gaugeData?.map((gaugeData: any) => ({
-                  value: gaugeData.address,
-                  label: gaugeData.address,
+                gaugesData?.map((gaugeData: any) => ({
+                  value: gaugeData.vaultAddress,
+                  label: `${gaugeData.symbol} - ${gaugeData.name}`,
                 })) || []
               }
               onSelect={(selectedValue) =>
                 handleGaugeChange(index, "address", selectedValue)
               }
-              className="flex w-full flex-1"
             />
             <Input
               type="number"

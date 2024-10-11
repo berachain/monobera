@@ -137,7 +137,7 @@ export default function GlobalGaugeWeightChart({
   );
 
   return (
-    <div className="flex w-full shrink-0 flex-col gap-10 rounded-lg border border-border p-6 lg:w-[300px] lg:items-stretch">
+    <div className="flex w-full shrink-0 flex-col gap-10 rounded-lg border border-border p-6 lg:mt-16 lg:w-[300px] lg:items-stretch">
       <div className="text-center text-sm font-medium leading-5 text-muted-foreground">
         Rewards Weight
       </div>
