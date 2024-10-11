@@ -7,8 +7,6 @@ import { VoteDialog } from "../../components/vote-dialog";
 import { CancelButton } from "./components/cancel-button";
 import { QueueButton } from "./components/queue-button";
 import { useGovernance } from "../../components/governance-provider";
-import { wagmiConfig, useTransactionReceipt } from "@bera/wagmi";
-import { Address, parseEventLogs } from "viem";
 import { governanceTimelockAddress } from "@bera/config";
 import { ExecuteButton } from "./components/execute-button";
 import { parseProposalBody } from "~/app/governance/helper";

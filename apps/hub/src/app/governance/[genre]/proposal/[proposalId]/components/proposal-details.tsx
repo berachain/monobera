@@ -70,8 +70,9 @@ export default function ProposalDetails({
   const { account, isReady } = useBeraJs();
   const { isLoading, data: proposal } = usePollProposal(proposalId);
 
-  const votes = proposal?.votes ?? [];
   console.log({ proposal });
+
+  const votes = proposal?.votes ?? [];
 
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
@@ -96,7 +97,7 @@ export default function ProposalDetails({
               {proposal && (
                 <StatusAction
                   frontmatter={fm}
-                  proposal={proposal as any}
+                  proposal={proposal}
                   userVote={userVote}
                 />
               )}

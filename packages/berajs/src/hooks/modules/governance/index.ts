@@ -7,3 +7,4 @@ export * from "./useProposalSnapshot";
 export * from "./useCancellerRole";
 export * from "./useProposalState";
 export * from "./useProposalTimelockState";
+export * from "./useHasVoted";
