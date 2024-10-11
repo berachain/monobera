@@ -27,9 +27,10 @@ export const ProposalsList = () => {
   //   },
   //   pollInterval: 60000, // 1 min
   // });
-  const { data, error, setSize } = usePollAllProposals({
-    topic: dappConfig.slug,
-  });
+  const { data, error, hasMore, isLoading, size, setSize } =
+    usePollAllProposals({
+      topic: dappConfig.slug,
+    });
 
   return (
     <div className="w-full">
@@ -55,33 +56,41 @@ export const ProposalsList = () => {
           </>
         ) : (
           <>
-            {data?.flat().map((proposal) =>
-              proposal ? (
-                <ProposalCard
-                  proposal={proposal}
-                  key={`proposal-${proposal.id}`}
-                  className="hover:cursor-pointer"
-                  onMouseOver={() => {
-                    if (!isIPFS) {
-                      router.prefetch(
+            {data
+              ?.slice(0, isLoading ? size : size - 1)
+              .flat()
+              .map((proposal) =>
+                proposal ? (
+                  <ProposalCard
+                    proposal={proposal}
+                    key={`proposal-${proposal.id}`}
+                    className="hover:cursor-pointer"
+                    onMouseOver={() => {
+                      if (!isIPFS) {
+                        router.prefetch(
+                          isIPFS
+                            ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
+                            : `/governance/${parms.genre}/proposal/${proposal.id}`,
+                        );
+                      }
+                    }}
+                    onClick={() => {
+                      router.push(
                         isIPFS
                           ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
                           : `/governance/${parms.genre}/proposal/${proposal.id}`,
                       );
-                    }
-                  }}
-                  onClick={() => {
-                    router.push(
-                      isIPFS
-                        ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
-                        : `/governance/${parms.genre}/proposal/${proposal.id}`,
-                    );
-                  }}
-                />
-              ) : null,
-            )}
-            {data.flat().length ? (
-              <Button onClick={() => setSize((s) => s + 1)}>Load More</Button>
+                    }}
+                  />
+                ) : null,
+              )}
+            {data.flat().length && hasMore ? (
+              <Button
+                disabled={isLoading}
+                onClick={() => setSize((s) => s + 1)}
+              >
+                Load More
+              </Button>
             ) : null}
           </>
         )}

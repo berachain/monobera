@@ -7,7 +7,6 @@ import {
   ProposalStatus,
 } from "@bera/graphql/governance";
 import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
 
 import { getVotesDataList, parseProposalBody } from "../../helper";
 import { QuorumStatus } from "./quorum-status";
@@ -37,7 +36,10 @@ export function ProposalCard({
       )}
       {...props}
     >
-      <div className="flex-1">
+      <div
+        // overflow-hidden needed when there are addresses or long strings in the title.
+        className="flex-1  overflow-hidden"
+      >
         <ProposalHeading frontmatter={fm} size="sm" />
         <StatusBadge proposal={proposal} className="mt-1 md:mt-3" />
       </div>

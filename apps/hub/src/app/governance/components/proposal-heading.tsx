@@ -51,7 +51,7 @@ export const ProposalHeading = ({
       <Heading
         className={cn(
           "first:mt-0  mt-1 md:mt-2 font-semibold ",
-          size === "sm" && " line-clamp-1 text-base hyphens-auto",
+          size === "sm" && " line-clamp-1 text-base hyphens-auto max-w-full",
           size === "md" && "text-2xl",
         )}
       >

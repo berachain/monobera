@@ -6,6 +6,7 @@ import { useBeraJs } from "~/contexts";
 import POLLING from "~/enum/polling";
 import { DefaultHookOptions } from "~/types";
 
+const DEFAULT_PER_PAGE = 20;
 export const usePollAllProposals = (
   args: {
     topic: string;
@@ -13,10 +14,12 @@ export const usePollAllProposals = (
     perPage?: number;
   },
   options?: DefaultHookOptions,
-): SWRInfiniteResponse<Awaited<ReturnType<typeof getAllProposals>>> => {
+): SWRInfiniteResponse<Awaited<ReturnType<typeof getAllProposals>>> & {
+  hasMore: boolean;
+} => {
   const { config: beraConfig } = useBeraJs();
   const config = options?.beraConfigOverride ?? beraConfig;
-  return useSwrInfinite<
+  const res = useSwrInfinite<
     Awaited<ReturnType<typeof getAllProposals>>,
     typeof usePollAllProposalsQueryKey
   >(
@@ -28,15 +31,20 @@ export const usePollAllProposals = (
           ...args.where,
         },
         config,
-        offset: page * 20,
+        offset: page * (args.perPage ?? DEFAULT_PER_PAGE),
       });
     },
     {
       ...options?.opts,
-      initialSize: 1,
+      initialSize: 2,
       refreshInterval: options?.opts?.refreshInterval ?? POLLING.SLOW,
     },
   );
+
+  return {
+    ...res,
+    hasMore: res.data?.at(-1)?.length === (args.perPage ?? DEFAULT_PER_PAGE),
+  };
 };
 
 export const usePollAllProposalsQueryKey =
