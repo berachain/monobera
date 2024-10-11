@@ -87,7 +87,10 @@ export const ProposalTimeline = ({
         block: proposal.voteEndBlock,
         isActive: false,
       });
-    } else if (proposal.status === ProposalStatus.Defeated) {
+    } else if (
+      proposal.status === ProposalStatus.Defeated ||
+      proposal.status === ProposalStatus.QuorumNotReached
+    ) {
       steps.push({
         title: "Proposal Defeated",
         block: proposal.voteEndBlock,

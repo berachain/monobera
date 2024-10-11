@@ -28,7 +28,12 @@ export const GoToIfHasVotingPower = ({
   return (
     <>
       <ActionButton className="w-fit">
-        <Button onClick={handleButtonClick} as={Link} href={href}>
+        <Button
+          onClick={handleButtonClick}
+          as={Link}
+          // @ts-ignore
+          href={href}
+        >
           Create Proposal
         </Button>
       </ActionButton>

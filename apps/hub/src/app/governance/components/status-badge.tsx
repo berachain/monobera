@@ -7,16 +7,27 @@ import {
   ProposalStatus,
 } from "@bera/graphql/governance";
 
+const statusMap: Record<ProposalStatus, string> = {
+  [ProposalStatus.Active]: "Active",
+  [ProposalStatus.CanceledByGuardian]: "Canceled by guardian",
+  [ProposalStatus.CanceledByUser]: "Canceled by user",
+  [ProposalStatus.Defeated]: "Defeated",
+  [ProposalStatus.Executed]: "Executed",
+  [ProposalStatus.Expired]: "Expired",
+  [ProposalStatus.InQueue]: "In queue",
+  [ProposalStatus.Pending]: "Pending",
+  [ProposalStatus.PendingExecution]: "Pending execution",
+  [ProposalStatus.PendingQueue]: "Pending queue",
+  [ProposalStatus.QuorumNotReached]: "Quorum not reached",
+  [ProposalStatus.Succeeded]: "Succeeded",
+};
+
 export const StatusBadge = ({
   proposal,
   className,
 }: { proposal: ProposalSelectionFragment; className?: string }) => {
   const start = useBlockToTimestamp(proposal.voteStartBlock);
   const end = useBlockToTimestamp(proposal.voteEndBlock);
-  let statusLabel: string = proposal.status;
-  if (proposal.status === ProposalStatus.InQueue) {
-    statusLabel = "In queue";
-  }
 
   return (
     <div
@@ -29,7 +40,7 @@ export const StatusBadge = ({
         variant={getBadgeColor(proposal.status)}
         className="mr-3 select-none rounded-xs px-2 py-1 text-sm leading-none font-semibold capitalize"
       >
-        {statusLabel}
+        {statusMap[proposal.status]}
       </Badge>
       {proposal.status === ProposalStatus.Pending && start && (
         // TODO: get end time from proposal
