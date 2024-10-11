@@ -63,19 +63,21 @@ export const StatusAction = ({
   }
   return (
     <div className="flex items-center gap-3 font-medium">
-      {status === ProposalStatus.InQueue &&
-        (proposalTimelockState === "ready" ? (
-          <ExecuteButton
-            proposal={proposal}
-            title={frontmatter?.data.title || ""}
-          />
-        ) : (
+      {status === ProposalStatus.PendingExecution ||
+      proposalTimelockState === "ready" ? (
+        <ExecuteButton
+          proposal={proposal}
+          title={frontmatter?.data.title || ""}
+        />
+      ) : (
+        status === ProposalStatus.InQueue && (
           <CancelButton
             title={frontmatter?.data.title || ""}
             proposal={proposal}
             proposalTimelockId={timelockId}
           />
-        ))}
+        )
+      )}
       {status === ProposalStatus.Pending && (
         <CancelButton
           title={frontmatter?.data.title || ""}

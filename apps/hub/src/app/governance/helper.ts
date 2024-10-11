@@ -1,5 +1,4 @@
 import { ComponentProps } from "react";
-import { Proposal } from "@bera/berajs";
 import {
   ProposalSelectionFragment,
   ProposalStatus,
@@ -10,7 +9,7 @@ import graymatter from "gray-matter";
 import { decodeFunctionData, formatEther } from "viem";
 
 import { NativeDapps, Others } from "./governance-genre-helper";
-import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
+import { ProposalTypeEnum, VoteColorMap } from "./types";
 
 export const getBadgeColor = (
   proposalStatus: ProposalStatus,
@@ -25,6 +24,8 @@ export const getBadgeColor = (
     case ProposalStatus.Defeated:
     case ProposalStatus.QuorumNotReached:
       return "destructive";
+    case ProposalStatus.PendingExecution:
+    case ProposalStatus.PendingQueue:
     case ProposalStatus.Expired:
       return "warning";
     case ProposalStatus.CanceledByGuardian:

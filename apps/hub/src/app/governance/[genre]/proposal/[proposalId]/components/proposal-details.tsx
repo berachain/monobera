@@ -7,20 +7,14 @@ import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import {
-  getTotalVotes,
-  getVotesDataList,
-  parseProposalBody,
-} from "../../../../helper";
+import { getVotesDataList, parseProposalBody } from "../../../../helper";
 import { Actions } from "../Actions";
 import { StatusAction } from "../Status";
 import "@bera/graphql";
 import MarkdownRenderer from "./markdown-renderer";
-import { Badge } from "@bera/ui/badge";
 import { OverviewChart } from "../../../components/overview-chart";
 import { VoterTable } from "../../../components/voter-table";
 import { VoteCard } from "../../../components/vote-card";
-import { StatusEnum } from "../../../../types";
 import { VoteInfo } from "../../../components/Voter";
 import { QuorumStatus } from "../../../components/quorum-status";
 import { formatEther } from "viem";
@@ -156,31 +150,36 @@ export default function ProposalDetails({
                 />
               </div>
             </div>
-            <hr className="border-b border-border mt-4 sm:mt-10 sm:mb-16" />
+            <hr className="border-b border-border mt-4 sm:mt-8 sm:mb-12" />
             <div className="mx-auto gap-16">
-              <div>
-                <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
-                  <Card className="px-8 py-3 md:py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
-                    <FormattedNumber
-                      value={formatEther(
-                        BigInt(proposal.pollResult?.total ?? 0),
-                      )}
-                      className="text-lg sm:text-xl font-semibold leading-none text-foreground"
-                      symbol="BGT"
+              {![
+                ProposalStatus.CanceledByUser,
+                ProposalStatus.Pending,
+              ].includes(proposal.status) && (
+                <div>
+                  <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
+                    <Card className="px-8 py-3 md:py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
+                      <FormattedNumber
+                        value={formatEther(
+                          BigInt(proposal.pollResult?.total ?? 0),
+                        )}
+                        className="text-lg sm:text-xl font-semibold leading-none text-foreground"
+                        symbol="BGT"
+                      />
+                      <div className="flex items-center text-sm font-medium leading-none mt-2 md:mt-0 text-muted-foreground">
+                        Total votes
+                      </div>
+                    </Card>
+                    <VoteCard
+                      yesPercentage={proposal.pollResult?.forPercentage ?? 0}
+                      noPercentage={proposal.pollResult?.againstPercentage ?? 0}
+                      abstainPercentage={
+                        proposal.pollResult?.abstainPercentage ?? 0
+                      }
                     />
-                    <div className="flex items-center text-sm font-medium leading-none mt-2 md:mt-0 text-muted-foreground">
-                      Total votes
-                    </div>
-                  </Card>
-                  <VoteCard
-                    yesPercentage={proposal.pollResult?.forPercentage ?? 0}
-                    noPercentage={proposal.pollResult?.againstPercentage ?? 0}
-                    abstainPercentage={
-                      proposal.pollResult?.abstainPercentage ?? 0
-                    }
-                  />
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
                   <div className="border border-border p-4 px-8 rounded-md">

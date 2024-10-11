@@ -41,5 +41,11 @@ export function computeActualStatus(
     return ProposalStatus.Pending;
   }
 
+  if (proposal.status === ProposalStatus.InQueue) {
+    if (proposal.queueEnd < Date.now() / 1000) {
+      return ProposalStatus.PendingExecution;
+    }
+  }
+
   return proposal.status;
 }
