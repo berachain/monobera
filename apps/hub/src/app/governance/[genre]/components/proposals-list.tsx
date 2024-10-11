@@ -64,7 +64,9 @@ export const ProposalsList = () => {
                   onMouseOver={() => {
                     if (!isIPFS) {
                       router.prefetch(
-                        `/governance/${parms.genre}/proposal/${proposal.id}`,
+                        isIPFS
+                          ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
+                          : `/governance/${parms.genre}/proposal/${proposal.id}`,
                       );
                     }
                   }}

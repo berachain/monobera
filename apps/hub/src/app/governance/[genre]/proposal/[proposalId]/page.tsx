@@ -11,6 +11,10 @@ import { NativeDapps, Others } from "~/app/governance/governance-genre-helper";
 export const revalidate = 120;
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
+  if (isIPFS) {
+    return {};
+  }
+
   const { proposalId } = params;
 
   const proposal = await getProposalDetails({
