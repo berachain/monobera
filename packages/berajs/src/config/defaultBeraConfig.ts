@@ -59,26 +59,8 @@ export const defaultBeraConfig: BeraConfig = {
     honeyRouterAddress: honeyRouterAddress,
     perpsTradingContractAddress: tradingContractAddress,
     governance: {
-      berahub: {
-        governor: governorAddress,
-        timelock: governanceTimelockAddress,
-      },
-      honey: {
-        governor: governorAddress,
-        timelock: governanceTimelockAddress,
-      },
-      bend: {
-        governor: governorAddress,
-        timelock: governanceTimelockAddress,
-      },
-      berps: {
-        governor: governorAddress,
-        timelock: governanceTimelockAddress,
-      },
-      general: {
-        governor: governorAddress,
-        timelock: governanceTimelockAddress,
-      },
+      governor: governorAddress,
+      timelock: governanceTimelockAddress,
     },
   },
 };
