@@ -1,5 +1,3 @@
-import { FooterSM } from "@bera/shared-ui/src/footer";
-
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <section>
