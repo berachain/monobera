@@ -1,4 +1,8 @@
-import { Proposal_Filter } from "@bera/graphql/governance";
+import {
+  OrderDirection,
+  Proposal_Filter,
+  Proposal_OrderBy,
+} from "@bera/graphql/governance";
 import useSwrInfinite, { SWRInfiniteResponse } from "swr/infinite";
 
 import { getAllProposals } from "~/actions/governance";
@@ -12,6 +16,8 @@ export const usePollAllProposals = (
     topic: string;
     where?: Proposal_Filter;
     perPage?: number;
+    orderBy?: Proposal_OrderBy;
+    orderDirection?: OrderDirection;
   },
   options?: DefaultHookOptions,
 ): SWRInfiniteResponse<Awaited<ReturnType<typeof getAllProposals>>> & {
@@ -23,13 +29,15 @@ export const usePollAllProposals = (
     Awaited<ReturnType<typeof getAllProposals>>,
     typeof usePollAllProposalsQueryKey
   >(
-    usePollAllProposalsQueryKey(args.topic, args.where),
+    usePollAllProposalsQueryKey(args.topic, args),
     async ([key, page]: [string, number]) => {
       return await getAllProposals({
         where: {
           topics_contains: [args.topic],
           ...args.where,
         },
+        orderBy: args.orderBy,
+        orderDirection: args.orderDirection,
         config,
         offset: page * (args.perPage ?? DEFAULT_PER_PAGE),
       });
@@ -48,10 +56,21 @@ export const usePollAllProposals = (
 };
 
 export const usePollAllProposalsQueryKey =
-  (topic: string, where?: Proposal_Filter) =>
+  (
+    topic: string,
+    {
+      orderBy,
+      orderDirection,
+      where,
+    }: {
+      orderBy?: Proposal_OrderBy;
+      orderDirection?: OrderDirection;
+      where?: Proposal_Filter;
+    } = {},
+  ) =>
   (
     page: number,
     // previousPageData?: Awaited<ReturnType<typeof getAllProposals>>,
   ): [string, number, ...any[]] => {
-    return ["usePollAllProposals", page, topic, where];
+    return ["usePollAllProposals", page, topic, where, orderBy, orderDirection];
   };

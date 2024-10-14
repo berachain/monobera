@@ -8,14 +8,6 @@ import { PROPOSAL_GENRE } from "./governance-genre-helper";
  */
 export const StatusEnum = ProposalStatus;
 
-export enum OrderByEnum {
-  MOST_RECENT = "most-recent",
-  OLDEST = "oldest",
-  NEWEST = "newest",
-  HIGHEST_PARTICIPATION = "highest-participation",
-  LOWEST_PARTICIPATION = "lowest-participation",
-}
-
 export type ProposalVotes = {
   yes: number;
   no: number;

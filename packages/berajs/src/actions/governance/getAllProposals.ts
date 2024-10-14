@@ -4,8 +4,10 @@ import {
   GetProposals,
   GetProposalsQuery,
   GetProposalsQueryVariables,
+  OrderDirection,
   ProposalSelectionFragment,
   Proposal_Filter,
+  Proposal_OrderBy,
 } from "@bera/graphql/governance";
 import { wagmiConfig } from "@bera/wagmi/config";
 import { getBlockNumber } from "@wagmi/core";
@@ -16,6 +18,8 @@ import { computeActualStatus } from "./computeActualStatus";
 export const getAllProposals = async ({
   config,
   where,
+  orderBy,
+  orderDirection,
   offset = 0,
   perPage = 20,
 }: {
@@ -23,6 +27,8 @@ export const getAllProposals = async ({
   where: Proposal_Filter;
   perPage?: number;
   config: BeraConfig;
+  orderBy?: Proposal_OrderBy;
+  orderDirection?: OrderDirection;
 }): Promise<ProposalSelectionFragment[] | undefined> => {
   try {
     if (perPage > 1000) {
@@ -40,6 +46,8 @@ export const getAllProposals = async ({
           offset,
           limit: perPage,
           where,
+          orderBy,
+          orderDirection,
         } satisfies GetProposalsQueryVariables,
       }),
       getBlockNumber(wagmiConfig, {
