@@ -1,12 +1,7 @@
-import {
-  useProposalState,
-  useProposalTimelockState,
-  type Vote,
-} from "@bera/berajs";
+import { useProposalTimelockState, type Vote } from "@bera/berajs";
 import { VoteDialog } from "../../components/vote-dialog";
 import { CancelButton } from "./components/cancel-button";
 import { QueueButton } from "./components/queue-button";
-import { useGovernance } from "../../components/governance-provider";
 import { governanceTimelockAddress } from "@bera/config";
 import { ExecuteButton } from "./components/execute-button";
 import { parseProposalBody } from "~/app/governance/helper";
@@ -26,35 +21,8 @@ export const StatusAction = ({
 }) => {
   const status = proposal.status;
 
-  const { governorAddress } = useGovernance();
-
-  const { data: onChainState } = useProposalState({
-    proposalId: proposal.id,
-    governorAddress,
-  });
-
-  // THIS WILL BE REMOVED WHEN WE HAVE A TIMELOCK ID ON SUBGRAPH
-
-  // const queueTxHash = proposal.events?.find((e) => e.type === "queued")
-  //   ?.txHash as Address | undefined;
-
-  // const { data: receipt } = useTransactionReceipt({
-  //   hash: queueTxHash,
-  //   // @ts-ignore
-  //   config: wagmiConfig,
-  // });
-
-  // const logs = parseEventLogs({
-  //   abi: governanceTimelockAbi,
-  //   logs: receipt?.logs || [],
-  // });
-
-  // This will be replaced with the actual timelockId when we have it on subgraph
-  // @ts-ignore - I'd might be missing on a type. we dont care, it;ll just be undefined.
-  const timelockId = undefined; //logs.find((l) => l.eventName === "CallScheduled")?.args.id;
-
   const { data: proposalTimelockState } = useProposalTimelockState({
-    proposalTimelockId: timelockId,
+    proposalTimelockId: proposal.timelockId,
     timelockAddress: governanceTimelockAddress,
   });
 
@@ -74,7 +42,7 @@ export const StatusAction = ({
           <CancelButton
             title={frontmatter?.data.title || ""}
             proposal={proposal}
-            proposalTimelockId={timelockId}
+            proposalTimelockId={proposal.timelockId}
           />
         )
       )}

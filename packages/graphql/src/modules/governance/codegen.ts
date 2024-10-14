@@ -246,108 +246,6 @@ export enum Block_OrderBy {
   UnclesHash = "unclesHash",
 }
 
-export type CallScheduled = {
-  __typename?: "CallScheduled";
-  data: Scalars["Bytes"]["output"];
-  delay: Scalars["BigInt"]["output"];
-  id: Scalars["Int8"]["output"];
-  index: Scalars["BigInt"]["output"];
-  predecessor: Scalars["Bytes"]["output"];
-  target: Scalars["Bytes"]["output"];
-  timelockId: Scalars["Bytes"]["output"];
-  value: Scalars["BigInt"]["output"];
-};
-
-export type CallScheduled_Filter = {
-  /** Filter for the block changed event. */
-  _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<CallScheduled_Filter>>>;
-  data?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  data_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_not?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  delay?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  delay_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_not?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  id?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_gt?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_gte?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_in?: InputMaybe<Array<Scalars["Int8"]["input"]>>;
-  id_lt?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_lte?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_not?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_not_in?: InputMaybe<Array<Scalars["Int8"]["input"]>>;
-  index?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  index_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_not?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  or?: InputMaybe<Array<InputMaybe<CallScheduled_Filter>>>;
-  predecessor?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  predecessor_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_not?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  target?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  target_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_not?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  target_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  timelockId?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  timelockId_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_not?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  value?: InputMaybe<Scalars["BigInt"]["input"]>;
-  value_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  value_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  value_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  value_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  value_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  value_not?: InputMaybe<Scalars["BigInt"]["input"]>;
-  value_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-};
-
-export enum CallScheduled_OrderBy {
-  Data = "data",
-  Delay = "delay",
-  Id = "id",
-  Index = "index",
-  Predecessor = "predecessor",
-  Target = "target",
-  TimelockId = "timelockId",
-  Value = "value",
-}
-
 export type ExecutableCall = {
   __typename?: "ExecutableCall";
   calldata: Scalars["Bytes"]["output"];
@@ -465,6 +363,7 @@ export enum ExecutableCall_OrderBy {
   ProposalQueueStartBlock = "proposal__queueStartBlock",
   ProposalQuorum = "proposal__quorum",
   ProposalStatus = "proposal__status",
+  ProposalTimelockId = "proposal__timelockId",
   ProposalTitle = "proposal__title",
   ProposalVoteEndBlock = "proposal__voteEndBlock",
   ProposalVoteStartBlock = "proposal__voteStartBlock",
@@ -482,13 +381,13 @@ export enum OrderDirection {
 export type PollResult = {
   __typename?: "PollResult";
   abstain: Scalars["BigInt"]["output"];
-  abstainPercentage: Scalars["Int"]["output"];
+  abstainPercentage: Scalars["String"]["output"];
   abstainVotersCount: Scalars["Int"]["output"];
   against: Scalars["BigInt"]["output"];
-  againstPercentage: Scalars["Int"]["output"];
+  againstPercentage: Scalars["String"]["output"];
   againstVotersCount: Scalars["Int"]["output"];
   for: Scalars["BigInt"]["output"];
-  forPercentage: Scalars["Int"]["output"];
+  forPercentage: Scalars["String"]["output"];
   forVotersCount: Scalars["Int"]["output"];
   id: Scalars["ID"]["output"];
   total: Scalars["BigInt"]["output"];
@@ -500,14 +399,32 @@ export type PollResult_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   abstain?: InputMaybe<Scalars["BigInt"]["input"]>;
-  abstainPercentage?: InputMaybe<Scalars["Int"]["input"]>;
-  abstainPercentage_gt?: InputMaybe<Scalars["Int"]["input"]>;
-  abstainPercentage_gte?: InputMaybe<Scalars["Int"]["input"]>;
-  abstainPercentage_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
-  abstainPercentage_lt?: InputMaybe<Scalars["Int"]["input"]>;
-  abstainPercentage_lte?: InputMaybe<Scalars["Int"]["input"]>;
-  abstainPercentage_not?: InputMaybe<Scalars["Int"]["input"]>;
-  abstainPercentage_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  abstainPercentage?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_contains?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_gt?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_gte?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  abstainPercentage_lt?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_lte?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_contains_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  abstainPercentage_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_ends_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  abstainPercentage_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  abstainPercentage_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_starts_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  abstainPercentage_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   abstainVotersCount?: InputMaybe<Scalars["Int"]["input"]>;
   abstainVotersCount_gt?: InputMaybe<Scalars["Int"]["input"]>;
   abstainVotersCount_gte?: InputMaybe<Scalars["Int"]["input"]>;
@@ -524,14 +441,32 @@ export type PollResult_Filter = {
   abstain_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   abstain_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   against?: InputMaybe<Scalars["BigInt"]["input"]>;
-  againstPercentage?: InputMaybe<Scalars["Int"]["input"]>;
-  againstPercentage_gt?: InputMaybe<Scalars["Int"]["input"]>;
-  againstPercentage_gte?: InputMaybe<Scalars["Int"]["input"]>;
-  againstPercentage_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
-  againstPercentage_lt?: InputMaybe<Scalars["Int"]["input"]>;
-  againstPercentage_lte?: InputMaybe<Scalars["Int"]["input"]>;
-  againstPercentage_not?: InputMaybe<Scalars["Int"]["input"]>;
-  againstPercentage_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  againstPercentage?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_contains?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_gt?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_gte?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  againstPercentage_lt?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_lte?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_contains_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  againstPercentage_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_ends_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  againstPercentage_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  againstPercentage_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_starts_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  againstPercentage_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   againstVotersCount?: InputMaybe<Scalars["Int"]["input"]>;
   againstVotersCount_gt?: InputMaybe<Scalars["Int"]["input"]>;
   againstVotersCount_gte?: InputMaybe<Scalars["Int"]["input"]>;
@@ -549,14 +484,26 @@ export type PollResult_Filter = {
   against_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   and?: InputMaybe<Array<InputMaybe<PollResult_Filter>>>;
   for?: InputMaybe<Scalars["BigInt"]["input"]>;
-  forPercentage?: InputMaybe<Scalars["Int"]["input"]>;
-  forPercentage_gt?: InputMaybe<Scalars["Int"]["input"]>;
-  forPercentage_gte?: InputMaybe<Scalars["Int"]["input"]>;
-  forPercentage_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
-  forPercentage_lt?: InputMaybe<Scalars["Int"]["input"]>;
-  forPercentage_lte?: InputMaybe<Scalars["Int"]["input"]>;
-  forPercentage_not?: InputMaybe<Scalars["Int"]["input"]>;
-  forPercentage_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  forPercentage?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_contains?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_gt?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_gte?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  forPercentage_lt?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_lte?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  forPercentage_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   forVotersCount?: InputMaybe<Scalars["Int"]["input"]>;
   forVotersCount_gt?: InputMaybe<Scalars["Int"]["input"]>;
   forVotersCount_gte?: InputMaybe<Scalars["Int"]["input"]>;
@@ -646,7 +593,7 @@ export type Proposal = {
   queueStartBlock?: Maybe<Scalars["BigInt"]["output"]>;
   quorum: Scalars["BigInt"]["output"];
   status: ProposalStatus;
-  timelock?: Maybe<CallScheduled>;
+  timelockId?: Maybe<Scalars["Bytes"]["output"]>;
   title?: Maybe<Scalars["String"]["output"]>;
   topics: Array<Scalars["String"]["output"]>;
   voteEndBlock: Scalars["BigInt"]["output"];
@@ -912,15 +859,16 @@ export type Proposal_Filter = {
   status_in?: InputMaybe<Array<ProposalStatus>>;
   status_not?: InputMaybe<ProposalStatus>;
   status_not_in?: InputMaybe<Array<ProposalStatus>>;
-  timelock?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_?: InputMaybe<CallScheduled_Filter>;
-  timelock_gt?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_gte?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
-  timelock_lt?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_lte?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_not?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  timelockId?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  timelockId_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_not?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
   title?: InputMaybe<Scalars["String"]["input"]>;
   title_contains?: InputMaybe<Scalars["String"]["input"]>;
   title_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
@@ -1001,15 +949,7 @@ export enum Proposal_OrderBy {
   QueueStartBlock = "queueStartBlock",
   Quorum = "quorum",
   Status = "status",
-  Timelock = "timelock",
-  TimelockData = "timelock__data",
-  TimelockDelay = "timelock__delay",
-  TimelockId = "timelock__id",
-  TimelockIndex = "timelock__index",
-  TimelockPredecessor = "timelock__predecessor",
-  TimelockTarget = "timelock__target",
-  TimelockTimelockId = "timelock__timelockId",
-  TimelockValue = "timelock__value",
+  TimelockId = "timelockId",
   Title = "title",
   Topics = "topics",
   VoteEndBlock = "voteEndBlock",
@@ -1023,8 +963,6 @@ export type Query = {
   _meta?: Maybe<_Meta_>;
   block?: Maybe<Block>;
   blocks: Array<Block>;
-  callScheduled?: Maybe<CallScheduled>;
-  callScheduleds: Array<CallScheduled>;
   executableCall?: Maybe<ExecutableCall>;
   executableCalls: Array<ExecutableCall>;
   pollResult?: Maybe<PollResult>;
@@ -1053,22 +991,6 @@ export type QueryBlocksArgs = {
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Block_Filter>;
-};
-
-export type QueryCallScheduledArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars["ID"]["input"];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-export type QueryCallScheduledsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<CallScheduled_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<CallScheduled_Filter>;
 };
 
 export type QueryExecutableCallArgs = {
@@ -1141,8 +1063,6 @@ export type Subscription = {
   _meta?: Maybe<_Meta_>;
   block?: Maybe<Block>;
   blocks: Array<Block>;
-  callScheduled?: Maybe<CallScheduled>;
-  callScheduleds: Array<CallScheduled>;
   executableCall?: Maybe<ExecutableCall>;
   executableCalls: Array<ExecutableCall>;
   pollResult?: Maybe<PollResult>;
@@ -1171,22 +1091,6 @@ export type SubscriptionBlocksArgs = {
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<Block_Filter>;
-};
-
-export type SubscriptionCallScheduledArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars["ID"]["input"];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-export type SubscriptionCallScheduledsArgs = {
-  block?: InputMaybe<Block_Height>;
-  first?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<CallScheduled_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<CallScheduled_Filter>;
 };
 
 export type SubscriptionExecutableCallArgs = {
@@ -1390,6 +1294,7 @@ export enum Vote_OrderBy {
   ProposalIdQueueStartBlock = "proposalId__queueStartBlock",
   ProposalIdQuorum = "proposalId__quorum",
   ProposalIdStatus = "proposalId__status",
+  ProposalIdTimelockId = "proposalId__timelockId",
   ProposalIdTitle = "proposalId__title",
   ProposalIdVoteEndBlock = "proposalId__voteEndBlock",
   ProposalIdVoteStartBlock = "proposalId__voteStartBlock",
@@ -1456,13 +1361,13 @@ export type ProposalSelectionFragment = {
     __typename?: "PollResult";
     for: any;
     forVotersCount: number;
-    forPercentage: number;
+    forPercentage: string;
     against: any;
     againstVotersCount: number;
-    againstPercentage: number;
+    againstPercentage: string;
     abstain: any;
     abstainVotersCount: number;
-    abstainPercentage: number;
+    abstainPercentage: string;
     total: any;
     totalVotersCount: number;
     totalTowardsQuorum: any;
@@ -1489,6 +1394,7 @@ export type ProposalVoteFragment = {
 
 export type ProposalWithVotesFragment = {
   __typename?: "Proposal";
+  timelockId?: any | null;
   id: string;
   proposer: any;
   proposalId: any;
@@ -1510,7 +1416,6 @@ export type ProposalWithVotesFragment = {
     value: any;
     calldata: any;
   }>;
-  timelock?: { __typename?: "CallScheduled"; timelockId: any } | null;
   votes: Array<{
     __typename?: "Vote";
     id: any;
@@ -1524,13 +1429,13 @@ export type ProposalWithVotesFragment = {
     __typename?: "PollResult";
     for: any;
     forVotersCount: number;
-    forPercentage: number;
+    forPercentage: string;
     against: any;
     againstVotersCount: number;
-    againstPercentage: number;
+    againstPercentage: string;
     abstain: any;
     abstainVotersCount: number;
-    abstainPercentage: number;
+    abstainPercentage: string;
     total: any;
     totalVotersCount: number;
     totalTowardsQuorum: any;
@@ -1584,13 +1489,13 @@ export type GetProposalsQuery = {
       __typename?: "PollResult";
       for: any;
       forVotersCount: number;
-      forPercentage: number;
+      forPercentage: string;
       against: any;
       againstVotersCount: number;
-      againstPercentage: number;
+      againstPercentage: string;
       abstain: any;
       abstainVotersCount: number;
-      abstainPercentage: number;
+      abstainPercentage: string;
       total: any;
       totalVotersCount: number;
       totalTowardsQuorum: any;
@@ -1606,6 +1511,7 @@ export type GetProposalQuery = {
   __typename?: "Query";
   proposal?: {
     __typename?: "Proposal";
+    timelockId?: any | null;
     id: string;
     proposer: any;
     proposalId: any;
@@ -1627,7 +1533,6 @@ export type GetProposalQuery = {
       value: any;
       calldata: any;
     }>;
-    timelock?: { __typename?: "CallScheduled"; timelockId: any } | null;
     votes: Array<{
       __typename?: "Vote";
       id: any;
@@ -1641,13 +1546,13 @@ export type GetProposalQuery = {
       __typename?: "PollResult";
       for: any;
       forVotersCount: number;
-      forPercentage: number;
+      forPercentage: string;
       against: any;
       againstVotersCount: number;
-      againstPercentage: number;
+      againstPercentage: string;
       abstain: any;
       abstainVotersCount: number;
-      abstainPercentage: number;
+      abstainPercentage: string;
       total: any;
       totalVotersCount: number;
       totalTowardsQuorum: any;
@@ -1712,9 +1617,7 @@ export const ProposalWithVotesFragmentDoc = gql`
   executableCalls {
     ...ExecutableCallSubset
   }
-  timelock {
-    timelockId
-  }
+  timelockId
   votes(orderBy: weight, orderDirection: desc) {
     ...ProposalVote
   }
@@ -2033,9 +1936,7 @@ export const ProposalWithVotes = gql`
   executableCalls {
     ...ExecutableCallSubset
   }
-  timelock {
-    timelockId
-  }
+  timelockId
   votes(orderBy: weight, orderDirection: desc) {
     ...ProposalVote
   }

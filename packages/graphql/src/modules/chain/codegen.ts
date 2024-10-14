@@ -1,6 +1,5 @@
 import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -348,22 +347,17 @@ export type GetBlocksTimeStampQuery = {
 };
 
 export const GetBlocksTimeStampDocument = gql`
-  query GetBlocksTimeStamp($skip: Int!) {
-    newest: blocks(first: 1, orderBy: timestamp, orderDirection: desc) {
-      timestamp
-      number
-    }
-    oldest: blocks(
-      first: 1
-      orderBy: timestamp
-      orderDirection: desc
-      skip: $skip
-    ) {
-      timestamp
-      number
-    }
+    query GetBlocksTimeStamp($skip: Int!) {
+  newest: blocks(first: 1, orderBy: timestamp, orderDirection: desc) {
+    timestamp
+    number
   }
-`;
+  oldest: blocks(first: 1, orderBy: timestamp, orderDirection: desc, skip: $skip) {
+    timestamp
+    number
+  }
+}
+    `;
 
 /**
  * __useGetBlocksTimeStampQuery__
@@ -441,19 +435,14 @@ export type GetBlocksTimeStampQueryResult = Apollo.QueryResult<
 >;
 
 export const GetBlocksTimeStamp = gql`
-  query GetBlocksTimeStamp($skip: Int!) {
-    newest: blocks(first: 1, orderBy: timestamp, orderDirection: desc) {
-      timestamp
-      number
-    }
-    oldest: blocks(
-      first: 1
-      orderBy: timestamp
-      orderDirection: desc
-      skip: $skip
-    ) {
-      timestamp
-      number
-    }
+    query GetBlocksTimeStamp($skip: Int!) {
+  newest: blocks(first: 1, orderBy: timestamp, orderDirection: desc) {
+    timestamp
+    number
   }
-`;
+  oldest: blocks(first: 1, orderBy: timestamp, orderDirection: desc, skip: $skip) {
+    timestamp
+    number
+  }
+}
+    `;

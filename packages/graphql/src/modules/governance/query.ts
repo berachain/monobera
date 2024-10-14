@@ -59,9 +59,9 @@ export default gql`
     executableCalls {
       ...ExecutableCallSubset
     }
-    timelock {
-      timelockId
-    }
+
+    timelockId
+
     votes(orderBy: weight, orderDirection: desc) {
       ...ProposalVote
     }
