@@ -1,12 +1,6 @@
-import { ProposalStatus } from "@bera/graphql/governance";
 import { Address } from "viem";
 
 import { PROPOSAL_GENRE } from "./governance-genre-helper";
-
-/**
- * @deprecated use ProposalStatus from @bera/graphql/governance instead
- */
-export const StatusEnum = ProposalStatus;
 
 export type ProposalVotes = {
   yes: number;

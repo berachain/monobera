@@ -19,7 +19,6 @@ import {
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { StatusBadge } from "~/app/governance/components/status-badge";
-import { StatusEnum } from "~/app/governance/types";
 import { Checkbox } from "@bera/ui/checkbox";
 import { useState } from "react";
 import {
@@ -66,9 +65,9 @@ export const CancelButton = ({
 
   const canCancel =
     !isCanceledOnChain &&
-    ((proposal.status === StatusEnum.PendingExecution &&
+    ((proposal.status === ProposalStatus.PendingExecution &&
       account === cancellerRole) ||
-      (proposal.status === StatusEnum.Pending &&
+      (proposal.status === ProposalStatus.Pending &&
         account === proposal.proposer));
 
   return (

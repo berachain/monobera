@@ -3,6 +3,14 @@ import {
   ProposalStatus,
 } from "@bera/graphql/governance";
 
+export const MOCKED_PROPOSAL_STATUSES: readonly ProposalStatus[] = [
+  ProposalStatus.Active,
+  ProposalStatus.PendingQueue,
+  ProposalStatus.PendingExecution,
+  ProposalStatus.Defeated,
+  ProposalStatus.QuorumNotReached,
+];
+
 export function computeActualStatus(
   proposal: ProposalSelectionFragment,
   currentBlock: bigint,
