@@ -38,7 +38,18 @@ export const ProposalStatusFilter = ({
         <DropdownMenuContent className="w-56 border border-border">
           <DropdownMenuLabel>Proposal Status</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {Object.values(ProposalStatus).map((status) => (
+          {[
+            ProposalStatus.Pending,
+            ProposalStatus.Active,
+            ProposalStatus.Executed,
+            ProposalStatus.PendingQueue,
+            ProposalStatus.InQueue,
+            ProposalStatus.PendingExecution,
+            ProposalStatus.QuorumNotReached,
+            ProposalStatus.Defeated,
+            ProposalStatus.CanceledByUser,
+            ProposalStatus.CanceledByGuardian,
+          ].map((status) => (
             <DropdownMenuCheckboxItem
               className="capitalize"
               key={status}

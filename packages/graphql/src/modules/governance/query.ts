@@ -98,6 +98,21 @@ export default gql`
       ...ProposalSelection
     }
   }
+  query SearchProposals(
+    $offset: Int
+    $limit: Int
+    $where: Proposal_filter
+    $text: String!
+  ) {
+    proposals: proposalSearch(
+      skip: $offset
+      first: $limit
+      where: $where
+      text: $text
+    ) {
+      ...ProposalSelection
+    }
+  }
 
   query GetProposal($id: ID!) {
     proposal(id: $id) {

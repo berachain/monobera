@@ -623,13 +623,11 @@ export enum ProposalStatus {
   CanceledByUser = "CANCELED_BY_USER",
   Defeated = "DEFEATED",
   Executed = "EXECUTED",
-  Expired = "EXPIRED",
   InQueue = "IN_QUEUE",
   Pending = "PENDING",
   PendingExecution = "PENDING_EXECUTION",
   PendingQueue = "PENDING_QUEUE",
   QuorumNotReached = "QUORUM_NOT_REACHED",
-  Succeeded = "SUCCEEDED",
 }
 
 export type Proposal_Filter = {
@@ -968,6 +966,7 @@ export type Query = {
   pollResult?: Maybe<PollResult>;
   pollResults: Array<PollResult>;
   proposal?: Maybe<Proposal>;
+  proposalSearch: Array<Proposal>;
   proposals: Array<Proposal>;
   vote?: Maybe<Vote>;
   votes: Array<Vote>;
@@ -1029,6 +1028,15 @@ export type QueryProposalArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type QueryProposalSearchArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  text: Scalars["String"]["input"];
+  where?: InputMaybe<Proposal_Filter>;
 };
 
 export type QueryProposalsArgs = {
@@ -1505,6 +1513,49 @@ export type GetProposalsQuery = {
   }>;
 };
 
+export type SearchProposalsQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<Proposal_Filter>;
+  text: Scalars["String"]["input"];
+}>;
+
+export type SearchProposalsQuery = {
+  __typename?: "Query";
+  proposals: Array<{
+    __typename?: "Proposal";
+    id: string;
+    proposer: any;
+    proposalId: any;
+    description: string;
+    status: ProposalStatus;
+    createdAt: any;
+    quorum: any;
+    voteEndBlock: any;
+    voteStartBlock: any;
+    queueEnd?: any | null;
+    canceledAt?: any | null;
+    executedAt?: any | null;
+    title?: string | null;
+    topics: Array<string>;
+    pollResult: {
+      __typename?: "PollResult";
+      for: any;
+      forVotersCount: number;
+      forPercentage: string;
+      against: any;
+      againstVotersCount: number;
+      againstPercentage: string;
+      abstain: any;
+      abstainVotersCount: number;
+      abstainPercentage: string;
+      total: any;
+      totalVotersCount: number;
+      totalTowardsQuorum: any;
+    };
+  }>;
+};
+
 export type GetProposalQueryVariables = Exact<{
   id: Scalars["ID"]["input"];
 }>;
@@ -1803,6 +1854,96 @@ export type GetProposalsQueryResult = Apollo.QueryResult<
   GetProposalsQuery,
   GetProposalsQueryVariables
 >;
+export const SearchProposalsDocument = gql`
+    query SearchProposals($offset: Int, $limit: Int, $where: Proposal_filter, $text: String!) {
+  proposals: proposalSearch(
+    skip: $offset
+    first: $limit
+    where: $where
+    text: $text
+  ) {
+    ...ProposalSelection
+  }
+}
+    ${ProposalSelectionFragmentDoc}`;
+
+/**
+ * __useSearchProposalsQuery__
+ *
+ * To run a query within a React component, call `useSearchProposalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchProposalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchProposalsQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      where: // value for 'where'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useSearchProposalsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  > &
+    (
+      | { variables: SearchProposalsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchProposalsQuery, SearchProposalsQueryVariables>(
+    SearchProposalsDocument,
+    options,
+  );
+}
+export function useSearchProposalsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  >(SearchProposalsDocument, options);
+}
+export function useSearchProposalsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        SearchProposalsQuery,
+        SearchProposalsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  >(SearchProposalsDocument, options);
+}
+export type SearchProposalsQueryHookResult = ReturnType<
+  typeof useSearchProposalsQuery
+>;
+export type SearchProposalsLazyQueryHookResult = ReturnType<
+  typeof useSearchProposalsLazyQuery
+>;
+export type SearchProposalsSuspenseQueryHookResult = ReturnType<
+  typeof useSearchProposalsSuspenseQuery
+>;
+export type SearchProposalsQueryResult = Apollo.QueryResult<
+  SearchProposalsQuery,
+  SearchProposalsQueryVariables
+>;
 export const GetProposalDocument = gql`
     query GetProposal($id: ID!) {
   proposal(id: $id) {
@@ -1967,6 +2108,18 @@ export const GetProposals = gql`
     orderBy: $orderBy
     orderDirection: $orderDirection
     where: $where
+  ) {
+    ...ProposalSelection
+  }
+}
+    ${ProposalSelection}`;
+export const SearchProposals = gql`
+    query SearchProposals($offset: Int, $limit: Int, $where: Proposal_filter, $text: String!) {
+  proposals: proposalSearch(
+    skip: $offset
+    first: $limit
+    where: $where
+    text: $text
   ) {
     ...ProposalSelection
   }

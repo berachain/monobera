@@ -30,6 +30,7 @@ export const ProposalsList = () => {
     orderBy: Proposal_OrderBy.CreatedAt,
     orderDirection: OrderDirection.Desc,
   });
+  const [search, setSearch] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<ProposalStatus[]>([]);
 
   const { data, hasMore, isLoading, size, setSize } = usePollAllProposals({
@@ -37,28 +38,44 @@ export const ProposalsList = () => {
     orderBy: sortBy.orderBy,
     status_in: statusFilter,
     orderDirection: sortBy.orderDirection,
+    text: search,
   });
 
-  const areFiltersSet =
-    statusFilter.length !== Object.values(ProposalStatus).length;
+  const areFiltersSet = !!search || statusFilter.length !== 0;
+
+  if (data?.flat().length === 0 && !areFiltersSet) {
+    return (
+      <div className="mx-auto w-fit">
+        <Image
+          src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+          alt="not found bear"
+          width={345.35}
+          height={200}
+        />
+        <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
+          No Proposals Found
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
-      {(data?.flat().length || areFiltersSet) && (
-        <div className="flex-col md:flex-row flex w-full justify-between mb-10 gap-4">
-          <SearchInput
-            className="w-[300px] bg-transparent"
-            placeholder="Search proposals..."
+      <div className="flex-col md:flex-row flex w-full justify-between mb-10 gap-4">
+        <SearchInput
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-[300px] bg-transparent"
+          placeholder="Search proposals..."
+        />
+        <div className="flex gap-4">
+          <ProposalStatusFilter
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
           />
-          <div className="flex gap-4">
-            <ProposalStatusFilter
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-            />
-            <ProposalSorting value={sortBy} setSortBy={setSortBy} />
-          </div>
+          <ProposalSorting value={sortBy} setSortBy={setSortBy} />
         </div>
-      )}
+      </div>
 
       {(data && data.flat().length > 0) || isLoading ? (
         <div className="flex flex-col gap-4">

@@ -207,7 +207,10 @@ export default function ProposalDetails({
                     <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
                       Overview
                     </div>
-                    <OverviewChart votes={votes} isLoading={isLoading} />
+                    <OverviewChart
+                      votes={votes.filter((v) => v.weight !== "0")}
+                      isLoading={isLoading}
+                    />
                   </div>
                   <div className="mt-4 sm:mt-10">
                     <VoterTable votes={votes} isLoading={isLoading} />

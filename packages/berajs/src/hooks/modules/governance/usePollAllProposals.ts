@@ -1,9 +1,11 @@
+import { useMemo } from "react";
 import {
   OrderDirection,
   ProposalStatus,
   Proposal_Filter,
   Proposal_OrderBy,
 } from "@bera/graphql/governance";
+import { orderBy } from "lodash";
 import useSwrInfinite, { SWRInfiniteResponse } from "swr/infinite";
 
 import { getAllProposals } from "~/actions/governance";
@@ -38,6 +40,7 @@ type UsePollAllProposalsArgs = {
   orderBy?: Proposal_OrderBy;
   orderDirection?: OrderDirection;
   status_in?: ProposalStatus[];
+  text?: string;
 };
 export const usePollAllProposals = (
   args: UsePollAllProposalsArgs,
@@ -66,6 +69,7 @@ export const usePollAllProposals = (
         orderBy: args.orderBy,
         orderDirection: args.orderDirection,
         config,
+        text: args.text,
         offset: page * (args.perPage ?? DEFAULT_PER_PAGE),
       });
     },
@@ -76,37 +80,53 @@ export const usePollAllProposals = (
     },
   );
 
-  const data = res.data
-    ?.flat()
-    .filter((proposal) => {
-      if (!proposal) {
-        return false;
-      }
+  const data = useMemo(
+    () =>
+      res.data
+        ?.flat()
+        .filter((proposal) => {
+          if (!proposal) {
+            return false;
+          }
 
-      if (!args.status_in || args.status_in.length === 0) {
-        return true;
-      }
+          if (!args.status_in || args.status_in.length === 0) {
+            return true;
+          }
 
-      return args.status_in?.includes(proposal.status);
-    })
-    .reduce<typeof res.data>((acc, curr) => {
-      if (!curr) {
-        return acc;
-      }
+          return args.status_in?.includes(proposal.status);
+        })
+        .toSorted((a, b) => {
+          // fulltext search does not support order in graphql.
+          // no need to compute this if there is no search
+          if (!args.text) {
+            return 0;
+          }
+          let result = 0;
+          if (args.orderBy === Proposal_OrderBy.CreatedAt) {
+            result = Number(b?.createdAt) - Number(a?.createdAt);
+          }
+          return args.orderDirection === "asc" ? result : -result;
+        })
+        .reduce<typeof res.data>((acc, curr) => {
+          if (!curr) {
+            return acc;
+          }
 
-      const currSection = acc.at(-1);
+          const currSection = acc.at(-1);
 
-      if (
-        !currSection ||
-        currSection?.length === (args.perPage ?? DEFAULT_PER_PAGE)
-      ) {
-        return [...acc, [curr]];
-      }
+          if (
+            !currSection ||
+            currSection?.length === (args.perPage ?? DEFAULT_PER_PAGE)
+          ) {
+            return [...acc, [curr]];
+          }
 
-      currSection.push(curr);
+          currSection.push(curr);
 
-      return acc;
-    }, []);
+          return acc;
+        }, []),
+    [res.data, args],
+  );
 
   return {
     ...res,
@@ -123,6 +143,7 @@ export const usePollAllProposalsQueryKey =
       orderDirection,
       where,
       perPage,
+      text,
       status_in,
     }: Partial<UsePollAllProposalsArgs> = {},
   ) =>
@@ -141,5 +162,6 @@ export const usePollAllProposalsQueryKey =
       orderBy,
       orderDirection,
       perPage,
+      text,
     ];
   };

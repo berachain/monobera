@@ -8,6 +8,9 @@ import {
   ProposalSelectionFragment,
   Proposal_Filter,
   Proposal_OrderBy,
+  SearchProposals,
+  SearchProposalsQuery,
+  SearchProposalsQueryVariables,
 } from "@bera/graphql/governance";
 import { wagmiConfig } from "@bera/wagmi/config";
 import { getBlockNumber } from "@wagmi/core";
@@ -22,6 +25,7 @@ export const getAllProposals = async ({
   orderDirection,
   offset = 0,
   perPage = 20,
+  text,
 }: {
   offset?: number;
   where: Proposal_Filter;
@@ -29,6 +33,7 @@ export const getAllProposals = async ({
   config: BeraConfig;
   orderBy?: Proposal_OrderBy;
   orderDirection?: OrderDirection;
+  text?: string;
 }): Promise<ProposalSelectionFragment[] | undefined> => {
   try {
     if (perPage > 1000) {
@@ -40,16 +45,26 @@ export const getAllProposals = async ({
     }
 
     const [response, blockNumber] = await Promise.all([
-      governanceClient.query<GetProposalsQuery>({
-        query: GetProposals,
-        variables: {
-          offset,
-          limit: perPage,
-          where,
-          orderBy,
-          orderDirection,
-        } satisfies GetProposalsQueryVariables,
-      }),
+      text
+        ? governanceClient.query<SearchProposalsQuery>({
+            query: SearchProposals,
+            variables: {
+              offset,
+              limit: perPage,
+              where,
+              text,
+            } satisfies SearchProposalsQueryVariables,
+          })
+        : governanceClient.query<GetProposalsQuery>({
+            query: GetProposals,
+            variables: {
+              offset,
+              limit: perPage,
+              where,
+              orderBy,
+              orderDirection,
+            } satisfies GetProposalsQueryVariables,
+          }),
       getBlockNumber(wagmiConfig, {
         cacheTime: FALLBACK_BLOCK_TIME * 1000,
       }),

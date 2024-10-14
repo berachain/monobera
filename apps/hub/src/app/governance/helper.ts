@@ -26,7 +26,6 @@ export const getBadgeColor = (
       return "destructive";
     case ProposalStatus.PendingExecution:
     case ProposalStatus.PendingQueue:
-    case ProposalStatus.Expired:
       return "warning";
     case ProposalStatus.CanceledByGuardian:
     case ProposalStatus.CanceledByUser:
