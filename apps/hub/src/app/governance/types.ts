@@ -62,6 +62,7 @@ export enum ProposalErrorCodes {
   INVALID_ACTION = "Invalid action",
   INVALID_ABI = "Invalid ABI",
   MUST_BE_HTTPS = "Must be https",
+  INVALID_BASEPATH = "Must be a berachain forum link",
 }
 
 export type CustomProposal = {

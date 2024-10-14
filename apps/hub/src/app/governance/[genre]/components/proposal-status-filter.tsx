@@ -10,6 +10,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 
 import { ProposalStatus } from "@bera/graphql/governance";
+import { statusMap } from "../../components/status-badge";
 
 export const ProposalStatusFilter = ({
   statusFilter,
@@ -27,9 +28,7 @@ export const ProposalStatusFilter = ({
           <div className="flex w-fit cursor-pointer items-center rounded-full border border-border text-sm hover:bg-muted">
             <div className="flex h-10 w-32 items-center border-r px-3 text-ellipsis max-w-full overflow-hidden font-medium whitespace-nowrap capitalize">
               {statusFilter.length
-                ? statusFilter
-                    .map((status) => status.toLowerCase().replaceAll("_", " "))
-                    .join(", ")
+                ? statusFilter.map((status) => statusMap[status]).join(", ")
                 : "Filter by Status"}
             </div>
             <Icons.chevronDown className="ml-1 mr-2 h-4 w-4 text-foreground" />
@@ -64,7 +63,7 @@ export const ProposalStatusFilter = ({
                 )
               }
             >
-              {status.replaceAll("_", " ").toLowerCase()}
+              {statusMap[status]}
             </DropdownMenuCheckboxItem>
           ))}
         </DropdownMenuContent>

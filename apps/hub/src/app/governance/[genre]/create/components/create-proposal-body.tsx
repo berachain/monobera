@@ -14,6 +14,7 @@ import {
   getBodyErrors,
   type useCreateProposal,
 } from "~/hooks/useCreateProposal";
+import { useGovernance } from "../../components/governance-provider";
 
 export const CreateProposalBody = ({
   proposal,
@@ -28,12 +29,19 @@ export const CreateProposalBody = ({
   errors: CustomProposalErrors;
   setErrors: Dispatch<SetStateAction<CustomProposalErrors>>;
 }) => {
+  const { dappConfig } = useGovernance();
   const handleNext = useCallback(() => {
     const e: CustomProposalErrors = {};
 
     e.title = checkProposalField("title", proposal.title);
     e.description = checkProposalField("description", proposal.description);
     e.forumLink = checkProposalField("forumLink", proposal.forumLink);
+
+    if (!e.forumLink) {
+      if (!proposal.forumLink.startsWith(dappConfig.forumLink)) {
+        e.forumLink = ProposalErrorCodes.INVALID_BASEPATH;
+      }
+    }
 
     setErrors(e);
 
@@ -99,7 +107,7 @@ export const CreateProposalBody = ({
         type="text"
         variant="black"
         id="proposal-forumLink"
-        placeholder="https://forum.berachain.com/...."
+        placeholder={`${dappConfig.forumLink}...`}
         value={proposal.forumLink}
         onChange={(e: any) => {
           setProposal((prev: any) => ({

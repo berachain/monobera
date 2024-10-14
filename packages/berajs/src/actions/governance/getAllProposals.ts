@@ -15,7 +15,7 @@ import {
 import { wagmiConfig } from "@bera/wagmi/config";
 import { getBlockNumber } from "@wagmi/core";
 
-import { BeraConfig, Proposal } from "~/types";
+import { BeraConfig } from "~/types";
 import { computeActualStatus } from "./computeActualStatus";
 
 export const getAllProposals = async ({

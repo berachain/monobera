@@ -48,8 +48,13 @@ export default function GovernanceByStatus({
             href={`/governance/${govTopic.slug}/create`}
             governorAddress={governorAddress}
           />
-          <Button variant="secondary" className="w-fit">
-            Visit forums
+          <Button
+            as={Link}
+            href={govTopic.forumLink}
+            variant="secondary"
+            className="w-fit"
+          >
+            Visit forum
           </Button>
         </div>
 

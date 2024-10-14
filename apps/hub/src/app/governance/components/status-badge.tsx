@@ -7,7 +7,7 @@ import {
   ProposalStatus,
 } from "@bera/graphql/governance";
 
-const statusMap: Record<ProposalStatus, string> = {
+export const statusMap: Record<ProposalStatus, string> = {
   [ProposalStatus.Active]: "Active",
   [ProposalStatus.CanceledByGuardian]: "Canceled by guardian",
   [ProposalStatus.CanceledByUser]: "Canceled by user",
