@@ -33,6 +33,7 @@ export enum VoteEnum {
 export type CustomProposalActionErrors = {
   type?: null | ProposalErrorCodes;
   target?: null | ProposalErrorCodes;
+  value?: null | ProposalErrorCodes;
   ABI?: null | ProposalErrorCodes;
   functionSignature?: null | ProposalErrorCodes;
   calldata?: (null | ProposalErrorCodes)[];
@@ -63,6 +64,10 @@ export enum ProposalErrorCodes {
   INVALID_ABI = "Invalid ABI",
   MUST_BE_HTTPS = "Must be https",
   INVALID_BASEPATH = "Must be a berachain forum link",
+  /**
+   * Mainly used when it's not a rewards vault
+   */
+  INVALID_CONTRACT = "This is not a valid contract",
 }
 
 export type CustomProposal = {
@@ -74,6 +79,7 @@ export type CustomProposal = {
 };
 
 export type SafeProposalAction = {
+  value: bigint;
   target: "" | Address;
 } & (
   | {

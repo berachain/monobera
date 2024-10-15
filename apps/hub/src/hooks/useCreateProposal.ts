@@ -32,6 +32,7 @@ const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
   target: "",
   ABI: "",
+  value: 0n,
   functionSignature: "",
   calldata: [],
 } satisfies SafeProposalAction;
@@ -298,7 +299,7 @@ export const useCreateProposal = ({
         functionName: "propose",
         params: [
           proposal.actions.map((action) => action.target as `0x${string}`),
-          proposal.actions.map(() => 0n),
+          proposal.actions.map((action) => action.value ?? 0n),
           actions,
           matter.stringify(proposal.description, {
             title: proposal.title,

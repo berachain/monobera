@@ -69,6 +69,9 @@ export const Actions = ({
             <br />
             <div className="font-medium text-foreground">Target:</div>
             <div>{executableCall.target}</div>
+            <br />
+            <div className="font-medium text-foreground">Value in wei:</div>
+            <div>{executableCall.value}</div>
           </Card>
         );
       })}

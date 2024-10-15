@@ -35,6 +35,7 @@ export function CustomAction({
   setErrors: Dispatch<SetStateAction<CustomProposalActionErrors>>;
 }) {
   const [abiItems, setAbiItems] = useState<AbiFunction>();
+  const [value, setValue] = useState<string>();
   const [contractSelectors, setContractSelectors] = useState<AbiFunction[]>([]);
   const prevSig = usePrevious(action.functionSignature);
 
@@ -155,6 +156,35 @@ export function CustomAction({
             target: e.target.value,
           }))
         }
+      />
+      <InputWithLabel
+        type="text"
+        variant="black"
+        label="Value (in wei)"
+        error={
+          errors.value === ProposalErrorCodes.REQUIRED
+            ? "Value is required."
+            : errors.value === ProposalErrorCodes.INVALID_AMOUNT
+              ? "Invalid value format."
+              : errors.value
+        }
+        id={`proposal-value--${idx}`}
+        placeholder={"0"}
+        value={value}
+        onChange={(e: any) => {
+          setValue(e.target.value);
+          try {
+            setAction((prev) => ({
+              ...prev,
+              value: BigInt(e.target.value),
+            }));
+          } catch (error) {
+            setErrors((e) => ({
+              ...e,
+              value: ProposalErrorCodes.INVALID_AMOUNT,
+            }));
+          }
+        }}
       />
 
       <TextArea
