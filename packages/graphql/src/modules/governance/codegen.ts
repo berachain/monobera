@@ -1454,6 +1454,8 @@ export type GetProposalVotesQueryVariables = Exact<{
   proposalId: Scalars["String"]["input"];
   orderBy?: InputMaybe<Vote_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
+  limit: Scalars["Int"]["input"];
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
 }>;
 
 export type GetProposalVotesQuery = {
@@ -1679,11 +1681,13 @@ export const ProposalWithVotesFragmentDoc = gql`
 ${ExecutableCallSubsetFragmentDoc}
 ${ProposalVoteFragmentDoc}`;
 export const GetProposalVotesDocument = gql`
-    query GetProposalVotes($proposalId: String!, $orderBy: Vote_orderBy = weight, $orderDirection: OrderDirection = desc) {
+    query GetProposalVotes($proposalId: String!, $orderBy: Vote_orderBy = weight, $orderDirection: OrderDirection = desc, $limit: Int!, $offset: Int) {
   votes(
     where: {proposalId: $proposalId}
     orderBy: $orderBy
     orderDirection: $orderDirection
+    skip: $offset
+    first: $limit
   ) {
     ...ProposalVote
   }
@@ -1705,6 +1709,8 @@ export const GetProposalVotesDocument = gql`
  *      proposalId: // value for 'proposalId'
  *      orderBy: // value for 'orderBy'
  *      orderDirection: // value for 'orderDirection'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
@@ -2090,11 +2096,13 @@ export const ProposalWithVotes = gql`
 ${ExecutableCallSubset}
 ${ProposalVote}`;
 export const GetProposalVotes = gql`
-    query GetProposalVotes($proposalId: String!, $orderBy: Vote_orderBy = weight, $orderDirection: OrderDirection = desc) {
+    query GetProposalVotes($proposalId: String!, $orderBy: Vote_orderBy = weight, $orderDirection: OrderDirection = desc, $limit: Int!, $offset: Int) {
   votes(
     where: {proposalId: $proposalId}
     orderBy: $orderBy
     orderDirection: $orderDirection
+    skip: $offset
+    first: $limit
   ) {
     ...ProposalVote
   }

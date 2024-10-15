@@ -71,11 +71,15 @@ export default gql`
     $proposalId: String!
     $orderBy: Vote_orderBy = weight
     $orderDirection: OrderDirection = desc
+    $limit: Int!
+    $offset: Int
   ) {
     votes(
       where: { proposalId: $proposalId }
       orderBy: $orderBy
       orderDirection: $orderDirection
+      skip: $offset
+      first: $limit
     ) {
       ...ProposalVote
     }
@@ -98,6 +102,7 @@ export default gql`
       ...ProposalSelection
     }
   }
+
   query SearchProposals(
     $offset: Int
     $limit: Int

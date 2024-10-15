@@ -147,10 +147,11 @@ export const usePollAllProposalsQueryKey =
       status_in,
     }: Partial<UsePollAllProposalsArgs> = {},
   ) =>
-  (
-    page: number,
-    // previousPageData?: Awaited<ReturnType<typeof getAllProposals>>,
-  ): [string, number, ...any[]] => {
+  (page: number, previousPageData?: any): [string, number, ...any[]] | null => {
+    if (!previousPageData && page !== 0) {
+      return null;
+    }
+
     return [
       "usePollAllProposals",
       page,

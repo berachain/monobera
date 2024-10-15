@@ -213,7 +213,7 @@ export default function ProposalDetails({
                     />
                   </div>
                   <div className="mt-4 sm:mt-10">
-                    <VoterTable votes={votes} isLoading={isLoading} />
+                    <VoterTable proposal={proposal} isLoading={isLoading} />
                   </div>
                 </>
               )}

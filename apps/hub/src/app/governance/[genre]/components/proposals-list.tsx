@@ -78,51 +78,61 @@ export const ProposalsList = () => {
       </div>
 
       {(data && data.flat().length > 0) || isLoading ? (
-        <div className="flex flex-col gap-4">
-          {!data?.flat().length ? (
-            <>
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-              <Skeleton className="h-20 w-full" />
-            </>
-          ) : (
-            data
-              ?.slice(0, isLoading ? size : size - 1)
-              .flat()
-              .map((proposal) =>
-                proposal ? (
-                  <ProposalCard
-                    proposal={proposal}
-                    key={`proposal-${proposal.id}`}
-                    className="hover:cursor-pointer"
-                    onMouseOver={() => {
-                      if (!isIPFS) {
-                        router.prefetch(
+        <>
+          <div className="max-sm:hidden font-medium text-xs text-muted-foreground px-4 lg:pr-8 xl:pr-16 gap-4 grid grid-cols-[4fr_2.5fr_2.5fr] mb-3 uppercase">
+            <h4>Proposal</h4>
+            <h4>Votes</h4>
+            <h4>Quorum</h4>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+            {!data?.flat().length ? (
+              <>
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+              </>
+            ) : (
+              data
+                ?.slice(0, isLoading ? size : size - 1)
+                .flat()
+                .map((proposal) =>
+                  proposal ? (
+                    <ProposalCard
+                      proposal={proposal}
+                      key={`proposal-${proposal.id}`}
+                      className="hover:cursor-pointer"
+                      onMouseOver={() => {
+                        if (!isIPFS) {
+                          router.prefetch(
+                            isIPFS
+                              ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
+                              : `/governance/${parms.genre}/proposal/${proposal.id}`,
+                          );
+                        }
+                      }}
+                      onClick={() => {
+                        router.push(
                           isIPFS
                             ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
                             : `/governance/${parms.genre}/proposal/${proposal.id}`,
                         );
-                      }
-                    }}
-                    onClick={() => {
-                      router.push(
-                        isIPFS
-                          ? `/governance/${parms.genre}/proposal/?id=${proposal.id}`
-                          : `/governance/${parms.genre}/proposal/${proposal.id}`,
-                      );
-                    }}
-                  />
-                ) : null,
-              )
-          )}
-          {hasMore && (
-            <Button disabled={isLoading} onClick={() => setSize((s) => s + 1)}>
-              Load More
-            </Button>
-          )}
-        </div>
+                      }}
+                    />
+                  ) : null,
+                )
+            )}
+            {hasMore && (
+              <Button
+                disabled={isLoading}
+                onClick={() => setSize((s) => s + 1)}
+              >
+                Load More
+              </Button>
+            )}
+          </div>
+        </>
       ) : (
         <div className="mx-auto w-fit">
           <Image
