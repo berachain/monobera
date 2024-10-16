@@ -35,13 +35,11 @@ export const CreateProposalBody = ({
 
     e.title = checkProposalField("title", proposal.title);
     e.description = checkProposalField("description", proposal.description);
-    e.forumLink = checkProposalField("forumLink", proposal.forumLink);
-
-    if (!e.forumLink) {
-      if (!proposal.forumLink.startsWith(dappConfig.forumLink)) {
-        e.forumLink = ProposalErrorCodes.INVALID_BASEPATH;
-      }
-    }
+    e.forumLink = checkProposalField(
+      "forumLink",
+      proposal.forumLink,
+      dappConfig.forumLink,
+    );
 
     setErrors(e);
 
@@ -116,7 +114,11 @@ export const CreateProposalBody = ({
           }));
           setErrors((errs) => ({
             ...errs,
-            forumLink: checkProposalField("forumLink", e.target.value),
+            forumLink: checkProposalField(
+              "forumLink",
+              e.target.value,
+              dappConfig.forumLink,
+            ),
           }));
         }}
       />

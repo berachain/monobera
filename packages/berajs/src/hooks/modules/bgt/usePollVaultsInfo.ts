@@ -30,10 +30,12 @@ export const usePollVaultsInfo = (
     QUERY_KEY,
     async () => {
       if (!args.vaultAddress || !publicClient) return undefined;
+
       const totalSupply = await getVaultsSupply({
         vaultAddress: args.vaultAddress,
         publicClient,
       });
+
       if (!account) {
         return {
           totalSupply: formatEther(totalSupply),
@@ -48,6 +50,7 @@ export const usePollVaultsInfo = (
         vaultAddress: args.vaultAddress,
         publicClient,
       });
+
       const userReward = await getUserVaultsReward({
         account,
         vaultAddress: args.vaultAddress,

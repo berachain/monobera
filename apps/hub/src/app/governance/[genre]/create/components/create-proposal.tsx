@@ -7,25 +7,16 @@ import {
   CustomProposalActionErrors,
   CustomProposalErrors,
   ProposalAction,
-  ProposalErrorCodes,
-  ProposalTypeEnum,
 } from "~/app/governance/types";
-import {
-  checkProposalField,
-  getBodyErrors,
-  useCreateProposal,
-} from "~/hooks/useCreateProposal";
+import { getBodyErrors, useCreateProposal } from "~/hooks/useCreateProposal";
 import { CreateProposalAction } from "./create-proposal-action";
-import { Address, isAddress, parseAbiItem } from "viem";
 import { ActionButton } from "@bera/shared-ui";
 import { Tabs } from "./tabs";
 import { Icons } from "@bera/ui/icons";
+import { governorAddress } from "@bera/config";
+import { useGovernance } from "../../components/governance-provider";
 
-export const CreateProposal = ({
-  governorAddress,
-}: {
-  governorAddress: Address;
-}) => {
+export const CreateProposal = () => {
   const {
     proposal,
     setProposal,
@@ -33,6 +24,8 @@ export const CreateProposal = ({
     removeProposalAction,
     submitProposal,
   } = useCreateProposal({ governorAddress });
+
+  const { dappConfig } = useGovernance();
   const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: null,
@@ -67,11 +60,11 @@ export const CreateProposal = ({
   );
 
   const leaveBodyTab = useCallback(() => {
-    const errors = getBodyErrors(proposal);
+    const errors = getBodyErrors(proposal, dappConfig);
     if (Object.values(errors).some((v) => v)) {
       setErrors(errors);
     } else setActiveTab(1);
-  }, [proposal]);
+  }, [proposal, dappConfig]);
 
   const handleSubmitProposal = useCallback(() => {
     submitProposal({
@@ -140,13 +133,6 @@ export const CreateProposal = ({
             </div>
           </>
         )}
-
-        {/* {proposal.proposalType === ProposalTypeEnum.UPDATE_REWARDS_GAUGE && (
-          <UpdateFriendsOfChef
-            title={proposal.title}
-            description={proposal.description}
-          />
-        )} */}
       </div>
     </div>
   );

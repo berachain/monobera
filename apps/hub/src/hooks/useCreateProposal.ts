@@ -18,7 +18,10 @@ import {
 } from "viem";
 
 import { useGovernance } from "../app/governance/[genre]/components/governance-provider";
-import { PROPOSAL_GENRE } from "../app/governance/governance-genre-helper";
+import {
+  GovernanceTopic,
+  PROPOSAL_GENRE,
+} from "../app/governance/governance-genre-helper";
 import {
   CustomProposal,
   CustomProposalActionErrors,
@@ -37,20 +40,33 @@ const defaultAction = {
   calldata: [],
 } satisfies SafeProposalAction;
 
-export const checkProposalField = (
-  fieldOrType:
-    | "address"
-    | "abi"
-    | "bool"
-    | `uint${string}`
-    | `int${string}`
-    | "action"
-    | "title"
-    | "description"
-    | "forumLink",
-  value: any,
-  required = true,
-): ProposalErrorCodes | null => {
+interface CheckProposalField {
+  (
+    fieldOrType:
+      | "address"
+      | "abi"
+      | "bool"
+      | `uint${string}`
+      | `int${string}`
+      | "action"
+      | "title"
+      | "description",
+    value: any,
+    required?: boolean,
+  ): ProposalErrorCodes | null;
+  (
+    fieldOrType: "forumLink",
+    value: string,
+    base: string,
+  ): ProposalErrorCodes | null;
+}
+export const checkProposalField: CheckProposalField = (
+  fieldOrType,
+  value,
+  requiredOrBase,
+) => {
+  const required = typeof requiredOrBase === "boolean" ? requiredOrBase : true;
+
   if (required && !value) {
     return ProposalErrorCodes.REQUIRED;
   }
@@ -101,9 +117,10 @@ export const checkProposalField = (
         return ProposalErrorCodes.INVALID_ADDRESS;
       }
 
-      if (!value.startsWith("https://")) {
-        return ProposalErrorCodes.INVALID_ADDRESS;
+      if (!value.startsWith(requiredOrBase)) {
+        return ProposalErrorCodes.INVALID_BASEPATH;
       }
+
       return null;
 
     case "address":
@@ -131,11 +148,18 @@ export const checkProposalField = (
   }
 };
 
-export const getBodyErrors = (proposal: CustomProposal) => {
+export const getBodyErrors = (
+  proposal: CustomProposal,
+  dappConfig: GovernanceTopic,
+) => {
   const e: CustomProposalErrors = {};
   e.title = checkProposalField("title", proposal.title);
   e.description = checkProposalField("description", proposal.description);
-  e.forumLink = checkProposalField("forumLink", proposal.forumLink);
+  e.forumLink = checkProposalField(
+    "forumLink",
+    proposal.forumLink,
+    dappConfig.forumLink,
+  );
 
   return e;
 };
@@ -174,7 +198,7 @@ export const useCreateProposal = ({
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => {
       onSuccess?.();
-      router.push("/governance");
+      router.push(`/governance/${dappConfig.slug}`);
     },
   });
 
@@ -195,7 +219,7 @@ export const useCreateProposal = ({
 
   const submitProposal = useCallback(
     ({ onError }: { onError?: (e: CustomProposalErrors) => void }) => {
-      const e: CustomProposalErrors = getBodyErrors(proposal);
+      const e: CustomProposalErrors = getBodyErrors(proposal, dappConfig);
 
       const actions: Address[] = [];
 
@@ -312,7 +336,7 @@ export const useCreateProposal = ({
         ],
       });
     },
-    [proposal],
+    [proposal, dappConfig],
   );
 
   return {

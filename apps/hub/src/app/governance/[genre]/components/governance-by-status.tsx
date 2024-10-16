@@ -53,6 +53,8 @@ export default function GovernanceByStatus({
             href={govTopic.forumLink}
             variant="secondary"
             className="w-fit"
+            // @ts-ignore
+            target="_blank"
           >
             Visit forum
           </Button>
