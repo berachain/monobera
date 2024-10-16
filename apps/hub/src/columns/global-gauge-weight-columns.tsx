@@ -6,29 +6,20 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { BribesPopover } from "~/components/bribes-tooltip";
 import { GaugeHeaderWidget } from "~/components/gauge-header-widget";
 
-export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
+export const GlobalGaugeWeightColumns: ColumnDef<Gauge>[] = [
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Gauge Vaults" />
-    ),
+    header: "Gauge Vaults",
     cell: ({ row }) => (
       <GaugeHeaderWidget
         address={row.original.vaultAddress}
-        className="w-[150px]"
+        // className="w-[150px]"
       />
     ),
     accessorKey: "gauge",
     enableSorting: false,
   },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Total Incentive Value"
-        className="whitespace-nowrap"
-        tooltip={"The total value of incentives in the gauge."}
-      />
-    ),
+    header: "Total Incentive Value",
     cell: ({ row }) => (
       <FormattedNumber
         className="justify-start pl-2"
@@ -38,38 +29,15 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         value={row.original.activeIncentivesInHoney}
       />
     ),
+    meta: {
+      tooltip: "The total value of incentives in the gauge.",
+      headerClassname: "flex-initial whitespace-nowrap",
+    },
     accessorKey: "activeIncentivesInHoney",
     enableSorting: true,
   },
-  // {
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title="BGT Staked"
-  //       className="whitespace-nowrap"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <FormattedNumber
-  //       className="w-full justify-start"
-  //       symbol="BGT"
-  //       compact={false}
-  //       compactThreshold={999_999_999}
-  //       value={row.original.amountStaked}
-  //     />
-  //   ),
-  //   accessorKey: "bgt-staked",
-  //   enableSorting: false,
-  // },
   {
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="BGT Capture"
-        tooltip={"The percentage of global BGT captured by the gauge."}
-        className="whitespace-nowrap"
-      />
-    ),
+    header: "BGT Capture",
     cell: ({ row }) => (
       <FormattedNumber
         className="pl-2 justify-start"
@@ -79,8 +47,13 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
         value={row.original.bgtInflationCapture / 10000 ?? 0}
       />
     ),
+    meta: {
+      tooltip: "The percentage of global BGT captured by the gauge.",
+      headerClassname: "flex-initial whitespace-nowrap",
+    },
     accessorKey: "bgtInflationCapture",
-    enableSorting: true,
+    // TODO: fix sorting for bgtInflationCapture
+    // enableSorting: true,
   },
   // {
   //   header: ({ column }) => (
@@ -151,9 +124,11 @@ export const global_gauge_weight_columns: ColumnDef<Gauge>[] = [
     enableSorting: false,
   },
   {
-    header: ({ column }) => <DataTableColumnHeader column={column} title="" />,
+    header: "",
     cell: () => <div className="text-lg text-muted-foreground">&gt;</div>,
     accessorKey: "deposit-lp",
     enableSorting: false,
+    minSize: 40,
+    size: 40,
   },
 ];

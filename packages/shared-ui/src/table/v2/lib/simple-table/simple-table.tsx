@@ -22,8 +22,7 @@ export type SimpleTableProps<TData> = TableBodyProps<TData> & {
   toolbarContent?: React.ReactNode;
   showToolbar?: boolean;
   showSelection?: boolean;
-  mutedBackgroundOnHead?: boolean;
-  minWidth?: number;
+  variant?: string;
 };
 
 export function SimpleTable<TData>({
@@ -36,12 +35,10 @@ export function SimpleTable<TData>({
   toolbarContent,
   showToolbar = true,
   showSelection = true,
-  mutedBackgroundOnHead = true,
   onRowClick,
-  ...props
+  variant = "",
 }: SimpleTableProps<TData>) {
-  const minWidth =
-    props.minWidth ?? (flexTable ? table.getTotalSize() : "auto");
+  const minWidth = flexTable ? table.getTotalSize() : "auto";
   const tableBodyRef = React.useRef<HTMLTableSectionElement>(null);
   const rows = table.getRowModel().rows;
   const loading = table.options.meta?.loading || table.options.meta?.validating;
@@ -49,8 +46,9 @@ export function SimpleTable<TData>({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col overflow-auto rounded-md border border-border",
+        "flex h-full w-full flex-col overflow-auto ",
         wrapperClassName,
+        variant !== "ghost" && "border border-border rounded-md",
       )}
     >
       <ReactTable flexTable={flexTable} className={className}>
@@ -67,18 +65,17 @@ export function SimpleTable<TData>({
           style={{ minWidth }}
           flexTable={flexTable}
           tableBodyRef={tableBodyRef}
-          backgroundColor={mutedBackgroundOnHead ? "muted" : "none"}
+          variant={variant}
         >
           {table.getHeaderGroups().map((headerGroup) => (
             <TableHeaderGroup key={headerGroup.id} flexTable={flexTable}>
               {headerGroup.headers.map((header) => (
                 <TableHeader
-                  showBorders={mutedBackgroundOnHead}
                   flexTable={flexTable}
                   key={header.id}
                   header={header}
+                  variant={variant}
                   dynamicFlex={dynamicFlex}
-                  className={header.column.columnDef.meta?.className}
                 />
               ))}
             </TableHeaderGroup>
@@ -106,7 +103,6 @@ export function SimpleTable<TData>({
                       cell={cell}
                       key={cell.id}
                       dynamicFlex={dynamicFlex}
-                      className={cell.column.columnDef.meta?.className}
                     />
                   ))}
                 </TableRow>

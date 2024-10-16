@@ -3,10 +3,20 @@
 import React, { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { usePollGauges, type Gauge } from "@bera/berajs";
-import { DataTable, getRewardsVaultUrl } from "@bera/shared-ui";
-import { TableState, type ColumnDef } from "@tanstack/react-table";
+import {
+  SimpleTable,
+  getRewardsVaultUrl,
+  useAsyncTable,
+} from "@bera/shared-ui";
+import type {
+  ColumnDef,
+  PaginationState,
+  SortingState,
+  TableState,
+  Updater,
+} from "@tanstack/react-table";
 
-import { global_gauge_weight_columns } from "~/columns/global-gauge-weight-columns";
+import { GlobalGaugeWeightColumns } from "~/columns/global-gauge-weight-columns";
 
 const GAUGE_PAGE_SIZE = 10;
 
@@ -26,11 +36,84 @@ export default function GlobalGaugeWeightTable({
   const [sorting, setSorting] = useState([
     { id: "activeIncentivesInHoney", desc: true },
   ]);
-  const handleNewSort = (newSort: any) => {
-    if (newSort === sorting) return;
-    setSorting(newSort);
-  };
-  const { gaugeCounts, gaugeList, isLoading, isValidating } = usePollGauges({
+
+  const { gaugeCounts, gaugeList, isLoading, isValidating } = usePollGauges(
+    {
+      sortBy: sorting[0]?.id as
+        | "activeIncentivesInHoney"
+        | "amountstaked"
+        | "bgtInflationCapture"
+        | undefined,
+      sortOrder: sorting[0]?.desc ? "desc" : "asc",
+      page: page + 1,
+      filterByProduct: markets,
+      pageSize: GAUGE_PAGE_SIZE,
+      query: isTyping ? "" : keywords,
+    },
+    { opts: { keepPreviousData: true } },
+  );
+
+  const fetchData = useCallback(
+    (state: TableState) => {
+      setPage(state?.pagination?.pageIndex);
+      setSorting(state?.sorting);
+    },
+    [setPage],
+  );
+
+  const handleSortingChange = useCallback(
+    (updater: Updater<SortingState>) => {
+      setSorting((prev: SortingState) => {
+        return typeof updater === "function" ? updater(prev ?? []) : updater;
+      });
+    },
+    [setSorting],
+  );
+
+  const handlePaginationChange = useCallback(
+    (updater: Updater<PaginationState>) => {
+      setPage((prev: number) => {
+        const newPaginationState =
+          typeof updater === "function"
+            ? updater({
+                pageIndex: prev ?? 0,
+                pageSize: GAUGE_PAGE_SIZE,
+              })
+            : updater;
+        return newPaginationState.pageIndex ?? 0;
+      });
+    },
+    [setPage],
+  );
+
+  const allGaugeTable = useAsyncTable({
+    fetchData: fetchData,
+    columns: GlobalGaugeWeightColumns as ColumnDef<Gauge>[],
+    data: myGauge ? [] : gaugeList ?? [],
+    enablePagination: true,
+    additionalTableProps: {
+      meta: {
+        loading: isLoading,
+        loadingText: "Loading...",
+        validating: isValidating,
+      },
+      state: {
+        pagination: {
+          pageIndex: page,
+          pageSize: GAUGE_PAGE_SIZE,
+        },
+        sorting,
+      },
+      manualSorting: true,
+      manualPagination: true,
+      autoResetPageIndex: false,
+      pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
+      onPaginationChange: handlePaginationChange,
+      onSortingChange: handleSortingChange,
+    },
+  });
+
+  console.log({
     sortBy: sorting[0]?.id as
       | "activeIncentivesInHoney"
       | "amountstaked"
@@ -41,30 +124,17 @@ export default function GlobalGaugeWeightTable({
     filterByProduct: markets,
     pageSize: GAUGE_PAGE_SIZE,
     query: isTyping ? "" : keywords,
-  });
-  const fetchData = useCallback(
-    (state: TableState) => setPage(state?.pagination?.pageIndex),
-    [setPage],
-  );
+  }, gaugeList, "gaugeList");
   return (
-    <DataTable
-      loading={isLoading}
-      validating={isValidating}
-      fetchData={fetchData}
-      enablePagination
-      columns={global_gauge_weight_columns as ColumnDef<Gauge>[]}
-      data={myGauge ? [] : gaugeList ?? []}
+    <SimpleTable
+      table={allGaugeTable}
       className="min-h-[200px] w-full min-w-[800px] shadow"
-      additionalTableProps={{
-        initialState: { pagination: { pageSize: GAUGE_PAGE_SIZE } },
-        pageCount: Math.ceil(gaugeCounts / GAUGE_PAGE_SIZE),
-        state: { sorting },
-        manualPagination: true,
-      }}
+      wrapperClassName="min-h-[200px] w-full min-w-[800px]"
+      variant="ghost"
+      flexTable
       onRowClick={(row: any) =>
         router.push(getRewardsVaultUrl(row.original.vaultAddress, myGauge))
       }
-      onCustomSortingChange={(a: any) => handleNewSort(a)}
     />
   );
 }

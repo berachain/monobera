@@ -9,7 +9,7 @@ type TableHeadProps = PropsWithChildren<{
   style?: React.CSSProperties;
   flexTable?: boolean;
   tableBodyRef?: React.RefObject<HTMLTableSectionElement | null>;
-  backgroundColor?: "muted" | "none";
+  variant?: string;
 }>;
 
 export const TableHead: React.FC<TableHeadProps> = ({
@@ -18,7 +18,7 @@ export const TableHead: React.FC<TableHeadProps> = ({
   style,
   flexTable,
   children,
-  backgroundColor = "muted",
+  variant,
 }) => {
   const [hasVerticalScrollbar, setHasVerticalScrollbar] = useState(false);
 
@@ -49,11 +49,8 @@ export const TableHead: React.FC<TableHeadProps> = ({
       className={cn(
         flexTable ? "flex" : "table-header-group",
         "relative w-full ",
-        {
-          "bg-muted": backgroundColor === "muted",
-          // "bg-none": backgroundColor === "none",
-        },
         hasVerticalScrollbar ? "pr-2" : "",
+        variant !== "ghost" && "bg-muted",
         className,
       )}
     >
