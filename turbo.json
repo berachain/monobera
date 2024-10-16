@@ -4,7 +4,12 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**",
+        "storybook-static/**"
+      ]
     },
 
     "start": {
@@ -21,11 +26,12 @@
     "dev": {
       "persistent": true,
       "cache": false,
-      "env": [".env.devnet"]
+      "env": [".env.v2"]
     },
     "check-types": {
       "dependsOn": ["^build"],
-      "cache": false
+      "cache": false,
+      "outputs": ["storybook-static/**"]
     }
   },
   "globalEnv": [

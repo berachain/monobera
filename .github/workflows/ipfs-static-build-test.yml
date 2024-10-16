@@ -15,15 +15,9 @@ jobs:
       with:
         token: ${{ secrets.CHARTING_ACCESS_TOKEN }}
 
+    - name: Cache for Turbo
+      uses: rharkor/caching-for-turbo@v1.5
 
-    - name: Cache turbo build setup
-      uses: actions/cache@v4
-      with: 
-        path: .turbo
-        key: ${{ runner.os }}-turbo-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-turbo-
-                    
     - name: Install pnpm
       uses: pnpm/action-setup@v4 
 
@@ -44,5 +38,5 @@ jobs:
         PERPS_OCT_KEY: ${{ secrets.PERPS_OCT_KEY }}
         CHARTING_ACCESS_TOKEN: ${{ secrets.CHARTING_ACCESS_TOKEN }}
         NODE_OPTIONS: "--max_old_space_size=8192"
-      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter='!berajs-docs'
+      run: NEXT_PUBLIC_HOST="ipfs" pnpm run build --filter='!berajs-docs' --filter='!storybook'
      

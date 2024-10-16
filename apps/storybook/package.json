@@ -1,0 +1,51 @@
+{
+  "name": "@bera/storybook",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build"
+  },
+  "dependencies": {
+    "@bera/shared-ui": "workspace:*",
+    "@bera/tailwind-config": "workspace:*",
+    "@bera/ui": "workspace:*",
+    "@fontsource/ibm-plex-sans": "^5.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^1.9.0",
+    "@eslint/js": "^9.11.1",
+    "@storybook/addon-essentials": "^8.3.5",
+    "@storybook/addon-interactions": "^8.3.5",
+    "@storybook/addon-links": "^8.3.5",
+    "@storybook/addon-onboarding": "^8.3.5",
+    "@storybook/addon-postcss": "^2.0.0",
+    "@storybook/addon-themes": "^8.3.5",
+    "@storybook/blocks": "^8.3.5",
+    "@storybook/react": "^8.3.5",
+    "@storybook/react-vite": "^8.3.5",
+    "@storybook/test": "^8.3.5",
+    "@types/react": "^18.3.10",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^9.11.1",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "eslint-plugin-storybook": "^0.6.12",
+    "globals": "^15.9.0",
+    "postcss": "^8.4.23",
+    "storybook": "^8.3.5",
+    "tailwindcss": "^3.3.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.7.0",
+    "vite": "^5.4.8"
+  },
+  "eslintConfig": {
+    "extends": ["plugin:storybook/recommended"]
+  }
+}

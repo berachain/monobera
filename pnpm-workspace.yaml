@@ -12,3 +12,4 @@ packages:
   - apps/lend
   - apps/perp
   - apps/berajs-docs
+  - apps/storybook
