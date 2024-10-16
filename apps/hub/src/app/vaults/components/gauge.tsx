@@ -6,6 +6,7 @@ import { usePollGlobalData } from "@bera/berajs";
 import GlobalGaugeWeightChart from "~/components/global-gauge-weight-chart";
 import GaugeTables from "./gauge-tables";
 import GaugeInfoCard from "./gauge-info-card";
+import { GaugeCreation } from "./gauge-creation";
 
 export default function Gauge() {
   const { data, isLoading: isGlobalDataLoading } = usePollGlobalData();
@@ -21,6 +22,7 @@ export default function Gauge() {
         />
       </div>
       <GaugeTables />
+      <GaugeCreation />
     </div>
   );
 }

@@ -113,18 +113,6 @@ export default function GlobalGaugeWeightTable({
     },
   });
 
-  console.log({
-    sortBy: sorting[0]?.id as
-      | "activeIncentivesInHoney"
-      | "amountstaked"
-      | "bgtInflationCapture"
-      | undefined,
-    sortOrder: sorting[0]?.desc ? "desc" : "asc",
-    page: page + 1,
-    filterByProduct: markets,
-    pageSize: GAUGE_PAGE_SIZE,
-    query: isTyping ? "" : keywords,
-  }, gaugeList, "gaugeList");
   return (
     <SimpleTable
       table={allGaugeTable}
