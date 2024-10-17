@@ -45,15 +45,17 @@ export const ProposalsList = () => {
 
   if (data?.flat().length === 0 && !areFiltersSet) {
     return (
-      <div className="mx-auto w-fit">
-        <Image
-          src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
-          alt="not found bear"
-          width={345.35}
-          height={200}
-        />
-        <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
-          No Proposals Found
+      <div className="mx-auto pb-10 w-full border border-border flex items-center justify-center rounded-md p-4">
+        <div>
+          <Image
+            src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+            alt="not found bear"
+            width={345.35}
+            height={200}
+          />
+          <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
+            No Proposals Found
+          </div>
         </div>
       </div>
     );
@@ -134,15 +136,17 @@ export const ProposalsList = () => {
           </div>
         </>
       ) : (
-        <div className="mx-auto w-fit">
-          <Image
-            src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
-            alt="not found bear"
-            width={345.35}
-            height={200}
-          />
-          <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
-            No Proposals Found
+        <div className="mx-auto pb-10 w-full border border-border flex items-center justify-center rounded-md p-4">
+          <div>
+            <Image
+              src={`${cloudinaryUrl}/bears/e6monhixzv21jy0fqes1`}
+              alt="not found bear"
+              width={345.35}
+              height={200}
+            />
+            <div className="mt-4 w-full text-center text-xl font-semibold leading-7 text-muted-foreground">
+              No Proposals Found
+            </div>
           </div>
         </div>
       )}
