@@ -1,5 +1,5 @@
 import { type PoolV2 } from "@bera/berajs";
-import { POLLING } from "@bera/shared-ui/src/utils";
+import { POLLING } from "@bera/shared-ui";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
 

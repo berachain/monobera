@@ -2,16 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { usePoolTable, useTotalPoolCount } from "@bera/berajs";
 import {
-  DataTable,
   NotFoundBear,
   SearchInput,
   SimpleTable,
   useBaseTable,
 } from "@bera/shared-ui";
-import { DataTableLoading } from "@bera/shared-ui/src/table/legacy/data-table";
+import { DataTableLoading } from "@bera/shared-ui/table/legacy";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 
@@ -26,7 +25,6 @@ export const PoolSearch = ({
 }: {
   poolType: "allPools" | "userPools";
 }) => {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const page = searchParams.get("page");
   const pageSize = searchParams.get("pageSize");
