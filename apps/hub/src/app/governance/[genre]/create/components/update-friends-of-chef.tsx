@@ -1,14 +1,16 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { cn } from "@bera/ui";
+import { Address } from "viem";
 
-import { GaugeSelector } from "./gauge-selector";
 import {
   CustomProposalActionErrors,
   ProposalAction,
   ProposalErrorCodes,
   ProposalTypeEnum,
 } from "~/app/governance/types";
-import { FormError } from "@bera/ui/form-error";
+import { InputWithLabel } from "@bera/ui/input";
+import { useIsFriendOfTheChef } from "@bera/berajs";
+import { beraChefAddress } from "@bera/config";
 
 export const UpdateFriendsOfChef = ({
   action: gauge,
@@ -19,18 +21,40 @@ export const UpdateFriendsOfChef = ({
   setAction: Dispatch<SetStateAction<ProposalAction>>;
   errors: CustomProposalActionErrors;
 }) => {
-  // const encodedData = gauge
-  //   ? encodeFunctionData({
-  //       abi: BERA_CHEF_ABI,
-  //       functionName: "updateFriendsOfTheChef",
-  //       args: [gauge.receiptToken, !gauge.isFriend],
-  //     })
-  //   : "0x";
+  const { data: isFriendOfTheChef, isLoading } = useIsFriendOfTheChef(
+    gauge.vault,
+  );
 
+  useEffect(() => {
+    setAction({
+      ...gauge,
+      target: beraChefAddress,
+
+      isFriend: !isFriendOfTheChef,
+    });
+  }, [isFriendOfTheChef, isLoading]);
   return (
     <>
       <div className="flex flex-col gap-2">
-        <div className="text-sm font-semibold leading-tight">Select gauge</div>
+        <InputWithLabel
+          variant="black"
+          label="Gauge Address"
+          value={gauge?.vault}
+          error={
+            errors.vault === ProposalErrorCodes.REQUIRED
+              ? "A Vault Must Be Chosen"
+              : errors.vault === ProposalErrorCodes.INVALID_ADDRESS
+                ? "Invalid gauge address."
+                : errors.vault
+          }
+          onChange={async (e) => {
+            setAction({
+              ...gauge,
+              vault: e.target.value as Address,
+            });
+          }}
+        />
+        {/* <div className="text-sm font-semibold leading-tight">Select gauge</div>
         <GaugeSelector selectedGauge={gauge} setGauge={setAction} />
         <FormError>
           {errors.vault === ProposalErrorCodes.REQUIRED
@@ -38,7 +62,7 @@ export const UpdateFriendsOfChef = ({
             : errors.vault === ProposalErrorCodes.INVALID_ADDRESS
               ? "Invalid gauge address."
               : errors.vault}
-        </FormError>
+        </FormError> */}
       </div>
 
       {gauge && (
@@ -46,10 +70,10 @@ export const UpdateFriendsOfChef = ({
           <div className="mb-2 text-sm font-semibold leading-tight">Update</div>
           <div className="rounded-md border border-border p-3">
             <div className="flex gap-2 text-sm font-semibold">
-              {gauge.isFriend ? "Remove" : "Add"} status:{" "}
+              {isFriendOfTheChef ? "Remove" : "Add"} status:{" "}
               <span
                 className={cn(
-                  gauge.isFriend
+                  isFriendOfTheChef
                     ? "text-destructive-foreground"
                     : "text-success-foreground",
                 )}
@@ -58,7 +82,8 @@ export const UpdateFriendsOfChef = ({
               </span>
             </div>
             <div className="text-sm font-medium text-muted-foreground">
-              Change this gauge to be in-eligible to receive emissions.
+              Update this reward vault to be {isFriendOfTheChef ? "in-" : ""}
+              eligible to receive emissions.
             </div>
           </div>
         </div>

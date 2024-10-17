@@ -1,29 +1,34 @@
 import { ComponentProps } from "react";
-import { Proposal } from "@bera/berajs";
+import {
+  ProposalSelectionFragment,
+  ProposalStatus,
+} from "@bera/graphql/governance";
 import { Badge } from "@bera/ui/badge";
 import BigNumber from "bignumber.js";
 import graymatter from "gray-matter";
 import { decodeFunctionData, formatEther } from "viem";
 
 import { NativeDapps, Others } from "./governance-genre-helper";
-import { ProposalTypeEnum, StatusEnum, VoteColorMap } from "./types";
+import { ProposalTypeEnum, VoteColorMap } from "./types";
 
 export const getBadgeColor = (
-  proposalStatus: StatusEnum,
+  proposalStatus: ProposalStatus,
 ): ComponentProps<typeof Badge>["variant"] => {
   switch (proposalStatus) {
-    case StatusEnum.PENDING:
-    case StatusEnum.IN_QUEUE:
+    case ProposalStatus.Pending:
+    case ProposalStatus.InQueue:
       return "outline";
-    case StatusEnum.ACTIVE:
-    case StatusEnum.EXECUTED:
+    case ProposalStatus.Active:
+    case ProposalStatus.Executed:
       return "success";
-    case StatusEnum.DEFEATED:
+    case ProposalStatus.Defeated:
+    case ProposalStatus.QuorumNotReached:
       return "destructive";
-    case StatusEnum.EXPIRED:
+    case ProposalStatus.PendingExecution:
+    case ProposalStatus.PendingQueue:
       return "warning";
-    case StatusEnum.CANCELED_BY_GUARDIAN:
-    case StatusEnum.CANCELED_BY_USER:
+    case ProposalStatus.CanceledByGuardian:
+    case ProposalStatus.CanceledByUser:
       return "destructive";
   }
 };
@@ -121,28 +126,29 @@ export const getTimeText = (date: Date) => {
   return "";
 };
 
-export const getVotesDataList = (proposal: Proposal) => {
-  const votes = proposal.voteStats;
-  const quorum = proposal.governor.quorum;
-  const globalYesPercentage = BigNumber(votes[0].votesCount)
+export const getVotesDataList = (proposal: ProposalSelectionFragment) => {
+  const votes = proposal.pollResult;
+  const quorum = proposal.pollResult?.total;
+  const globalYesPercentage = BigNumber(votes?.for)
     .div(BigNumber(quorum))
     .times(100)
     .toNumber();
 
-  const globalNoPercentage = BigNumber(votes[1].votesCount)
+  const globalNoPercentage = BigNumber(votes?.against)
     .div(BigNumber(quorum))
     .times(100)
     .toNumber();
 
-  const globalAbstainPercentage = BigNumber(votes[2].votesCount)
+  const globalAbstainPercentage = BigNumber(votes?.abstain)
     .div(BigNumber(quorum))
     .times(100)
     .toNumber();
+
   return [
     {
       color: VoteColorMap.yes,
       width: globalYesPercentage > 100 ? 100 : globalYesPercentage,
-      votesCount: votes[0].votesCount,
+      votesCount: votes?.for,
     },
     {
       color: VoteColorMap.no,
@@ -150,7 +156,7 @@ export const getVotesDataList = (proposal: Proposal) => {
         globalYesPercentage + globalNoPercentage > 100
           ? 100
           : globalYesPercentage + globalNoPercentage,
-      votesCount: votes[1].votesCount,
+      votesCount: votes?.against,
     },
     {
       color: VoteColorMap.abstain,
@@ -158,23 +164,15 @@ export const getVotesDataList = (proposal: Proposal) => {
         globalYesPercentage + globalNoPercentage + globalAbstainPercentage > 100
           ? 100
           : globalYesPercentage + globalNoPercentage + globalAbstainPercentage,
-      votesCount: votes[2].votesCount,
+      votesCount: votes?.abstain,
     },
   ];
 };
 
-export const getTotalVotes = (proposal: Proposal) =>
+export const getTotalVotes = (proposal: ProposalSelectionFragment) =>
   formatEther(
-    proposal.voteStats.reduce(
-      (acc: bigint, curr: any) => acc + BigInt(curr.votesCount),
-      0n,
-    ),
-  );
-
-export const getTotalVoters = (proposal: Proposal) =>
-  proposal.voteStats.reduce(
-    (acc: number, curr: any) => acc + curr.votersCount,
-    0,
+    BigInt(proposal.pollResult?.abstain ?? 0) +
+      BigInt(proposal.pollResult?.for ?? 0),
   );
 
 const parseLegacyBody = (
@@ -198,7 +196,7 @@ const parseLegacyBody = (
 };
 
 export const parseProposalBody = (
-  proposal?: Proposal,
+  proposal?: ProposalSelectionFragment,
 ): graymatter.GrayMatterFile<string> & {
   isFrontMatter: boolean;
 } => {
@@ -214,7 +212,7 @@ export const parseProposalBody = (
     };
   }
 
-  const body = proposal?.metadata?.description ?? "";
+  const body = proposal?.description ?? "";
 
   if (graymatter.test(body)) {
     return { ...graymatter(body), isFrontMatter: true };
@@ -236,7 +234,7 @@ export const parseProposalBody = (
     return {
       isFrontMatter: false,
       data: {
-        title: proposal.metadata.description.split("\n")[0].slice(0, 100),
+        title: proposal?.description?.split("\n")[0].slice(0, 100),
       },
       content: body,
       matter: "",

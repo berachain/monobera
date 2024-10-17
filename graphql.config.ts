@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
 
 dotenv.config({
-  path: ["./.env", "./.env.local"],
+  path: ["./.env.local", "./.env"],
 });
 module.exports = {
   projects: {
     governance: {
-      schema: "http://localhost:8000/subgraphs/name/governance-subgraph",
+      schema: process.env.NEXT_PUBLIC_GOVERNANCE_SUBGRAPH_URL,
       documents: "./packages/graphql/src/modules/governance/query.ts",
     },
     blocks: {

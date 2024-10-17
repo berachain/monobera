@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GetBlocksTimeStampDocument = gql`
+gql`
   query GetBlocksTimeStamp($skip: Int!) {
     newest: blocks(first: 1, orderBy: timestamp, orderDirection: desc) {
       timestamp

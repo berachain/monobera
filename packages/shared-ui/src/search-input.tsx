@@ -8,7 +8,7 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 const SearchInput = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, onChange, isLoading, type, ...props }, ref) => {
+  ({ className, isLoading, type, ...props }, ref) => {
     return (
       <Input
         startAdornment={<Icons.search className="h-4 w-4" />}
@@ -39,7 +39,6 @@ const SearchInput = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className={cn("pl-9 text-foreground", className)}
         ref={ref}
-        onChange={onChange}
         {...props}
       />
     );

@@ -1,16 +1,16 @@
 import { FormattedNumber } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import BigNumber from "bignumber.js";
+import { formatEther } from "viem";
 
-export const QuorumStatus = ({
-  delegatesVotesCount,
-  quorum,
-}: {
+export const QuorumStatus = (props: {
   delegatesVotesCount: string;
   quorum: string;
 }) => {
+  const delegatesVotesCount = formatEther(BigInt(props.delegatesVotesCount));
+  const quorum = formatEther(BigInt(props.quorum));
   const percentage = BigNumber(delegatesVotesCount)
-    .div(BigNumber(quorum))
+    .div(quorum)
     .times(100)
     .toNumber();
 

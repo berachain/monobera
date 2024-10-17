@@ -2,28 +2,6 @@ import { Address } from "viem";
 
 import { PROPOSAL_GENRE } from "./governance-genre-helper";
 
-export enum StatusEnum {
-  PENDING = "pending",
-  ACTIVE = "active",
-  CANCELED_BY_GUARDIAN = "canceled-by-guardian",
-  CANCELED_BY_USER = "canceled",
-  SUCCEEDED = "succeeded",
-  DEFEATED = "defeated",
-  PENDING_QUEUE = "pending-queue",
-  IN_QUEUE = "queued",
-  PENDING_EXECUTION = "pending-execution",
-  EXECUTED = "executed",
-  EXPIRED = "expired",
-}
-
-export enum OrderByEnum {
-  MOST_RECENT = "most-recent",
-  OLDEST = "oldest",
-  NEWEST = "newest",
-  HIGHEST_PARTICIPATION = "highest-participation",
-  LOWEST_PARTICIPATION = "lowest-participation",
-}
-
 export type ProposalVotes = {
   yes: number;
   no: number;
@@ -47,20 +25,15 @@ export const VoteColorMap = {
 };
 
 export enum VoteEnum {
-  for = "yes",
-  against = "no",
-  abstain = "abstain",
+  AGAINST = "no",
+  FOR = "yes",
+  ABSTAIN = "abstain",
 }
-
-export const voteTypes: VOTE_TYPE[] = ["yes", "no", "abstain"];
-
-export type VOTE_TYPE = "yes" | "no" | "abstain";
-
-export type ALL = "all";
 
 export type CustomProposalActionErrors = {
   type?: null | ProposalErrorCodes;
   target?: null | ProposalErrorCodes;
+  value?: null | ProposalErrorCodes;
   ABI?: null | ProposalErrorCodes;
   functionSignature?: null | ProposalErrorCodes;
   calldata?: (null | ProposalErrorCodes)[];
@@ -90,6 +63,11 @@ export enum ProposalErrorCodes {
   INVALID_ACTION = "Invalid action",
   INVALID_ABI = "Invalid ABI",
   MUST_BE_HTTPS = "Must be https",
+  INVALID_BASEPATH = "Must be a berachain forum link",
+  /**
+   * Mainly used when it's not a rewards vault
+   */
+  INVALID_CONTRACT = "This is not a valid contract",
 }
 
 export type CustomProposal = {
@@ -101,6 +79,7 @@ export type CustomProposal = {
 };
 
 export type SafeProposalAction = {
+  value: bigint;
   target: "" | Address;
 } & (
   | {

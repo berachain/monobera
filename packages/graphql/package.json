@@ -14,23 +14,51 @@
     "build": "tsup src",
     "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "tsup src --watch",
-    "lint": "eslint src",
-    "lint:fix": "pnpm lint --fix",
+    "lint": "biome lint . ",
+    "format:check": "biome format .",
+    "format": "biome format --write .",
     "codegen": "graphql-codegen",
+    "postcodegen": "pnpm format",
     "codegen:watch": "graphql-codegen --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.8.8",
     "@bera/config": "workspace:*",
+    "@biomejs/biome": "1.5.3",
     "graphql": "^16.8.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/client-preset": "^4.4.0",
     "@graphql-codegen/near-operation-file-preset": "^3.0.0",
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-document-nodes": "^4.0.9",
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@parcel/watcher": "^2.4.1"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./governance": {
+      "import": "./dist/modules/governance/index.js",
+      "types": "./dist/modules/governance/index.d.ts"
+    },
+    "./chain": {
+      "import": "./dist/modules/chain/index.js",
+      "types": "./dist/modules/chain/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "governance": [
+        "dist/modules/governance/index.d.ts"
+      ],
+      "chain": [
+        "dist/modules/chain/index.d.ts"
+      ]
+    }
   }
 }

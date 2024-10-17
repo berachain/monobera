@@ -3,6 +3,7 @@ import { ApolloProvider } from "@apollo/client";
 import { honeyClient } from "@bera/graphql";
 import { Analytics } from "@vercel/analytics/react";
 import { BeraWagmi } from "@bera/wagmi";
+import { BeraJsProvider } from "@bera/berajs";
 
 export default function HoneyProviders({
   children,
@@ -10,7 +11,7 @@ export default function HoneyProviders({
   return (
     <ApolloProvider client={honeyClient}>
       <BeraWagmi>
-        {children}
+        <BeraJsProvider configOverride={undefined}>{children}</BeraJsProvider>
         <Analytics />
       </BeraWagmi>
     </ApolloProvider>

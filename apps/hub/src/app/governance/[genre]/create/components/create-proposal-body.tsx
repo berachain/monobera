@@ -14,6 +14,7 @@ import {
   getBodyErrors,
   type useCreateProposal,
 } from "~/hooks/useCreateProposal";
+import { useGovernance } from "../../components/governance-provider";
 
 export const CreateProposalBody = ({
   proposal,
@@ -28,12 +29,17 @@ export const CreateProposalBody = ({
   errors: CustomProposalErrors;
   setErrors: Dispatch<SetStateAction<CustomProposalErrors>>;
 }) => {
+  const { currentTopic } = useGovernance();
   const handleNext = useCallback(() => {
     const e: CustomProposalErrors = {};
 
     e.title = checkProposalField("title", proposal.title);
     e.description = checkProposalField("description", proposal.description);
-    e.forumLink = checkProposalField("forumLink", proposal.forumLink);
+    e.forumLink = checkProposalField(
+      "forumLink",
+      proposal.forumLink,
+      currentTopic.forumLink,
+    );
 
     setErrors(e);
 
@@ -99,7 +105,7 @@ export const CreateProposalBody = ({
         type="text"
         variant="black"
         id="proposal-forumLink"
-        placeholder="https://forum.berachain.com/...."
+        placeholder={`${currentTopic.forumLink}...`}
         value={proposal.forumLink}
         onChange={(e: any) => {
           setProposal((prev: any) => ({
@@ -108,7 +114,11 @@ export const CreateProposalBody = ({
           }));
           setErrors((errs) => ({
             ...errs,
-            forumLink: checkProposalField("forumLink", e.target.value),
+            forumLink: checkProposalField(
+              "forumLink",
+              e.target.value,
+              currentTopic.forumLink,
+            ),
           }));
         }}
       />

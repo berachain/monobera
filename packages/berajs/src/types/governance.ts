@@ -1,63 +1,14 @@
+import {
+  ProposalVoteFragment,
+  ProposalWithVotesFragment,
+} from "@bera/graphql/governance";
 import { Address } from "viem";
 
-export type Proposal = {
-  block: {
-    timestamp: string;
-  };
-  createdAt: string;
-  creator: {
-    name: string;
-    picture: string | null;
-    address: Address;
-  };
-  governor: {
-    id: string;
-    name: string;
-    quorum: string;
-    timelockId: string;
-    token: { decimals: number };
-  };
+export type Proposal = ProposalWithVotesFragment;
 
-  executableCalls: ExecutableCalls[];
-  id: string;
-  metadata: {
-    description: string;
-  };
-  onchainId: string;
-  originalId: string;
-  status: string;
-  start: {
-    timestamp: string;
-  };
-  end: {
-    timestamp: string;
-  };
-  events: {
-    type: string;
-    txHash: string;
-  }[];
-  voteStats: {
-    percent: number;
-    type: string;
-    votersCount: number;
-    votesCount: string;
-  }[];
-};
+export type Vote = ProposalVoteFragment;
 
-export type Vote = {
-  block: { timestamp: string };
-  reason: string;
-  type: "for" | "against" | "abstain";
-  voter: Voter;
-  amount: string;
-};
-
-export type Voter = {
-  address: Address;
-  name: string;
-  picture: string | null;
-  twitter?: string;
-};
+export type Voter = Address;
 
 export type ExecutableCalls = {
   calldata: string;

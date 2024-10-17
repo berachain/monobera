@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { PriceContextProvider } from "~/context/price-context";
 import { TableContextProvider } from "~/context/table-context";
 import { PricesMap } from "~/types/prices";
+import { BeraJsProvider } from "@bera/berajs";
 
 export default function Providers({
   children,
@@ -15,11 +16,13 @@ export default function Providers({
 }>) {
   return (
     <BeraWagmi>
-      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-        <PriceContextProvider>
-          <TableContextProvider>{children}</TableContextProvider>
-        </PriceContextProvider>
-      </ThemeProvider>
+      <BeraJsProvider configOverride={undefined}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <PriceContextProvider>
+            <TableContextProvider>{children}</TableContextProvider>
+          </PriceContextProvider>
+        </ThemeProvider>
+      </BeraJsProvider>
     </BeraWagmi>
   );
 }

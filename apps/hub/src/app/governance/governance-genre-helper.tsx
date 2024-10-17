@@ -11,6 +11,7 @@ export type GovernanceTopic = {
   name: string;
   slug: string;
   subgraph: string;
+  forumLink: string;
 };
 
 export const NativeDapps: GovernanceTopic[] = [
@@ -21,6 +22,7 @@ export const NativeDapps: GovernanceTopic[] = [
     name: "BeraHub",
     slug: "berahub",
     // subgraph: governanceSubgraphUrl,
+    forumLink: "https://berahub-berachain.discourse.group/",
     subgraph:
       "https://api.goldsky.com/api/public/project_clq1h5ct0g4a201x18tfte5iv/subgraphs/governance-subgraph/v1/gn",
   },
@@ -29,6 +31,7 @@ export const NativeDapps: GovernanceTopic[] = [
     color: "#EC8A19",
     icon: <Icons.honeyFav className="h-16 w-16" />,
     name: "Honey",
+    forumLink: "https://honey-berachain.discourse.group/",
     slug: "honey",
     subgraph: governanceSubgraphUrl,
   },
@@ -39,6 +42,7 @@ export const NativeDapps: GovernanceTopic[] = [
     name: "BEND",
     slug: "bend",
     subgraph: governanceSubgraphUrl,
+    forumLink: "https://bend-berachain.discourse.group/",
   },
   {
     id: "berps",
@@ -47,6 +51,7 @@ export const NativeDapps: GovernanceTopic[] = [
     name: "BERPS",
     slug: "berps",
     subgraph: governanceSubgraphUrl,
+    forumLink: "https://berps-berachain.discourse.group/",
   },
 ] as const;
 
@@ -58,6 +63,7 @@ export const Others: GovernanceTopic[] = [
     icon: <Icons.ecoFav className="h-16 w-16" />,
     name: "General",
     slug: "general",
+    forumLink: "https://berachain.discourse.group/",
     subgraph: governanceSubgraphUrl,
   },
 ];

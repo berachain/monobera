@@ -34,11 +34,8 @@ export interface BeraConfig {
     honeyRouterAddress?: Address;
     perpsTradingContractAddress?: Address;
     governance?: {
-      berahub?: { governor: Address; timelock: Address };
-      honey?: { governor: Address; timelock: Address };
-      bend?: { governor: Address; timelock: Address };
-      berps?: { governor: Address; timelock: Address };
-      general?: { governor: Address; timelock: Address };
+      governor: Address;
+      timelock: Address;
     };
   };
 }

@@ -1,5 +1,10 @@
 const config = {
-  entryPoints: ["src/index.ts"], // The entry point(s) of your library
+  entryPoints: [
+    "src/index.ts",
+    "src/config/index.ts",
+    "src/context/index.ts",
+    "src/constants/index.ts",
+  ], // The entry point(s) of your library
   format: ["esm"], // The desired output format(s)
   clean: true,
   splitting: true,

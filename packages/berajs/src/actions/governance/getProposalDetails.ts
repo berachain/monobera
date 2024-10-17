@@ -1,6 +1,15 @@
-import { getProposal } from "@bera/graphql";
+import { FALLBACK_BLOCK_TIME } from "@bera/config";
+import { governanceClient } from "@bera/graphql";
+import {
+  GetProposal,
+  GetProposalDocument,
+  ProposalWithVotesFragment,
+} from "@bera/graphql/governance";
+import { wagmiConfig } from "@bera/wagmi/config";
+import { getBlockNumber } from "@wagmi/core";
 
-import { BeraConfig, Proposal } from "~/types";
+import { BeraConfig } from "~/types";
+import { computeActualStatus } from "./computeActualStatus";
 
 export const getProposalDetails = async ({
   proposalId,
@@ -8,47 +17,25 @@ export const getProposalDetails = async ({
 }: {
   proposalId: string;
   config: BeraConfig;
-}): Promise<any> => {
-  try {
-    if (!config.subgraphs?.governanceSubgraph) {
-      throw new Error("governance subgraph uri is not found in config");
-    }
+}): Promise<ProposalWithVotesFragment> => {
+  if (!config.subgraphs?.governanceSubgraph) {
+    throw new Error("governance subgraph uri is not found in config");
+  }
 
-    const subgraphEndpoint = config.subgraphs.governanceSubgraph;
-    const variables = {
-      input: {
+  const [res, blocknumber] = await Promise.all([
+    governanceClient.query({
+      query: GetProposal,
+      variables: {
         id: proposalId,
       },
-      votesInput: {
-        filters: {
-          proposalId: proposalId,
-        },
-        sort: {
-          sortBy: "amount",
-          isDescending: true,
-        },
-        page: {
-          limit: 500,
-        },
-      },
-    };
-    const response = await fetch(subgraphEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Api-Key":
-          "751c3bf1ebd98e89c5bc0fd3354add5adf7b7db18d2269c7968f6325453f01c1",
-      },
-      body: JSON.stringify({
-        query: getProposal.loc?.source.body,
-        variables: variables,
-      }),
-    });
-    const data = await response.json();
-    return data.data;
-  } catch (e) {
-    console.log("getProposalDetails:", e);
-    return [];
-  }
+    }),
+    getBlockNumber(wagmiConfig, {
+      cacheTime: FALLBACK_BLOCK_TIME * 1000,
+    }),
+  ]);
+
+  return {
+    ...res.data.proposal,
+    status: computeActualStatus(res.data.proposal, blocknumber),
+  } as ProposalWithVotesFragment;
 };

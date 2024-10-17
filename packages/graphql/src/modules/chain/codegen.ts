@@ -1,25 +1,28 @@
 import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
-type Maybe<T> = T | null;
-type InputMaybe<T> = Maybe<T>;
-type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]?: Maybe<T[SubKey]>;
 };
-type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
-type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
-  [_ in K]?: never;
-};
-type Incremental<T> =
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
   | T
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
-type Scalars = {
+export type Scalars = {
   ID: { input: string; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
@@ -32,12 +35,12 @@ type Scalars = {
   Timestamp: { input: any; output: any };
 };
 
-enum Aggregation_Interval {
+export enum Aggregation_Interval {
   Day = "day",
   Hour = "hour",
 }
 
-type Block = {
+export type Block = {
   __typename?: "Block";
   author: Scalars["Bytes"]["output"];
   baseFeePerGas?: Maybe<Scalars["BigInt"]["output"]>;
@@ -57,11 +60,11 @@ type Block = {
   unclesHash: Scalars["Bytes"]["output"];
 };
 
-type BlockChangedFilter = {
+export type BlockChangedFilter = {
   number_gte: Scalars["Int"]["input"];
 };
 
-type Block_Filter = {
+export type Block_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Block_Filter>>>;
@@ -210,13 +213,13 @@ type Block_Filter = {
   unclesHash_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
 };
 
-type Block_Height = {
+export type Block_Height = {
   hash?: InputMaybe<Scalars["Bytes"]["input"]>;
   number?: InputMaybe<Scalars["Int"]["input"]>;
   number_gte?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-enum Block_OrderBy {
+export enum Block_OrderBy {
   Author = "author",
   BaseFeePerGas = "baseFeePerGas",
   Difficulty = "difficulty",
@@ -236,12 +239,12 @@ enum Block_OrderBy {
 }
 
 /** Defines the order direction, either ascending or descending */
-enum OrderDirection {
+export enum OrderDirection {
   Asc = "asc",
   Desc = "desc",
 }
 
-type Query = {
+export type Query = {
   __typename?: "Query";
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
@@ -249,17 +252,17 @@ type Query = {
   blocks: Array<Block>;
 };
 
-type Query_MetaArgs = {
+export type Query_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
 
-type QueryBlockArgs = {
+export type QueryBlockArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type QueryBlocksArgs = {
+export type QueryBlocksArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Block_OrderBy>;
@@ -269,7 +272,7 @@ type QueryBlocksArgs = {
   where?: InputMaybe<Block_Filter>;
 };
 
-type Subscription = {
+export type Subscription = {
   __typename?: "Subscription";
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
@@ -277,17 +280,17 @@ type Subscription = {
   blocks: Array<Block>;
 };
 
-type Subscription_MetaArgs = {
+export type Subscription_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
 
-type SubscriptionBlockArgs = {
+export type SubscriptionBlockArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type SubscriptionBlocksArgs = {
+export type SubscriptionBlocksArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Block_OrderBy>;
@@ -297,7 +300,7 @@ type SubscriptionBlocksArgs = {
   where?: InputMaybe<Block_Filter>;
 };
 
-type _Block_ = {
+export type _Block_ = {
   __typename?: "_Block_";
   /** The hash of the block */
   hash?: Maybe<Scalars["Bytes"]["output"]>;
@@ -310,7 +313,7 @@ type _Block_ = {
 };
 
 /** The type for the top-level _meta field */
-type _Meta_ = {
+export type _Meta_ = {
   __typename?: "_Meta_";
   /**
    * Information about a specific subgraph block. The hash of the block
@@ -326,30 +329,30 @@ type _Meta_ = {
   hasIndexingErrors: Scalars["Boolean"]["output"];
 };
 
-enum _SubgraphErrorPolicy_ {
+export enum _SubgraphErrorPolicy_ {
   /** Data will be returned even if the subgraph has indexing errors */
   Allow = "allow",
   /** If the subgraph has indexing errors, data will be omitted. The default. */
   Deny = "deny",
 }
 
-type GetBlocksTimeStampQueryVariables = Exact<{
+export type GetBlocksTimeStampQueryVariables = Exact<{
   skip: Scalars["Int"]["input"];
 }>;
 
-type GetBlocksTimeStampQuery = {
+export type GetBlocksTimeStampQuery = {
   __typename?: "Query";
   newest: Array<{ __typename?: "Block"; timestamp: any; number: any }>;
   oldest: Array<{ __typename?: "Block"; timestamp: any; number: any }>;
 };
 
-const GetBlocksTimeStampDocument = gql`
+export const GetBlocksTimeStampDocument = gql`
     query GetBlocksTimeStamp($skip: Int!) {
-  newest: blocks(first: 1) {
+  newest: blocks(first: 1, orderBy: timestamp, orderDirection: desc) {
     timestamp
     number
   }
-  oldest: blocks(first: 1, skip: $skip) {
+  oldest: blocks(first: 1, orderBy: timestamp, orderDirection: desc, skip: $skip) {
     timestamp
     number
   }
@@ -431,13 +434,13 @@ export type GetBlocksTimeStampQueryResult = Apollo.QueryResult<
   GetBlocksTimeStampQueryVariables
 >;
 
-const GetBlocksTimeStamp = gql`
+export const GetBlocksTimeStamp = gql`
     query GetBlocksTimeStamp($skip: Int!) {
-  newest: blocks(first: 1) {
+  newest: blocks(first: 1, orderBy: timestamp, orderDirection: desc) {
     timestamp
     number
   }
-  oldest: blocks(first: 1, skip: $skip) {
+  oldest: blocks(first: 1, orderBy: timestamp, orderDirection: desc, skip: $skip) {
     timestamp
     number
   }

@@ -60,18 +60,18 @@ const Options = {
 const getChartData = (data: Vote[]) => {
   return {
     labels: data.map(
-      //@ts-ignore
-      (da, _) => `${formatter.format(formatEther(BigInt(da.amount)))} BGT `,
+      (da, _) =>
+        `${formatter.format(Number(formatEther(BigInt(da.weight))))} BGT `,
     ),
     datasets: [
       {
-        data: data.map((d) => Number(d.amount)),
+        data: data.map((d) => Number(formatEther(BigInt(d.weight)))),
         labelColor: false,
         backgroundColor: data.map(
           (d) =>
             VoteColorMap[
               VoteEnum[
-                d.type as keyof typeof VoteEnum
+                d.support as keyof typeof VoteEnum
               ] as keyof typeof VoteColorMap
             ],
         ),
@@ -79,7 +79,7 @@ const getChartData = (data: Vote[]) => {
           (d) =>
             VoteColorMap[
               VoteEnum[
-                d.type as keyof typeof VoteEnum
+                d.support as keyof typeof VoteEnum
               ] as keyof typeof VoteColorMap
             ],
         ),
@@ -109,7 +109,7 @@ export function OverviewChart({
         votes?.filter((data) =>
           voteType === "all"
             ? true
-            : VoteEnum[data.type as keyof typeof VoteEnum] === voteType,
+            : VoteEnum[data.support as keyof typeof VoteEnum] === voteType,
         ),
       ),
     [voteType, votes],

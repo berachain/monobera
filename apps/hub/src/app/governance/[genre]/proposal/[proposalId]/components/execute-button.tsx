@@ -53,7 +53,7 @@ export const ExecuteButton = ({
                     address: governorAddress,
                     abi: GOVERNANCE_ABI,
                     functionName: "execute",
-                    params: [BigInt(proposal.onchainId)],
+                    params: [BigInt(proposal.id)],
                   })
                 }
               >

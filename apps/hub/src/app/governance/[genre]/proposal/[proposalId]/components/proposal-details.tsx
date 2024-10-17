@@ -7,20 +7,14 @@ import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import {
-  getTotalVotes,
-  getVotesDataList,
-  parseProposalBody,
-} from "../../../../helper";
+import { getVotesDataList, parseProposalBody } from "../../../../helper";
 import { Actions } from "../Actions";
 import { StatusAction } from "../Status";
 import "@bera/graphql";
 import MarkdownRenderer from "./markdown-renderer";
-import { Badge } from "@bera/ui/badge";
 import { OverviewChart } from "../../../components/overview-chart";
 import { VoterTable } from "../../../components/voter-table";
 import { VoteCard } from "../../../components/vote-card";
-import { StatusEnum } from "../../../../types";
 import { VoteInfo } from "../../../components/Voter";
 import { QuorumStatus } from "../../../components/quorum-status";
 import { formatEther } from "viem";
@@ -32,6 +26,7 @@ import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 import { cn } from "@bera/ui";
 import { StatusBadge } from "~/app/governance/components/status-badge";
 import { useSearchParams } from "next/navigation";
+import { ProposalStatus } from "@bera/graphql/governance";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -67,9 +62,11 @@ export default function ProposalDetails({
   proposalId: string;
 }) {
   const { account, isReady } = useBeraJs();
-  const { isLoading, proposal, votes } = usePollProposal(proposalId);
+  const { isLoading, data: proposal } = usePollProposal(proposalId);
 
   console.log({ proposal });
+
+  const votes = proposal?.votes ?? [];
 
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
@@ -94,7 +91,7 @@ export default function ProposalDetails({
               {proposal && (
                 <StatusAction
                   frontmatter={fm}
-                  proposal={proposal as any}
+                  proposal={proposal}
                   userVote={userVote}
                 />
               )}
@@ -110,16 +107,17 @@ export default function ProposalDetails({
                 <VoteInfo
                   className="text-xs font-medium "
                   prefix="Submitted by "
-                  voter={proposal.creator}
+                  voter={proposal.proposer}
                 />
               </div>
 
               <div
                 className={cn(
                   "col-start-2",
-                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
-                    proposal.status as StatusEnum,
-                  )
+                  [
+                    ProposalStatus.Pending,
+                    ProposalStatus.CanceledByUser,
+                  ].includes(proposal.status)
                     ? "invisible"
                     : "",
                 )}
@@ -135,9 +133,10 @@ export default function ProposalDetails({
               <div
                 className={cn(
                   "self-stretch col-start-1 row-start-3 ",
-                  [StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
-                    proposal.status as StatusEnum,
-                  )
+                  [
+                    ProposalStatus.Pending,
+                    ProposalStatus.CanceledByUser,
+                  ].includes(proposal.status as ProposalStatus)
                     ? "invisible"
                     : "",
                 )}
@@ -146,32 +145,41 @@ export default function ProposalDetails({
                   quorum
                 </h3>
                 <QuorumStatus
-                  delegatesVotesCount={getTotalVotes(proposal)}
-                  quorum={formatEther(BigInt(proposal.governor.quorum))}
+                  delegatesVotesCount={proposal.pollResult.totalTowardsQuorum}
+                  quorum={proposal.quorum}
                 />
               </div>
             </div>
-            <hr className="border-b border-border mt-4 sm:mt-10 sm:mb-16" />
+            <hr className="border-b border-border mt-4 sm:mt-8 sm:mb-12" />
             <div className="mx-auto gap-16">
-              <div>
-                <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
-                  <Card className="px-8 py-3 md:py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
-                    <FormattedNumber
-                      value={getTotalVotes(proposal)}
-                      className="text-lg sm:text-xl font-semibold leading-none text-foreground"
-                      symbol="BGT"
+              {![
+                ProposalStatus.CanceledByUser,
+                ProposalStatus.Pending,
+              ].includes(proposal.status) && (
+                <div>
+                  <div className="mt-4 flex md:flex-row flex-col gap-4 md:gap-6">
+                    <Card className="px-8 py-3 md:py-2 flex-col items-center md:basis-1/3 shrink justify-center flex">
+                      <FormattedNumber
+                        value={formatEther(
+                          BigInt(proposal.pollResult?.total ?? 0),
+                        )}
+                        className="text-lg sm:text-xl font-semibold leading-none text-foreground"
+                        symbol="BGT"
+                      />
+                      <div className="flex items-center text-sm font-medium leading-none mt-2 md:mt-0 text-muted-foreground">
+                        Total votes
+                      </div>
+                    </Card>
+                    <VoteCard
+                      yesPercentage={proposal.pollResult?.forPercentage ?? 0}
+                      noPercentage={proposal.pollResult?.againstPercentage ?? 0}
+                      abstainPercentage={
+                        proposal.pollResult?.abstainPercentage ?? 0
+                      }
                     />
-                    <div className="flex items-center text-sm font-medium leading-none mt-2 md:mt-0 text-muted-foreground">
-                      Total votes
-                    </div>
-                  </Card>
-                  <VoteCard
-                    yesPercentage={proposal.voteStats[0].percent}
-                    noPercentage={proposal.voteStats[1].percent}
-                    abstainPercentage={proposal.voteStats[2].percent}
-                  />
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="grid grid-cols-1 gap-4 md:gap-6 lg:grid-cols-[7fr,3fr] auto-rows-min pt-4">
                 <div className="grid lg:row-start-1  lg:col-start-1 grid-cols-1 gap-4 md:gap-6">
                   <div className="border border-border p-4 px-8 rounded-md">
@@ -190,18 +198,22 @@ export default function ProposalDetails({
                 </div>
               </div>
 
-              {![StatusEnum.PENDING, StatusEnum.CANCELED_BY_USER].includes(
-                proposal.status as StatusEnum,
-              ) && (
+              {![
+                ProposalStatus.Pending,
+                ProposalStatus.CanceledByUser,
+              ].includes(proposal.status) && (
                 <>
                   <div className="mt-4 sm:mt-10">
                     <div className="h-7 mb-2 text-lg font-semibold leading-7 text-foreground">
                       Overview
                     </div>
-                    <OverviewChart votes={votes} isLoading={isLoading} />
+                    <OverviewChart
+                      votes={votes.filter((v) => v.weight !== "0")}
+                      isLoading={isLoading}
+                    />
                   </div>
                   <div className="mt-4 sm:mt-10">
-                    <VoterTable votes={votes} isLoading={isLoading} />
+                    <VoterTable proposal={proposal} isLoading={isLoading} />
                   </div>
                 </>
               )}

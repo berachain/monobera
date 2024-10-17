@@ -1,25 +1,28 @@
 import { gql } from "@apollo/client";
 import * as Apollo from "@apollo/client";
-type Maybe<T> = T | null;
-type InputMaybe<T> = Maybe<T>;
-type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]?: Maybe<T[SubKey]>;
 };
-type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
-type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = {
-  [_ in K]?: never;
-};
-type Incremental<T> =
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
   | T
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
-type Scalars = {
+export type Scalars = {
   ID: { input: string; output: string };
   String: { input: string; output: string };
   Boolean: { input: boolean; output: boolean };
@@ -40,12 +43,12 @@ type Scalars = {
   Timestamp: { input: any; output: any };
 };
 
-enum Aggregation_Interval {
+export enum Aggregation_Interval {
   Day = "day",
   Hour = "hour",
 }
 
-type Block = {
+export type Block = {
   __typename?: "Block";
   author: Scalars["Bytes"]["output"];
   baseFeePerGas?: Maybe<Scalars["BigInt"]["output"]>;
@@ -65,11 +68,11 @@ type Block = {
   unclesHash: Scalars["Bytes"]["output"];
 };
 
-type BlockChangedFilter = {
+export type BlockChangedFilter = {
   number_gte: Scalars["Int"]["input"];
 };
 
-type Block_Filter = {
+export type Block_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Block_Filter>>>;
@@ -218,13 +221,13 @@ type Block_Filter = {
   unclesHash_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
 };
 
-type Block_Height = {
+export type Block_Height = {
   hash?: InputMaybe<Scalars["Bytes"]["input"]>;
   number?: InputMaybe<Scalars["Int"]["input"]>;
   number_gte?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
-enum Block_OrderBy {
+export enum Block_OrderBy {
   Author = "author",
   BaseFeePerGas = "baseFeePerGas",
   Difficulty = "difficulty",
@@ -243,67 +246,80 @@ enum Block_OrderBy {
   UnclesHash = "unclesHash",
 }
 
-type CallScheduled = {
-  __typename?: "CallScheduled";
-  data: Scalars["Bytes"]["output"];
-  delay: Scalars["BigInt"]["output"];
-  id: Scalars["Int8"]["output"];
-  index: Scalars["BigInt"]["output"];
-  predecessor: Scalars["Bytes"]["output"];
+export type ExecutableCall = {
+  __typename?: "ExecutableCall";
+  calldata: Scalars["Bytes"]["output"];
+  id: Scalars["ID"]["output"];
+  proposal: Proposal;
+  signature: Scalars["String"]["output"];
   target: Scalars["Bytes"]["output"];
-  timelockId: Scalars["Bytes"]["output"];
   value: Scalars["BigInt"]["output"];
 };
 
-type CallScheduled_Filter = {
+export type ExecutableCall_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<CallScheduled_Filter>>>;
-  data?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  data_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_not?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  data_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  delay?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  delay_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_not?: InputMaybe<Scalars["BigInt"]["input"]>;
-  delay_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  id?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_gt?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_gte?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_in?: InputMaybe<Array<Scalars["Int8"]["input"]>>;
-  id_lt?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_lte?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_not?: InputMaybe<Scalars["Int8"]["input"]>;
-  id_not_in?: InputMaybe<Array<Scalars["Int8"]["input"]>>;
-  index?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  index_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_not?: InputMaybe<Scalars["BigInt"]["input"]>;
-  index_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  or?: InputMaybe<Array<InputMaybe<CallScheduled_Filter>>>;
-  predecessor?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  predecessor_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_not?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  predecessor_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  and?: InputMaybe<Array<InputMaybe<ExecutableCall_Filter>>>;
+  calldata?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  calldata_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_not?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  calldata_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  id?: InputMaybe<Scalars["ID"]["input"]>;
+  id_gt?: InputMaybe<Scalars["ID"]["input"]>;
+  id_gte?: InputMaybe<Scalars["ID"]["input"]>;
+  id_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  id_lt?: InputMaybe<Scalars["ID"]["input"]>;
+  id_lte?: InputMaybe<Scalars["ID"]["input"]>;
+  id_not?: InputMaybe<Scalars["ID"]["input"]>;
+  id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
+  or?: InputMaybe<Array<InputMaybe<ExecutableCall_Filter>>>;
+  proposal?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_?: InputMaybe<Proposal_Filter>;
+  proposal_contains?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_gt?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_gte?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  proposal_lt?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_lte?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_not?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  proposal_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  proposal_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  signature?: InputMaybe<Scalars["String"]["input"]>;
+  signature_contains?: InputMaybe<Scalars["String"]["input"]>;
+  signature_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  signature_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  signature_gt?: InputMaybe<Scalars["String"]["input"]>;
+  signature_gte?: InputMaybe<Scalars["String"]["input"]>;
+  signature_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  signature_lt?: InputMaybe<Scalars["String"]["input"]>;
+  signature_lte?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  signature_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  signature_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  signature_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   target?: InputMaybe<Scalars["Bytes"]["input"]>;
   target_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   target_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
@@ -314,16 +330,6 @@ type CallScheduled_Filter = {
   target_not?: InputMaybe<Scalars["Bytes"]["input"]>;
   target_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   target_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  timelockId?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  timelockId_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_not?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
-  timelockId_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
   value?: InputMaybe<Scalars["BigInt"]["input"]>;
   value_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   value_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -334,73 +340,99 @@ type CallScheduled_Filter = {
   value_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
 };
 
-enum CallScheduled_OrderBy {
-  Data = "data",
-  Delay = "delay",
+export enum ExecutableCall_OrderBy {
+  Calldata = "calldata",
   Id = "id",
-  Index = "index",
-  Predecessor = "predecessor",
+  Proposal = "proposal",
+  ProposalCanceledAt = "proposal__canceledAt",
+  ProposalCanceledAtBlock = "proposal__canceledAtBlock",
+  ProposalContentEncoding = "proposal__contentEncoding",
+  ProposalContentType = "proposal__contentType",
+  ProposalCreatedAt = "proposal__createdAt",
+  ProposalCreatedAtBlock = "proposal__createdAtBlock",
+  ProposalDescription = "proposal__description",
+  ProposalExecutableAtBlock = "proposal__executableAtBlock",
+  ProposalExecutedAt = "proposal__executedAt",
+  ProposalExecutedAtBlock = "proposal__executedAtBlock",
+  ProposalForumLink = "proposal__forumLink",
+  ProposalId = "proposal__id",
+  ProposalProposalId = "proposal__proposalId",
+  ProposalProposer = "proposal__proposer",
+  ProposalQueueEnd = "proposal__queueEnd",
+  ProposalQueueStart = "proposal__queueStart",
+  ProposalQueueStartBlock = "proposal__queueStartBlock",
+  ProposalQuorum = "proposal__quorum",
+  ProposalStatus = "proposal__status",
+  ProposalTimelockId = "proposal__timelockId",
+  ProposalTitle = "proposal__title",
+  ProposalVoteEndBlock = "proposal__voteEndBlock",
+  ProposalVoteStartBlock = "proposal__voteStartBlock",
+  Signature = "signature",
   Target = "target",
-  TimelockId = "timelockId",
   Value = "value",
 }
 
 /** Defines the order direction, either ascending or descending */
-enum OrderDirection {
+export enum OrderDirection {
   Asc = "asc",
   Desc = "desc",
 }
 
-type Proposal = {
-  __typename?: "Proposal";
-  calldatas: Array<Scalars["Bytes"]["output"]>;
-  canceledAt?: Maybe<Scalars["BigInt"]["output"]>;
-  canceledAtBlock?: Maybe<Scalars["BigInt"]["output"]>;
-  createdAt: Scalars["BigInt"]["output"];
-  createdAtBlock: Scalars["BigInt"]["output"];
-  description: Scalars["String"]["output"];
-  executedAt?: Maybe<Scalars["BigInt"]["output"]>;
-  executedAtBlock?: Maybe<Scalars["BigInt"]["output"]>;
-  id: Scalars["ID"]["output"];
-  proposalId: Scalars["BigInt"]["output"];
-  proposalVotes?: Maybe<ProposalVote>;
-  proposer: Scalars["Bytes"]["output"];
-  queueEnd?: Maybe<Scalars["BigInt"]["output"]>;
-  queueStart?: Maybe<Scalars["BigInt"]["output"]>;
-  queueStartBlock?: Maybe<Scalars["BigInt"]["output"]>;
-  quorum: Scalars["BigInt"]["output"];
-  signatures: Array<Scalars["String"]["output"]>;
-  status: Scalars["String"]["output"];
-  targets: Array<Scalars["Bytes"]["output"]>;
-  timelock?: Maybe<CallScheduled>;
-  values: Array<Scalars["BigInt"]["output"]>;
-  voteEnd: Scalars["BigInt"]["output"];
-  voteStart: Scalars["BigInt"]["output"];
-  votes: Array<Vote>;
-};
-
-type ProposalVotesArgs = {
-  first?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<Vote_OrderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  where?: InputMaybe<Vote_Filter>;
-};
-
-type ProposalVote = {
-  __typename?: "ProposalVote";
+export type PollResult = {
+  __typename?: "PollResult";
   abstain: Scalars["BigInt"]["output"];
+  abstainPercentage: Scalars["String"]["output"];
+  abstainVotersCount: Scalars["Int"]["output"];
   against: Scalars["BigInt"]["output"];
+  againstPercentage: Scalars["String"]["output"];
+  againstVotersCount: Scalars["Int"]["output"];
   for: Scalars["BigInt"]["output"];
+  forPercentage: Scalars["String"]["output"];
+  forVotersCount: Scalars["Int"]["output"];
   id: Scalars["ID"]["output"];
-  proposalId: Proposal;
   total: Scalars["BigInt"]["output"];
+  totalTowardsQuorum: Scalars["BigInt"]["output"];
+  totalVotersCount: Scalars["Int"]["output"];
 };
 
-type ProposalVote_Filter = {
+export type PollResult_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   abstain?: InputMaybe<Scalars["BigInt"]["input"]>;
+  abstainPercentage?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_contains?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_gt?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_gte?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  abstainPercentage_lt?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_lte?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_contains_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  abstainPercentage_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_ends_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  abstainPercentage_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  abstainPercentage_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_not_starts_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  abstainPercentage_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  abstainPercentage_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  abstainVotersCount?: InputMaybe<Scalars["Int"]["input"]>;
+  abstainVotersCount_gt?: InputMaybe<Scalars["Int"]["input"]>;
+  abstainVotersCount_gte?: InputMaybe<Scalars["Int"]["input"]>;
+  abstainVotersCount_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  abstainVotersCount_lt?: InputMaybe<Scalars["Int"]["input"]>;
+  abstainVotersCount_lte?: InputMaybe<Scalars["Int"]["input"]>;
+  abstainVotersCount_not?: InputMaybe<Scalars["Int"]["input"]>;
+  abstainVotersCount_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
   abstain_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   abstain_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
   abstain_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
@@ -409,6 +441,40 @@ type ProposalVote_Filter = {
   abstain_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   abstain_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   against?: InputMaybe<Scalars["BigInt"]["input"]>;
+  againstPercentage?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_contains?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_gt?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_gte?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  againstPercentage_lt?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_lte?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_contains_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  againstPercentage_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_ends_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  againstPercentage_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  againstPercentage_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_not_starts_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  againstPercentage_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  againstPercentage_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  againstVotersCount?: InputMaybe<Scalars["Int"]["input"]>;
+  againstVotersCount_gt?: InputMaybe<Scalars["Int"]["input"]>;
+  againstVotersCount_gte?: InputMaybe<Scalars["Int"]["input"]>;
+  againstVotersCount_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  againstVotersCount_lt?: InputMaybe<Scalars["Int"]["input"]>;
+  againstVotersCount_lte?: InputMaybe<Scalars["Int"]["input"]>;
+  againstVotersCount_not?: InputMaybe<Scalars["Int"]["input"]>;
+  againstVotersCount_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
   against_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   against_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
   against_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
@@ -416,8 +482,36 @@ type ProposalVote_Filter = {
   against_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   against_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   against_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  and?: InputMaybe<Array<InputMaybe<ProposalVote_Filter>>>;
+  and?: InputMaybe<Array<InputMaybe<PollResult_Filter>>>;
   for?: InputMaybe<Scalars["BigInt"]["input"]>;
+  forPercentage?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_contains?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_gt?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_gte?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  forPercentage_lt?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_lte?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  forPercentage_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  forPercentage_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forVotersCount?: InputMaybe<Scalars["Int"]["input"]>;
+  forVotersCount_gt?: InputMaybe<Scalars["Int"]["input"]>;
+  forVotersCount_gte?: InputMaybe<Scalars["Int"]["input"]>;
+  forVotersCount_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  forVotersCount_lt?: InputMaybe<Scalars["Int"]["input"]>;
+  forVotersCount_lte?: InputMaybe<Scalars["Int"]["input"]>;
+  forVotersCount_not?: InputMaybe<Scalars["Int"]["input"]>;
+  forVotersCount_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
   for_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   for_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
   for_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
@@ -433,29 +527,24 @@ type ProposalVote_Filter = {
   id_lte?: InputMaybe<Scalars["ID"]["input"]>;
   id_not?: InputMaybe<Scalars["ID"]["input"]>;
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
-  or?: InputMaybe<Array<InputMaybe<ProposalVote_Filter>>>;
-  proposalId?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_?: InputMaybe<Proposal_Filter>;
-  proposalId_contains?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_ends_with?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_gt?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_gte?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  proposalId_lt?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_lte?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_not?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_not_contains?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  proposalId_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_starts_with?: InputMaybe<Scalars["String"]["input"]>;
-  proposalId_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  or?: InputMaybe<Array<InputMaybe<PollResult_Filter>>>;
   total?: InputMaybe<Scalars["BigInt"]["input"]>;
+  totalTowardsQuorum?: InputMaybe<Scalars["BigInt"]["input"]>;
+  totalTowardsQuorum_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  totalTowardsQuorum_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  totalTowardsQuorum_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  totalTowardsQuorum_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  totalTowardsQuorum_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  totalTowardsQuorum_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  totalTowardsQuorum_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  totalVotersCount?: InputMaybe<Scalars["Int"]["input"]>;
+  totalVotersCount_gt?: InputMaybe<Scalars["Int"]["input"]>;
+  totalVotersCount_gte?: InputMaybe<Scalars["Int"]["input"]>;
+  totalVotersCount_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  totalVotersCount_lt?: InputMaybe<Scalars["Int"]["input"]>;
+  totalVotersCount_lte?: InputMaybe<Scalars["Int"]["input"]>;
+  totalVotersCount_not?: InputMaybe<Scalars["Int"]["input"]>;
+  totalVotersCount_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
   total_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   total_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
   total_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
@@ -465,42 +554,86 @@ type ProposalVote_Filter = {
   total_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
 };
 
-enum ProposalVote_OrderBy {
+export enum PollResult_OrderBy {
   Abstain = "abstain",
+  AbstainPercentage = "abstainPercentage",
+  AbstainVotersCount = "abstainVotersCount",
   Against = "against",
+  AgainstPercentage = "againstPercentage",
+  AgainstVotersCount = "againstVotersCount",
   For = "for",
+  ForPercentage = "forPercentage",
+  ForVotersCount = "forVotersCount",
   Id = "id",
-  ProposalId = "proposalId",
-  ProposalIdCanceledAt = "proposalId__canceledAt",
-  ProposalIdCanceledAtBlock = "proposalId__canceledAtBlock",
-  ProposalIdCreatedAt = "proposalId__createdAt",
-  ProposalIdCreatedAtBlock = "proposalId__createdAtBlock",
-  ProposalIdDescription = "proposalId__description",
-  ProposalIdExecutedAt = "proposalId__executedAt",
-  ProposalIdExecutedAtBlock = "proposalId__executedAtBlock",
-  ProposalIdId = "proposalId__id",
-  ProposalIdProposalId = "proposalId__proposalId",
-  ProposalIdProposer = "proposalId__proposer",
-  ProposalIdQueueEnd = "proposalId__queueEnd",
-  ProposalIdQueueStart = "proposalId__queueStart",
-  ProposalIdQueueStartBlock = "proposalId__queueStartBlock",
-  ProposalIdQuorum = "proposalId__quorum",
-  ProposalIdStatus = "proposalId__status",
-  ProposalIdVoteEnd = "proposalId__voteEnd",
-  ProposalIdVoteStart = "proposalId__voteStart",
   Total = "total",
+  TotalTowardsQuorum = "totalTowardsQuorum",
+  TotalVotersCount = "totalVotersCount",
 }
 
-type Proposal_Filter = {
+export type Proposal = {
+  __typename?: "Proposal";
+  canceledAt?: Maybe<Scalars["BigInt"]["output"]>;
+  canceledAtBlock?: Maybe<Scalars["BigInt"]["output"]>;
+  contentEncoding?: Maybe<Scalars["String"]["output"]>;
+  contentType?: Maybe<Scalars["String"]["output"]>;
+  createdAt: Scalars["BigInt"]["output"];
+  createdAtBlock: Scalars["BigInt"]["output"];
+  description: Scalars["String"]["output"];
+  executableAtBlock?: Maybe<Scalars["BigInt"]["output"]>;
+  executableCalls: Array<ExecutableCall>;
+  executedAt?: Maybe<Scalars["BigInt"]["output"]>;
+  executedAtBlock?: Maybe<Scalars["BigInt"]["output"]>;
+  forumLink?: Maybe<Scalars["String"]["output"]>;
+  id: Scalars["ID"]["output"];
+  pollResult: PollResult;
+  proposalId: Scalars["BigInt"]["output"];
+  proposer: Scalars["Bytes"]["output"];
+  queueEnd?: Maybe<Scalars["BigInt"]["output"]>;
+  queueStart?: Maybe<Scalars["BigInt"]["output"]>;
+  queueStartBlock?: Maybe<Scalars["BigInt"]["output"]>;
+  quorum: Scalars["BigInt"]["output"];
+  status: ProposalStatus;
+  timelockId?: Maybe<Scalars["Bytes"]["output"]>;
+  title?: Maybe<Scalars["String"]["output"]>;
+  topics: Array<Scalars["String"]["output"]>;
+  voteEndBlock: Scalars["BigInt"]["output"];
+  voteStartBlock: Scalars["BigInt"]["output"];
+  votes: Array<Vote>;
+};
+
+export type ProposalExecutableCallsArgs = {
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<ExecutableCall_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<ExecutableCall_Filter>;
+};
+
+export type ProposalVotesArgs = {
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Vote_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<Vote_Filter>;
+};
+
+export enum ProposalStatus {
+  Active = "ACTIVE",
+  CanceledByGuardian = "CANCELED_BY_GUARDIAN",
+  CanceledByUser = "CANCELED_BY_USER",
+  Defeated = "DEFEATED",
+  Executed = "EXECUTED",
+  InQueue = "IN_QUEUE",
+  Pending = "PENDING",
+  PendingExecution = "PENDING_EXECUTION",
+  PendingQueue = "PENDING_QUEUE",
+  QuorumNotReached = "QUORUM_NOT_REACHED",
+}
+
+export type Proposal_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Proposal_Filter>>>;
-  calldatas?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  calldatas_contains?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  calldatas_contains_nocase?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  calldatas_not?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  calldatas_not_contains?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  calldatas_not_contains_nocase?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
   canceledAt?: InputMaybe<Scalars["BigInt"]["input"]>;
   canceledAtBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
   canceledAtBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -517,6 +650,48 @@ type Proposal_Filter = {
   canceledAt_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   canceledAt_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   canceledAt_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  contentEncoding?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_contains?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_gt?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_gte?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  contentEncoding_lt?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_lte?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_not?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  contentEncoding_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_not_starts_with_nocase?: InputMaybe<
+    Scalars["String"]["input"]
+  >;
+  contentEncoding_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentEncoding_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentType?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_contains?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_gt?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_gte?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  contentType_lt?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_lte?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_not?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  contentType_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  contentType_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   createdAt?: InputMaybe<Scalars["BigInt"]["input"]>;
   createdAtBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
   createdAtBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -553,6 +728,15 @@ type Proposal_Filter = {
   description_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   description_starts_with?: InputMaybe<Scalars["String"]["input"]>;
   description_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  executableAtBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
+  executableAtBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  executableAtBlock_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  executableAtBlock_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  executableAtBlock_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  executableAtBlock_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  executableAtBlock_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  executableAtBlock_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  executableCalls_?: InputMaybe<ExecutableCall_Filter>;
   executedAt?: InputMaybe<Scalars["BigInt"]["input"]>;
   executedAtBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
   executedAtBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -569,6 +753,26 @@ type Proposal_Filter = {
   executedAt_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   executedAt_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   executedAt_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  forumLink?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_contains?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_gt?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_gte?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  forumLink_lt?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_lte?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_not?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  forumLink_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  forumLink_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   id?: InputMaybe<Scalars["ID"]["input"]>;
   id_gt?: InputMaybe<Scalars["ID"]["input"]>;
   id_gte?: InputMaybe<Scalars["ID"]["input"]>;
@@ -578,6 +782,27 @@ type Proposal_Filter = {
   id_not?: InputMaybe<Scalars["ID"]["input"]>;
   id_not_in?: InputMaybe<Array<Scalars["ID"]["input"]>>;
   or?: InputMaybe<Array<InputMaybe<Proposal_Filter>>>;
+  pollResult?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_?: InputMaybe<PollResult_Filter>;
+  pollResult_contains?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_gt?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_gte?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  pollResult_lt?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_lte?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_not?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  pollResult_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  pollResult_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   proposalId?: InputMaybe<Scalars["BigInt"]["input"]>;
   proposalId_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   proposalId_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -586,7 +811,6 @@ type Proposal_Filter = {
   proposalId_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   proposalId_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   proposalId_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  proposalVotes_?: InputMaybe<ProposalVote_Filter>;
   proposer?: InputMaybe<Scalars["Bytes"]["input"]>;
   proposer_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
   proposer_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
@@ -629,141 +853,136 @@ type Proposal_Filter = {
   quorum_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
   quorum_not?: InputMaybe<Scalars["BigInt"]["input"]>;
   quorum_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  signatures?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  signatures_contains?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  signatures_contains_nocase?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  signatures_not?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  signatures_not_contains?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  signatures_not_contains_nocase?: InputMaybe<
-    Array<Scalars["String"]["input"]>
-  >;
-  status?: InputMaybe<Scalars["String"]["input"]>;
-  status_contains?: InputMaybe<Scalars["String"]["input"]>;
-  status_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  status_ends_with?: InputMaybe<Scalars["String"]["input"]>;
-  status_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  status_gt?: InputMaybe<Scalars["String"]["input"]>;
-  status_gte?: InputMaybe<Scalars["String"]["input"]>;
-  status_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  status_lt?: InputMaybe<Scalars["String"]["input"]>;
-  status_lte?: InputMaybe<Scalars["String"]["input"]>;
-  status_not?: InputMaybe<Scalars["String"]["input"]>;
-  status_not_contains?: InputMaybe<Scalars["String"]["input"]>;
-  status_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  status_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
-  status_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  status_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
-  status_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
-  status_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  status_starts_with?: InputMaybe<Scalars["String"]["input"]>;
-  status_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  targets?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  targets_contains?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  targets_contains_nocase?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  targets_not?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  targets_not_contains?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  targets_not_contains_nocase?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
-  timelock?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_?: InputMaybe<CallScheduled_Filter>;
-  timelock_gt?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_gte?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
-  timelock_lt?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_lte?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_not?: InputMaybe<Scalars["Int"]["input"]>;
-  timelock_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
-  values?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  values_contains?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  values_contains_nocase?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  values_not?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  values_not_contains?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  values_not_contains_nocase?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  voteEnd?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteEnd_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteEnd_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteEnd_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  voteEnd_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteEnd_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteEnd_not?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteEnd_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  voteStart?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteStart_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteStart_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteStart_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
-  voteStart_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteStart_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteStart_not?: InputMaybe<Scalars["BigInt"]["input"]>;
-  voteStart_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  status?: InputMaybe<ProposalStatus>;
+  status_in?: InputMaybe<Array<ProposalStatus>>;
+  status_not?: InputMaybe<ProposalStatus>;
+  status_not_in?: InputMaybe<Array<ProposalStatus>>;
+  timelockId?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_gt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_gte?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  timelockId_lt?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_lte?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_not?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_not_contains?: InputMaybe<Scalars["Bytes"]["input"]>;
+  timelockId_not_in?: InputMaybe<Array<Scalars["Bytes"]["input"]>>;
+  title?: InputMaybe<Scalars["String"]["input"]>;
+  title_contains?: InputMaybe<Scalars["String"]["input"]>;
+  title_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  title_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  title_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  title_gt?: InputMaybe<Scalars["String"]["input"]>;
+  title_gte?: InputMaybe<Scalars["String"]["input"]>;
+  title_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  title_lt?: InputMaybe<Scalars["String"]["input"]>;
+  title_lte?: InputMaybe<Scalars["String"]["input"]>;
+  title_not?: InputMaybe<Scalars["String"]["input"]>;
+  title_not_contains?: InputMaybe<Scalars["String"]["input"]>;
+  title_not_contains_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  title_not_ends_with?: InputMaybe<Scalars["String"]["input"]>;
+  title_not_ends_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  title_not_in?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  title_not_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  title_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  title_starts_with?: InputMaybe<Scalars["String"]["input"]>;
+  title_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
+  topics?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  topics_contains?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  topics_contains_nocase?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  topics_not?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  topics_not_contains?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  topics_not_contains_nocase?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  voteEndBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteEndBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteEndBlock_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteEndBlock_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  voteEndBlock_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteEndBlock_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteEndBlock_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteEndBlock_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  voteStartBlock?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteStartBlock_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteStartBlock_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteStartBlock_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
+  voteStartBlock_lt?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteStartBlock_lte?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteStartBlock_not?: InputMaybe<Scalars["BigInt"]["input"]>;
+  voteStartBlock_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
   votes_?: InputMaybe<Vote_Filter>;
 };
 
-enum Proposal_OrderBy {
-  Calldatas = "calldatas",
+export enum Proposal_OrderBy {
   CanceledAt = "canceledAt",
   CanceledAtBlock = "canceledAtBlock",
+  ContentEncoding = "contentEncoding",
+  ContentType = "contentType",
   CreatedAt = "createdAt",
   CreatedAtBlock = "createdAtBlock",
   Description = "description",
+  ExecutableAtBlock = "executableAtBlock",
+  ExecutableCalls = "executableCalls",
   ExecutedAt = "executedAt",
   ExecutedAtBlock = "executedAtBlock",
+  ForumLink = "forumLink",
   Id = "id",
+  PollResult = "pollResult",
+  PollResultAbstain = "pollResult__abstain",
+  PollResultAbstainPercentage = "pollResult__abstainPercentage",
+  PollResultAbstainVotersCount = "pollResult__abstainVotersCount",
+  PollResultAgainst = "pollResult__against",
+  PollResultAgainstPercentage = "pollResult__againstPercentage",
+  PollResultAgainstVotersCount = "pollResult__againstVotersCount",
+  PollResultFor = "pollResult__for",
+  PollResultForPercentage = "pollResult__forPercentage",
+  PollResultForVotersCount = "pollResult__forVotersCount",
+  PollResultId = "pollResult__id",
+  PollResultTotal = "pollResult__total",
+  PollResultTotalTowardsQuorum = "pollResult__totalTowardsQuorum",
+  PollResultTotalVotersCount = "pollResult__totalVotersCount",
   ProposalId = "proposalId",
-  ProposalVotes = "proposalVotes",
-  ProposalVotesAbstain = "proposalVotes__abstain",
-  ProposalVotesAgainst = "proposalVotes__against",
-  ProposalVotesFor = "proposalVotes__for",
-  ProposalVotesId = "proposalVotes__id",
-  ProposalVotesTotal = "proposalVotes__total",
   Proposer = "proposer",
   QueueEnd = "queueEnd",
   QueueStart = "queueStart",
   QueueStartBlock = "queueStartBlock",
   Quorum = "quorum",
-  Signatures = "signatures",
   Status = "status",
-  Targets = "targets",
-  Timelock = "timelock",
-  TimelockData = "timelock__data",
-  TimelockDelay = "timelock__delay",
-  TimelockId = "timelock__id",
-  TimelockIndex = "timelock__index",
-  TimelockPredecessor = "timelock__predecessor",
-  TimelockTarget = "timelock__target",
-  TimelockTimelockId = "timelock__timelockId",
-  TimelockValue = "timelock__value",
-  Values = "values",
-  VoteEnd = "voteEnd",
-  VoteStart = "voteStart",
+  TimelockId = "timelockId",
+  Title = "title",
+  Topics = "topics",
+  VoteEndBlock = "voteEndBlock",
+  VoteStartBlock = "voteStartBlock",
   Votes = "votes",
 }
 
-type Query = {
+export type Query = {
   __typename?: "Query";
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
   block?: Maybe<Block>;
   blocks: Array<Block>;
-  callScheduled?: Maybe<CallScheduled>;
-  callScheduleds: Array<CallScheduled>;
+  executableCall?: Maybe<ExecutableCall>;
+  executableCalls: Array<ExecutableCall>;
+  pollResult?: Maybe<PollResult>;
+  pollResults: Array<PollResult>;
   proposal?: Maybe<Proposal>;
-  proposalVote?: Maybe<ProposalVote>;
-  proposalVotes: Array<ProposalVote>;
+  proposalSearch: Array<Proposal>;
   proposals: Array<Proposal>;
   vote?: Maybe<Vote>;
   votes: Array<Vote>;
 };
 
-type Query_MetaArgs = {
+export type Query_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
 
-type QueryBlockArgs = {
+export type QueryBlockArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type QueryBlocksArgs = {
+export type QueryBlocksArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Block_OrderBy>;
@@ -773,45 +992,54 @@ type QueryBlocksArgs = {
   where?: InputMaybe<Block_Filter>;
 };
 
-type QueryCallScheduledArgs = {
+export type QueryExecutableCallArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type QueryCallScheduledsArgs = {
+export type QueryExecutableCallsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<CallScheduled_OrderBy>;
+  orderBy?: InputMaybe<ExecutableCall_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<CallScheduled_Filter>;
+  where?: InputMaybe<ExecutableCall_Filter>;
 };
 
-type QueryProposalArgs = {
+export type QueryPollResultArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type QueryProposalVoteArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars["ID"]["input"];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-type QueryProposalVotesArgs = {
+export type QueryPollResultsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<ProposalVote_OrderBy>;
+  orderBy?: InputMaybe<PollResult_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<ProposalVote_Filter>;
+  where?: InputMaybe<PollResult_Filter>;
 };
 
-type QueryProposalsArgs = {
+export type QueryProposalArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars["ID"]["input"];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type QueryProposalSearchArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  text: Scalars["String"]["input"];
+  where?: InputMaybe<Proposal_Filter>;
+};
+
+export type QueryProposalsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Proposal_OrderBy>;
@@ -821,13 +1049,13 @@ type QueryProposalsArgs = {
   where?: InputMaybe<Proposal_Filter>;
 };
 
-type QueryVoteArgs = {
+export type QueryVoteArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type QueryVotesArgs = {
+export type QueryVotesArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Vote_OrderBy>;
@@ -837,33 +1065,33 @@ type QueryVotesArgs = {
   where?: InputMaybe<Vote_Filter>;
 };
 
-type Subscription = {
+export type Subscription = {
   __typename?: "Subscription";
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
   block?: Maybe<Block>;
   blocks: Array<Block>;
-  callScheduled?: Maybe<CallScheduled>;
-  callScheduleds: Array<CallScheduled>;
+  executableCall?: Maybe<ExecutableCall>;
+  executableCalls: Array<ExecutableCall>;
+  pollResult?: Maybe<PollResult>;
+  pollResults: Array<PollResult>;
   proposal?: Maybe<Proposal>;
-  proposalVote?: Maybe<ProposalVote>;
-  proposalVotes: Array<ProposalVote>;
   proposals: Array<Proposal>;
   vote?: Maybe<Vote>;
   votes: Array<Vote>;
 };
 
-type Subscription_MetaArgs = {
+export type Subscription_MetaArgs = {
   block?: InputMaybe<Block_Height>;
 };
 
-type SubscriptionBlockArgs = {
+export type SubscriptionBlockArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type SubscriptionBlocksArgs = {
+export type SubscriptionBlocksArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Block_OrderBy>;
@@ -873,45 +1101,45 @@ type SubscriptionBlocksArgs = {
   where?: InputMaybe<Block_Filter>;
 };
 
-type SubscriptionCallScheduledArgs = {
+export type SubscriptionExecutableCallArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type SubscriptionCallScheduledsArgs = {
+export type SubscriptionExecutableCallsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<CallScheduled_OrderBy>;
+  orderBy?: InputMaybe<ExecutableCall_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<CallScheduled_Filter>;
+  where?: InputMaybe<ExecutableCall_Filter>;
 };
 
-type SubscriptionProposalArgs = {
+export type SubscriptionPollResultArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type SubscriptionProposalVoteArgs = {
-  block?: InputMaybe<Block_Height>;
-  id: Scalars["ID"]["input"];
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-type SubscriptionProposalVotesArgs = {
+export type SubscriptionPollResultsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: InputMaybe<ProposalVote_OrderBy>;
+  orderBy?: InputMaybe<PollResult_OrderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars["Int"]["input"]>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<ProposalVote_Filter>;
+  where?: InputMaybe<PollResult_Filter>;
 };
 
-type SubscriptionProposalsArgs = {
+export type SubscriptionProposalArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars["ID"]["input"];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type SubscriptionProposalsArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Proposal_OrderBy>;
@@ -921,13 +1149,13 @@ type SubscriptionProposalsArgs = {
   where?: InputMaybe<Proposal_Filter>;
 };
 
-type SubscriptionVoteArgs = {
+export type SubscriptionVoteArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars["ID"]["input"];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
-type SubscriptionVotesArgs = {
+export type SubscriptionVotesArgs = {
   block?: InputMaybe<Block_Height>;
   first?: InputMaybe<Scalars["Int"]["input"]>;
   orderBy?: InputMaybe<Vote_OrderBy>;
@@ -937,19 +1165,25 @@ type SubscriptionVotesArgs = {
   where?: InputMaybe<Vote_Filter>;
 };
 
-type Vote = {
+export type Vote = {
   __typename?: "Vote";
   id: Scalars["Int8"]["output"];
   params?: Maybe<Scalars["Bytes"]["output"]>;
   proposalId: Proposal;
   reason: Scalars["String"]["output"];
-  support: Scalars["Int"]["output"];
+  support: VoteSupportType;
   timestamp: Scalars["BigInt"]["output"];
   voter: Scalars["Bytes"]["output"];
   weight: Scalars["BigInt"]["output"];
 };
 
-type Vote_Filter = {
+export enum VoteSupportType {
+  Abstain = "ABSTAIN",
+  Against = "AGAINST",
+  For = "FOR",
+}
+
+export type Vote_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Vote_Filter>>>;
@@ -1013,14 +1247,10 @@ type Vote_Filter = {
   reason_not_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
   reason_starts_with?: InputMaybe<Scalars["String"]["input"]>;
   reason_starts_with_nocase?: InputMaybe<Scalars["String"]["input"]>;
-  support?: InputMaybe<Scalars["Int"]["input"]>;
-  support_gt?: InputMaybe<Scalars["Int"]["input"]>;
-  support_gte?: InputMaybe<Scalars["Int"]["input"]>;
-  support_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
-  support_lt?: InputMaybe<Scalars["Int"]["input"]>;
-  support_lte?: InputMaybe<Scalars["Int"]["input"]>;
-  support_not?: InputMaybe<Scalars["Int"]["input"]>;
-  support_not_in?: InputMaybe<Array<Scalars["Int"]["input"]>>;
+  support?: InputMaybe<VoteSupportType>;
+  support_in?: InputMaybe<Array<VoteSupportType>>;
+  support_not?: InputMaybe<VoteSupportType>;
+  support_not_in?: InputMaybe<Array<VoteSupportType>>;
   timestamp?: InputMaybe<Scalars["BigInt"]["input"]>;
   timestamp_gt?: InputMaybe<Scalars["BigInt"]["input"]>;
   timestamp_gte?: InputMaybe<Scalars["BigInt"]["input"]>;
@@ -1049,17 +1279,21 @@ type Vote_Filter = {
   weight_not_in?: InputMaybe<Array<Scalars["BigInt"]["input"]>>;
 };
 
-enum Vote_OrderBy {
+export enum Vote_OrderBy {
   Id = "id",
   Params = "params",
   ProposalId = "proposalId",
   ProposalIdCanceledAt = "proposalId__canceledAt",
   ProposalIdCanceledAtBlock = "proposalId__canceledAtBlock",
+  ProposalIdContentEncoding = "proposalId__contentEncoding",
+  ProposalIdContentType = "proposalId__contentType",
   ProposalIdCreatedAt = "proposalId__createdAt",
   ProposalIdCreatedAtBlock = "proposalId__createdAtBlock",
   ProposalIdDescription = "proposalId__description",
+  ProposalIdExecutableAtBlock = "proposalId__executableAtBlock",
   ProposalIdExecutedAt = "proposalId__executedAt",
   ProposalIdExecutedAtBlock = "proposalId__executedAtBlock",
+  ProposalIdForumLink = "proposalId__forumLink",
   ProposalIdId = "proposalId__id",
   ProposalIdProposalId = "proposalId__proposalId",
   ProposalIdProposer = "proposalId__proposer",
@@ -1068,8 +1302,10 @@ enum Vote_OrderBy {
   ProposalIdQueueStartBlock = "proposalId__queueStartBlock",
   ProposalIdQuorum = "proposalId__quorum",
   ProposalIdStatus = "proposalId__status",
-  ProposalIdVoteEnd = "proposalId__voteEnd",
-  ProposalIdVoteStart = "proposalId__voteStart",
+  ProposalIdTimelockId = "proposalId__timelockId",
+  ProposalIdTitle = "proposalId__title",
+  ProposalIdVoteEndBlock = "proposalId__voteEndBlock",
+  ProposalIdVoteStartBlock = "proposalId__voteStartBlock",
   Reason = "reason",
   Support = "support",
   Timestamp = "timestamp",
@@ -1077,7 +1313,7 @@ enum Vote_OrderBy {
   Weight = "weight",
 }
 
-type _Block_ = {
+export type _Block_ = {
   __typename?: "_Block_";
   /** The hash of the block */
   hash?: Maybe<Scalars["Bytes"]["output"]>;
@@ -1090,7 +1326,7 @@ type _Block_ = {
 };
 
 /** The type for the top-level _meta field */
-type _Meta_ = {
+export type _Meta_ = {
   __typename?: "_Meta_";
   /**
    * Information about a specific subgraph block. The hash of the block
@@ -1106,66 +1342,449 @@ type _Meta_ = {
   hasIndexingErrors: Scalars["Boolean"]["output"];
 };
 
-enum _SubgraphErrorPolicy_ {
+export enum _SubgraphErrorPolicy_ {
   /** Data will be returned even if the subgraph has indexing errors */
   Allow = "allow",
   /** If the subgraph has indexing errors, data will be omitted. The default. */
   Deny = "deny",
 }
 
-type GetProposalsQueryVariables = Exact<{
+export type ProposalSelectionFragment = {
+  __typename?: "Proposal";
+  id: string;
+  proposer: any;
+  proposalId: any;
+  description: string;
+  status: ProposalStatus;
+  createdAt: any;
+  quorum: any;
+  voteEndBlock: any;
+  voteStartBlock: any;
+  queueEnd?: any | null;
+  canceledAt?: any | null;
+  executedAt?: any | null;
+  title?: string | null;
+  topics: Array<string>;
+  pollResult: {
+    __typename?: "PollResult";
+    for: any;
+    forVotersCount: number;
+    forPercentage: string;
+    against: any;
+    againstVotersCount: number;
+    againstPercentage: string;
+    abstain: any;
+    abstainVotersCount: number;
+    abstainPercentage: string;
+    total: any;
+    totalVotersCount: number;
+    totalTowardsQuorum: any;
+  };
+};
+
+export type ExecutableCallSubsetFragment = {
+  __typename?: "ExecutableCall";
+  id: string;
+  target: any;
+  value: any;
+  calldata: any;
+};
+
+export type ProposalVoteFragment = {
+  __typename?: "Vote";
+  id: any;
+  voter: any;
+  weight: any;
+  support: VoteSupportType;
+  timestamp: any;
+  reason: string;
+};
+
+export type ProposalWithVotesFragment = {
+  __typename?: "Proposal";
+  timelockId?: any | null;
+  id: string;
+  proposer: any;
+  proposalId: any;
+  description: string;
+  status: ProposalStatus;
+  createdAt: any;
+  quorum: any;
+  voteEndBlock: any;
+  voteStartBlock: any;
+  queueEnd?: any | null;
+  canceledAt?: any | null;
+  executedAt?: any | null;
+  title?: string | null;
+  topics: Array<string>;
+  executableCalls: Array<{
+    __typename?: "ExecutableCall";
+    id: string;
+    target: any;
+    value: any;
+    calldata: any;
+  }>;
+  votes: Array<{
+    __typename?: "Vote";
+    id: any;
+    voter: any;
+    weight: any;
+    support: VoteSupportType;
+    timestamp: any;
+    reason: string;
+  }>;
+  pollResult: {
+    __typename?: "PollResult";
+    for: any;
+    forVotersCount: number;
+    forPercentage: string;
+    against: any;
+    againstVotersCount: number;
+    againstPercentage: string;
+    abstain: any;
+    abstainVotersCount: number;
+    abstainPercentage: string;
+    total: any;
+    totalVotersCount: number;
+    totalTowardsQuorum: any;
+  };
+};
+
+export type GetProposalVotesQueryVariables = Exact<{
+  proposalId: Scalars["String"]["input"];
+  orderBy?: InputMaybe<Vote_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  limit: Scalars["Int"]["input"];
   offset?: InputMaybe<Scalars["Int"]["input"]>;
-  limit?: InputMaybe<Scalars["Int"]["input"]>;
 }>;
 
-type GetProposalsQuery = {
+export type GetProposalVotesQuery = {
+  __typename?: "Query";
+  votes: Array<{
+    __typename?: "Vote";
+    id: any;
+    voter: any;
+    weight: any;
+    support: VoteSupportType;
+    timestamp: any;
+    reason: string;
+  }>;
+};
+
+export type GetProposalsQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<Proposal_Filter>;
+  orderBy?: InputMaybe<Proposal_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+}>;
+
+export type GetProposalsQuery = {
   __typename?: "Query";
   proposals: Array<{
     __typename?: "Proposal";
     id: string;
     proposer: any;
     proposalId: any;
-    targets: Array<any>;
-    values: Array<any>;
-    signatures: Array<string>;
-    calldatas: Array<any>;
     description: string;
-    status: string;
+    status: ProposalStatus;
     createdAt: any;
-    voteStart: any;
-    voteEnd: any;
+    quorum: any;
+    voteEndBlock: any;
+    voteStartBlock: any;
     queueEnd?: any | null;
     canceledAt?: any | null;
     executedAt?: any | null;
+    title?: string | null;
+    topics: Array<string>;
+    pollResult: {
+      __typename?: "PollResult";
+      for: any;
+      forVotersCount: number;
+      forPercentage: string;
+      against: any;
+      againstVotersCount: number;
+      againstPercentage: string;
+      abstain: any;
+      abstainVotersCount: number;
+      abstainPercentage: string;
+      total: any;
+      totalVotersCount: number;
+      totalTowardsQuorum: any;
+    };
   }>;
 };
 
-const GetProposalsDocument = gql`
-    query GetProposals($offset: Int, $limit: Int) {
+export type SearchProposalsQueryVariables = Exact<{
+  offset?: InputMaybe<Scalars["Int"]["input"]>;
+  limit?: InputMaybe<Scalars["Int"]["input"]>;
+  where?: InputMaybe<Proposal_Filter>;
+  text: Scalars["String"]["input"];
+}>;
+
+export type SearchProposalsQuery = {
+  __typename?: "Query";
+  proposals: Array<{
+    __typename?: "Proposal";
+    id: string;
+    proposer: any;
+    proposalId: any;
+    description: string;
+    status: ProposalStatus;
+    createdAt: any;
+    quorum: any;
+    voteEndBlock: any;
+    voteStartBlock: any;
+    queueEnd?: any | null;
+    canceledAt?: any | null;
+    executedAt?: any | null;
+    title?: string | null;
+    topics: Array<string>;
+    pollResult: {
+      __typename?: "PollResult";
+      for: any;
+      forVotersCount: number;
+      forPercentage: string;
+      against: any;
+      againstVotersCount: number;
+      againstPercentage: string;
+      abstain: any;
+      abstainVotersCount: number;
+      abstainPercentage: string;
+      total: any;
+      totalVotersCount: number;
+      totalTowardsQuorum: any;
+    };
+  }>;
+};
+
+export type GetProposalQueryVariables = Exact<{
+  id: Scalars["ID"]["input"];
+}>;
+
+export type GetProposalQuery = {
+  __typename?: "Query";
+  proposal?: {
+    __typename?: "Proposal";
+    timelockId?: any | null;
+    id: string;
+    proposer: any;
+    proposalId: any;
+    description: string;
+    status: ProposalStatus;
+    createdAt: any;
+    quorum: any;
+    voteEndBlock: any;
+    voteStartBlock: any;
+    queueEnd?: any | null;
+    canceledAt?: any | null;
+    executedAt?: any | null;
+    title?: string | null;
+    topics: Array<string>;
+    executableCalls: Array<{
+      __typename?: "ExecutableCall";
+      id: string;
+      target: any;
+      value: any;
+      calldata: any;
+    }>;
+    votes: Array<{
+      __typename?: "Vote";
+      id: any;
+      voter: any;
+      weight: any;
+      support: VoteSupportType;
+      timestamp: any;
+      reason: string;
+    }>;
+    pollResult: {
+      __typename?: "PollResult";
+      for: any;
+      forVotersCount: number;
+      forPercentage: string;
+      against: any;
+      againstVotersCount: number;
+      againstPercentage: string;
+      abstain: any;
+      abstainVotersCount: number;
+      abstainPercentage: string;
+      total: any;
+      totalVotersCount: number;
+      totalTowardsQuorum: any;
+    };
+  } | null;
+};
+
+export const ProposalSelectionFragmentDoc = gql`
+    fragment ProposalSelection on Proposal {
+  id
+  proposer
+  proposalId
+  description
+  status
+  createdAt
+  quorum
+  pollResult {
+    for
+    forVotersCount
+    forPercentage
+    against
+    againstVotersCount
+    againstPercentage
+    abstain
+    abstainVotersCount
+    abstainPercentage
+    total
+    totalVotersCount
+    totalTowardsQuorum
+  }
+  voteEndBlock
+  voteStartBlock
+  queueEnd
+  canceledAt
+  canceledAt
+  executedAt
+  title
+  topics
+}
+    `;
+export const ExecutableCallSubsetFragmentDoc = gql`
+    fragment ExecutableCallSubset on ExecutableCall {
+  id
+  target
+  value
+  calldata
+}
+    `;
+export const ProposalVoteFragmentDoc = gql`
+    fragment ProposalVote on Vote {
+  id
+  voter
+  weight
+  support
+  timestamp
+  reason
+}
+    `;
+export const ProposalWithVotesFragmentDoc = gql`
+    fragment ProposalWithVotes on Proposal {
+  ...ProposalSelection
+  executableCalls {
+    ...ExecutableCallSubset
+  }
+  timelockId
+  votes(orderBy: weight, orderDirection: desc) {
+    ...ProposalVote
+  }
+}
+    ${ProposalSelectionFragmentDoc}
+${ExecutableCallSubsetFragmentDoc}
+${ProposalVoteFragmentDoc}`;
+export const GetProposalVotesDocument = gql`
+    query GetProposalVotes($proposalId: String!, $orderBy: Vote_orderBy = weight, $orderDirection: OrderDirection = desc, $limit: Int!, $offset: Int) {
+  votes(
+    where: {proposalId: $proposalId}
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+    skip: $offset
+    first: $limit
+  ) {
+    ...ProposalVote
+  }
+}
+    ${ProposalVoteFragmentDoc}`;
+
+/**
+ * __useGetProposalVotesQuery__
+ *
+ * To run a query within a React component, call `useGetProposalVotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalVotesQuery({
+ *   variables: {
+ *      proposalId: // value for 'proposalId'
+ *      orderBy: // value for 'orderBy'
+ *      orderDirection: // value for 'orderDirection'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProposalVotesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProposalVotesQuery,
+    GetProposalVotesQueryVariables
+  > &
+    (
+      | { variables: GetProposalVotesQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetProposalVotesQuery, GetProposalVotesQueryVariables>(
+    GetProposalVotesDocument,
+    options,
+  );
+}
+export function useGetProposalVotesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProposalVotesQuery,
+    GetProposalVotesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProposalVotesQuery,
+    GetProposalVotesQueryVariables
+  >(GetProposalVotesDocument, options);
+}
+export function useGetProposalVotesSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetProposalVotesQuery,
+        GetProposalVotesQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    GetProposalVotesQuery,
+    GetProposalVotesQueryVariables
+  >(GetProposalVotesDocument, options);
+}
+export type GetProposalVotesQueryHookResult = ReturnType<
+  typeof useGetProposalVotesQuery
+>;
+export type GetProposalVotesLazyQueryHookResult = ReturnType<
+  typeof useGetProposalVotesLazyQuery
+>;
+export type GetProposalVotesSuspenseQueryHookResult = ReturnType<
+  typeof useGetProposalVotesSuspenseQuery
+>;
+export type GetProposalVotesQueryResult = Apollo.QueryResult<
+  GetProposalVotesQuery,
+  GetProposalVotesQueryVariables
+>;
+export const GetProposalsDocument = gql`
+    query GetProposals($offset: Int, $limit: Int, $where: Proposal_filter, $orderBy: Proposal_orderBy = createdAt, $orderDirection: OrderDirection = desc) {
   proposals(
     skip: $offset
     first: $limit
-    orderBy: createdAt
-    orderDirection: desc
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+    where: $where
   ) {
-    id
-    proposer
-    proposalId
-    targets
-    values
-    signatures
-    calldatas
-    description
-    status
-    createdAt
-    voteStart
-    voteEnd
-    queueEnd
-    canceledAt
-    executedAt
+    ...ProposalSelection
   }
 }
-    `;
+    ${ProposalSelectionFragmentDoc}`;
 
 /**
  * __useGetProposalsQuery__
@@ -1181,6 +1800,9 @@ const GetProposalsDocument = gql`
  *   variables: {
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      orderDirection: // value for 'orderDirection'
  *   },
  * });
  */
@@ -1238,30 +1860,283 @@ export type GetProposalsQueryResult = Apollo.QueryResult<
   GetProposalsQuery,
   GetProposalsQueryVariables
 >;
+export const SearchProposalsDocument = gql`
+    query SearchProposals($offset: Int, $limit: Int, $where: Proposal_filter, $text: String!) {
+  proposals: proposalSearch(
+    skip: $offset
+    first: $limit
+    where: $where
+    text: $text
+  ) {
+    ...ProposalSelection
+  }
+}
+    ${ProposalSelectionFragmentDoc}`;
 
-const GetProposals = gql`
-    query GetProposals($offset: Int, $limit: Int) {
+/**
+ * __useSearchProposalsQuery__
+ *
+ * To run a query within a React component, call `useSearchProposalsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchProposalsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchProposalsQuery({
+ *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *      where: // value for 'where'
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useSearchProposalsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  > &
+    (
+      | { variables: SearchProposalsQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchProposalsQuery, SearchProposalsQueryVariables>(
+    SearchProposalsDocument,
+    options,
+  );
+}
+export function useSearchProposalsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  >(SearchProposalsDocument, options);
+}
+export function useSearchProposalsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        SearchProposalsQuery,
+        SearchProposalsQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    SearchProposalsQuery,
+    SearchProposalsQueryVariables
+  >(SearchProposalsDocument, options);
+}
+export type SearchProposalsQueryHookResult = ReturnType<
+  typeof useSearchProposalsQuery
+>;
+export type SearchProposalsLazyQueryHookResult = ReturnType<
+  typeof useSearchProposalsLazyQuery
+>;
+export type SearchProposalsSuspenseQueryHookResult = ReturnType<
+  typeof useSearchProposalsSuspenseQuery
+>;
+export type SearchProposalsQueryResult = Apollo.QueryResult<
+  SearchProposalsQuery,
+  SearchProposalsQueryVariables
+>;
+export const GetProposalDocument = gql`
+    query GetProposal($id: ID!) {
+  proposal(id: $id) {
+    ...ProposalWithVotes
+  }
+}
+    ${ProposalWithVotesFragmentDoc}`;
+
+/**
+ * __useGetProposalQuery__
+ *
+ * To run a query within a React component, call `useGetProposalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProposalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProposalQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProposalQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProposalQuery,
+    GetProposalQueryVariables
+  > &
+    (
+      | { variables: GetProposalQueryVariables; skip?: boolean }
+      | { skip: boolean }
+    ),
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetProposalQuery, GetProposalQueryVariables>(
+    GetProposalDocument,
+    options,
+  );
+}
+export function useGetProposalLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProposalQuery,
+    GetProposalQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetProposalQuery, GetProposalQueryVariables>(
+    GetProposalDocument,
+    options,
+  );
+}
+export function useGetProposalSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<
+        GetProposalQuery,
+        GetProposalQueryVariables
+      >,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetProposalQuery, GetProposalQueryVariables>(
+    GetProposalDocument,
+    options,
+  );
+}
+export type GetProposalQueryHookResult = ReturnType<typeof useGetProposalQuery>;
+export type GetProposalLazyQueryHookResult = ReturnType<
+  typeof useGetProposalLazyQuery
+>;
+export type GetProposalSuspenseQueryHookResult = ReturnType<
+  typeof useGetProposalSuspenseQuery
+>;
+export type GetProposalQueryResult = Apollo.QueryResult<
+  GetProposalQuery,
+  GetProposalQueryVariables
+>;
+export const ProposalSelection = gql`
+    fragment ProposalSelection on Proposal {
+  id
+  proposer
+  proposalId
+  description
+  status
+  createdAt
+  quorum
+  pollResult {
+    for
+    forVotersCount
+    forPercentage
+    against
+    againstVotersCount
+    againstPercentage
+    abstain
+    abstainVotersCount
+    abstainPercentage
+    total
+    totalVotersCount
+    totalTowardsQuorum
+  }
+  voteEndBlock
+  voteStartBlock
+  queueEnd
+  canceledAt
+  canceledAt
+  executedAt
+  title
+  topics
+}
+    `;
+export const ExecutableCallSubset = gql`
+    fragment ExecutableCallSubset on ExecutableCall {
+  id
+  target
+  value
+  calldata
+}
+    `;
+export const ProposalVote = gql`
+    fragment ProposalVote on Vote {
+  id
+  voter
+  weight
+  support
+  timestamp
+  reason
+}
+    `;
+export const ProposalWithVotes = gql`
+    fragment ProposalWithVotes on Proposal {
+  ...ProposalSelection
+  executableCalls {
+    ...ExecutableCallSubset
+  }
+  timelockId
+  votes(orderBy: weight, orderDirection: desc) {
+    ...ProposalVote
+  }
+}
+    ${ProposalSelection}
+${ExecutableCallSubset}
+${ProposalVote}`;
+export const GetProposalVotes = gql`
+    query GetProposalVotes($proposalId: String!, $orderBy: Vote_orderBy = weight, $orderDirection: OrderDirection = desc, $limit: Int!, $offset: Int) {
+  votes(
+    where: {proposalId: $proposalId}
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+    skip: $offset
+    first: $limit
+  ) {
+    ...ProposalVote
+  }
+}
+    ${ProposalVote}`;
+export const GetProposals = gql`
+    query GetProposals($offset: Int, $limit: Int, $where: Proposal_filter, $orderBy: Proposal_orderBy = createdAt, $orderDirection: OrderDirection = desc) {
   proposals(
     skip: $offset
     first: $limit
-    orderBy: createdAt
-    orderDirection: desc
+    orderBy: $orderBy
+    orderDirection: $orderDirection
+    where: $where
   ) {
-    id
-    proposer
-    proposalId
-    targets
-    values
-    signatures
-    calldatas
-    description
-    status
-    createdAt
-    voteStart
-    voteEnd
-    queueEnd
-    canceledAt
-    executedAt
+    ...ProposalSelection
   }
 }
-    `;
+    ${ProposalSelection}`;
+export const SearchProposals = gql`
+    query SearchProposals($offset: Int, $limit: Int, $where: Proposal_filter, $text: String!) {
+  proposals: proposalSearch(
+    skip: $offset
+    first: $limit
+    where: $where
+    text: $text
+  ) {
+    ...ProposalSelection
+  }
+}
+    ${ProposalSelection}`;
+export const GetProposal = gql`
+    query GetProposal($id: ID!) {
+  proposal(id: $id) {
+    ...ProposalWithVotes
+  }
+}
+    ${ProposalWithVotes}`;

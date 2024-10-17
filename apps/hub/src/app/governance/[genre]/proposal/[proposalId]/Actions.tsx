@@ -1,17 +1,15 @@
-import {
-  BERA_CHEF_ABI,
-  truncateHash,
-  type ExecutableCalls,
-} from "@bera/berajs";
+import { BERA_CHEF_ABI, truncateHash } from "@bera/berajs";
 import { Card } from "@bera/ui/card";
 
 import { useGetVerifiedAbi } from "@bera/berajs";
+import { ExecutableCallSubsetFragment } from "@bera/graphql/governance";
+
 import { Abi, AbiFunction, Address, decodeFunctionData, erc20Abi } from "viem";
 
 export const Actions = ({
   executableCalls,
 }: {
-  executableCalls: ExecutableCalls[];
+  executableCalls: ExecutableCallSubsetFragment[];
 }) => {
   return (
     <>
@@ -71,6 +69,9 @@ export const Actions = ({
             <br />
             <div className="font-medium text-foreground">Target:</div>
             <div>{executableCall.target}</div>
+            <br />
+            <div className="font-medium text-foreground">Value in wei:</div>
+            <div>{executableCall.value}</div>
           </Card>
         );
       })}

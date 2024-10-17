@@ -53,7 +53,7 @@ export const QueueButton = ({
                     address: governorAddress,
                     abi: GOVERNANCE_ABI,
                     functionName: "queue",
-                    params: [BigInt(proposal.onchainId)],
+                    params: [BigInt(proposal.id)],
                   })
                 }
               >

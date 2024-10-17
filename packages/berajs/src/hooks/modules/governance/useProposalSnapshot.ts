@@ -1,8 +1,9 @@
+import { governorAddress } from "@bera/config";
+import { SWRResponse } from "swr";
 import useSWRImmutable from "swr/immutable";
 import { usePublicClient } from "wagmi";
+
 import { GOVERNANCE_ABI } from "~/abi";
-import { SWRResponse } from "swr";
-import { governorAddress } from "@bera/config";
 
 export const useProposalSnapshot = ({
   proposalId,

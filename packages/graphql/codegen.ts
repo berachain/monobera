@@ -21,6 +21,7 @@ const config: CodegenConfig = {
     "./src/modules/governance/codegen.ts": {
       documents: "./src/modules/governance/query.ts",
       schema: process.env.NEXT_PUBLIC_GOVERNANCE_SUBGRAPH_URL,
+      // preset: "client",
 
       plugins: [
         "typescript",
@@ -33,25 +34,28 @@ const config: CodegenConfig = {
         },
       ],
       config: {
-        noExport: true,
+        gqlImport: "@apollo/client#gql",
+        withHooks: true,
+        // noExport: true,
       },
     },
     "./src/modules/chain/codegen.ts": {
       documents: "./src/modules/chain/query.ts",
       schema: process.env.NEXT_PUBLIC_CHAIN_BLOCKS_SUBGRAPH_URL,
 
+      // preset: "client",
       plugins: [
         "typescript",
         "typescript-operations",
         "typescript-react-apollo",
         {
-          "typescript-document-nodes": {
-            gqlImport: "@apollo/client#gql",
-          },
+          "typescript-document-nodes": {},
         },
       ],
       config: {
-        noExport: true,
+        // noExport: true,
+        withHooks: true,
+        gqlImport: "@apollo/client#gql",
       },
     },
   },

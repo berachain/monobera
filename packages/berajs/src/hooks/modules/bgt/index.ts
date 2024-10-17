@@ -18,3 +18,4 @@ export { useUserValidatorsSubgraph } from "./useUserValidatorsSubgraph";
 export { useValidValidator } from "./useValidValidator";
 export { useClaimableFees } from "./useClaimableFees";
 export * from "./useBgtInflation";
+export * from "./useIsFriendOfTheChef";

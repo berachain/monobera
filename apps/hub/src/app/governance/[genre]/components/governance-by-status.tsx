@@ -11,17 +11,25 @@ import { ProposalsList } from "./proposals-list";
 import { UserVotingPower } from "./user-voting-power";
 import { SWRFallback, usePollAllProposalsQueryKey } from "@bera/berajs";
 import { unstable_serialize } from "swr/infinite";
+import { OrderDirection, Proposal_OrderBy } from "@bera/graphql/governance";
 
 export default function GovernanceByStatus({
   allProposals,
 }: {
   allProposals?: any;
 }) {
-  const { dappConfig } = useGovernance();
+  const { currentTopic: govTopic } = useGovernance();
   return (
     <SWRFallback
       fallback={{
-        [unstable_serialize(usePollAllProposalsQueryKey)]: allProposals,
+        [unstable_serialize(
+          usePollAllProposalsQueryKey(govTopic.slug, {
+            orderBy: Proposal_OrderBy.CreatedAt,
+            status_in: [],
+            orderDirection: OrderDirection.Desc,
+            text: "",
+          }),
+        )]: allProposals,
       }}
     >
       <div className="pb-32">
@@ -34,9 +42,9 @@ export default function GovernanceByStatus({
         </Link>
         <div
           className="font-bold uppercase tracking-widest"
-          style={{ color: dappConfig.color }}
+          style={{ color: govTopic.color }}
         >
-          {dappConfig.name}
+          {govTopic.name}
         </div>
         <div className="text-3xl font-bold leading-9 text-foreground sm:text-5xl sm:leading-[48px]">
           Vote on proposals <br />
@@ -44,11 +52,18 @@ export default function GovernanceByStatus({
         </div>
         <div className="mx-auto my-8 flex gap-3 sm:w-full flex-wrap ">
           <GoToIfHasVotingPower
-            href={`/governance/${dappConfig.slug}/create`}
+            href={`/governance/${govTopic.slug}/create`}
             governorAddress={governorAddress}
           />
-          <Button variant="secondary" className="w-fit">
-            Visit forums
+          <Button
+            as={Link}
+            href={govTopic.forumLink}
+            variant="secondary"
+            className="w-fit"
+            // @ts-ignore
+            target="_blank"
+          >
+            Visit forum
           </Button>
         </div>
 

@@ -7,7 +7,7 @@ import {
   truncateHash,
   useBeraJs,
   useGetPastVotes,
-  Proposal,
+  useHasVoted,
 } from "@bera/berajs";
 import { governorAddress } from "@bera/config";
 import {
@@ -21,7 +21,6 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -31,21 +30,26 @@ import { TextArea } from "@bera/ui/text-area";
 import { ProposalHeading } from "../../components/proposal-heading";
 import { parseProposalBody } from "../../helper";
 import { cn } from "@bera/ui";
+import { ProposalWithVotesFragment } from "@bera/graphql/governance";
 
 export function VoteDialog({
   proposal,
-  disable,
+  disable: propsDisabled,
 }: {
-  proposal: Proposal;
+  proposal: ProposalWithVotesFragment;
   disable?: boolean;
 }) {
+  const { data: hasVoted, mutate } = useHasVoted({ proposalId: proposal.id });
+
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
   // 0 = Against, 1 = For, 2 = Abstain
   const [selected, setSelected] = useState(-1);
 
-  // @ts-ignore
-  const proposalId = BigInt(proposal.onchainId);
+  const proposalId = BigInt(proposal.id);
+
+  const disabled = hasVoted || propsDisabled;
+
   const {
     data: votingPower,
     isLoading,
@@ -57,7 +61,10 @@ export function VoteDialog({
   const { write, ModalPortal } = useTxn({
     message: "Vote Proposal",
     actionType: TransactionActionType.VOTE,
-    onSuccess: () => setOpen(false),
+    onSuccess: () => {
+      setOpen(false);
+      mutate(true);
+    },
   });
 
   const frontmatter = useMemo(() => parseProposalBody(proposal), [proposal]);
@@ -81,9 +88,9 @@ export function VoteDialog({
               onClick={() => {
                 setOpen(true);
               }}
-              disabled={disable}
+              disabled={disabled}
             >
-              {disable ? "Voted" : "Vote"}
+              {disabled ? "Voted" : "Vote"}
             </Button>
           </ActionButton>
         </DialogTrigger>

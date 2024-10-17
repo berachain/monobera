@@ -1,24 +1,18 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { type Proposal } from "@bera/berajs";
 import { cn } from "@bera/ui";
-import { Badge } from "@bera/ui/badge";
-import { Skeleton } from "@bera/ui/skeleton";
-import { formatEther } from "viem";
-
 import {
-  getBadgeColor,
-  getTimeText,
-  getTotalVotes,
-  getVotesDataList,
-  parseProposalBody,
-} from "../../helper";
-import { StatusEnum } from "../../types";
-import { ProgressBarChart } from "./progress-bar-chart";
+  ProposalSelectionFragment,
+  ProposalStatus,
+} from "@bera/graphql/governance";
+import { Skeleton } from "@bera/ui/skeleton";
+
+import { getVotesDataList, parseProposalBody } from "../../helper";
 import { QuorumStatus } from "./quorum-status";
 import { ProposalHeading } from "../../components/proposal-heading";
 import { StatusBadge } from "../../components/status-badge";
+import { ProgressBarChart } from "./progress-bar-chart";
 
 export function ProposalCard({
   details = false,
@@ -29,7 +23,7 @@ export function ProposalCard({
 }: React.HTMLAttributes<HTMLDivElement> & {
   details?: boolean;
   truncate?: boolean;
-  proposal: Proposal;
+  proposal: ProposalSelectionFragment;
 }) {
   const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
 
@@ -42,24 +36,27 @@ export function ProposalCard({
       )}
       {...props}
     >
-      <div className="flex-1">
+      <div
+        // overflow-hidden needed when there are addresses or long strings in the title.
+        className="flex-1  overflow-hidden"
+      >
         <ProposalHeading frontmatter={fm} size="sm" />
         <StatusBadge proposal={proposal} className="mt-1 md:mt-3" />
       </div>
 
       {![
-        StatusEnum.PENDING,
-        StatusEnum.CANCELED_BY_USER,
-        StatusEnum.CANCELED_BY_GUARDIAN,
-      ].includes(proposal.status as StatusEnum) ? (
+        ProposalStatus.Pending,
+        ProposalStatus.CanceledByUser,
+        ProposalStatus.CanceledByGuardian,
+      ].includes(proposal.status) ? (
         <div
           className={cn(
             "flex flex-col items-start min-w-36 sm:grid sm:grid-cols-2 xl:items-center gap-2 gap-y-4 text-xs xl:flex-row ",
           )}
         >
           <QuorumStatus
-            delegatesVotesCount={getTotalVotes(proposal)}
-            quorum={formatEther(BigInt(proposal.governor.quorum))}
+            delegatesVotesCount={proposal.pollResult?.totalTowardsQuorum}
+            quorum={proposal.quorum}
           />
           <ProgressBarChart
             dataList={getVotesDataList(proposal)}

@@ -3,9 +3,9 @@ import { Card } from "@bera/ui/card";
 import { cn } from "@bera/ui";
 
 interface IVoteCard {
-  abstainPercentage: number;
-  noPercentage: number;
-  yesPercentage: number;
+  abstainPercentage: string;
+  noPercentage: string;
+  yesPercentage: string;
 }
 
 const VotePercentage = ({
@@ -23,7 +23,7 @@ const VotePercentage = ({
       <div
         className={cn("text-lg font-semibold leading-none sm:text-xl", color)}
       >
-        {Math.round(percentage ?? 0)}%
+        {Math.round(percentage * 100 ?? 0)}%
       </div>
       <div className="flex capitalize items-center text-xs font-medium leading-none text-muted-foreground sm:text-sm">
         {type}
@@ -38,9 +38,9 @@ export function VoteCard({
 }: IVoteCard) {
   return (
     <Card className="flex w-full grow p-3">
-      <VotePercentage percentage={yesPercentage} type="yes" />
-      <VotePercentage percentage={noPercentage} type="no" />
-      <VotePercentage percentage={abstainPercentage} type="abstain" />
+      <VotePercentage percentage={Number(yesPercentage)} type="yes" />
+      <VotePercentage percentage={Number(noPercentage)} type="no" />
+      <VotePercentage percentage={Number(abstainPercentage)} type="abstain" />
     </Card>
   );
 }

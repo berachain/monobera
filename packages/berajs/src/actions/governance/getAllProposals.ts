@@ -1,63 +1,79 @@
-import { governanceOrganizationId } from "@bera/config";
-import { getProposals } from "@bera/graphql";
+import { FALLBACK_BLOCK_TIME } from "@bera/config";
+import { governanceClient } from "@bera/graphql";
+import {
+  GetProposals,
+  GetProposalsQuery,
+  GetProposalsQueryVariables,
+  OrderDirection,
+  ProposalSelectionFragment,
+  Proposal_Filter,
+  Proposal_OrderBy,
+  SearchProposals,
+  SearchProposalsQuery,
+  SearchProposalsQueryVariables,
+} from "@bera/graphql/governance";
+import { wagmiConfig } from "@bera/wagmi/config";
+import { getBlockNumber } from "@wagmi/core";
 
-import { BeraConfig, Proposal } from "~/types";
+import { BeraConfig } from "~/types";
+import { computeActualStatus } from "./computeActualStatus";
 
 export const getAllProposals = async ({
   config,
-  afterCursor,
-  beforeCursor,
+  where,
+  orderBy,
+  orderDirection,
+  offset = 0,
   perPage = 20,
+  text,
 }: {
-  afterCursor?: string;
-  beforeCursor?: string;
+  offset?: number;
+  where: Proposal_Filter;
   perPage?: number;
   config: BeraConfig;
-}): Promise<
-  | {
-      nodes: Proposal[];
-      pageInfo: { firstCursor: string; lastCursor: string; count: number };
-    }
-  | undefined
-> => {
+  orderBy?: Proposal_OrderBy;
+  orderDirection?: OrderDirection;
+  text?: string;
+}): Promise<ProposalSelectionFragment[] | undefined> => {
   try {
-    if (perPage > 20) {
-      throw new Error("perPage must be less than 20");
+    if (perPage > 1000) {
+      throw new Error("perPage must be less than 1000");
     }
+
     if (!config.subgraphs?.governanceSubgraph) {
       throw new Error("governance subgraph uri is not found in config");
     }
-    const subgraphEndpoint = config.subgraphs.governanceSubgraph;
-    const variables = {
-      input: {
-        filters: {
-          organizationId: governanceOrganizationId,
-        },
-        sort: {
-          sortBy: "id",
-          isDescending: true,
-        },
-        page: {
-          limit: perPage,
-          afterCursor,
-          beforeCursor,
-        },
-      },
-    };
-    const response = await fetch(subgraphEndpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Api-Key": process.env.NEXT_PUBLIC_TALLY_API_KEY as string,
-      },
-      body: JSON.stringify({
-        query: getProposals.loc?.source.body,
-        variables: variables,
+
+    const [response, blockNumber] = await Promise.all([
+      text
+        ? governanceClient.query<SearchProposalsQuery>({
+            query: SearchProposals,
+            variables: {
+              offset,
+              limit: perPage,
+              where,
+              text,
+            } satisfies SearchProposalsQueryVariables,
+          })
+        : governanceClient.query<GetProposalsQuery>({
+            query: GetProposals,
+            variables: {
+              offset,
+              limit: perPage,
+              where,
+              orderBy,
+              orderDirection,
+            } satisfies GetProposalsQueryVariables,
+          }),
+      getBlockNumber(wagmiConfig, {
+        cacheTime: FALLBACK_BLOCK_TIME * 1000,
       }),
-    });
-    const data = await response.json();
-    return data.data.proposals;
+    ]);
+
+    return response.data.proposals.map((p) => ({
+      ...p,
+      status: computeActualStatus(p, blockNumber),
+    }));
   } catch (e) {
     console.error("getAllProposals:", e);
     return undefined;

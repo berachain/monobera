@@ -18,7 +18,10 @@ import {
 } from "viem";
 
 import { useGovernance } from "../app/governance/[genre]/components/governance-provider";
-import { PROPOSAL_GENRE } from "../app/governance/governance-genre-helper";
+import {
+  GovernanceTopic,
+  PROPOSAL_GENRE,
+} from "../app/governance/governance-genre-helper";
 import {
   CustomProposal,
   CustomProposalActionErrors,
@@ -32,24 +35,38 @@ const defaultAction = {
   type: ProposalTypeEnum.CUSTOM_PROPOSAL,
   target: "",
   ABI: "",
+  value: 0n,
   functionSignature: "",
   calldata: [],
 } satisfies SafeProposalAction;
 
-export const checkProposalField = (
-  fieldOrType:
-    | "address"
-    | "abi"
-    | "bool"
-    | `uint${string}`
-    | `int${string}`
-    | "action"
-    | "title"
-    | "description"
-    | "forumLink",
-  value: any,
-  required = true,
-): ProposalErrorCodes | null => {
+interface CheckProposalField {
+  (
+    fieldOrType:
+      | "address"
+      | "abi"
+      | "bool"
+      | `uint${string}`
+      | `int${string}`
+      | "action"
+      | "title"
+      | "description",
+    value: any,
+    required?: boolean,
+  ): ProposalErrorCodes | null;
+  (
+    fieldOrType: "forumLink",
+    value: string,
+    base: string,
+  ): ProposalErrorCodes | null;
+}
+export const checkProposalField: CheckProposalField = (
+  fieldOrType,
+  value,
+  requiredOrBase,
+) => {
+  const required = typeof requiredOrBase === "boolean" ? requiredOrBase : true;
+
   if (required && !value) {
     return ProposalErrorCodes.REQUIRED;
   }
@@ -100,9 +117,10 @@ export const checkProposalField = (
         return ProposalErrorCodes.INVALID_ADDRESS;
       }
 
-      if (!value.startsWith("https://")) {
-        return ProposalErrorCodes.INVALID_ADDRESS;
+      if (!value.startsWith(requiredOrBase)) {
+        return ProposalErrorCodes.INVALID_BASEPATH;
       }
+
       return null;
 
     case "address":
@@ -130,11 +148,18 @@ export const checkProposalField = (
   }
 };
 
-export const getBodyErrors = (proposal: CustomProposal) => {
+export const getBodyErrors = (
+  proposal: CustomProposal,
+  currentTopic: GovernanceTopic,
+) => {
   const e: CustomProposalErrors = {};
   e.title = checkProposalField("title", proposal.title);
   e.description = checkProposalField("description", proposal.description);
-  e.forumLink = checkProposalField("forumLink", proposal.forumLink);
+  e.forumLink = checkProposalField(
+    "forumLink",
+    proposal.forumLink,
+    currentTopic.forumLink,
+  );
 
   return e;
 };
@@ -159,21 +184,21 @@ export const useCreateProposal = ({
 
   const router = useRouter();
 
-  const { dappConfig } = useGovernance();
+  const { currentTopic } = useGovernance();
 
   useEffect(() => {
     setProposal((p) => ({
       ...p,
-      topic: new Set<PROPOSAL_GENRE>([dappConfig.id]),
+      topic: new Set<PROPOSAL_GENRE>([currentTopic.id]),
     }));
-  }, [dappConfig]);
+  }, [currentTopic]);
 
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => {
       onSuccess?.();
-      router.push("/governance");
+      router.push(`/governance/${currentTopic.slug}`);
     },
   });
 
@@ -194,7 +219,7 @@ export const useCreateProposal = ({
 
   const submitProposal = useCallback(
     ({ onError }: { onError?: (e: CustomProposalErrors) => void }) => {
-      const e: CustomProposalErrors = getBodyErrors(proposal);
+      const e: CustomProposalErrors = getBodyErrors(proposal, currentTopic);
 
       const actions: Address[] = [];
 
@@ -298,7 +323,7 @@ export const useCreateProposal = ({
         functionName: "propose",
         params: [
           proposal.actions.map((action) => action.target as `0x${string}`),
-          proposal.actions.map(() => 0n),
+          proposal.actions.map((action) => action.value ?? 0n),
           actions,
           matter.stringify(proposal.description, {
             title: proposal.title,
@@ -311,7 +336,7 @@ export const useCreateProposal = ({
         ],
       });
     },
-    [proposal],
+    [proposal, currentTopic],
   );
 
   return {

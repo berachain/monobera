@@ -4,6 +4,7 @@ import {
   Dropdown,
   NotFoundBear,
   SimpleTable,
+  TableFooter,
   useAsyncTable,
 } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
@@ -12,6 +13,8 @@ import { MultiSelectBadge } from "./multi-select-badge";
 import { voterColumns } from "./voter-column";
 import { VoteOption } from "@bera/proto/ts-proto-gen/cosmos-ts/cosmos/gov/v1/gov";
 import { Accordion } from "@bera/ui/accordion";
+import { usePollProposalVotes } from "@bera/berajs";
+import { ProposalWithVotesFragment } from "@bera/graphql/governance";
 
 const voteOptionMap: Record<VoteOption, string> = {
   [VoteOption.VOTE_OPTION_YES]: "for",
@@ -23,10 +26,10 @@ const voteOptionMap: Record<VoteOption, string> = {
 };
 
 export function VoterTable({
-  votes,
   isLoading,
+  proposal,
 }: {
-  votes: Vote[];
+  proposal: ProposalWithVotesFragment;
   isLoading: boolean;
 }) {
   const [filter, setFilter] = React.useState<{
@@ -37,27 +40,50 @@ export function VoterTable({
     walletType: undefined,
   });
 
+  const { data: votes } = usePollProposalVotes(
+    {
+      proposalId: proposal.id,
+    },
+    proposal.pollResult.totalVotersCount,
+  );
+
   // Let's compute the filtered votes since there might be a lot of them
   const filteredVotes = useMemo(() => {
-    return votes.filter((vote) => {
-      if (filter.voteType?.length && !filter.voteType.includes(vote.type)) {
-        return false;
-      }
+    return (
+      votes
+        ?.flatMap((d) => d.data.votes)
+        .filter((vote) => {
+          if (
+            filter.voteType?.length &&
+            // Idk where it's coming from but voteType is lowercase
+            !filter.voteType.includes(vote.support.toLowerCase())
+          ) {
+            return false;
+          }
 
-      if (filter.walletType) {
-        // TODO: Implement wallet type filter
-        return false;
-      }
-      return true;
-    });
+          if (filter.walletType) {
+            // DEPRECATED: Implement wallet type filter
+            return false;
+          }
+          return true;
+        }) ?? []
+    );
   }, [votes, filter]);
 
   const table = useAsyncTable({
     fetchData: async () => {},
     columns: voterColumns,
     data: filteredVotes,
+    enablePagination: true,
     additionalTableProps: {
       manualSorting: false,
+      manualPagination: false,
+      initialState: {
+        pagination: {
+          pageIndex: 0,
+          pageSize: 10,
+        },
+      },
     },
   });
 
@@ -80,15 +106,15 @@ export function VoterTable({
             selectionList={[
               {
                 label: "Yes",
-                value: "for",
+                value: "For",
               },
               {
                 label: "Abstain",
-                value: "abstain",
+                value: "Abstain",
               },
               {
                 label: "No",
-                value: "against",
+                value: "Against",
               },
             ]}
             onSelect={(value) =>
@@ -123,7 +149,7 @@ export function VoterTable({
               <Skeleton key={index} className="h-10 w-full" />
             ))}{" "}
           </div>
-        ) : votes.length === 0 ? (
+        ) : votes?.length === 0 ? (
           <NotFoundBear title="No recent votes found." />
         ) : (
           <Accordion type="single" collapsible>
@@ -134,12 +160,9 @@ export function VoterTable({
               dynamicFlex
               showToolbar={false}
             />
+            <TableFooter table={table} className="w-full" />
           </Accordion>
         )}
-      </div>
-
-      <div className="mt-4 w-full text-right text-xs font-medium leading-tight text-muted-foreground">
-        {votes.length} addresses
       </div>
     </div>
   );

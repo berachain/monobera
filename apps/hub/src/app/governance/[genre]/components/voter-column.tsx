@@ -14,22 +14,22 @@ import {
 
 const getBadgeColor = (type: keyof typeof VoteEnum) => {
   switch (type) {
-    case "for":
+    case "FOR":
       return "success";
-    case "against":
+    case "AGAINST":
       return "destructive";
-    case "abstain":
+    case "ABSTAIN":
       return "secondary";
     default:
       return "secondary";
   }
 };
 
-export const voterColumns: ColumnDef<Vote>[] = [
+export const voterColumns = [
   {
     header: "Voter",
     cell: ({ row }) => (
-      <AccordionItem value={row.original.voter.address}>
+      <AccordionItem value={row.original.voter}>
         <AccordionTrigger className="!justify-start">
           <VoteInfo voter={row.original.voter} />
         </AccordionTrigger>
@@ -55,10 +55,10 @@ export const voterColumns: ColumnDef<Vote>[] = [
     },
     cell: ({ row }) => (
       <Badge
-        variant={getBadgeColor(row.original.type)}
+        variant={getBadgeColor(row.original.support)}
         className="justify-center border-none px-2 py-1 text-sm capitalize"
       >
-        {VoteEnum[row.original.type as keyof typeof VoteEnum]}
+        {VoteEnum[row.original.support as keyof typeof VoteEnum]}
       </Badge>
     ),
     minSize: 100,
@@ -73,7 +73,7 @@ export const voterColumns: ColumnDef<Vote>[] = [
     },
     cell: ({ row }) => (
       <FormattedNumber
-        value={formatEther(BigInt(row.original.amount))}
+        value={formatEther(BigInt(row.original.weight))}
         visibleDecimals={2}
         symbol="BGT"
         className="text-sm font-medium"
@@ -81,7 +81,7 @@ export const voterColumns: ColumnDef<Vote>[] = [
     ),
     size: 250,
     accessorKey: "vp",
-    sortingFn: (a, b) => Number(a.original.amount) - Number(b.original.amount),
+    sortingFn: (a, b) => Number(a.original.weight) - Number(b.original.weight),
     enableSorting: true,
   },
-];
+] satisfies ColumnDef<Vote>[];
