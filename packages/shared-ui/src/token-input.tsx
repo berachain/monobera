@@ -21,6 +21,7 @@ import {
   useBreakpoint,
 } from ".";
 import { getPriceImpactColorClass } from "./utils/textStyling";
+import { Address } from "viem";
 
 type Props = {
   selected: Token | undefined;
@@ -48,6 +49,7 @@ type Props = {
   beraSafetyMargin?: number;
   maxDecimal?: number;
   className?: string;
+  walletAddress?: Address;
 };
 
 let typingTimer: NodeJS.Timeout;
@@ -60,6 +62,7 @@ export function TokenInput({
   balance = undefined,
   forceShowBalance = false,
   hideBalance = false,
+  walletAddress,
   hidePrice = false,
   selectable = true,
   disabled = false,
@@ -80,7 +83,7 @@ export function TokenInput({
 }: Props) {
   const [exceeding, setExceeding] = useState<boolean | undefined>(undefined);
   const { useSelectedWalletBalance, isLoading: isBalancesLoading } =
-    usePollWalletBalances();
+    usePollWalletBalances({ walletAddress });
   const token = useSelectedWalletBalance(selected ? selected?.address : "0x");
 
   let tokenBalance = token?.formattedBalance || "0";
@@ -173,6 +176,7 @@ export function TokenInput({
       <div className="flex flex-row items-center">
         <div className="flex flex-row items-center gap-1">
           <SelectToken
+            walletAddress={walletAddress}
             token={selected}
             onTokenSelection={handleTokenSelect}
             selectedTokens={selectedTokens}

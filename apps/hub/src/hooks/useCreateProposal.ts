@@ -193,7 +193,7 @@ export const useCreateProposal = ({
     }));
   }, [currentTopic]);
 
-  const { write, ModalPortal } = useTxn({
+  const { write, ModalPortal, isSubmitting } = useTxn({
     message: "Submit Proposal",
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => {
@@ -346,5 +346,6 @@ export const useCreateProposal = ({
     submitProposal,
     addProposalAction,
     removeProposalAction,
+    isSubmitting,
   };
 };

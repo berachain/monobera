@@ -16,6 +16,7 @@ type Props = {
   filter?: Address[];
   className?: string;
   btnClassName?: string;
+  walletAddress?: Address;
   filteredTokenTags?: string[];
   filteredSymbols?: string[];
 };
@@ -25,6 +26,7 @@ export function SelectToken({
   onTokenSelection = undefined,
   selectedTokens = undefined,
   customTokenList = undefined,
+  walletAddress,
   selectable,
   filter = [],
   className = "",
@@ -70,6 +72,7 @@ export function SelectToken({
           onSelectedToken={(token: Token | undefined) =>
             onTokenSelection?.(token)
           }
+          walletAddress={walletAddress}
           setOpen={setOpen}
           selectedTokens={selectedTokens ?? []}
           focusedToken={token}

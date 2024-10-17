@@ -22,11 +22,12 @@ export const CreateProposal = () => {
     setProposal,
     addProposalAction,
     removeProposalAction,
+    isSubmitting,
     submitProposal,
   } = useCreateProposal({ governorAddress });
 
   const { currentTopic } = useGovernance();
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: null,
     description: null,
@@ -127,7 +128,12 @@ export const CreateProposal = () => {
               </div>
               <div>
                 <ActionButton>
-                  <Button onClick={handleSubmitProposal}>Publish</Button>
+                  <Button
+                    disabled={isSubmitting}
+                    onClick={handleSubmitProposal}
+                  >
+                    Publish
+                  </Button>
                 </ActionButton>
               </div>
             </div>

@@ -66,10 +66,10 @@ export const CreateProposalAction = ({
               value: ProposalTypeEnum.UPDATE_REWARDS_GAUGE,
               label: "Update Rewards Vault",
             },
-            {
-              value: ProposalTypeEnum.ERC20_TRANSFER,
-              label: "Transfer ERC20 Tokens",
-            },
+            // { // TODO add wen we have the treasury contract
+            //   value: ProposalTypeEnum.ERC20_TRANSFER,
+            //   label: "Transfer ERC20 Tokens",
+            // },
           ]}
           selected={action.type}
           onSelect={(v) =>

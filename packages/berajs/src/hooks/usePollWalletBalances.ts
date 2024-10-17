@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import { Address } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getWalletBalances } from "~/actions";
@@ -14,6 +15,7 @@ import { useTokens } from "./useTokens";
 
 export type UsePollWalletBalancesArgs = {
   externalTokenList?: Token[];
+  walletAddress?: Address;
 };
 export interface UsePollBalancesResponse
   extends DefaultHookReturnType<BalanceToken[] | undefined> {
@@ -26,12 +28,20 @@ export const usePollWalletBalances = (
   options?: DefaultHookOptions,
 ): UsePollBalancesResponse => {
   const publicClient = usePublicClient();
-  const { account, isConnected, config: beraConfig } = useBeraJs();
+
+  const {
+    account: connectedAccount,
+    isConnected,
+    config: beraConfig,
+  } = useBeraJs();
   const { data: tokenData } = useTokens({
     beraConfigOverride: options?.beraConfigOverride,
   });
+
+  const wallet = args?.walletAddress ?? connectedAccount;
+
   const QUERY_KEY = [
-    account,
+    wallet,
     isConnected,
     tokenData?.tokenList,
     "assetWalletBalances",
@@ -42,7 +52,7 @@ export const usePollWalletBalances = (
     QUERY_KEY,
     async () => {
       return getWalletBalances({
-        account,
+        account: wallet,
         tokenList: [
           ...(tokenData?.tokenList ?? []),
           ...(args?.externalTokenList ?? []),
