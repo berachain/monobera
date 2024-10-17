@@ -31,7 +31,7 @@ jobs:
       run: pnpm install
       
     - name: Set environment variables
-      run: pnpm setenv:v2
+      run: pnpm setenv:bartio
 
     - name: Build all projects
       env: 
