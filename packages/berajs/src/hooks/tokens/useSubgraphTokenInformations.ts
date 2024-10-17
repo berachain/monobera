@@ -1,29 +1,32 @@
 import useSWR, { mutate } from "swr";
 
-import { TokenHoneyPrices, getTokenHoneyPrices } from "~/actions/honey";
 import POLLING from "~/enum/polling";
 import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
-import { useBeraJs } from "..";
+import { useBeraJs } from "../..";
+import {
+  getSubgraphTokenInformations,
+  SubgraphTokenInformations,
+} from "~/actions/shared/getSubgraphTokenInformations";
 
 /**
  *
  * @returns the current honey price of a series of tokens
  */
-export type UseTokenHoneyPricesArgs = {
+export type UseSubgraphTokenInformationsArgs = {
   tokenAddresses: string[] | undefined;
 };
 
-export const useTokenHoneyPrices = (
-  { tokenAddresses = undefined }: UseTokenHoneyPricesArgs,
+export const useSubgraphTokenInformations = (
+  { tokenAddresses = undefined }: UseSubgraphTokenInformationsArgs,
   options?: DefaultHookOptions,
-): DefaultHookReturnType<TokenHoneyPrices | undefined> => {
-  const method = "tokenHoneyPrices";
+): DefaultHookReturnType<SubgraphTokenInformations | undefined> => {
+  const method = "subgraphTokenInformations";
   const QUERY_KEY = [tokenAddresses, method];
   const { config: beraConfig } = useBeraJs();
   const swrResponse = useSWR(
     QUERY_KEY,
     async () => {
-      return getTokenHoneyPrices({
+      return getSubgraphTokenInformations({
         tokenAddresses,
         config: options?.beraConfigOverride ?? beraConfig,
       });
