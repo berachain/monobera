@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { TransactionActionType, formatUsd, tradingAbi } from "@bera/berajs";
 import { tradingContractAddress } from "@bera/config";
 import { ActionButton } from "@bera/shared-ui";
-import { useOctTxn } from "@bera/shared-ui/src/hooks";
+import { useOctTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Button } from "@bera/ui/button";

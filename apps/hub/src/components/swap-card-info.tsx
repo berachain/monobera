@@ -1,5 +1,5 @@
 import { useSlippage } from "@bera/shared-ui";
-import { getPriceImpactColorClass } from "@bera/shared-ui/src/utils/textStyling";
+import { getPriceImpactColorClass } from "@bera/shared-ui/utils";
 import { cn } from "@bera/ui";
 import {
   Accordion,

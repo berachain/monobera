@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { truncateHash, useBeraJs, type CuttingBoardWeight } from "@bera/berajs";
 import { blockExplorerUrl } from "@bera/config";
 import { GaugeIcon, SearchInput } from "@bera/shared-ui";
-import { getHubValidatorPath } from "@bera/shared-ui/src/utils/getHubUrls";
+import { getHubValidatorPath } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { getAddress } from "viem";
 

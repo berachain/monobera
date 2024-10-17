@@ -11,7 +11,7 @@ import {
 } from "@bera/berajs";
 import { perpsReferralsAddress } from "@bera/config";
 import { ConnectButton } from "@bera/shared-ui";
-import { useTxn } from "@bera/shared-ui/src/hooks";
+import { useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
 import { Icons } from "@bera/ui/icons";

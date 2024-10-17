@@ -1,5 +1,5 @@
 import { truncateHash, type Voter } from "@bera/berajs";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { Identicon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { useEnsName, useEnsAvatar } from "wagmi";
 import { normalize } from "viem/ens";

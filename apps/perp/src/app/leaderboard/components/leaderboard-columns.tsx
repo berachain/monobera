@@ -1,5 +1,5 @@
 import { formatUsd, truncateHash } from "@bera/berajs";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { Identicon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { type ColumnDef } from "@tanstack/react-table";
 import { LEADERBOARD_TABS } from "~/utils/constants";

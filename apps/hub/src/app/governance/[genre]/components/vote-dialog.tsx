@@ -24,7 +24,7 @@ import {
   DialogTrigger,
 } from "@bera/ui/dialog";
 import { Skeleton } from "@bera/ui/skeleton";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { Identicon } from "@bera/shared-ui";
 import { Label } from "@bera/ui/label";
 import { TextArea } from "@bera/ui/text-area";
 import { ProposalHeading } from "../../components/proposal-heading";

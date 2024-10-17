@@ -1,6 +1,6 @@
 import { truncateHash, useBeraJs, usePollUserDelegates } from "@bera/berajs";
 import { ActionButton, FormattedNumber, TokenIcon } from "@bera/shared-ui";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { Identicon } from "@bera/shared-ui";
 import { Skeleton } from "@bera/ui/skeleton";
 
 import { DelegateModal } from "./delegate-modal";

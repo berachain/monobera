@@ -1,5 +1,5 @@
 import { truncateHash, useBeraJs } from "@bera/berajs";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { Identicon } from "@bera/shared-ui";
 
 export const UserSection = () => {
   const { isReady, account } = useBeraJs();

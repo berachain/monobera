@@ -6,7 +6,7 @@ import {
   usePythUpdateFee,
 } from "@bera/berajs";
 import { tradingContractAddress } from "@bera/config";
-import { useOctTxn } from "@bera/shared-ui/src/hooks";
+import { useOctTxn } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Avatar, AvatarFallback, AvatarImage } from "@bera/ui/avatar";
 import { Dialog, DialogContent } from "@bera/ui/dialog";
