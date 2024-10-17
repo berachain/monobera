@@ -11,6 +11,7 @@ import { ProposalsList } from "./proposals-list";
 import { UserVotingPower } from "./user-voting-power";
 import { SWRFallback, usePollAllProposalsQueryKey } from "@bera/berajs";
 import { unstable_serialize } from "swr/infinite";
+import { OrderDirection, Proposal_OrderBy } from "@bera/graphql/governance";
 
 export default function GovernanceByStatus({
   allProposals,
@@ -21,8 +22,14 @@ export default function GovernanceByStatus({
   return (
     <SWRFallback
       fallback={{
-        [unstable_serialize(usePollAllProposalsQueryKey(govTopic.slug))]:
-          allProposals,
+        [unstable_serialize(
+          usePollAllProposalsQueryKey(govTopic.slug, {
+            orderBy: Proposal_OrderBy.CreatedAt,
+            status_in: [],
+            orderDirection: OrderDirection.Desc,
+            text: "",
+          }),
+        )]: allProposals,
       }}
     >
       <div className="pb-32">
