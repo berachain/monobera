@@ -29,6 +29,8 @@
     "start:bgt": "next start ./apps/bgt-station",
     "check-types": "turbo check-types",
     "lint": "biome lint . ",
+    "setenv": "node ./.scripts/set-env.js",
+    "setenv:bartio": "pnpm run setenv bartio",
     "format:check": "biome format .",
     "format": "biome format --write .",
     "check": "biome check .",
@@ -39,6 +41,7 @@
   "dependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
     "@types/prettier": "^2.7.2",
+    "commander": "^12.1.0",
     "eslint": "^8.39.0",
     "husky": "^8.0.0",
     "prettier": "^2.8.8",
