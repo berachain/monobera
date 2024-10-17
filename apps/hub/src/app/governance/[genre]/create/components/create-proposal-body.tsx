@@ -29,7 +29,7 @@ export const CreateProposalBody = ({
   errors: CustomProposalErrors;
   setErrors: Dispatch<SetStateAction<CustomProposalErrors>>;
 }) => {
-  const { dappConfig } = useGovernance();
+  const { currentTopic } = useGovernance();
   const handleNext = useCallback(() => {
     const e: CustomProposalErrors = {};
 
@@ -38,7 +38,7 @@ export const CreateProposalBody = ({
     e.forumLink = checkProposalField(
       "forumLink",
       proposal.forumLink,
-      dappConfig.forumLink,
+      currentTopic.forumLink,
     );
 
     setErrors(e);
@@ -105,7 +105,7 @@ export const CreateProposalBody = ({
         type="text"
         variant="black"
         id="proposal-forumLink"
-        placeholder={`${dappConfig.forumLink}...`}
+        placeholder={`${currentTopic.forumLink}...`}
         value={proposal.forumLink}
         onChange={(e: any) => {
           setProposal((prev: any) => ({
@@ -117,7 +117,7 @@ export const CreateProposalBody = ({
             forumLink: checkProposalField(
               "forumLink",
               e.target.value,
-              dappConfig.forumLink,
+              currentTopic.forumLink,
             ),
           }));
         }}

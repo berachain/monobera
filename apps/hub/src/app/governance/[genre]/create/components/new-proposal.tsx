@@ -15,8 +15,12 @@ export default function NewProposal({ genre }: { genre: PROPOSAL_GENRE }) {
   // const dapp = getDappByGenre(genre);
   const { account } = useBeraJs();
   const params = useParams();
-  const { canPropose, isLoading, dappConfig, openNotEnoughVotingPowerDialog } =
-    useGovernance();
+  const {
+    canPropose,
+    isLoading,
+    currentTopic,
+    openNotEnoughVotingPowerDialog,
+  } = useGovernance();
   const router = useRouter();
 
   useEffect(() => {
@@ -47,9 +51,9 @@ export default function NewProposal({ genre }: { genre: PROPOSAL_GENRE }) {
       <div className="mb-9">
         <div
           className="font-bold leading-6 tracking-widest text-muted-foreground uppercase"
-          style={{ color: dappConfig.color }}
+          style={{ color: currentTopic.color }}
         >
-          {dappConfig.name}
+          {currentTopic.name}
         </div>
         <div className="relative text-3xl font-semibold leading-9 text-foreground">
           Create New Proposal

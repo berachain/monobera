@@ -42,7 +42,7 @@ type GovernanceContextType = {
     onClose?: () => void;
     isOpen?: boolean;
   }) => void;
-  dappConfig: GovernanceTopic;
+  currentTopic: GovernanceTopic;
 };
 
 const GovernanceContext = createContext<GovernanceContextType | undefined>(
@@ -66,8 +66,8 @@ export const GovernanceProvider = ({
   children: React.ReactNode;
 }) => {
   if (!isValidGenre(genre)) return notFound();
-  const dappConfig = getDappByGenre(genre);
-  const client = getClient(dappConfig!.subgraph);
+  const currentTopic = getDappByGenre(genre);
+  const client = getClient(currentTopic!.subgraph);
 
   const { account } = useBeraJs();
   const { data: tokenBalanceData, isLoading: isLoadingTokenBalance } =
@@ -126,7 +126,7 @@ export const GovernanceProvider = ({
           isLoading:
             isLoadingVotes || isLoadingVotesThreshold || isLoadingTokenBalance,
           governorAddress,
-          dappConfig,
+          currentTopic,
           delegatedByOthers,
           delegatedToThemselves,
           tokenBalance: tokenBalanceData?.formattedBalance,

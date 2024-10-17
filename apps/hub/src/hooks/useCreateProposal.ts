@@ -150,7 +150,7 @@ export const checkProposalField: CheckProposalField = (
 
 export const getBodyErrors = (
   proposal: CustomProposal,
-  dappConfig: GovernanceTopic,
+  currentTopic: GovernanceTopic,
 ) => {
   const e: CustomProposalErrors = {};
   e.title = checkProposalField("title", proposal.title);
@@ -158,7 +158,7 @@ export const getBodyErrors = (
   e.forumLink = checkProposalField(
     "forumLink",
     proposal.forumLink,
-    dappConfig.forumLink,
+    currentTopic.forumLink,
   );
 
   return e;
@@ -184,21 +184,21 @@ export const useCreateProposal = ({
 
   const router = useRouter();
 
-  const { dappConfig } = useGovernance();
+  const { currentTopic } = useGovernance();
 
   useEffect(() => {
     setProposal((p) => ({
       ...p,
-      topic: new Set<PROPOSAL_GENRE>([dappConfig.id]),
+      topic: new Set<PROPOSAL_GENRE>([currentTopic.id]),
     }));
-  }, [dappConfig]);
+  }, [currentTopic]);
 
   const { write, ModalPortal } = useTxn({
     message: "Submit Proposal",
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
     onSuccess: () => {
       onSuccess?.();
-      router.push(`/governance/${dappConfig.slug}`);
+      router.push(`/governance/${currentTopic.slug}`);
     },
   });
 
@@ -219,7 +219,7 @@ export const useCreateProposal = ({
 
   const submitProposal = useCallback(
     ({ onError }: { onError?: (e: CustomProposalErrors) => void }) => {
-      const e: CustomProposalErrors = getBodyErrors(proposal, dappConfig);
+      const e: CustomProposalErrors = getBodyErrors(proposal, currentTopic);
 
       const actions: Address[] = [];
 
@@ -336,7 +336,7 @@ export const useCreateProposal = ({
         ],
       });
     },
-    [proposal, dappConfig],
+    [proposal, currentTopic],
   );
 
   return {

@@ -22,7 +22,7 @@ export const ProposalsList = () => {
   const router = useRouter();
   const parms = useParams();
 
-  const { dappConfig } = useGovernance();
+  const { currentTopic } = useGovernance();
   const [sortBy, setSortBy] = useState<{
     orderBy: Proposal_OrderBy;
     orderDirection: OrderDirection;
@@ -34,7 +34,7 @@ export const ProposalsList = () => {
   const [statusFilter, setStatusFilter] = useState<ProposalStatus[]>([]);
 
   const { data, hasMore, isLoading, size, setSize } = usePollAllProposals({
-    topic: dappConfig.slug,
+    topic: currentTopic.slug,
     orderBy: sortBy.orderBy,
     status_in: statusFilter,
     orderDirection: sortBy.orderDirection,

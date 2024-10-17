@@ -25,7 +25,7 @@ export const CreateProposal = () => {
     submitProposal,
   } = useCreateProposal({ governorAddress });
 
-  const { dappConfig } = useGovernance();
+  const { currentTopic } = useGovernance();
   const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: null,
@@ -60,11 +60,11 @@ export const CreateProposal = () => {
   );
 
   const leaveBodyTab = useCallback(() => {
-    const errors = getBodyErrors(proposal, dappConfig);
+    const errors = getBodyErrors(proposal, currentTopic);
     if (Object.values(errors).some((v) => v)) {
       setErrors(errors);
     } else setActiveTab(1);
-  }, [proposal, dappConfig]);
+  }, [proposal, currentTopic]);
 
   const handleSubmitProposal = useCallback(() => {
     submitProposal({

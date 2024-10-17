@@ -18,7 +18,7 @@ export default function GovernanceByStatus({
 }: {
   allProposals?: any;
 }) {
-  const { dappConfig: govTopic } = useGovernance();
+  const { currentTopic: govTopic } = useGovernance();
   return (
     <SWRFallback
       fallback={{

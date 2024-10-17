@@ -80,53 +80,52 @@ export const usePollAllProposals = (
     },
   );
 
-  const data = useMemo(
-    () =>
-      res.data
-        ?.flat()
-        .filter((proposal) => {
-          if (!proposal) {
-            return false;
-          }
+  const data = useMemo(() => {
+    return res.data
+      ?.flat()
+      .filter((proposal) => {
+        if (!proposal) {
+          return false;
+        }
 
-          if (!args.status_in || args.status_in.length === 0) {
-            return true;
-          }
+        if (!args.status_in || args.status_in.length === 0) {
+          return true;
+        }
 
-          return args.status_in?.includes(proposal.status);
-        })
-        .toSorted((a, b) => {
-          // fulltext search does not support order in graphql.
-          // no need to compute this if there is no search
-          if (!args.text) {
-            return 0;
-          }
-          let result = 0;
-          if (args.orderBy === Proposal_OrderBy.CreatedAt) {
-            result = Number(b?.createdAt) - Number(a?.createdAt);
-          }
-          return args.orderDirection === "asc" ? result : -result;
-        })
-        .reduce<typeof res.data>((acc, curr) => {
-          if (!curr) {
-            return acc;
-          }
+        return args.status_in?.includes(proposal.status);
+      })
+      .sort((a, b) => {
+        // fulltext search does not support order in graphql.
+        // no need to compute this if there is no search
+        if (!args.text) {
+          return 0;
+        }
 
-          const currSection = acc.at(-1);
-
-          if (
-            !currSection ||
-            currSection?.length === (args.perPage ?? DEFAULT_PER_PAGE)
-          ) {
-            return [...acc, [curr]];
-          }
-
-          currSection.push(curr);
-
+        let result = 0;
+        if (args.orderBy === Proposal_OrderBy.CreatedAt) {
+          result = Number(b?.createdAt) - Number(a?.createdAt);
+        }
+        return args.orderDirection === "asc" ? result : -result;
+      })
+      .reduce<typeof res.data>((acc, curr) => {
+        if (!curr) {
           return acc;
-        }, []),
-    [res.data, args],
-  );
+        }
+
+        const currSection = acc.at(-1);
+
+        if (
+          !currSection ||
+          currSection?.length === (args.perPage ?? DEFAULT_PER_PAGE)
+        ) {
+          return [...acc, [curr]];
+        }
+
+        currSection.push(curr);
+
+        return acc;
+      }, []);
+  }, [res.data, args]);
 
   return {
     ...res,

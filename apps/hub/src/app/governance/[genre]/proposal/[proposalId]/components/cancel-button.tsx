@@ -29,11 +29,9 @@ import {
 export const CancelButton = ({
   proposal,
   proposalTimelockId,
-  title,
 }: {
-  proposal?: ProposalSelectionFragment;
+  proposal: ProposalSelectionFragment;
   proposalTimelockId?: Address;
-  title: string;
 }) => {
   const { data: cancellerRole } = useCancellerRole();
   const { governorAddress } = useGovernance();
@@ -68,7 +66,7 @@ export const CancelButton = ({
     ((proposal.status === ProposalStatus.PendingExecution &&
       account === cancellerRole) ||
       (proposal.status === ProposalStatus.Pending &&
-        account === proposal.proposer));
+        account?.toLowerCase() === proposal.proposer));
 
   return (
     <>
@@ -84,7 +82,7 @@ export const CancelButton = ({
               <p className="mb-4">This is an irreversible action.</p>
               <div className="rounded-sm border border-border p-4 ">
                 <h3 className="font-semibold mb-3 line-clamp-1 text-base hyphens-auto text-foreground">
-                  {title}
+                  {proposal.title}
                 </h3>
                 <StatusBadge proposal={proposal} />
               </div>
