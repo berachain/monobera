@@ -720,6 +720,9 @@ importers:
       '@wagmi/core':
         specifier: ^2.10.5
         version: 2.10.5(@tanstack/query-core@5.40.0)(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.2.0)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.13.7(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
+      abitype:
+        specifier: ^1.0.6
+        version: 1.0.6(typescript@5.4.5)(zod@3.23.8)
       axios:
         specifier: ^1.6.8
         version: 1.7.2
@@ -732,6 +735,9 @@ importers:
       ethers:
         specifier: ^5.5.3
         version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      gray-matter:
+        specifier: ^4.0.3
+        version: 4.0.3
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -22349,6 +22355,11 @@ snapshots:
   abitype@1.0.0(typescript@5.6.3)(zod@3.23.8):
     optionalDependencies:
       typescript: 5.6.3
+      zod: 3.23.8
+
+  abitype@1.0.6(typescript@5.4.5)(zod@3.23.8):
+    optionalDependencies:
+      typescript: 5.4.5
       zod: 3.23.8
 
   abitype@1.0.6(typescript@5.5.3)(zod@3.23.8):

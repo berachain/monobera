@@ -64,6 +64,7 @@ export const ProposalTimeline = ({
     {
       title: "Initiated",
       date: proposal.createdAt,
+      block: proposal.createdAtBlock,
       isActive: proposal.status === ProposalStatus.Pending,
     },
   ];

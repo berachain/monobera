@@ -1357,6 +1357,8 @@ export type ProposalSelectionFragment = {
   description: string;
   status: ProposalStatus;
   createdAt: any;
+  createdAtBlock: any;
+  forumLink?: string | null;
   quorum: any;
   voteEndBlock: any;
   voteStartBlock: any;
@@ -1409,6 +1411,8 @@ export type ProposalWithVotesFragment = {
   description: string;
   status: ProposalStatus;
   createdAt: any;
+  createdAtBlock: any;
+  forumLink?: string | null;
   quorum: any;
   voteEndBlock: any;
   voteStartBlock: any;
@@ -1489,6 +1493,8 @@ export type GetProposalsQuery = {
     description: string;
     status: ProposalStatus;
     createdAt: any;
+    createdAtBlock: any;
+    forumLink?: string | null;
     quorum: any;
     voteEndBlock: any;
     voteStartBlock: any;
@@ -1532,6 +1538,8 @@ export type SearchProposalsQuery = {
     description: string;
     status: ProposalStatus;
     createdAt: any;
+    createdAtBlock: any;
+    forumLink?: string | null;
     quorum: any;
     voteEndBlock: any;
     voteStartBlock: any;
@@ -1573,6 +1581,8 @@ export type GetProposalQuery = {
     description: string;
     status: ProposalStatus;
     createdAt: any;
+    createdAtBlock: any;
+    forumLink?: string | null;
     quorum: any;
     voteEndBlock: any;
     voteStartBlock: any;
@@ -1623,6 +1633,8 @@ export const ProposalSelectionFragmentDoc = gql`
   description
   status
   createdAt
+  createdAtBlock
+  forumLink
   quorum
   pollResult {
     for
@@ -2038,6 +2050,8 @@ export const ProposalSelection = gql`
   description
   status
   createdAt
+  createdAtBlock
+  forumLink
   quorum
   pollResult {
     for

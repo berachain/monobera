@@ -4,7 +4,6 @@ import { CancelButton } from "./components/cancel-button";
 import { QueueButton } from "./components/queue-button";
 import { governanceTimelockAddress } from "@bera/config";
 import { ExecuteButton } from "./components/execute-button";
-import { parseProposalBody } from "~/app/governance/helper";
 import {
   ProposalStatus,
   ProposalWithVotesFragment,
@@ -13,11 +12,9 @@ import {
 export const StatusAction = ({
   proposal,
   userVote,
-  frontmatter,
 }: {
   proposal: ProposalWithVotesFragment;
   userVote: Vote | false | undefined;
-  frontmatter?: ReturnType<typeof parseProposalBody>;
 }) => {
   const status = proposal.status;
 
@@ -29,14 +26,12 @@ export const StatusAction = ({
   if (!proposal || !proposal.id) {
     return null;
   }
+
   return (
     <div className="flex items-center gap-3 font-medium">
       {status === ProposalStatus.PendingExecution ||
       proposalTimelockState === "ready" ? (
-        <ExecuteButton
-          proposal={proposal}
-          title={frontmatter?.data.title || ""}
-        />
+        <ExecuteButton proposal={proposal} title={proposal.title || ""} />
       ) : (
         status === ProposalStatus.InQueue && (
           <CancelButton
@@ -55,10 +50,7 @@ export const StatusAction = ({
         />
       )}
       {status === ProposalStatus.PendingQueue && (
-        <QueueButton
-          proposal={proposal}
-          title={frontmatter?.data.title || ""}
-        />
+        <QueueButton proposal={proposal} title={proposal.title || ""} />
       )}
     </div>
   );

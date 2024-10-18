@@ -2,7 +2,6 @@ import { GOVERNANCE_ABI, Proposal } from "@bera/berajs";
 import { governanceTimelockAddress } from "@bera/config";
 import { ActionButton, useTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
-import { useTransactionReceipt } from "wagmi";
 import { useGovernance } from "~/app/governance/[genre]/components/governance-provider";
 import {
   Dialog,

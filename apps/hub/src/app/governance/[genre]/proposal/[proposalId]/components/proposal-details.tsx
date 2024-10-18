@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import React, { FC, useMemo } from "react";
-import { Vote, useBeraJs, usePollProposal } from "@bera/berajs";
+import {
+  Vote,
+  useBeraJs,
+  usePollProposal,
+  useProposalFromTx,
+} from "@bera/berajs";
 import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
@@ -17,7 +22,7 @@ import { VoterTable } from "../../../components/voter-table";
 import { VoteCard } from "../../../components/vote-card";
 import { VoteInfo } from "../../../components/Voter";
 import { QuorumStatus } from "../../../components/quorum-status";
-import { formatEther } from "viem";
+import { Address, formatEther } from "viem";
 import { ProgressBarChart } from "../../../components/progress-bar-chart";
 import { SWRFallback } from "@bera/berajs/contexts";
 import { unstable_serialize } from "swr";
@@ -26,7 +31,10 @@ import { ProposalHeading } from "~/app/governance/components/proposal-heading";
 import { cn } from "@bera/ui";
 import { StatusBadge } from "~/app/governance/components/status-badge";
 import { useSearchParams } from "next/navigation";
-import { ProposalStatus } from "@bera/graphql/governance";
+import {
+  ProposalStatus,
+  ProposalWithVotesFragment,
+} from "@bera/graphql/governance";
 
 export const ProposalDetailsWrapper = ({
   children,
@@ -50,35 +58,43 @@ export const ProposalDetailsWrapper = ({
 
 export const SearchParamsProposal: FC = () => {
   const sp = useSearchParams();
-  if (!sp.get("id")) {
-    throw Error("No proposal id found in search params");
-  }
-  return <ProposalDetails proposalId={sp.get("id")!} />;
+
+  return (
+    <ProposalDetails proposalId={sp.get("id")!} txHash={sp.get("txHash")} />
+  );
 };
 
 export default function ProposalDetails({
   proposalId,
+  txHash,
 }: {
   proposalId: string;
+  txHash?: string | null;
 }) {
   const { account, isReady } = useBeraJs();
-  const { isLoading, data: proposal } = usePollProposal(proposalId);
 
-  console.log({ proposal });
+  const { data: txProposal } = useProposalFromTx(
+    (txHash as Address) || undefined,
+  );
+
+  const { isLoading, data: subgraphProposal } = usePollProposal(
+    proposalId ?? txProposal?.id,
+  );
+
+  const proposal = {
+    ...txProposal,
+    ...subgraphProposal,
+  } as ProposalWithVotesFragment;
 
   const votes = proposal?.votes ?? [];
 
   const userVote =
     isReady && votes.find((vote: Vote) => vote.voter.address === account);
 
-  const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
-
   return (
     <div className="grid grid-cols-1 xl:grid-cols-12 pb-16 gap-4 md:gap-6">
       <div className="xl:col-start-2 xl:col-span-10 grid grid-cols-1 gap-4">
-        {!proposal ? (
-          <>Loading</>
-        ) : (
+        {proposal?.id ? (
           <>
             <div className="flex h-11 col-span-full justify-between">
               <Link
@@ -89,16 +105,12 @@ export default function ProposalDetails({
                 Governance
               </Link>
               {proposal && (
-                <StatusAction
-                  frontmatter={fm}
-                  proposal={proposal}
-                  userVote={userVote}
-                />
+                <StatusAction proposal={proposal!} userVote={userVote} />
               )}
             </div>
 
             <div className="col-span-full">
-              <ProposalHeading frontmatter={fm} size="md" />
+              <ProposalHeading proposal={proposal} size="md" />
             </div>
             <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-x-4 gap-y-6 md:gap-6">
               <StatusBadge proposal={proposal} />
@@ -185,7 +197,7 @@ export default function ProposalDetails({
                   <div className="border border-border p-4 px-8 rounded-md">
                     <h3 className="font-medium mb-4">Description</h3>
                     <div>
-                      <MarkdownRenderer content={fm.content} />
+                      <MarkdownRenderer content={proposal.description} />
                     </div>
                   </div>
                   <div className="border border-border grid grid-cols-1 gap-y-4 py-4 pb-8 px-8 rounded-md">
@@ -219,6 +231,8 @@ export default function ProposalDetails({
               )}
             </div>
           </>
+        ) : (
+          <div>Loading...</div>
         )}
       </div>
     </div>

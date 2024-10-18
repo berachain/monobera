@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import {
   GOVERNANCE_ABI,
   TransactionActionType,
@@ -28,7 +28,6 @@ import Identicon from "@bera/shared-ui/src/identicon";
 import { Label } from "@bera/ui/label";
 import { TextArea } from "@bera/ui/text-area";
 import { ProposalHeading } from "../../components/proposal-heading";
-import { parseProposalBody } from "../../helper";
 import { cn } from "@bera/ui";
 import { ProposalWithVotesFragment } from "@bera/graphql/governance";
 
@@ -67,7 +66,6 @@ export function VoteDialog({
     },
   });
 
-  const frontmatter = useMemo(() => parseProposalBody(proposal), [proposal]);
   const { account } = useBeraJs();
 
   const vote = () =>
@@ -96,7 +94,7 @@ export function VoteDialog({
         </DialogTrigger>
         <DialogContent className=" ">
           <DialogHeader className="!text-left">
-            <ProposalHeading size="md" frontmatter={frontmatter} />
+            <ProposalHeading size="md" proposal={proposal} />
           </DialogHeader>
           <div className="flex w-full flex-wrap items-center ">
             <div className="basis-1/2">
