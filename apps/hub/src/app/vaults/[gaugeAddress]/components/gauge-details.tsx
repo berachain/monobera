@@ -9,7 +9,7 @@ import {
 } from "@bera/berajs";
 import { bgtVaultBlackList, blockExplorerUrl } from "@bera/config";
 import { DataTable, GaugeIcon, MarketIcon, PoolHeader } from "@bera/shared-ui";
-import { getHubValidatorPath } from "@bera/shared-ui/src/utils/getHubUrls";
+import { getHubValidatorPath } from "@bera/shared-ui";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import { SWRConfig, unstable_serialize } from "swr";
 import { Address, isAddress } from "viem";

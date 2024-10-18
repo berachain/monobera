@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { formatUsd } from "@bera/berajs";
-import { useSetSlippage, useSlippage } from "@bera/shared-ui/src/hooks";
-import { DEFAULT_SLIPPAGE, SLIPPAGE_MODE } from "@bera/shared-ui/src/settings";
+import { useSetSlippage, useSlippage } from "@bera/shared-ui";
+import { DEFAULT_SLIPPAGE, SLIPPAGE_MODE } from "@bera/shared-ui/hooks";
 import {
   Accordion,
   AccordionContent,

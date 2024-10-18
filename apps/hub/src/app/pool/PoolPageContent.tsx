@@ -25,7 +25,7 @@ import {
   TokenIcon,
   TokenIconList,
 } from "@bera/shared-ui";
-import { truncateFloat } from "@bera/shared-ui/src/utils";
+import { truncateFloat } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Card, CardContent } from "@bera/ui/card";

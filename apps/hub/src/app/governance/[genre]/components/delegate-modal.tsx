@@ -19,7 +19,7 @@ import {
 import { Icons } from "@bera/ui/icons";
 import { Address, isAddress } from "viem";
 import { Skeleton } from "@bera/ui/skeleton";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { Identicon } from "@bera/shared-ui";
 import { useGovernance } from "./governance-provider";
 import { InputWithLabel } from "@bera/ui/input";
 import { cn } from "@bera/ui";
