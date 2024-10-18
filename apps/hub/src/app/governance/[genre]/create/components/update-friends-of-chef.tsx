@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { cn } from "@bera/ui";
-import { Address } from "viem";
+import { Address, isAddress } from "viem";
 
 import {
   CustomProposalActionErrors,
@@ -33,6 +33,7 @@ export const UpdateFriendsOfChef = ({
       isFriend: !isFriendOfTheChef,
     });
   }, [isFriendOfTheChef, isLoading]);
+
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -71,15 +72,19 @@ export const UpdateFriendsOfChef = ({
           <div className="rounded-md border border-border p-3">
             <div className="flex gap-2 text-sm font-semibold">
               {isFriendOfTheChef ? "Remove" : "Add"} status:{" "}
-              <span
-                className={cn(
-                  isFriendOfTheChef
-                    ? "text-destructive-foreground"
-                    : "text-success-foreground",
-                )}
-              >
-                Receiving Emissions
-              </span>
+              {isAddress(gauge.vault ?? "") ? (
+                <span
+                  className={cn(
+                    isFriendOfTheChef
+                      ? "text-destructive-foreground"
+                      : "text-success-foreground",
+                  )}
+                >
+                  Receiving Emissions
+                </span>
+              ) : (
+                <span>–</span>
+              )}
             </div>
             <div className="text-sm font-medium text-muted-foreground">
               Update this reward vault to be {isFriendOfTheChef ? "in-" : ""}

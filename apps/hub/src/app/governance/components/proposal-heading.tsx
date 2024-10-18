@@ -1,6 +1,7 @@
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { getTopicColor, parseProposalBody } from "../helper";
+import { useGovernance } from "../[genre]/components/governance-provider";
 
 export const ProposalHeading = ({
   frontmatter: fm,
@@ -10,10 +11,17 @@ export const ProposalHeading = ({
   size?: "sm" | "md";
 }) => {
   const Heading = size === "sm" ? "h3" : "h1";
+
+  const { currentTopic } = useGovernance();
+
+  const linkBelongsToForum = fm.data.forumLink?.startsWith(
+    currentTopic.forumLink,
+  );
+
   return (
     <>
       {size === "md" &&
-        (fm.data.topics || fm.data.topic || fm.data.forumLink) && (
+        (fm.data.topics || fm.data.topic || linkBelongsToForum) && (
           <div
             className={cn(
               "text-xs flex gap-2 font-semibold capitalize leading-4",
@@ -32,7 +40,7 @@ export const ProposalHeading = ({
                 ),
               )}
             </p>
-            {fm.data.forumLink && (
+            {linkBelongsToForum && (
               <>
                 <span className="text-muted-foreground">•</span>
                 <a
