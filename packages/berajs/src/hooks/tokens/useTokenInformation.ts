@@ -1,5 +1,5 @@
 import useSWRImmutable from "swr/immutable";
-import { Address, isAddress } from "viem";
+import { isAddress } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { getTokenInformation } from "~/actions";
@@ -8,7 +8,13 @@ import {
   DefaultHookReturnType,
   Token,
   useBeraJs,
-} from "..";
+} from "../..";
+import {
+  gasTokenDecimals,
+  gasTokenName,
+  gasTokenSymbol,
+  nativeTokenAddress,
+} from "@bera/config";
 
 export type UseTokenInformationResponse = DefaultHookReturnType<
   Token | undefined
