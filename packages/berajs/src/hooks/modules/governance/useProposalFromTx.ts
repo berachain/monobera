@@ -75,7 +75,7 @@ export const useProposalFromTx = (
           target: target as Address,
           value: String(creationEvent?.args.values[index]),
           calldata: String(creationEvent?.args.calldatas[index]),
-        } satisfies ExecutableCallSubsetFragment),
+        }) satisfies ExecutableCallSubsetFragment,
     ),
     timelockId: undefined,
   } satisfies ProposalWithVotesFragment;
