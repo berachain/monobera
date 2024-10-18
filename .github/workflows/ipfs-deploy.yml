@@ -38,7 +38,7 @@ jobs:
       run: pnpm i -g @fleek-platform/cli
 
     - name: Set environment variables
-      run: pnpm setenv:v2
+      run: pnpm setenv:bartio
       
     - name: Build all projects
       env:

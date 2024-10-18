@@ -26,7 +26,7 @@
     "dev": {
       "persistent": true,
       "cache": false,
-      "env": [".env.v2"]
+      "env": [".env.bartio"]
     },
     "check-types": {
       "dependsOn": ["^build"],
