@@ -1,53 +1,59 @@
 import { cn } from "@bera/ui";
 import { Icons } from "@bera/ui/icons";
 import { getTopicColor, parseProposalBody } from "../helper";
+import { useGovernance } from "../[genre]/components/governance-provider";
+import { ProposalSelectionFragment } from "@bera/graphql/governance";
 
 export const ProposalHeading = ({
-  frontmatter: fm,
+  proposal,
   size,
 }: {
-  frontmatter: ReturnType<typeof parseProposalBody>;
+  proposal: ProposalSelectionFragment;
   size?: "sm" | "md";
 }) => {
   const Heading = size === "sm" ? "h3" : "h1";
+
+  const { currentTopic } = useGovernance();
+
+  const linkBelongsToForum = proposal.forumLink?.startsWith(
+    currentTopic.forumLink,
+  );
+
   return (
     <>
-      {size === "md" &&
-        (fm.data.topics || fm.data.topic || fm.data.forumLink) && (
-          <div
-            className={cn(
-              "text-xs flex gap-2 font-semibold capitalize leading-4",
-            )}
-          >
-            <p>
-              {((fm.data.topics || fm.data.topic) as Array<string>)?.map(
-                (topic: string, idx: number) => (
-                  <span
-                    key={idx}
-                    className="inline-block after:content-['•'] after:mx-1 last:after:hidden"
-                    style={{ color: getTopicColor(topic) }}
-                  >
-                    {topic}
-                  </span>
-                ),
-              )}
-            </p>
-            {fm.data.forumLink && (
-              <>
-                <span className="text-muted-foreground">•</span>
-                <a
-                  href={fm.data.forumLink}
-                  target="_blank"
-                  className="text-muted-foreground"
-                  rel="noreferrer"
-                >
-                  View Forum Post
-                  <Icons.externalLink className="w-3 h-3 ml-1 align-middle inline-block" />
-                </a>
-              </>
-            )}
-          </div>
-        )}
+      {size === "md" && (proposal.topics || linkBelongsToForum) && (
+        <div
+          className={cn(
+            "text-xs flex gap-2 font-semibold capitalize leading-4",
+          )}
+        >
+          <p>
+            {proposal.topics?.map((topic: string, idx: number) => (
+              <span
+                key={idx}
+                className="inline-block after:content-['•'] after:mx-1 last:after:hidden"
+                style={{ color: getTopicColor(topic) }}
+              >
+                {topic}
+              </span>
+            ))}
+          </p>
+          {linkBelongsToForum && (
+            <>
+              <span className="text-muted-foreground">•</span>
+              <a
+                href={proposal.forumLink!}
+                target="_blank"
+                className="text-muted-foreground"
+                rel="noreferrer"
+              >
+                View Forum Post
+                <Icons.externalLink className="w-3 h-3 ml-1 align-middle inline-block" />
+              </a>
+            </>
+          )}
+        </div>
+      )}
       <Heading
         className={cn(
           "first:mt-0  mt-1 md:mt-2 font-semibold ",
@@ -55,7 +61,7 @@ export const ProposalHeading = ({
           size === "md" && "text-2xl",
         )}
       >
-        {fm.data.title}
+        {proposal.title}
       </Heading>
     </>
   );

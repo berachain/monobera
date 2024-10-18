@@ -10,7 +10,7 @@ import {
   ProposalErrorCodes,
   ProposalTypeEnum,
 } from "~/app/governance/types";
-import { formatUnits, isAddress, parseUnits } from "viem";
+import { formatUnits, parseUnits } from "viem";
 import { checkProposalField } from "~/hooks/useCreateProposal";
 import { useGovernance } from "../../components/governance-provider";
 
@@ -89,6 +89,9 @@ export function Erc20Transfer({
           className="p-4 border border-border rounded-sm"
           selected={selectedToken}
           amount={amount}
+          // TODO: balance won't be on the governance contract.
+          // the contract that will hold tokens is still TBD
+          walletAddress={governorAddress}
           forceShowBalance
           hidePrice
           // hideBalance

@@ -25,8 +25,6 @@ export function ProposalCard({
   truncate?: boolean;
   proposal: ProposalSelectionFragment;
 }) {
-  const fm = useMemo(() => parseProposalBody(proposal), [proposal]);
-
   return (
     <div
       className={cn(
@@ -40,7 +38,7 @@ export function ProposalCard({
         // overflow-hidden needed when there are addresses or long strings in the title.
         className="flex-1  overflow-hidden"
       >
-        <ProposalHeading frontmatter={fm} size="sm" />
+        <ProposalHeading proposal={proposal} size="sm" />
         <StatusBadge proposal={proposal} className="mt-1 md:mt-3" />
       </div>
 

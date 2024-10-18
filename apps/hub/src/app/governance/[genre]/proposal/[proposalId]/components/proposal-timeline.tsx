@@ -18,11 +18,13 @@ const Step = ({
   date,
   isActive,
   block,
+  bulletClassName,
 }: {
   title: string;
   date?: number | Date;
   isActive: boolean;
   block?: number | bigint | string;
+  bulletClassName?: string;
 }) => {
   const d = block ? useBlockToTimestamp(block) : date;
 
@@ -31,7 +33,7 @@ const Step = ({
       <div>
         <div
           className={cn("h-4 w-4 rounded-full relative flex justify-center", {
-            "bg-primary": isActive,
+            [bulletClassName ?? "bg-primary"]: isActive,
             "bg-primary-foreground": !isActive,
           })}
         >
@@ -53,6 +55,7 @@ export const ProposalTimeline = ({
   const steps: ({
     title: string;
     isActive: boolean;
+    bulletClassName?: string;
   } & (
     | {
         date: number | Date;
@@ -64,6 +67,7 @@ export const ProposalTimeline = ({
     {
       title: "Initiated",
       date: proposal.createdAt,
+      block: proposal.createdAtBlock,
       isActive: proposal.status === ProposalStatus.Pending,
     },
   ];
@@ -73,6 +77,7 @@ export const ProposalTimeline = ({
       title: "Canceled by proposer",
       date: proposal.canceledAt,
       isActive: true,
+      bulletClassName: "bg-destructive-foreground",
     });
   } else {
     steps.push({
@@ -93,6 +98,7 @@ export const ProposalTimeline = ({
     ) {
       steps.push({
         title: "Proposal Defeated",
+        bulletClassName: "bg-destructive-foreground",
         block: proposal.voteEndBlock,
         isActive: true,
       });
@@ -106,6 +112,7 @@ export const ProposalTimeline = ({
       steps.push({
         title: "Proposal Passed",
         block: proposal.voteEndBlock,
+        bulletClassName: "bg-success-foreground",
         isActive: proposal.status === ProposalStatus.PendingQueue,
       });
 
@@ -121,12 +128,14 @@ export const ProposalTimeline = ({
             title: "Canceled by guardian",
             date: proposal.canceledAt,
             isActive: true,
+            bulletClassName: "bg-destructive-foreground",
           });
         } else if (proposal.status === ProposalStatus.Executed) {
           steps.push({
             title: "Proposal Executed",
             date: proposal.executedAt,
             isActive: proposal.status === ProposalStatus.Executed,
+            bulletClassName: "bg-success-foreground",
           });
         } else if (proposal.status === ProposalStatus.PendingExecution) {
           steps.push({

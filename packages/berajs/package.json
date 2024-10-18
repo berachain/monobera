@@ -5,7 +5,9 @@
   "module": "dist/index.js",
   "sideEffects": false,
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -26,10 +28,12 @@
     "@metamask/browser-passworder": "^5.0.0",
     "@tanstack/react-query": "^5.26.3",
     "@wagmi/core": "^2.10.5",
+    "abitype": "^1.0.6",
     "axios": "^1.6.8",
     "bignumber.js": "^9.1.2",
     "crypto-js": "^4.1.1",
     "ethers": "^5.5.3",
+    "gray-matter": "^4.0.3",
     "lodash": "^4.17.21",
     "sha3": "^2.1.4",
     "swr": "^2.2.5",

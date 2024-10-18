@@ -5,11 +5,12 @@ import {
 } from "@bera/graphql/governance";
 import { Badge } from "@bera/ui/badge";
 import BigNumber from "bignumber.js";
-import graymatter from "gray-matter";
 import { decodeFunctionData, formatEther } from "viem";
 
 import { NativeDapps, Others } from "./governance-genre-helper";
 import { ProposalTypeEnum, VoteColorMap } from "./types";
+
+export { parseProposalBody } from "@bera/berajs";
 
 export const getBadgeColor = (
   proposalStatus: ProposalStatus,
@@ -72,59 +73,6 @@ export function formatTimeLeft(timeLeftInSeconds: number): string {
 
   return [hoursDisplay, minutesDisplay].filter(Boolean).join(", ");
 }
-export const getTimeText = (date: Date) => {
-  const now = Date.now();
-  const targetTimestamp = date.getTime();
-  const diffInMilliseconds = targetTimestamp - now;
-  const diffInSeconds = Math.round(diffInMilliseconds / 1000);
-
-  const absDiffInSeconds = Math.abs(diffInSeconds);
-  const oneWeekInSeconds = 7 * 24 * 60 * 60; // 7 days
-
-  const isFuture = diffInMilliseconds > 0;
-
-  if (absDiffInSeconds > oneWeekInSeconds) {
-    // Format the date as "Month Day, Year"
-    const date = new Date(targetTimestamp);
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    };
-    return date.toLocaleDateString(undefined, options);
-  }
-
-  const rtf = new Intl.RelativeTimeFormat("en-US", {
-    numeric: "auto",
-    style: "long",
-  });
-
-  const thresholds = [
-    { limit: -60, divisor: 1, unit: "second" },
-    { limit: -3600, divisor: 60, unit: "minute" },
-    { limit: -86400, divisor: 3600, unit: "hour" },
-    { limit: -2592000, divisor: 86400, unit: "day" },
-    { limit: -31536000, divisor: 2592000, unit: "month" },
-    { limit: Infinity, divisor: 31536000, unit: "year" },
-  ];
-
-  for (const threshold of thresholds) {
-    if (
-      isFuture
-        ? diffInSeconds < threshold.limit
-        : diffInSeconds > threshold.limit
-    ) {
-      const value = Math.round(diffInSeconds / threshold.divisor);
-      const formatted = rtf.format(
-        value,
-        threshold.unit as Intl.RelativeTimeFormatUnit,
-      );
-      return isFuture ? `${formatted} left` : `${formatted}`;
-    }
-  }
-
-  return "";
-};
 
 export const getVotesDataList = (proposal: ProposalSelectionFragment) => {
   const votes = proposal.pollResult;
@@ -167,82 +115,6 @@ export const getVotesDataList = (proposal: ProposalSelectionFragment) => {
       votesCount: votes?.abstain,
     },
   ];
-};
-
-export const getTotalVotes = (proposal: ProposalSelectionFragment) =>
-  formatEther(
-    BigInt(proposal.pollResult?.abstain ?? 0) +
-      BigInt(proposal.pollResult?.for ?? 0),
-  );
-
-const parseLegacyBody = (
-  s: string,
-): { type: string | null; title: string; content: string } => {
-  const pattern = /#(?:([\w-]+)# )?(.+)\n([\s\S]*)/;
-  const match = s.match(pattern);
-
-  if (match) {
-    const type = match[1] || null;
-    const title = match[2];
-    const content = match[3].replace("\n", "<br />");
-    return {
-      type,
-      title,
-      content,
-    };
-  }
-
-  throw new Error("Invalid proposal body");
-};
-
-export const parseProposalBody = (
-  proposal?: ProposalSelectionFragment,
-): graymatter.GrayMatterFile<string> & {
-  isFrontMatter: boolean;
-} => {
-  if (!proposal) {
-    return {
-      isFrontMatter: false,
-      data: { title: "Loading..." },
-      content: "",
-      matter: "",
-      language: "",
-      orig: "",
-      stringify: () => "",
-    };
-  }
-
-  const body = proposal?.description ?? "";
-
-  if (graymatter.test(body)) {
-    return { ...graymatter(body), isFrontMatter: true };
-  }
-
-  try {
-    const legacyBody = parseLegacyBody(body);
-
-    return {
-      isFrontMatter: false,
-      data: { title: legacyBody.title },
-      content: legacyBody.content,
-      matter: "",
-      language: "",
-      orig: body,
-      stringify: () => body,
-    };
-  } catch (error) {
-    return {
-      isFrontMatter: false,
-      data: {
-        title: proposal?.description?.split("\n")[0].slice(0, 100),
-      },
-      content: body,
-      matter: "",
-      language: "",
-      orig: body,
-      stringify: () => body,
-    };
-  }
 };
 
 export const decodeProposalCalldata = (

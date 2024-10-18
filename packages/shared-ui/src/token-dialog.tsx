@@ -39,6 +39,7 @@ type Props = {
   filter?: string[];
   filteredTokenTags?: string[]; // list of tags excluded from visible token list
   filteredSymbols?: string[]; // list of symbols excluded from visible token list
+  walletAddress?: Address;
 };
 
 export function TokenDialog({
@@ -46,6 +47,7 @@ export function TokenDialog({
   onSelectedToken,
   setOpen,
   selectedTokens,
+  walletAddress,
   focusedToken = undefined,
   customTokens = undefined,
   filter = [],
@@ -89,6 +91,7 @@ export function TokenDialog({
       setFilteredTokens(customTokens);
     }
   }, [customTokens]);
+
   useEffect(() => {
     if (!customTokens) {
       // Only update the state if the filtered list is different from the current state
@@ -212,6 +215,7 @@ export function TokenDialog({
                   ?.filter((token) => !filter.includes(token?.address ?? ""))
                   .map((token, i) => (
                     <TokenDialogRow
+                      walletAddress={walletAddress}
                       key={`${token?.symbol}-${token?.name}-${token?.address}-${i}`}
                       token={token}
                       isTokenSelected={isTokenSelected(token)}
@@ -297,6 +301,7 @@ type RowProps = {
   onAddToken: (token: Token | undefined) => void;
   onTokenSelect: (token: Token | undefined) => void;
   pendingAddition: boolean;
+  walletAddress?: Address;
 };
 const TokenDialogRow = ({
   token,
@@ -305,15 +310,19 @@ const TokenDialogRow = ({
   onAddToken,
   onTokenSelect,
   pendingAddition,
+  walletAddress,
 }: RowProps) => {
   const { isConnected } = useBeraJs();
-  const { useSelectedWalletBalance } = usePollWalletBalances();
+  const { useSelectedWalletBalance } = usePollWalletBalances({
+    walletAddress,
+  });
   const t = useSelectedWalletBalance(token?.address ?? "0x");
   const { data: tokenData } = useTokens();
   const tokenExists = useMemo(() => {
     return tokenData?.tokenList?.some((t) => t.address === token?.address);
   }, [tokenData?.customTokenList]);
   const [addTokenOpen, setAddTokenOpen] = useState(false);
+
   return (
     <div>
       <Button
@@ -353,7 +362,7 @@ const TokenDialogRow = ({
         {focusedToken?.address === token?.address && (
           <div className="absolute ml-auto" />
         )}
-        {!pendingAddition && isConnected && (
+        {!pendingAddition && (walletAddress || isConnected) && (
           <div className="ml-auto truncate text-muted-foreground">
             <FormattedNumber
               value={t?.formattedBalance ?? "0"}

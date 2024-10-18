@@ -15,17 +15,28 @@ import { Tabs } from "./tabs";
 import { Icons } from "@bera/ui/icons";
 import { governorAddress } from "@bera/config";
 import { useGovernance } from "../../components/governance-provider";
+import { useRouter } from "next/navigation";
 
 export const CreateProposal = () => {
+  const router = useRouter();
+  const { currentTopic } = useGovernance();
+
   const {
     proposal,
     setProposal,
     addProposalAction,
     removeProposalAction,
+    isSubmitting,
     submitProposal,
-  } = useCreateProposal({ governorAddress });
+  } = useCreateProposal({
+    governorAddress,
+    onSuccess: (txHash) => {
+      router.push(
+        `/governance/${currentTopic.slug}/proposal/?txHash=${txHash}`,
+      );
+    },
+  });
 
-  const { currentTopic } = useGovernance();
   const [activeTab, setActiveTab] = useState(0);
   const [errors, setErrors] = useState<CustomProposalErrors>({
     title: null,
@@ -127,7 +138,12 @@ export const CreateProposal = () => {
               </div>
               <div>
                 <ActionButton>
-                  <Button onClick={handleSubmitProposal}>Publish</Button>
+                  <Button
+                    disabled={isSubmitting}
+                    onClick={handleSubmitProposal}
+                  >
+                    Publish
+                  </Button>
                 </ActionButton>
               </div>
             </div>
