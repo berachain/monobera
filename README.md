@@ -20,7 +20,7 @@ In order to setup your local environment, run
 
 ```
 pnpm i
-pnpm setenv v2
+pnpm setenv bartio
 ```
 
 You'll also need to run
@@ -36,8 +36,7 @@ All Berachain dapps are built to be single chain applications.
 
 | Environment Variables | Environment |
 | --------------------- | ---------------------------------------------------------------------------------------------- |
-| `.env.v2` | Environment variables for future release of Berachain dapps |
-| `.env.bartio` | Environment variables used for testing on `bartio` branch. It's not supported on `v2` branch. |
+| `.env.bartio` | Environment variables for Berachain bartio testnet |
 
 
 ## Commands
