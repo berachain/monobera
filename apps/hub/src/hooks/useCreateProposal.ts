@@ -117,7 +117,12 @@ export const checkProposalField: CheckProposalField = (
         return ProposalErrorCodes.INVALID_ADDRESS;
       }
 
-      if (!value.startsWith(requiredOrBase)) {
+      // biome-ignore lint/correctness/noSwitchDeclarations: <explanation>
+      const base = new URL(requiredOrBase as string);
+
+      // base.pathname = "/c/";
+
+      if (!value.startsWith(base.toString())) {
         return ProposalErrorCodes.INVALID_BASEPATH;
       }
 
@@ -171,7 +176,7 @@ export const useCreateProposal = ({
 }: {
   governorAddress: Address;
   initialData?: any;
-  onSuccess?: () => void;
+  onSuccess?: (txHash: string) => void;
 }) => {
   const [proposal, setProposal] = useState<CustomProposal>({
     title: "",
@@ -196,9 +201,8 @@ export const useCreateProposal = ({
   const { write, ModalPortal, isSubmitting } = useTxn({
     message: "Submit Proposal",
     actionType: TransactionActionType.SUBMIT_PROPOSAL,
-    onSuccess: () => {
-      onSuccess?.();
-      router.push(`/governance/${currentTopic.slug}`);
+    onSuccess: (txHash) => {
+      onSuccess?.(txHash);
     },
   });
 

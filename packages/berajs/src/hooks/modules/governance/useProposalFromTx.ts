@@ -43,11 +43,12 @@ export const useProposalFromTx = (
     id: String(creationEvent.args.proposalId),
     proposalId: String(creationEvent?.args.proposalId),
     createdAt: undefined,
+    title: fm.data.title,
     createdAtBlock: tx.blockNumber.toString(),
     voteStartBlock: String(creationEvent?.args.voteStart),
     voteEndBlock: String(creationEvent?.args.voteEnd),
     proposer: creationEvent?.args.proposer,
-    description: fm.data.title,
+    description: fm.content,
     pollResult: {
       for: "0",
       forVotersCount: 0,
@@ -74,7 +75,7 @@ export const useProposalFromTx = (
           target: target as Address,
           value: String(creationEvent?.args.values[index]),
           calldata: String(creationEvent?.args.calldatas[index]),
-        }) satisfies ExecutableCallSubsetFragment,
+        } satisfies ExecutableCallSubsetFragment),
     ),
     timelockId: undefined,
   } satisfies ProposalWithVotesFragment;
