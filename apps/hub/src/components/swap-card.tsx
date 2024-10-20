@@ -4,9 +4,11 @@ import React, { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   BGT_ABI,
+  // Vault
+  // @ts-ignore - ignore Token typing import error
   Token,
   TransactionActionType,
-  multiswapAbi,
+  balancerVaultAbi,
   useBeraJs,
   useBgtUnstakedBalance,
   usePollWalletBalances,
@@ -14,9 +16,9 @@ import {
   wberaAbi,
 } from "@bera/berajs";
 import {
+  balancerVaultAddress,
   beraTokenAddress,
   bgtTokenAddress,
-  crocMultiSwapAddress,
   honeyAddress,
   nativeTokenAddress,
 } from "@bera/config";
@@ -39,6 +41,7 @@ import { Icons } from "@bera/ui/icons";
 import { isAddress, parseUnits } from "viem";
 
 import { WRAP_TYPE, useSwap } from "~/hooks/useSwap";
+// NOTE: the meat of the swap needs to be driven by a refactored useSwap
 import { SwapCardHeader } from "./swap-card-header";
 import { SwapCardInfo } from "./swap-card-info";
 import { SwapRoute } from "./swap-route";
@@ -82,7 +85,7 @@ export function SwapCard({
   const {
     setSelectedFrom,
     selectedFrom,
-    allowance,
+    // allowance, // FIXME: re-enable
     selectedTo,
     fromAmount,
     setFromAmount,
@@ -96,7 +99,7 @@ export function SwapCard({
     setIsTyping,
     swapInfo,
     isRouteLoading,
-    refreshAllowance,
+    // refreshAllowance, // FIXME: re-enable
     payload,
     payloadValue,
     exchangeRate,
@@ -175,6 +178,7 @@ export function SwapCard({
     nativeTokenBalance > 0 &&
     nativeTokenBalance - estimatedBeraFee < 0;
 
+  // NOTE: this is a UX-friendly use-wrapper that executes the swap transation in L372
   const { write, isLoading, ModalPortal } = useTxn({
     actionType: TransactionActionType.SWAP,
     message: `Swap ${selectedFrom?.symbol} to ${selectedTo?.symbol}`,
@@ -187,7 +191,7 @@ export function SwapCard({
       setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
-      void refreshAllowance();
+      // void refreshAllowance();
       refresh();
     },
     onSubmission: () => {
@@ -301,7 +305,7 @@ export function SwapCard({
       );
     }
     if (
-      (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
+      // (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
       !exceedingBalance &&
       !isWrap &&
       !isRouteLoading &&
@@ -315,7 +319,7 @@ export function SwapCard({
             selectedFrom?.decimals ?? 18,
           )}
           token={selectedFrom}
-          spender={crocMultiSwapAddress}
+          spender={balancerVaultAddress}
         />
       );
     }
@@ -365,10 +369,11 @@ export function SwapCard({
             open={openPreview}
             setOpen={setOpenPreview}
             write={() => {
+              // NOTE: here is where we actually write out the transaction from the useTxn in L181
               write({
-                address: crocMultiSwapAddress,
-                abi: multiswapAbi,
-                functionName: "multiSwap",
+                address: balancerVaultAddress,
+                abi: balancerVaultAbi,
+                functionName: "batchSwap",
                 params: payload ?? [],
                 value: payloadValue,
               });
@@ -392,9 +397,10 @@ export function SwapCard({
           setOpen={setOpenPreview}
           write={() => {
             write({
-              address: crocMultiSwapAddress,
-              abi: multiswapAbi,
-              functionName: "multiSwap",
+              // NOTE: here is where we actually write out the transaction from the useTxn in L181
+              address: balancerVaultAddress,
+              abi: balancerVaultAbi,
+              functionName: "batchSwap",
               params: payload ?? [],
               value: (swapInfo as any)?.value,
             });
@@ -449,6 +455,10 @@ export function SwapCard({
   const breakpoint = useBreakpoint();
 
   const { addNewToken } = useTokens();
+
+  if (swapInfo?.error !== undefined) {
+    console.error(swapInfo);
+  }
 
   return (
     <div className={cn("flex w-full flex-col items-center", className)}>
@@ -611,8 +621,9 @@ export function SwapCard({
                 {swapInfo?.error !== undefined && (
                   <Alert variant="destructive">
                     <AlertTitle>Error</AlertTitle>
+                    {/* FIXME this error sucks! */}
                     <AlertDescription className="text-xs">
-                      {swapInfo.error}
+                      There was an error with your swap. Please try again.
                     </AlertDescription>
                   </Alert>
                 )}

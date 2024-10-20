@@ -22,7 +22,8 @@ export interface BeraConfig {
   };
   contracts?: {
     multicallAddress?: Address;
-    crocMultiSwapAddress?: Address;
+    balancerVaultAddress?: Address;
+    crocMultiSwapAddress?: Address; // TODO: prune this croc address
     wrappedTokenAddress?: Address;
     dexAddress?: Address;
     bgtAddress?: Address;

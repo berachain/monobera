@@ -5,6 +5,7 @@ import { handleNativeBera } from "~/utils";
 import { BeraConfig } from "~/types/global";
 import { SwapRequest } from "~/types";
 
+// TODO (#multiswap): this and getSwap are croc-specific and should use batchSwap from Balancer instead  (usePollBalancerSwap)
 /**
  * Queries router for optimal swap path from one token to another
  */

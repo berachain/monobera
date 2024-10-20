@@ -7,6 +7,7 @@ import { SwapRequest } from "~/types";
 import { BeraConfig } from "~/types/global";
 import { getRoute } from "./getRoute";
 
+// TODO (#multiswap): this and getRoute are croc-specific and should use batchSwap from Balancer instead (usePollBalancerSwap)
 /**
  * Returns the optimal swap path and return amount for a given swap request
  */

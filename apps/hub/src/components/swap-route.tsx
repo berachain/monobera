@@ -1,4 +1,4 @@
-import { SwapInfoV3, Token } from "@bera/berajs";
+import { SwapInfo, Token } from "@bera/berajs";
 import { TokenIcon } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Address } from "viem";
@@ -7,17 +7,22 @@ export const SwapRoute = ({
   swapInfo,
   tokenIn,
   tokenOut,
-}: { swapInfo: SwapInfoV3; tokenIn: Token; tokenOut: Token }) => {
+}: {
+  swapInfo: SwapInfo;
+  tokenIn: Token;
+  tokenOut: Token;
+}) => {
   return (
-    <div className="flex flex-row flex-wrap w-full p-4 items-center gap-2 border border-border rounded-md mb-4">
+    <div className="mb-4 flex w-full flex-row flex-wrap items-center gap-2 rounded-md border border-border p-4">
       <TokenIcon address={tokenIn.address} size={"lg"} />
       <span className="text-sm font-medium">{tokenIn.symbol}</span>
       <Icons.arrowRight className="h-4 w-4" />
       {swapInfo.batchSwapSteps.map((step, index) => (
         <div key={index} className="flex flex-row">
-          <TokenIcon address={step.base as Address} size={"lg"} />
+          {/* TODO (#multiswap): properly define these as step-wise token in -> out via batchSwap asset steps */}
+          <TokenIcon address={tokenIn.address} size={"lg"} />
           <TokenIcon
-            address={step.quote as Address}
+            address={tokenOut.address}
             size={"lg"}
             className="ml-[-8px]"
           />

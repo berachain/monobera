@@ -5,25 +5,26 @@ import {
   TXN_GAS_USED_ESTIMATES,
   useGasData,
   usePollAllowance,
-  usePollCrocSwap,
+  usePollBalancerSwap,
   usePollWalletBalances,
-  useTokenInformation,
   useSubgraphTokenInformation,
+  useTokenInformation,
   useTokens,
+  // @ts-ignore - ignore Token typing import error
   type Token,
 } from "@bera/berajs";
 import { getSwapPayload } from "@bera/berajs/actions";
 import {
+  balancerVaultAddress,
   beraTokenAddress,
-  crocMultiSwapAddress,
   nativeTokenAddress,
 } from "@bera/config";
 import { POLLING } from "@bera/shared-ui";
 import { useSlippage } from "@bera/shared-ui/src/hooks";
+import { beraToken } from "@bera/wagmi";
 import { formatUnits, type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";
-import { beraToken } from "@bera/wagmi";
 
 enum SwapKind {
   GIVEN_IN = 0,
@@ -76,6 +77,7 @@ export const useSwap = ({
     if (!tokenListData) return;
 
     const doesInputTokenExist = tokenListData?.tokenList?.some(
+      // @ts-ignore - ignore any
       (t) => t.address.toLowerCase() === inputCurrency.toLowerCase(),
     );
     if (!doesInputTokenExist) {
@@ -83,6 +85,7 @@ export const useSwap = ({
       return;
     }
     const doesOuputTokenExist = tokenListData?.tokenList?.some(
+      // @ts-ignore - ignore any
       (t) => t.address.toLowerCase() === outputCurrency.toLowerCase(),
     );
     if (!doesOuputTokenExist) {
@@ -144,11 +147,12 @@ export const useSwap = ({
     }
   }, [swapAmount]);
 
+  // TODO (#multiswap): we are hardcoding internally to usePollBalancerSwap because we dont support multiswap yet
   const {
     data: swapInfo,
     error: getSwapError,
     isLoading: isSwapLoading,
-  } = usePollCrocSwap(
+  } = usePollBalancerSwap(
     {
       tokenIn: selectedFrom?.address as Address,
       tokenOut: selectedTo?.address as Address,
@@ -177,6 +181,7 @@ export const useSwap = ({
       : 0;
 
   const [differenceUSD, setDifferenceUSD] = useState<number | null>(null);
+
   // update price impact
   useEffect(() => {
     if (
@@ -262,10 +267,11 @@ export const useSwap = ({
     setExchangeRate(undefined);
   }, [selectedFrom, selectedTo]);
 
-  const { data: allowance, refresh: refreshAllowance } = usePollAllowance({
-    spender: crocMultiSwapAddress,
-    token: selectedFrom,
-  });
+  // FIXME: we should bring this important check back ASAP
+  // const { data: allowance, refresh: refreshAllowance } = usePollAllowance({
+  //   spender: balancerVaultAddress,
+  //   token: selectedFrom,
+  // });
 
   const slippage = useSlippage();
   const swapPayload = useMemo(
@@ -315,6 +321,7 @@ export const useSwap = ({
     ? formatUnits(swapPayload?.payload[2] ?? 0, selectedTo?.decimals ?? 18)
     : "";
 
+  // @ts-ignore
   const { estimatedBeraFee } = useGasData({
     gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
   });
@@ -343,7 +350,7 @@ export const useSwap = ({
     setSwapAmount,
     onSwitch,
     setIsTyping,
-    refreshAllowance,
+    // refreshAllowance,
     setInputAddTokenDialogOpen,
     setOutputAddTokenDialogOpen,
     pendingInputToken,
@@ -354,7 +361,7 @@ export const useSwap = ({
     payload: swapPayload?.payload,
     payloadValue: swapPayload?.value,
     selectedFrom,
-    allowance,
+    // allowance,
     selectedTo,
     fromAmount,
     toAmount,

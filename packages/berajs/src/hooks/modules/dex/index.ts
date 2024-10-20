@@ -1,4 +1,5 @@
 export * from "./usePollCrocSwap";
+export * from "./usePollBalancer";
 export * from "./usePoolTable";
 export * from "./usePoolUserPosition";
 export * from "./usePoolRecentSwaps";

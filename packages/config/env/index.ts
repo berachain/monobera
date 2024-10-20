@@ -24,8 +24,10 @@ export const governanceUrl = process.env.NEXT_PUBLIC_GOVERNANCE_URL as string;
 export const governanceName = process.env.NEXT_PUBLIC_GOVERNANCE_NAME as string;
 
 // Subgraphs
-export const crocSubgraphEndpoint = process.env
+export const crocSubgraphEndpoint = process.env // TODO (#): croc subgraph definition
   .NEXT_PUBLIC_RPC_CROC_SUBGRAPH as Address;
+export const balancerApiUrl = process.env
+  .NEXT_PUBLIC_BALANCER_API_URL as Address;
 export const honeySubgraphUrl = process.env
   .NEXT_PUBLIC_HONEY_SUBGRAPH_URL as string;
 export const lendSubgraphUrl = process.env
@@ -216,7 +218,7 @@ export const governanceTimelockAddress = process.env
 export const beraChefAddress = process.env
   .NEXT_PUBLIC_BERA_CHEF_ADDRESS as Address;
 
-// Crocswap
+// Crocswap TODO (#): remove croc definitions
 export const crocDexAddress = process.env.NEXT_PUBLIC_RPC_CROC_DEX as Address;
 export const crocQueryAddress = process.env
   .NEXT_PUBLIC_RPC_CROC_QUERY as Address;
@@ -230,6 +232,11 @@ export const crocIndexerEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_INDEXER_ENDPOINT as Address;
 export const crocRouterEndpoint = process.env
   .NEXT_PUBLIC_RPC_CROC_ROUTER_ENDPOINT as Address;
+
+// Balancer
+export const balancerVaultAddress = process.env
+  .NEXT_PUBLIC_BALANCER_VAULT_ADDRESS as Address;
+// TODO (#): we need subgraph and so on here
 
 // Sentry && Mixpanel
 export const developmentAnalytics = process.env
