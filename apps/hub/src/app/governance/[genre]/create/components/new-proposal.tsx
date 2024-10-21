@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useBeraJs } from "@bera/berajs";
-import { governorAddress } from "@bera/config";
 import { Icons } from "@bera/ui/icons";
+import pollImage from "../../../assets/gov-poll.jpg";
 
 import { PROPOSAL_GENRE } from "../../../governance-genre-helper";
 import { useGovernance } from "../../components/governance-provider";
 import { CreateProposal } from "./create-proposal";
+import Image from "next/image";
 
 export default function NewProposal({ genre }: { genre: PROPOSAL_GENRE }) {
   // const dapp = getDappByGenre(genre);
@@ -40,26 +41,34 @@ export default function NewProposal({ genre }: { genre: PROPOSAL_GENRE }) {
 
   return (
     <div className="col-span-12 pb-16 xl:col-span-8 xl:col-start-3">
-      <Link
-        href={`/governance/${params.genre}`}
-        className="mb-8 flex items-center gap-1 text-sm font-medium text-muted-foreground"
-      >
-        <Icons.arrowLeft className="h-4 w-4" />
-        All Proposals
-      </Link>
+      <div className="sm:flex sm:justify-between relative">
+        <div>
+          <Link
+            href={`/governance/${params.genre}`}
+            className="mb-8 flex items-center gap-1 text-sm font-medium text-muted-foreground"
+          >
+            <Icons.arrowLeft className="h-4 w-4" />
+            All Proposals
+          </Link>
 
-      <div className="mb-9">
-        <div
-          className="font-bold leading-6 tracking-widest text-muted-foreground uppercase"
-          style={{ color: currentTopic.color }}
-        >
-          {currentTopic.name}
+          <div className="mb-9">
+            <div
+              className="font-bold leading-6 tracking-widest text-muted-foreground uppercase"
+              style={{ color: currentTopic.color }}
+            >
+              {currentTopic.name}
+            </div>
+            <div className="relative max-sm:w-1/2 max-sm:text-[1.875rem] sm:text-3xl font-semibold leading-9 text-foreground">
+              Create New Proposal
+            </div>
+          </div>
         </div>
-        <div className="relative text-3xl font-semibold leading-9 text-foreground">
-          Create New Proposal
-        </div>
+        <Image
+          src={pollImage}
+          alt="poll image"
+          className=" max-sm:absolute max-sm:bottom-0 max-sm:right-0 max-sm:w-1/2 sm:w-1/4 basis-1/4 z-0 object-contain object-top"
+        />
       </div>
-
       <CreateProposal />
     </div>
   );
