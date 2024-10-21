@@ -12,7 +12,7 @@ import { FormattedNumber } from "@bera/shared-ui";
 import { Card } from "@bera/ui/card";
 import { Icons } from "@bera/ui/icons";
 
-import { getVotesDataList, parseProposalBody } from "../../../../helper";
+import { getVotesDataList } from "../../../../helper";
 import { Actions } from "../Actions";
 import { StatusAction } from "../Status";
 import "@bera/graphql";
@@ -98,7 +98,7 @@ export default function ProposalDetails({
           <>
             <div className="flex h-11 col-span-full justify-between">
               <Link
-                href="/governance"
+                href={`/governance/${proposal.topics?.at(0) ?? ""}`}
                 className="flex items-center gap-1 text-sm font-medium leading-[14px] text-muted-foreground"
               >
                 <Icons.arrowLeft className="relative h-4 w-4" />
