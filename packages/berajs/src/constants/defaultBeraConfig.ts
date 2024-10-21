@@ -1,7 +1,6 @@
 import {
   beraTokenAddress,
   crocDexAddress,
-  crocIndexerEndpoint,
   crocMultiSwapAddress,
   crocRouterEndpoint,
   crocSubgraphEndpoint,
@@ -29,7 +28,6 @@ import { BeraConfig } from "..";
 export const defaultBeraConfig: BeraConfig = {
   endpoints: {
     dexRouter: crocRouterEndpoint,
-    dexIndexer: crocIndexerEndpoint,
     tokenList: tokenListUrl,
     validatorList: validatorListUrl,
     marketList: marketListUrl,
