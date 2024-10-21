@@ -456,4 +456,4 @@ export const BGT_STAKER_ABI = [
   { type: "error", name: "VaultAlreadyExists", inputs: [] },
   { type: "error", name: "WithdrawAmountIsZero", inputs: [] },
   { type: "error", name: "ZeroAddress", inputs: [] },
-];
+] as const;
