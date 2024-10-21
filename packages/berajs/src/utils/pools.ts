@@ -1,7 +1,3 @@
-import { chainId, crocIndexerEndpoint } from "@bera/config";
-import BigNumber from "bignumber.js";
-
-import { BeraConfig } from "~/types/global";
 import { PoolV2 } from "..";
 
 // export const formatPoolData = (result: any): PoolV2 => {
