@@ -15,13 +15,13 @@ export const ProposalHeading = ({
 
   const { currentTopic } = useGovernance();
 
-  const linkBelongsToForum = proposal.forumLink?.startsWith(
+  const isLinkVerified = proposal.unverifiedForumLink?.startsWith(
     currentTopic.forumLink,
   );
 
   return (
     <>
-      {size === "md" && (proposal.topics || linkBelongsToForum) && (
+      {size === "md" && (proposal.topics || isLinkVerified) && (
         <div
           className={cn(
             "text-xs flex gap-2 font-semibold capitalize leading-4",
@@ -38,11 +38,11 @@ export const ProposalHeading = ({
               </span>
             ))}
           </p>
-          {linkBelongsToForum && (
+          {isLinkVerified && (
             <>
               <span className="text-muted-foreground">•</span>
               <a
-                href={proposal.forumLink!}
+                href={proposal.unverifiedForumLink!}
                 target="_blank"
                 className="text-muted-foreground"
                 rel="noreferrer"
