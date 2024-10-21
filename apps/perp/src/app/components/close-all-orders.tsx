@@ -6,7 +6,7 @@ import {
 } from "@bera/berajs";
 import { tradingContractAddress } from "@bera/config";
 import { Tooltip } from "@bera/shared-ui";
-import { useOctTxn } from "@bera/shared-ui/src/hooks";
+import { useOctTxn } from "@bera/shared-ui";
 import { Button } from "@bera/ui/button";
 import { encodeFunctionData, type Address } from "viem";
 

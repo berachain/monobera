@@ -19,7 +19,7 @@ import {
   nativeTokenAddress,
 } from "@bera/config";
 import { POLLING } from "@bera/shared-ui";
-import { useSlippage } from "@bera/shared-ui/src/hooks";
+import { useSlippage } from "@bera/shared-ui";
 import { formatUnits, type Address } from "viem";
 
 import { isBeratoken } from "~/utils/isBeraToken";

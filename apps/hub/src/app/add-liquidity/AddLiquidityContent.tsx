@@ -39,7 +39,7 @@ import { getBaseCost, getPoolUrl, getQuoteCost } from "../pools/fetchPools";
 import { useAddLiquidity } from "./useAddLiquidity";
 import { useSelectedPool } from "~/hooks/useSelectedPool";
 import { Skeleton } from "@bera/ui/skeleton";
-import { AddLiquiditySuccess } from "@bera/shared-ui/src/txn-modals";
+import { AddLiquiditySuccess } from "@bera/shared-ui";
 
 interface IAddLiquidityContent {
   shareAddress: Address;

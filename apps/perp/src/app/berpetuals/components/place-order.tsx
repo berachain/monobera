@@ -13,7 +13,7 @@ import {
   tradingContractAddress,
 } from "@bera/config";
 import { ActionButton, ApproveButton } from "@bera/shared-ui";
-import { useOctTxn, useSlippage } from "@bera/shared-ui/src/hooks";
+import { useOctTxn, useSlippage } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";

@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { truncateHash, usePollGlobalData, type Validator } from "@bera/berajs";
 import { FormattedNumber, ValidatorIcon } from "@bera/shared-ui";
-import { getHubValidatorPath } from "@bera/shared-ui/src/utils/getHubUrls";
+import { getHubValidatorPath } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 import { Skeleton } from "@bera/ui/skeleton";
 

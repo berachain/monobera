@@ -9,6 +9,14 @@
     "lint": "eslint src",
     "lint:fix": "pnpm lint --fix"
   },
+  "exports": {
+    "./src/style.css": "./src/style.css",
+    "./hooks": "./src/hooks/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./table": "./src/table/index.ts",
+    "./table/legacy": "./src/table/legacy/index.ts",
+    ".": "./src/index.ts"
+  },
   "dependencies": {
     "@sentry/react": "^7.109.0",
     "@tanstack/react-table": "^8.15.3",
