@@ -18,7 +18,7 @@ export const getAllowance = async ({
   publicClient,
 }: GetAllowance): Promise<GetAllowanceResponse> => {
   if (!publicClient) return undefined;
-  if (account && token) {
+  if (account && token && spender && token.address) {
     const allowance = await publicClient.readContract({
       address: token.address,
       abi: erc20Abi,

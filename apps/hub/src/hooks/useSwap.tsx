@@ -267,11 +267,10 @@ export const useSwap = ({
     setExchangeRate(undefined);
   }, [selectedFrom, selectedTo]);
 
-  // FIXME: we should bring this important check back ASAP
-  // const { data: allowance, refresh: refreshAllowance } = usePollAllowance({
-  //   spender: balancerVaultAddress,
-  //   token: selectedFrom,
-  // });
+  const { data: allowance, refresh: refreshAllowance } = usePollAllowance({
+    spender: balancerVaultAddress,
+    token: selectedFrom,
+  });
 
   const slippage = useSlippage();
   const swapPayload = useMemo(
@@ -350,7 +349,7 @@ export const useSwap = ({
     setSwapAmount,
     onSwitch,
     setIsTyping,
-    // refreshAllowance,
+    refreshAllowance,
     setInputAddTokenDialogOpen,
     setOutputAddTokenDialogOpen,
     pendingInputToken,
@@ -361,7 +360,7 @@ export const useSwap = ({
     payload: swapPayload?.payload,
     payloadValue: swapPayload?.value,
     selectedFrom,
-    // allowance,
+    allowance,
     selectedTo,
     fromAmount,
     toAmount,

@@ -85,7 +85,7 @@ export function SwapCard({
   const {
     setSelectedFrom,
     selectedFrom,
-    // allowance, // FIXME: re-enable
+    allowance,
     selectedTo,
     fromAmount,
     setFromAmount,
@@ -99,7 +99,7 @@ export function SwapCard({
     setIsTyping,
     swapInfo,
     isRouteLoading,
-    // refreshAllowance, // FIXME: re-enable
+    refreshAllowance,
     payload,
     payloadValue,
     exchangeRate,
@@ -191,7 +191,7 @@ export function SwapCard({
       setSwapAmount("");
       setToAmount(undefined);
       setOpenPreview(false);
-      // void refreshAllowance();
+      void refreshAllowance();
       refresh();
     },
     onSubmission: () => {
@@ -305,7 +305,7 @@ export function SwapCard({
       );
     }
     if (
-      // (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
+      (Number(allowance?.formattedAllowance) ?? 0) < (safeFromAmount ?? 0) &&
       !exceedingBalance &&
       !isWrap &&
       !isRouteLoading &&
@@ -558,8 +558,8 @@ export function SwapCard({
                       isWrap
                         ? undefined
                         : swapInfo?.error
-                          ? undefined
-                          : differenceUSD
+                        ? undefined
+                        : differenceUSD
                     }
                     showExceeding={false}
                     isActionLoading={isRouteLoading && !isWrap && !isRedeem}
@@ -619,11 +619,14 @@ export function SwapCard({
                   false
                 )}
                 {swapInfo?.error !== undefined && (
+                  // toAmount && FIXME: this error shows when values are empty
+                  // Number(toAmount) > 0 &&
+                  // fromAmount &&
+                  // Number(fromAmount) > 0 &&
                   <Alert variant="destructive">
                     <AlertTitle>Error</AlertTitle>
-                    {/* FIXME this error sucks! */}
                     <AlertDescription className="text-xs">
-                      There was an error with your swap. Please try again.
+                      {`There was an error with swap simulation:\n${swapInfo.error}`}
                     </AlertDescription>
                   </Alert>
                 )}
