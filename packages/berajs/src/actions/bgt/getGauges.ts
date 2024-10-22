@@ -27,16 +27,15 @@ export const getGauges = async (
     throw new Error("Missing backend endpoint in config");
   }
   try {
-    let url = `${config.endpoints.bgtEndpoint}/vaults`;
+    const url = new URL(`${config.endpoints.bgtEndpoint}/vaults`);
     if (filter) {
-      let isFirstParam = true;
-      Object.keys(filter).forEach((key) => {
+      Object.entries(filter).forEach(([key, value]) => {
         const filterKey = key as keyof typeof filter;
-        url += `${isFirstParam ? "?" : "&"}${filterKey}=${filter[filterKey]}`;
-        isFirstParam = false;
+        url.searchParams.set(filterKey, value);
       });
     }
     const res = await fetch(url);
+
     const gauges = await res.json();
     return {
       gaugeCounts: gauges.total,
