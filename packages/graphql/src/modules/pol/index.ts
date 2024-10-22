@@ -21,7 +21,7 @@ export const GetBgtInflation = gql`
 
 export const GetUserValidatorInformation = gql`
   query GetUserValidatorInformation($address: String!) {
-    userValidatorInformations(where: { user: $address }, limit: 1000) {
+    userValidatorInformations(where: { user: $address }, first: 1000) {
       id
       amountQueued
       amountDeposited
