@@ -107,7 +107,7 @@ export const CreateProposal = () => {
           />
         </div>
       </div>
-      <div className="md:col-span-3">
+      <div className="md:col-span-3 max-sm:mt-2">
         {activeTab === 0 && (
           <CreateProposalBody
             errors={errors}

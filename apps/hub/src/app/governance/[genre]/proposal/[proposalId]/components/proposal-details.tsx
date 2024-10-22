@@ -112,12 +112,12 @@ export default function ProposalDetails({
             <div className="col-span-full">
               <ProposalHeading proposal={proposal} size="md" />
             </div>
-            <div className="sm:flex  grid grid-cols-2 col-span-full items-center justify-between text-sm gap-x-4 gap-y-6 md:gap-6">
+            <div className="sm:flex grid grid-cols-2 col-span-full items-center justify-between text-sm gap-x-4 gap-y-6 md:gap-6">
               <StatusBadge proposal={proposal} />
 
-              <div className="col-span-full  text-muted-foreground ">
+              <div className="col-span-full text-muted-foreground ">
                 <VoteInfo
-                  className="text-xs font-medium "
+                  className="text-xs font-medium"
                   prefix="Submitted by "
                   voter={proposal.proposer}
                 />

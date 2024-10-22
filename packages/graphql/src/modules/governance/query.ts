@@ -9,7 +9,7 @@ export default gql`
     status
     createdAt
     createdAtBlock
-    forumLink
+    unverifiedForumLink
     quorum
     pollResult {
       for

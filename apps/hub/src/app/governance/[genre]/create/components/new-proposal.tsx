@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useBeraJs } from "@bera/berajs";
 import { Icons } from "@bera/ui/icons";
-import pollImage from "../../../assets/gov-poll.jpg";
 
 import { PROPOSAL_GENRE } from "../../../governance-genre-helper";
 import { useGovernance } from "../../components/governance-provider";
@@ -63,11 +62,14 @@ export default function NewProposal({ genre }: { genre: PROPOSAL_GENRE }) {
             </div>
           </div>
         </div>
-        <Image
-          src={pollImage}
-          alt="poll image"
-          className=" max-sm:absolute max-sm:bottom-0 max-sm:right-0 max-sm:w-1/2 sm:w-1/4 basis-1/4 z-0 object-contain object-top"
-        />
+        <div className=" max-sm:absolute max-sm:bottom-0 max-sm:right-0 max-sm:w-1/2 sm:w-1/4 basis-1/4 z-0 object-contain object-top">
+          <Image
+            src="https://res.cloudinary.com/duv0g402y/image/upload/v1729532664/governance/y59qkz9bqnwkuqulpkme.png"
+            width={586}
+            height={388}
+            alt="poll image"
+          />
+        </div>
       </div>
       <CreateProposal />
     </div>

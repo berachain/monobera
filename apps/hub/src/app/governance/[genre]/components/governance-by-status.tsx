@@ -13,7 +13,6 @@ import { SWRFallback, usePollAllProposalsQueryKey } from "@bera/berajs";
 import { unstable_serialize } from "swr/infinite";
 import { OrderDirection, Proposal_OrderBy } from "@bera/graphql/governance";
 import Image from "next/image";
-import pollImage from "../../assets/gov-poll.jpg";
 
 export default function GovernanceByStatus({
   allProposals,
@@ -72,11 +71,16 @@ export default function GovernanceByStatus({
               </Button>
             </div>
           </div>
-          <Image
-            src={pollImage}
-            alt="poll image"
-            className=" max-sm:absolute max-sm:-top-4 max-sm:right-0 max-sm:w-1/3 sm:w-1/4 basis-1/4 z-0 object-contain object-top"
-          />
+          <div className="max-sm:absolute max-sm:-top-4 max-sm:right-0 max-sm:w-1/3 max-w-[30%] sm:w-1/4 basis-1/4 z-0 object-contain object-right">
+            <Image
+              src="https://res.cloudinary.com/duv0g402y/image/upload/v1729532664/governance/y59qkz9bqnwkuqulpkme.png"
+              width={586 / 2}
+              height={388 / 2}
+              layout=""
+              alt="poll image"
+              className=" "
+            />
+          </div>
         </div>
         <div className="flex flex-col-reverse gap-4 pt-10 lg:flex-row">
           <ProposalsList />
