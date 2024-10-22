@@ -30,6 +30,7 @@ export const useUserActiveValidators = (
         cache: new InMemoryCache(),
       });
 
+      // TODO: we should make sure that we run another query if validator exceeds 1000
       const userDeposited = await bgtClient.query({
         query: GetUserValidatorInformation,
         variables: { address: account.toLowerCase() },
