@@ -160,12 +160,12 @@ export const useSwap = ({
       tokenOutDecimals: selectedTo?.decimals ?? 18,
       amount: swapAmount,
     },
-    {
-      opts: {
-        refreshInterval: POLLING.FAST,
-      },
-      isTyping: isTyping,
-    },
+    // {  FIXME: add this back
+    //   opts: {
+    //     refreshInterval: POLLING.FAST,
+    //   },
+    //   isTyping: isTyping,
+    // },
   );
 
   const priceImpactPercentage =
@@ -229,7 +229,7 @@ export const useSwap = ({
     if (swapKind === SwapKind.GIVEN_IN) {
       setToAmount(swapInfo?.formattedReturnAmount);
     } else {
-      setFromAmount(swapInfo?.formattedSwapAmount);
+      setFromAmount(swapInfo?.formattedAmountIn); //FIXME: should be using formattedSwapAmount
     }
   }, [swapInfo, isWrap]);
 

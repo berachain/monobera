@@ -1,146 +1,129 @@
-import { SwapType } from "@balancer-labs/sdk";
 import { balancerVaultAddress } from "@bera/config";
 import useSWR from "swr";
-import { Address, PublicClient, parseUnits } from "viem";
+import { PublicClient, formatUnits, parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
 import { balancerVaultAbi } from "~/abi";
-import { SwapRequest, type DefaultHookOptions } from "~/types";
+import { useBeraJs } from "~/contexts";
+import { SwapRequest } from "~/types";
 
-type IUsePollSwapsArgs = SwapRequest;
-interface IUsePollSwapsOptions extends DefaultHookOptions {
-  isTyping?: boolean | undefined;
+// Define the structure of BatchSwapStep
+export interface IBalancerSwapStep {
+  poolId: string;
+  assetInIndex: bigint;
+  assetOutIndex: bigint;
+  amount: bigint;
+  userData: string;
 }
 
+// SwapType (either exactIn or exactOut)
+enum SwapType {
+  SwapExactIn = 0,
+  SwapExactOut = 1,
+}
+
+// The response type from queryBatchSwap
 export interface SwapInfo {
   batchSwapSteps: IBalancerSwapStep[];
-  formattedSwapAmount: string;
-  formattedReturnAmount: string;
-  formattedAmountIn: string;
   amountIn: bigint;
   returnAmount: bigint;
-  tokenIn: string;
-  tokenOut: string;
-  predictedAmountOut: bigint;
+  formattedAmountIn: string;
+  formattedReturnAmount: string;
   formattedPredictedAmountOut: string;
   error: any;
 }
 
-export interface IBalancerSwapStep {
-  poolId: string;
-  assetInIndex: number;
-  assetOutIndex: number;
-  amountIn: string;
-  amountOut: string;
-  kind: "exactIn" | "exactOut";
-}
-
 /**
- * Polls a pair for the optimal route and amount for a swap using direct contract calls
+ * Polls a pair for a hardcoded pool swap using queryBatchSwap
+ * test with http://localhost:3000/swap/?inputCurrency=WBERA&outputCurrency=HONEY
  */
-export const usePollBalancerSwap = (
-  args: IUsePollSwapsArgs,
-  options?: IUsePollSwapsOptions,
-) => {
-  const poolId =
-    "0xbbc5bde7e68ee3c71ba23f3a04133ad688e41ebf000100000000000000000003"; // WBERA : HONEY
-  const { tokenIn, tokenOut, amount, tokenInDecimals } = args;
+export const usePollBalancerSwap = (args: SwapRequest) => {
   const publicClient = usePublicClient() as PublicClient;
-  const QUERY_KEY = [tokenIn, tokenOut, amount, options?.isTyping];
 
-  return useSWR<SwapInfo | undefined>(
-    QUERY_KEY,
-    async () => {
-      try {
-        if (!publicClient) return undefined;
-        if (options?.isTyping !== undefined && options?.isTyping === true) {
-          return {
-            batchSwapSteps: [],
-            formattedSwapAmount: amount,
-            formattedAmountIn: "0",
-            formattedReturnAmount: "0",
-            amountIn: 0n,
-            returnAmount: 0n,
-            tokenIn,
-            tokenOut,
-            predictedAmountOut: 0n,
-            formattedPredictedAmountOut: "0",
-            error: undefined,
-          };
-        }
+  // Destructure input args
+  const { tokenIn, tokenOut, amount, tokenInDecimals, tokenOutDecimals } = args;
+  const QUERY_KEY = [tokenIn, tokenOut, amount];
+  const { account } = useBeraJs();
 
-        // Convert the input amount to its smallest unit (e.g., wei for ETH)
-        const safeAmount = parseUnits(amount, tokenInDecimals ?? 18).toString();
-
-        // Perform a direct contract call using viem's `readContract` method
-        const result = await publicClient.readContract({
-          address: balancerVaultAddress as Address,
-          abi: balancerVaultAbi,
-          functionName: "queryBatchSwap",
-          args: [
-            SwapType.SwapExactIn, // Swap type (Exact input)
-            [
-              {
-                poolId,
-                assetInIndex: 0,
-                assetOutIndex: 1,
-                amount: safeAmount,
-                userData: "0x",
-              },
-            ],
-            [tokenIn, tokenOut], // TODO (#multiswap): this should be a list of tokens discovered from a getRoute (gqlSorSwapRoute)
-          ],
-        });
-
-        if (!result) {
-          throw new Error("Contract call failed");
-        }
-
-        // Result contains amounts after swap; this should be properly typed
-        const returnAmounts = result as bigint[];
-        const predictedAmountOut = returnAmounts[1]?.toString() || "0";
-
-        return {
-          batchSwapSteps: [
-            {
-              poolId: poolId,
-              assetInIndex: 0,
-              assetOutIndex: 1,
-              amountIn: amount,
-              amountOut: predictedAmountOut,
-              kind: "exactIn",
-            },
-          ],
-          formattedSwapAmount: amount,
-          formattedAmountIn: amount,
-          formattedReturnAmount: predictedAmountOut,
-          amountIn: BigInt(amount),
-          returnAmount: BigInt(predictedAmountOut),
-          tokenIn,
-          tokenOut,
-          predictedAmountOut: BigInt(predictedAmountOut),
-          formattedPredictedAmountOut: predictedAmountOut,
-          error: undefined,
-        };
-      } catch (e) {
-        console.log("Error in swap logic:", e);
-        return {
-          batchSwapSteps: [],
-          formattedSwapAmount: amount,
-          formattedAmountIn: "0",
-          formattedReturnAmount: "0",
-          amountIn: 0n,
-          returnAmount: 0n,
-          tokenIn,
-          tokenOut,
-          predictedAmountOut: 0n,
-          formattedPredictedAmountOut: "0",
-          error: e,
-        };
+  return useSWR<SwapInfo | undefined>(QUERY_KEY, async () => {
+    try {
+      if (!publicClient || !amount || Number(amount) <= 0) {
+        throw new Error("Invalid amount");
       }
-    },
-    {
-      ...options?.opts,
-    },
-  );
+
+      // Convert the amount to BigInt
+      const safeAmount = BigInt(
+        parseUnits(amount, tokenInDecimals ?? 18).toString(),
+      );
+
+      if (safeAmount <= 0n) {
+        throw new Error("Invalid safeAmount");
+      }
+
+      // hardcoded swap step (single step) FIXME: implement getRoute and poll subgraph to construct this.
+      const batchSwapSteps: IBalancerSwapStep[] = [
+        {
+          poolId:
+            "0xbbc5bde7e68ee3c71ba23f3a04133ad688e41ebf000100000000000000000003", // HONEY POOL "34WBERA-33HONEY-33STGUSDC"
+          assetInIndex: 0n,
+          assetOutIndex: 1n,
+          amount: safeAmount,
+          userData: "0x",
+        },
+      ];
+
+      // Define the assets involved in the swap
+      const assets = [tokenIn, tokenOut];
+
+      const options = {
+        sender: account,
+        fromInternalBalance: false,
+        recipient: account,
+        toInternalBalance: false,
+      };
+
+      // Perform the contract call using queryBatchSwap
+      const result = await publicClient.readContract({
+        address: balancerVaultAddress,
+        abi: balancerVaultAbi,
+        functionName: "queryBatchSwap",
+        args: [SwapType.SwapExactIn, batchSwapSteps, assets, options],
+      });
+
+      if (!result) {
+        throw new Error("Query failed");
+      }
+
+      const returnAmounts = result as bigint[];
+
+      // Format the return amount
+      const formattedReturnAmount = formatUnits(
+        returnAmounts[1],
+        tokenOutDecimals || 18,
+      );
+      const formattedAmountIn = formatUnits(safeAmount, tokenInDecimals || 18);
+      const formattedPredictedAmountOut = formattedReturnAmount; // FIXME: this is not correct.
+
+      return {
+        batchSwapSteps,
+        amountIn: safeAmount,
+        returnAmount: returnAmounts[1],
+        formattedAmountIn,
+        formattedReturnAmount,
+        formattedPredictedAmountOut,
+        error: undefined,
+      };
+    } catch (e) {
+      console.error("Error in swap simulation:", e);
+      return {
+        batchSwapSteps: [],
+        amountIn: 0n,
+        returnAmount: 0n,
+        formattedAmountIn: "0",
+        formattedReturnAmount: "0",
+        formattedPredictedAmountOut: "0",
+        error: e,
+      };
+    }
+  });
 };
