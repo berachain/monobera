@@ -6,4 +6,5 @@ export * from "./usePoolRecentSwaps";
 export * from "./usePoolRecentProvisions";
 export * from "./usePoolHistoricalData";
 export * from "./useUserPools";
+export * from "./usePools";
 export * from "./useTotalPoolCount";

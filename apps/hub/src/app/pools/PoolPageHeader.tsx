@@ -6,10 +6,14 @@ import { useSearchParams } from "next/navigation";
 import { cloudinaryUrl } from "@bera/config";
 
 import { PoolSearch } from "./PoolsTable";
+import { usePools } from "@bera/berajs";
 
 export default function PoolPageHeader() {
   const sp = useSearchParams();
   const poolType = sp.get("pool") as "allPools" | "userPools";
+
+  const { data: pools, error } = usePools();
+  console.warn("POOLS", pools, error);
 
   return (
     <div className="mx-auto flex w-full flex-col items-center justify-center gap-8">

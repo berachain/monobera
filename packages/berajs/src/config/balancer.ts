@@ -4,10 +4,12 @@ import {
   BalancerNetworkConfig,
   BalancerSdkConfig,
   ContractAddresses,
+  Network,
 } from "@balancer-labs/sdk";
 import {
   balancerHelperAddress,
   balancerQueriesAddress,
+  balancerSubgraphUrl,
   balancerVaultAddress,
   beraTokenAddress,
   jsonRpcUrl,
@@ -33,7 +35,7 @@ export const balancerNetworkConfig: BalancerNetworkConfig = {
     },
   },
   urls: {
-    subgraph: "https://bartio-bexapi.berachain.com/graphql", // FIXME: this will likely throw CORS
+    subgraph: balancerSubgraphUrl, // FIXME: this will likely throw CORS
   },
   thirdParty: {
     coingecko: {
@@ -42,7 +44,7 @@ export const balancerNetworkConfig: BalancerNetworkConfig = {
     },
   },
   pools: {},
-  chainId: 80084, // FIXME: need to fork Balancer SDK to support Berachain fully (vs modifying locally)
+  chainId: 80084 as Network, // FIXME: need to fork Balancer SDK to support Berachain fully (vs modifying locally)
 
   // multicallBatchSize: 10, // Optional batch size for multicall
   // averageBlockTime: 3, // Optional average block time in seconds

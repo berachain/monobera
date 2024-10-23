@@ -17,5 +17,5 @@
     "esm",
     "cjs",
   ],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "../../apps/hub/src/hooks/useCreateProposal.ts"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs", "../../apps/hub/src/hooks/useCreateProposal.ts", "src/hooks/useEthersProvider.js"]
 }

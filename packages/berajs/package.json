@@ -5,7 +5,9 @@
   "module": "dist/index.js",
   "sideEffects": false,
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "author": "deez",
   "license": "MIT",
   "scripts": {
@@ -19,6 +21,7 @@
   "dependencies": {
     "@apollo/client": "^3.8.8",
     "@balancer-labs/sdk": "^1.1.6",
+    "@balancer/sdk": "^0.28.2",
     "@bera/beracrocswap": "workspace:*",
     "@bera/config": "workspace:*",
     "@bera/graphql": "workspace:*",

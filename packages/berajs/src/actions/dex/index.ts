@@ -16,3 +16,5 @@ export * from "./getPoolRecentProvisions";
 export * from "./getPoolHistoricalData";
 export * from "./searchUserPools";
 export * from "./getGlobalDexStats";
+
+export * from "./balancerClient";

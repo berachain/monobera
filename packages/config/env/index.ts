@@ -240,6 +240,9 @@ export const balancerHelperAddress = process.env
   .NEXT_PUBLIC_BALANCER_HELPERS as Address;
 export const balancerQueriesAddress = process.env
   .NEXT_PUBLIC_BALANCER_QUERIES as Address;
+export const balancerSubgraphUrl = process.env
+  .NEXT_PUBLIC_BALANCER_SUBGRAPH as Address;
+
 // TODO (#): we need subgraph and so on here
 
 // Sentry && Mixpanel

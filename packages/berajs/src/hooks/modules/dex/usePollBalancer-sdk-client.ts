@@ -50,7 +50,7 @@ export const usePollBalancerSwap = (
   const publicClient = usePublicClient();
   const QUERY_KEY = [tokenIn, tokenOut, amount, options?.isTyping];
 
-  return useSWR<SwapInfo | undefined>(
+  return useSWR(
     QUERY_KEY,
     async () => {
       try {
