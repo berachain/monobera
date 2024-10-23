@@ -1,28 +1,11 @@
-import {
-  BalancerNetworkConfig,
-  BalancerSDK,
-  BalancerSdkConfig,
-  ContractAddresses,
-  Network,
-  SwapType,
-} from "@balancer-labs/sdk";
-import {
-  balancerVaultAddress,
-  beraTokenAddress,
-  blocksSubgraphUrl,
-  governanceSubgraphUrl,
-  honeySubgraphUrl,
-  honeyTokenAddress,
-  jsonRpcUrl,
-  multicallAddress,
-  nativeTokenAddress,
-} from "@bera/config";
+import { BalancerSDK } from "@balancer-labs/sdk";
 import { parseFixed } from "@ethersproject/bignumber";
 import { BigNumber } from "ethers";
 import useSWR from "swr";
 import { parseUnits } from "viem";
 import { usePublicClient } from "wagmi";
 
+import { balancerSdkConfig } from "~/config/balancer";
 import { SwapRequest, type DefaultHookOptions } from "~/types";
 
 type IUsePollSwapsArgs = SwapRequest;
@@ -89,48 +72,13 @@ export const usePollBalancerSwap = (
         }
 
         // Custom Balancer network configuration for Berachain
-        // FIXME: this throws TypeError: Cannot read properties of undefined (reading 'addresses')
-        const contractAddresses: ContractAddresses = {
-          vault: balancerVaultAddress,
-          multicall: multicallAddress,
-          poolDataQueries: "0xD64a39b70eB097505e08f438062fd217DFd14291",
-          balancerHelpers: "0x389A5033796c6cF8043AECc12B3ffE5874186697",
-          balancerRelayer: "0x0000000000000000000000000000000000000001", // https://docs.balancer.fi/concepts/advanced/relayers.html#authorizing-a-relayer
-        };
-
-        const customNetworkConfig: BalancerNetworkConfig = {
-          chainId: 80084, // FIXME: need to fork Balancer SDK to support Berachain fully (vs modifying locally)
-          addresses: {
-            contracts: contractAddresses,
-            tokens: {
-              wrappedNativeAsset: beraTokenAddress,
-              bal: nativeTokenAddress,
-            },
-          },
-          urls: {
-            subgraph: "https://bartio-bexapi.berachain.com/graphql", // FIXME: this will likely throw CORS
-          },
-          thirdParty: {
-            coingecko: {
-              nativeAssetId: "berachain-bera", // CoinGecko ID for Berachain's native asset (https://www.coingecko.com/en/coins/berachain-bera)
-              platformId: "berachain-bera",
-            },
-          },
-          pools: {},
-          // multicallBatchSize: 10, // Optional batch size for multicall
-          // averageBlockTime: 3, // Optional average block time in seconds
-        };
 
         const amountBN = parseUnits(amount, tokenInDecimals ?? 18);
         const safeAmount = amountBN.toString();
 
         // Full SDK configuration for Balancer SDK initialization
-        const balancerSdkConfig: BalancerSdkConfig = {
-          network: customNetworkConfig,
-          rpcUrl: jsonRpcUrl,
-          enableLogging: true,
-        };
-        const sdk = new BalancerSDK(balancerSdkConfig);
+
+        const { swaps } = new BalancerSDK(balancerSdkConfig);
 
         // // Single pool swap logic with a known pool
         // const swapInfo = await sdk.swaps.queryBatchSwap({
@@ -148,7 +96,7 @@ export const usePollBalancerSwap = (
         // });
 
         // FIXME: what we really want to do is this: https://docs.balancer.fi/sdk/technical-reference/swaps.html#querybatchswap
-        const { swaps } = sdk; // Swaps module is abstracting SOR
+        // const { swaps } = sdk; // Swaps module is abstracting SOR
         await swaps.fetchPools();
         const maxPools = 4;
 
