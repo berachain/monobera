@@ -380,6 +380,7 @@ export default function PoolPageContent({
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader
+        href={"/pools"}
         title={
           isPoolLoading ? (
             <Skeleton className="h-10 w-40" />

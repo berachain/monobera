@@ -1,9 +1,10 @@
 "use client";
+
 import { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { cn } from "@bera/ui";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
-import { useRouter } from "next/navigation";
 
 export const PoolHeader = ({
   title,
@@ -11,6 +12,7 @@ export const PoolHeader = ({
   actions,
   center,
   className,
+  href,
 }: {
   title: ReactNode;
   subtitles: {
@@ -23,8 +25,18 @@ export const PoolHeader = ({
   actions?: ReactNode;
   center?: boolean;
   className?: string;
+  href?: string;
 }) => {
   const router = useRouter();
+
+  const handleBack = () => {
+    if (href) {
+      router.replace(href);
+    } else if (window.history?.length && window.history.length > 1) {
+      router.back();
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -38,15 +50,17 @@ export const PoolHeader = ({
           !center && "md:items-start",
         )}
       >
-        <Button
-          variant={"ghost"}
-          size="sm"
-          className="flex items-center gap-1"
-          onClick={() => router.back()}
-        >
-          <Icons.arrowLeft className="h-4 w-4" />
-          <div className="text-sm font-medium">Go Back</div>
-        </Button>
+        {(href || (window.history?.length && window.history.length > 1)) && (
+          <Button
+            variant={"ghost"}
+            size="sm"
+            className="flex items-center gap-1"
+            onClick={handleBack}
+          >
+            <Icons.arrowLeft className="h-4 w-4" />
+            <div className="text-sm font-medium">Go Back</div>
+          </Button>
+        )}
         <span
           className={cn(
             "flex w-full justify-center gap-4 text-center text-2xl font-semibold md:text-left",
