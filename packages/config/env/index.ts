@@ -236,6 +236,10 @@ export const crocRouterEndpoint = process.env
 // Balancer
 export const balancerVaultAddress = process.env
   .NEXT_PUBLIC_BALANCER_VAULT_ADDRESS as Address;
+export const balancerHelperAddress = process.env
+  .NEXT_PUBLIC_BALANCER_HELPERS as Address;
+export const balancerQueriesAddress = process.env
+  .NEXT_PUBLIC_BALANCER_QUERIES as Address;
 // TODO (#): we need subgraph and so on here
 
 // Sentry && Mixpanel
