@@ -10,7 +10,7 @@ import {
   DefaultHookOptions,
   DefaultHookReturnType,
 } from "~/types/global";
-import { getAllowances } from "../actions/dex";
+import { getAllowances } from "../../actions/dex";
 
 export type UsePollAllowancesArgs = {
   spender: string;
