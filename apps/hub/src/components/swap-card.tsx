@@ -30,7 +30,7 @@ import {
   useBreakpoint,
   useTxn,
 } from "@bera/shared-ui";
-import { AddTokenDialog } from "@bera/shared-ui/src/add-token-dialog";
+import { AddTokenDialog } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert, AlertDescription, AlertTitle } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";

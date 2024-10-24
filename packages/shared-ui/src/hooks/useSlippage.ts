@@ -3,12 +3,19 @@ import { useLocalStorage } from "usehooks-ts";
 
 import {
   DEFAULT_SLIPPAGE,
+  SLIPPAGE_DEGEN_VALUE,
   SLIPPAGE_MODE,
   SLIPPAGE_TOLERANCE_TYPE,
   SLIPPAGE_TOLERANCE_VALUE,
-  SLIPPAGE_DEGEN_VALUE,
 } from "../settings";
 
+export {
+  DEFAULT_SLIPPAGE,
+  SLIPPAGE_DEGEN_VALUE,
+  SLIPPAGE_MODE,
+  SLIPPAGE_TOLERANCE_TYPE,
+  SLIPPAGE_TOLERANCE_VALUE,
+} from "../settings";
 export const useSlippage = () => {
   const [slippageMode] = useLocalStorage<SLIPPAGE_MODE>(
     SLIPPAGE_TOLERANCE_TYPE,

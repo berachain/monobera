@@ -13,8 +13,8 @@ import {
   tradingContractAddress,
 } from "@bera/config";
 import { ActionButton, TokenIcon, useTxn } from "@bera/shared-ui";
-import { useOctTxn } from "@bera/shared-ui/src/hooks";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { useOctTxn } from "@bera/shared-ui";
+import { Identicon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Alert } from "@bera/ui/alert";
 import { Button } from "@bera/ui/button";

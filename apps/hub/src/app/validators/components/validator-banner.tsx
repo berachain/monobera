@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { truncateHash, useBeraJs, useSelectedValidator } from "@bera/berajs";
 import { ValidatorIcon } from "@bera/shared-ui";
-import { getHubValidatorPath } from "@bera/shared-ui/src/utils/getHubUrls";
+import { getHubValidatorPath } from "@bera/shared-ui";
 import { Icons } from "@bera/ui/icons";
 
 export const ValidatorBanner = () => {

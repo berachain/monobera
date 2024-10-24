@@ -14,7 +14,7 @@ import {
   TokenInput,
   useTxn,
 } from "@bera/shared-ui";
-import Identicon from "@bera/shared-ui/src/identicon";
+import { Identicon } from "@bera/shared-ui";
 import { cn } from "@bera/ui";
 import { Tabs, TabsList, TabsTrigger } from "@bera/ui/tabs";
 import {
