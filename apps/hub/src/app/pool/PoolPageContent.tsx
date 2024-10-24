@@ -8,6 +8,7 @@ import {
   truncateHash,
   useBeraJs,
   useBgtInflation,
+  usePool,
   usePoolHistoricalData,
   usePoolRecentProvisions,
   usePoolRecentSwaps,
@@ -258,128 +259,131 @@ export default function PoolPageContent({
 }: {
   shareAddress: Address;
 }) {
-  const { data: pool, isLoading: isPoolLoading } =
-    useSelectedPool(shareAddress);
-
-  const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
-    pool,
+  const { data: pool, isLoading: isPoolLoading } = usePool({
+    id: shareAddress,
   });
 
-  const { data: provisions, isLoading: isRecentProvisionsLoading } =
-    usePoolRecentProvisions({ pool });
+  // const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
+  //   pool,
+  // });
 
-  const isLoading = isRecentSwapsLoading || isRecentProvisionsLoading;
+  // const { data: provisions, isLoading: isRecentProvisionsLoading } =
+  //   usePoolRecentProvisions({ pool });
 
-  const combinedEvents: ISwapOrProvision[] | undefined = useMemo(() => {
-    if (!swaps || !provisions) return undefined;
-    return [...swaps, ...provisions].sort((a, b) => b.time - a.time);
-  }, [swaps, provisions]);
+  const isLoading = isPoolLoading;
+
+  // const combinedEvents: ISwapOrProvision[] | undefined = useMemo(() => {
+  //   if (!swaps || !provisions) return undefined;
+  //   return [...swaps, ...provisions].sort((a, b) => b.time - a.time);
+  // }, [swaps, provisions]);
   const [selectedTab, setSelectedTab] = useState(Selection.AllTransactions);
-  const {
-    allData,
-    allDataSize,
-    setAllDataSize,
-    isAllDataLoadingMore,
-    isAllDataReachingEnd,
-    swapData,
-    swapDataSize,
-    setSwapDataSize,
-    isSwapDataLoadingMore,
-    isSwapDataReachingEnd,
-    provisionData,
-    provisionDataSize,
-    setProvisionDataSize,
-    isProvisionDataLoadingMore,
-    isProvisionDataReachingEnd,
-  } = usePoolEvents({
-    pool,
-    swaps,
-    provisions,
-    combinedEvents,
-  });
+  // const {
+  //   allData,
+  //   allDataSize,
+  //   setAllDataSize,
+  //   isAllDataLoadingMore,
+  //   isAllDataReachingEnd,
+  //   swapData,
+  //   swapDataSize,
+  //   setSwapDataSize,
+  //   isSwapDataLoadingMore,
+  //   isSwapDataReachingEnd,
+  //   provisionData,
+  //   provisionDataSize,
+  //   setProvisionDataSize,
+  //   isProvisionDataLoadingMore,
+  //   isProvisionDataReachingEnd,
+  // } = usePoolEvents({
+  //   pool,
+  //   swaps,
+  //   provisions,
+  //   combinedEvents,
+  // });
 
-  const getLoadMoreButton = () => {
-    if (selectedTab === Selection.AllTransactions) {
-      return (
-        <>
-          {allData.length === 0 ? (
-            false
-          ) : (
-            <Button
-              onClick={() => setAllDataSize(allDataSize + 1)}
-              disabled={isAllDataLoadingMore || isAllDataReachingEnd}
-              variant="outline"
-            >
-              {isAllDataLoadingMore
-                ? "Loading..."
-                : isAllDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
-            </Button>
-          )}
-        </>
-      );
-    }
-    if (selectedTab === Selection.Swaps) {
-      return (
-        <>
-          {swapData.length === 0 ? (
-            false
-          ) : (
-            <Button
-              onClick={() => setSwapDataSize(swapDataSize + 1)}
-              disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
-              variant="outline"
-            >
-              {isSwapDataLoadingMore
-                ? "Loading..."
-                : isSwapDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
-            </Button>
-          )}
-        </>
-      );
-    }
-    if (selectedTab === Selection.AddsWithdrawals) {
-      return (
-        <>
-          {provisionData.length === 0 ? (
-            false
-          ) : (
-            <Button
-              onClick={() => setProvisionDataSize(provisionDataSize + 1)}
-              disabled={
-                isProvisionDataLoadingMore || isProvisionDataReachingEnd
-              }
-              variant="outline"
-            >
-              {isProvisionDataLoadingMore
-                ? "Loading..."
-                : isProvisionDataReachingEnd
-                  ? "No more transactions"
-                  : "Load more"}
-            </Button>
-          )}
-        </>
-      );
-    }
-  };
+  // const getLoadMoreButton = () => {
+  //   if (selectedTab === Selection.AllTransactions) {
+  //     return (
+  //       <>
+  //         {allData.length === 0 ? (
+  //           false
+  //         ) : (
+  //           <Button
+  //             onClick={() => setAllDataSize(allDataSize + 1)}
+  //             disabled={isAllDataLoadingMore || isAllDataReachingEnd}
+  //             variant="outline"
+  //           >
+  //             {isAllDataLoadingMore
+  //               ? "Loading..."
+  //               : isAllDataReachingEnd
+  //                 ? "No more transactions"
+  //                 : "Load more"}
+  //           </Button>
+  //         )}
+  //       </>
+  //     );
+  //   }
+  //   if (selectedTab === Selection.Swaps) {
+  //     return (
+  //       <>
+  //         {swapData.length === 0 ? (
+  //           false
+  //         ) : (
+  //           <Button
+  //             onClick={() => setSwapDataSize(swapDataSize + 1)}
+  //             disabled={isSwapDataLoadingMore || isSwapDataReachingEnd}
+  //             variant="outline"
+  //           >
+  //             {isSwapDataLoadingMore
+  //               ? "Loading..."
+  //               : isSwapDataReachingEnd
+  //                 ? "No more transactions"
+  //                 : "Load more"}
+  //           </Button>
+  //         )}
+  //       </>
+  //     );
+  //   }
+  //   if (selectedTab === Selection.AddsWithdrawals) {
+  //     return (
+  //       <>
+  //         {provisionData.length === 0 ? (
+  //           false
+  //         ) : (
+  //           <Button
+  //             onClick={() => setProvisionDataSize(provisionDataSize + 1)}
+  //             disabled={
+  //               isProvisionDataLoadingMore || isProvisionDataReachingEnd
+  //             }
+  //             variant="outline"
+  //           >
+  //             {isProvisionDataLoadingMore
+  //               ? "Loading..."
+  //               : isProvisionDataReachingEnd
+  //                 ? "No more transactions"
+  //                 : "Load more"}
+  //           </Button>
+  //         )}
+  //       </>
+  //     );
+  //   }
+  // };
 
   const { isReady, isConnected, isWrongNetwork } = useBeraJs();
 
-  const { data: userPositionBreakdown, isLoading: isPositionBreakdownLoading } =
-    usePoolUserPosition({
-      pool,
-    });
+  const userPositionBreakdown = undefined;
 
-  const { data: poolHistoryData, isLoading: isPoolHistoryLoading } =
-    usePoolHistoricalData({
-      poolId: pool?.id,
-    });
+  // const { data: userPositionBreakdown, isLoading: isPositionBreakdownLoading } =
+  //   usePoolUserPosition({
+  //     pool,
+  //   });
 
-  const poolHistory = poolHistoryData;
-  const timeCreated = pool?.timeCreate;
+  // const { data: poolHistoryData, isLoading: isPoolHistoryLoading } =
+  //   usePoolHistoricalData({
+  //     poolId: pool?.id,
+  //   });
+
+  // const poolHistory = poolHistoryData;
+  // const timeCreated = pool?.timeCreate;
 
   const { data: bgtInflation } = useBgtInflation();
 
@@ -393,7 +397,7 @@ export default function PoolPageContent({
           ) : (
             <>
               <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
-              {pool?.poolName}
+              {pool?.name}
             </>
           )
         }
@@ -420,7 +424,11 @@ export default function PoolPageContent({
             content: isPoolLoading ? (
               <Skeleton className="h-4 w-8" />
             ) : (
-              <>{pool?.feeRate.toFixed(2)}%</>
+              <>
+                {
+                  // pool?.feeRate?.toFixed(2)
+                }%
+              </>
             ),
             color: "success",
           },
@@ -429,9 +437,9 @@ export default function PoolPageContent({
             content: isPoolLoading ? (
               <Skeleton className="h-4 w-16" />
             ) : (
-              <>{truncateHash(pool?.shareAddress ?? "")}</>
+              <>{truncateHash(pool?.address ?? "")}</>
             ),
-            externalLink: `${blockExplorerUrl}/address/${pool?.shareAddress}`,
+            externalLink: `${blockExplorerUrl}/address/${pool?.address}`,
           },
         ]}
         actions={
@@ -457,19 +465,19 @@ export default function PoolPageContent({
       ) : (
         <BgtStationBanner
           isHub
-          receiptTokenAddress={pool?.shareAddress as Address}
-          vaultAddress={pool?.vaultAddress as Address}
+          receiptTokenAddress={pool?.address as Address}
+          vaultAddress={pool?.id as Address}
         />
       )}
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">
         <div className="col-span-5 flex w-full flex-col gap-4 lg:col-span-3">
-          <PoolChart
+          {/* <PoolChart
             pool={pool}
             currentTvl={pool?.tvlUsd}
             historicalData={poolHistory}
             timeCreated={timeCreated}
             isLoading={isPoolHistoryLoading}
-          />
+          /> */}
           <div className="mb-3 grid grid-cols-2 gap-4 lg:grid-cols-4">
             <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
@@ -478,7 +486,10 @@ export default function PoolPageContent({
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.tvlUsd ?? 0} symbol="USD" />
+                <FormattedNumber
+                  value={pool?.totalLiquidity ?? 0}
+                  symbol="USD"
+                />
               </div>
             </Card>
             <Card className="px-4 py-2">
@@ -498,7 +509,7 @@ export default function PoolPageContent({
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.fees24h ?? 0} symbol="USD" />
+                {/* <FormattedNumber value={pool?.fees24h ?? 0} symbol="USD" /> */}
               </div>{" "}
             </Card>
             <Card className="px-4 py-2">
@@ -508,14 +519,14 @@ export default function PoolPageContent({
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold text-warning-foreground">
-                <FormattedNumber
+                {/* <FormattedNumber
                   value={calculateApy(
                     pool?.wtv ?? "0",
                     bgtInflation?.usdPerYear ?? 0,
                   )}
                   colored
                   percent
-                />
+                /> */}
               </div>
             </Card>
           </div>
@@ -525,11 +536,11 @@ export default function PoolPageContent({
             <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
               Pool Liquidity
               <div className="text-2xl">
-                {isLoading || !pool?.tvlUsd ? (
+                {/* {isLoading || !pool?.tvlUsd ? (
                   <Skeleton className="h-10 w-20" />
                 ) : (
                   <FormattedNumber value={pool?.tvlUsd ?? 0} symbol="USD" />
-                )}
+                )} */}
               </div>
             </div>
             <TokenView
@@ -538,22 +549,22 @@ export default function PoolPageContent({
                 !pool
                   ? []
                   : [
-                      {
-                        address: pool.baseInfo.address,
-                        symbol: pool.baseInfo.symbol,
-                        value: pool.baseTokens,
-                        valueUSD:
-                          parseFloat(pool.baseTokens) *
-                          parseFloat(pool?.baseInfo?.usdValue ?? "0"),
-                      },
-                      {
-                        address: pool.quoteInfo.address,
-                        symbol: pool.quoteInfo.symbol,
-                        value: pool.quoteTokens,
-                        valueUSD:
-                          parseFloat(pool.quoteTokens) *
-                          parseFloat(pool?.quoteInfo?.usdValue ?? "0"),
-                      },
+                      // {
+                      //   address: pool.baseInfo.address,
+                      //   symbol: pool.baseInfo.symbol,
+                      //   value: pool.baseTokens,
+                      //   valueUSD:
+                      //     parseFloat(pool.baseTokens) *
+                      //     parseFloat(pool?.baseInfo?.usdValue ?? "0"),
+                      // },
+                      // {
+                      //   address: pool.quoteInfo.address,
+                      //   symbol: pool.quoteInfo.symbol,
+                      //   value: pool.quoteTokens,
+                      //   valueUSD:
+                      //     parseFloat(pool.quoteTokens) *
+                      //     parseFloat(pool?.quoteInfo?.usdValue ?? "0"),
+                      // },
                     ]
               }
             />
@@ -568,7 +579,7 @@ export default function PoolPageContent({
                       My pool balance
                     </h3>
                     <div className="text-2xl">
-                      {isReady ? (
+                      {/* {isReady ? (
                         isPositionBreakdownLoading ? (
                           <Skeleton className="h-[32px] w-[150px]" />
                         ) : (
@@ -581,38 +592,38 @@ export default function PoolPageContent({
                         )
                       ) : (
                         <Skeleton className="h-[32px] w-[150px]" />
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div className="mt-4 lg:mt-8">
                     <TokenView
-                      isLoading={isPositionBreakdownLoading}
+                      isLoading={true}
                       tokens={
                         !pool
                           ? []
                           : [
-                              {
-                                address: pool.baseInfo.address,
-                                symbol: pool.baseInfo.symbol,
-                                value:
-                                  truncateFloat(
-                                    userPositionBreakdown?.formattedBaseAmount,
-                                    6,
-                                  )?.toString() ?? "0",
-                                valueUSD:
-                                  userPositionBreakdown?.baseHoneyValue ?? "0",
-                              },
-                              {
-                                address: pool.quoteInfo.address,
-                                symbol: pool.quoteInfo.symbol,
-                                value:
-                                  truncateFloat(
-                                    userPositionBreakdown?.formattedQuoteAmount,
-                                    6,
-                                  )?.toString() ?? "0",
-                                valueUSD:
-                                  userPositionBreakdown?.quoteHoneyValue ?? "0",
-                              },
+                              // {
+                              //   address: pool.baseInfo.address,
+                              //   symbol: pool.baseInfo.symbol,
+                              //   value:
+                              //     truncateFloat(
+                              //       userPositionBreakdown?.formattedBaseAmount,
+                              //       6,
+                              //     )?.toString() ?? "0",
+                              //   valueUSD:
+                              //     userPositionBreakdown?.baseHoneyValue ?? "0",
+                              // },
+                              // {
+                              //   address: pool.quoteInfo.address,
+                              //   symbol: pool.quoteInfo.symbol,
+                              //   value:
+                              //     truncateFloat(
+                              //       userPositionBreakdown?.formattedQuoteAmount,
+                              //       6,
+                              //     )?.toString() ?? "0",
+                              //   valueUSD:
+                              //     userPositionBreakdown?.quoteHoneyValue ?? "0",
+                              // },
                             ]
                       }
                     />
@@ -627,7 +638,7 @@ export default function PoolPageContent({
       <section>
         <Tabs
           defaultValue={Selection.AllTransactions}
-          onValueChange={(value: string) => setSelectedTab(value as Selection)}
+          // onValueChange={(value: string) => setSelectedTab(value as Selection)}
         >
           <TabsList className="w-full">
             <TabsTrigger
@@ -654,26 +665,26 @@ export default function PoolPageContent({
               value={Selection.AllTransactions}
               className="mt-0 overflow-x-auto"
             >
-              <EventTable pool={pool} events={allData} isLoading={isLoading} />
+              {/* <EventTable pool={pool} events={allData} isLoading={isLoading} /> */}
             </TabsContent>
             <TabsContent
               value={Selection.Swaps}
               className="mt-0 overflow-x-auto"
             >
-              <EventTable pool={pool} events={swapData} isLoading={isLoading} />
+              {/* <EventTable pool={pool} events={swapData} isLoading={isLoading} /> */}
             </TabsContent>
             <TabsContent
               value={Selection.AddsWithdrawals}
               className="mt-0 overflow-x-auto"
             >
-              <EventTable
+              {/* <EventTable
                 pool={pool}
                 events={provisionData}
                 isLoading={isLoading}
-              />
+              /> */}
             </TabsContent>
           </Card>
-          <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div>
+          {/* <div className="mt-4 flex justify-center">{getLoadMoreButton()}</div> */}
         </Tabs>
       </section>
     </div>

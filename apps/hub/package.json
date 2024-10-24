@@ -13,6 +13,7 @@
     "with-env": "dotenv -e ../../.env -c --"
   },
   "dependencies": {
+    "@balancer-labs/sdk": "^1.1.6",
     "@bera/beracrocswap": "workspace:*",
     "@bera/berajs": "workspace:*",
     "@bera/config": "workspace:*",

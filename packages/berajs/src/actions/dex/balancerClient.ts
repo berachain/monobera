@@ -7,6 +7,7 @@ import {
 import {
   balancerHelperAddress,
   balancerQueriesAddress,
+  balancerRelayerAddress,
   balancerSubgraphUrl,
   balancerVaultAddress,
   beraTokenAddress,
@@ -31,7 +32,7 @@ BALANCER_NETWORK_CONFIG[chainId as Network] = {
       vault: balancerVaultAddress,
       balancerHelpers: balancerHelperAddress,
       balancerMinter: undefined, // "0x239e55f427d44c3cc793f49bfb507ebe76638a2b",
-      balancerRelayer: "0x0000000000000000000000000000000000000000", // "0xfea793aa415061c483d2390414275ad314b3f621",
+      balancerRelayer: balancerRelayerAddress, // "0xfea793aa415061c483d2390414275ad314b3f621",
       gaugeController: undefined, // "0xc128468b7ce63ea702c1f104d55a2566b13d3abd",
       feeDistributor: undefined, // "0xd3cf852898b21fc233251427c2dc93d3d604f3bb",
       protocolFeePercentagesProvider:

@@ -7,12 +7,7 @@ import { balancerSdkConfig } from "~/config";
 export const usePools = () => {
   return useSWR("pools", async () => {
     try {
-      console.log("POOL CONFIG", balancerSdkConfig);
-
-      const pools = await balancerClient.pools.all();
-
-      console.log("POOLS", { pools });
-      return pools;
+      return await balancerClient.pools.all();
     } catch (error) {
       console.error("USEPOOLSERROR", error);
       throw error;

@@ -240,6 +240,8 @@ export const balancerHelperAddress = process.env
   .NEXT_PUBLIC_BALANCER_HELPERS as Address;
 export const balancerQueriesAddress = process.env
   .NEXT_PUBLIC_BALANCER_QUERIES as Address;
+export const balancerRelayerAddress = process.env
+  .NEXT_PUBLIC_BALANCER_RELAYER as Address;
 export const balancerSubgraphUrl = process.env
   .NEXT_PUBLIC_BALANCER_SUBGRAPH as Address;
 

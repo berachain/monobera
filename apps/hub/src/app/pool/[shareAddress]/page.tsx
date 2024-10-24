@@ -25,9 +25,10 @@ export default async function PoolPage({
   }
 
   try {
-    if (!isAddress(params.shareAddress)) {
-      notFound();
-    }
+    // if (!isAddress(params.shareAddress)) {
+    //   notFound();
+    // }
+
     return <PoolPageContent shareAddress={params.shareAddress as Address} />;
   } catch (e) {
     console.log(`Error fetching pools: ${e}`);
