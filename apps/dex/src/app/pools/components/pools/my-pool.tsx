@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useBeraJs, useUserPools } from "@bera/berajs";
+import { useBeraJs, useUserPools, usePollGauges } from "@bera/berajs";
 import { ConnectWalletBear, DataTable, NotFoundBear } from "@bera/shared-ui";
 
 import { getUserPoolColumns } from "~/components/pools-table-columns";
@@ -12,6 +12,9 @@ export default function MyPool({ keyword }: { keyword: string }) {
 
   const [hasLoaded, setHasLoaded] = useState<any>(false);
   const [userPools, setUserPools] = useState<any>(undefined);
+  const { gaugeDictionary } = usePollGauges({
+    pageSize: 9999,
+  });
   const [sorting, setSorting] = useState<any>([
     {
       id: "estimatedHoneyValue",
@@ -49,7 +52,7 @@ export default function MyPool({ keyword }: { keyword: string }) {
         <div className="flex w-full flex-col items-center justify-center gap-4">
           <DataTable
             data={userPools}
-            columns={getUserPoolColumns(refresh)}
+            columns={getUserPoolColumns(refresh, gaugeDictionary)}
             title={`My Pools (${userPools?.length ?? "0"})`}
             onRowClick={(row: any) => {
               if (!row?.original) return;
