@@ -2,14 +2,15 @@
 
 import Link from "next/link";
 import {
-  type IUserPool,
-  type PoolV2,
-  useSubgraphTokenInformation,
-  TransactionActionType,
   ADDRESS_ZERO,
   BERA_VAULT_REWARDS_ABI,
+  TransactionActionType,
   useBeraJs,
+  useSubgraphTokenInformation,
+  type IUserPool,
+  type PoolV2,
 } from "@bera/berajs";
+import { beraTokenAddress, bgtUrl } from "@bera/config";
 import {
   DataTableColumnHeader,
   FormattedNumber,
@@ -21,10 +22,13 @@ import { Badge } from "@bera/ui/badge";
 import { Button } from "@bera/ui/button";
 import { Icons } from "@bera/ui/icons";
 import { type ColumnDef } from "@tanstack/react-table";
+import { Address } from "viem";
 
 import { getPoolAddLiquidityUrl } from "~/app/pools/fetchPools";
-import { beraTokenAddress, bgtUrl } from "@bera/config";
-import { Address } from "viem";
+
+type GaugeType = {
+  vaultAddress: string;
+};
 
 const PoolSummary = ({ pool }: { pool: PoolV2 }) => {
   return (
@@ -188,6 +192,7 @@ export const columns: ColumnDef<PoolV2>[] = [
 
 export const getUserPoolColumns = (
   refresh: () => void,
+  gaugeDictionary: Record<string, GaugeType>,
 ): ColumnDef<IUserPool>[] => {
   return [
     {
@@ -252,7 +257,11 @@ export const getUserPoolColumns = (
       ),
       cell: ({ row }) => (
         <div className="flex items-center text-sm">
-          {row.original.vaultAddress ? (
+          {row.original.vaultAddress &&
+          Object.keys(gaugeDictionary).some(
+            (key) =>
+              key.toLowerCase() === row.original.vaultAddress?.toLowerCase(),
+          ) ? (
             <FormattedNumber
               value={
                 row.original?.userPosition?.estimatedDepositedHoneyValue ?? 0
@@ -282,7 +291,11 @@ export const getUserPoolColumns = (
         });
         return (
           <div className="flex items-center text-sm">
-            {row.original.vaultAddress ? (
+            {row.original.vaultAddress &&
+            Object.keys(gaugeDictionary).some(
+              (key) =>
+                key.toLowerCase() === row.original.vaultAddress?.toLowerCase(),
+            ) ? (
               row.original.userPosition?.estimatedDepositedHoneyValue !== 0 ? (
                 <div className="flex flex-col gap-0">
                   <FormattedNumber
@@ -301,13 +314,13 @@ export const getUserPoolColumns = (
                   />
                 </div>
               ) : (
-                <div className="w-40 flex flex-col">
+                <div className="flex w-40 flex-col">
                   <span className="font-medium">
                     {" "}
                     Deposit balance in vault to start earning rewards
                   </span>
                   <div className="flex flex-row items-center text-success-foreground">
-                    <Icons.bgt className="w-4 h-4 mr-1" />
+                    <Icons.bgt className="mr-1 h-4 w-4" />
                     <FormattedNumber value={row.original.bgtApy ?? 0} compact />
                     % APY
                   </div>
@@ -340,7 +353,11 @@ export const getUserPoolColumns = (
         });
         return (
           <div className="w-100 flex flex-row items-center justify-center gap-1">
-            {row.original.vaultAddress ? (
+            {row.original.vaultAddress &&
+            Object.keys(gaugeDictionary).some(
+              (key) =>
+                key.toLowerCase() === row.original.vaultAddress?.toLowerCase(),
+            ) ? (
               row.original.userPosition?.estimatedDepositedHoneyValue !== 0 ? (
                 <Button
                   size="sm"

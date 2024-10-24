@@ -182,10 +182,10 @@ export const AddLiquiditySuccess = ({ onClose, open = false, pool }: any) => {
           <span className="inline-flex items-center">
             <Icons.bgt className="h-3 w-3 mx-1" />
           </span>
-          BGT Rewards
+          BGT Rewards if the pool has a gauge vault
         </span>
         <Link
-          href={`${bgtUrl}/gauge/${pool.vaultAddress}`}
+          href={`/pool/${pool.shareAddress}`}
           onClick={(e) => e.stopPropagation()}
           className="w-full"
         >

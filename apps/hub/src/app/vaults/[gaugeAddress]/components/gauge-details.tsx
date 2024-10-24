@@ -38,6 +38,7 @@ export const GaugeDetails = ({ gaugeAddress }: { gaugeAddress: Address }) => {
       {gauge ? (
         <div className="flex flex-col gap-11">
           <PoolHeader
+            href={"/gauge"}
             title={
               <>
                 <GaugeIcon

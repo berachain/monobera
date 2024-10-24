@@ -11,6 +11,7 @@ import {
   usePoolRecentProvisions,
   usePoolRecentSwaps,
   usePoolUserPosition,
+  usePollGauges,
   type IProvision,
   type ISwaps,
   type PoolV2,
@@ -50,6 +51,11 @@ import {
 import { PoolChart } from "./PoolChart";
 import { usePoolEvents } from "./usePoolEvents";
 import { useSelectedPool } from "~/hooks/useSelectedPool";
+
+type GaugeType = {
+  vaultAddress: string;
+  // Add other properties of the gauge object here
+};
 
 const getTokenDisplay = (
   event: ISwapOrProvision | ISwaps | IProvision,
@@ -377,9 +383,27 @@ export default function PoolPageContent({
   const poolHistory = poolHistoryData;
   const timeCreated = pool?.timeCreate;
 
+  const {
+    gaugeDictionary,
+    gaugeCounts,
+    gaugeList,
+    isLoading: isGaugesLoading,
+    ...rest
+  } = usePollGauges({
+    pageSize: 9999,
+  });
+
+  const gauge: GaugeType | undefined = (() => {
+    const key = Object.keys(gaugeDictionary).find(
+      (key) => key.toLowerCase() === pool?.vaultAddress?.toLowerCase(),
+    );
+    return key ? gaugeDictionary[key] : undefined;
+  })();
+
   return (
     <div className="flex flex-col gap-8">
       <PoolHeader
+        href={"/pools"}
         title={
           isPoolLoading ? (
             <Skeleton className="h-10 w-40" />
@@ -442,12 +466,12 @@ export default function PoolPageContent({
         }
       />
       <Separator />
-      {isPoolLoading ? (
+      {isPoolLoading && isGaugesLoading ? (
         <Skeleton className="h-16 w-full" />
       ) : (
         <BgtStationBanner
           receiptTokenAddress={pool?.shareAddress as Address}
-          vaultAddress={pool?.vaultAddress as Address}
+          vaultAddress={gauge?.vaultAddress as Address}
         />
       )}
       <div className="flex w-full grid-cols-5 flex-col gap-4 lg:grid">
