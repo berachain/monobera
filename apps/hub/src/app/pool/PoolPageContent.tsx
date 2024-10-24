@@ -259,11 +259,12 @@ export default function PoolPageContent({
 }: {
   shareAddress: Address;
 }) {
-  const { data: pool, isLoading: isPoolLoading } = usePool({
+  const { data, isLoading: isPoolLoading } = usePool({
     id: shareAddress,
   });
 
-  console.log("POOL", pool);
+  const { v2Pool: pool, v3Pool } = data ?? {};
+  console.log("POOL", pool, v3Pool);
 
   // const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
   //   pool,
@@ -416,18 +417,19 @@ export default function PoolPageContent({
         subtitles={[
           {
             title: "BGT APY",
-            content: isPoolLoading ? (
-              <Skeleton className="h-4 w-8" />
-            ) : (
-              <FormattedNumber
-                value={calculateApy(
-                  pool?.wtv ?? "0",
-                  bgtInflation?.usdPerYear ?? 0,
-                )}
-                colored
-                percent
-              />
-            ),
+            content: null,
+            // content: isPoolLoading ? (
+            //   <Skeleton className="h-4 w-8" />
+            // ) : (
+            //   <FormattedNumber
+            //     value={calculateApy(
+            //       pool?.wtv ?? "0",
+            //       bgtInflation?.usdPerYear ?? 0,
+            //     )}
+            //     colored
+            //     percent
+            //   />
+            // ),
             color: "warning",
             tooltip: <ApyTooltip />,
           },

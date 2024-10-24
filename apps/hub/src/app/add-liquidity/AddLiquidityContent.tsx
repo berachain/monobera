@@ -50,9 +50,11 @@ interface IAddLiquidityContent {
 export default function AddLiquidityContent({
   shareAddress,
 }: IAddLiquidityContent) {
-  const { data: pool, isLoading } = usePool({ id: shareAddress });
+  const { data, isLoading } = usePool({ id: shareAddress });
 
-  console.log("POOL", pool);
+  const { v2Pool: pool, v3Pool } = data ?? {};
+
+  console.log("POOL", pool, v3Pool);
 
   useEffect(() => {
     if (!pool && !isLoading) {
@@ -191,7 +193,7 @@ export default function AddLiquidityContent({
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <TokenList>
-            {pool?.tokens.map((token) => (
+            {pool?.tokens?.map((token) => (
               <TokenInput
                 key={token?.address}
                 selected={token}
