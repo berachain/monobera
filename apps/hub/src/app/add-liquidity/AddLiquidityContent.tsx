@@ -8,6 +8,7 @@ import {
   bexAbi,
   useGasData,
   usePollWalletBalances,
+  usePool,
   type Token,
 } from "@bera/berajs";
 import { getAddLiquidityPayload } from "@bera/berajs/actions";
@@ -40,6 +41,7 @@ import { useAddLiquidity } from "./useAddLiquidity";
 import { useSelectedPool } from "~/hooks/useSelectedPool";
 import { Skeleton } from "@bera/ui/skeleton";
 import { AddLiquiditySuccess } from "@bera/shared-ui/src/txn-modals";
+import Link from "next/link";
 
 interface IAddLiquidityContent {
   shareAddress: Address;
@@ -48,45 +50,47 @@ interface IAddLiquidityContent {
 export default function AddLiquidityContent({
   shareAddress,
 }: IAddLiquidityContent) {
-  const { data: pool, isLoading } = useSelectedPool(shareAddress);
+  const { data: pool, isLoading } = usePool({ id: shareAddress });
+
+  console.log("POOL", pool);
+
   useEffect(() => {
     if (!pool && !isLoading) {
       notFound();
     }
   }, [pool, isLoading]);
 
-  const router = useRouter();
-  const {
-    baseToken,
-    quoteToken,
-    poolPrice,
-    error,
-    previewOpen,
-    tokenInputs,
-    needsApproval,
-    areAllInputsEmpty,
-    isBaseInput,
-    setIsBaseInput,
-    refreshAllowances,
-    reset,
-    updateTokenAmount,
-    updateTokenExceeding,
-    setPreviewOpen,
-    beraToken,
-    wBeraToken,
-    isNativeBera,
-    setIsNativeBera,
-  } = useAddLiquidity(pool);
+  // const {
+  //   baseToken,
+  //   quoteToken,
+  //   poolPrice,
+  //   error,
+  //   previewOpen,
+  //   tokenInputs,
+  //   needsApproval,
+  //   areAllInputsEmpty,
+  //   isBaseInput,
+  //   setIsBaseInput,
+  //   refreshAllowances,
+  //   reset,
+  //   updateTokenAmount,
+  //   updateTokenExceeding,
+  //   setPreviewOpen,
+  //   beraToken,
+  //   wBeraToken,
+  //   isNativeBera,
+  //   setIsNativeBera,
+  // } = useAddLiquidity(pool);
 
   const { refresh } = usePollWalletBalances();
   const { write, ModalPortal } = useTxn({
-    message: `Add liquidity to ${pool?.poolName}`,
+    message: `Add liquidity to ${pool?.name}`,
     onSuccess: () => {
-      reset();
+      // reset();
       refresh();
     },
-    CustomSuccessModal: pool?.vaultAddress ? AddLiquiditySuccess : undefined,
-    customSuccessModalProps: pool?.vaultAddress
+    CustomSuccessModal: pool?.address ? AddLiquiditySuccess : undefined,
+    customSuccessModalProps: pool?.address
       ? {
           pool: pool,
         }
@@ -94,182 +98,57 @@ export default function AddLiquidityContent({
     actionType: TransactionActionType.ADD_LIQUIDITY,
   });
 
-  const baseCost = useMemo(() => {
-    if (!poolPrice) {
-      return 0;
-    }
-    return getBaseCost(poolPrice);
-  }, [poolPrice]);
+  // const baseCost = useMemo(() => {
+  //   if (!poolPrice) {
+  //     return 0;
+  //   }
+  //   return getBaseCost(poolPrice);
+  // }, [poolPrice]);
 
-  const quoteCost = useMemo(() => {
-    if (!poolPrice) {
-      return 0;
-    }
-    return getQuoteCost(poolPrice);
-  }, [poolPrice]);
+  // const quoteCost = useMemo(() => {
+  //   if (!poolPrice) {
+  //     return 0;
+  //   }
+  //   return getQuoteCost(poolPrice);
+  // }, [poolPrice]);
 
-  const handleBaseAssetAmountChange = (value: string): void => {
-    updateTokenAmount(0, value);
-    const parsedBaseCost = parseUnits(
-      baseCost.toString(),
-      quoteToken?.decimals ?? 18,
-    );
-    const parsedValue = parseUnits(value, quoteToken?.decimals ?? 18);
-    const quoteAmount =
-      (parsedBaseCost * parsedValue) /
-      BigInt(10 ** (quoteToken?.decimals ?? 18));
-    updateTokenAmount(
-      1,
-      quoteAmount === 0n
-        ? ""
-        : formatUnits(quoteAmount, quoteToken?.decimals ?? 18),
-    );
-  };
+  // const handleBaseAssetAmountChange = (value: string): void => {
+  //   updateTokenAmount(0, value);
+  //   const parsedBaseCost = parseUnits(
+  //     baseCost.toString(),
+  //     quoteToken?.decimals ?? 18,
+  //   );
+  //   const parsedValue = parseUnits(value, quoteToken?.decimals ?? 18);
+  //   const quoteAmount =
+  //     (parsedBaseCost * parsedValue) /
+  //     BigInt(10 ** (quoteToken?.decimals ?? 18));
+  //   updateTokenAmount(
+  //     1,
+  //     quoteAmount === 0n
+  //       ? ""
+  //       : formatUnits(quoteAmount, quoteToken?.decimals ?? 18),
+  //   );
+  // };
 
-  const handleQuoteAssetAmountChange = (value: string): void => {
-    updateTokenAmount(1, value);
-    const parsedQuoteCost = parseUnits(
-      quoteCost.toString(),
-      baseToken?.decimals ?? 18,
-    );
-    const parsedValue = parseUnits(value, baseToken?.decimals ?? 18);
-    const baseAmount =
-      (parsedQuoteCost * parsedValue) /
-      BigInt(10 ** (baseToken?.decimals ?? 18));
-    updateTokenAmount(
-      0,
-      baseAmount === 0n
-        ? ""
-        : formatUnits(baseAmount, baseToken?.decimals ?? 18),
-    );
-  };
+  // const handleQuoteAssetAmountChange = (value: string): void => {
+  //   updateTokenAmount(1, value);
+  //   const parsedQuoteCost = parseUnits(
+  //     quoteCost.toString(),
+  //     baseToken?.decimals ?? 18,
+  //   );
+  //   const parsedValue = parseUnits(value, baseToken?.decimals ?? 18);
+  //   const baseAmount =
+  //     (parsedQuoteCost * parsedValue) /
+  //     BigInt(10 ** (baseToken?.decimals ?? 18));
+  //   updateTokenAmount(
+  //     0,
+  //     baseAmount === 0n
+  //       ? ""
+  //       : formatUnits(baseAmount, baseToken?.decimals ?? 18),
+  //   );
+  // };
 
   const slippage = useSlippage();
-  const baseTokenInitialLiquidity = tokenInputs[0]?.amount;
-  const quoteTokenInitialLiquidity = tokenInputs[1]?.amount;
-
-  const bnBaseAmount = parseUnits(
-    baseTokenInitialLiquidity ?? "0",
-    baseToken?.decimals ?? 18,
-  );
-
-  const bnQuoteAmount = parseUnits(
-    quoteTokenInitialLiquidity ?? "0",
-    quoteToken?.decimals ?? 18,
-  );
-
-  const maxBaseApprovalAmount = useMemo(() => {
-    if (!baseTokenInitialLiquidity || !slippage) {
-      return 0n;
-    }
-    const parsedLiq = parseUnits(
-      baseTokenInitialLiquidity as string,
-      baseToken?.decimals ?? 18,
-    );
-    const sI = BigInt(parsedLiq);
-    // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** baseToken.decimals);
-    const s = parseUnits(
-      (slippage ?? 0).toString(), // add a little more just to avoid infininte approval
-      baseToken?.decimals ?? 18,
-    );
-    const minAmountOut =
-      (sI ?? 0n) +
-      ((sI ?? 0n) * s) / BigInt(100 * 10 ** (baseToken?.decimals ?? 18));
-    return minAmountOut;
-  }, [baseTokenInitialLiquidity, slippage]);
-
-  const maxQuoteApprovalAmount = useMemo(() => {
-    if (!quoteTokenInitialLiquidity || !slippage) {
-      return 0n;
-    }
-    const parsedLiq = parseUnits(
-      quoteTokenInitialLiquidity as string,
-      quoteToken?.decimals ?? 18,
-    );
-    const sI = BigInt(parsedLiq);
-    // const s = BigInt(((slippage ?? 0) + 0.001) * 10 ** quoteToken.decimals);
-    const s = parseUnits(
-      (slippage ?? 0).toString(),
-      quoteToken?.decimals ?? 18,
-    );
-
-    const minAmountOut =
-      (sI ?? 0n) +
-      ((sI ?? 0n) * s) / BigInt(100 * 10 ** (quoteToken?.decimals ?? 18));
-
-    return minAmountOut;
-  }, [quoteTokenInitialLiquidity, slippage]);
-
-  const handleAddLiquidity = useCallback(async () => {
-    try {
-      setPreviewOpen(false);
-      const addLiqPayload = await getAddLiquidityPayload({
-        args: {
-          slippage: slippage ?? 0,
-          poolPrice,
-          baseToken: baseToken as Token,
-          quoteToken: quoteToken as Token,
-          isAmountBaseDenominated: isBaseInput,
-          baseAmount: bnBaseAmount,
-          quoteAmount: bnQuoteAmount,
-          poolIdx: pool?.poolIdx ?? 0,
-          shareAddress: pool?.shareAddress,
-        },
-      });
-      if (!addLiqPayload || !addLiqPayload.payload) {
-        throw new Error("Error generating transaction payload");
-      }
-      write({
-        address: crocDexAddress,
-        abi: bexAbi,
-        functionName: "userCmd",
-        params: addLiqPayload.payload,
-        value: addLiqPayload?.value === 0n ? undefined : addLiqPayload?.value,
-      });
-    } catch (error) {
-      console.error("Error submitting transaction:", error);
-    }
-  }, [
-    baseToken,
-    isBaseInput,
-    quoteToken,
-    poolPrice,
-    bnBaseAmount,
-    bnQuoteAmount,
-    write,
-  ]);
-
-  const totalHoneyPrice = useMemo(() => {
-    return (
-      Number(baseToken?.usdValue ?? 0) * Number(tokenInputs[0]?.amount || 0) +
-      Number(quoteToken?.usdValue ?? 0) * Number(tokenInputs[1]?.amount || 0)
-    );
-  }, [baseToken, quoteToken, tokenInputs[0]?.amount, tokenInputs[1]?.amount]);
-
-  const needsApprovalNoBera = needsApproval.filter(
-    (token) => token.address.toLowerCase() !== beraTokenAddress.toLowerCase(),
-  );
-
-  const { estimatedBeraFee } = useGasData({
-    gasUsedOverride: TXN_GAS_USED_ESTIMATES.SWAP * 8 * 2, // multiplied by 8 for the multiswap steps assumption in a swap, then by 2 to allow for a follow up swap
-  });
-
-  const baseSelected: Token = useMemo(() => {
-    return isBeratoken(baseToken)
-      ? isNativeBera
-        ? beraToken
-        : wBeraToken
-      : baseToken;
-  }, [baseToken, isNativeBera]);
-
-  const quoteSelected: Token = useMemo(() => {
-    return isBeratoken(quoteToken)
-      ? isNativeBera
-        ? beraToken
-        : wBeraToken
-      : quoteToken;
-  }, [quoteToken, isNativeBera]);
-
   return (
     <div className="mt-16 flex w-full flex-col items-center justify-center gap-4">
       {ModalPortal}
@@ -277,7 +156,7 @@ export default function AddLiquidityContent({
         {isLoading ? (
           <Skeleton className="h-8 w-40 self-center" />
         ) : (
-          <p className="text-center text-2xl font-semibold">{pool?.poolName}</p>
+          <p className="text-center text-2xl font-semibold">{pool?.name}</p>
         )}
         <div className="flex w-full flex-row items-center justify-center rounded-lg p-4">
           {isLoading ? (
@@ -295,13 +174,13 @@ export default function AddLiquidityContent({
             })
           )}
         </div>
-        <div
-          onClick={() => router.push(getPoolUrl(pool))}
+        <Link
+          href={getPoolUrl(pool)}
           className="flex items-center justify-center text-sm font-normal leading-tight text-muted-foreground hover:cursor-pointer hover:underline"
         >
           View Pool Details
           <Icons.arrowRight className="W-4 h-4" />
-        </div>
+        </Link>
       </Card>
       <Card className="mx-6 w-full sm:w-[480px] md:mx-0 ">
         <CardHeader>
@@ -312,74 +191,29 @@ export default function AddLiquidityContent({
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <TokenList>
-            <TokenInput
-              key={baseToken?.address}
-              selected={baseSelected}
-              selectable={
-                isBeratoken(baseToken) && beraToken && wBeraToken ? true : false
-              }
-              customTokenList={
-                isBeratoken(baseToken)
-                  ? [beraToken as Token, wBeraToken as Token]
-                  : undefined
-              }
-              onTokenSelection={(token: Token | undefined) => {
-                if (isBera(token)) {
-                  setIsNativeBera(true);
-                } else {
-                  setIsNativeBera(false);
+            {pool?.tokens.map((token) => (
+              <TokenInput
+                key={token?.address}
+                selected={token}
+                selectable={false}
+                customTokenList={[token]}
+                // amount={token[0]?.amount ?? ""}
+                setAmount={(amount: string) => {
+                  // setIsBaseInput(true);
+                  // handleBaseAssetAmountChange(amount);
+                }}
+                price={Number(token?.token?.latestUSDPrice ?? "0")}
+                onExceeding={
+                  (exceeding: boolean) => false // updateTokenExceeding(0, exceeding)
                 }
-              }}
-              amount={tokenInputs[0]?.amount ?? ""}
-              setAmount={(amount: string) => {
-                setIsBaseInput(true);
-                handleBaseAssetAmountChange(amount);
-              }}
-              price={Number(baseToken?.usdValue ?? "0")}
-              onExceeding={(exceeding: boolean) =>
-                updateTokenExceeding(0, exceeding)
-              }
-              showExceeding={true}
-              disabled={!poolPrice}
-              beraSafetyMargin={estimatedBeraFee}
-            />
-
-            <TokenInput
-              key={quoteToken?.address}
-              selected={quoteSelected}
-              selectable={
-                isBeratoken(quoteToken) && beraToken && wBeraToken
-                  ? true
-                  : false
-              }
-              customTokenList={
-                isBeratoken(quoteToken)
-                  ? [beraToken as Token, wBeraToken as Token]
-                  : undefined
-              }
-              onTokenSelection={(token: Token | undefined) => {
-                if (isBera(token)) {
-                  setIsNativeBera(true);
-                } else {
-                  setIsNativeBera(false);
-                }
-              }}
-              amount={tokenInputs[1]?.amount ?? ""}
-              setAmount={(amount: string) => {
-                setIsBaseInput(false);
-                handleQuoteAssetAmountChange(amount);
-              }}
-              price={Number(quoteToken?.usdValue ?? "0")}
-              onExceeding={(exceeding: boolean) =>
-                updateTokenExceeding(1, exceeding)
-              }
-              showExceeding={true}
-              disabled={!poolPrice}
-              beraSafetyMargin={estimatedBeraFee}
-            />
+                showExceeding={true}
+                // disabled={!poolPrice}
+                // beraSafetyMargin={estimatedBeraFee}
+              />
+            ))}
           </TokenList>
           <InfoBoxList>
-            <InfoBoxListItem
+            {/* <InfoBoxListItem
               title={"Pool Price"}
               value={
                 poolPrice ? (
@@ -404,17 +238,17 @@ export default function AddLiquidityContent({
                   compact={false}
                 />
               }
-            />
+            /> */}
 
             <InfoBoxListItem title={"Slippage"} value={`${slippage}%`} />
           </InfoBoxList>
-          {error && (
+          {/* {error && (
             <Alert variant="destructive">
               <AlertTitle>Error</AlertTitle>
               <AlertDescription className="text-xs">{error}</AlertDescription>
             </Alert>
-          )}
-          <TxnPreview
+          )} */}
+          {/* <TxnPreview
             open={previewOpen}
             disabled={areAllInputsEmpty || error !== undefined}
             title={"Confirm LP Addition Details"}
@@ -500,7 +334,7 @@ export default function AddLiquidityContent({
                 </Button>
               </ActionButton>
             )}
-          </TxnPreview>
+          </TxnPreview> */}
         </CardContent>
       </Card>
     </div>

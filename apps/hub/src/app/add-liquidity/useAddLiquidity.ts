@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { PoolWithMethods } from "@balancer-labs/sdk";
 import { Token, useBeraJs, useTokens, type PoolV2 } from "@bera/berajs";
+import { ADDRESS_ZERO } from "@bera/berajs/config";
 import { beraTokenAddress, crocDexAddress } from "@bera/config";
 import { beraToken, wBeraToken } from "@bera/wagmi";
 import { type Address } from "viem";
@@ -10,9 +12,8 @@ import { isBeratoken } from "~/utils/isBeraToken";
 import { useCrocPoolPrice } from "~/hooks/useCrocPoolPrice";
 import useMultipleTokenApprovalsWithSlippage from "~/hooks/useMultipleTokenApprovalsWithSlippage";
 import useMultipleTokenInput from "~/hooks/useMultipleTokenInput";
-import { ADDRESS_ZERO } from "@bera/berajs/config";
 
-export const useAddLiquidity = (pool: PoolV2 | undefined) => {
+export const useAddLiquidity = (pool: PoolWithMethods | undefined) => {
   const { account: _account } = useBeraJs();
   const [error, setError] = useState<string | undefined>("");
 

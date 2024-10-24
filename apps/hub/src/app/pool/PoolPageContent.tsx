@@ -263,6 +263,8 @@ export default function PoolPageContent({
     id: shareAddress,
   });
 
+  console.log("POOL", pool);
+
   // const { data: swaps, isLoading: isRecentSwapsLoading } = usePoolRecentSwaps({
   //   pool,
   // });
@@ -396,7 +398,17 @@ export default function PoolPageContent({
             <Skeleton className="h-10 w-40" />
           ) : (
             <>
-              <TokenIconList tokenList={pool?.tokens ?? []} size="xl" />
+              <TokenIconList
+                tokenList={
+                  pool?.tokens.map((t) => ({
+                    address: t.address as Address,
+                    symbol: t.symbol!,
+                    decimals: t.decimals!,
+                    name: t.symbol!,
+                  })) ?? []
+                }
+                size="xl"
+              />
               {pool?.name}
             </>
           )
@@ -424,11 +436,7 @@ export default function PoolPageContent({
             content: isPoolLoading ? (
               <Skeleton className="h-4 w-8" />
             ) : (
-              <>
-                {
-                  // pool?.feeRate?.toFixed(2)
-                }%
-              </>
+              <>{pool?.swapFee}%</>
             ),
             color: "success",
           },
@@ -495,21 +503,24 @@ export default function PoolPageContent({
             <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
                 <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
-                  Volume (24h)
+                  Volume
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                <FormattedNumber value={pool?.volume24h ?? 0} symbol="USD" />
+                <FormattedNumber
+                  value={pool?.totalSwapVolume ?? 0}
+                  symbol="USD"
+                />
               </div>
             </Card>
             <Card className="px-4 py-2">
               <div className="flex flex-row items-center justify-between">
                 <div className="overflow-hidden truncate whitespace-nowrap text-sm ">
-                  Fees (24h)
+                  Fees
                 </div>
               </div>
               <div className="overflow-hidden truncate whitespace-nowrap text-lg font-semibold">
-                {/* <FormattedNumber value={pool?.fees24h ?? 0} symbol="USD" /> */}
+                <FormattedNumber value={pool?.totalSwapFee ?? 0} symbol="USD" />
               </div>{" "}
             </Card>
             <Card className="px-4 py-2">
@@ -536,11 +547,14 @@ export default function PoolPageContent({
             <div className="mb-4 flex h-8 w-full items-center justify-between text-lg font-semibold lg:mb-8">
               Pool Liquidity
               <div className="text-2xl">
-                {/* {isLoading || !pool?.tvlUsd ? (
+                {isLoading ? (
                   <Skeleton className="h-10 w-20" />
                 ) : (
-                  <FormattedNumber value={pool?.tvlUsd ?? 0} symbol="USD" />
-                )} */}
+                  <FormattedNumber
+                    value={pool?.totalLiquidity ?? 0}
+                    symbol="USD"
+                  />
+                )}
               </div>
             </div>
             <TokenView
@@ -548,24 +562,30 @@ export default function PoolPageContent({
               tokens={
                 !pool
                   ? []
-                  : [
-                      // {
-                      //   address: pool.baseInfo.address,
-                      //   symbol: pool.baseInfo.symbol,
-                      //   value: pool.baseTokens,
-                      //   valueUSD:
-                      //     parseFloat(pool.baseTokens) *
-                      //     parseFloat(pool?.baseInfo?.usdValue ?? "0"),
-                      // },
-                      // {
-                      //   address: pool.quoteInfo.address,
-                      //   symbol: pool.quoteInfo.symbol,
-                      //   value: pool.quoteTokens,
-                      //   valueUSD:
-                      //     parseFloat(pool.quoteTokens) *
-                      //     parseFloat(pool?.quoteInfo?.usdValue ?? "0"),
-                      // },
-                    ]
+                  : pool.tokens?.map((t) => ({
+                      address: t.address!,
+                      symbol: t.symbol!,
+                      value: parseFloat(t.balance),
+                      valueUSD:
+                        parseFloat(t.balance) *
+                        parseFloat(t.token?.latestUSDPrice ?? "0"),
+                    }))
+                // {
+                //   address: pool.baseInfo.address,
+                //   symbol: pool.baseInfo.symbol,
+                //   value: pool.baseTokens,
+                //   valueUSD:
+                //     parseFloat(pool.baseTokens) *
+                //     parseFloat(pool?.baseInfo?.usdValue ?? "0"),
+                // },
+                // {
+                //   address: pool.quoteInfo.address,
+                //   symbol: pool.quoteInfo.symbol,
+                //   value: pool.quoteTokens,
+                //   valueUSD:
+                //     parseFloat(pool.quoteTokens) *
+                //     parseFloat(pool?.quoteInfo?.usdValue ?? "0"),
+                // },
               }
             />
           </Card>

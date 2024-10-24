@@ -4,6 +4,7 @@ import { dexName } from "@bera/config";
 import { Address, isAddress } from "viem";
 
 import AddLiquidityContent from "../AddLiquidityContent";
+import { balancerClient } from "@bera/berajs/actions";
 
 export function generateMetadata(): Metadata {
   return {
@@ -20,7 +21,11 @@ export default async function PoolPage({
   params: { shareAddress: string };
 }) {
   try {
-    if (!isAddress(params.shareAddress)) {
+    // if (!isAddress(params.shareAddress)) {
+    //   notFound();
+    // }
+    const pool = await balancerClient.pools.find(params.shareAddress);
+    if (!pool) {
       notFound();
     }
 

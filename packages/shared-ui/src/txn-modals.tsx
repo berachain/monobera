@@ -175,8 +175,7 @@ export const AddLiquiditySuccess = ({ onClose, open = false, pool }: any) => {
       <DialogContent className="flex w-80 flex-col items-center justify-center gap-3 py-12">
         <TokenIconList tokenList={pool.tokens} size="2xl" />
         <span className="text-center text-xl font-medium">
-          Deposit your {pool.baseInfo.symbol}/{pool.quoteInfo.symbol} Receipt
-          Tokens
+          Deposit your {pool.name} Receipt Tokens
         </span>
         <span className="my-2 text-center text-xs text-muted-foreground">
           Deposit your receipt tokens in the gauge vault to start earning

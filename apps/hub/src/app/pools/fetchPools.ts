@@ -8,24 +8,24 @@ export const getPoolUrl = (
 ): string => {
   if (!pool) return "";
   if (isIPFS) {
-    return `/pool?address=${pool?.address}${isMyPool ? "&back=my-pools" : ""}`;
+    return `/pool?address=${pool?.id}${isMyPool ? "&back=my-pools" : ""}`;
   }
-  return `/pool/${pool?.address}${isMyPool ? "?back=my-pools" : ""}`;
+  return `/pool/${pool?.id}${isMyPool ? "?back=my-pools" : ""}`;
 };
 
 export const getPoolAddLiquidityUrl = (pool: PoolWithMethods | undefined) => {
   if (!pool) return "";
 
   if (isIPFS) {
-    return `/add-liquidity?address=${pool?.address}`;
+    return `/add-liquidity?address=${pool?.id}`;
   }
 
-  return `/add-liquidity/${pool?.address}`;
+  return `/add-liquidity/${pool?.id}`;
 };
 
 export const getPoolWithdrawUrl = (pool: PoolWithMethods | undefined) => {
   if (!pool) return "";
-  return `/withdraw/${pool?.address}`;
+  return `/withdraw/${pool?.id}`;
 };
 
 export const getBaseCost = (initialPrice: number) => {
