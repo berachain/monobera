@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@apollo/client";
 import {
   GetFirstHoneyTxnDate,
@@ -161,13 +161,14 @@ function calculatePercentageDifference(entries: HoneyEntry[]): number {
 
 export const HoneyChart = ({ arcade = false }: { arcade?: boolean }) => {
   const [timeFrame, setTimeFrame] = useState(HoneyTimeFrame.WEEKLY);
+  const calculatedTimestamp = useMemo(() => getTime(timeFrame), [timeFrame]);
   const [chart, setChart] = useState<Chart.VOLUME | Chart.FEES>(Chart.VOLUME);
   const {
     data: graphdata,
     loading,
     error,
   } = useQuery(chart === Chart.VOLUME ? GetVolumeDay : GetSupplyDay, {
-    variables: { timestamp_gt: getTime(timeFrame) },
+    variables: { timestamp_gt: calculatedTimestamp },
   });
 
   const { data: FirstTxnData } = useQuery(GetFirstHoneyTxnDate);
