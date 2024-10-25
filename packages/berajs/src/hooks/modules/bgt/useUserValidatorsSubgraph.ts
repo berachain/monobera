@@ -1,12 +1,12 @@
-import useSWR, { useSWRConfig } from "swr";
-
-import POLLING from "~/enum/polling";
-import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
-import { useBeraJs } from "~/contexts";
-import { SubgraphUserValidator } from "~/types";
-import { GetUserValidatorInformation } from "@bera/graphql";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { bgtStakerSubgraphUrl } from "@bera/config";
+import { GetUserValidatorInformation } from "@bera/graphql";
+import useSWR, { useSWRConfig } from "swr";
+
+import { useBeraJs } from "~/contexts";
+import POLLING from "~/enum/polling";
+import { SubgraphUserValidator } from "~/types";
+import { DefaultHookOptions, DefaultHookReturnType } from "~/types/global";
 
 /**
  *
@@ -32,6 +32,7 @@ export const useUserValidatorsSubgraph = (
           cache: new InMemoryCache(),
         });
 
+        // TODO: we should make sure that we run another query if validator exceeds 1000
         const userDeposited = await bgtClient.query({
           query: GetUserValidatorInformation,
           variables: { address: account.toLowerCase() },
